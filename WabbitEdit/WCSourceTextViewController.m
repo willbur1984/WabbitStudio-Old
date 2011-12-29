@@ -15,6 +15,7 @@
 #import "NSTextView+WCExtensions.h"
 #import "WCArgumentPlaceholderCell.h"
 #import "RSDefines.h"
+#import "WCEditorViewController.h"
 
 @interface WCSourceTextViewController ()
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
@@ -25,6 +26,8 @@
 @implementation WCSourceTextViewController
 
 - (void)dealloc {
+	[_completionTimer invalidate];
+	_completionTimer = nil;
 	_textStorage = nil;
 	_sourceScanner = nil;
 	_sourceHighlighter = nil;
@@ -97,6 +100,8 @@
 - (void)_textStorageDidProcessEditing:(NSNotification *)note {
 	if (([[note object] editedMask] & NSTextStorageEditedCharacters) == 0)
 		return;
+	else if (![[NSUserDefaults standardUserDefaults] boolForKey:WCEditorSuggestCompletionsWhileTypingKey])
+		return;
 	else if ([[note object] changeInLength] != 1 ||
 			 [[self undoManager] isUndoing] ||
 			 [[self undoManager] isRedoing]) {
@@ -121,7 +126,7 @@
 		return;
 	}
 	
-	static const NSTimeInterval kCompletionTimerDelay = 0.35;
+	CGFloat kCompletionTimerDelay = [[NSUserDefaults standardUserDefaults] floatForKey:WCEditorSuggestCompletionsWhileTypingDelayKey];
 	
 	if (_completionTimer)
 		[_completionTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:kCompletionTimerDelay]];

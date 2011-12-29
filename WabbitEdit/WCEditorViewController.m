@@ -10,6 +10,12 @@
 
 NSString *const WCEditorShowCurrentLineHighlightKey = @"editorShowCurrentLineHighlight";
 NSString *const WCEditorShowLineNumbersKey = @"editorShowLineNumbers";
+NSString *const WCEditorShowMatchingBraceHighlightKey = @"editorShowMatchingBraceHighlight";
+NSString *const WCEditorShowMatchingTemporaryLabelHighlightKey = @"editorShowMatchingTemporaryLabelHighlight";
+NSString *const WCEditorAutomaticallyInsertMatchingBraceKey = @"editorAutomaticallyInsertMatchingBrace";
+NSString *const WCEditorSuggestCompletionsWhileTypingKey = @"editorSuggestCompletionsWhileTyping";
+NSString *const WCEditorSuggestCompletionsWhileTypingDelayKey = @"editorSuggestCompletionsWhileTypingDelay";
+NSString *const WCEditorAutomaticallyIndentAfterNewlinesKey = @"editorAutomaticallyIndentAfterNewlines";
 
 @implementation WCEditorViewController
 
@@ -36,7 +42,7 @@ NSString *const WCEditorShowLineNumbersKey = @"editorShowLineNumbers";
 }
 #pragma mark RSUserDefaultsProvider
 + (NSDictionary *)userDefaults {
-	return [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],WCEditorShowCurrentLineHighlightKey,[NSNumber numberWithBool:YES],WCEditorShowLineNumbersKey, nil];
+	return [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],WCEditorShowCurrentLineHighlightKey,[NSNumber numberWithBool:YES],WCEditorShowLineNumbersKey,[NSNumber numberWithBool:YES],WCEditorShowMatchingBraceHighlightKey,[NSNumber numberWithBool:YES],WCEditorShowMatchingTemporaryLabelHighlightKey,[NSNumber numberWithBool:YES],WCEditorAutomaticallyInsertMatchingBraceKey,[NSNumber numberWithBool:YES],WCEditorSuggestCompletionsWhileTypingKey,[NSNumber numberWithFloat:0.35],WCEditorSuggestCompletionsWhileTypingDelayKey,[NSNumber numberWithBool:YES],WCEditorAutomaticallyIndentAfterNewlinesKey, nil];
 }
 
 @synthesize initialFirstResponder=_initialFirstResponder;

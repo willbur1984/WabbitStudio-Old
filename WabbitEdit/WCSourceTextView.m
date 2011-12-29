@@ -107,6 +107,44 @@
 	
 	[self setSelectedRange:placeholderRange];
 }
+
+- (IBAction)insertNewline:(id)sender {
+	[super insertNewline:sender];
+	
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorAutomaticallyIndentAfterNewlinesKey]) {
+		NSString *previousLineWhitespaceString;
+		NSScanner *previousLineScanner = [[[NSScanner alloc] initWithString:[[self string] substringWithRange:[[self string] lineRangeForRange:NSMakeRange([self selectedRange].location - 1, 0)]]] autorelease];
+		[previousLineScanner setCharactersToBeSkipped:nil];
+		
+		if ([previousLineScanner scanCharactersFromSet:[NSCharacterSet whitespaceCharacterSet] intoString:&previousLineWhitespaceString])
+			[self insertText:previousLineWhitespaceString];
+	}
+}
+
+- (void)insertText:(id)insertString {
+	[super insertText:insertString];
+	
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorAutomaticallyInsertMatchingBraceKey] &&
+		[insertString length] == 1 &&
+		[[NSCharacterSet characterSetWithCharactersInString:@"([{"] characterIsMember:[insertString characterAtIndex:0]]) {
+		
+		switch ([insertString characterAtIndex:0]) {
+			case '(':
+				[super insertText:@")"];
+				break;
+			case '[':
+				[super insertText:@"]"];
+				break;
+			case '{':
+				[super insertText:@"}"];
+				break;
+			default:
+				break;
+		}
+		
+		[self setSelectedRange:NSMakeRange([self selectedRange].location-1, 0)];
+	}
+}
 #pragma mark NSObject+WCExtensions
 - (NSSet *)userDefaultsKeyPathsToObserve {
 	return [NSSet setWithObjects:WCEditorShowCurrentLineHighlightKey, nil];
@@ -405,8 +443,10 @@
 }
 
 - (void)_highlightMatchingBrace; {
+	if (![[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowMatchingBraceHighlightKey])
+		return;
 	// need at least two characters in our string to be able to match
-	if ([[self string] length] <= 1)
+	else if ([[self string] length] <= 1)
 		return;
 	// return early if we have any text selected
 	else if ([self selectedRange].length)
@@ -456,8 +496,10 @@
 }
 
 - (void)_highlightMatchingTempLabel; {
+	if (![[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowMatchingTemporaryLabelHighlightKey])
+		return;
 	// need at least two characters in order to match
-	if ([[self string] length] <= 2)
+	else if ([[self string] length] <= 2)
 		return;
 	// selection cannot have a length
 	else if ([self selectedRange].length)
@@ -553,6 +595,15 @@
 
 #pragma mark Notifications
 - (void)_textViewDidChangeSelection:(NSNotification *)note {
+	NSRange oldSelectedRange = [[[note userInfo] objectForKey:@"NSOldSelectedCharacterRange"] rangeValue];
+	if (!oldSelectedRange.length &&
+		oldSelectedRange.location < [self selectedRange].location &&
+		[self selectedRange].location - oldSelectedRange.location == 1) {
+		
+		[self _highlightMatchingBrace];
+		[self _highlightMatchingTempLabel];
+	}
+	
 	[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
 }
 - (void)_currentThemeDidChange:(NSNotification *)note {

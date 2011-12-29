@@ -12,6 +12,12 @@
 
 extern NSString *const WCEditorShowCurrentLineHighlightKey;
 extern NSString *const WCEditorShowLineNumbersKey;
+extern NSString *const WCEditorShowMatchingBraceHighlightKey;
+extern NSString *const WCEditorShowMatchingTemporaryLabelHighlightKey;
+extern NSString *const WCEditorAutomaticallyInsertMatchingBraceKey;
+extern NSString *const WCEditorSuggestCompletionsWhileTypingKey;
+extern NSString *const WCEditorSuggestCompletionsWhileTypingDelayKey;
+extern NSString *const WCEditorAutomaticallyIndentAfterNewlinesKey;
 
 @interface WCEditorViewController : NSViewController <RSPreferencesModule,RSUserDefaultsProvider>
 @property (readwrite,assign,nonatomic) IBOutlet NSView *initialFirstResponder;
