@@ -83,6 +83,43 @@
 	
 	return completionRange;
 }
+
+- (NSRange)selectionRangeForProposedRange:(NSRange)proposedCharRange granularity:(NSSelectionGranularity)granularity {
+	if (granularity != NSSelectByWord)
+		return proposedCharRange;
+	
+	// look for a symbol inside the proposed range
+	NSRange symbolRange = [self _symbolRangeForRange:proposedCharRange];
+	if (symbolRange.location == NSNotFound)
+		return proposedCharRange;
+	return symbolRange;
+}
+
++ (NSMenu *)defaultMenu; {
+	static NSMenu *retval;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		retval = [[NSMenu alloc] initWithTitle:@""];
+		
+		[retval addItemWithTitle:NSLocalizedString(@"Cut", @"Cut") action:@selector(cut:) keyEquivalent:@""];
+		[retval addItemWithTitle:NSLocalizedString(@"Copy", @"Copy") action:@selector(copy:) keyEquivalent:@""];
+		[retval addItemWithTitle:NSLocalizedString(@"Paste", @"Paste") action:@selector(paste:) keyEquivalent:@""];
+		[retval addItem:[NSMenuItem separatorItem]];
+		[retval addItemWithTitle:NSLocalizedString(@"Shift Left", @"Shift Left") action:@selector(shiftLeft:) keyEquivalent:@""];
+		[retval addItemWithTitle:NSLocalizedString(@"Shift Right", @"Shift Right") action:@selector(shiftRight:) keyEquivalent:@""];
+		[retval addItem:[NSMenuItem separatorItem]];
+		[retval addItemWithTitle:NSLocalizedString(@"Comment/Uncomment Selection", @"Comment/Uncomment Selection") action:@selector(commentUncommentSelection:) keyEquivalent:@""];
+		
+	});
+	return retval;
+}
+
+- (NSMenu *)menuForEvent:(NSEvent *)event {
+	NSMenu *retval = [super menuForEvent:event];
+	if (retval)
+		retval = [[self class] defaultMenu];
+	return retval;
+}
 #pragma mark IBActions
 - (IBAction)complete:(id)sender {
 	[[WCCompletionWindowController sharedWindowController] showCompletionWindowControllerForSourceTextView:self];
