@@ -25,6 +25,7 @@ extern NSString *const WCFontAndColorThemeManagerFontDidChangeFontNameKey;
 @interface WCFontAndColorThemeManager : NSObject {
 	NSMutableArray *_themes;
 	WCFontAndColorTheme *_currentTheme;
+	NSMutableSet *_userThemeIdentifiers;
 	NSHashTable *_unsavedThemes;
 }
 @property (readonly,nonatomic) NSArray *themes;

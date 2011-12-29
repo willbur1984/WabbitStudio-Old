@@ -10,9 +10,14 @@
 #import "WCFontAndColorTheme.h"
 #import "WCFontAndColorThemeManager.h"
 #import "WCFontAndColorThemePair.h"
+#import "RSTableView.h"
 
 NSString *const WCFontsAndColorsCurrentThemeIdentifierKey = @"WCFontsAndColorsCurrentThemeIdentifierKey";
 NSString *const WCFontsAndColorsUserThemeIdentifiersKey = @"WCFontsAndColorsUserThemeIdentifiersKey";
+
+@interface WCFontsAndColorsViewController ()
+- (void)_editSelectedThemesTableViewRow;
+@end
 
 @implementation WCFontsAndColorsViewController
 #pragma mark *** Subclass Overrides ***
@@ -141,7 +146,8 @@ NSString *const WCFontsAndColorsUserThemeIdentifiersKey = @"WCFontsAndColorsUser
 	}
 	
 	[[self themesArrayController] addObject:newTheme];
-	[[self themesTableView] editColumn:0 row:[[[self themesArrayController] arrangedObjects] count] withEvent:nil select:YES];
+	
+	[self performSelector:@selector(_editSelectedThemesTableViewRow) withObject:nil afterDelay:0.0];
 }
 #pragma mark Properties
 @synthesize initialFirstResponder=_initialFirstResponder;
@@ -150,9 +156,12 @@ NSString *const WCFontsAndColorsUserThemeIdentifiersKey = @"WCFontsAndColorsUser
 @synthesize themesTableView=_themesTableView;
 @synthesize pairsTableView=_pairsTableView;
 #pragma mark *** Private Methods ***
+- (void)_editSelectedThemesTableViewRow; {
+	[[self themesTableView] editColumn:0 row:[[self themesTableView] selectedRow] withEvent:nil select:YES];
+}
 #pragma mark IBActions
 - (IBAction)_newFromTemplateClicked:(NSMenuItem *)sender {
-	WCFontAndColorTheme *newTheme = [[[sender representedObject] copy] autorelease];
+	WCFontAndColorTheme *newTheme = [[[sender representedObject] mutableCopy] autorelease];
 	
 	if ([[WCFontAndColorThemeManager sharedManager] containsTheme:newTheme]) {
 		NSBeep();
@@ -160,7 +169,8 @@ NSString *const WCFontsAndColorsUserThemeIdentifiersKey = @"WCFontsAndColorsUser
 	}
 	
 	[[self themesArrayController] addObject:newTheme];
-	[[self themesTableView] editColumn:0 row:[[[self themesArrayController] arrangedObjects] count] withEvent:nil select:YES];
+	
+	[self performSelector:@selector(_editSelectedThemesTableViewRow) withObject:nil afterDelay:0.0];
 }
 #pragma mark Notifications
 - (void)_themesTableViewSelectionDidChange:(NSNotification *)note {
