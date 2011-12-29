@@ -12,6 +12,7 @@
 #import "WCFontAndColorThemePair.h"
 
 NSString *const WCFontsAndColorsCurrentThemeIdentifierKey = @"WCFontsAndColorsCurrentThemeIdentifierKey";
+NSString *const WCFontsAndColorsUserThemeIdentifiersKey = @"WCFontsAndColorsUserThemeIdentifiersKey";
 
 @implementation WCFontsAndColorsViewController
 #pragma mark *** Subclass Overrides ***
@@ -60,6 +61,34 @@ NSString *const WCFontsAndColorsCurrentThemeIdentifierKey = @"WCFontsAndColorsCu
 	
 	return rowHeight;
 }
+#pragma mark NSMenuValidation
+- (BOOL)validateMenuItem:(NSMenuItem *)item {
+	if ([item action] == @selector(duplicateTheme:)) {
+		WCFontAndColorTheme *theme = [[[self themesArrayController] selectedObjects] lastObject];
+		
+		[item setTitle:[NSString stringWithFormat:NSLocalizedString(@"Duplicate \"%@\"", @"duplicate theme format string"),[theme name]]];
+	}
+	return YES;
+}
+#pragma mark NSMenuDelegate
+- (NSInteger)numberOfItemsInMenu:(NSMenu *)menu {
+	return [[[WCFontAndColorThemeManager sharedManager] defaultThemes] count];
+}
+- (BOOL)menu:(NSMenu *)menu updateItem:(NSMenuItem *)item atIndex:(NSInteger)index shouldCancel:(BOOL)shouldCancel {
+	WCFontAndColorTheme *theme = [[[WCFontAndColorThemeManager sharedManager] defaultThemes] objectAtIndex:index];
+	
+	[item setTitle:[theme name]];
+	[item setTarget:self];
+	[item setAction:@selector(_newFromTemplateClicked:)];
+	[item setRepresentedObject:theme];
+	
+	return YES;
+}
+#pragma mark RSTableViewDelegate
+- (void)handleDeletePressedForTableView:(RSTableView *)tableView {
+	if (tableView == [self themesTableView])
+		[self deleteTheme:nil];
+}
 #pragma mark RSPreferencesModule
 - (NSString *)identifier {
 	return @"org.revsoft.wabbitcode.fontsandcolors";
@@ -74,7 +103,7 @@ NSString *const WCFontsAndColorsCurrentThemeIdentifierKey = @"WCFontsAndColorsCu
 }
 #pragma mark RSUserDefaultsProvider
 + (NSDictionary *)userDefaults {
-	return [NSDictionary dictionaryWithObjectsAndKeys:[WCFontAndColorThemeDefaultTheme identifier],WCFontsAndColorsCurrentThemeIdentifierKey, nil];
+	return [NSDictionary dictionaryWithObjectsAndKeys:[[[WCFontAndColorThemeManager sharedManager] defaultTheme] identifier],WCFontsAndColorsCurrentThemeIdentifierKey, nil];
 }
 #pragma mark *** Public Methods ***
 #pragma mark IBActions
@@ -95,6 +124,25 @@ NSString *const WCFontsAndColorsCurrentThemeIdentifierKey = @"WCFontsAndColorsCu
 		_fontPanelWillCloseObservingToken = nil;
 	}];
 }
+- (IBAction)deleteTheme:(id)sender; {
+	if ([[[self themesArrayController] arrangedObjects] count] == 1) {
+		NSBeep();
+		return;
+	}
+	
+	[[self themesArrayController] removeObjectsAtArrangedObjectIndexes:[[self themesArrayController] selectionIndexes]];
+}
+- (IBAction)duplicateTheme:(id)sender; {
+	WCFontAndColorTheme *newTheme = [[[[[self themesArrayController] selectedObjects] lastObject] mutableCopy] autorelease];
+	
+	if ([[WCFontAndColorThemeManager sharedManager] containsTheme:newTheme]) {
+		NSBeep();
+		return;
+	}
+	
+	[[self themesArrayController] addObject:newTheme];
+	[[self themesTableView] editColumn:0 row:[[[self themesArrayController] arrangedObjects] count] withEvent:nil select:YES];
+}
 #pragma mark Properties
 @synthesize initialFirstResponder=_initialFirstResponder;
 @synthesize themesArrayController=_themesArrayController;
@@ -102,6 +150,18 @@ NSString *const WCFontsAndColorsCurrentThemeIdentifierKey = @"WCFontsAndColorsCu
 @synthesize themesTableView=_themesTableView;
 @synthesize pairsTableView=_pairsTableView;
 #pragma mark *** Private Methods ***
+#pragma mark IBActions
+- (IBAction)_newFromTemplateClicked:(NSMenuItem *)sender {
+	WCFontAndColorTheme *newTheme = [[[sender representedObject] copy] autorelease];
+	
+	if ([[WCFontAndColorThemeManager sharedManager] containsTheme:newTheme]) {
+		NSBeep();
+		return;
+	}
+	
+	[[self themesArrayController] addObject:newTheme];
+	[[self themesTableView] editColumn:0 row:[[[self themesArrayController] arrangedObjects] count] withEvent:nil select:YES];
+}
 #pragma mark Notifications
 - (void)_themesTableViewSelectionDidChange:(NSNotification *)note {
 	[[WCFontAndColorThemeManager sharedManager] setCurrentTheme:[[[self themesArrayController] selectedObjects] lastObject]];

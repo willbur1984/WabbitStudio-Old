@@ -111,7 +111,53 @@ static WCFontToStringValueTransformer *fontToStringValueTransformer;
 - (id)copyWithZone:(NSZone *)zone {
 	WCFontAndColorTheme *copy = [[[self class] alloc] init];
 	
-	copy->_name = [[NSString alloc] initWithFormat:@"%@ Copy",_name];
+	copy->_name = [_name copy];
+	copy->_identifier = [_identifier copy];
+	
+	copy->_plainTextFont = [_plainTextFont retain];
+	copy->_plainTextColor = [_plainTextColor retain];
+	copy->_registerFont = [_registerFont retain];
+	copy->_registerColor = [_registerColor retain];
+	copy->_commentFont = [_commentFont retain];
+	copy->_commentColor = [_commentColor retain];
+	copy->_mneumonicFont = [_mneumonicFont retain];
+	copy->_mneumonicColor = [_mneumonicColor retain];
+	copy->_directiveFont = [_directiveFont retain];
+	copy->_directiveColor = [_directiveColor retain];
+	copy->_numberFont = [_numberFont retain];
+	copy->_numberColor = [_numberColor retain];
+	copy->_hexadecimalFont = [_hexadecimalFont retain];
+	copy->_hexadecimalColor = [_hexadecimalColor retain];
+	copy->_binaryFont = [_binaryFont retain];
+	copy->_binaryColor = [_binaryColor retain];
+	copy->_preProcessorFont = [_preProcessorFont retain];
+	copy->_preProcessorColor = [_preProcessorColor retain];
+	copy->_conditionalFont = [_conditionalFont retain];
+	copy->_conditionalColor = [_conditionalColor retain];
+	copy->_stringFont = [_stringFont retain];
+	copy->_stringColor = [_stringColor retain];
+	
+	copy->_labelFont = [_labelFont retain];
+	copy->_labelColor = [_labelColor retain];
+	copy->_equateFont = [_equateFont retain];
+	copy->_equateColor = [_equateColor retain];
+	copy->_defineFont = [_defineFont retain];
+	copy->_defineColor = [_defineColor retain];
+	copy->_macroFont = [_macroFont retain];
+	copy->_macroColor = [_macroColor retain];
+	
+	copy->_selectionColor = [_selectionColor retain];
+	copy->_backgroundColor = [_backgroundColor retain];
+	copy->_cursorColor = [_cursorColor retain];
+	copy->_currentLineColor = [_currentLineColor retain];
+	
+	return copy;
+}
+
+- (id)mutableCopyWithZone:(NSZone *)zone {
+	WCFontAndColorTheme *copy = [[[self class] alloc] init];
+	
+	copy->_name = [[NSString alloc] initWithFormat:@"Copy of \"%@\"",_name];
 	copy->_identifier = [[NSString alloc] initWithFormat:@"org.revsoft.wabbitcode.theme.%@",_name];
 	
 	copy->_plainTextFont = [_plainTextFont retain];

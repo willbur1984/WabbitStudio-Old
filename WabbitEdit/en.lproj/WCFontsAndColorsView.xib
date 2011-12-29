@@ -441,10 +441,10 @@
 										<string>NSColor pasteboard type</string>
 									</object>
 								</object>
-								<string key="NSFrame">{{350, 8}, {44, 19}}</string>
+								<string key="NSFrame">{{8, 8}, {44, 19}}</string>
 								<reference key="NSSuperview" ref="654396595"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="166143743"/>
+								<reference key="NSNextKeyView" ref="269493441"/>
 								<string key="NSReuseIdentifierKey">_NS:3925</string>
 								<bool key="NSEnabled">YES</bool>
 								<bool key="NSIsBordered">YES</bool>
@@ -456,16 +456,16 @@
 							<object class="NSButton" id="304803175">
 								<reference key="NSNextResponder" ref="654396595"/>
 								<int key="NSvFlags">257</int>
-								<string key="NSFrame">{{3, 3}, {104, 28}}</string>
+								<string key="NSFrame">{{322, 3}, {77, 28}}</string>
 								<reference key="NSSuperview" ref="654396595"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="269493441"/>
+								<reference key="NSNextKeyView" ref="166143743"/>
 								<string key="NSReuseIdentifierKey">_NS:687</string>
 								<bool key="NSEnabled">YES</bool>
 								<object class="NSButtonCell" key="NSCell" id="290906136">
 									<int key="NSCellFlags">67239424</int>
 									<int key="NSCellFlags2">134348800</int>
-									<string key="NSContents">Choose Font…</string>
+									<string key="NSContents">Choose…</string>
 									<reference key="NSSupport" ref="26"/>
 									<string key="NSCellIdentifier">_NS:687</string>
 									<reference key="NSControlView" ref="304803175"/>
@@ -480,10 +480,10 @@
 							<object class="NSTextField" id="269493441">
 								<reference key="NSNextResponder" ref="654396595"/>
 								<int key="NSvFlags">258</int>
-								<string key="NSFrame">{{110, 8}, {232, 19}}</string>
+								<string key="NSFrame">{{60, 8}, {259, 19}}</string>
 								<reference key="NSSuperview" ref="654396595"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="573769975"/>
+								<reference key="NSNextKeyView" ref="304803175"/>
 								<string key="NSReuseIdentifierKey">_NS:903</string>
 								<bool key="NSEnabled">YES</bool>
 								<object class="NSTextFieldCell" key="NSCell" id="120322473">
@@ -512,7 +512,7 @@
 						<string key="NSFrame">{{178, 83}, {402, 35}}</string>
 						<reference key="NSSuperview" ref="1005"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="304803175"/>
+						<reference key="NSNextKeyView" ref="573769975"/>
 						<string key="NSReuseIdentifierKey">_NS:1192</string>
 						<string key="NSClassName">RSBottomBorderedGlassGradientView</string>
 					</object>
@@ -625,6 +625,7 @@
 										</object>
 										<reference key="NSMenuFont" ref="199815728"/>
 									</object>
+									<int key="NSSelectedIndex">3</int>
 									<bool key="NSPullDown">YES</bool>
 									<int key="NSPreferredEdge">1</int>
 									<bool key="NSUsesItemFromMenu">YES</bool>
@@ -942,6 +943,30 @@
 					<int key="connectionID">125</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">duplicateTheme:</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="18500850"/>
+					</object>
+					<int key="connectionID">127</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">deleteTheme:</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="778563273"/>
+					</object>
+					<int key="connectionID">128</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">delegate</string>
+						<reference key="source" ref="931728459"/>
+						<reference key="destination" ref="1001"/>
+					</object>
+					<int key="connectionID">129</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
 						<string key="label">value: arrangedObjects.name</string>
 						<reference key="source" ref="226130804"/>
@@ -1137,6 +1162,14 @@
 						</object>
 					</object>
 					<int key="connectionID">107</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">delegate</string>
+						<reference key="source" ref="300561170"/>
+						<reference key="destination" ref="1001"/>
+					</object>
+					<int key="connectionID">126</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -1591,6 +1624,7 @@
 					<string>45.IBPluginDependency</string>
 					<string>48.CustomClassName</string>
 					<string>48.IBPluginDependency</string>
+					<string>5.CustomClassName</string>
 					<string>5.IBPluginDependency</string>
 					<string>6.IBPluginDependency</string>
 					<string>60.IBPluginDependency</string>
@@ -1652,6 +1686,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>RSNoHighlightColorTextFieldCell</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>RSTableView</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -1691,7 +1726,7 @@
 				<reference key="dict.values" ref="1002"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">125</int>
+			<int key="maxID">129</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1745,6 +1780,25 @@
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
+					<string key="className">RSTableView</string>
+					<string key="superclassName">NSTableView</string>
+					<object class="NSMutableDictionary" key="outlets">
+						<string key="NS.key.0">delegate</string>
+						<string key="NS.object.0">id</string>
+					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<string key="NS.key.0">delegate</string>
+						<object class="IBToOneOutletInfo" key="NS.object.0">
+							<string key="name">delegate</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/RSTableView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
 					<string key="className">RSVerticallyCenteredTextFieldCell</string>
 					<string key="superclassName">NSTextFieldCell</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
@@ -1775,14 +1829,42 @@
 					<string key="className">WCFontsAndColorsViewController</string>
 					<string key="superclassName">NSViewController</string>
 					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">chooseFont:</string>
-						<string key="NS.object.0">id</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>chooseFont:</string>
+							<string>deleteTheme:</string>
+							<string>duplicateTheme:</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+						</object>
 					</object>
 					<object class="NSMutableDictionary" key="actionInfosByName">
-						<string key="NS.key.0">chooseFont:</string>
-						<object class="IBActionInfo" key="NS.object.0">
-							<string key="name">chooseFont:</string>
-							<string key="candidateClassName">id</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>chooseFont:</string>
+							<string>deleteTheme:</string>
+							<string>duplicateTheme:</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBActionInfo">
+								<string key="name">chooseFont:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">deleteTheme:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">duplicateTheme:</string>
+								<string key="candidateClassName">id</string>
+							</object>
 						</object>
 					</object>
 					<object class="NSMutableDictionary" key="outlets">
@@ -1801,7 +1883,7 @@
 							<string>NSArrayController</string>
 							<string>NSTableView</string>
 							<string>NSArrayController</string>
-							<string>NSTableView</string>
+							<string>RSTableView</string>
 						</object>
 					</object>
 					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
@@ -1834,7 +1916,7 @@
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">themesTableView</string>
-								<string key="candidateClassName">NSTableView</string>
+								<string key="candidateClassName">RSTableView</string>
 							</object>
 						</object>
 					</object>

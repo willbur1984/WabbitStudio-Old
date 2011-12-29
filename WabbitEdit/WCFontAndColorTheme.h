@@ -49,7 +49,7 @@ extern NSString *const WCFontAndColorThemeDefineColorKey;
 extern NSString *const WCFontAndColorThemeMacroFontKey;
 extern NSString *const WCFontAndColorThemeMacroColorKey;
 
-@interface WCFontAndColorTheme : NSObject <RSPlistArchiving,NSCopying> {
+@interface WCFontAndColorTheme : NSObject <RSPlistArchiving,NSCopying,NSMutableCopying> {
 	NSString *_name;
 	NSString *_identifier;
 	NSMutableArray *_pairs;
@@ -91,8 +91,8 @@ extern NSString *const WCFontAndColorThemeMacroColorKey;
 	NSFont *_macroFont;
 	NSColor *_macroColor;
 }
-@property (readonly,nonatomic) NSString *name;
-@property (readonly,nonatomic) NSString *identifier;
+@property (readwrite,copy,nonatomic) NSString *name;
+@property (readwrite,copy,nonatomic) NSString *identifier;
 @property (readonly,nonatomic) NSArray *pairs;
 
 @property (readwrite,retain,nonatomic) NSColor *selectionColor;

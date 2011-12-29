@@ -22,15 +22,15 @@ extern NSString *const WCFontAndColorThemeManagerColorDidChangeColorNameKey;
 extern NSString *const WCFontAndColorThemeManagerFontDidChangeNotification;
 extern NSString *const WCFontAndColorThemeManagerFontDidChangeFontNameKey;
 
-extern WCFontAndColorTheme *WCFontAndColorThemeDefaultTheme;
-
 @interface WCFontAndColorThemeManager : NSObject {
 	NSMutableArray *_themes;
-	NSMutableSet *_identifiers;
 	WCFontAndColorTheme *_currentTheme;
+	NSHashTable *_unsavedThemes;
 }
 @property (readonly,nonatomic) NSArray *themes;
 @property (readwrite,retain,nonatomic) WCFontAndColorTheme *currentTheme;
+@property (readonly,nonatomic) NSArray *defaultThemes;
+@property (readonly,nonatomic) WCFontAndColorTheme *defaultTheme;
 
 + (WCFontAndColorThemeManager *)sharedManager;
 - (BOOL)containsTheme:(WCFontAndColorTheme *)theme;

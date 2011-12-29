@@ -24,72 +24,74 @@ NSString *const WCFontAndColorThemeManagerColorDidChangeColorNameKey = @"colorNa
 NSString *const WCFontAndColorThemeManagerFontDidChangeNotification = @"WCFontAndColorThemeManagerFontDidChangeNotification";
 NSString *const WCFontAndColorThemeManagerFontDidChangeFontNameKey = @"fontName";
 
-WCFontAndColorTheme *WCFontAndColorThemeDefaultTheme;
+static NSString *const WCFontAndColorThemeDefaultIdentifier = @"org.revsoft.wabbitcode.fontandcolortheme.default";
 
 @interface WCFontAndColorThemeManager ()
 @property (readonly,nonatomic) NSMutableArray *mutableThemes;
+@property (readonly,nonatomic) NSHashTable *unsavedThemes;
 
 - (void)_setupObservingForFontAndColorTheme:(WCFontAndColorTheme *)theme;
 - (void)_cleanupObservingForFontAndColorTheme:(WCFontAndColorTheme *)theme;
+
 @end
 
 @implementation WCFontAndColorThemeManager
-+ (void)initialize {
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		WCFontAndColorThemeDefaultTheme = [[WCFontAndColorTheme alloc] initWithPlistRepresentation:[NSDictionary dictionaryWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"DefaultTheme" withExtension:@"plist" subdirectory:@"FontAndColorThemes"]]];
-	});
-}
-
 - (id)init {
 	if (!(self = [super init]))
 		return nil;
 	
 	_themes = [[NSMutableArray alloc] initWithCapacity:0];
-	_identifiers = [[NSMutableSet alloc] initWithCapacity:0];
+	_unsavedThemes = [[NSHashTable hashTableWithWeakObjects] retain];
 	
+	NSArray *userThemeIdentifiers = [[NSUserDefaults standardUserDefaults] objectForKey:WCFontsAndColorsUserThemeIdentifiersKey];
+	
+	// first load the user themes
 	for (NSURL *themeURL in [[NSFileManager defaultManager] contentsOfDirectoryAtURL:[[WCMiscellaneousPerformer sharedPerformer] userFontAndColorThemesDirectoryURL] includingPropertiesForKeys:[NSArray array] options:NSDirectoryEnumerationSkipsHiddenFiles|NSDirectoryEnumerationSkipsPackageDescendants|NSDirectoryEnumerationSkipsSubdirectoryDescendants error:NULL]) {
 		WCFontAndColorTheme *theme = [[[WCFontAndColorTheme alloc] initWithPlistRepresentation:[NSDictionary dictionaryWithContentsOfURL:themeURL]] autorelease];
 		
 		if ([self containsTheme:theme])
 			continue;
-		
-		[[self mutableThemes] addObject:theme];
-	}
-	
-	for (NSURL *themeURL in [[NSFileManager defaultManager] contentsOfDirectoryAtURL:[[WCMiscellaneousPerformer sharedPerformer] applicationFontAndColorThemesDirectoryURL] includingPropertiesForKeys:[NSArray array] options:NSDirectoryEnumerationSkipsHiddenFiles|NSDirectoryEnumerationSkipsPackageDescendants|NSDirectoryEnumerationSkipsSubdirectoryDescendants error:NULL]) {
-		WCFontAndColorTheme *theme = [[[WCFontAndColorTheme alloc] initWithPlistRepresentation:[NSDictionary dictionaryWithContentsOfURL:themeURL]] autorelease];
-		
-		if ([self containsTheme:theme])
+		else if (![userThemeIdentifiers containsObject:[theme identifier]])
 			continue;
 		
 		[[self mutableThemes] addObject:theme];
 	}
 	
-	NSString *currentIdentifier = [[NSUserDefaults standardUserDefaults] objectForKey:WCFontsAndColorsCurrentThemeIdentifierKey];
-	
-	if ([_identifiers containsObject:currentIdentifier]) {
-		for (WCFontAndColorTheme *theme in _themes) {
-			if ([[theme identifier] isEqualToString:currentIdentifier]) {
-				_currentTheme = [theme retain];
-				break;
-			}
+	// only load the default themes if no user themes were loaded
+	if (![[self themes] count]) {
+		// next load the default themes
+		for (WCFontAndColorTheme *theme in [self defaultThemes]) {
+			if ([self containsTheme:theme])
+				continue;
+			
+			[[self mutableThemes] addObject:[[theme copy] autorelease]];
 		}
 	}
-	else {
-		[[self mutableThemes] addObject:WCFontAndColorThemeDefaultTheme];
-		_currentTheme = [WCFontAndColorThemeDefaultTheme retain];
-	}
 	
+	NSString *currentIdentifier = [[NSUserDefaults standardUserDefaults] objectForKey:WCFontsAndColorsCurrentThemeIdentifierKey];
+	
+	// look for a theme matching the current identifier
+	for (WCFontAndColorTheme *theme in _themes) {
+		if ([[theme identifier] isEqualToString:currentIdentifier]) {
+			_currentTheme = [theme retain];
+			break;
+		}
+	}
+	// otherwise use the first theme
+	if (!_currentTheme)
+		_currentTheme = [[[self themes] objectAtIndex:0] retain];
+	
+	// start observing our current theme for changes
 	[self _setupObservingForFontAndColorTheme:_currentTheme];
 	
+	// sort the themes by name, it just looks nicer
 	[_themes sortUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedStandardCompare:)]]];
 	
 	return self;
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-	if (context == self) {
+	if (context == self && [object isKindOfClass:[WCFontAndColorTheme class]]) {
 		static NSSet *fontKeyPaths;
 		static NSSet *colorKeyPaths;
 		static dispatch_once_t onceToken;
@@ -98,7 +100,14 @@ WCFontAndColorTheme *WCFontAndColorThemeDefaultTheme;
 			colorKeyPaths = [[NSSet alloc] initWithObjects:@"plainTextColor",@"registerColor",@"commentColor",@"preProcessorColor",@"mneumonicColor",@"directiveColor",@"numberColor",@"hexadecimalColor",@"binaryColor",@"conditionalColor",@"stringColor",@"labelColor",@"equateColor",@"defineColor",@"macroColor", nil];
 		});
 		
-		if ([keyPath isEqualToString:@"selectionColor"])
+		if ([keyPath isEqualToString:@"name"]) {
+			WCFontAndColorTheme *theme = object;
+			
+			[theme setIdentifier:[NSString stringWithFormat:@"org.revsoft.wabbitcode.theme.%@",[theme name]]];
+			
+			[[NSUserDefaults standardUserDefaults] setObject:[theme identifier] forKey:WCFontsAndColorsCurrentThemeIdentifierKey];
+		}
+		else if ([keyPath isEqualToString:@"selectionColor"])
 			[[NSNotificationCenter defaultCenter] postNotificationName:WCFontAndColorThemeManagerSelectionColorDidChangeNotification object:self];
 		else if ([keyPath isEqualToString:@"backgroundColor"])
 			[[NSNotificationCenter defaultCenter] postNotificationName:WCFontAndColorThemeManagerBackgroundColorDidChangeNotification object:self];
@@ -110,6 +119,8 @@ WCFontAndColorTheme *WCFontAndColorThemeDefaultTheme;
 			[[NSNotificationCenter defaultCenter] postNotificationName:WCFontAndColorThemeManagerFontDidChangeNotification object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:keyPath,WCFontAndColorThemeManagerFontDidChangeFontNameKey, nil]];
 		else if ([colorKeyPaths containsObject:keyPath])
 			[[NSNotificationCenter defaultCenter] postNotificationName:WCFontAndColorThemeManagerColorDidChangeNotification object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:keyPath,WCFontAndColorThemeManagerColorDidChangeColorNameKey, nil]];
+		
+		[[self unsavedThemes] addObject:object];
 	}
 	else
 		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
@@ -125,12 +136,16 @@ WCFontAndColorTheme *WCFontAndColorThemeDefaultTheme;
 }
 
 - (BOOL)containsTheme:(WCFontAndColorTheme *)theme; {
-	return [_identifiers containsObject:[theme identifier]];
+	for (WCFontAndColorTheme *t in [self themes]) {
+		if ([[t identifier] isEqualToString:[theme identifier]])
+			return YES;
+	}
+	return NO;
 }
 
 - (BOOL)saveCurrentThemes:(NSError **)outError; {
 	NSURL *directoryURL = [[WCMiscellaneousPerformer sharedPerformer] userFontAndColorThemesDirectoryURL];
-	for (WCFontAndColorTheme *theme in [self themes]) {
+	for (WCFontAndColorTheme *theme in [[[self unsavedThemes] copy] autorelease]) {
 		NSDictionary *plist = [theme plistRepresentation];
 		NSData *data = [NSPropertyListSerialization dataWithPropertyList:plist format:NSPropertyListXMLFormat_v1_0 options:0 error:outError];
 		
@@ -138,6 +153,8 @@ WCFontAndColorTheme *WCFontAndColorThemeDefaultTheme;
 			return NO;
 		else if (![data writeToURL:[[directoryURL URLByAppendingPathComponent:[theme name]] URLByAppendingPathExtension:@"plist"] options:NSDataWritingAtomic error:outError])
 			return NO;
+		
+		[[self unsavedThemes] removeObject:theme];
 	}
 	return YES;
 }
@@ -154,22 +171,31 @@ WCFontAndColorTheme *WCFontAndColorThemeDefaultTheme;
 	return [_themes objectAtIndex:index];
 }
 - (void)insertObject:(WCFontAndColorTheme *)object inThemesAtIndex:(NSUInteger)index {
-	[_identifiers addObject:[object identifier]];
+	[_unsavedThemes addObject:object];
 	[_themes insertObject:object atIndex:index];
+	
+	[[NSUserDefaults standardUserDefaults] setObject:[_themes valueForKeyPath:@"identifier"] forKey:WCFontsAndColorsUserThemeIdentifiersKey];
 }
 - (void)removeObjectFromThemesAtIndex:(NSUInteger)index {
-	[_identifiers removeObject:[[_themes objectAtIndex:index] identifier]];
+	[_unsavedThemes removeObject:[_themes objectAtIndex:index]];
 	[_themes removeObjectAtIndex:index];
+	
+	[[NSUserDefaults standardUserDefaults] setObject:[_themes valueForKeyPath:@"identifier"] forKey:WCFontsAndColorsUserThemeIdentifiersKey];
 }
 - (void)insertThemes:(NSArray *)array atIndexes:(NSIndexSet *)indexes {
 	for (WCFontAndColorTheme *theme in array)
-		[_identifiers addObject:[theme identifier]];
+		[_unsavedThemes addObject:theme];
 	[_themes insertObjects:array atIndexes:indexes];
+	
+	[[NSUserDefaults standardUserDefaults] setObject:[_themes valueForKeyPath:@"identifier"] forKey:WCFontsAndColorsUserThemeIdentifiersKey];
 }
 - (void)removeThemesAtIndexes:(NSIndexSet *)indexes {
 	for (WCFontAndColorTheme *theme in [_themes objectsAtIndexes:indexes])
-		[_identifiers removeObject:[theme identifier]];
+		[_unsavedThemes removeObject:theme];
+	
 	[_themes removeObjectsAtIndexes:indexes];
+	
+	[[NSUserDefaults standardUserDefaults] setObject:[_themes valueForKeyPath:@"identifier"] forKey:WCFontsAndColorsUserThemeIdentifiersKey];
 }
 @dynamic currentTheme;
 - (WCFontAndColorTheme *)currentTheme {
@@ -190,11 +216,42 @@ WCFontAndColorTheme *WCFontAndColorThemeDefaultTheme;
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:WCFontAndColorThemeManagerCurrentThemeDidChangeNotification object:self];
 }
+@dynamic defaultThemes;
+- (NSArray *)defaultThemes {
+	static NSMutableArray *retval;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		retval = [[NSMutableArray alloc] initWithCapacity:0];
+		
+		for (NSURL *themeURL in [[NSFileManager defaultManager] contentsOfDirectoryAtURL:[[WCMiscellaneousPerformer sharedPerformer] applicationFontAndColorThemesDirectoryURL] includingPropertiesForKeys:[NSArray array] options:NSDirectoryEnumerationSkipsHiddenFiles|NSDirectoryEnumerationSkipsPackageDescendants|NSDirectoryEnumerationSkipsSubdirectoryDescendants error:NULL]) {
+			WCFontAndColorTheme *theme = [[[WCFontAndColorTheme alloc] initWithPlistRepresentation:[NSDictionary dictionaryWithContentsOfURL:themeURL]] autorelease];
+			
+			[retval addObject:theme];
+		}
+	});
+	return [[retval copy] autorelease];
+}
+@dynamic defaultTheme;
+- (WCFontAndColorTheme *)defaultTheme {
+	static WCFontAndColorTheme *retval;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		for (WCFontAndColorTheme *theme in [self defaultThemes]) {
+			if ([[theme identifier] isEqualToString:WCFontAndColorThemeDefaultIdentifier]) {
+				retval = theme;
+				break;
+			}
+		}
+	});
+	return retval;
+}
+@synthesize unsavedThemes=_unsavedThemes;
 
 - (void)_setupObservingForFontAndColorTheme:(WCFontAndColorTheme *)theme; {
-	[theme addObserver:self forKeyPaths:[NSArray arrayWithObjects:@"selectionColor",@"backgroundColor",@"cursorColor",@"currentLineColor",@"plainTextFont",@"plainTextColor",@"commentFont",@"commentColor",@"registerFont",@"registerColor",@"mneumonicFont",@"mneumonicColor",@"stringFont",@"stringColor",@"preProcessorFont",@"preProcessorColor",@"directiveFont",@"directiveColor",@"conditionalFont",@"conditionalColor",@"numberFont",@"numberColor",@"hexadecimalFont",@"hexadecimalColor",@"binaryFont",@"binaryColor",@"stringFont",@"stringColor",@"labelFont",@"labelColor",@"equateFont",@"equateColor",@"defineFont",@"defineColor",@"macroFont",@"macroColor", nil]];
+	[theme addObserver:self forKeyPaths:[NSArray arrayWithObjects:@"name",@"selectionColor",@"backgroundColor",@"cursorColor",@"currentLineColor",@"plainTextFont",@"plainTextColor",@"commentFont",@"commentColor",@"registerFont",@"registerColor",@"mneumonicFont",@"mneumonicColor",@"stringFont",@"stringColor",@"preProcessorFont",@"preProcessorColor",@"directiveFont",@"directiveColor",@"conditionalFont",@"conditionalColor",@"numberFont",@"numberColor",@"hexadecimalFont",@"hexadecimalColor",@"binaryFont",@"binaryColor",@"stringFont",@"stringColor",@"labelFont",@"labelColor",@"equateFont",@"equateColor",@"defineFont",@"defineColor",@"macroFont",@"macroColor", nil]];
 }
 - (void)_cleanupObservingForFontAndColorTheme:(WCFontAndColorTheme *)theme; {
-	[theme removeObserver:self forKeyPaths:[NSArray arrayWithObjects:@"selectionColor",@"backgroundColor",@"cursorColor",@"currentLineColor",@"plainTextFont",@"plainTextColor",@"commentFont",@"commentColor",@"registerFont",@"registerColor",@"mneumonicFont",@"mneumonicColor",@"stringFont",@"stringColor",@"preProcessorFont",@"preProcessorColor",@"directiveFont",@"directiveColor",@"conditionalFont",@"conditionalColor",@"numberFont",@"numberColor",@"hexadecimalFont",@"hexadecimalColor",@"binaryFont",@"binaryColor",@"stringFont",@"stringColor",@"labelFont",@"labelColor",@"equateFont",@"equateColor",@"defineFont",@"defineColor",@"macroFont",@"macroColor", nil]];
+	[theme removeObserver:self forKeyPaths:[NSArray arrayWithObjects:@"name",@"selectionColor",@"backgroundColor",@"cursorColor",@"currentLineColor",@"plainTextFont",@"plainTextColor",@"commentFont",@"commentColor",@"registerFont",@"registerColor",@"mneumonicFont",@"mneumonicColor",@"stringFont",@"stringColor",@"preProcessorFont",@"preProcessorColor",@"directiveFont",@"directiveColor",@"conditionalFont",@"conditionalColor",@"numberFont",@"numberColor",@"hexadecimalFont",@"hexadecimalColor",@"binaryFont",@"binaryColor",@"stringFont",@"stringColor",@"labelFont",@"labelColor",@"equateFont",@"equateColor",@"defineFont",@"defineColor",@"macroFont",@"macroColor", nil]];
 }
+
 @end
