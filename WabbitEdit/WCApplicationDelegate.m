@@ -9,12 +9,14 @@
 #import "WCApplicationDelegate.h"
 #import "WCFontsAndColorsViewController.h"
 #import "WCPreferencesWindowController.h"
+#import "WCEditorViewController.h"
 
 @implementation WCApplicationDelegate
 - (void)applicationDidFinishLaunching:(NSNotification *)notification {
 	NSMutableDictionary *userDefaults = [NSMutableDictionary dictionaryWithCapacity:0];
 	
 	[userDefaults addEntriesFromDictionary:[WCFontsAndColorsViewController userDefaults]];
+	[userDefaults addEntriesFromDictionary:[WCEditorViewController userDefaults]];
 	
 	[[NSUserDefaults standardUserDefaults] registerDefaults:userDefaults];
 }

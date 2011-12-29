@@ -351,6 +351,7 @@
 				0706D65614A8F6D60092F880 /* WCSourceTextStorage.h */,
 				0706D65714A8F6D60092F880 /* WCSourceTextStorage.m */,
 				0745BE1B14AAFA0D00F541DC /* WCSourceTextStorageDelegate.h */,
+				0708964014A6C8050017BBE4 /* Tokens/Symbols */,
 				0725436D14A83A1400C961B7 /* Jump Bar */,
 				0708964314A6C88A0017BBE4 /* Completion */,
 			);
@@ -461,7 +462,6 @@
 				0745BE1D14AB921300F541DC /* WCMiscellaneousPerformer.m */,
 				072BBC3F14AA66730044ECC2 /* Preferences */,
 				0708964114A6C81C0017BBE4 /* Documents */,
-				0708964014A6C8050017BBE4 /* Tokens/Symbols */,
 				0708964214A6C8660017BBE4 /* Source Editor */,
 				0708964414A6C8A70017BBE4 /* Cells */,
 				0708964514A6C8EC0017BBE4 /* Categories */,

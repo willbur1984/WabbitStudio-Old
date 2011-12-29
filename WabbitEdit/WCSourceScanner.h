@@ -57,4 +57,5 @@ extern NSString *const WCSourceScannerDidFinishScanningSymbolsNotification;
 + (NSRegularExpression *)conditionalRegularExpression;
 + (NSRegularExpression *)defineRegularExpression;
 + (NSRegularExpression *)macroRegularExpression;
++ (NSRegularExpression *)symbolRegularExpression;
 @end

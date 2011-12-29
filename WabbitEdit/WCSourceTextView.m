@@ -15,12 +15,17 @@
 #import "WCFontAndColorThemeManager.h"
 #import "WCFontAndColorTheme.h"
 #import "NSAttributedString+WCExtensions.h"
+#import "NSObject+WCExtensions.h"
+#import "WCEditorViewController.h"
+#import "WCSourceToken.h"
 
 @interface WCSourceTextView ()
 
 - (void)_commonInit;
-- (void)_updateCurrentLineHighlight;
 - (void)_drawCurrentLineHighlightInRect:(NSRect)rect;
+- (void)_highlightMatchingBrace;
+- (void)_highlightMatchingTempLabel;
+- (NSRange)_symbolRangeForRange:(NSRange)range;
 @end
 
 @implementation WCSourceTextView
@@ -30,6 +35,7 @@
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[self cleanUpUserDefaultsObserving];
 	[super dealloc];
 }
 
@@ -100,6 +106,17 @@
 	}
 	
 	[self setSelectedRange:placeholderRange];
+}
+#pragma mark NSObject+WCExtensions
+- (NSSet *)userDefaultsKeyPathsToObserve {
+	return [NSSet setWithObjects:WCEditorShowCurrentLineHighlightKey, nil];
+}
+#pragma mark NSKeyValueObserving
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+	if ([keyPath isEqualToString:[kUserDefaultsKeyPathPrefix stringByAppendingString:WCEditorShowCurrentLineHighlightKey]])
+		[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
+	else
+		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
 #pragma mark *** Public Methods ***
 #pragma mark IBActions
@@ -349,6 +366,8 @@
 	[self setBackgroundColor:[currentTheme backgroundColor]];
 	[self setInsertionPointColor:[currentTheme cursorColor]];
 	
+	[self setupUserDefaultsObserving];
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textViewDidChangeSelection:) name:NSTextViewDidChangeSelectionNotification object:self];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_currentThemeDidChange:) name:WCFontAndColorThemeManagerCurrentThemeDidChangeNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_selectionColorDidChange:) name:WCFontAndColorThemeManagerSelectionColorDidChangeNotification object:nil];
@@ -358,6 +377,9 @@
 }
 
 - (void)_drawCurrentLineHighlightInRect:(NSRect)rect; {
+	if (![[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCurrentLineHighlightKey])
+		return;
+	
 	NSUInteger numRects;
 	NSRectArray rects;
 	
@@ -382,12 +404,156 @@
 	NSRectFill(lineRect);
 }
 
-- (void)_updateCurrentLineHighlight; {
-	[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
+- (void)_highlightMatchingBrace; {
+	// need at least two characters in our string to be able to match
+	if ([[self string] length] <= 1)
+		return;
+	// return early if we have any text selected
+	else if ([self selectedRange].length)
+		return;
+	
+	static NSCharacterSet *closingCharacterSet = nil;
+	static NSCharacterSet *openingCharacterSet = nil;
+	if (!closingCharacterSet) {
+		closingCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:@")]}"] retain];
+		openingCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:@"([{"] retain];
+	}
+	// return early if the character at the caret position is not one our closing brace characters
+	if (![closingCharacterSet characterIsMember:[[self string] characterAtIndex:[self selectedRange].location-1]])
+		return;
+	
+	unichar closingBraceCharacter = [[self string] characterAtIndex:[self selectedRange].location-1];
+	NSUInteger numberOfClosingBraces = 0, numberOfOpeningBraces = 0;
+	NSInteger characterIndex;
+	
+	// scan backwards starting at the selected character index
+	for (characterIndex = [self selectedRange].location-1; characterIndex > 0; characterIndex--) {
+		unichar charAtIndex = [[self string] characterAtIndex:characterIndex];
+		
+		// keep track of opening and closing braces
+		if ([openingCharacterSet characterIsMember:charAtIndex]) {
+			numberOfOpeningBraces++;
+			
+			// if the number of opening and closing braces are equal and the opening and closing characters match
+			// show the find indicator on the opening brace
+			if (numberOfOpeningBraces == numberOfClosingBraces &&
+				((closingBraceCharacter == ')' && charAtIndex == '(') ||
+				 (closingBraceCharacter == ']' && charAtIndex == '[') ||
+				 (closingBraceCharacter == '}' && charAtIndex == '{'))) {
+					[self showFindIndicatorForRange:NSMakeRange(characterIndex, 1)];
+					return;
+				}
+			else if (numberOfOpeningBraces > numberOfClosingBraces) {
+				NSBeep();
+				return;
+			}
+		}
+		else if ([closingCharacterSet characterIsMember:charAtIndex])
+			numberOfClosingBraces++;
+	}
+	
+	NSBeep();
 }
+
+- (void)_highlightMatchingTempLabel; {
+	// need at least two characters in order to match
+	if ([[self string] length] <= 2)
+		return;
+	// selection cannot have a length
+	else if ([self selectedRange].length)
+		return;
+	
+	NSRange selectedRange = [self selectedRange];
+	if ([[self string] characterAtIndex:selectedRange.location-1] != '_')
+		return;
+	// dont highlight the temp labels themselves
+	else if ([[self string] lineRangeForRange:selectedRange].location == selectedRange.location-1)
+		return;
+	
+	__block NSInteger numberOfReferences = 0;
+	
+	NSUInteger stringLength = [[self string] length];
+	NSInteger charIndex;
+	
+	for (charIndex = selectedRange.location-2; charIndex > 0; charIndex--) {
+		unichar charAtIndex = [[self string] characterAtIndex:charIndex];
+		
+		if (charAtIndex == '+')
+			numberOfReferences++;
+		else if (charAtIndex == '-')
+			numberOfReferences--;
+		else
+			break;
+	}
+	
+	if (!numberOfReferences) {
+		static NSCharacterSet *delimiterCharSet;
+		static dispatch_once_t onceToken;
+		dispatch_once(&onceToken, ^{
+			NSMutableCharacterSet *charSet = [[[NSCharacterSet whitespaceCharacterSet] mutableCopy] autorelease];
+			[charSet formUnionWithCharacterSet:[NSCharacterSet characterSetWithCharactersInString:@","]];
+			delimiterCharSet = [charSet copy];
+		});
+		
+		if (![delimiterCharSet characterIsMember:[[self string] characterAtIndex:selectedRange.location-2]])
+			return;
+		
+		numberOfReferences++;
+	}
+	
+	__block BOOL foundMatchingTempLabel = NO;
+	NSStringEnumerationOptions enumOptions = NSStringEnumerationByLines;
+	if (numberOfReferences < 0)
+		enumOptions |= NSStringEnumerationReverse;
+	NSRange enumRange = (numberOfReferences > 0)?NSMakeRange(selectedRange.location, stringLength-selectedRange.location):NSMakeRange(0, selectedRange.location);
+	
+	[[self string] enumerateSubstringsInRange:enumRange options:enumOptions usingBlock:^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
+		if (substringRange.length && [substring characterAtIndex:0] == '_') {
+			NSRange symbolRange = [self _symbolRangeForRange:NSMakeRange(substringRange.location, 0)];
+			if (symbolRange.length != 1)
+				return;
+			
+			WCSourceToken *token = [[[[self delegate] sourceScannerForSourceTextView:self] tokens] sourceTokenForRange:substringRange];
+			if (NSLocationInRange(substringRange.location, [token range]) &&
+				[token type] == WCSourceTokenTypeComment)
+				return;
+			
+			if (numberOfReferences > 0 && (!(--numberOfReferences))) {
+				foundMatchingTempLabel = YES;
+				[self showFindIndicatorForRange:NSMakeRange(substringRange.location, 1)];
+				*stop = YES;
+			}
+			else if (numberOfReferences < 0 && (!(++numberOfReferences))) {
+				foundMatchingTempLabel = YES;
+				[self showFindIndicatorForRange:NSMakeRange(substringRange.location, 1)];
+				*stop = YES;
+			}
+		}
+	}];
+	
+	if (!foundMatchingTempLabel)
+		NSBeep();
+}
+
+- (NSRange)_symbolRangeForRange:(NSRange)range; {
+	if (![[self string] length])
+		return NSNotFoundRange;
+	
+	__block NSRange symbolRange = NSNotFoundRange;
+	NSRange lineRange = [[self string] lineRangeForRange:range];
+	
+	[[WCSourceScanner symbolRegularExpression] enumerateMatchesInString:[self string] options:0 range:lineRange usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+		if (NSLocationInOrEqualToRange(range.location, [result range])) {
+			symbolRange = [result range];
+			*stop = YES;
+		}
+	}];
+	return symbolRange;
+}
+
 #pragma mark Notifications
 - (void)_textViewDidChangeSelection:(NSNotification *)note {
-	[self _updateCurrentLineHighlight];
+	[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
 }
 - (void)_currentThemeDidChange:(NSNotification *)note {
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];

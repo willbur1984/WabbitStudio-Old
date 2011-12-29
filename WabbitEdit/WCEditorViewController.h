@@ -10,6 +10,9 @@
 #import "RSPreferencesModule.h"
 #import "RSUserDefaultsProvider.h"
 
+extern NSString *const WCEditorShowCurrentLineHighlightKey;
+extern NSString *const WCEditorShowLineNumbersKey;
+
 @interface WCEditorViewController : NSViewController <RSPreferencesModule,RSUserDefaultsProvider>
 @property (readwrite,assign,nonatomic) IBOutlet NSView *initialFirstResponder;
 @end

@@ -61,18 +61,12 @@
 	
 	[[[self sourceScanner] textStorage] addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName, nil] range:range];
 	
-	static NSRegularExpression *symbolsRegex;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		symbolsRegex = [[NSRegularExpression alloc] initWithPattern:@"[A-Za-z0-9_!?.]+" options:0 error:NULL];
-	});
-	
 	NSDictionary *labelNames = [[self sourceScanner] labelNamesToLabelSymbols];
 	NSDictionary *equateNames = [[self sourceScanner] equateNamesToEquateSymbols];
 	NSDictionary *defineNames = [[self sourceScanner] defineNamesToDefineSymbols];
 	NSDictionary *macroNames = [[self sourceScanner] macroNamesToMacroSymbols];
 	
-	[symbolsRegex enumerateMatchesInString:[[[self sourceScanner] textStorage] string] options:0 range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+	[[WCSourceScanner symbolRegularExpression] enumerateMatchesInString:[[[self sourceScanner] textStorage] string] options:0 range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
 		NSString *name = [[[[[self sourceScanner] textStorage] string] substringWithRange:[result range]] lowercaseString];
 		
 		if ([labelNames objectForKey:name]) {

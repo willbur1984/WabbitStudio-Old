@@ -164,6 +164,14 @@ NSString *const WCSourceScannerDidFinishScanningSymbolsNotification = @"WCSource
 	});
 	return retval;
 }
++ (NSRegularExpression *)symbolRegularExpression; {
+	static NSRegularExpression *retval;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		retval = [[NSRegularExpression alloc] initWithPattern:@"[A-Za-z0-9_!?]+" options:0 error:NULL];
+	});
+	return retval;
+}
 
 @synthesize textStorage=_textStorage;
 @synthesize tokens=_tokens;

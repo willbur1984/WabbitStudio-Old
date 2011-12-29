@@ -19,6 +19,7 @@
 @property (readonly,nonatomic) NSDictionary *textAttributes;
 
 - (void)drawBackgroundAndDividerLineInRect:(NSRect)backgroundAndDividerLineRect;
+- (void)drawCurrentLineHighlightInRect:(NSRect)rect;
 - (void)drawLineNumbersInRect:(NSRect)lineNumbersRect;
 
 - (NSUInteger)lineNumberForCharacterIndex:(NSUInteger)index;

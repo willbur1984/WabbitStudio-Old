@@ -8,6 +8,9 @@
 
 #import "WCEditorViewController.h"
 
+NSString *const WCEditorShowCurrentLineHighlightKey = @"editorShowCurrentLineHighlight";
+NSString *const WCEditorShowLineNumbersKey = @"editorShowLineNumbers";
+
 @implementation WCEditorViewController
 
 #pragma mark *** Subclass Overrides ***
@@ -33,7 +36,7 @@
 }
 #pragma mark RSUserDefaultsProvider
 + (NSDictionary *)userDefaults {
-	return nil;
+	return [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],WCEditorShowCurrentLineHighlightKey,[NSNumber numberWithBool:YES],WCEditorShowLineNumbersKey, nil];
 }
 
 @synthesize initialFirstResponder=_initialFirstResponder;

@@ -11,6 +11,8 @@
 #import "NSString+WCExtensions.h"
 #import "WCFontAndColorTheme.h"
 #import "WCFontAndColorThemeManager.h"
+#import "WCEditorViewController.h"
+#import "NSObject+WCExtensions.h"
 
 #define DEFAULT_THICKNESS	20.0
 #define RULER_MARGIN		8.0
@@ -31,6 +33,7 @@
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[self cleanUpUserDefaultsObserving];
 	[_lineStartIndexes release];
 	[super dealloc];
 }
@@ -42,6 +45,8 @@
 	_lineStartIndexes = [[NSMutableArray alloc] initWithCapacity:0];
 	
 	[self setClientView:[scrollView documentView]];
+	
+	[self setupUserDefaultsObserving];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidProcessEditing:) name:NSTextStorageDidProcessEditingNotification object:[[scrollView documentView] textStorage]];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textViewDidChangeSelection:) name:NSTextViewDidChangeSelectionNotification object:[scrollView documentView]];
@@ -79,27 +84,7 @@
 	[[self backgroundColor] set];
 	NSRectFill([self bounds]);
 	
-	NSUInteger numRects;
-	NSRectArray rects;
-	
-	if ([[self textView] selectedRange].length)
-		rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[[[self textView] string] lineRangeForRange:[[self textView] selectedRange]] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&numRects];
-	else
-		rects = [[[self textView] layoutManager] rectArrayForCharacterRange:NSMakeRange([[self textView] selectedRange].location, 0) withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&numRects];
-	
-	if (numRects > 0) {
-		NSRect lineRect = rects[0];
-		lineRect = NSMakeRect(NSMinX([self bounds]), [self convertPoint:lineRect.origin fromView:[self clientView]].y, NSWidth([self bounds]), NSHeight(lineRect));
-		
-		if (NSIntersectsRect(lineRect, rect)) {
-			
-			WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
-			
-			[[currentTheme currentLineColor] setFill];
-			NSRectFill(lineRect);
-		}
-	}
-	
+	[self drawCurrentLineHighlightInRect:rect];
 	[self drawLineNumbersInRect:rect];
 	
 	[[NSColor colorWithCalibratedWhite:0.58 alpha:1.0] setStroke];
@@ -115,6 +100,19 @@
 	 */
 }
 
+- (NSSet *)userDefaultsKeyPathsToObserve {
+	return [NSSet setWithObjects:WCEditorShowCurrentLineHighlightKey,WCEditorShowLineNumbersKey, nil];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+	if ([keyPath isEqualToString:[kUserDefaultsKeyPathPrefix stringByAppendingString:WCEditorShowLineNumbersKey]])
+		[self setNeedsDisplay:YES];
+	else if ([keyPath isEqualToString:[kUserDefaultsKeyPathPrefix stringByAppendingString:WCEditorShowCurrentLineHighlightKey]])
+		[self setNeedsDisplay:YES];
+	else
+		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+}
+
 - (void)drawBackgroundAndDividerLineInRect:(NSRect)backgroundAndDividerLineRect; {
 	NSRect bounds = backgroundAndDividerLineRect;
 	
@@ -125,6 +123,9 @@
 }
 
 - (void)drawLineNumbersInRect:(NSRect)lineNumbersRect; {
+	if (![[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowLineNumbersKey])
+		return;
+	
 	NSRect bounds = lineNumbersRect;
 	id view = [self clientView];
 	NSLayoutManager *layoutManager = [view layoutManager];
@@ -133,7 +134,6 @@
 	NSRange range = [layoutManager characterRangeForGlyphRange:glyphRange actualGlyphRange:NULL];
 	NSUInteger lineNumber, lineStartIndex, numberOfLines = [[self lineStartIndexes] count], stringLength = [[view string] length];
 	NSUInteger selectedLineNumber = [[[self textView] string] lineNumberForRange:[[self textView] selectedRange]];
-	BOOL shouldDrawLineNumbers = YES;
 	
 	// Fudge the range a tad in case there is an extra new line at end.
 	// It doesn't show up in the glyphs so would not be accounted for.
@@ -141,35 +141,31 @@
 	
 	for (lineNumber = [self lineNumberForCharacterIndex:range.location]; lineNumber < numberOfLines; lineNumber++) {
 		lineStartIndex = [[[self lineStartIndexes] objectAtIndex:lineNumber] unsignedIntegerValue];
-		//lineStartIndex = (NSUInteger)[[self lineStartIndexes] pointerAtIndex:lineNumber];
 		
 		if (NSLocationInRange(lineStartIndex, range)) {
+			NSString *labelText = [NSString stringWithFormat:@"%lu", lineNumber + 1];
 			
-			// Line numbers are internally stored starting at 0
-			if (shouldDrawLineNumbers) {
-				NSString *labelText = [NSString stringWithFormat:@"%lu", lineNumber + 1];
+			NSRect labelRect;
+			NSUInteger numRects;
+			
+			if (lineStartIndex < stringLength)
+				labelRect = [layoutManager lineFragmentRectForGlyphAtIndex:[[(NSTextView *)[self clientView] layoutManager] glyphIndexForCharacterAtIndex:lineStartIndex] effectiveRange:NULL];
+			else {
+				NSRectArray rects = [layoutManager rectArrayForCharacterRange:NSMakeRange(lineStartIndex, 0) withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[view textContainer] rectCount:&numRects];
+				if (numRects > 0)
+					labelRect = rects[0];
+			}
+			
+			if (lineStartIndex < stringLength || numRects > 0) {
+				NSDictionary *textAttributes = [self textAttributesForLineNumber:lineNumber selectedLineNumber:selectedLineNumber];
 				
-				NSRect labelRect;
-				NSUInteger numRects;
+				NSSize stringSize = [labelText sizeWithAttributes:textAttributes];
 				
-				if (lineStartIndex < stringLength)
-					labelRect = [layoutManager lineFragmentRectForGlyphAtIndex:[[(NSTextView *)[self clientView] layoutManager] glyphIndexForCharacterAtIndex:lineStartIndex] effectiveRange:NULL];
-				else {
-					NSRectArray rects = [layoutManager rectArrayForCharacterRange:NSMakeRange(lineStartIndex, 0) withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[view textContainer] rectCount:&numRects];
-					if (numRects > 0)
-						labelRect = rects[0];
-				}
-				
-				if (lineStartIndex < stringLength || numRects > 0) {
-					NSDictionary *textAttributes = [self textAttributesForLineNumber:lineNumber selectedLineNumber:selectedLineNumber];
-					
-					NSSize stringSize = [labelText sizeWithAttributes:textAttributes];
-					
-					[labelText drawInRect:NSMakeRect(NSMinX(bounds), [self convertPoint:labelRect.origin fromView:[self clientView]].y + (floor(NSHeight(labelRect)/2.0)-floor(stringSize.height/2.0)), NSWidth(bounds)-floor(RULER_MARGIN/2.0), NSHeight(labelRect)) withAttributes:textAttributes];
-				}
+				[labelText drawInRect:NSMakeRect(NSMinX(bounds), [self convertPoint:labelRect.origin fromView:[self clientView]].y + (floor(NSHeight(labelRect)/2.0)-floor(stringSize.height/2.0)), NSWidth(bounds)-floor(RULER_MARGIN/2.0), NSHeight(labelRect)) withAttributes:textAttributes];
 			}
 		}
-		else if (lineStartIndex > NSMaxRange(range))
+		
+		if (lineStartIndex > NSMaxRange(range))
 			break;
 	}
 }
@@ -281,6 +277,32 @@
 	[[[self textView] string] getLineStart:NULL end:&lineEnd contentsEnd:&contentEnd forRange:NSMakeRange([[_lineStartIndexes lastObject] unsignedIntegerValue], 0)];
 	if (contentEnd < lineEnd)
 		[_lineStartIndexes addObject:[NSNumber numberWithUnsignedInteger:characterIndex]];
+}
+
+- (void)drawCurrentLineHighlightInRect:(NSRect)rect; {
+	if (![[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCurrentLineHighlightKey])
+		return;
+	
+	NSUInteger numRects;
+	NSRectArray rects;
+	
+	if ([[self textView] selectedRange].length)
+		rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[[[self textView] string] lineRangeForRange:[[self textView] selectedRange]] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&numRects];
+	else
+		rects = [[[self textView] layoutManager] rectArrayForCharacterRange:NSMakeRange([[self textView] selectedRange].location, 0) withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&numRects];
+	
+	if (numRects > 0) {
+		NSRect lineRect = rects[0];
+		lineRect = NSMakeRect(NSMinX([self bounds]), [self convertPoint:lineRect.origin fromView:[self clientView]].y, NSWidth([self bounds]), NSHeight(lineRect));
+		
+		if (NSIntersectsRect(lineRect, rect)) {
+			
+			WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
+			
+			[[currentTheme currentLineColor] setFill];
+			NSRectFill(lineRect);
+		}
+	}
 }
 
 - (void)_textStorageDidProcessEditing:(NSNotification *)note {
