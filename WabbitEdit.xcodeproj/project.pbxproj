@@ -85,6 +85,11 @@
 		0745BE2F14ABF83400F541DC /* WCEditorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0745BE2D14ABF83400F541DC /* WCEditorViewController.m */; };
 		0745BE3314ABF86700F541DC /* WCEditorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0745BE3114ABF86700F541DC /* WCEditorView.xib */; };
 		0745BE3514ABFB0D00F541DC /* Editor.png in Resources */ = {isa = PBXBuildFile; fileRef = 0745BE3414ABFB0D00F541DC /* Editor.png */; };
+		078F03FD14AD0D760080ADBC /* RSToolTipBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F03F614AD0D760080ADBC /* RSToolTipBackgroundView.m */; };
+		078F03FE14AD0D760080ADBC /* RSToolTipManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F03F914AD0D760080ADBC /* RSToolTipManager.m */; };
+		078F03FF14AD0D760080ADBC /* RSToolTipPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F03FB14AD0D760080ADBC /* RSToolTipPanel.m */; };
+		078F040414AD0FA00080ADBC /* RSToolTipWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 078F040214AD0FA00080ADBC /* RSToolTipWindow.xib */; };
+		078F040714AD17AC0080ADBC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 078F040614AD17AC0080ADBC /* QuartzCore.framework */; };
 		07F5F75714A4F37200F1F326 /* WCSourceHighlighter.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F5F75614A4F37200F1F326 /* WCSourceHighlighter.m */; };
 		07F5F75E14A5024D00F1F326 /* NSTextView+WCExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F5F75D14A5024D00F1F326 /* NSTextView+WCExtensions.m */; };
 		07F5F76114A5451700F1F326 /* WCScanSymbolsOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F5F76014A5451700F1F326 /* WCScanSymbolsOperation.m */; };
@@ -237,6 +242,16 @@
 		0745BE2D14ABF83400F541DC /* WCEditorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCEditorViewController.m; sourceTree = "<group>"; };
 		0745BE3214ABF86700F541DC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCEditorView.xib; sourceTree = "<group>"; };
 		0745BE3414ABFB0D00F541DC /* Editor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Editor.png; sourceTree = "<group>"; };
+		078F03F514AD0D760080ADBC /* RSToolTipBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSToolTipBackgroundView.h; sourceTree = "<group>"; };
+		078F03F614AD0D760080ADBC /* RSToolTipBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSToolTipBackgroundView.m; sourceTree = "<group>"; };
+		078F03F814AD0D760080ADBC /* RSToolTipManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSToolTipManager.h; sourceTree = "<group>"; };
+		078F03F914AD0D760080ADBC /* RSToolTipManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSToolTipManager.m; sourceTree = "<group>"; };
+		078F03FA14AD0D760080ADBC /* RSToolTipPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSToolTipPanel.h; sourceTree = "<group>"; };
+		078F03FB14AD0D760080ADBC /* RSToolTipPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSToolTipPanel.m; sourceTree = "<group>"; };
+		078F03FC14AD0D760080ADBC /* RSToolTipProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSToolTipProvider.h; sourceTree = "<group>"; };
+		078F040314AD0FA00080ADBC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = RSToolTipWindow.xib; sourceTree = "<group>"; };
+		078F040514AD11740080ADBC /* RSToolTipView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSToolTipView.h; sourceTree = "<group>"; };
+		078F040614AD17AC0080ADBC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		07F5F75514A4F37200F1F326 /* WCSourceHighlighter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSourceHighlighter.h; sourceTree = "<group>"; };
 		07F5F75614A4F37200F1F326 /* WCSourceHighlighter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSourceHighlighter.m; sourceTree = "<group>"; };
 		07F5F75C14A5024C00F1F326 /* NSTextView+WCExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTextView+WCExtensions.h"; sourceTree = "<group>"; };
@@ -260,6 +275,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				078F040714AD17AC0080ADBC /* QuartzCore.framework in Frameworks */,
 				071ECCC314A4233C002409F8 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -437,6 +453,7 @@
 			isa = PBXGroup;
 			children = (
 				071ECCC214A4233C002409F8 /* Cocoa.framework */,
+				078F040614AD17AC0080ADBC /* QuartzCore.framework */,
 				071ECCC414A4233C002409F8 /* Other Frameworks */,
 			);
 			name = Frameworks;
@@ -502,6 +519,14 @@
 		0725433C14A7998200C961B7 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				078F03F514AD0D760080ADBC /* RSToolTipBackgroundView.h */,
+				078F03F614AD0D760080ADBC /* RSToolTipBackgroundView.m */,
+				078F03F814AD0D760080ADBC /* RSToolTipManager.h */,
+				078F03F914AD0D760080ADBC /* RSToolTipManager.m */,
+				078F03FA14AD0D760080ADBC /* RSToolTipPanel.h */,
+				078F03FB14AD0D760080ADBC /* RSToolTipPanel.m */,
+				078F03FC14AD0D760080ADBC /* RSToolTipProvider.h */,
+				078F040514AD11740080ADBC /* RSToolTipView.h */,
 				0745BE1314AAE2CF00F541DC /* RSNoHighlightColorTextFieldCell.h */,
 				0745BE1414AAE2CF00F541DC /* RSNoHighlightColorTextFieldCell.m */,
 				0745BE0414AAC4B400F541DC /* RSBorderlessButtonCell.h */,
@@ -530,6 +555,7 @@
 				0745BE0A14AAD51D00F541DC /* RSBorderedGlassGradientView.h */,
 				0745BE0B14AAD51D00F541DC /* RSBorderedGlassGradientView.m */,
 				0745BE2414ABE2A700F541DC /* RSPlistArchiving.h */,
+				078F040114AD0F7A0080ADBC /* Xibs */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -582,6 +608,15 @@
 				0745BE2D14ABF83400F541DC /* WCEditorViewController.m */,
 			);
 			name = Editor;
+			sourceTree = "<group>";
+		};
+		078F040114AD0F7A0080ADBC /* Xibs */ = {
+			isa = PBXGroup;
+			children = (
+				078F040214AD0FA00080ADBC /* RSToolTipWindow.xib */,
+			);
+			name = Xibs;
+			path = en.lproj;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -660,6 +695,7 @@
 				0745BE2014ABD82F00F541DC /* FontAndColorThemeTypesToNames.plist in Resources */,
 				0745BE3314ABF86700F541DC /* WCEditorView.xib in Resources */,
 				0745BE3514ABFB0D00F541DC /* Editor.png in Resources */,
+				078F040414AD0FA00080ADBC /* RSToolTipWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -729,6 +765,9 @@
 				0745BE1E14AB921400F541DC /* WCMiscellaneousPerformer.m in Sources */,
 				0745BE2314ABDAB200F541DC /* NSObject+WCExtensions.m in Sources */,
 				0745BE2F14ABF83400F541DC /* WCEditorViewController.m in Sources */,
+				078F03FD14AD0D760080ADBC /* RSToolTipBackgroundView.m in Sources */,
+				078F03FE14AD0D760080ADBC /* RSToolTipManager.m in Sources */,
+				078F03FF14AD0D760080ADBC /* RSToolTipPanel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -816,6 +855,14 @@
 				0745BE3214ABF86700F541DC /* en */,
 			);
 			name = WCEditorView.xib;
+			sourceTree = "<group>";
+		};
+		078F040214AD0FA00080ADBC /* RSToolTipWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				078F040314AD0FA00080ADBC /* en */,
+			);
+			name = RSToolTipWindow.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

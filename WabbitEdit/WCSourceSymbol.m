@@ -36,6 +36,10 @@
 	return [self icon];
 }
 
+- (NSAttributedString *)attributedToolTip {
+	return [[[NSAttributedString alloc] initWithString:[self completionName] attributes:RSToolTipProviderDefaultAttributes()] autorelease];
+}
+
 + (id)sourceSymbolOfType:(WCSourceSymbolType)type range:(NSRange)range name:(NSString *)name; {
 	return [[[[self class] alloc] initWithType:type range:range name:name] autorelease];
 }

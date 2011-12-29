@@ -50,8 +50,14 @@
 		
 		NSString *name = [[self string] substringWithRange:[result rangeAtIndex:1]];
 		WCEquateSymbol *equate = [WCEquateSymbol equateSymbolWithRange:[result rangeAtIndex:1] name:name value:value];
+		NSMutableSet *equates = [equateNames objectForKey:[name lowercaseString]];
 		
-		[equateNames setObject:equate forKey:[name lowercaseString]];
+		if (!equates) {
+			equates = [NSMutableSet setWithCapacity:0];
+			[equateNames setObject:equates forKey:[name lowercaseString]];
+		}
+		
+		[equates addObject:equate];
 		[completions setObject:equate forKey:[name lowercaseString]];
 		[symbols addObject:equate];
 	}];
@@ -74,8 +80,14 @@
 			return;
 		
 		WCSourceSymbol *label = [WCSourceSymbol sourceSymbolOfType:WCSourceSymbolTypeLabel range:[result range] name:name];
+		NSMutableSet *labels = [labelNames objectForKey:[name lowercaseString]];
 		
-		[labelNames setObject:label forKey:[name lowercaseString]];
+		if (!labels) {
+			labels = [NSMutableSet setWithCapacity:0];
+			[labelNames setObject:labels forKey:[name lowercaseString]];
+		}
+		
+		[labels addObject:label];
 		[completions setObject:label forKey:[name lowercaseString]];
 		[symbols addObject:label];
 	}];
@@ -130,7 +142,14 @@
 			define = [WCDefineSymbol defineSymbolWithRange:[result rangeAtIndex:1] name:name];
 		}
 		
-		[defineNames setObject:define forKey:[name lowercaseString]];
+		NSMutableSet *defines = [defineNames objectForKey:[name lowercaseString]];
+		
+		if (!defines) {
+			defines = [NSMutableSet setWithCapacity:0];
+			[defineNames setObject:defines forKey:[name lowercaseString]];
+		}
+		
+		[defines addObject:define];
 		[completions setObject:define forKey:[name lowercaseString]];
 		[symbols addObject:define];
 	}];
@@ -193,7 +212,14 @@
 			macro = [WCMacroSymbol macroSymbolWithRange:[result rangeAtIndex:1] name:[[self string] substringWithRange:[result rangeAtIndex:1]] value:value];
 		}
 		
-		[macroNames setObject:macro forKey:[name lowercaseString]];
+		NSMutableSet *macros = [macroNames objectForKey:[name lowercaseString]];
+		
+		if (!macros) {
+			macros = [NSMutableSet setWithCapacity:0];
+			[macroNames setObject:macros forKey:[name lowercaseString]];
+		}
+		
+		[macros addObject:macro];
 		[completions setObject:macro forKey:[name lowercaseString]];
 		[symbols addObject:macro];
 	}];

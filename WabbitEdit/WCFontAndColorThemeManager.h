@@ -31,7 +31,6 @@ extern NSString *const WCFontAndColorThemeManagerFontDidChangeFontNameKey;
 @property (readonly,nonatomic) NSArray *themes;
 @property (readwrite,retain,nonatomic) WCFontAndColorTheme *currentTheme;
 @property (readonly,nonatomic) NSArray *defaultThemes;
-@property (readonly,nonatomic) WCFontAndColorTheme *defaultTheme;
 
 + (WCFontAndColorThemeManager *)sharedManager;
 - (BOOL)containsTheme:(WCFontAndColorTheme *)theme;

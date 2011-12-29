@@ -18,6 +18,8 @@
 #import "NSObject+WCExtensions.h"
 #import "WCEditorViewController.h"
 #import "WCSourceToken.h"
+#import "RSToolTipManager.h"
+#import "WCSourceSymbol.h"
 
 @interface WCSourceTextView ()
 
@@ -55,6 +57,19 @@
 	[self _commonInit];
 	
 	return self;
+}
+
+- (void)viewWillMoveToWindow:(NSWindow *)newWindow {
+	[super viewWillMoveToWindow:newWindow];
+	
+	[[RSToolTipManager sharedManager] removeView:self];
+}
+
+- (void)viewDidMoveToWindow {
+	[super viewDidMoveToWindow];
+	
+	if ([self window])
+		[[RSToolTipManager sharedManager] addView:self];
 }
 
 - (void)drawViewBackgroundInRect:(NSRect)rect {
@@ -192,6 +207,23 @@
 		[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
 	else
 		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+}
+#pragma mark RSToolTipView
+- (NSArray *)toolTipManager:(RSToolTipManager *)toolTipManager toolTipProvidersForToolTipAtPoint:(NSPoint)toolTipPoint {
+	NSUInteger charIndex = [self characterIndexForInsertionAtPoint:toolTipPoint];
+	if (charIndex >= [[self string] length])
+		return nil;
+	else if ([[NSCharacterSet whitespaceAndNewlineCharacterSet] characterIsMember:[[self string] characterAtIndex:charIndex]])
+		return nil;
+	
+	NSRange toolTipRange = [self _symbolRangeForRange:NSMakeRange(charIndex, 0)];
+	if (toolTipRange.location == NSNotFound)
+		return nil;
+	
+	NSArray *symbols = [[self delegate] sourceTextView:self sourceSymbolsForSymbolName:[[self string] substringWithRange:toolTipRange]];
+	if (![symbols count])
+		return nil;
+	return symbols;
 }
 #pragma mark *** Public Methods ***
 #pragma mark IBActions

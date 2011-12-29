@@ -8,8 +8,9 @@
 
 #import <AppKit/NSTextView.h>
 #import "WCSourceTextViewDelegate.h"
+#import "RSToolTipView.h"
 
-@interface WCSourceTextView : NSTextView {
+@interface WCSourceTextView : NSTextView <RSToolTipView> {
 	__weak id <WCSourceTextViewDelegate> _delegate;
 }
 @property (readwrite,assign,nonatomic) IBOutlet id <WCSourceTextViewDelegate> delegate;

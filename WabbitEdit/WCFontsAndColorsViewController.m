@@ -108,7 +108,7 @@ NSString *const WCFontsAndColorsUserThemeIdentifiersKey = @"WCFontsAndColorsUser
 }
 #pragma mark RSUserDefaultsProvider
 + (NSDictionary *)userDefaults {
-	return [NSDictionary dictionaryWithObjectsAndKeys:[[[WCFontAndColorThemeManager sharedManager] defaultTheme] identifier],WCFontsAndColorsCurrentThemeIdentifierKey, nil];
+	return nil;
 }
 #pragma mark *** Public Methods ***
 #pragma mark IBActions

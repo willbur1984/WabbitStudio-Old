@@ -67,6 +67,22 @@
 - (NSArray *)sourceTokensForSourceTextView:(WCSourceTextView *)textView {
 	return [[self sourceScanner] tokens];
 }
+- (NSArray *)sourceTextView:(WCSourceTextView *)textView sourceSymbolsForSymbolName:(NSString *)name {
+	NSMutableArray *retval = [NSMutableArray arrayWithCapacity:0];
+	
+	name = [name lowercaseString];
+	
+	if ([[[self sourceScanner] labelNamesToLabelSymbols] objectForKey:name])
+		[retval addObjectsFromArray:[[[[self sourceScanner] labelNamesToLabelSymbols] objectForKey:name] allObjects]];
+	if ([[[self sourceScanner] equateNamesToEquateSymbols] objectForKey:name])
+		[retval addObjectsFromArray:[[[[self sourceScanner] equateNamesToEquateSymbols] objectForKey:name] allObjects]];
+	if ([[[self sourceScanner] defineNamesToDefineSymbols] objectForKey:name])
+		[retval addObjectsFromArray:[[[[self sourceScanner] defineNamesToDefineSymbols] objectForKey:name] allObjects]];
+	if ([[[self sourceScanner] macroNamesToMacroSymbols] objectForKey:name])
+		[retval addObjectsFromArray:[[[[self sourceScanner] macroNamesToMacroSymbols] objectForKey:name] allObjects]];
+	
+	return retval;
+}
 - (WCSourceScanner *)sourceScannerForSourceTextView:(WCSourceTextView *)textView {
 	return [self sourceScanner];
 }

@@ -15,5 +15,7 @@
 - (NSArray *)sourceTokensForSourceTextView:(WCSourceTextView *)textView;
 - (NSArray *)sourceSymbolsForSourceTextView:(WCSourceTextView *)textView;
 
+- (NSArray *)sourceTextView:(WCSourceTextView *)textView sourceSymbolsForSymbolName:(NSString *)name;
+
 - (WCSourceScanner *)sourceScannerForSourceTextView:(WCSourceTextView *)textView;
 @end

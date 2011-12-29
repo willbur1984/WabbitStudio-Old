@@ -8,6 +8,7 @@
 
 #import <Foundation/NSObject.h>
 #import "WCCompletionItem.h"
+#import "RSToolTipProvider.h"
 
 typedef enum _WCSourceSymbolType {
 	WCSourceSymbolTypeLabel,
@@ -17,7 +18,7 @@ typedef enum _WCSourceSymbolType {
 	
 } WCSourceSymbolType;
 
-@interface WCSourceSymbol : NSObject <WCCompletionItem> {
+@interface WCSourceSymbol : NSObject <WCCompletionItem,RSToolTipProvider> {
 	WCSourceSymbolType _type;
 	NSRange _range;
 	NSString *_name;

@@ -24,8 +24,6 @@ NSString *const WCFontAndColorThemeManagerColorDidChangeColorNameKey = @"colorNa
 NSString *const WCFontAndColorThemeManagerFontDidChangeNotification = @"WCFontAndColorThemeManagerFontDidChangeNotification";
 NSString *const WCFontAndColorThemeManagerFontDidChangeFontNameKey = @"fontName";
 
-static NSString *const WCFontAndColorThemeDefaultIdentifier = @"org.revsoft.wabbitcode.fontandcolortheme.default";
-
 @interface WCFontAndColorThemeManager ()
 @property (readonly,nonatomic) NSMutableArray *mutableThemes;
 
@@ -234,20 +232,6 @@ static NSString *const WCFontAndColorThemeDefaultIdentifier = @"org.revsoft.wabb
 		}
 	});
 	return [[retval copy] autorelease];
-}
-@dynamic defaultTheme;
-- (WCFontAndColorTheme *)defaultTheme {
-	static WCFontAndColorTheme *retval;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		for (WCFontAndColorTheme *theme in [self defaultThemes]) {
-			if ([[theme identifier] isEqualToString:WCFontAndColorThemeDefaultIdentifier]) {
-				retval = theme;
-				break;
-			}
-		}
-	});
-	return retval;
 }
 
 - (void)_setupObservingForFontAndColorTheme:(WCFontAndColorTheme *)theme; {
