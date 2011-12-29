@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>adc</key>
+	<dict>
+		<key>variants</key>
+		<array>
+			<dict>
+				<key>name</key>
+				<string>adc a,register</string>
+				<key>arguments</key>
+				<array>
+					<dict>
+						<key>name</key>
+						<string>a</string>
+						<key>isPlaceholder</key>
+						<false/>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>register</string>
+						<key>isPlaceholder</key>
+						<true/>
+					</dict>
+				</array>
+			</dict>
+			<dict>
+				<key>name</key>
+				<string>adc hl,regpair</string>
+				<key>arguments</key>
+				<array>
+					<dict>
+						<key>name</key>
+						<string>hl</string>
+						<key>isPlaceholder</key>
+						<false/>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>regpair</string>
+						<key>isPlaceholder</key>
+						<true/>
+					</dict>
+				</array>
+			</dict>
+		</array>
+	</dict>
+	<key>add</key>
+	<dict>
+		<key>name</key>
+		<string>add arg1,arg2</string>
+		<key>arguments</key>
+		<array>
+			<dict>
+				<key>name</key>
+				<string>arg1</string>
+				<key>isPlaceholder</key>
+				<true/>
+			</dict>
+			<dict>
+				<key>name</key>
+				<string>arg2</string>
+				<key>isPlaceholder</key>
+				<true/>
+			</dict>
+		</array>
+	</dict>
+	<key>call</key>
+	<dict>
+		<key>variants</key>
+		<array>
+			<dict>
+				<key>name</key>
+				<string>call address</string>
+				<key>arguments</key>
+				<array>
+					<dict>
+						<key>name</key>
+						<string>address</string>
+						<key>isPlaceholder</key>
+						<true/>
+					</dict>
+				</array>
+			</dict>
+			<dict>
+				<key>name</key>
+				<string>call creg, address</string>
+				<key>arguments</key>
+				<array>
+					<dict>
+						<key>name</key>
+						<string>creg</string>
+						<key>isPlaceholder</key>
+						<true/>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>address</string>
+						<key>isPlaceholder</key>
+						<true/>
+					</dict>
+				</array>
+			</dict>
+		</array>
+	</dict>
+</dict>
+</plist>

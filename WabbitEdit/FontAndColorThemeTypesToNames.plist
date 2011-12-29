@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>plainText</key>
+	<string>Plain Text</string>
+	<key>comment</key>
+	<string>Comments</string>
+	<key>conditional</key>
+	<string>Conditional Registers</string>
+	<key>register</key>
+	<string>Registers</string>
+	<key>number</key>
+	<string>Numbers</string>
+	<key>hexadecimal</key>
+	<string>Hexadecimal Numbers</string>
+	<key>binary</key>
+	<string>Binary Numbers</string>
+	<key>preProcessor</key>
+	<string>Preprocessor Statements</string>
+	<key>mneumonic</key>
+	<string>Operational Codes</string>
+	<key>directive</key>
+	<string>Assembler Directives</string>
+	<key>string</key>
+	<string>Strings</string>
+	<key>label</key>
+	<string>Labels</string>
+	<key>equate</key>
+	<string>Equates</string>
+	<key>define</key>
+	<string>Defines</string>
+	<key>macro</key>
+	<string>Macros</string>
+</dict>
+</plist>

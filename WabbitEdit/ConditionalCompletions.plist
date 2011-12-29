@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>nz</key>
+	<dict>
+		<key>name</key>
+		<string>nz - not zero</string>
+	</dict>
+	<key>nv</key>
+	<dict>
+		<key>name</key>
+		<string>nv - not something</string>
+	</dict>
+	<key>nc</key>
+	<dict>
+		<key>name</key>
+		<string>nc - not carry</string>
+	</dict>
+	<key>po</key>
+	<dict>
+		<key>name</key>
+		<string>po - some condition</string>
+	</dict>
+	<key>pe</key>
+	<dict>
+		<key>name</key>
+		<string>pe - some condition</string>
+	</dict>
+	<key>c</key>
+	<dict>
+		<key>name</key>
+		<string>c - carry</string>
+	</dict>
+	<key>p</key>
+	<dict>
+		<key>name</key>
+		<string>p - parity</string>
+	</dict>
+	<key>m</key>
+	<dict>
+		<key>name</key>
+		<string>m - some condition</string>
+	</dict>
+	<key>n</key>
+	<dict>
+		<key>name</key>
+		<string>n - some condition</string>
+	</dict>
+	<key>z</key>
+	<dict>
+		<key>name</key>
+		<string>z - zero</string>
+	</dict>
+	<key>v</key>
+	<dict>
+		<key>name</key>
+		<string>v - some condition</string>
+	</dict>
+</dict>
+</plist>

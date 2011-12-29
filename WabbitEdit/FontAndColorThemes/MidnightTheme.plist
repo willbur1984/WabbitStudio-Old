@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Midnight</string>
+	<key>identifier</key>
+	<string>org.revsoft.wabbitcode.fontandcolortheme.midnight</string>
+	<key>plainTextFont</key>
+	<string>Menlo - 11.0</string>
+	<key>plainTextColor</key>
+	<string>1.0 1.0 1.0</string>
+	<key>commentFont</key>
+	<string>Menlo Italic - 11.0</string>
+	<key>commentColor</key>
+	<string>0 0.5 0</string>
+	<key>registerFont</key>
+	<string>Menlo - 11.0</string>
+	<key>registerColor</key>
+	<string>1.0 0 0</string>
+	<key>mneumonicFont</key>
+	<string>Menlo Bold - 11.0</string>
+	<key>mneumonicColor</key>
+	<string>0 0 1.0</string>
+	<key>directiveFont</key>
+	<string>Menlo - 11.0</string>
+	<key>directiveColor</key>
+	<string>1.0 0.5 0</string>
+	<key>preProcessorFont</key>
+	<string>Menlo - 11.0</string>
+	<key>preProcessorColor</key>
+	<string>0.6 0.4 0.2</string>
+	<key>conditionalFont</key>
+	<string>Menlo - 11.0</string>
+	<key>conditionalColor</key>
+	<string>0 1.0 1.0</string>
+	<key>numberFont</key>
+	<string>Menlo - 11.0</string>
+	<key>numberColor</key>
+	<string>0 0 1.0</string>
+	<key>hexadecimalFont</key>
+	<string>Menlo - 11.0</string>
+	<key>hexadecimalColor</key>
+	<string>1.0 0 1.0</string>
+	<key>binaryFont</key>
+	<string>Menlo - 11.0</string>
+	<key>binaryColor</key>
+	<string>0 0.75 0.75</string>
+	<key>stringFont</key>
+	<string>Menlo - 11.0</string>
+	<key>stringColor</key>
+	<string>0.5 0 0.5</string>
+	<key>labelFont</key>
+	<string>Menlo - 11.0</string>
+	<key>labelColor</key>
+	<string>0.75 0.75 0</string>
+	<key>equateFont</key>
+	<string>Menlo - 11.0</string>
+	<key>equateColor</key>
+	<string>0 0.5 0.5</string>
+	<key>defineFont</key>
+	<string>Menlo - 11.0</string>
+	<key>defineColor</key>
+	<string>0.6 0.4 0.2</string>
+	<key>macroFont</key>
+	<string>Menlo - 11.0</string>
+	<key>macroColor</key>
+	<string>1.0 0.4 0.4</string>
+	<key>selectionColor</key>
+	<string>0.512 0.486 0.376</string>
+	<key>backgroundColor</key>
+	<string>0 0 0</string>
+	<key>cursorColor</key>
+	<string>1.0 1.0 1.0</string>
+	<key>currentLineColor</key>
+	<string>0.6 0.6 0.6</string>
+</dict>
+</plist>

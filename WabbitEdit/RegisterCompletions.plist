@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ixh</key>
+	<dict>
+		<key>name</key>
+		<string>ixh</string>
+	</dict>
+	<key>iyh</key>
+	<dict>
+		<key>name</key>
+		<string>ixh</string>
+	</dict>
+	<key>ixl</key>
+	<dict>
+		<key>name</key>
+		<string>ixl</string>
+	</dict>
+	<key>iyl</key>
+	<dict>
+		<key>name</key>
+		<string>iyl</string>
+	</dict>
+	<key>sp</key>
+	<dict>
+		<key>name</key>
+		<string>sp - stack pointer register (16-bit)</string>
+	</dict>
+	<key>af&apos;</key>
+	<dict>
+		<key>name</key>
+		<string>af&apos; - shadow register pair af&apos; (16-bit)</string>
+	</dict>
+	<key>af</key>
+	<dict>
+		<key>name</key>
+		<string>af - register pair af (16-bit)</string>
+	</dict>
+	<key>pc</key>
+	<dict>
+		<key>name</key>
+		<string>pc - program counter register (16-bit)</string>
+	</dict>
+	<key>bc</key>
+	<dict>
+		<key>name</key>
+		<string>bc - register pair bc (16-bit)</string>
+	</dict>
+	<key>de</key>
+	<dict>
+		<key>name</key>
+		<string>de - register pair de (16-bit)</string>
+	</dict>
+	<key>hl</key>
+	<dict>
+		<key>name</key>
+		<string>hl - register pair hl (16-bit)</string>
+	</dict>
+	<key>ix</key>
+	<dict>
+		<key>name</key>
+		<string>ix - index register ix (16-bit)</string>
+	</dict>
+	<key>iy</key>
+	<dict>
+		<key>name</key>
+		<string>iy - index register iy (16-bit)</string>
+	</dict>
+	<key>a</key>
+	<dict>
+		<key>name</key>
+		<string>a - register a (8-bit)</string>
+	</dict>
+	<key>f</key>
+	<dict>
+		<key>name</key>
+		<string>f - flag register (8-bit)</string>
+	</dict>
+	<key>b</key>
+	<dict>
+		<key>name</key>
+		<string>b - register b (8-bit)</string>
+	</dict>
+	<key>c</key>
+	<dict>
+		<key>name</key>
+		<string>c - register c (8-bit)</string>
+	</dict>
+	<key>d</key>
+	<dict>
+		<key>name</key>
+		<string>d - register d (8-bit)</string>
+	</dict>
+	<key>e</key>
+	<dict>
+		<key>name</key>
+		<string>e - register e (8-bit)</string>
+	</dict>
+	<key>h</key>
+	<dict>
+		<key>name</key>
+		<string>h - register h (8-bit)</string>
+	</dict>
+	<key>l</key>
+	<dict>
+		<key>name</key>
+		<string>l - register l (8-bit)</string>
+	</dict>
+	<key>i</key>
+	<dict>
+		<key>name</key>
+		<string>i - interrupt page address register (8-bit)</string>
+	</dict>
+	<key>r</key>
+	<dict>
+		<key>name</key>
+		<string>r - memory refresh register</string>
+	</dict>
+</dict>
+</plist>
