@@ -28,6 +28,9 @@
 @implementation WCSourceTextViewController
 
 - (void)dealloc {
+#ifdef DEBUG
+	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
+#endif
 	[_completionTimer invalidate];
 	_completionTimer = nil;
 	_textStorage = nil;

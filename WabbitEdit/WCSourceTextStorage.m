@@ -17,6 +17,9 @@
 
 @implementation WCSourceTextStorage
 - (void)dealloc {
+#ifdef DEBUG
+	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
+#endif
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[_attributedString release];
 	[_lineStartIndexes release];

@@ -91,6 +91,13 @@
 		078F040414AD0FA00080ADBC /* RSToolTipWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 078F040214AD0FA00080ADBC /* RSToolTipWindow.xib */; };
 		078F040714AD17AC0080ADBC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 078F040614AD17AC0080ADBC /* QuartzCore.framework */; };
 		078F040B14AD5BFA0080ADBC /* NSColor+ContrastingLabelExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F040A14AD5BFA0080ADBC /* NSColor+ContrastingLabelExtensions.m */; };
+		078F040F14AD73510080ADBC /* RSFindOptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F040D14AD73510080ADBC /* RSFindOptionsViewController.m */; };
+		078F041314AD736A0080ADBC /* RSFindOptionsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 078F041114AD736A0080ADBC /* RSFindOptionsView.xib */; };
+		078F041814AD784E0080ADBC /* RSFindBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F041614AD784E0080ADBC /* RSFindBarViewController.m */; };
+		078F041C14AD78640080ADBC /* RSFindBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 078F041A14AD78640080ADBC /* RSFindBarView.xib */; };
+		0791BE5214AD7F530004AC16 /* RSFindBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0791BE5114AD7F530004AC16 /* RSFindBarView.m */; };
+		0791BE5414ADA3B80004AC16 /* BGHUDAppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0791BE5314ADA3B80004AC16 /* BGHUDAppKit.framework */; };
+		0791BE5614ADA3E10004AC16 /* BGHUDAppKit.framework in Copy Private Frameworks */ = {isa = PBXBuildFile; fileRef = 0791BE5314ADA3B80004AC16 /* BGHUDAppKit.framework */; };
 		07F5F75714A4F37200F1F326 /* WCSourceHighlighter.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F5F75614A4F37200F1F326 /* WCSourceHighlighter.m */; };
 		07F5F75E14A5024D00F1F326 /* NSTextView+WCExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F5F75D14A5024D00F1F326 /* NSTextView+WCExtensions.m */; };
 		07F5F76114A5451700F1F326 /* WCScanSymbolsOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F5F76014A5451700F1F326 /* WCScanSymbolsOperation.m */; };
@@ -99,6 +106,20 @@
 		07F5F77114A5A91800F1F326 /* NSString+WCExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F5F77014A5A91700F1F326 /* NSString+WCExtensions.m */; };
 		07F5F77414A5BC5700F1F326 /* NDTrie.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F5F77314A5BC5600F1F326 /* NDTrie.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		0791BE5514ADA3CD0004AC16 /* Copy Private Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				0791BE5614ADA3E10004AC16 /* BGHUDAppKit.framework in Copy Private Frameworks */,
+			);
+			name = "Copy Private Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0706D64C14A8F1800092F880 /* WCJumpBarDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCJumpBarDataSource.h; sourceTree = "<group>"; };
@@ -256,6 +277,16 @@
 		078F040814AD4A540080ADBC /* WCSourceScannerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSourceScannerDelegate.h; sourceTree = "<group>"; };
 		078F040914AD5BFA0080ADBC /* NSColor+ContrastingLabelExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSColor+ContrastingLabelExtensions.h"; sourceTree = "<group>"; };
 		078F040A14AD5BFA0080ADBC /* NSColor+ContrastingLabelExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSColor+ContrastingLabelExtensions.m"; sourceTree = "<group>"; };
+		078F040C14AD73500080ADBC /* RSFindOptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSFindOptionsViewController.h; sourceTree = "<group>"; };
+		078F040D14AD73510080ADBC /* RSFindOptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSFindOptionsViewController.m; sourceTree = "<group>"; };
+		078F041214AD736A0080ADBC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = RSFindOptionsView.xib; sourceTree = "<group>"; };
+		078F041414AD75570080ADBC /* RSFindOptionsViewControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSFindOptionsViewControllerDelegate.h; sourceTree = "<group>"; };
+		078F041514AD784E0080ADBC /* RSFindBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSFindBarViewController.h; sourceTree = "<group>"; };
+		078F041614AD784E0080ADBC /* RSFindBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSFindBarViewController.m; sourceTree = "<group>"; };
+		078F041B14AD78640080ADBC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = RSFindBarView.xib; sourceTree = "<group>"; };
+		0791BE5014AD7F530004AC16 /* RSFindBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSFindBarView.h; sourceTree = "<group>"; };
+		0791BE5114AD7F530004AC16 /* RSFindBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSFindBarView.m; sourceTree = "<group>"; };
+		0791BE5314ADA3B80004AC16 /* BGHUDAppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BGHUDAppKit.framework; sourceTree = "<group>"; };
 		07F5F75514A4F37200F1F326 /* WCSourceHighlighter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSourceHighlighter.h; sourceTree = "<group>"; };
 		07F5F75614A4F37200F1F326 /* WCSourceHighlighter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSourceHighlighter.m; sourceTree = "<group>"; };
 		07F5F75C14A5024C00F1F326 /* NSTextView+WCExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTextView+WCExtensions.h"; sourceTree = "<group>"; };
@@ -281,6 +312,7 @@
 			files = (
 				078F040714AD17AC0080ADBC /* QuartzCore.framework in Frameworks */,
 				071ECCC314A4233C002409F8 /* Cocoa.framework in Frameworks */,
+				0791BE5414ADA3B80004AC16 /* BGHUDAppKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -459,6 +491,7 @@
 		071ECCC114A4233C002409F8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0791BE5314ADA3B80004AC16 /* BGHUDAppKit.framework */,
 				071ECCC214A4233C002409F8 /* Cocoa.framework */,
 				078F040614AD17AC0080ADBC /* QuartzCore.framework */,
 				071ECCC414A4233C002409F8 /* Other Frameworks */,
@@ -526,42 +559,13 @@
 		0725433C14A7998200C961B7 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				078F03F514AD0D760080ADBC /* RSToolTipBackgroundView.h */,
-				078F03F614AD0D760080ADBC /* RSToolTipBackgroundView.m */,
-				078F03F814AD0D760080ADBC /* RSToolTipManager.h */,
-				078F03F914AD0D760080ADBC /* RSToolTipManager.m */,
-				078F03FA14AD0D760080ADBC /* RSToolTipPanel.h */,
-				078F03FB14AD0D760080ADBC /* RSToolTipPanel.m */,
-				078F03FC14AD0D760080ADBC /* RSToolTipProvider.h */,
-				078F040514AD11740080ADBC /* RSToolTipView.h */,
-				0745BE1314AAE2CF00F541DC /* RSNoHighlightColorTextFieldCell.h */,
-				0745BE1414AAE2CF00F541DC /* RSNoHighlightColorTextFieldCell.m */,
-				0745BE0414AAC4B400F541DC /* RSBorderlessButtonCell.h */,
-				0745BE0514AAC4B400F541DC /* RSBorderlessButtonCell.m */,
-				0745BE0714AAD3DE00F541DC /* RSBorderlessPopUpButtonCell.h */,
-				0745BE0814AAD3DE00F541DC /* RSBorderlessPopUpButtonCell.m */,
-				072BBC3814AA65AD0044ECC2 /* RSPreferencesWindowController.h */,
-				072BBC3914AA65AD0044ECC2 /* RSPreferencesWindowController.m */,
-				072BBC4A14AA67B70044ECC2 /* RSPreferencesModule.h */,
-				0725433D14A7999500C961B7 /* RSEmptyContentCell.h */,
-				0725433E14A7999500C961B7 /* RSEmptyContentCell.m */,
-				0725434014A79A0000C961B7 /* RSTableView.h */,
-				0725434114A79A0000C961B7 /* RSTableView.m */,
-				0725434314A79A3600C961B7 /* RSTableViewDelegate.h */,
-				0725436A14A8376500C961B7 /* RSVerticallyCenteredTextFieldCell.h */,
-				0725436B14A8376500C961B7 /* RSVerticallyCenteredTextFieldCell.m */,
-				0725436E14A85F7000C961B7 /* RSRaisedBackgroundTextFieldCell.h */,
-				0725436F14A85F7000C961B7 /* RSRaisedBackgroundTextFieldCell.m */,
-				072BBC3C14AA65F80044ECC2 /* NSEvent+RSExtensions.h */,
-				072BBC3D14AA65F80044ECC2 /* NSEvent+RSExtensions.m */,
-				072BBC5314AA68EC0044ECC2 /* RSUserDefaultsProvider.h */,
-				072BBC5A14AA6D190044ECC2 /* RSGlassGradientView.h */,
-				072BBC5B14AA6D190044ECC2 /* RSGlassGradientView.m */,
-				072BBC5D14AA700B0044ECC2 /* RSBottomBorderedGlassGradientView.h */,
-				072BBC5E14AA700B0044ECC2 /* RSBottomBorderedGlassGradientView.m */,
-				0745BE0A14AAD51D00F541DC /* RSBorderedGlassGradientView.h */,
-				0745BE0B14AAD51D00F541DC /* RSBorderedGlassGradientView.m */,
-				0745BE2414ABE2A700F541DC /* RSPlistArchiving.h */,
+				078F041E14AD78A50080ADBC /* ToolTips */,
+				0791BE4A14AD79DC0004AC16 /* Cells */,
+				0791BE4D14AD7A1C0004AC16 /* Preferences */,
+				0791BE4C14AD7A110004AC16 /* Views */,
+				0791BE4F14AD7A370004AC16 /* Categories */,
+				0791BE4E14AD7A2D0004AC16 /* Protocols */,
+				078F041D14AD78890080ADBC /* Find Bar */,
 				078F040114AD0F7A0080ADBC /* Xibs */,
 			);
 			path = Shared;
@@ -621,9 +625,103 @@
 			isa = PBXGroup;
 			children = (
 				078F040214AD0FA00080ADBC /* RSToolTipWindow.xib */,
+				078F041114AD736A0080ADBC /* RSFindOptionsView.xib */,
+				078F041A14AD78640080ADBC /* RSFindBarView.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
+			sourceTree = "<group>";
+		};
+		078F041D14AD78890080ADBC /* Find Bar */ = {
+			isa = PBXGroup;
+			children = (
+				078F040C14AD73500080ADBC /* RSFindOptionsViewController.h */,
+				078F040D14AD73510080ADBC /* RSFindOptionsViewController.m */,
+				078F041414AD75570080ADBC /* RSFindOptionsViewControllerDelegate.h */,
+				078F041514AD784E0080ADBC /* RSFindBarViewController.h */,
+				078F041614AD784E0080ADBC /* RSFindBarViewController.m */,
+				0791BE5014AD7F530004AC16 /* RSFindBarView.h */,
+				0791BE5114AD7F530004AC16 /* RSFindBarView.m */,
+			);
+			name = "Find Bar";
+			sourceTree = "<group>";
+		};
+		078F041E14AD78A50080ADBC /* ToolTips */ = {
+			isa = PBXGroup;
+			children = (
+				078F03F514AD0D760080ADBC /* RSToolTipBackgroundView.h */,
+				078F03F614AD0D760080ADBC /* RSToolTipBackgroundView.m */,
+				078F03F814AD0D760080ADBC /* RSToolTipManager.h */,
+				078F03F914AD0D760080ADBC /* RSToolTipManager.m */,
+				078F03FA14AD0D760080ADBC /* RSToolTipPanel.h */,
+				078F03FB14AD0D760080ADBC /* RSToolTipPanel.m */,
+				078F03FC14AD0D760080ADBC /* RSToolTipProvider.h */,
+				078F040514AD11740080ADBC /* RSToolTipView.h */,
+			);
+			name = ToolTips;
+			sourceTree = "<group>";
+		};
+		0791BE4A14AD79DC0004AC16 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				0745BE1314AAE2CF00F541DC /* RSNoHighlightColorTextFieldCell.h */,
+				0745BE1414AAE2CF00F541DC /* RSNoHighlightColorTextFieldCell.m */,
+				0745BE0414AAC4B400F541DC /* RSBorderlessButtonCell.h */,
+				0745BE0514AAC4B400F541DC /* RSBorderlessButtonCell.m */,
+				0745BE0714AAD3DE00F541DC /* RSBorderlessPopUpButtonCell.h */,
+				0745BE0814AAD3DE00F541DC /* RSBorderlessPopUpButtonCell.m */,
+				0725433D14A7999500C961B7 /* RSEmptyContentCell.h */,
+				0725433E14A7999500C961B7 /* RSEmptyContentCell.m */,
+				0725436A14A8376500C961B7 /* RSVerticallyCenteredTextFieldCell.h */,
+				0725436B14A8376500C961B7 /* RSVerticallyCenteredTextFieldCell.m */,
+				0725436E14A85F7000C961B7 /* RSRaisedBackgroundTextFieldCell.h */,
+				0725436F14A85F7000C961B7 /* RSRaisedBackgroundTextFieldCell.m */,
+			);
+			name = Cells;
+			sourceTree = "<group>";
+		};
+		0791BE4C14AD7A110004AC16 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				0725434014A79A0000C961B7 /* RSTableView.h */,
+				0725434114A79A0000C961B7 /* RSTableView.m */,
+				0725434314A79A3600C961B7 /* RSTableViewDelegate.h */,
+				072BBC5A14AA6D190044ECC2 /* RSGlassGradientView.h */,
+				072BBC5B14AA6D190044ECC2 /* RSGlassGradientView.m */,
+				072BBC5D14AA700B0044ECC2 /* RSBottomBorderedGlassGradientView.h */,
+				072BBC5E14AA700B0044ECC2 /* RSBottomBorderedGlassGradientView.m */,
+				0745BE0A14AAD51D00F541DC /* RSBorderedGlassGradientView.h */,
+				0745BE0B14AAD51D00F541DC /* RSBorderedGlassGradientView.m */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		0791BE4D14AD7A1C0004AC16 /* Preferences */ = {
+			isa = PBXGroup;
+			children = (
+				072BBC3814AA65AD0044ECC2 /* RSPreferencesWindowController.h */,
+				072BBC3914AA65AD0044ECC2 /* RSPreferencesWindowController.m */,
+				072BBC4A14AA67B70044ECC2 /* RSPreferencesModule.h */,
+			);
+			name = Preferences;
+			sourceTree = "<group>";
+		};
+		0791BE4E14AD7A2D0004AC16 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				072BBC5314AA68EC0044ECC2 /* RSUserDefaultsProvider.h */,
+				0745BE2414ABE2A700F541DC /* RSPlistArchiving.h */,
+			);
+			name = Protocols;
+			sourceTree = "<group>";
+		};
+		0791BE4F14AD7A370004AC16 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				072BBC3C14AA65F80044ECC2 /* NSEvent+RSExtensions.h */,
+				072BBC3D14AA65F80044ECC2 /* NSEvent+RSExtensions.m */,
+			);
+			name = Categories;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -636,6 +734,7 @@
 				071ECCBA14A4233C002409F8 /* Sources */,
 				071ECCBB14A4233C002409F8 /* Frameworks */,
 				071ECCBC14A4233C002409F8 /* Resources */,
+				0791BE5514ADA3CD0004AC16 /* Copy Private Frameworks */,
 			);
 			buildRules = (
 			);
@@ -703,6 +802,8 @@
 				0745BE3314ABF86700F541DC /* WCEditorView.xib in Resources */,
 				0745BE3514ABFB0D00F541DC /* Editor.png in Resources */,
 				078F040414AD0FA00080ADBC /* RSToolTipWindow.xib in Resources */,
+				078F041314AD736A0080ADBC /* RSFindOptionsView.xib in Resources */,
+				078F041C14AD78640080ADBC /* RSFindBarView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -776,6 +877,9 @@
 				078F03FE14AD0D760080ADBC /* RSToolTipManager.m in Sources */,
 				078F03FF14AD0D760080ADBC /* RSToolTipPanel.m in Sources */,
 				078F040B14AD5BFA0080ADBC /* NSColor+ContrastingLabelExtensions.m in Sources */,
+				078F040F14AD73510080ADBC /* RSFindOptionsViewController.m in Sources */,
+				078F041814AD784E0080ADBC /* RSFindBarViewController.m in Sources */,
+				0791BE5214AD7F530004AC16 /* RSFindBarView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -873,6 +977,22 @@
 			name = RSToolTipWindow.xib;
 			sourceTree = "<group>";
 		};
+		078F041114AD736A0080ADBC /* RSFindOptionsView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				078F041214AD736A0080ADBC /* en */,
+			);
+			name = RSFindOptionsView.xib;
+			sourceTree = "<group>";
+		};
+		078F041A14AD78640080ADBC /* RSFindBarView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				078F041B14AD78640080ADBC /* en */,
+			);
+			name = RSFindBarView.xib;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -924,6 +1044,10 @@
 		071ECCE014A4233D002409F8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WabbitEdit/WabbitEdit-Prefix.pch";
 				INFOPLIST_FILE = "WabbitEdit/WabbitEdit-Info.plist";
@@ -935,6 +1059,10 @@
 		071ECCE114A4233D002409F8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WabbitEdit/WabbitEdit-Prefix.pch";
 				INFOPLIST_FILE = "WabbitEdit/WabbitEdit-Info.plist";

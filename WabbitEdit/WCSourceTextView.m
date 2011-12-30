@@ -20,8 +20,10 @@
 #import "WCSourceToken.h"
 #import "RSToolTipManager.h"
 #import "WCSourceSymbol.h"
+#import "RSFindBarViewController.h"
 
 @interface WCSourceTextView ()
+@property (readonly,nonatomic) RSFindBarViewController *findBarViewController;
 
 - (void)_commonInit;
 - (void)_drawCurrentLineHighlightInRect:(NSRect)rect;
@@ -38,6 +40,7 @@
 #endif
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[self cleanUpUserDefaultsObserving];
+	[_findBarViewController release];
 	[super dealloc];
 }
 
@@ -210,6 +213,18 @@
 		[self setSelectedRange:NSMakeRange([self selectedRange].location-1, 0)];
 	}
 }
+- (IBAction)performTextFinderAction:(id)sender {
+	switch ([sender tag]) {
+		case NSTextFinderActionShowFindInterface:
+			[[self findBarViewController] showFindBar:nil];
+			break;
+		case NSTextFinderActionHideFindInterface:
+			[[self findBarViewController] hideFindBar:nil];
+			break;
+		default:
+			break;
+	}
+}
 #pragma mark NSObject+WCExtensions
 - (NSSet *)userDefaultsKeyPathsToObserve {
 	return [NSSet setWithObjects:WCEditorShowCurrentLineHighlightKey, nil];
@@ -220,6 +235,21 @@
 		[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
 	else
 		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+}
+#pragma mark NSUserInterfaceValidations
+- (BOOL)validateUserInterfaceItem:(id<NSValidatedUserInterfaceItem>)anItem {
+	if ([anItem action] == @selector(performTextFinderAction:)) {
+		switch ([anItem tag]) {
+			case NSTextFinderActionShowFindInterface:
+				return YES;
+			case NSTextFinderActionHideFindInterface:
+				return [[self findBarViewController] isFindBarVisible];
+			default:
+				return NO;
+				break;
+		}
+	}
+	return [super validateUserInterfaceItem:anItem];
 }
 #pragma mark RSToolTipView
 - (NSArray *)toolTipManager:(RSToolTipManager *)toolTipManager toolTipProvidersForToolTipAtPoint:(NSPoint)toolTipPoint {
@@ -522,6 +552,13 @@
 	_delegate = delegate;
 	
 	[super setDelegate:delegate];
+}
+@dynamic findBarViewController;
+- (RSFindBarViewController *)findBarViewController {
+	if (!_findBarViewController) {
+		_findBarViewController = [[RSFindBarViewController alloc] initWithTextView:self];
+	}
+	return _findBarViewController;
 }
 #pragma mark *** Private Methods ***
 - (void)_commonInit; {

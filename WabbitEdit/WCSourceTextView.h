@@ -10,10 +10,13 @@
 #import "WCSourceTextViewDelegate.h"
 #import "RSToolTipView.h"
 
+@class RSFindBarViewController;
+
 @interface WCSourceTextView : NSTextView <RSToolTipView> {
 	__weak id <WCSourceTextViewDelegate> _delegate;
 	id _windowDidResignKeyObservingToken;
 	id _windowDidBecomeKeyObservingToken;
+	RSFindBarViewController *_findBarViewController;
 }
 @property (readwrite,assign,nonatomic) IBOutlet id <WCSourceTextViewDelegate> delegate;
 
