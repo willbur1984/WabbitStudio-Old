@@ -8,6 +8,9 @@
 
 #import "WCArgumentPlaceholderCell.h"
 #import "NSBezierPath+StrokeExtensions.h"
+#import "NSColor+ContrastingLabelExtensions.h"
+#import "WCFontAndColorTheme.h"
+#import "WCFontAndColorThemeManager.h"
 
 static NSTextStorage *_textStorage;
 static NSLayoutManager *_layoutManager;
@@ -26,28 +29,71 @@ static NSTextContainer *_textContainer;
 	});
 }
 
-- (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView characterIndex:(NSUInteger)charIndex {	
-	NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:NSInsetRect(cellFrame, 0.0, 0.0) xRadius:5.0 yRadius:5.0];
+- (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView characterIndex:(NSUInteger)charIndex {
+	static NSColor *lightSelectedFillColor;
+	static NSColor *lightNotSelectedKeyFillColor;
+	static NSColor *lightNotSelectedKeyStrokeColor;
+	static NSColor *lightNonKeyFillColor;
+	static NSColor *lightNonKeyStrokeColor;
+	static NSColor *darkSelectedFillColor;
+	static NSColor *darkNotSelectedKeyFillColor;
+	static NSColor *darkNotSelectedKeyStrokeColor;
+	static NSColor *darkNonKeyFillColor;
+	static NSColor *darkNonKeyStrokeColor;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		lightSelectedFillColor = [[NSColor colorWithCalibratedRed:131.0/255.0 green:166.0/255.0 blue:239.0/255.0 alpha:1.0] retain];
+		lightNotSelectedKeyFillColor = [[NSColor colorWithCalibratedRed:0.871 green:0.906 blue:0.973 alpha:1.0] retain];
+		lightNotSelectedKeyStrokeColor = [[NSColor colorWithCalibratedRed:0.643 green:0.741 blue:0.925 alpha:1.0] retain];
+		lightNonKeyFillColor = [[NSColor colorWithCalibratedRed:239.0/255.0 green:239.0/255.0 blue:239.0/255.0 alpha:1.0] retain];
+		lightNonKeyStrokeColor = [[NSColor colorWithCalibratedRed:210.0/255.0 green:210.0/255.0 blue:210.0/255.0 alpha:1.0] retain];
+		
+		darkSelectedFillColor = [[NSColor colorWithCalibratedRed:36.0/255.0 green:81.0/255.0 blue:154.0/255.0 alpha:1.0] retain];
+		darkNotSelectedKeyFillColor = [[NSColor colorWithCalibratedRed:141.0/255.0 green:151.0/255.0 blue:164.0/255.0 alpha:1.0] retain];
+		darkNotSelectedKeyStrokeColor = [[NSColor colorWithCalibratedRed:94.0/255.0 green:117.0/255.0 blue:154.0/255.0 alpha:1.0] retain];
+		darkNonKeyFillColor = [[NSColor colorWithCalibratedRed:149.0/255.0 green:149.0/255.0 blue:149.0/255.0 alpha:1.0] retain];
+		darkNonKeyStrokeColor = [[NSColor colorWithCalibratedRed:116.0/255.0 green:116.0/255.0 blue:116.0/255.0 alpha:1.0] retain];
+	});
+	
+	NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:cellFrame xRadius:5.0 yRadius:5.0];
 	BOOL isSelected = NO;
-	if ([controlView isKindOfClass:[NSTextView class]])
+	BOOL backgroundColorIsLight = YES;
+	if ([controlView isKindOfClass:[NSTextView class]]) {
 		isSelected = NSLocationInRange(charIndex, [(NSTextView *)controlView selectedRange]);
+		backgroundColorIsLight = [[[(NSTextView *)controlView backgroundColor] contrastingLabelColor] isEqualTo:[NSColor blackColor]];
+	}
 	
 	if ([[controlView window] isKeyWindow]) {
 		if (isSelected) {
-			[[NSColor colorWithCalibratedRed:131.0/255.0 green:166.0/255.0 blue:239.0/255.0 alpha:1.0] setFill];
+			if (backgroundColorIsLight)
+				[lightSelectedFillColor setFill];
+			else
+				[darkSelectedFillColor setFill];
 			[path fill];
 		}
 		else {
-			[[NSColor colorWithCalibratedRed:0.871 green:0.906 blue:0.973 alpha:1.0] setFill];
+			if (backgroundColorIsLight)
+				[lightNotSelectedKeyFillColor setFill];
+			else
+				[darkNotSelectedKeyFillColor setFill];
 			[path fill];
-			[[NSColor colorWithCalibratedRed:0.643 green:0.741 blue:0.925 alpha:1.0] setStroke];
+			if (backgroundColorIsLight)
+				[lightNotSelectedKeyStrokeColor setStroke];
+			else
+				[darkNotSelectedKeyStrokeColor setStroke];
 			[path strokeInside];
 		}
 	}
 	else {
-		[[NSColor colorWithCalibratedRed:239.0/255.0 green:239.0/255.0 blue:239.0/255.0 alpha:1.0] setFill];
+		if (backgroundColorIsLight)
+			[lightNonKeyFillColor setFill];
+		else
+			[darkNonKeyFillColor setFill];
 		[path fill];
-		[[NSColor colorWithCalibratedRed:210.0/255.0 green:210.0/255.0 blue:210.0/255.0 alpha:1.0] setStroke];
+		if (backgroundColorIsLight)
+			[lightNonKeyStrokeColor setStroke];
+		else
+			[darkNonKeyStrokeColor setStroke];
 		[path strokeInside];
 	}
 	
@@ -55,9 +101,16 @@ static NSTextContainer *_textContainer;
 	
 	NSRectClip(cellFrame);
 	
-	//WCFontsAndColorsTheme *currentTheme = [[WCFontsAndColorsViewController sharedFontsAndColorsViewController] currentTheme];
+	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
+	NSColor *textColor = [NSColor blackColor];
+	if (isSelected && [[controlView window] isKeyWindow]) {
+		if (backgroundColorIsLight)
+			textColor = [NSColor whiteColor];
+	}
+	else if (!backgroundColorIsLight)
+		textColor = [NSColor whiteColor];
 	
-	[_textStorage replaceCharactersInRange:NSMakeRange(0, [_textStorage length]) withAttributedString:[[[NSAttributedString alloc] initWithString:[self stringValue] attributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSFont fontWithName:@"Menlo" size:11.0],NSFontAttributeName,(isSelected && [[controlView window] isKeyWindow])?[NSColor alternateSelectedControlTextColor]:[NSColor textColor],NSForegroundColorAttributeName, nil]] autorelease]];
+	[_textStorage replaceCharactersInRange:NSMakeRange(0, [_textStorage length]) withAttributedString:[[[NSAttributedString alloc] initWithString:[self stringValue] attributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,textColor,NSForegroundColorAttributeName, nil]] autorelease]];
 	[_layoutManager ensureLayoutForCharacterRange:NSMakeRange(0, [_textStorage length])];
 	
 	[_layoutManager drawGlyphsForGlyphRange:[_layoutManager glyphRangeForCharacterRange:NSMakeRange(0, [_textStorage length]) actualCharacterRange:NULL] atPoint:cellFrame.origin];
@@ -67,8 +120,8 @@ static NSTextContainer *_textContainer;
 
 - (NSRect)cellFrameForTextContainer:(NSTextContainer *)textContainer proposedLineFragment:(NSRect)lineFrag glyphPosition:(NSPoint)position characterIndex:(NSUInteger)charIndex {
 	
-	//WCFontsAndColorsTheme *currentTheme = [[WCFontsAndColorsViewController sharedFontsAndColorsViewController] currentTheme];
-	[_textStorage replaceCharactersInRange:NSMakeRange(0, [_textStorage length]) withAttributedString:[[[NSAttributedString alloc] initWithString:[self stringValue] attributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSFont fontWithName:@"Menlo" size:11.0],NSFontAttributeName, nil]] autorelease]];
+	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
+	[_textStorage replaceCharactersInRange:NSMakeRange(0, [_textStorage length]) withAttributedString:[[[NSAttributedString alloc] initWithString:[self stringValue] attributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName, nil]] autorelease]];
 	[_layoutManager ensureLayoutForCharacterRange:NSMakeRange(0, [_textStorage length])];
 	
 	NSRect cellFrame = [super cellFrameForTextContainer:textContainer proposedLineFragment:lineFrag glyphPosition:position characterIndex:charIndex];

@@ -90,6 +90,7 @@
 		078F03FF14AD0D760080ADBC /* RSToolTipPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F03FB14AD0D760080ADBC /* RSToolTipPanel.m */; };
 		078F040414AD0FA00080ADBC /* RSToolTipWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 078F040214AD0FA00080ADBC /* RSToolTipWindow.xib */; };
 		078F040714AD17AC0080ADBC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 078F040614AD17AC0080ADBC /* QuartzCore.framework */; };
+		078F040B14AD5BFA0080ADBC /* NSColor+ContrastingLabelExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F040A14AD5BFA0080ADBC /* NSColor+ContrastingLabelExtensions.m */; };
 		07F5F75714A4F37200F1F326 /* WCSourceHighlighter.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F5F75614A4F37200F1F326 /* WCSourceHighlighter.m */; };
 		07F5F75E14A5024D00F1F326 /* NSTextView+WCExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F5F75D14A5024D00F1F326 /* NSTextView+WCExtensions.m */; };
 		07F5F76114A5451700F1F326 /* WCScanSymbolsOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F5F76014A5451700F1F326 /* WCScanSymbolsOperation.m */; };
@@ -253,6 +254,8 @@
 		078F040514AD11740080ADBC /* RSToolTipView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSToolTipView.h; sourceTree = "<group>"; };
 		078F040614AD17AC0080ADBC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		078F040814AD4A540080ADBC /* WCSourceScannerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSourceScannerDelegate.h; sourceTree = "<group>"; };
+		078F040914AD5BFA0080ADBC /* NSColor+ContrastingLabelExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSColor+ContrastingLabelExtensions.h"; sourceTree = "<group>"; };
+		078F040A14AD5BFA0080ADBC /* NSColor+ContrastingLabelExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSColor+ContrastingLabelExtensions.m"; sourceTree = "<group>"; };
 		07F5F75514A4F37200F1F326 /* WCSourceHighlighter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSourceHighlighter.h; sourceTree = "<group>"; };
 		07F5F75614A4F37200F1F326 /* WCSourceHighlighter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSourceHighlighter.m; sourceTree = "<group>"; };
 		07F5F75C14A5024C00F1F326 /* NSTextView+WCExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTextView+WCExtensions.h"; sourceTree = "<group>"; };
@@ -421,6 +424,8 @@
 		0708964614A6C9020017BBE4 /* External */ = {
 			isa = PBXGroup;
 			children = (
+				078F040914AD5BFA0080ADBC /* NSColor+ContrastingLabelExtensions.h */,
+				078F040A14AD5BFA0080ADBC /* NSColor+ContrastingLabelExtensions.m */,
 				0725433614A7996000C961B7 /* NSBezierPath+MCAdditions.h */,
 				0725433714A7996000C961B7 /* NSBezierPath+MCAdditions.m */,
 				0725433814A7996000C961B7 /* NSShadow+MCAdditions.h */,
@@ -770,6 +775,7 @@
 				078F03FD14AD0D760080ADBC /* RSToolTipBackgroundView.m in Sources */,
 				078F03FE14AD0D760080ADBC /* RSToolTipManager.m in Sources */,
 				078F03FF14AD0D760080ADBC /* RSToolTipPanel.m in Sources */,
+				078F040B14AD5BFA0080ADBC /* NSColor+ContrastingLabelExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

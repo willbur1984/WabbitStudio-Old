@@ -12,6 +12,8 @@
 
 @interface WCSourceTextView : NSTextView <RSToolTipView> {
 	__weak id <WCSourceTextViewDelegate> _delegate;
+	id _windowDidResignKeyObservingToken;
+	id _windowDidBecomeKeyObservingToken;
 }
 @property (readwrite,assign,nonatomic) IBOutlet id <WCSourceTextViewDelegate> delegate;
 

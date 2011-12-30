@@ -44,6 +44,7 @@
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
 	
 	[[self textView] setFont:[currentTheme plainTextFont]];
+	[[self textView] setTextColor:[currentTheme plainTextColor]];
 	
 	WCSourceRulerView *rulerView = [[[WCSourceRulerView alloc] initWithScrollView:[[self textView] enclosingScrollView] orientation:NSVerticalRuler] autorelease];
 	

@@ -63,13 +63,24 @@
 	[super viewWillMoveToWindow:newWindow];
 	
 	[[RSToolTipManager sharedManager] removeView:self];
+	
+	[[NSNotificationCenter defaultCenter] removeObserver:_windowDidBecomeKeyObservingToken];
+	[[NSNotificationCenter defaultCenter] removeObserver:_windowDidResignKeyObservingToken];
 }
 
 - (void)viewDidMoveToWindow {
 	[super viewDidMoveToWindow];
 	
-	if ([self window])
+	if ([self window]) {
 		[[RSToolTipManager sharedManager] addView:self];
+		
+		_windowDidBecomeKeyObservingToken = [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidBecomeKeyNotification object:[self window] queue:nil usingBlock:^(NSNotification *note) {
+			[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
+		}];
+		_windowDidResignKeyObservingToken = [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidResignKeyNotification object:[self window] queue:nil usingBlock:^(NSNotification *note) {
+			[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
+		}];
+	}
 }
 
 - (void)drawViewBackgroundInRect:(NSRect)rect {
