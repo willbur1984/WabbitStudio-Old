@@ -18,6 +18,9 @@
 - (IBAction)jumpToNextPlaceholder:(id)sender;
 - (IBAction)jumpToPreviousPlaceholder:(id)sender;
 
+- (IBAction)jumpToSelection:(id)sender;
+- (IBAction)jumpToDefinition:(id)sender;
+
 - (IBAction)shiftLeft:(id)sender;
 - (IBAction)shiftRight:(id)sender;
 

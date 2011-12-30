@@ -51,6 +51,7 @@
 	[super windowControllerDidLoadNib:windowController];
 	
 	_sourceScanner = [[WCSourceScanner alloc] initWithTextStorage:[self textStorage]];
+	[_sourceScanner setDelegate:self];
 	[_sourceScanner setNeedsToScanSymbols:YES];
 	
 	if (_fileContents) {
@@ -110,6 +111,10 @@
 
 - (WCSourceHighlighter *)sourceHighlighterForSourceTextStorage:(WCSourceTextStorage *)textStorage {
 	return [self sourceHighlighter];
+}
+
+- (NSString *)fileDisplayNameForSourceScanner:(WCSourceScanner *)scanner {
+	return [self displayName];
 }
 
 @synthesize jumpBarViewController=_jumpBarViewController;

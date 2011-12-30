@@ -252,6 +252,7 @@
 		078F040314AD0FA00080ADBC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = RSToolTipWindow.xib; sourceTree = "<group>"; };
 		078F040514AD11740080ADBC /* RSToolTipView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSToolTipView.h; sourceTree = "<group>"; };
 		078F040614AD17AC0080ADBC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		078F040814AD4A540080ADBC /* WCSourceScannerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSourceScannerDelegate.h; sourceTree = "<group>"; };
 		07F5F75514A4F37200F1F326 /* WCSourceHighlighter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSourceHighlighter.h; sourceTree = "<group>"; };
 		07F5F75614A4F37200F1F326 /* WCSourceHighlighter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSourceHighlighter.m; sourceTree = "<group>"; };
 		07F5F75C14A5024C00F1F326 /* NSTextView+WCExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTextView+WCExtensions.h"; sourceTree = "<group>"; };
@@ -333,6 +334,7 @@
 				071ECCF214A44780002409F8 /* WCMacroSymbol.m */,
 				071ECCF714A44C4E002409F8 /* WCSourceScanner.h */,
 				071ECCF814A44C4E002409F8 /* WCSourceScanner.m */,
+				078F040814AD4A540080ADBC /* WCSourceScannerDelegate.h */,
 				071ECCFA14A44D3A002409F8 /* WCScanTokensOperation.h */,
 				071ECCFB14A44D3A002409F8 /* WCScanTokensOperation.m */,
 				07F5F75F14A5451700F1F326 /* WCScanSymbolsOperation.h */,

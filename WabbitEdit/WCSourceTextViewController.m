@@ -16,6 +16,8 @@
 #import "WCArgumentPlaceholderCell.h"
 #import "RSDefines.h"
 #import "WCEditorViewController.h"
+#import "WCFontAndColorTheme.h"
+#import "WCFontAndColorThemeManager.h"
 
 @interface WCSourceTextViewController ()
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
@@ -39,6 +41,10 @@
 	
 	[[[self textView] layoutManager] replaceTextStorage:[self textStorage]];
 	
+	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
+	
+	[[self textView] setFont:[currentTheme plainTextFont]];
+	
 	WCSourceRulerView *rulerView = [[[WCSourceRulerView alloc] initWithScrollView:[[self textView] enclosingScrollView] orientation:NSVerticalRuler] autorelease];
 	
 	[[[self textView] enclosingScrollView] setVerticalRulerView:rulerView];
@@ -59,6 +65,11 @@
 		return;
 	
 	[textView setSelectedRange:NSMakeRange(charIndex, 1)];
+}
+- (NSDictionary *)textView:(NSTextView *)textView shouldChangeTypingAttributes:(NSDictionary *)oldTypingAttributes toAttributes:(NSDictionary *)newTypingAttributes; {
+	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
+	
+	return [NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName, nil];
 }
 
 - (NSArray *)sourceSymbolsForSourceTextView:(WCSourceTextView *)textView {

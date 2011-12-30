@@ -120,6 +120,8 @@
 		[retval addItemWithTitle:NSLocalizedString(@"Copy", @"Copy") action:@selector(copy:) keyEquivalent:@""];
 		[retval addItemWithTitle:NSLocalizedString(@"Paste", @"Paste") action:@selector(paste:) keyEquivalent:@""];
 		[retval addItem:[NSMenuItem separatorItem]];
+		[retval addItemWithTitle:NSLocalizedString(@"Jump to Definition", @"Jump to Definition") action:@selector(jumpToDefinition:) keyEquivalent:@""];
+		[retval addItem:[NSMenuItem separatorItem]];
 		[retval addItemWithTitle:NSLocalizedString(@"Shift Left", @"Shift Left") action:@selector(shiftLeft:) keyEquivalent:@""];
 		[retval addItemWithTitle:NSLocalizedString(@"Shift Right", @"Shift Right") action:@selector(shiftRight:) keyEquivalent:@""];
 		[retval addItem:[NSMenuItem separatorItem]];
@@ -245,7 +247,52 @@
 	
 	[self setSelectedRange:placeholderRange];
 }
-
+- (IBAction)jumpToSelection:(id)sender; {
+	[self scrollRangeToVisible:[self selectedRange]];
+}
+- (IBAction)jumpToDefinition:(id)sender; {
+	NSRange symbolRange = [self _symbolRangeForRange:[self selectedRange]];
+	if (symbolRange.location == NSNotFound) {
+		NSBeep();
+		return;
+	}
+	
+	NSArray *symbols = [[self delegate] sourceTextView:self sourceSymbolsForSymbolName:[[self string] substringWithRange:symbolRange]];
+	if (![symbols count]) {
+		NSBeep();
+		return;
+	}
+	else if ([symbols count] == 1) {
+		WCSourceSymbol *symbol = [symbols lastObject];
+		
+		[self setSelectedRange:[symbol range]];
+		[self scrollRangeToVisible:[self selectedRange]];
+	}
+	else {
+		NSMenu *menu = [[[NSMenu alloc] initWithTitle:@""] autorelease];
+		
+		for (WCSourceSymbol *symbol in symbols) {
+			NSString *fileDisplayName = [[[symbol sourceScanner] delegate] fileDisplayNameForSourceScanner:[symbol sourceScanner]];
+			NSMenuItem *item = [menu addItemWithTitle:[NSString stringWithFormat:@"%@ \u2192 %@:%lu",[symbol name],fileDisplayName,[symbol lineNumber]+1] action:@selector(_symbolMenuClicked:) keyEquivalent:@""];
+			
+			[item setImage:[symbol icon]];
+			[item setTarget:self];
+			[item setRepresentedObject:symbol];
+		}
+		
+		NSUInteger glyphIndex = [[self layoutManager] glyphIndexForCharacterAtIndex:symbolRange.location];
+		NSRect lineRect = [[self layoutManager] lineFragmentRectForGlyphAtIndex:glyphIndex effectiveRange:NULL];
+		NSPoint selectedPoint = [[self layoutManager] locationForGlyphAtIndex:glyphIndex];
+		
+		lineRect.origin.y += lineRect.size.height;
+		lineRect.origin.x += selectedPoint.x;
+		
+		NSCursor *currentCursor = [[self enclosingScrollView] documentCursor];
+		
+		if (![menu popUpMenuPositioningItem:nil atLocation:lineRect.origin inView:self])
+			[currentCursor push];
+	}
+}
 - (IBAction)shiftLeft:(id)sender; {
 	if ([self selectedRange].length) {
 		NSRange lineRange = [[self string] lineRangeForRange:[self selectedRange]];

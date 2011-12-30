@@ -46,10 +46,12 @@
 	return [_attributedString attributesAtIndex:location effectiveRange:range];
 }
 - (void)replaceCharactersInRange:(NSRange)range withString:(NSString *)string; {
+	/*
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
 	NSAttributedString *attributedString = [[[NSAttributedString alloc] initWithString:string attributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName, nil]] autorelease];
 	[_attributedString replaceCharactersInRange:range withAttributedString:attributedString];
-	//[_attributedString replaceCharactersInRange:range withString:string];
+	 */
+	[_attributedString replaceCharactersInRange:range withString:string];
 	[self _calculateLineStartIndexes];
 	[self edited:NSTextStorageEditedCharacters range:range changeInLength:[string length] - range.length];
 }
@@ -99,15 +101,23 @@
 - (void)_colorDidChange:(NSNotification *)note {
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
 	
-	if ([[[note userInfo] objectForKey:@"colorName"] isEqualToString:@"plainTextColor"])
-		[self addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextColor],NSForegroundColorAttributeName, nil] range:NSMakeRange(0, [self length])];
+	if ([[[note userInfo] objectForKey:@"colorName"] isEqualToString:@"plainTextColor"]) {
+		for (NSLayoutManager *layoutManager in [self layoutManagers]) {
+			for (NSTextContainer *textContainer in [layoutManager textContainers])
+				[[textContainer textView] setTextColor:[currentTheme plainTextColor]];
+		}
+	}
 	[[[self delegate] sourceHighlighterForSourceTextStorage:self] performHighlightingInVisibleRange];
 }
 - (void)_fontDidChange:(NSNotification *)note {
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
 	
-	if ([[[note userInfo] objectForKey:@"fontName"] isEqualToString:@"plainTextFont"])
-		[self addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName, nil] range:NSMakeRange(0, [self length])];
+	if ([[[note userInfo] objectForKey:@"fontName"] isEqualToString:@"plainTextFont"]) {
+		for (NSLayoutManager *layoutManager in [self layoutManagers]) {
+			for (NSTextContainer *textContainer in [layoutManager textContainers])
+				[[textContainer textView] setFont:[currentTheme plainTextFont]];
+		}
+	}
 	[[[self delegate] sourceHighlighterForSourceTextStorage:self] performHighlightingInVisibleRange];
 }
 @end

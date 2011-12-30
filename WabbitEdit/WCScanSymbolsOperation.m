@@ -57,6 +57,7 @@
 			[equateNames setObject:equates forKey:[name lowercaseString]];
 		}
 		
+		[equate setSourceScanner:[self sourceScanner]];
 		[equates addObject:equate];
 		[completions setObject:equate forKey:[name lowercaseString]];
 		[symbols addObject:equate];
@@ -87,6 +88,7 @@
 			[labelNames setObject:labels forKey:[name lowercaseString]];
 		}
 		
+		[label setSourceScanner:[self sourceScanner]];
 		[labels addObject:label];
 		[completions setObject:label forKey:[name lowercaseString]];
 		[symbols addObject:label];
@@ -149,6 +151,7 @@
 			[defineNames setObject:defines forKey:[name lowercaseString]];
 		}
 		
+		[define setSourceScanner:[self sourceScanner]];
 		[defines addObject:define];
 		[completions setObject:define forKey:[name lowercaseString]];
 		[symbols addObject:define];
@@ -219,6 +222,7 @@
 			[macroNames setObject:macros forKey:[name lowercaseString]];
 		}
 		
+		[macro setSourceScanner:[self sourceScanner]];
 		[macros addObject:macro];
 		[completions setObject:macro forKey:[name lowercaseString]];
 		[symbols addObject:macro];

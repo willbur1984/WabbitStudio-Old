@@ -8,7 +8,7 @@
 
 #import "WCSourceSymbol.h"
 
-@interface WCDefineSymbol : WCSourceSymbol <WCCompletionItem> {
+@interface WCDefineSymbol : WCSourceSymbol <WCCompletionItem,RSToolTipProvider> {
 	NSString *_value;
 	NSArray *_arguments;
 }

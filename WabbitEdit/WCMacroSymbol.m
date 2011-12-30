@@ -7,6 +7,8 @@
 //
 
 #import "WCMacroSymbol.h"
+#import "WCSourceScanner.h"
+#import "NSString+WCExtensions.h"
 
 @implementation WCMacroSymbol
 - (void)dealloc {
@@ -27,6 +29,19 @@
 }
 - (NSArray *)completionArguments {
 	return [self arguments];
+}
+
+- (NSAttributedString *)attributedToolTip {
+	NSMutableAttributedString *retval = [[[NSMutableAttributedString alloc] initWithString:[self name] attributes:RSToolTipProviderDefaultAttributes()] autorelease];
+	
+	[retval applyFontTraits:NSBoldFontMask range:NSMakeRange(0, [retval length])];
+	
+	if ([self arguments])
+		[retval appendAttributedString:[[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"(%@)",[[self arguments] componentsJoinedByString:@", "]] attributes:RSToolTipProviderDefaultAttributes()] autorelease]];
+	
+	[retval appendAttributedString:[[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" \u2192 %@:%lu",[[[self sourceScanner] delegate] fileDisplayNameForSourceScanner:[self sourceScanner]],[[[[self sourceScanner] textStorage] string] lineNumberForRange:[self range]]+1] attributes:[NSDictionary dictionaryWithObjectsAndKeys:RSToolTipProviderDefaultFont(),NSFontAttributeName,[NSColor darkGrayColor],NSForegroundColorAttributeName, nil]] autorelease]];
+	
+	return retval;
 }
 
 + (id)macroSymbolWithRange:(NSRange)range name:(NSString *)name value:(NSString *)value arguments:(NSArray *)arguments; {

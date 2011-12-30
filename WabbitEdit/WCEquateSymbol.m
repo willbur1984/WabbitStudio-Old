@@ -7,6 +7,8 @@
 //
 
 #import "WCEquateSymbol.h"
+#import "WCSourceScanner.h"
+#import "NSString+WCExtensions.h"
 
 @implementation WCEquateSymbol
 - (void)dealloc {
@@ -20,6 +22,18 @@
 
 - (NSString *)completionName {
 	return [NSString stringWithFormat:@"%@ = %@",[self name],[self value]];
+}
+
+- (NSAttributedString *)attributedToolTip {
+	NSMutableAttributedString *retval = [[[NSMutableAttributedString alloc] initWithString:[self name] attributes:RSToolTipProviderDefaultAttributes()] autorelease];
+	
+	[retval applyFontTraits:NSBoldFontMask range:NSMakeRange(0, [retval length])];
+	
+	[retval appendAttributedString:[[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" = %@",[self value]] attributes:RSToolTipProviderDefaultAttributes()] autorelease]];
+	
+	[retval appendAttributedString:[[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" \u2192 %@:%lu",[[[self sourceScanner] delegate] fileDisplayNameForSourceScanner:[self sourceScanner]],[[[[self sourceScanner] textStorage] string] lineNumberForRange:[self range]]+1] attributes:[NSDictionary dictionaryWithObjectsAndKeys:RSToolTipProviderDefaultFont(),NSFontAttributeName,[NSColor darkGrayColor],NSForegroundColorAttributeName, nil]] autorelease]];
+	
+	return retval;
 }
 
 + (id)equateSymbolWithRange:(NSRange)range name:(NSString *)name value:(NSString *)value; {

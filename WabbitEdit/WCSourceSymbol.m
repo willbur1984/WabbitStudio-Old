@@ -10,6 +10,8 @@
 #import "RSDefines.h"
 #import "WCFontAndColorTheme.h"
 #import "WCFontAndColorThemeManager.h"
+#import "WCSourceScanner.h"
+#import "NSString+WCExtensions.h"
 
 @interface WCSourceSymbol ()
 + (NSImage *)_sourceSymbolIconForSourceSymbolType:(WCSourceSymbolType)sourceSymbolType;
@@ -37,7 +39,11 @@
 }
 
 - (NSAttributedString *)attributedToolTip {
-	return [[[NSAttributedString alloc] initWithString:[self completionName] attributes:RSToolTipProviderDefaultAttributes()] autorelease];
+	NSMutableAttributedString *retval = [[[NSMutableAttributedString alloc] initWithString:[self name] attributes:RSToolTipProviderDefaultAttributes()] autorelease];
+	
+	[retval appendAttributedString:[[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" \u2192 %@:%lu",[[[self sourceScanner] delegate] fileDisplayNameForSourceScanner:[self sourceScanner]],[[[[self sourceScanner] textStorage] string] lineNumberForRange:[self range]]+1] attributes:[NSDictionary dictionaryWithObjectsAndKeys:RSToolTipProviderDefaultFont(),NSFontAttributeName,[NSColor darkGrayColor],NSForegroundColorAttributeName, nil]] autorelease]];
+	
+	return retval;
 }
 
 + (id)sourceSymbolOfType:(WCSourceSymbolType)type range:(NSRange)range name:(NSString *)name; {
@@ -54,6 +60,7 @@
 	return self;
 }
 
+@synthesize sourceScanner=_sourceScanner;
 @synthesize type=_type;
 @synthesize range=_range;
 @synthesize name=_name;
@@ -75,6 +82,10 @@
 @dynamic icon;
 - (NSImage *)icon {
 	return [[self class] _sourceSymbolIconForSourceSymbolType:[self type]];
+}
+@dynamic lineNumber;
+- (NSUInteger)lineNumber {
+	return [[[[self sourceScanner] textStorage] string] lineNumberForRange:[self range]];
 }
 
 + (NSImage *)_sourceSymbolIconForSourceSymbolType:(WCSourceSymbolType)sourceSymbolType; {

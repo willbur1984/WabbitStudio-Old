@@ -13,10 +13,10 @@
 @private	
     NSMapTable *_viewsToTrackingAreas;
 	NSMapTable *_trackingAreasToViews;
-	id _eventMonitor;
-	NSTimer *_delayTimer;
 	NSView <RSToolTipView> *_currentView;
-	BOOL _isShowingToolTip;
+	id _eventMonitor;
+	NSTimer *_showTimer;
+	NSTimer *_closeTimer;
 	id _applicationDidResignActiveObservingToken;
 }
 @property (readwrite,assign,nonatomic) IBOutlet NSTextField *textField;

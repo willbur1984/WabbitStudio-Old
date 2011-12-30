@@ -9,10 +9,11 @@
 #import <AppKit/NSDocument.h>
 #import "WCJumpBarDataSource.h"
 #import "WCSourceTextStorageDelegate.h"
+#import "WCSourceScannerDelegate.h"
 
 @class WCSourceScanner,WCSourceHighlighter,WCJumpBarViewController,WCSourceTextStorage,WCSourceTextViewController;
 
-@interface WCSourceFileDocument : NSDocument <WCJumpBarDataSource,WCSourceTextStorageDelegate,NSWindowDelegate> {
+@interface WCSourceFileDocument : NSDocument <WCJumpBarDataSource,WCSourceTextStorageDelegate,WCSourceScannerDelegate,NSWindowDelegate> {
 	NSString *_fileContents;
 	WCSourceTextStorage *_textStorage;
 	WCSourceScanner *_sourceScanner;

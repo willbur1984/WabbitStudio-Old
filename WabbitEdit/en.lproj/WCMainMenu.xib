@@ -740,6 +740,34 @@
 						<object class="NSMenu" key="NSSubmenu" id="287866681">
 							<string key="NSTitle">Navigate</string>
 							<array class="NSMutableArray" key="NSMenuItems">
+								<object class="NSMenuItem" id="628564588">
+									<reference key="NSMenu" ref="287866681"/>
+									<string key="NSTitle">Jump to Definition</string>
+									<string key="NSKeyEquiv">j</string>
+									<int key="NSKeyEquivModMask">1310720</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="1033313550"/>
+									<reference key="NSMixedImage" ref="310636482"/>
+								</object>
+								<object class="NSMenuItem" id="679109234">
+									<reference key="NSMenu" ref="287866681"/>
+									<string key="NSTitle">Jump to Selection</string>
+									<string key="NSKeyEquiv">L</string>
+									<int key="NSKeyEquivModMask">1048576</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="1033313550"/>
+									<reference key="NSMixedImage" ref="310636482"/>
+								</object>
+								<object class="NSMenuItem" id="955723144">
+									<reference key="NSMenu" ref="287866681"/>
+									<bool key="NSIsDisabled">YES</bool>
+									<bool key="NSIsSeparator">YES</bool>
+									<string key="NSTitle"/>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="1033313550"/>
+									<reference key="NSMixedImage" ref="310636482"/>
+								</object>
 								<object class="NSMenuItem" id="1024139691">
 									<reference key="NSMenu" ref="287866681"/>
 									<string key="NSTitle">Jump to Next Placeholder</string>
@@ -1365,6 +1393,22 @@
 						<reference key="destination" ref="3802643"/>
 					</object>
 					<int key="connectionID">552</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">jumpToDefinition:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="628564588"/>
+					</object>
+					<int key="connectionID">559</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">jumpToSelection:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="679109234"/>
+					</object>
+					<int key="connectionID">560</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
@@ -1996,6 +2040,9 @@
 						<array class="NSMutableArray" key="children">
 							<reference ref="1024139691"/>
 							<reference ref="988059890"/>
+							<reference ref="955723144"/>
+							<reference ref="679109234"/>
+							<reference ref="628564588"/>
 						</array>
 						<reference key="parent" ref="1059282136"/>
 					</object>
@@ -2064,6 +2111,21 @@
 						<int key="objectID">553</int>
 						<reference key="object" ref="968104485"/>
 						<reference key="parent" ref="0"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">556</int>
+						<reference key="object" ref="955723144"/>
+						<reference key="parent" ref="287866681"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">557</int>
+						<reference key="object" ref="679109234"/>
+						<reference key="parent" ref="287866681"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">558</int>
+						<reference key="object" ref="628564588"/>
+						<reference key="parent" ref="287866681"/>
 					</object>
 				</array>
 			</object>
@@ -2158,6 +2220,9 @@
 				<string key="550.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="551.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="553.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="556.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="557.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="558.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="56.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="57.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="58.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2177,7 +2242,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">555</int>
+			<int key="maxID">560</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -2265,8 +2330,10 @@
 					<dictionary class="NSMutableDictionary" key="actions">
 						<string key="commentSelection:">id</string>
 						<string key="commentUncommentSelection:">id</string>
+						<string key="jumpToDefinition:">id</string>
 						<string key="jumpToNextPlaceholder:">id</string>
 						<string key="jumpToPreviousPlaceholder:">id</string>
+						<string key="jumpToSelection:">id</string>
 						<string key="shiftLeft:">id</string>
 						<string key="shiftRight:">id</string>
 						<string key="uncommentSelection:">id</string>
@@ -2280,12 +2347,20 @@
 							<string key="name">commentUncommentSelection:</string>
 							<string key="candidateClassName">id</string>
 						</object>
+						<object class="IBActionInfo" key="jumpToDefinition:">
+							<string key="name">jumpToDefinition:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 						<object class="IBActionInfo" key="jumpToNextPlaceholder:">
 							<string key="name">jumpToNextPlaceholder:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="jumpToPreviousPlaceholder:">
 							<string key="name">jumpToPreviousPlaceholder:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="jumpToSelection:">
+							<string key="name">jumpToSelection:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="shiftLeft:">

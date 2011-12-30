@@ -18,16 +18,21 @@ typedef enum _WCSourceSymbolType {
 	
 } WCSourceSymbolType;
 
+@class WCSourceScanner;
+
 @interface WCSourceSymbol : NSObject <WCCompletionItem,RSToolTipProvider> {
+	__weak WCSourceScanner *_sourceScanner;
 	WCSourceSymbolType _type;
 	NSRange _range;
 	NSString *_name;
 }
+@property (readwrite,assign,nonatomic) WCSourceScanner *sourceScanner;
 @property (readonly,nonatomic) WCSourceSymbolType type;
 @property (readonly,nonatomic) NSRange range;
 @property (readonly,nonatomic) NSString *name;
 @property (readonly,nonatomic) NSString *typeDescription;
 @property (readonly,nonatomic) NSImage *icon;
+@property (readonly,nonatomic) NSUInteger lineNumber;
 
 + (id)sourceSymbolOfType:(WCSourceSymbolType)type range:(NSRange)range name:(NSString *)name;
 - (id)initWithType:(WCSourceSymbolType)type range:(NSRange)range name:(NSString *)name;

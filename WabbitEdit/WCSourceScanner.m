@@ -173,6 +173,7 @@ NSString *const WCSourceScannerDidFinishScanningSymbolsNotification = @"WCSource
 	return retval;
 }
 
+@synthesize delegate=_delegate;
 @synthesize textStorage=_textStorage;
 @synthesize tokens=_tokens;
 @synthesize symbols=_symbols;

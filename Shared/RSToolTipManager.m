@@ -11,7 +11,6 @@
 #import "RSToolTipProvider.h"
 
 @interface RSToolTipManager ()
-@property (readwrite,assign,nonatomic) BOOL isShowingToolTip;
 
 - (void)_showTooltipPanelForCurrentToolTipProvider;
 - (void)_closeToolTipPanelWithAnimation:(BOOL)animate;
@@ -47,6 +46,9 @@
 	[self _closeToolTipPanelWithAnimation:YES];
 }
 
+static const NSTimeInterval kShowToolTipDelay = 0.35;
+static const NSTimeInterval kCloseToolTipDelay = 0.25;
+
 - (void)mouseMoved:(NSEvent *)theEvent {
 	if (!_currentView) {
 		NSView *view = [[[theEvent window] contentView] hitTest:[theEvent locationInWindow]];
@@ -58,21 +60,24 @@
 	NSArray *dataSources = [_currentView toolTipManager:self toolTipProvidersForToolTipAtPoint:[_currentView convertPointFromBase:[theEvent locationInWindow]]];
 	
 	if (dataSources) {
-		if ([self isShowingToolTip])
+		[_closeTimer invalidate];
+		_closeTimer = nil;
+		
+		if ([[self window] isVisible])
 			[self _showTooltipPanelForCurrentToolTipProvider];
-		else if (_delayTimer)
-			[_delayTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:0.35]];
+		else if (_showTimer)
+			[_showTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:kShowToolTipDelay]];
 		else
-			_delayTimer = [NSTimer scheduledTimerWithTimeInterval:0.35 target:self selector:@selector(_delayTimerCallback:) userInfo:nil repeats:NO];
+			_showTimer = [NSTimer scheduledTimerWithTimeInterval:kShowToolTipDelay target:self selector:@selector(_showTimerCallback:) userInfo:nil repeats:NO];
 	}
+	else if (_closeTimer)
+		[_closeTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:kCloseToolTipDelay]];
 	else
-		[self _closeToolTipPanelWithAnimation:YES];
+		_closeTimer = [NSTimer scheduledTimerWithTimeInterval:kCloseToolTipDelay target:self selector:@selector(_closeTimerCallback:) userInfo:nil repeats:NO];
 }
 #pragma mark NSAnimationDelegate
 - (void)animationDidStop:(CAAnimation *)animation finished:(BOOL)flag  {
-	if ([self isShowingToolTip])
-		return;
-	else if (flag)
+	if (flag)
 		[[self window] orderOut:nil];
 }
 #pragma mark *** Public Methods ***
@@ -109,7 +114,9 @@
 		}];
 	}
 	
-	NSParameterAssert([toolTipView window]);
+#ifdef DEBUG
+    NSAssert([toolTipView window], @"toolTipView %@ must have a window!",toolTipView);
+#endif
 	
 	NSTrackingArea *trackingArea = [[[NSTrackingArea alloc] initWithRect:NSZeroRect options:NSTrackingActiveInKeyWindow|NSTrackingInVisibleRect|NSTrackingMouseMoved|NSTrackingMouseEnteredAndExited owner:self userInfo:nil] autorelease];
 	
@@ -130,15 +137,16 @@
 	
 	if (![_viewsToTrackingAreas count]) {
 		[[NSNotificationCenter defaultCenter] removeObserver:_applicationDidResignActiveObservingToken];
-		[_delayTimer invalidate];
-		_delayTimer = nil;
+		[_showTimer invalidate];
+		_showTimer = nil;
+		[_closeTimer invalidate];
+		_closeTimer = nil;
 		[NSEvent removeMonitor:_eventMonitor];
 		_eventMonitor = nil;
 	}
 }
 #pragma mark Properties
 @synthesize textField=_textField;
-@synthesize isShowingToolTip=_isShowingToolTip;
 #pragma mark *** Private Methods ***
 - (void)_showTooltipPanelForCurrentToolTipProvider; {
 	static dispatch_once_t onceToken;
@@ -149,17 +157,13 @@
 		[[self window] setAnimations:[NSDictionary dictionaryWithObjectsAndKeys:animation,@"alphaValue", nil]];
 	});
 	
-	_delayTimer = nil;
-	
 	NSEvent *theEvent = [NSApp currentEvent];
-	NSArray *dataSources = [_currentView toolTipManager:self toolTipProvidersForToolTipAtPoint:[_currentView convertPointFromBase:[theEvent locationInWindow]]];
+	NSArray *providers = [_currentView toolTipManager:self toolTipProvidersForToolTipAtPoint:[_currentView convertPointFromBase:[theEvent locationInWindow]]];
 	
-	if (dataSources) {
-		[self setIsShowingToolTip:YES];
-		
+	if (providers) {
 		NSMutableAttributedString *toolTip = [[[NSMutableAttributedString alloc] initWithString:@"" attributes:RSToolTipProviderDefaultAttributes()] autorelease];
-		for (id <RSToolTipProvider> dataSource in dataSources) {
-			[toolTip appendAttributedString:[dataSource attributedToolTip]];
+		for (id <RSToolTipProvider> provider in providers) {
+			[toolTip appendAttributedString:[provider attributedToolTip]];
 			[toolTip appendAttributedString:[[[NSAttributedString alloc] initWithString:@"\n" attributes:RSToolTipProviderDefaultAttributes()] autorelease]];
 		}
 		
@@ -192,10 +196,7 @@
 }
 
 - (void)_closeToolTipPanelWithAnimation:(BOOL)animate; {
-	if (![self isShowingToolTip])
-		return;
-	
-	[self setIsShowingToolTip:NO];
+	_currentView = nil;
 	
 	if (animate)
 		[[[self window] animator] setAlphaValue:0.0];
@@ -203,11 +204,17 @@
 		[[self window] orderOut:nil];
 }
 #pragma mark Callbacks
-- (void)_delayTimerCallback:(NSTimer *)timer {
-	[_delayTimer invalidate];
-	_delayTimer = nil;
+- (void)_showTimerCallback:(NSTimer *)timer {
+	[_showTimer invalidate];
+	_showTimer = nil;
 	
 	[self _showTooltipPanelForCurrentToolTipProvider];
+}
+- (void)_closeTimerCallback:(NSTimer *)timer {
+	[_closeTimer invalidate];
+	_closeTimer = nil;
+	
+	[self _closeToolTipPanelWithAnimation:YES];
 }
 
 @end

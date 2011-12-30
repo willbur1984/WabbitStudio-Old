@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/NSObject.h>
+#import "WCSourceScannerDelegate.h"
 
 extern NSString *const WCSourceScannerDidFinishScanningNotification;
 extern NSString *const WCSourceScannerDidFinishScanningSymbolsNotification;
@@ -15,6 +16,7 @@ extern NSString *const WCSourceScannerDidFinishScanningSymbolsNotification;
 
 @interface WCSourceScanner : NSObject {
 	__weak NSTextStorage *_textStorage;
+	__weak id <WCSourceScannerDelegate> _delegate;
 	NSOperationQueue *_operationQueue;
 	NSArray *_tokens;
 	NSTimer *_tokenScanningTimer;
@@ -27,7 +29,7 @@ extern NSString *const WCSourceScannerDidFinishScanningSymbolsNotification;
 	NSDictionary *_macroNamesToMacroSymbols;
 	NDTrie *_completions;
 }
-
+@property (readwrite,assign,nonatomic) id <WCSourceScannerDelegate> delegate;
 @property (readonly,nonatomic) NSTextStorage *textStorage;
 @property (readwrite,copy) NSArray *tokens;
 

@@ -12,7 +12,7 @@ static NSFont *RSToolTipProviderDefaultFont() {
 	return [NSFont labelFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]];
 }
 static NSDictionary *RSToolTipProviderDefaultAttributes() {
-	return [NSDictionary dictionaryWithObjectsAndKeys:RSToolTipProviderDefaultFont(),NSFontAttributeName,[NSColor darkGrayColor],NSForegroundColorAttributeName, nil];
+	return [NSDictionary dictionaryWithObjectsAndKeys:RSToolTipProviderDefaultFont(),NSFontAttributeName,[NSColor blackColor],NSForegroundColorAttributeName, nil];
 }
 
 @protocol RSToolTipProvider <NSObject>
