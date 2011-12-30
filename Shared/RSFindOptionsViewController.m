@@ -52,6 +52,15 @@
 	
 	if ([[self delegate] respondsToSelector:@selector(findOptionsViewControllerDidChangeFindOptions:)])
 		[[self delegate] findOptionsViewControllerDidChangeFindOptions:self];
+	
+	NSSize contentSize = [_popover contentSize];
+	if (_findStyle == RSFindOptionsFindStyleTextual) {
+		contentSize.height -= 40.0;
+	}
+	else {
+		contentSize.height += 40.0;
+	}
+	[_popover setContentSize:contentSize];
 }
 @dynamic matchStyle;
 - (RSFindOptionsMatchStyle)matchStyle {

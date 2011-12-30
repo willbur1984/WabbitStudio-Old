@@ -45,5 +45,50 @@ static NSString *NSRangeDescriptionFunction(const void *item) {
     }
     return *(NSRangePointer)[self pointerAtIndex:left];
 }
+- (NSUInteger)objectIndexForRange:(NSRange)range {
+	if (![self count])
+		return NSNotFound;
+	
+	NSUInteger left = 0, right = [self count], mid, lineStart;
+	
+    while ((right - left) > 1) {
+        mid = (right + left) / 2;
+		lineStart = ((NSRangePointer)[self pointerAtIndex:mid])->location;
+        
+        if (range.location < lineStart)
+			right = mid;
+        else if (range.location > lineStart)
+			left = mid;
+        else
+			return mid;
+    }
+    return left;
+}
+- (NSRange)rangeGreaterThanOrEqualToRange:(NSRange)range; {
+	NSUInteger rangeIndex = [self objectIndexForRange:range];
+	if (rangeIndex == NSNotFound)
+		return NSNotFoundRange;
+	
+	while (rangeIndex < [self count]) {
+		NSRange cmpRange = *(NSRangePointer)[self pointerAtIndex:rangeIndex++];
+		
+		if (cmpRange.location >= NSMaxRange(range))
+			return cmpRange;
+	}
+	return NSNotFoundRange;
+}
 
+- (NSRange)rangeLessThenRange:(NSRange)range; {
+	NSInteger rangeIndex = [self objectIndexForRange:range];
+	if (rangeIndex == NSNotFound)
+		return NSNotFoundRange;
+	
+	while (rangeIndex > 0) {
+		NSRange cmpRange = *(NSRangePointer)[self pointerAtIndex:rangeIndex--];
+		
+		if (cmpRange.location < range.location)
+			return cmpRange;
+	}
+	return *(NSRangePointer)[self pointerAtIndex:0];
+}
 @end

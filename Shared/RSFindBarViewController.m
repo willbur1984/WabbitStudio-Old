@@ -9,6 +9,7 @@
 #import "RSFindBarViewController.h"
 #import "NSPointerArray+WCExtensions.h"
 #import "RSFindOptionsViewController.h"
+#import "RSDefines.h"
 
 @interface RSFindBarViewController ()
 @property (readonly,nonatomic) NSTextView *textView;
@@ -18,7 +19,10 @@
 @property (readwrite,retain,nonatomic) NSRegularExpression *findRegularExpression;
 @property (readwrite,copy,nonatomic) NSString *statusString;
 
+- (void)_addFindTextAttributes;
 - (void)_removeFindTextAttributes;
+- (NSRange)_nextRangeDidWrap:(BOOL *)didWrap includeSelectedRange:(BOOL)includeSelectedRange;
+- (NSRange)_previousRangeDidWrap:(BOOL *)didWrap;
 @end
 
 @implementation RSFindBarViewController
@@ -78,11 +82,18 @@
 		[self hideFindBar:nil];
 		return YES;
 	}
+	else if (commandSelector == @selector(insertNewline:)) {
+		if ([_findRanges count])
+			[self findNext:nil];
+		else if ([[self findString] length])
+			[self find:nil];
+	}
 	return NO;
 }
 
 - (void)findOptionsViewControllerDidChangeFindOptions:(RSFindOptionsViewController *)viewController {
-	[self find:nil];
+	if ([[self findString] length])
+		[self find:nil];
 }
 
 - (id)initWithTextView:(NSTextView *)textView {
@@ -278,12 +289,52 @@ static const NSAnimationCurve kFindBarShowHideAnimationCurve = NSAnimationEaseIn
 		[[self searchField] setRecentSearches:recentSearches];
 	}
 	
-	NSDictionary *attributes = [[self class] findTextAttributes];
-	NSUInteger rangeIndex, rangeCount = [_findRanges count];
-	for (rangeIndex = 0; rangeIndex < rangeCount; rangeIndex++) {
-		NSRange range = *(NSRangePointer)[_findRanges pointerAtIndex:rangeIndex];
+	[self _addFindTextAttributes];
+}
+- (IBAction)findNext:(id)sender; {
+	if (![[self findString] length]) {
+		NSBeep();
+		return;
+	}
+	
+	BOOL didWrap = NO;
+	NSRange foundRange = [self _nextRangeDidWrap:&didWrap includeSelectedRange:NO];
+	
+	if (foundRange.location == NSNotFound) {
+		NSBeep();
+		//if (![self wrapAround])
+			//[[RSBezelWindowManager sharedBezelWindowManager] showImage:[NSImage imageNamed:@"FindNoWrapIndicator"] inView:[[[self textView] enclosingScrollView] contentView]];
+	}
+	else {
+		[[self textView] setSelectedRange:foundRange];
+		[[self textView] scrollRangeToVisible:foundRange];
+		[[self textView] showFindIndicatorForRange:foundRange];
 		
-		[[[self textView] layoutManager] addTemporaryAttributes:attributes forCharacterRange:range];
+		//if (didWrap)
+		//	[[RSBezelWindowManager sharedBezelWindowManager] showImage:[NSImage imageNamed:@"FindWrapIndicator"] inView:[[[self textView] enclosingScrollView] contentView]];
+	}
+}
+- (IBAction)findPrevious:(id)sender; {
+	if (![[self findString] length]) {
+		NSBeep();
+		return;
+	}
+	
+	BOOL didWrap = NO;
+	NSRange foundRange = [self _previousRangeDidWrap:&didWrap];
+	
+	if (foundRange.location == NSNotFound) {
+		NSBeep();
+		//if (![self wrapAround])
+		//	[[RSBezelWindowManager sharedBezelWindowManager] showImage:[NSImage imageNamed:@"FindNoWrapIndicatorReverse"] inView:[[[self textView] enclosingScrollView] contentView]];
+	}
+	else {
+		[[self textView] setSelectedRange:foundRange];
+		[[self textView] scrollRangeToVisible:foundRange];
+		[[self textView] showFindIndicatorForRange:foundRange];
+		
+		//if (didWrap)
+		//	[[RSBezelWindowManager sharedBezelWindowManager] showImage:[NSImage imageNamed:@"FindWrapIndicatorReverse"] inView:[[[self textView] enclosingScrollView] contentView]];
 	}
 }
 
@@ -306,10 +357,86 @@ static const NSAnimationCurve kFindBarShowHideAnimationCurve = NSAnimationEaseIn
 @synthesize findOptionsViewController=_findOptionsViewController;
 @synthesize findRegularExpression=_findRegularExpression;
 
+- (void)_addFindTextAttributes {	
+	NSDictionary *attributes = [[self class] findTextAttributes];
+	NSUInteger rangeIndex, rangeCount = [_findRanges count];
+	for (rangeIndex = 0; rangeIndex < rangeCount; rangeIndex++) {
+		NSRange range = *(NSRangePointer)[_findRanges pointerAtIndex:rangeIndex];
+		
+		[[[self textView] layoutManager] addTemporaryAttributes:attributes forCharacterRange:range];
+	}
+}
 - (void)_removeFindTextAttributes {
 	[[[self textView] layoutManager] removeTemporaryAttribute:NSBackgroundColorAttributeName forCharacterRange:NSMakeRange(0, [[[self textView] string] length])];
 	[[[self textView] layoutManager] removeTemporaryAttribute:NSUnderlineStyleAttributeName forCharacterRange:NSMakeRange(0, [[[self textView] string] length])];
 	[[[self textView] layoutManager] removeTemporaryAttribute:NSUnderlineColorAttributeName forCharacterRange:NSMakeRange(0, [[[self textView] string] length])];
 }
 
+- (NSRange)_nextRangeDidWrap:(BOOL *)didWrap includeSelectedRange:(BOOL)includeSelectedRange; {
+	NSString *string = [[self textView] string];
+	NSRange selectedRange = [[self textView] selectedRange];
+	NSRange searchRange = (includeSelectedRange)?NSMakeRange(selectedRange.location, [string length]-selectedRange.location):NSMakeRange(NSMaxRange(selectedRange), [string length]-NSMaxRange(selectedRange));
+	NSStringCompareOptions options;
+	NSRange foundRange;
+	
+	if ([[self findOptionsViewController] findStyle] == RSFindOptionsFindStyleTextual) {
+		options = ([[self findOptionsViewController] matchCase])?NSLiteralSearch:(NSCaseInsensitiveSearch|NSLiteralSearch);
+		foundRange = [[[self textView] string] rangeOfString:[self findString] options:options range:searchRange];
+	}
+	else
+		foundRange = [[self findRegularExpression] rangeOfFirstMatchInString:[[self textView] string] options:0 range:searchRange];
+	
+	if (foundRange.location == NSNotFound && [self wrapAround]) {
+		if (didWrap != NULL)
+			*didWrap = YES;
+		
+		if (includeSelectedRange)
+			searchRange = NSMakeRange(0, NSMaxRange(selectedRange));
+		else
+			searchRange = NSMakeRange(0, selectedRange.location);
+		
+		if ([[self findOptionsViewController] findStyle] == RSFindOptionsFindStyleTextual)
+			foundRange = [[[self textView] string] rangeOfString:[self findString] options:options range:searchRange];
+		else
+			foundRange = [[self findRegularExpression] rangeOfFirstMatchInString:[[self textView] string] options:0 range:searchRange];
+	}
+	return foundRange;
+}
+- (NSRange)_previousRangeDidWrap:(BOOL *)didWrap; {
+	NSRange selectedRange = [[self textView] selectedRange];
+	NSStringCompareOptions options;
+	NSRange foundRange;
+	
+	if ([[self findOptionsViewController] findStyle] == RSFindOptionsFindStyleTextual) {
+		options = ([[self findOptionsViewController] matchCase])?(NSLiteralSearch|NSBackwardsSearch):(NSBackwardsSearch|NSCaseInsensitiveSearch|NSLiteralSearch);
+		foundRange = [[[self textView] string] rangeOfString:[self findString] options:options range:NSMakeRange(0, selectedRange.location)];
+	}
+	else {
+		// TODO: this might be really slow, but i don't know another way to get the last match from NSRegularExpression
+		NSArray *foundMatches = [[self findRegularExpression] matchesInString:[[self textView] string] options:0 range:NSMakeRange(0, selectedRange.location)];
+		NSTextCheckingResult *lastMatch = [foundMatches lastObject];
+		if (lastMatch)
+			foundRange = [lastMatch range];
+		else
+			foundRange = NSNotFoundRange;
+	}
+	
+	if (foundRange.location == NSNotFound && [self wrapAround]) {
+		if (didWrap != NULL)
+			*didWrap = YES;
+		
+		if ([[self findOptionsViewController] findStyle] == RSFindOptionsFindStyleTextual)
+			foundRange = [[[self textView] string] rangeOfString:[self findString] options:options range:NSMakeRange(NSMaxRange(selectedRange), [[[self textView] string] length]-NSMaxRange(selectedRange))];
+		else {
+			// TODO: this might be really slow, but i don't know another way to get the last match from NSRegularExpression
+			NSArray *foundMatches = [[self findRegularExpression] matchesInString:[[self textView] string] options:0 range:NSMakeRange(NSMaxRange(selectedRange), [[[self textView] string] length]-NSMaxRange(selectedRange))];
+			NSTextCheckingResult *lastMatch = [foundMatches lastObject];
+			if (lastMatch)
+				foundRange = [lastMatch range];
+			else
+				foundRange = NSNotFoundRange;
+		}
+	}
+	return foundRange;
+}
 @end

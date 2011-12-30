@@ -40,6 +40,8 @@
 - (IBAction)showFindOptions:(id)sender;
 
 - (IBAction)find:(id)sender;
+- (IBAction)findNext:(id)sender;
+- (IBAction)findPrevious:(id)sender;
 
 + (NSDictionary *)findTextAttributes;
 

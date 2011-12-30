@@ -98,6 +98,9 @@
 		0791BE5214AD7F530004AC16 /* RSFindBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0791BE5114AD7F530004AC16 /* RSFindBarView.m */; };
 		0791BE5414ADA3B80004AC16 /* BGHUDAppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0791BE5314ADA3B80004AC16 /* BGHUDAppKit.framework */; };
 		0791BE5614ADA3E10004AC16 /* BGHUDAppKit.framework in Copy Private Frameworks */ = {isa = PBXBuildFile; fileRef = 0791BE5314ADA3B80004AC16 /* BGHUDAppKit.framework */; };
+		07B4740514AE3CAA00E3F9D0 /* RSNumberToBoolTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B4740414AE3CAA00E3F9D0 /* RSNumberToBoolTransformer.m */; };
+		07B4740814AE3E0A00E3F9D0 /* RSNegateNumberToBoolTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B4740714AE3E0A00E3F9D0 /* RSNegateNumberToBoolTransformer.m */; };
+		07B4740B14AE433300E3F9D0 /* RSFindSearchField.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B4740A14AE433300E3F9D0 /* RSFindSearchField.m */; };
 		07F5F75714A4F37200F1F326 /* WCSourceHighlighter.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F5F75614A4F37200F1F326 /* WCSourceHighlighter.m */; };
 		07F5F75E14A5024D00F1F326 /* NSTextView+WCExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F5F75D14A5024D00F1F326 /* NSTextView+WCExtensions.m */; };
 		07F5F76114A5451700F1F326 /* WCScanSymbolsOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F5F76014A5451700F1F326 /* WCScanSymbolsOperation.m */; };
@@ -287,6 +290,12 @@
 		0791BE5014AD7F530004AC16 /* RSFindBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSFindBarView.h; sourceTree = "<group>"; };
 		0791BE5114AD7F530004AC16 /* RSFindBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSFindBarView.m; sourceTree = "<group>"; };
 		0791BE5314ADA3B80004AC16 /* BGHUDAppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BGHUDAppKit.framework; sourceTree = "<group>"; };
+		07B4740314AE3CAA00E3F9D0 /* RSNumberToBoolTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSNumberToBoolTransformer.h; sourceTree = "<group>"; };
+		07B4740414AE3CAA00E3F9D0 /* RSNumberToBoolTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSNumberToBoolTransformer.m; sourceTree = "<group>"; };
+		07B4740614AE3E0A00E3F9D0 /* RSNegateNumberToBoolTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSNegateNumberToBoolTransformer.h; sourceTree = "<group>"; };
+		07B4740714AE3E0A00E3F9D0 /* RSNegateNumberToBoolTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSNegateNumberToBoolTransformer.m; sourceTree = "<group>"; };
+		07B4740914AE433300E3F9D0 /* RSFindSearchField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSFindSearchField.h; sourceTree = "<group>"; };
+		07B4740A14AE433300E3F9D0 /* RSFindSearchField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSFindSearchField.m; sourceTree = "<group>"; };
 		07F5F75514A4F37200F1F326 /* WCSourceHighlighter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSourceHighlighter.h; sourceTree = "<group>"; };
 		07F5F75614A4F37200F1F326 /* WCSourceHighlighter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSourceHighlighter.m; sourceTree = "<group>"; };
 		07F5F75C14A5024C00F1F326 /* NSTextView+WCExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTextView+WCExtensions.h"; sourceTree = "<group>"; };
@@ -559,6 +568,7 @@
 		0725433C14A7998200C961B7 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				07B4740114AE3C7D00E3F9D0 /* Transformers */,
 				078F041E14AD78A50080ADBC /* ToolTips */,
 				0791BE4A14AD79DC0004AC16 /* Cells */,
 				0791BE4D14AD7A1C0004AC16 /* Preferences */,
@@ -642,6 +652,8 @@
 				078F041614AD784E0080ADBC /* RSFindBarViewController.m */,
 				0791BE5014AD7F530004AC16 /* RSFindBarView.h */,
 				0791BE5114AD7F530004AC16 /* RSFindBarView.m */,
+				07B4740914AE433300E3F9D0 /* RSFindSearchField.h */,
+				07B4740A14AE433300E3F9D0 /* RSFindSearchField.m */,
 			);
 			name = "Find Bar";
 			sourceTree = "<group>";
@@ -722,6 +734,17 @@
 				072BBC3D14AA65F80044ECC2 /* NSEvent+RSExtensions.m */,
 			);
 			name = Categories;
+			sourceTree = "<group>";
+		};
+		07B4740114AE3C7D00E3F9D0 /* Transformers */ = {
+			isa = PBXGroup;
+			children = (
+				07B4740314AE3CAA00E3F9D0 /* RSNumberToBoolTransformer.h */,
+				07B4740414AE3CAA00E3F9D0 /* RSNumberToBoolTransformer.m */,
+				07B4740614AE3E0A00E3F9D0 /* RSNegateNumberToBoolTransformer.h */,
+				07B4740714AE3E0A00E3F9D0 /* RSNegateNumberToBoolTransformer.m */,
+			);
+			name = Transformers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -880,6 +903,9 @@
 				078F040F14AD73510080ADBC /* RSFindOptionsViewController.m in Sources */,
 				078F041814AD784E0080ADBC /* RSFindBarViewController.m in Sources */,
 				0791BE5214AD7F530004AC16 /* RSFindBarView.m in Sources */,
+				07B4740514AE3CAA00E3F9D0 /* RSNumberToBoolTransformer.m in Sources */,
+				07B4740814AE3E0A00E3F9D0 /* RSNegateNumberToBoolTransformer.m in Sources */,
+				07B4740B14AE433300E3F9D0 /* RSFindSearchField.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

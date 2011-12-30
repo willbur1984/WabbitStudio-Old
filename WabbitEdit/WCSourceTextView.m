@@ -221,6 +221,20 @@
 		case NSTextFinderActionHideFindInterface:
 			[[self findBarViewController] hideFindBar:nil];
 			break;
+		case NSTextFinderActionNextMatch:
+			[[self findBarViewController] findNext:nil];
+			break;
+		case NSTextFinderActionPreviousMatch:
+			[[self findBarViewController] findPrevious:nil];
+			break;
+		case NSTextFinderActionSetSearchString:
+			[[self findBarViewController] setFindString:[[self string] substringWithRange:[self selectedRange]]];
+			
+			if ([[self findBarViewController] isFindBarVisible])
+				[[self findBarViewController] find:nil];
+			else
+				[[self findBarViewController] showFindBar:nil];
+			break;
 		default:
 			break;
 	}
@@ -241,9 +255,13 @@
 	if ([anItem action] == @selector(performTextFinderAction:)) {
 		switch ([anItem tag]) {
 			case NSTextFinderActionShowFindInterface:
+			case NSTextFinderActionPreviousMatch:
+			case NSTextFinderActionNextMatch:
 				return YES;
 			case NSTextFinderActionHideFindInterface:
 				return [[self findBarViewController] isFindBarVisible];
+			case NSTextFinderActionSetSearchString:
+				return ([self selectedRange].length > 0);
 			default:
 				return NO;
 				break;
