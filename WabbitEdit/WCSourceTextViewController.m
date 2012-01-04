@@ -71,6 +71,7 @@
 	[textView setSelectedRange:NSMakeRange(charIndex, 1)];
 }
 - (NSDictionary *)textView:(NSTextView *)textView shouldChangeTypingAttributes:(NSDictionary *)oldTypingAttributes toAttributes:(NSDictionary *)newTypingAttributes; {
+	
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
 	
 	return [NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName, nil];
@@ -133,7 +134,8 @@
 		return;
 	else if (![[NSUserDefaults standardUserDefaults] boolForKey:WCEditorSuggestCompletionsWhileTypingKey])
 		return;
-	else if ([[note object] changeInLength] != 1 ||
+	else if ([[[self textView] window] firstResponder] != [self textView] ||
+			 [[note object] changeInLength] != 1 ||
 			 [[self undoManager] isUndoing] ||
 			 [[self undoManager] isRedoing]) {
 		[_completionTimer invalidate];

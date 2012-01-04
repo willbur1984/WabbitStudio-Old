@@ -10,6 +10,7 @@
 #import "NSPointerArray+WCExtensions.h"
 #import "RSFindOptionsViewController.h"
 #import "RSDefines.h"
+#import "RSBezelWindowController.h"
 
 @interface RSFindBarViewController ()
 @property (readonly,nonatomic) NSTextView *textView;
@@ -26,6 +27,7 @@
 @end
 
 @implementation RSFindBarViewController
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
@@ -48,7 +50,7 @@
 	
 	[(NSSearchFieldCell *)[[self searchField] cell] setPlaceholderString:NSLocalizedString(@"String Searching", @"find bar search field placeholder string")];
 }
-
+#pragma mark NSAnimationDelegate
 - (void)animationDidStop:(NSAnimation *)animation {
 	if (animation == _showFindBarAnimation) {
 		[_showFindBarAnimation release];
@@ -66,6 +68,12 @@
 		
 		[[[self view] window] makeFirstResponder:[self searchField]];
 		
+		if (![[self findString] length]) {
+			NSString *pboardString = [[NSPasteboard generalPasteboard] stringForType:NSPasteboardTypeString];
+			if ([pboardString length])
+				[self setFindString:pboardString];
+		}
+		
 		if ([[self findString] length])
 			[self find:nil];
 	}
@@ -74,9 +82,11 @@
 		_hideFindBarAnimation = nil;
 		
 		[[self view] removeFromSuperviewWithoutNeedingDisplay];
+		
+		[[NSNotificationCenter defaultCenter] removeObserver:_textStorageDidProcessEditingObservingToken];
 	}
 }
-
+#pragma mark NSControlTextEditingDelegate
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector {
 	if (commandSelector == @selector(cancelOperation:)) {
 		[self hideFindBar:nil];
@@ -90,12 +100,12 @@
 	}
 	return NO;
 }
-
+#pragma mark RSFindOptionsViewControllerDelegate
 - (void)findOptionsViewControllerDidChangeFindOptions:(RSFindOptionsViewController *)viewController {
 	if ([[self findString] length])
 		[self find:nil];
 }
-
+#pragma mark *** Public Methods ***
 - (id)initWithTextView:(NSTextView *)textView {
 	if (!(self = [super initWithNibName:@"RSFindBarView" bundle:nil]))
 		return nil;
@@ -110,9 +120,9 @@
 }
 
 + (NSDictionary *)findTextAttributes; {
-	return [NSDictionary dictionaryWithObjectsAndKeys:[NSColor yellowColor],NSBackgroundColorAttributeName,[NSColor orangeColor],NSUnderlineColorAttributeName,[NSNumber numberWithUnsignedInteger:NSUnderlinePatternSolid|NSUnderlineStyleThick],NSUnderlineStyleAttributeName, nil];
+	return [NSDictionary dictionaryWithObjectsAndKeys:[NSColor yellowColor],NSBackgroundColorAttributeName,[NSColor orangeColor],NSUnderlineColorAttributeName,[NSNumber numberWithUnsignedInteger:NSUnderlinePatternSolid|NSUnderlineStyleDouble],NSUnderlineStyleAttributeName, nil];
 }
-
+#pragma mark IBActions
 - (IBAction)toggleFindBar:(id)sender; {
 	if ([self isFindBarVisible])
 		[self hideFindBar:nil];
@@ -126,6 +136,15 @@ static const NSAnimationCurve kFindBarShowHideAnimationCurve = NSAnimationEaseIn
 		[[[self view] window] makeFirstResponder:[self searchField]];
 		return;
 	}
+	
+	_textStorageDidProcessEditingObservingToken = [[NSNotificationCenter defaultCenter] addObserverForName:NSTextStorageDidProcessEditingNotification object:[[self textView] textStorage] queue:nil usingBlock:^(NSNotification *note) {
+		if (([[note object] editedMask] & NSTextStorageEditedCharacters) == 0)
+			return;
+		
+		[self setStatusString:nil];
+		[_findRanges setCount:0];
+		[self performSelector:@selector(_removeFindTextAttributes) withObject:nil afterDelay:0.0];
+	}];
 	
 	[[[[self textView] window] contentView] addSubview:[self view] positioned:NSWindowBelow relativeTo:[[[[[self textView] window] contentView] subviews] objectAtIndex:0]];
 	
@@ -191,13 +210,13 @@ static const NSAnimationCurve kFindBarShowHideAnimationCurve = NSAnimationEaseIn
 	NSStringCompareOptions options = ([[self findOptionsViewController] matchCase])?NSLiteralSearch:(NSCaseInsensitiveSearch|NSLiteralSearch);
 	RSFindOptionsMatchStyle matchStyle = [[self findOptionsViewController] matchStyle];
 	
-	CFLocaleRef currentLocale = CFLocaleCopyCurrent();
-	// the CFStringTokenizer documentation says to pass kCFStringTokenizerUnitWordBoundary to do whole word searching
-	CFStringTokenizerRef stringTokenizer = CFStringTokenizerCreate(kCFAllocatorDefault, (CFStringRef)string, CFRangeMake(0, (CFIndex)stringLength), kCFStringTokenizerUnitWordBoundary, currentLocale);
-	// release the copy of the current locale we were given
-	CFRelease(currentLocale);
-	
 	if ([[self findOptionsViewController] findStyle] == RSFindOptionsFindStyleTextual) {
+		CFLocaleRef currentLocale = CFLocaleCopyCurrent();
+		// the CFStringTokenizer documentation says to pass kCFStringTokenizerUnitWordBoundary to do whole word searching
+		CFStringTokenizerRef stringTokenizer = CFStringTokenizerCreate(kCFAllocatorDefault, (CFStringRef)string, CFRangeMake(0, (CFIndex)stringLength), kCFStringTokenizerUnitWordBoundary, currentLocale);
+		// release the copy of the current locale we were given
+		CFRelease(currentLocale);
+		
 		while (searchRange.location < stringLength) {
 			NSRange foundRange = [string rangeOfString:[self findString] options:options range:searchRange];
 			if (foundRange.location == NSNotFound)
@@ -234,44 +253,17 @@ static const NSAnimationCurve kFindBarShowHideAnimationCurve = NSAnimationEaseIn
 			
 			searchRange = NSMakeRange(NSMaxRange(foundRange), stringLength-NSMaxRange(foundRange));
 		}
+		
+		// release our tokenizer from above
+		CFRelease(stringTokenizer);
 	}
 	else {
 		[[self findRegularExpression] enumerateMatchesInString:string options:0 range:searchRange usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
 			NSRange foundRange = [result range];
 			
-			CFStringTokenizerGoToTokenAtIndex(stringTokenizer, (CFIndex)foundRange.location);
-			CFRange tokenRange = CFStringTokenizerGetCurrentTokenRange(stringTokenizer);
-			
-			switch (matchStyle) {
-					// token range doesn't matter in this case
-				case RSFindOptionsMatchStyleContains:
-					[_findRanges addPointer:(void *)&foundRange];
-					break;
-					// token range and found range starting indexes must match and match range can't be longer than token range
-				case RSFindOptionsMatchStyleStartsWith:
-					if (foundRange.location == tokenRange.location &&
-						foundRange.length < tokenRange.length)
-						[_findRanges addPointer:(void *)&foundRange];
-					break;
-					// the ending indexes of token range and found range must match
-				case RSFindOptionsMatchStyleEndsWith:
-					if (NSMaxRange(foundRange) == (tokenRange.location + tokenRange.length))
-						[_findRanges addPointer:(void *)&foundRange];
-					break;
-					// token range and found range must match exactly
-				case RSFindOptionsMatchStyleWholeWord:
-					if (foundRange.location == tokenRange.location &&
-						foundRange.length == tokenRange.length)
-						[_findRanges addPointer:(void *)&foundRange];
-					break;
-				default:
-					break;
-			}
+			[_findRanges addPointer:(void *)&foundRange];
 		}];
 	}
-	
-	// release our tokenizer from above
-	CFRelease(stringTokenizer);
 	
 	if (![_findRanges count]) {
 		[self setStatusString:NSLocalizedString(@"Not found", @"Not found")];
@@ -290,6 +282,12 @@ static const NSAnimationCurve kFindBarShowHideAnimationCurve = NSAnimationEaseIn
 	}
 	
 	[self _addFindTextAttributes];
+	
+	NSRange nearRange = [self _nextRangeDidWrap:NULL includeSelectedRange:YES];
+	
+	[[self textView] setSelectedRange:nearRange];
+	[[self textView] scrollRangeToVisible:nearRange];
+	[[self textView] showFindIndicatorForRange:nearRange];
 }
 - (IBAction)findNext:(id)sender; {
 	if (![[self findString] length]) {
@@ -302,16 +300,17 @@ static const NSAnimationCurve kFindBarShowHideAnimationCurve = NSAnimationEaseIn
 	
 	if (foundRange.location == NSNotFound) {
 		NSBeep();
-		//if (![self wrapAround])
-			//[[RSBezelWindowManager sharedBezelWindowManager] showImage:[NSImage imageNamed:@"FindNoWrapIndicator"] inView:[[[self textView] enclosingScrollView] contentView]];
+		
+		if (![self wrapAround])
+			[[RSBezelWindowController sharedWindowController] showImage:[NSImage imageNamed:@"FindNoWrapIndicator"] centeredInView:[[[self textView] enclosingScrollView] contentView]];
 	}
 	else {
 		[[self textView] setSelectedRange:foundRange];
 		[[self textView] scrollRangeToVisible:foundRange];
 		[[self textView] showFindIndicatorForRange:foundRange];
 		
-		//if (didWrap)
-		//	[[RSBezelWindowManager sharedBezelWindowManager] showImage:[NSImage imageNamed:@"FindWrapIndicator"] inView:[[[self textView] enclosingScrollView] contentView]];
+		if (didWrap)
+			[[RSBezelWindowController sharedWindowController] showImage:[NSImage imageNamed:@"FindWrapIndicator"] centeredInView:[[[self textView] enclosingScrollView] contentView]];
 	}
 }
 - (IBAction)findPrevious:(id)sender; {
@@ -325,19 +324,26 @@ static const NSAnimationCurve kFindBarShowHideAnimationCurve = NSAnimationEaseIn
 	
 	if (foundRange.location == NSNotFound) {
 		NSBeep();
-		//if (![self wrapAround])
-		//	[[RSBezelWindowManager sharedBezelWindowManager] showImage:[NSImage imageNamed:@"FindNoWrapIndicatorReverse"] inView:[[[self textView] enclosingScrollView] contentView]];
+		
+		if (![self wrapAround])
+			[[RSBezelWindowController sharedWindowController] showImage:[NSImage imageNamed:@"FindNoWrapIndicatorReverse"] centeredInView:[[[self textView] enclosingScrollView] contentView]];
 	}
 	else {
 		[[self textView] setSelectedRange:foundRange];
 		[[self textView] scrollRangeToVisible:foundRange];
 		[[self textView] showFindIndicatorForRange:foundRange];
 		
-		//if (didWrap)
-		//	[[RSBezelWindowManager sharedBezelWindowManager] showImage:[NSImage imageNamed:@"FindWrapIndicatorReverse"] inView:[[[self textView] enclosingScrollView] contentView]];
+		if (didWrap)
+			[[RSBezelWindowController sharedWindowController] showImage:[NSImage imageNamed:@"FindWrapIndicatorReverse"] centeredInView:[[[self textView] enclosingScrollView] contentView]];
 	}
 }
-
+- (IBAction)findNextOrPrevious:(NSSegmentedControl *)sender; {
+	if ([sender selectedSegment] == 0)
+		[self findPrevious:nil];
+	else
+		[self findNext:nil];
+}
+#pragma mark Properties
 @synthesize searchField=_searchField;
 @synthesize findString=_findString;
 @synthesize statusString=_statusString;
@@ -356,7 +362,7 @@ static const NSAnimationCurve kFindBarShowHideAnimationCurve = NSAnimationEaseIn
 @synthesize lastFindString=_lastFindString;
 @synthesize findOptionsViewController=_findOptionsViewController;
 @synthesize findRegularExpression=_findRegularExpression;
-
+#pragma mark *** Private Methods ***
 - (void)_addFindTextAttributes {	
 	NSDictionary *attributes = [[self class] findTextAttributes];
 	NSUInteger rangeIndex, rangeCount = [_findRanges count];

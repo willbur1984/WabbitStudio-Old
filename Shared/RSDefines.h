@@ -53,6 +53,10 @@ static inline NSRect NSCenteredRectWithSize(NSSize size, NSRect rect) {
 	return NSCenteredRect(NSMakeRect(NSMinX(rect), NSMinY(rect), size.width, size.height), rect);
 }
 
+static inline NSPoint NSCenteredPointInRect(NSRect rect) {
+	return NSMakePoint(NSMinX(rect)+floor(NSWidth(rect)/2.0), NSMinY(rect)+floor(NSHeight(rect)/2.0));
+}
+
 static inline BOOL NSLocationInOrEqualToRange(NSUInteger loc, NSRange range) {
 	return (loc - range.location <= range.length);
 }

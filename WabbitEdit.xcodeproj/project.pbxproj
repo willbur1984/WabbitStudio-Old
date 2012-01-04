@@ -63,6 +63,14 @@
 		0725436914A7F66500C961B7 /* VerticalSeparator.png in Resources */ = {isa = PBXBuildFile; fileRef = 0725436714A7F66500C961B7 /* VerticalSeparator.png */; };
 		0725436C14A8376500C961B7 /* RSVerticallyCenteredTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0725436B14A8376500C961B7 /* RSVerticallyCenteredTextFieldCell.m */; };
 		0725437014A85F7000C961B7 /* RSRaisedBackgroundTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0725436F14A85F7000C961B7 /* RSRaisedBackgroundTextFieldCell.m */; };
+		072880BE14B4F16D0082DE4C /* FindNoWrapIndicator.png in Resources */ = {isa = PBXBuildFile; fileRef = 072880BA14B4F16D0082DE4C /* FindNoWrapIndicator.png */; };
+		072880BF14B4F16D0082DE4C /* FindNoWrapIndicatorReverse.png in Resources */ = {isa = PBXBuildFile; fileRef = 072880BB14B4F16D0082DE4C /* FindNoWrapIndicatorReverse.png */; };
+		072880C014B4F16D0082DE4C /* FindWrapIndicator.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 072880BC14B4F16D0082DE4C /* FindWrapIndicator.tiff */; };
+		072880C114B4F16D0082DE4C /* FindWrapIndicatorReverse.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 072880BD14B4F16D0082DE4C /* FindWrapIndicatorReverse.tiff */; };
+		072880C514B4F2170082DE4C /* RSBezelWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 072880C414B4F2170082DE4C /* RSBezelWindowController.m */; };
+		072880C814B4F6920082DE4C /* RSBezelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 072880C714B4F6920082DE4C /* RSBezelView.m */; };
+		072880CB14B4F8790082DE4C /* RSBezelWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 072880CA14B4F8790082DE4C /* RSBezelWindow.m */; };
+		072880CE14B4F9030082DE4C /* RSBezelWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 072880CC14B4F9030082DE4C /* RSBezelWindow.xib */; };
 		072BBC3A14AA65AD0044ECC2 /* RSPreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 072BBC3914AA65AD0044ECC2 /* RSPreferencesWindowController.m */; };
 		072BBC3E14AA65F80044ECC2 /* NSEvent+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 072BBC3D14AA65F80044ECC2 /* NSEvent+RSExtensions.m */; };
 		072BBC4214AA66900044ECC2 /* WCPreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 072BBC4114AA66900044ECC2 /* WCPreferencesWindowController.m */; };
@@ -225,6 +233,17 @@
 		0725436B14A8376500C961B7 /* RSVerticallyCenteredTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSVerticallyCenteredTextFieldCell.m; sourceTree = "<group>"; };
 		0725436E14A85F7000C961B7 /* RSRaisedBackgroundTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSRaisedBackgroundTextFieldCell.h; sourceTree = "<group>"; };
 		0725436F14A85F7000C961B7 /* RSRaisedBackgroundTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSRaisedBackgroundTextFieldCell.m; sourceTree = "<group>"; };
+		072880BA14B4F16D0082DE4C /* FindNoWrapIndicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FindNoWrapIndicator.png; sourceTree = "<group>"; };
+		072880BB14B4F16D0082DE4C /* FindNoWrapIndicatorReverse.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FindNoWrapIndicatorReverse.png; sourceTree = "<group>"; };
+		072880BC14B4F16D0082DE4C /* FindWrapIndicator.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = FindWrapIndicator.tiff; sourceTree = "<group>"; };
+		072880BD14B4F16D0082DE4C /* FindWrapIndicatorReverse.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = FindWrapIndicatorReverse.tiff; sourceTree = "<group>"; };
+		072880C314B4F2170082DE4C /* RSBezelWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSBezelWindowController.h; sourceTree = "<group>"; };
+		072880C414B4F2170082DE4C /* RSBezelWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSBezelWindowController.m; sourceTree = "<group>"; };
+		072880C614B4F6920082DE4C /* RSBezelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSBezelView.h; sourceTree = "<group>"; };
+		072880C714B4F6920082DE4C /* RSBezelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSBezelView.m; sourceTree = "<group>"; };
+		072880C914B4F8790082DE4C /* RSBezelWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSBezelWindow.h; sourceTree = "<group>"; };
+		072880CA14B4F8790082DE4C /* RSBezelWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSBezelWindow.m; sourceTree = "<group>"; };
+		072880CD14B4F9030082DE4C /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = RSBezelWindow.xib; sourceTree = "<group>"; };
 		072BBC3814AA65AD0044ECC2 /* RSPreferencesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSPreferencesWindowController.h; sourceTree = "<group>"; };
 		072BBC3914AA65AD0044ECC2 /* RSPreferencesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSPreferencesWindowController.m; sourceTree = "<group>"; };
 		072BBC3C14AA65F80044ECC2 /* NSEvent+RSExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSEvent+RSExtensions.h"; sourceTree = "<group>"; };
@@ -521,7 +540,6 @@
 		071ECCC814A4233C002409F8 /* WabbitEdit */ = {
 			isa = PBXGroup;
 			children = (
-				07F5F76E14A5A46900F1F326 /* RSDefines.h */,
 				072BBC4F14AA68B80044ECC2 /* WCApplicationDelegate.h */,
 				072BBC5014AA68B80044ECC2 /* WCApplicationDelegate.m */,
 				0745BE1C14AB921300F541DC /* WCMiscellaneousPerformer.h */,
@@ -568,6 +586,8 @@
 		0725433C14A7998200C961B7 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				072880C214B4F1780082DE4C /* Bezel Window */,
+				07F5F76E14A5A46900F1F326 /* RSDefines.h */,
 				07B4740114AE3C7D00E3F9D0 /* Transformers */,
 				078F041E14AD78A50080ADBC /* ToolTips */,
 				0791BE4A14AD79DC0004AC16 /* Cells */,
@@ -577,6 +597,7 @@
 				0791BE4E14AD7A2D0004AC16 /* Protocols */,
 				078F041D14AD78890080ADBC /* Find Bar */,
 				078F040114AD0F7A0080ADBC /* Xibs */,
+				072880B914B4F1470082DE4C /* Supporting Files */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -597,6 +618,30 @@
 				0725436414A7C88E00C961B7 /* WCJumpBarComponentCell.m */,
 			);
 			name = "Jump Bar";
+			sourceTree = "<group>";
+		};
+		072880B914B4F1470082DE4C /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				072880BA14B4F16D0082DE4C /* FindNoWrapIndicator.png */,
+				072880BB14B4F16D0082DE4C /* FindNoWrapIndicatorReverse.png */,
+				072880BC14B4F16D0082DE4C /* FindWrapIndicator.tiff */,
+				072880BD14B4F16D0082DE4C /* FindWrapIndicatorReverse.tiff */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		072880C214B4F1780082DE4C /* Bezel Window */ = {
+			isa = PBXGroup;
+			children = (
+				072880C314B4F2170082DE4C /* RSBezelWindowController.h */,
+				072880C414B4F2170082DE4C /* RSBezelWindowController.m */,
+				072880C614B4F6920082DE4C /* RSBezelView.h */,
+				072880C714B4F6920082DE4C /* RSBezelView.m */,
+				072880C914B4F8790082DE4C /* RSBezelWindow.h */,
+				072880CA14B4F8790082DE4C /* RSBezelWindow.m */,
+			);
+			name = "Bezel Window";
 			sourceTree = "<group>";
 		};
 		072BBC3F14AA66730044ECC2 /* Preferences */ = {
@@ -637,6 +682,7 @@
 				078F040214AD0FA00080ADBC /* RSToolTipWindow.xib */,
 				078F041114AD736A0080ADBC /* RSFindOptionsView.xib */,
 				078F041A14AD78640080ADBC /* RSFindBarView.xib */,
+				072880CC14B4F9030082DE4C /* RSBezelWindow.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -827,6 +873,11 @@
 				078F040414AD0FA00080ADBC /* RSToolTipWindow.xib in Resources */,
 				078F041314AD736A0080ADBC /* RSFindOptionsView.xib in Resources */,
 				078F041C14AD78640080ADBC /* RSFindBarView.xib in Resources */,
+				072880BE14B4F16D0082DE4C /* FindNoWrapIndicator.png in Resources */,
+				072880BF14B4F16D0082DE4C /* FindNoWrapIndicatorReverse.png in Resources */,
+				072880C014B4F16D0082DE4C /* FindWrapIndicator.tiff in Resources */,
+				072880C114B4F16D0082DE4C /* FindWrapIndicatorReverse.tiff in Resources */,
+				072880CE14B4F9030082DE4C /* RSBezelWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -906,6 +957,9 @@
 				07B4740514AE3CAA00E3F9D0 /* RSNumberToBoolTransformer.m in Sources */,
 				07B4740814AE3E0A00E3F9D0 /* RSNegateNumberToBoolTransformer.m in Sources */,
 				07B4740B14AE433300E3F9D0 /* RSFindSearchField.m in Sources */,
+				072880C514B4F2170082DE4C /* RSBezelWindowController.m in Sources */,
+				072880C814B4F6920082DE4C /* RSBezelView.m in Sources */,
+				072880CB14B4F8790082DE4C /* RSBezelWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -969,6 +1023,14 @@
 				0725435414A7AB1000C961B7 /* en */,
 			);
 			name = WCJumpBarView.xib;
+			sourceTree = "<group>";
+		};
+		072880CC14B4F9030082DE4C /* RSBezelWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				072880CD14B4F9030082DE4C /* en */,
+			);
+			name = RSBezelWindow.xib;
 			sourceTree = "<group>";
 		};
 		072BBC5414AA698B0044ECC2 /* WCFontsAndColorsView.xib */ = {

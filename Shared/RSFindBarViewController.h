@@ -42,6 +42,7 @@
 - (IBAction)find:(id)sender;
 - (IBAction)findNext:(id)sender;
 - (IBAction)findPrevious:(id)sender;
+- (IBAction)findNextOrPrevious:(NSSegmentedControl *)sender;
 
 + (NSDictionary *)findTextAttributes;
 

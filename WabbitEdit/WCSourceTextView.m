@@ -21,6 +21,7 @@
 #import "RSToolTipManager.h"
 #import "WCSourceSymbol.h"
 #import "RSFindBarViewController.h"
+#import "RSBezelWindowController.h"
 
 @interface WCSourceTextView ()
 @property (readonly,nonatomic) RSFindBarViewController *findBarViewController;
@@ -30,6 +31,7 @@
 - (void)_highlightMatchingBrace;
 - (void)_highlightMatchingTempLabel;
 - (NSRange)_symbolRangeForRange:(NSRange)range;
+- (void)_insertMatchingBraceWithString:(id)string;
 @end
 
 @implementation WCSourceTextView
@@ -192,26 +194,7 @@
 - (void)insertText:(id)insertString {
 	[super insertText:insertString];
 	
-	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorAutomaticallyInsertMatchingBraceKey] &&
-		[insertString length] == 1 &&
-		[[NSCharacterSet characterSetWithCharactersInString:@"([{"] characterIsMember:[insertString characterAtIndex:0]]) {
-		
-		switch ([insertString characterAtIndex:0]) {
-			case '(':
-				[super insertText:@")"];
-				break;
-			case '[':
-				[super insertText:@"]"];
-				break;
-			case '{':
-				[super insertText:@"}"];
-				break;
-			default:
-				break;
-		}
-		
-		[self setSelectedRange:NSMakeRange([self selectedRange].location-1, 0)];
-	}
+	
 }
 - (IBAction)performTextFinderAction:(id)sender {
 	switch ([sender tag]) {
@@ -313,12 +296,17 @@
 	NSRange symbolRange = [self _symbolRangeForRange:[self selectedRange]];
 	if (symbolRange.location == NSNotFound) {
 		NSBeep();
+		
+		[[RSBezelWindowController sharedWindowController] showString:NSLocalizedString(@"Symbol Not Found, click another one plox", @"Symbol Not Found, click another one plox") centeredInView:[[self enclosingScrollView] contentView]];
+		
 		return;
 	}
 	
 	NSArray *symbols = [[self delegate] sourceTextView:self sourceSymbolsForSymbolName:[[self string] substringWithRange:symbolRange]];
 	if (![symbols count]) {
 		NSBeep();
+		
+		[[RSBezelWindowController sharedWindowController] showString:NSLocalizedString(@"Symbol Not Found, click another one plox", @"Symbol Not Found, click another one plox") centeredInView:[[self enclosingScrollView] contentView]];
 		return;
 	}
 	else if ([symbols count] == 1) {
@@ -757,6 +745,38 @@
 	
 	if (!foundMatchingTempLabel)
 		NSBeep();
+}
+
+- (void)_insertMatchingBraceWithString:(id)string; {
+	if (![[NSUserDefaults standardUserDefaults] boolForKey:WCEditorAutomaticallyInsertMatchingBraceKey])
+		return;
+	else if ([string length] != 1)
+		return;
+	
+	static NSCharacterSet *openBraceCharacters;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		openBraceCharacters = [[NSCharacterSet characterSetWithCharactersInString:@"{(["] retain];
+	});
+	
+	if (![openBraceCharacters characterIsMember:[string characterAtIndex:0]])
+		return;
+	
+	switch ([string characterAtIndex:0]) {
+		case '(':
+			[super insertText:@")"];
+			break;
+		case '[':
+			[super insertText:@"]"];
+			break;
+		case '{':
+			[super insertText:@"}"];
+			break;
+		default:
+			break;
+	}
+	
+	[self setSelectedRange:NSMakeRange([self selectedRange].location-1, 0)];
 }
 
 - (NSRange)_symbolRangeForRange:(NSRange)range; {

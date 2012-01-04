@@ -454,6 +454,14 @@
 					<int key="connectionID">34</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">findNextOrPrevious:</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="458602561"/>
+					</object>
+					<int key="connectionID">43</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
 						<string key="label">value: wrapAround</string>
 						<reference key="source" ref="67115305"/>
@@ -812,7 +820,7 @@
 				<reference key="dict.values" ref="1002"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">42</int>
+			<int key="maxID">43</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -834,6 +842,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>find:</string>
 							<string>findNext:</string>
+							<string>findNextOrPrevious:</string>
 							<string>findPrevious:</string>
 							<string>hideFindBar:</string>
 							<string>showFindBar:</string>
@@ -844,6 +853,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>id</string>
 							<string>id</string>
+							<string>NSSegmentedControl</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -857,6 +867,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>find:</string>
 							<string>findNext:</string>
+							<string>findNextOrPrevious:</string>
 							<string>findPrevious:</string>
 							<string>hideFindBar:</string>
 							<string>showFindBar:</string>
@@ -872,6 +883,10 @@
 							<object class="IBActionInfo">
 								<string key="name">findNext:</string>
 								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">findNextOrPrevious:</string>
+								<string key="candidateClassName">NSSegmentedControl</string>
 							</object>
 							<object class="IBActionInfo">
 								<string key="name">findPrevious:</string>

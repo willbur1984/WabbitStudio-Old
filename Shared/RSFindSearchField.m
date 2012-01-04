@@ -13,7 +13,8 @@
 @implementation RSFindSearchField
 - (BOOL)performKeyEquivalent:(NSEvent *)theEvent {
 	if ([[theEvent charactersIgnoringModifiers] isEqualToString:@"G"] &&
-		[theEvent isOnlyCommandKeyPressed]) {
+		[theEvent isShiftKeyPressed] &&
+		[theEvent isCommandKeyPressed]) {
 		// Shift + Command + g is 'Find Previous'
 		[[self findBarViewController] findPrevious:nil];	
 		return YES;

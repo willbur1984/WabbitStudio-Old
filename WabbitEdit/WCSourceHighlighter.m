@@ -31,6 +31,7 @@
 	if (!(self = [super init]))
 		return nil;
 	
+	//_needsToPerformFullHighlight = YES;
 	_sourceScanner = sourceScanner;
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageWillProcessEditing:) name:NSTextStorageWillProcessEditingNotification object:[sourceScanner textStorage]];
@@ -54,6 +55,11 @@
 - (void)performHighlightingInRange:(NSRange)range; {
 	if (!range.length)
 		return;
+	else if (_needsToPerformFullHighlight) {
+		_needsToPerformFullHighlight = NO;
+		[self performHighlightingInRange:NSMakeRange(0, [[[self sourceScanner] textStorage] length])];
+		return;
+	}
 	
 	[[[self sourceScanner] textStorage] beginEditing];
 	
@@ -119,27 +125,6 @@
 				break;
 		}
 	}
-	
-	/*
-	for (WCSourceSymbol *symbol in [[[self sourceScanner] symbols] sourceSymbolsForRange:range]) {
-		switch ([symbol type]) {
-			case WCSourceSymbolTypeLabel:
-				[[[self sourceScanner] textStorage] addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSColor colorWithCalibratedRed:0.75 green:0.75 blue:0.0 alpha:1.0],NSForegroundColorAttributeName, nil] range:[symbol range]];
-				break;
-			case WCSourceSymbolTypeEquate:
-				[[[self sourceScanner] textStorage] addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSColor colorWithCalibratedRed:0.0 green:0.5 blue:0.5 alpha:1.0],NSForegroundColorAttributeName, nil] range:[symbol range]];
-				break;
-			case WCSourceSymbolTypeMacro:
-				[[[self sourceScanner] textStorage] addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSColor brownColor],NSForegroundColorAttributeName, nil] range:[symbol range]];
-				break;
-			case WCSourceSymbolTypeDefine:
-				[[[self sourceScanner] textStorage] addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSColor brownColor],NSForegroundColorAttributeName, nil] range:[symbol range]];
-				break;
-			default:
-				break;
-		}
-	}
-	 */
 	
 	[[[self sourceScanner] textStorage] endEditing];
 }

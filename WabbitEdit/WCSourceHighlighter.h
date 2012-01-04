@@ -12,6 +12,7 @@
 
 @interface WCSourceHighlighter : NSObject {
 	__weak WCSourceScanner *_sourceScanner;
+	BOOL _needsToPerformFullHighlight;
 }
 - (id)initWithSourceScanner:(WCSourceScanner *)sourceScanner;
 
