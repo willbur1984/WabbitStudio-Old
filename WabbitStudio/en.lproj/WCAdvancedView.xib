@@ -305,7 +305,7 @@
 									<object class="NSTabView" id="253150193">
 										<reference key="NSNextResponder" ref="1013183467"/>
 										<int key="NSvFlags">18</int>
-										<string key="NSFrameSize">{368, 272}</string>
+										<string key="NSFrameSize">{443, 272}</string>
 										<reference key="NSSuperview" ref="1013183467"/>
 										<reference key="NSWindow"/>
 										<string key="NSReuseIdentifierKey">_NS:608</string>
@@ -317,7 +317,7 @@
 										<bool key="NSAllowTruncatedLabels">YES</bool>
 									</object>
 								</object>
-								<string key="NSFrame">{{157, 0}, {368, 272}}</string>
+								<string key="NSFrame">{{157, 0}, {443, 272}}</string>
 								<reference key="NSSuperview" ref="844276816"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="253150193"/>
@@ -325,7 +325,7 @@
 								<string key="NSClassName">NSView</string>
 							</object>
 						</object>
-						<string key="NSFrameSize">{525, 272}</string>
+						<string key="NSFrameSize">{600, 272}</string>
 						<reference key="NSSuperview" ref="1005"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="64236713"/>
@@ -334,7 +334,7 @@
 						<int key="NSDividerStyle">2</int>
 					</object>
 				</object>
-				<string key="NSFrameSize">{525, 272}</string>
+				<string key="NSFrameSize">{600, 272}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="844276816"/>

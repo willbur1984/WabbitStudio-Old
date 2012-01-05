@@ -16,6 +16,7 @@
 #import "NSEvent+RSExtensions.h"
 #import "NSAttributedString+WCExtensions.h"
 #import "WCReallyAdvancedViewController.h"
+#import "NSObject+WCExtensions.h"
 
 @interface WCJumpBarViewController ()
 @property (readwrite,copy,nonatomic) NSString *textViewSelectedLineAndColumn;
@@ -26,7 +27,7 @@
 - (void)_updatePathComponentCells;
 - (void)_updateSymbolPathComponentCell;
 - (void)_updateTextViewSelectedLineAndColumn;
-- (void)_updateSymbolsMenuItemsWithSymbols:(NSArray *)symbols selectedSymbolIndex:(NSUInteger *)selectedSymbolIndex sortedByName:(BOOL)sortedByName;
+- (void)_updateSymbolsMenuItemsWithSymbols:(NSArray *)symbols selectedSymbol:(WCSourceSymbol *)selectedSymbol selectedSymbolIndex:(NSUInteger *)selectedSymbolIndex sortedByName:(BOOL)sortedByName;
 @end
 
 @implementation WCJumpBarViewController
@@ -36,6 +37,7 @@
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[self cleanUpUserDefaultsObserving];
 	_textView = nil;
 	_jumpBarDataSource = nil;
 	[_symbolsMenu release];
@@ -54,6 +56,8 @@
 	[_symbolsMenu setFont:[NSFont menuFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]]];
 	
 	[self setTextViewSelectedLineAndColumn:NSLocalizedString(@"1:0", @"1:0")];
+	
+	[self setupUserDefaultsObserving];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textViewDidChangeSelection:) name:NSTextViewDidChangeSelectionNotification object:textView];
 	
@@ -86,6 +90,18 @@
 		
 		[item setTitle:[NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 (%@:%lu)", @"jump bar symbols menu format string"),[symbol name],[[self jumpBarDataSource] displayName],[[[self textView] textStorage] lineNumberForRange:[symbol range]]+1]];
 	}
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+	if ([keyPath isEqualToString:[kUserDefaultsKeyPathPrefix stringByAppendingString:WCReallyAdvancedJumpBarShowFileAndLineNumberKey]]) {
+		[self _updateSymbolPathComponentCell];
+	}
+	else
+		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+}
+
+- (NSSet *)userDefaultsKeyPathsToObserve {
+	return [NSSet setWithObjects:WCReallyAdvancedJumpBarShowFileAndLineNumberKey, nil];
 }
 
 @synthesize jumpBar=_jumpBar;
@@ -155,13 +171,11 @@
 	[self setTextViewSelectedLineAndColumn:[NSString stringWithFormat:NSLocalizedString(@"%lu:%lu", @"text view selected line and column format string"),++lineNumber,selectedRange.location-lineRange.location]];
 }
 
-- (void)_updateSymbolsMenuItemsWithSymbols:(NSArray *)symbols selectedSymbolIndex:(NSUInteger *)selectedSymbolIndex sortedByName:(BOOL)sortedByName {
+- (void)_updateSymbolsMenuItemsWithSymbols:(NSArray *)symbols selectedSymbol:(WCSourceSymbol *)selectedSymbol selectedSymbolIndex:(NSUInteger *)selectedSymbolIndex sortedByName:(BOOL)sortedByName; {
 	BOOL showFileAndLineNumber = [[NSUserDefaults standardUserDefaults] boolForKey:WCReallyAdvancedJumpBarShowFileAndLineNumberKey];
 	NSUInteger symbolIndex, numberOfSymbols = [symbols count];
 	
 	if (sortedByName) {
-		WCSourceSymbol *selectedSymbol = [symbols objectAtIndex:*selectedSymbolIndex];
-		
 		for (symbolIndex = 0; symbolIndex < numberOfSymbols; symbolIndex++) {
 			WCSourceSymbol *symbol = [symbols objectAtIndex:symbolIndex];
 			NSMenuItem *item = [[self symbolsMenu] itemAtIndex:symbolIndex];
@@ -226,27 +240,30 @@
 	}
 	
 	NSUInteger selectedSymbolIndex = [symbols sourceSymbolIndexForRange:[[self textView] selectedRange]];
+	WCSourceSymbol *selectedSymbol = [symbols objectAtIndex:selectedSymbolIndex];
 	
 	// show the symbols sorted by location
 	if ([[[NSUserDefaults standardUserDefaults] objectForKey:WCReallyAdvancedJumpBarSortItemsByKey] unsignedIntegerValue] == WCReallyAdvancedJumpBarSortItemsByLocation) {
 		// command key indicates we should sort using the opposite behavior, in this case, sort by name
 		if ([NSEvent isOnlyCommandKeyPressed]) {
-			[self _updateSymbolsMenuItemsWithSymbols:[[[self jumpBarDataSource] sourceScanner] symbolsSortedByName] selectedSymbolIndex:&selectedSymbolIndex sortedByName:YES];
+			symbols = [[[self jumpBarDataSource] sourceScanner] symbolsSortedByName];
+			[self _updateSymbolsMenuItemsWithSymbols:symbols selectedSymbol:selectedSymbol selectedSymbolIndex:&selectedSymbolIndex sortedByName:YES];
 		}
 		// sort normally by location
 		else {
-			[self _updateSymbolsMenuItemsWithSymbols:symbols selectedSymbolIndex:&selectedSymbolIndex sortedByName:NO];
+			[self _updateSymbolsMenuItemsWithSymbols:symbols selectedSymbol:selectedSymbol selectedSymbolIndex:&selectedSymbolIndex sortedByName:NO];
 		}
 	}
 	// otherwise show the symbols sorted by name
 	else {
 		// command key indicates we should sort using the opposite behavior, in this case, sort by location
 		if ([NSEvent isOnlyCommandKeyPressed]) {
-			[self _updateSymbolsMenuItemsWithSymbols:symbols selectedSymbolIndex:&selectedSymbolIndex sortedByName:NO];
+			[self _updateSymbolsMenuItemsWithSymbols:symbols selectedSymbol:selectedSymbol selectedSymbolIndex:&selectedSymbolIndex sortedByName:NO];
 		}
 		// sort normally by name
 		else {
-			[self _updateSymbolsMenuItemsWithSymbols:[[[self jumpBarDataSource] sourceScanner] symbolsSortedByName] selectedSymbolIndex:&selectedSymbolIndex sortedByName:YES];
+			symbols = [[[self jumpBarDataSource] sourceScanner] symbolsSortedByName];
+			[self _updateSymbolsMenuItemsWithSymbols:symbols selectedSymbol:selectedSymbol selectedSymbolIndex:&selectedSymbolIndex sortedByName:YES];
 		}
 	}
 	
