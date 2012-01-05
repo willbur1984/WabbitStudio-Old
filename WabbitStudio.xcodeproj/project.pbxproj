@@ -170,12 +170,12 @@
 		0708965314A6CE900017BBE4 /* WCCompletionChoice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCCompletionChoice.h; sourceTree = "<group>"; };
 		0708965414A6CE900017BBE4 /* WCCompletionChoice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCCompletionChoice.m; sourceTree = "<group>"; };
 		0708965614A6F1360017BBE4 /* PreProcessorCompletions.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PreProcessorCompletions.plist; sourceTree = "<group>"; };
-		071ECCBE14A4233C002409F8 /* WabbitEdit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WabbitEdit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		071ECCBE14A4233C002409F8 /* WabbitStudio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WabbitStudio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		071ECCC214A4233C002409F8 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		071ECCC514A4233C002409F8 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		071ECCC614A4233C002409F8 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		071ECCC714A4233C002409F8 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		071ECCCA14A4233C002409F8 /* WabbitEdit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "WabbitEdit-Info.plist"; sourceTree = "<group>"; };
+		071ECCCA14A4233C002409F8 /* WabbitStudio-Info.plist */ = {isa = PBXFileReference; path = "WabbitStudio-Info.plist"; sourceTree = "<group>"; };
 		071ECCCC14A4233C002409F8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		071ECCCE14A4233C002409F8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		071ECCD014A4233C002409F8 /* WabbitEdit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WabbitEdit-Prefix.pch"; sourceTree = "<group>"; };
@@ -528,7 +528,7 @@
 		071ECCBF14A4233C002409F8 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				071ECCBE14A4233C002409F8 /* WabbitEdit.app */,
+				071ECCBE14A4233C002409F8 /* WabbitStudio.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -570,7 +570,8 @@
 				0708963F14A6C7B90017BBE4 /* Xibs */,
 				071ECCC914A4233C002409F8 /* Supporting Files */,
 			);
-			path = WabbitEdit;
+			name = WabbitEdit;
+			path = WabbitStudio;
 			sourceTree = "<group>";
 		};
 		071ECCC914A4233C002409F8 /* Supporting Files */ = {
@@ -585,7 +586,7 @@
 				0725435914A7AE1300C961B7 /* include.icns */,
 				0725434714A7A6DA00C961B7 /* assembly.icns */,
 				0708964914A6C96B0017BBE4 /* Mneumonics.plist */,
-				071ECCCA14A4233C002409F8 /* WabbitEdit-Info.plist */,
+				071ECCCA14A4233C002409F8 /* WabbitStudio-Info.plist */,
 				071ECCCB14A4233C002409F8 /* InfoPlist.strings */,
 				071ECCCE14A4233C002409F8 /* main.m */,
 				071ECCD014A4233C002409F8 /* WabbitEdit-Prefix.pch */,
@@ -821,9 +822,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		071ECCBD14A4233C002409F8 /* WabbitEdit */ = {
+		071ECCBD14A4233C002409F8 /* WabbitStudio */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 071ECCDF14A4233D002409F8 /* Build configuration list for PBXNativeTarget "WabbitEdit" */;
+			buildConfigurationList = 071ECCDF14A4233D002409F8 /* Build configuration list for PBXNativeTarget "WabbitStudio" */;
 			buildPhases = (
 				071ECCBA14A4233C002409F8 /* Sources */,
 				071ECCBB14A4233C002409F8 /* Frameworks */,
@@ -834,9 +835,9 @@
 			);
 			dependencies = (
 			);
-			name = WabbitEdit;
+			name = WabbitStudio;
 			productName = WabbitEdit;
-			productReference = 071ECCBE14A4233C002409F8 /* WabbitEdit.app */;
+			productReference = 071ECCBE14A4233C002409F8 /* WabbitStudio.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -848,7 +849,7 @@
 				LastUpgradeCheck = 0420;
 				ORGANIZATIONNAME = "Revolution Software";
 			};
-			buildConfigurationList = 071ECCB814A4233C002409F8 /* Build configuration list for PBXProject "WabbitEdit" */;
+			buildConfigurationList = 071ECCB814A4233C002409F8 /* Build configuration list for PBXProject "WabbitStudio" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -860,7 +861,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				071ECCBD14A4233C002409F8 /* WabbitEdit */,
+				071ECCBD14A4233C002409F8 /* WabbitStudio */,
 			);
 		};
 /* End PBXProject section */
@@ -1168,8 +1169,8 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WabbitEdit/WabbitEdit-Prefix.pch";
-				INFOPLIST_FILE = "WabbitEdit/WabbitEdit-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "WabbitEdit/WabbitStudio-Info.plist";
+				PRODUCT_NAME = WabbitStudio;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1183,8 +1184,8 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WabbitEdit/WabbitEdit-Prefix.pch";
-				INFOPLIST_FILE = "WabbitEdit/WabbitEdit-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "WabbitEdit/WabbitStudio-Info.plist";
+				PRODUCT_NAME = WabbitStudio;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -1192,7 +1193,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		071ECCB814A4233C002409F8 /* Build configuration list for PBXProject "WabbitEdit" */ = {
+		071ECCB814A4233C002409F8 /* Build configuration list for PBXProject "WabbitStudio" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				071ECCDD14A4233D002409F8 /* Debug */,
@@ -1201,7 +1202,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		071ECCDF14A4233D002409F8 /* Build configuration list for PBXNativeTarget "WabbitEdit" */ = {
+		071ECCDF14A4233D002409F8 /* Build configuration list for PBXNativeTarget "WabbitStudio" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				071ECCE014A4233D002409F8 /* Debug */,
