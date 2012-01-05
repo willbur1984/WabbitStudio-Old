@@ -11,12 +11,11 @@
 
 @class WCJumpBar;
 
-@interface WCJumpBarViewController : NSViewController {
+@interface WCJumpBarViewController : NSViewController <NSMenuDelegate> {
 	__weak NSTextView *_textView;
 	__weak id <WCJumpBarDataSource> _jumpBarDataSource;
 	NSString *_textViewSelectedLineAndColumn;
 	NSMenu *_symbolsMenu;
-	BOOL _symbolsMenuNeedsUpdate;
 }
 @property (readwrite,assign,nonatomic) IBOutlet WCJumpBar *jumpBar;
 
@@ -24,5 +23,4 @@
 
 - (id)initWithTextView:(NSTextView *)textView jumpBarDataSource:(id <WCJumpBarDataSource>)jumpBarDataSource;
 
-- (void)performCleanup;
 @end

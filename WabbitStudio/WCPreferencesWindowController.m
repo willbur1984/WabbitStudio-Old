@@ -10,6 +10,7 @@
 #import "WCFontsAndColorsViewController.h"
 #import "WCFontAndColorThemeManager.h"
 #import "WCEditorViewController.h"
+#import "WCAdvancedViewController.h"
 
 @implementation WCPreferencesWindowController
 - (void)windowDidLoad {
@@ -26,6 +27,7 @@
 - (void)setupViewControllers {
 	[self addViewController:[[[WCEditorViewController alloc] init] autorelease]];
 	[self addViewController:[[[WCFontsAndColorsViewController alloc] init] autorelease]];
+	[self addViewController:[[[WCAdvancedViewController alloc] init] autorelease]];
 }
 
 - (void)_applicationWillTerminate:(NSNotification *)note {

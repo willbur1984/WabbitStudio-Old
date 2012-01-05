@@ -10,6 +10,7 @@
 #import "WCFontsAndColorsViewController.h"
 #import "WCPreferencesWindowController.h"
 #import "WCEditorViewController.h"
+#import "WCAdvancedViewController.h"
 
 @implementation WCApplicationDelegate
 - (void)applicationDidFinishLaunching:(NSNotification *)notification {
@@ -17,6 +18,7 @@
 	
 	[userDefaults addEntriesFromDictionary:[WCFontsAndColorsViewController userDefaults]];
 	[userDefaults addEntriesFromDictionary:[WCEditorViewController userDefaults]];
+	[userDefaults addEntriesFromDictionary:[WCAdvancedViewController userDefaults]];
 	
 	[[NSUserDefaults standardUserDefaults] registerDefaults:userDefaults];
 }

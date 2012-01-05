@@ -98,6 +98,7 @@
 		0745BE2F14ABF83400F541DC /* WCEditorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0745BE2D14ABF83400F541DC /* WCEditorViewController.m */; };
 		0745BE3314ABF86700F541DC /* WCEditorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0745BE3114ABF86700F541DC /* WCEditorView.xib */; };
 		0745BE3514ABFB0D00F541DC /* Editor.png in Resources */ = {isa = PBXBuildFile; fileRef = 0745BE3414ABFB0D00F541DC /* Editor.png */; };
+		076966E614B636CD005448F7 /* WCAdvancedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 076966E414B636CD005448F7 /* WCAdvancedViewController.m */; };
 		078F03FD14AD0D760080ADBC /* RSToolTipBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F03F614AD0D760080ADBC /* RSToolTipBackgroundView.m */; };
 		078F03FE14AD0D760080ADBC /* RSToolTipManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F03F914AD0D760080ADBC /* RSToolTipManager.m */; };
 		078F03FF14AD0D760080ADBC /* RSToolTipPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F03FB14AD0D760080ADBC /* RSToolTipPanel.m */; };
@@ -109,11 +110,19 @@
 		078F041814AD784E0080ADBC /* RSFindBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F041614AD784E0080ADBC /* RSFindBarViewController.m */; };
 		078F041C14AD78640080ADBC /* RSFindBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 078F041A14AD78640080ADBC /* RSFindBarView.xib */; };
 		0791BE5214AD7F530004AC16 /* RSFindBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0791BE5114AD7F530004AC16 /* RSFindBarView.m */; };
-		0791BE5414ADA3B80004AC16 /* BGHUDAppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0791BE5314ADA3B80004AC16 /* BGHUDAppKit.framework */; };
-		0791BE5614ADA3E10004AC16 /* BGHUDAppKit.framework in Copy Private Frameworks */ = {isa = PBXBuildFile; fileRef = 0791BE5314ADA3B80004AC16 /* BGHUDAppKit.framework */; };
 		07B4740514AE3CAA00E3F9D0 /* RSNumberToBoolTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B4740414AE3CAA00E3F9D0 /* RSNumberToBoolTransformer.m */; };
 		07B4740814AE3E0A00E3F9D0 /* RSNegateNumberToBoolTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B4740714AE3E0A00E3F9D0 /* RSNegateNumberToBoolTransformer.m */; };
 		07B4740B14AE433300E3F9D0 /* RSFindSearchField.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B4740A14AE433300E3F9D0 /* RSFindSearchField.m */; };
+		07EB8E2214B63C4F00F8A8C6 /* BGHUDAppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0791BE5314ADA3B80004AC16 /* BGHUDAppKit.framework */; };
+		07EB8E2314B63C5600F8A8C6 /* BGHUDAppKit.framework in Copy Private Frameworks */ = {isa = PBXBuildFile; fileRef = 0791BE5314ADA3B80004AC16 /* BGHUDAppKit.framework */; };
+		07EB8E2614B63EB800F8A8C6 /* WCAdvancedView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07EB8E2414B63EB800F8A8C6 /* WCAdvancedView.xib */; };
+		07EB8E2814B641B900F8A8C6 /* SplitterHandle.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 07EB8E2714B641B900F8A8C6 /* SplitterHandle.pdf */; };
+		07EB8E2A14B644A600F8A8C6 /* ReallyAdvanced.png in Resources */ = {isa = PBXBuildFile; fileRef = 07EB8E2914B644A600F8A8C6 /* ReallyAdvanced.png */; };
+		07EB8E2E14B644CA00F8A8C6 /* WCReallyAdvancedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07EB8E2C14B644C900F8A8C6 /* WCReallyAdvancedViewController.m */; };
+		07EB8E3214B6499500F8A8C6 /* WCReallyAdvancedView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07EB8E3014B6499500F8A8C6 /* WCReallyAdvancedView.xib */; };
+		07EB8E3614B64D2500F8A8C6 /* WCKeyboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07EB8E3414B64D2500F8A8C6 /* WCKeyboardViewController.m */; };
+		07EB8E3914B64D9A00F8A8C6 /* Keyboard.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 07EB8E3814B64D9A00F8A8C6 /* Keyboard.tiff */; };
+		07EB8E3C14B64DB600F8A8C6 /* WCKeyboardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07EB8E3A14B64DB600F8A8C6 /* WCKeyboardView.xib */; };
 		07F5F75714A4F37200F1F326 /* WCSourceHighlighter.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F5F75614A4F37200F1F326 /* WCSourceHighlighter.m */; };
 		07F5F75E14A5024D00F1F326 /* NSTextView+WCExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F5F75D14A5024D00F1F326 /* NSTextView+WCExtensions.m */; };
 		07F5F76114A5451700F1F326 /* WCScanSymbolsOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F5F76014A5451700F1F326 /* WCScanSymbolsOperation.m */; };
@@ -130,7 +139,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				0791BE5614ADA3E10004AC16 /* BGHUDAppKit.framework in Copy Private Frameworks */,
+				07EB8E2314B63C5600F8A8C6 /* BGHUDAppKit.framework in Copy Private Frameworks */,
 			);
 			name = "Copy Private Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -175,10 +184,10 @@
 		071ECCC514A4233C002409F8 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		071ECCC614A4233C002409F8 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		071ECCC714A4233C002409F8 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		071ECCCA14A4233C002409F8 /* WabbitStudio-Info.plist */ = {isa = PBXFileReference; path = "WabbitStudio-Info.plist"; sourceTree = "<group>"; };
+		071ECCCA14A4233C002409F8 /* WabbitStudio-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "WabbitStudio-Info.plist"; sourceTree = "<group>"; };
 		071ECCCC14A4233C002409F8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		071ECCCE14A4233C002409F8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		071ECCD014A4233C002409F8 /* WabbitEdit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WabbitEdit-Prefix.pch"; sourceTree = "<group>"; };
+		071ECCD014A4233C002409F8 /* WabbitStudio-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WabbitStudio-Prefix.pch"; sourceTree = "<group>"; };
 		071ECCD214A4233C002409F8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		071ECCD414A4233C002409F8 /* WCSourceFileDocument.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCSourceFileDocument.h; sourceTree = "<group>"; };
 		071ECCD514A4233C002409F8 /* WCSourceFileDocument.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WCSourceFileDocument.m; sourceTree = "<group>"; };
@@ -301,6 +310,8 @@
 		0745BE2D14ABF83400F541DC /* WCEditorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCEditorViewController.m; sourceTree = "<group>"; };
 		0745BE3214ABF86700F541DC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCEditorView.xib; sourceTree = "<group>"; };
 		0745BE3414ABFB0D00F541DC /* Editor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Editor.png; sourceTree = "<group>"; };
+		076966E314B636CD005448F7 /* WCAdvancedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCAdvancedViewController.h; sourceTree = "<group>"; };
+		076966E414B636CD005448F7 /* WCAdvancedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCAdvancedViewController.m; sourceTree = "<group>"; };
 		078F03F514AD0D760080ADBC /* RSToolTipBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSToolTipBackgroundView.h; sourceTree = "<group>"; };
 		078F03F614AD0D760080ADBC /* RSToolTipBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSToolTipBackgroundView.m; sourceTree = "<group>"; };
 		078F03F814AD0D760080ADBC /* RSToolTipManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSToolTipManager.h; sourceTree = "<group>"; };
@@ -330,6 +341,16 @@
 		07B4740714AE3E0A00E3F9D0 /* RSNegateNumberToBoolTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSNegateNumberToBoolTransformer.m; sourceTree = "<group>"; };
 		07B4740914AE433300E3F9D0 /* RSFindSearchField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSFindSearchField.h; sourceTree = "<group>"; };
 		07B4740A14AE433300E3F9D0 /* RSFindSearchField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSFindSearchField.m; sourceTree = "<group>"; };
+		07EB8E2514B63EB800F8A8C6 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCAdvancedView.xib; sourceTree = "<group>"; };
+		07EB8E2714B641B900F8A8C6 /* SplitterHandle.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = SplitterHandle.pdf; sourceTree = "<group>"; };
+		07EB8E2914B644A600F8A8C6 /* ReallyAdvanced.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ReallyAdvanced.png; sourceTree = "<group>"; };
+		07EB8E2B14B644C900F8A8C6 /* WCReallyAdvancedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCReallyAdvancedViewController.h; sourceTree = "<group>"; };
+		07EB8E2C14B644C900F8A8C6 /* WCReallyAdvancedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCReallyAdvancedViewController.m; sourceTree = "<group>"; };
+		07EB8E3114B6499500F8A8C6 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCReallyAdvancedView.xib; sourceTree = "<group>"; };
+		07EB8E3314B64D2400F8A8C6 /* WCKeyboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCKeyboardViewController.h; sourceTree = "<group>"; };
+		07EB8E3414B64D2500F8A8C6 /* WCKeyboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCKeyboardViewController.m; sourceTree = "<group>"; };
+		07EB8E3814B64D9A00F8A8C6 /* Keyboard.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Keyboard.tiff; sourceTree = "<group>"; };
+		07EB8E3B14B64DB600F8A8C6 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCKeyboardView.xib; sourceTree = "<group>"; };
 		07F5F75514A4F37200F1F326 /* WCSourceHighlighter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSourceHighlighter.h; sourceTree = "<group>"; };
 		07F5F75614A4F37200F1F326 /* WCSourceHighlighter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSourceHighlighter.m; sourceTree = "<group>"; };
 		07F5F75C14A5024C00F1F326 /* NSTextView+WCExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTextView+WCExtensions.h"; sourceTree = "<group>"; };
@@ -355,7 +376,7 @@
 			files = (
 				078F040714AD17AC0080ADBC /* QuartzCore.framework in Frameworks */,
 				071ECCC314A4233C002409F8 /* Cocoa.framework in Frameworks */,
-				0791BE5414ADA3B80004AC16 /* BGHUDAppKit.framework in Frameworks */,
+				07EB8E2214B63C4F00F8A8C6 /* BGHUDAppKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -390,6 +411,9 @@
 				072BBC5414AA698B0044ECC2 /* WCFontsAndColorsView.xib */,
 				072BBC5714AA69EF0044ECC2 /* WCPreferencesWindow.xib */,
 				0745BE3114ABF86700F541DC /* WCEditorView.xib */,
+				07EB8E2414B63EB800F8A8C6 /* WCAdvancedView.xib */,
+				07EB8E3014B6499500F8A8C6 /* WCReallyAdvancedView.xib */,
+				07EB8E3A14B64DB600F8A8C6 /* WCKeyboardView.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -519,7 +543,7 @@
 			isa = PBXGroup;
 			children = (
 				0725433C14A7998200C961B7 /* Shared */,
-				071ECCC814A4233C002409F8 /* WabbitEdit */,
+				071ECCC814A4233C002409F8 /* WabbitStudio */,
 				071ECCC114A4233C002409F8 /* Frameworks */,
 				071ECCBF14A4233C002409F8 /* Products */,
 			);
@@ -554,7 +578,7 @@
 			name = "Other Frameworks";
 			sourceTree = "<group>";
 		};
-		071ECCC814A4233C002409F8 /* WabbitEdit */ = {
+		071ECCC814A4233C002409F8 /* WabbitStudio */ = {
 			isa = PBXGroup;
 			children = (
 				072BBC4F14AA68B80044ECC2 /* WCApplicationDelegate.h */,
@@ -570,13 +594,15 @@
 				0708963F14A6C7B90017BBE4 /* Xibs */,
 				071ECCC914A4233C002409F8 /* Supporting Files */,
 			);
-			name = WabbitEdit;
 			path = WabbitStudio;
 			sourceTree = "<group>";
 		};
 		071ECCC914A4233C002409F8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				07EB8E3814B64D9A00F8A8C6 /* Keyboard.tiff */,
+				07EB8E2914B644A600F8A8C6 /* ReallyAdvanced.png */,
+				07EB8E2714B641B900F8A8C6 /* SplitterHandle.pdf */,
 				0745BE3414ABFB0D00F541DC /* Editor.png */,
 				072BBC4314AA675C0044ECC2 /* FontsAndColors.png */,
 				0706D66B14A9AA360092F880 /* FontAndColorThemes */,
@@ -589,7 +615,7 @@
 				071ECCCA14A4233C002409F8 /* WabbitStudio-Info.plist */,
 				071ECCCB14A4233C002409F8 /* InfoPlist.strings */,
 				071ECCCE14A4233C002409F8 /* main.m */,
-				071ECCD014A4233C002409F8 /* WabbitEdit-Prefix.pch */,
+				071ECCD014A4233C002409F8 /* WabbitStudio-Prefix.pch */,
 				071ECCD114A4233C002409F8 /* Credits.rtf */,
 				0708965114A6CDEA0017BBE4 /* MneumonicCompletions.plist */,
 				0708965614A6F1360017BBE4 /* PreProcessorCompletions.plist */,
@@ -669,6 +695,7 @@
 				072BBC4114AA66900044ECC2 /* WCPreferencesWindowController.m */,
 				0745BE2B14ABF81700F541DC /* Editor */,
 				0745BE2914ABF7F200F541DC /* Fonts & Colors */,
+				076966E214B6366C005448F7 /* Advanced */,
 			);
 			name = Preferences;
 			sourceTree = "<group>";
@@ -692,6 +719,19 @@
 				0745BE2D14ABF83400F541DC /* WCEditorViewController.m */,
 			);
 			name = Editor;
+			sourceTree = "<group>";
+		};
+		076966E214B6366C005448F7 /* Advanced */ = {
+			isa = PBXGroup;
+			children = (
+				076966E314B636CD005448F7 /* WCAdvancedViewController.h */,
+				076966E414B636CD005448F7 /* WCAdvancedViewController.m */,
+				07EB8E2B14B644C900F8A8C6 /* WCReallyAdvancedViewController.h */,
+				07EB8E2C14B644C900F8A8C6 /* WCReallyAdvancedViewController.m */,
+				07EB8E3314B64D2400F8A8C6 /* WCKeyboardViewController.h */,
+				07EB8E3414B64D2500F8A8C6 /* WCKeyboardViewController.m */,
+			);
+			name = Advanced;
 			sourceTree = "<group>";
 		};
 		078F040114AD0F7A0080ADBC /* Xibs */ = {
@@ -904,6 +944,12 @@
 				072880C014B4F16D0082DE4C /* FindWrapIndicator.tiff in Resources */,
 				072880C114B4F16D0082DE4C /* FindWrapIndicatorReverse.tiff in Resources */,
 				072880CE14B4F9030082DE4C /* RSBezelWindow.xib in Resources */,
+				07EB8E2614B63EB800F8A8C6 /* WCAdvancedView.xib in Resources */,
+				07EB8E2814B641B900F8A8C6 /* SplitterHandle.pdf in Resources */,
+				07EB8E2A14B644A600F8A8C6 /* ReallyAdvanced.png in Resources */,
+				07EB8E3214B6499500F8A8C6 /* WCReallyAdvancedView.xib in Resources */,
+				07EB8E3914B64D9A00F8A8C6 /* Keyboard.tiff in Resources */,
+				07EB8E3C14B64DB600F8A8C6 /* WCKeyboardView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -991,6 +1037,9 @@
 				072880D714B572430082DE4C /* RSFindSearchFieldCell.m in Sources */,
 				072880DA14B57A3A0082DE4C /* RSFindTextField.m in Sources */,
 				072880DD14B57A660082DE4C /* RSFindTextFieldCell.m in Sources */,
+				076966E614B636CD005448F7 /* WCAdvancedViewController.m in Sources */,
+				07EB8E2E14B644CA00F8A8C6 /* WCReallyAdvancedViewController.m in Sources */,
+				07EB8E3614B64D2500F8A8C6 /* WCKeyboardViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1112,6 +1161,30 @@
 			name = RSFindBarView.xib;
 			sourceTree = "<group>";
 		};
+		07EB8E2414B63EB800F8A8C6 /* WCAdvancedView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				07EB8E2514B63EB800F8A8C6 /* en */,
+			);
+			name = WCAdvancedView.xib;
+			sourceTree = "<group>";
+		};
+		07EB8E3014B6499500F8A8C6 /* WCReallyAdvancedView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				07EB8E3114B6499500F8A8C6 /* en */,
+			);
+			name = WCReallyAdvancedView.xib;
+			sourceTree = "<group>";
+		};
+		07EB8E3A14B64DB600F8A8C6 /* WCKeyboardView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				07EB8E3B14B64DB600F8A8C6 /* en */,
+			);
+			name = WCKeyboardView.xib;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -1130,7 +1203,7 @@
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -1150,7 +1223,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -1168,8 +1241,10 @@
 					"\"$(SRCROOT)\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "WabbitEdit/WabbitEdit-Prefix.pch";
-				INFOPLIST_FILE = "WabbitEdit/WabbitStudio-Info.plist";
+				GCC_PREFIX_HEADER = "WabbitStudio/WabbitStudio-Prefix.pch";
+				GCC_VERSION = "";
+				INFOPLIST_FILE = "WabbitStudio/WabbitStudio-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = WabbitStudio;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1183,8 +1258,10 @@
 					"\"$(SRCROOT)\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "WabbitEdit/WabbitEdit-Prefix.pch";
-				INFOPLIST_FILE = "WabbitEdit/WabbitStudio-Info.plist";
+				GCC_PREFIX_HEADER = "WabbitStudio/WabbitStudio-Prefix.pch";
+				GCC_VERSION = "";
+				INFOPLIST_FILE = "WabbitStudio/WabbitStudio-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = WabbitStudio;
 				WRAPPER_EXTENSION = app;
 			};

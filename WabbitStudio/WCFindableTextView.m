@@ -8,6 +8,7 @@
 
 #import "WCFindableTextView.h"
 #import "RSFindBarViewController.h"
+#import "WCKeyboardViewController.h"
 
 @implementation WCFindableTextView
 - (void)dealloc {
@@ -67,6 +68,28 @@
 	}
 }
 
+- (IBAction)scrollToBeginningOfDocument:(id)sender {
+	if ([[[NSUserDefaults standardUserDefaults] objectForKey:WCKeyboardHomeAndEndKeysBehaviorKey] unsignedIntegerValue] == WCKeyboardHomeAndEndKeysBehaviorScrollToBeginningAndEndOfDocument) {
+		[super scrollToBeginningOfDocument:nil];
+		return;
+	}
+	
+	NSRange lineRange = [[self string] lineRangeForRange:[self selectedRange]];
+	
+	[self setSelectedRange:NSMakeRange(lineRange.location, 0)];
+}
+
+- (IBAction)scrollToEndOfDocument:(id)sender {
+	if ([[[NSUserDefaults standardUserDefaults] objectForKey:WCKeyboardHomeAndEndKeysBehaviorKey] unsignedIntegerValue] == WCKeyboardHomeAndEndKeysBehaviorScrollToBeginningAndEndOfDocument) {
+		[super scrollToEndOfDocument:nil];
+		return;
+	}
+	
+	NSRange lineRange = [[self string] lineRangeForRange:[self selectedRange]];
+	
+	[self setSelectedRange:NSMakeRange(NSMaxRange(lineRange), 0)];
+}
+
 - (BOOL)validateUserInterfaceItem:(id<NSValidatedUserInterfaceItem>)anItem {
 	if ([anItem action] == @selector(performTextFinderAction:)) {
 		switch ([anItem tag]) {
@@ -75,7 +98,7 @@
 			case NSTextFinderActionNextMatch:
 				return YES;
 			case NSTextFinderActionHideFindInterface:
-				return [[self findBarViewController] isFindBarVisible];
+				return [_findBarViewController isFindBarVisible];
 			case NSTextFinderActionSetSearchString:
 				return ([self selectedRange].length > 0);
 			case NSTextFinderActionShowReplaceInterface:

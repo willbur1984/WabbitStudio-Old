@@ -23,6 +23,7 @@
 #import "RSFindBarViewController.h"
 #import "RSBezelWidgetManager.h"
 #import "WCSourceHighlighter.h"
+#import "WCKeyboardViewController.h"
 
 @interface WCSourceTextView ()
 
@@ -162,6 +163,11 @@
 }
 
 - (IBAction)insertTab:(id)sender {
+	if (![[NSUserDefaults standardUserDefaults] boolForKey:WCKeyboardUseTabToNavigateArgumentPlaceholdersKey]) {
+		[super insertTab:nil];
+		return;
+	}
+	
 	NSRange placeholderRange = [[self textStorage] nextArgumentPlaceholderRangeForRange:[self selectedRange] inRange:[[self string] lineRangeForRange:[self selectedRange]] wrapAround:YES];
 	if (placeholderRange.location == NSNotFound) {
 		[super insertTab:sender];
@@ -172,6 +178,11 @@
 }
 
 - (IBAction)insertBacktab:(id)sender {
+	if (![[NSUserDefaults standardUserDefaults] boolForKey:WCKeyboardUseTabToNavigateArgumentPlaceholdersKey]) {
+		[super insertBacktab:nil];
+		return;
+	}
+	
 	NSRange placeholderRange = [[self textStorage] previousArgumentPlaceholderRangeForRange:[self selectedRange] inRange:[[self string] lineRangeForRange:[self selectedRange]] wrapAround:YES];
 	if (placeholderRange.location == NSNotFound) {
 		[super insertBacktab:sender];

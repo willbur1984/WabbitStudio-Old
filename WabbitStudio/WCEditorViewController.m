@@ -30,7 +30,7 @@ NSString *const WCEditorAutomaticallyIndentAfterNewlinesKey = @"editorAutomatica
 }
 #pragma mark RSPreferencesModule
 - (NSString *)identifier {
-	return @"org.revsoft.wabbitcode.editor";
+	return @"org.revsoft.wabbitstudio.editor";
 }
 
 - (NSString *)label {

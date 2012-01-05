@@ -9,5 +9,6 @@
 #import <Foundation/NSObject.h>
 
 @protocol RSUserDefaultsProvider <NSObject>
+@required
 + (NSDictionary *)userDefaults;
 @end

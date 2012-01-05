@@ -15,17 +15,18 @@
 #import "NSString+WCExtensions.h"
 #import "NSEvent+RSExtensions.h"
 #import "NSAttributedString+WCExtensions.h"
+#import "WCReallyAdvancedViewController.h"
 
 @interface WCJumpBarViewController ()
 @property (readwrite,copy,nonatomic) NSString *textViewSelectedLineAndColumn;
 @property (readonly,nonatomic) NSTextView *textView;
 @property (readonly,nonatomic) NSMenu *symbolsMenu;
-@property (readwrite,assign,nonatomic) BOOL symbolsMenuNeedsUpdate;
 @property (readonly,nonatomic) id <WCJumpBarDataSource> jumpBarDataSource;
 
 - (void)_updatePathComponentCells;
 - (void)_updateSymbolPathComponentCell;
 - (void)_updateTextViewSelectedLineAndColumn;
+- (void)_updateSymbolsMenuItemsWithSymbols:(NSArray *)symbols selectedSymbolIndex:(NSUInteger *)selectedSymbolIndex sortedByName:(BOOL)sortedByName;
 @end
 
 @implementation WCJumpBarViewController
@@ -49,8 +50,8 @@
 	_textView = textView;
 	_jumpBarDataSource = jumpBarDataSource;
 	_symbolsMenu = [[NSMenu alloc] initWithTitle:@""];
+	[_symbolsMenu setDelegate:self];
 	[_symbolsMenu setFont:[NSFont menuFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]]];
-	_symbolsMenuNeedsUpdate = YES;
 	
 	[self setTextViewSelectedLineAndColumn:NSLocalizedString(@"1:0", @"1:0")];
 	
@@ -70,8 +71,21 @@
 	[self _updatePathComponentCells];
 }
 
-- (void)performCleanup; {
+- (void)menu:(NSMenu *)menu willHighlightItem:(NSMenuItem *)item {
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCReallyAdvancedJumpBarShowFileAndLineNumberKey])
+		return;
 	
+	if ([menu highlightedItem]) {
+		NSMenuItem *oldItem = [menu highlightedItem];
+		
+		[oldItem setTitle:[[oldItem representedObject] name]];
+	}
+	
+	if (item) {
+		WCSourceSymbol *symbol = [item representedObject];
+		
+		[item setTitle:[NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 (%@:%lu)", @"jump bar symbols menu format string"),[symbol name],[[self jumpBarDataSource] displayName],[[[self textView] textStorage] lineNumberForRange:[symbol range]]+1]];
+	}
 }
 
 @synthesize jumpBar=_jumpBar;
@@ -80,7 +94,6 @@
 
 @synthesize textViewSelectedLineAndColumn=_textViewSelectedLineAndColumn;
 @synthesize symbolsMenu=_symbolsMenu;
-@synthesize symbolsMenuNeedsUpdate=_symbolsMenuNeedsUpdate;
 
 - (void)_updatePathComponentCells; {
 	if (![self jumpBarDataSource])
@@ -116,10 +129,10 @@
 	if ([symbols count]) {
 		WCSourceSymbol *symbol = [symbols sourceSymbolForRange:[[self textView] selectedRange]];
 		
-		if ([[pathCells lastObject] representedObject] == symbol)
-			return;
-		
-		symbolCell = [[[WCJumpBarComponentCell alloc] initTextCell:[symbol name]] autorelease];
+		if ([[NSUserDefaults standardUserDefaults] boolForKey:WCReallyAdvancedJumpBarShowFileAndLineNumberKey])
+			symbolCell = [[[WCJumpBarComponentCell alloc] initTextCell:[NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 (%@:%lu)", @"jump bar symbols menu format string"),[symbol name],[[self jumpBarDataSource] displayName],[[[self textView] textStorage] lineNumberForRange:[symbol range]]+1]] autorelease];
+		else
+			symbolCell = [[[WCJumpBarComponentCell alloc] initTextCell:[symbol name]] autorelease];
 		
 		[symbolCell setImage:[symbol icon]];
 		[symbolCell setRepresentedObject:symbol];
@@ -140,6 +153,52 @@
 	NSUInteger lineNumber = [[[self textView] string] lineNumberForRange:selectedRange];
 	
 	[self setTextViewSelectedLineAndColumn:[NSString stringWithFormat:NSLocalizedString(@"%lu:%lu", @"text view selected line and column format string"),++lineNumber,selectedRange.location-lineRange.location]];
+}
+
+- (void)_updateSymbolsMenuItemsWithSymbols:(NSArray *)symbols selectedSymbolIndex:(NSUInteger *)selectedSymbolIndex sortedByName:(BOOL)sortedByName {
+	BOOL showFileAndLineNumber = [[NSUserDefaults standardUserDefaults] boolForKey:WCReallyAdvancedJumpBarShowFileAndLineNumberKey];
+	NSUInteger symbolIndex, numberOfSymbols = [symbols count];
+	
+	if (sortedByName) {
+		WCSourceSymbol *selectedSymbol = [symbols objectAtIndex:*selectedSymbolIndex];
+		
+		for (symbolIndex = 0; symbolIndex < numberOfSymbols; symbolIndex++) {
+			WCSourceSymbol *symbol = [symbols objectAtIndex:symbolIndex];
+			NSMenuItem *item = [[self symbolsMenu] itemAtIndex:symbolIndex];
+			
+			[item setTarget:self];
+			[item setAction:@selector(_symbolsMenuClick:)];
+			if (showFileAndLineNumber)
+				[item setTitle:[NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 (%@:%lu)", @"jump bar symbols menu format string"),[symbol name],[[self jumpBarDataSource] displayName],[[[self textView] textStorage] lineNumberForRange:[symbol range]]+1]];
+			else
+				[item setTitle:[symbol name]];
+			[item setImage:[symbol icon]];
+			[item setRepresentedObject:symbol];
+			
+			if (symbol == selectedSymbol) {
+				*selectedSymbolIndex = symbolIndex;
+				[item setState:NSOnState];
+			}
+			else
+				[item setState:NSOffState];
+		}
+	}
+	else {
+		for (symbolIndex = 0; symbolIndex < numberOfSymbols; symbolIndex++) {
+			WCSourceSymbol *symbol = [symbols objectAtIndex:symbolIndex];
+			NSMenuItem *item = [[self symbolsMenu] itemAtIndex:symbolIndex];
+			
+			[item setTarget:self];
+			[item setAction:@selector(_symbolsMenuClick:)];
+			if (showFileAndLineNumber)
+				[item setTitle:[NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 (%@:%lu)", @"jump bar symbols menu format string"),[symbol name],[[self jumpBarDataSource] displayName],[[[self textView] textStorage] lineNumberForRange:[symbol range]]+1]];
+			else
+				[item setTitle:[symbol name]];
+			[item setImage:[symbol icon]];
+			[item setRepresentedObject:symbol];
+			[item setState:(symbolIndex == *selectedSymbolIndex)?NSOnState:NSOffState];
+		}
+	}
 }
 
 - (IBAction)_jumpBarClicked:(id)sender {
@@ -168,54 +227,28 @@
 	
 	NSUInteger selectedSymbolIndex = [symbols sourceSymbolIndexForRange:[[self textView] selectedRange]];
 	
-	// show the symbols sorted by name
-	if ([NSEvent isOnlyCommandKeyPressed]) {
-		WCSourceSymbol *selectedSymbol = [symbols objectAtIndex:selectedSymbolIndex];
-		
-		symbols = [[[self jumpBarDataSource] sourceScanner] symbolsSortedByName];
-		
-		NSUInteger symbolIndex;
-		
-		for (symbolIndex = 0; symbolIndex < numberOfSymbols; symbolIndex++) {
-			WCSourceSymbol *symbol = [symbols objectAtIndex:symbolIndex];
-			NSMenuItem *item = [[self symbolsMenu] itemAtIndex:symbolIndex];
-			
-			if ([self symbolsMenuNeedsUpdate]) {
-				[item setTarget:self];
-				[item setAction:@selector(_symbolsMenuClick:)];
-				[item setTitle:[NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 (%@:%lu)", @"jump bar symbols menu format string"),[symbol name],[[self jumpBarDataSource] displayName],[[[self textView] textStorage] lineNumberForRange:[symbol range]]+1]];
-				[item setImage:[symbol icon]];
-				[item setRepresentedObject:symbol];
-			}
-			
-			if (symbol == selectedSymbol) {
-				selectedSymbolIndex = symbolIndex;
-				[item setState:NSOnState];
-			}
-			else
-				[item setState:NSOffState];
-		}
-	}
 	// show the symbols sorted by location
-	else {
-		NSUInteger symbolIndex;
-		
-		for (symbolIndex = 0; symbolIndex < numberOfSymbols; symbolIndex++) {
-			WCSourceSymbol *symbol = [symbols objectAtIndex:symbolIndex];
-			NSMenuItem *item = [[self symbolsMenu] itemAtIndex:symbolIndex];
-			
-			if ([self symbolsMenuNeedsUpdate]) {
-				[item setTarget:self];
-				[item setAction:@selector(_symbolsMenuClick:)];
-				[item setTitle:[NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 (%@:%lu)", @"jump bar symbols menu format string"),[symbol name],[[self jumpBarDataSource] displayName],[[[self textView] textStorage] lineNumberForRange:[symbol range]]+1]];
-				[item setImage:[symbol icon]];
-				[item setRepresentedObject:symbol];
-			}
-			[item setState:(symbolIndex == selectedSymbolIndex)?NSOnState:NSOffState];
+	if ([[[NSUserDefaults standardUserDefaults] objectForKey:WCReallyAdvancedJumpBarSortItemsByKey] unsignedIntegerValue] == WCReallyAdvancedJumpBarSortItemsByLocation) {
+		// command key indicates we should sort using the opposite behavior, in this case, sort by name
+		if ([NSEvent isOnlyCommandKeyPressed]) {
+			[self _updateSymbolsMenuItemsWithSymbols:[[[self jumpBarDataSource] sourceScanner] symbolsSortedByName] selectedSymbolIndex:&selectedSymbolIndex sortedByName:YES];
+		}
+		// sort normally by location
+		else {
+			[self _updateSymbolsMenuItemsWithSymbols:symbols selectedSymbolIndex:&selectedSymbolIndex sortedByName:NO];
 		}
 	}
-	
-	[self setSymbolsMenuNeedsUpdate:NO];
+	// otherwise show the symbols sorted by name
+	else {
+		// command key indicates we should sort using the opposite behavior, in this case, sort by location
+		if ([NSEvent isOnlyCommandKeyPressed]) {
+			[self _updateSymbolsMenuItemsWithSymbols:symbols selectedSymbolIndex:&selectedSymbolIndex sortedByName:NO];
+		}
+		// sort normally by name
+		else {
+			[self _updateSymbolsMenuItemsWithSymbols:[[[self jumpBarDataSource] sourceScanner] symbolsSortedByName] selectedSymbolIndex:&selectedSymbolIndex sortedByName:YES];
+		}
+	}
 	
 	NSRect cellRect = [[[self jumpBar] cell] rectOfPathComponentCell:clickedCell withFrame:[[self jumpBar] bounds] inView:[self jumpBar]];
 	
@@ -233,9 +266,7 @@
 	[self _updateTextViewSelectedLineAndColumn];
 }
 
-- (void)_sourceScannerDidFinishScanningSymbols:(NSNotification *)note {
-	[self setSymbolsMenuNeedsUpdate:YES];
-	
+- (void)_sourceScannerDidFinishScanningSymbols:(NSNotification *)note {	
 	[self _updateSymbolPathComponentCell];
 }
 
