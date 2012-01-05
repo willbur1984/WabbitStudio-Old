@@ -39,6 +39,10 @@
 	[_popover showRelativeToRect:rect ofView:view preferredEdge:preferredEdge];
 }
 
+- (void)hideFindOptionsView; {
+	[_popover performClose:nil];
+}
+
 @synthesize delegate=_delegate;
 @dynamic findStyle;
 - (RSFindOptionsFindStyle)findStyle {
@@ -104,5 +108,9 @@
 	
 	if ([[self delegate] respondsToSelector:@selector(findOptionsViewControllerDidChangeFindOptions:)])
 		[[self delegate] findOptionsViewControllerDidChangeFindOptions:self];
+}
+@dynamic findOptionsVisible;
+- (BOOL)areFindOptionsVisible {
+	return ([_popover isShown]);
 }
 @end

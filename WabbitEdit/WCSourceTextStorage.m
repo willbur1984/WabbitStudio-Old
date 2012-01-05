@@ -10,6 +10,7 @@
 #import "WCFontAndColorTheme.h"
 #import "WCFontAndColorThemeManager.h"
 #import "WCSourceHighlighter.h"
+#import "NSAttributedString+WCExtensions.h"
 
 @interface WCSourceTextStorage ()
 - (void)_calculateLineStartIndexes;
@@ -61,6 +62,23 @@
 - (void)setAttributes:(NSDictionary *)attrs range:(NSRange)range; {
 	[_attributedString setAttributes:attrs range:range];
 	[self edited:NSTextStorageEditedAttributes range:range changeInLength:0];
+}
+
+- (NSUInteger)lineNumberForRange:(NSRange)range {
+	NSUInteger left = 0, right = [[self lineStartIndexes] count], mid, lineStart;
+	
+    while ((right - left) > 1) {
+        mid = (right + left) / 2;
+        lineStart = [[[self lineStartIndexes] objectAtIndex:mid] unsignedIntegerValue];
+        
+        if (range.location < lineStart)
+			right = mid;
+        else if (range.location > lineStart)
+			left = mid;
+        else
+			return mid;
+    }
+    return left;
 }
 
 @synthesize lineStartIndexes=_lineStartIndexes;

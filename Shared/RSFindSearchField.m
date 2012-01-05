@@ -7,25 +7,11 @@
 //
 
 #import "RSFindSearchField.h"
-#import "RSFindBarViewController.h"
-#import "NSEvent+RSExtensions.h"
+#import "RSFindSearchFieldCell.h"
 
 @implementation RSFindSearchField
-- (BOOL)performKeyEquivalent:(NSEvent *)theEvent {
-	if ([[theEvent charactersIgnoringModifiers] isEqualToString:@"G"] &&
-		[theEvent isShiftKeyPressed] &&
-		[theEvent isCommandKeyPressed]) {
-		// Shift + Command + g is 'Find Previous'
-		[[self findBarViewController] findPrevious:nil];	
-		return YES;
-	}
-	else if ([[theEvent charactersIgnoringModifiers] isEqualToString:@"g"] &&
-			 [theEvent isOnlyCommandKeyPressed]) {
-		// Command + g is 'Find Next'
-		[[self findBarViewController] findNext:nil];
-		return YES;
-	}
-	return [super performKeyEquivalent:theEvent];
++ (Class)cellClass {
+	return [RSFindSearchFieldCell class];
 }
 
 @synthesize findBarViewController=_findBarViewController;

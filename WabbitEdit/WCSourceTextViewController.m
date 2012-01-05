@@ -102,6 +102,9 @@
 - (WCSourceScanner *)sourceScannerForSourceTextView:(WCSourceTextView *)textView {
 	return [self sourceScanner];
 }
+- (WCSourceHighlighter *)sourceHighlighterForSourceTextView:(WCSourceTextView *)textView; {
+	return [self sourceHighlighter];
+}
 
 - (id)initWithTextStorage:(WCSourceTextStorage *)textStorage sourceScanner:(WCSourceScanner *)sourceScanner sourceHighlighter:(WCSourceHighlighter *)sourceHighlighter; {
 	if (!(self = [super initWithNibName:@"WCSourceTextView" bundle:nil]))

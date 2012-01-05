@@ -21,10 +21,10 @@
 #import "RSToolTipManager.h"
 #import "WCSourceSymbol.h"
 #import "RSFindBarViewController.h"
-#import "RSBezelWindowController.h"
+#import "RSBezelWidgetManager.h"
+#import "WCSourceHighlighter.h"
 
 @interface WCSourceTextView ()
-@property (readonly,nonatomic) RSFindBarViewController *findBarViewController;
 
 - (void)_commonInit;
 - (void)_drawCurrentLineHighlightInRect:(NSRect)rect;
@@ -42,7 +42,6 @@
 #endif
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[self cleanUpUserDefaultsObserving];
-	[_findBarViewController release];
 	[super dealloc];
 }
 
@@ -71,6 +70,7 @@
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:_windowDidBecomeKeyObservingToken];
 	[[NSNotificationCenter defaultCenter] removeObserver:_windowDidResignKeyObservingToken];
+	[[NSNotificationCenter defaultCenter] removeObserver:_windowDidResizeObservingToken];
 }
 
 - (void)viewDidMoveToWindow {
@@ -84,6 +84,9 @@
 		}];
 		_windowDidResignKeyObservingToken = [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidResignKeyNotification object:[self window] queue:nil usingBlock:^(NSNotification *note) {
 			[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
+		}];
+		_windowDidResizeObservingToken = [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidResizeNotification object:[self window] queue:nil usingBlock:^(NSNotification *note) {
+			[[[self delegate] sourceHighlighterForSourceTextView:self] performHighlightingInVisibleRange];
 		}];
 	}
 }
@@ -194,33 +197,7 @@
 - (void)insertText:(id)insertString {
 	[super insertText:insertString];
 	
-	
-}
-- (IBAction)performTextFinderAction:(id)sender {
-	switch ([sender tag]) {
-		case NSTextFinderActionShowFindInterface:
-			[[self findBarViewController] showFindBar:nil];
-			break;
-		case NSTextFinderActionHideFindInterface:
-			[[self findBarViewController] hideFindBar:nil];
-			break;
-		case NSTextFinderActionNextMatch:
-			[[self findBarViewController] findNext:nil];
-			break;
-		case NSTextFinderActionPreviousMatch:
-			[[self findBarViewController] findPrevious:nil];
-			break;
-		case NSTextFinderActionSetSearchString:
-			[[self findBarViewController] setFindString:[[self string] substringWithRange:[self selectedRange]]];
-			
-			if ([[self findBarViewController] isFindBarVisible])
-				[[self findBarViewController] find:nil];
-			else
-				[[self findBarViewController] showFindBar:nil];
-			break;
-		default:
-			break;
-	}
+	[self _insertMatchingBraceWithString:insertString];
 }
 #pragma mark NSObject+WCExtensions
 - (NSSet *)userDefaultsKeyPathsToObserve {
@@ -235,21 +212,6 @@
 }
 #pragma mark NSUserInterfaceValidations
 - (BOOL)validateUserInterfaceItem:(id<NSValidatedUserInterfaceItem>)anItem {
-	if ([anItem action] == @selector(performTextFinderAction:)) {
-		switch ([anItem tag]) {
-			case NSTextFinderActionShowFindInterface:
-			case NSTextFinderActionPreviousMatch:
-			case NSTextFinderActionNextMatch:
-				return YES;
-			case NSTextFinderActionHideFindInterface:
-				return [[self findBarViewController] isFindBarVisible];
-			case NSTextFinderActionSetSearchString:
-				return ([self selectedRange].length > 0);
-			default:
-				return NO;
-				break;
-		}
-	}
 	return [super validateUserInterfaceItem:anItem];
 }
 #pragma mark RSToolTipView
@@ -297,7 +259,7 @@
 	if (symbolRange.location == NSNotFound) {
 		NSBeep();
 		
-		[[RSBezelWindowController sharedWindowController] showString:NSLocalizedString(@"Symbol Not Found, click another one plox", @"Symbol Not Found, click another one plox") centeredInView:[[self enclosingScrollView] contentView]];
+		[[RSBezelWidgetManager sharedWindowController] showString:NSLocalizedString(@"Symbol Not Found, click another one plox", @"Symbol Not Found, click another one plox") centeredInView:[self enclosingScrollView]];
 		
 		return;
 	}
@@ -306,7 +268,7 @@
 	if (![symbols count]) {
 		NSBeep();
 		
-		[[RSBezelWindowController sharedWindowController] showString:NSLocalizedString(@"Symbol Not Found, click another one plox", @"Symbol Not Found, click another one plox") centeredInView:[[self enclosingScrollView] contentView]];
+		[[RSBezelWidgetManager sharedWindowController] showString:NSLocalizedString(@"Symbol Not Found, click another one plox", @"Symbol Not Found, click another one plox") centeredInView:[self enclosingScrollView]];
 		return;
 	}
 	else if ([symbols count] == 1) {
@@ -317,10 +279,11 @@
 	}
 	else {
 		NSMenu *menu = [[[NSMenu alloc] initWithTitle:@""] autorelease];
+		[menu setFont:[NSFont menuFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]]];
 		
 		for (WCSourceSymbol *symbol in symbols) {
 			NSString *fileDisplayName = [[[symbol sourceScanner] delegate] fileDisplayNameForSourceScanner:[symbol sourceScanner]];
-			NSMenuItem *item = [menu addItemWithTitle:[NSString stringWithFormat:@"%@ \u2192 %@:%lu",[symbol name],fileDisplayName,[symbol lineNumber]+1] action:@selector(_symbolMenuClicked:) keyEquivalent:@""];
+			NSMenuItem *item = [menu addItemWithTitle:[NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 (%@:%lu)", @"jump to definition contextual menu format string"),[symbol name],fileDisplayName,[symbol lineNumber]+1] action:@selector(_symbolMenuClicked:) keyEquivalent:@""];
 			
 			[item setImage:[symbol icon]];
 			[item setTarget:self];
@@ -559,13 +522,6 @@
 	
 	[super setDelegate:delegate];
 }
-@dynamic findBarViewController;
-- (RSFindBarViewController *)findBarViewController {
-	if (!_findBarViewController) {
-		_findBarViewController = [[RSFindBarViewController alloc] initWithTextView:self];
-	}
-	return _findBarViewController;
-}
 #pragma mark *** Private Methods ***
 - (void)_commonInit; {
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
@@ -793,6 +749,11 @@
 		}
 	}];
 	return symbolRange;
+}
+#pragma mark IBActions
+- (IBAction)_symbolMenuClicked:(id)sender {
+	[self setSelectedRange:[sender range]];
+	[self scrollRangeToVisible:[self selectedRange]];
 }
 
 #pragma mark Notifications

@@ -10,15 +10,15 @@
 #import "NSPointerArray+WCExtensions.h"
 #import "RSFindOptionsViewController.h"
 #import "RSDefines.h"
-#import "RSBezelWindowController.h"
+#import "RSBezelWidgetManager.h"
 
 @interface RSFindBarViewController ()
-@property (readonly,nonatomic) NSTextView *textView;
 @property (readwrite,assign,nonatomic) BOOL wrapAround;
 @property (readwrite,copy,nonatomic) NSString *lastFindString;
 @property (readonly,nonatomic) RSFindOptionsViewController *findOptionsViewController;
 @property (readwrite,retain,nonatomic) NSRegularExpression *findRegularExpression;
 @property (readwrite,copy,nonatomic) NSString *statusString;
+@property (readwrite,assign,nonatomic) RSFindBarViewControllerViewMode viewMode;
 
 - (void)_addFindTextAttributes;
 - (void)_removeFindTextAttributes;
@@ -41,6 +41,7 @@
 	[_findRanges release];
 	[_showFindBarAnimation release];
 	[_hideFindBarAnimation release];
+	[_showReplaceControlsAnimation release];
 	[_findOptionsViewController release];
 	[super dealloc];
 }
@@ -50,23 +51,28 @@
 	
 	[(NSSearchFieldCell *)[[self searchField] cell] setPlaceholderString:NSLocalizedString(@"String Searching", @"find bar search field placeholder string")];
 }
-#pragma mark NSAnimationDelegate
-- (void)animationDidStop:(NSAnimation *)animation {
-	if (animation == _showFindBarAnimation) {
-		[_showFindBarAnimation release];
-		_showFindBarAnimation = nil;
+#pragma mark NSMenuValidation
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
+	if ([menuItem action] == @selector(toggleFindOptions:)) {
+		if ([[self findOptionsViewController] areFindOptionsVisible])
+			[menuItem setTitle:NSLocalizedString(@"Hide Find Options\u2026", @"hide find options with ellipsis")];
+		else
+			[menuItem setTitle:NSLocalizedString(@"Show Find Options\u2026", @"show find options with ellipsis")];
 	}
-	else if (animation == _hideFindBarAnimation) {
-		[_hideFindBarAnimation release];
-		_hideFindBarAnimation = nil;
-	}
+	return YES;
 }
+#pragma mark NSAnimationDelegate
 - (void)animationDidEnd:(NSAnimation *)animation {
 	if (animation == _showFindBarAnimation) {
 		[_showFindBarAnimation release];
 		_showFindBarAnimation = nil;
 		
 		[[[self view] window] makeFirstResponder:[self searchField]];
+		
+		if ([self areReplaceControlsVisible])
+			[[self searchField] setNextKeyView:[self replaceTextField]];
+		else
+			[[self searchField] setNextKeyView:[self textView]];
 		
 		if (![[self findString] length]) {
 			NSString *pboardString = [[NSPasteboard generalPasteboard] stringForType:NSPasteboardTypeString];
@@ -76,6 +82,12 @@
 		
 		if ([[self findString] length])
 			[self find:nil];
+		
+		if (_findFlags.runShowReplaceControlsAnimationAfterShowFindBarAnimationCompletes) {
+			_findFlags.runShowReplaceControlsAnimationAfterShowFindBarAnimationCompletes = NO;
+			
+			[self showReplaceControls:nil];
+		}
 	}
 	else if (animation == _hideFindBarAnimation) {
 		[_hideFindBarAnimation release];
@@ -85,6 +97,21 @@
 		
 		[[NSNotificationCenter defaultCenter] removeObserver:_textStorageDidProcessEditingObservingToken];
 	}
+	else if (animation == _showReplaceControlsAnimation) {
+		[_showReplaceControlsAnimation release];
+		_showReplaceControlsAnimation = nil;
+		
+		[[self searchField] setNextKeyView:[self replaceTextField]];
+		[[self replaceTextField] setNextKeyView:[self textView]];
+	}
+	else if (animation == _hideReplaceControlsAnimation) {
+		[_hideReplaceControlsAnimation release];
+		_hideReplaceControlsAnimation = nil;
+		
+		[self setViewMode:RSFindBarViewControllerViewModeFind];
+		
+		[[self searchField] setNextKeyView:[self textView]];
+	}
 }
 #pragma mark NSControlTextEditingDelegate
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector {
@@ -93,15 +120,27 @@
 		return YES;
 	}
 	else if (commandSelector == @selector(insertNewline:)) {
-		if ([_findRanges count])
-			[self findNext:nil];
-		else if ([[self findString] length])
-			[self find:nil];
+		if ([control isKindOfClass:[NSSearchField class]]) {
+			if ([_findRanges count])
+				[self findNext:nil];
+			else if ([[self findString] length])
+				[self find:nil];
+			return YES;
+		}
+		else if ([control isKindOfClass:[NSTextField class]]) {
+			[self replace:nil];
+			return YES;
+		}
 	}
 	return NO;
 }
 #pragma mark RSFindOptionsViewControllerDelegate
 - (void)findOptionsViewControllerDidChangeFindOptions:(RSFindOptionsViewController *)viewController {
+	if ([[self findOptionsViewController] findStyle] == RSFindOptionsFindStyleTextual)
+		[(NSSearchFieldCell *)[[self searchField] cell] setPlaceholderString:NSLocalizedString(@"String Searching", @"String Searching")];
+	else
+		[(NSSearchFieldCell *)[[self searchField] cell] setPlaceholderString:NSLocalizedString(@"Regex Searching", @"Regex Searching")];
+	
 	if ([[self findString] length])
 		[self find:nil];
 }
@@ -121,6 +160,10 @@
 
 + (NSDictionary *)findTextAttributes; {
 	return [NSDictionary dictionaryWithObjectsAndKeys:[NSColor yellowColor],NSBackgroundColorAttributeName,[NSColor orangeColor],NSUnderlineColorAttributeName,[NSNumber numberWithUnsignedInteger:NSUnderlinePatternSolid|NSUnderlineStyleDouble],NSUnderlineStyleAttributeName, nil];
+}
+
+- (void)performCleanup; {
+	[[NSNotificationCenter defaultCenter] removeObserver:_textStorageDidProcessEditingObservingToken];
 }
 #pragma mark IBActions
 - (IBAction)toggleFindBar:(id)sender; {
@@ -172,10 +215,69 @@ static const NSAnimationCurve kFindBarShowHideAnimationCurve = NSAnimationEaseIn
 	
 	[_hideFindBarAnimation startAnimation];
 }
-
+- (IBAction)toggleFindOptions:(id)sender; {
+	if ([[self findOptionsViewController] areFindOptionsVisible])
+		[self hideFindOptions:nil];
+	else
+		[self showFindOptions:nil];
+}
 - (void)showFindOptions:(id)sender {
 	NSRect rect = [(NSSearchFieldCell *)[[self searchField] cell] searchButtonRectForBounds:[[self searchField] bounds]];
 	[[self findOptionsViewController] showFindOptionsViewRelativeToRect:rect ofView:[self searchField] preferredEdge:NSMaxYEdge];
+}
+- (IBAction)hideFindOptions:(id)sender; {
+	[[self findOptionsViewController] hideFindOptionsView];
+}
+
+- (IBAction)toggleReplaceControls:(id)sender; {
+	if ([self areReplaceControlsVisible])
+		[self hideReplaceControls:nil];
+	else
+		[self showReplaceControls:nil];
+}
+
+static const CGFloat kReplaceControlsHeight = 22.0;
+- (IBAction)showReplaceControls:(id)sender; {
+	if ([self areReplaceControlsVisible]) {
+		if (![self isFindBarVisible])
+			[self showFindBar:nil];
+		return;
+	}
+	else if (![self isFindBarVisible]) {
+		_findFlags.runShowReplaceControlsAnimationAfterShowFindBarAnimationCompletes = YES;
+		[self showFindBar:nil];
+		return;
+	}
+	
+	[self setViewMode:RSFindBarViewControllerViewModeFindAndReplace];
+	
+	NSRect scrollViewFrame = [[[self textView] enclosingScrollView] frame];
+	NSRect findBarFrame = [[self view] frame];
+	
+	_showReplaceControlsAnimation = [[NSViewAnimation alloc] initWithDuration:kFindBarShowHideDelay animationCurve:kFindBarShowHideAnimationCurve];
+	[_showReplaceControlsAnimation setDelegate:self];
+	[_showReplaceControlsAnimation setAnimationBlockingMode:NSAnimationNonblocking];
+	[_showReplaceControlsAnimation setViewAnimations:[NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:[self view],NSViewAnimationTargetKey,[NSValue valueWithRect:NSMakeRect(NSMinX(findBarFrame), NSMinY(findBarFrame)-kReplaceControlsHeight, NSWidth(findBarFrame), NSHeight(findBarFrame)+kReplaceControlsHeight)],NSViewAnimationEndFrameKey, nil],[NSDictionary dictionaryWithObjectsAndKeys:[[self textView] enclosingScrollView],NSViewAnimationTargetKey,[NSValue valueWithRect:NSMakeRect(NSMinX(scrollViewFrame), NSMinY(scrollViewFrame), NSWidth(scrollViewFrame), NSHeight(scrollViewFrame)-kReplaceControlsHeight)],NSViewAnimationEndFrameKey, nil],[NSDictionary dictionaryWithObjectsAndKeys:[self replaceTextField],NSViewAnimationTargetKey,NSViewAnimationFadeInEffect,NSViewAnimationEffectKey, nil],[NSDictionary dictionaryWithObjectsAndKeys:[self replaceAllButton],NSViewAnimationTargetKey,NSViewAnimationFadeInEffect,NSViewAnimationEffectKey, nil],[NSDictionary dictionaryWithObjectsAndKeys:[self replaceButton],NSViewAnimationTargetKey,NSViewAnimationFadeInEffect,NSViewAnimationEffectKey, nil],[NSDictionary dictionaryWithObjectsAndKeys:[self replaceAndFindButton],NSViewAnimationTargetKey,NSViewAnimationFadeInEffect,NSViewAnimationEffectKey, nil], nil]];
+	
+	[_showReplaceControlsAnimation startAnimation];
+}
+- (IBAction)hideReplaceControls:(id)sender; {
+	if (![self areReplaceControlsVisible]) {
+		
+		return;
+	}
+	
+	[[[self textView] window] makeFirstResponder:[self searchField]];
+	
+	NSRect scrollViewFrame = [[[self textView] enclosingScrollView] frame];
+	NSRect findBarFrame = [[self view] frame];
+	
+	_hideReplaceControlsAnimation = [[NSViewAnimation alloc] initWithDuration:kFindBarShowHideDelay animationCurve:kFindBarShowHideAnimationCurve];
+	[_hideReplaceControlsAnimation setDelegate:self];
+	[_hideReplaceControlsAnimation setAnimationBlockingMode:NSAnimationNonblocking];
+	[_hideReplaceControlsAnimation setViewAnimations:[NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:[self view],NSViewAnimationTargetKey,[NSValue valueWithRect:NSMakeRect(NSMinX(findBarFrame), NSMinY(findBarFrame)+kReplaceControlsHeight, NSWidth(findBarFrame), NSHeight(findBarFrame)-kReplaceControlsHeight)],NSViewAnimationEndFrameKey, nil],[NSDictionary dictionaryWithObjectsAndKeys:[[self textView] enclosingScrollView],NSViewAnimationTargetKey,[NSValue valueWithRect:NSMakeRect(NSMinX(scrollViewFrame), NSMinY(scrollViewFrame), NSWidth(scrollViewFrame), NSHeight(scrollViewFrame)+kReplaceControlsHeight)],NSViewAnimationEndFrameKey, nil],[NSDictionary dictionaryWithObjectsAndKeys:[self replaceTextField],NSViewAnimationTargetKey,NSViewAnimationFadeOutEffect,NSViewAnimationEffectKey, nil],[NSDictionary dictionaryWithObjectsAndKeys:[self replaceAllButton],NSViewAnimationTargetKey,NSViewAnimationFadeOutEffect,NSViewAnimationEffectKey, nil],[NSDictionary dictionaryWithObjectsAndKeys:[self replaceButton],NSViewAnimationTargetKey,NSViewAnimationFadeOutEffect,NSViewAnimationEffectKey, nil],[NSDictionary dictionaryWithObjectsAndKeys:[self replaceAndFindButton],NSViewAnimationTargetKey,NSViewAnimationFadeOutEffect,NSViewAnimationEffectKey, nil], nil]];
+	
+	[_hideReplaceControlsAnimation startAnimation];
 }
 
 - (IBAction)find:(id)sender; {
@@ -228,24 +330,24 @@ static const NSAnimationCurve kFindBarShowHideAnimationCurve = NSAnimationEaseIn
 			switch (matchStyle) {
 					// token range doesn't matter in this case
 				case RSFindOptionsMatchStyleContains:
-					[_findRanges addPointer:(void *)&foundRange];
+					[_findRanges addPointer:&foundRange];
 					break;
 					// token range and found range starting indexes must match and match range can't be longer than token range
 				case RSFindOptionsMatchStyleStartsWith:
 					if (foundRange.location == tokenRange.location &&
 						foundRange.length < tokenRange.length)
-						[_findRanges addPointer:(void *)&foundRange];
+						[_findRanges addPointer:&foundRange];
 					break;
 					// the ending indexes of token range and found range must match
 				case RSFindOptionsMatchStyleEndsWith:
 					if (NSMaxRange(foundRange) == (tokenRange.location + tokenRange.length))
-						[_findRanges addPointer:(void *)&foundRange];
+						[_findRanges addPointer:&foundRange];
 					break;
 					// token range and found range must match exactly
 				case RSFindOptionsMatchStyleWholeWord:
 					if (foundRange.location == tokenRange.location &&
 						foundRange.length == tokenRange.length)
-						[_findRanges addPointer:(void *)&foundRange];
+						[_findRanges addPointer:&foundRange];
 					break;
 				default:
 					break;
@@ -261,7 +363,7 @@ static const NSAnimationCurve kFindBarShowHideAnimationCurve = NSAnimationEaseIn
 		[[self findRegularExpression] enumerateMatchesInString:string options:0 range:searchRange usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
 			NSRange foundRange = [result range];
 			
-			[_findRanges addPointer:(void *)&foundRange];
+			[_findRanges addPointer:&foundRange];
 		}];
 	}
 	
@@ -302,7 +404,7 @@ static const NSAnimationCurve kFindBarShowHideAnimationCurve = NSAnimationEaseIn
 		NSBeep();
 		
 		if (![self wrapAround])
-			[[RSBezelWindowController sharedWindowController] showImage:[NSImage imageNamed:@"FindNoWrapIndicator"] centeredInView:[[[self textView] enclosingScrollView] contentView]];
+			[[RSBezelWidgetManager sharedWindowController] showImage:[NSImage imageNamed:@"FindNoWrapIndicator"] centeredInView:[[self textView] enclosingScrollView]];
 	}
 	else {
 		[[self textView] setSelectedRange:foundRange];
@@ -310,7 +412,7 @@ static const NSAnimationCurve kFindBarShowHideAnimationCurve = NSAnimationEaseIn
 		[[self textView] showFindIndicatorForRange:foundRange];
 		
 		if (didWrap)
-			[[RSBezelWindowController sharedWindowController] showImage:[NSImage imageNamed:@"FindWrapIndicator"] centeredInView:[[[self textView] enclosingScrollView] contentView]];
+			[[RSBezelWidgetManager sharedWindowController] showImage:[NSImage imageNamed:@"FindWrapIndicator"] centeredInView:[[self textView] enclosingScrollView]];
 	}
 }
 - (IBAction)findPrevious:(id)sender; {
@@ -326,7 +428,7 @@ static const NSAnimationCurve kFindBarShowHideAnimationCurve = NSAnimationEaseIn
 		NSBeep();
 		
 		if (![self wrapAround])
-			[[RSBezelWindowController sharedWindowController] showImage:[NSImage imageNamed:@"FindNoWrapIndicatorReverse"] centeredInView:[[[self textView] enclosingScrollView] contentView]];
+			[[RSBezelWidgetManager sharedWindowController] showImage:[NSImage imageNamed:@"FindNoWrapIndicatorReverse"] centeredInView:[[self textView] enclosingScrollView]];
 	}
 	else {
 		[[self textView] setSelectedRange:foundRange];
@@ -334,7 +436,7 @@ static const NSAnimationCurve kFindBarShowHideAnimationCurve = NSAnimationEaseIn
 		[[self textView] showFindIndicatorForRange:foundRange];
 		
 		if (didWrap)
-			[[RSBezelWindowController sharedWindowController] showImage:[NSImage imageNamed:@"FindWrapIndicatorReverse"] centeredInView:[[[self textView] enclosingScrollView] contentView]];
+			[[RSBezelWidgetManager sharedWindowController] showImage:[NSImage imageNamed:@"FindWrapIndicatorReverse"] centeredInView:[[self textView] enclosingScrollView]];
 	}
 }
 - (IBAction)findNextOrPrevious:(NSSegmentedControl *)sender; {
@@ -343,8 +445,31 @@ static const NSAnimationCurve kFindBarShowHideAnimationCurve = NSAnimationEaseIn
 	else
 		[self findNext:nil];
 }
+- (IBAction)replaceAll:(id)sender; {
+	if (![_findRanges count]) {
+		NSBeep();
+		return;
+	}
+}
+- (IBAction)replace:(id)sender; {
+	if (![_findRanges count]) {
+		NSBeep();
+		return;
+	}
+}
+- (IBAction)replaceAndFind:(id)sender; {
+	if (![[self findString] length] || ![_findRanges count]) {
+		NSBeep();
+		return;
+	}
+}
 #pragma mark Properties
 @synthesize searchField=_searchField;
+@synthesize replaceTextField=_replaceTextField;
+@synthesize replaceAllButton=_replaceAllButton;
+@synthesize replaceButton=_replaceButton;
+@synthesize replaceAndFindButton=_replaceAndFindButton;
+
 @synthesize findString=_findString;
 @synthesize statusString=_statusString;
 @dynamic wrapAround;
@@ -358,6 +483,11 @@ static const NSAnimationCurve kFindBarShowHideAnimationCurve = NSAnimationEaseIn
 - (BOOL)isFindBarVisible {
 	return ([[self view] window] != nil);
 }
+@dynamic replaceControlsVisible;
+- (BOOL)areReplaceControlsVisible {
+	return ([self viewMode] == RSFindBarViewControllerViewModeFindAndReplace);
+}
+@synthesize viewMode=_viewMode;
 @synthesize textView=_textView;
 @synthesize lastFindString=_lastFindString;
 @synthesize findOptionsViewController=_findOptionsViewController;

@@ -11,4 +11,6 @@
 @interface NSAttributedString (WCExtensions)
 - (NSRange)nextArgumentPlaceholderRangeForRange:(NSRange)compareRange inRange:(NSRange)range wrapAround:(BOOL)wrapAround;
 - (NSRange)previousArgumentPlaceholderRangeForRange:(NSRange)compareRange inRange:(NSRange)range wrapAround:(BOOL)wrapAround;
+
+- (NSUInteger)lineNumberForRange:(NSRange)range;
 @end

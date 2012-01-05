@@ -6,17 +6,15 @@
 //  Copyright (c) 2011 Revolution Software. All rights reserved.
 //
 
-#import <AppKit/NSTextView.h>
+#import "WCFindableTextView.h"
 #import "WCSourceTextViewDelegate.h"
 #import "RSToolTipView.h"
 
-@class RSFindBarViewController;
-
-@interface WCSourceTextView : NSTextView <RSToolTipView> {
+@interface WCSourceTextView : WCFindableTextView <RSToolTipView> {
 	__weak id <WCSourceTextViewDelegate> _delegate;
 	id _windowDidResignKeyObservingToken;
 	id _windowDidBecomeKeyObservingToken;
-	RSFindBarViewController *_findBarViewController;
+	id _windowDidResizeObservingToken;
 }
 @property (readwrite,assign,nonatomic) IBOutlet id <WCSourceTextViewDelegate> delegate;
 

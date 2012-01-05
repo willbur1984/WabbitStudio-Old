@@ -18,22 +18,19 @@
 
 @implementation RSToolTipManager
 #pragma mark *** Subclass Overrides ***
-- (void)dealloc {
-	[[NSNotificationCenter defaultCenter] removeObserver:_applicationDidResignActiveObservingToken];
-	[NSEvent removeMonitor:_eventMonitor];
-	[_viewsToTrackingAreas release];
-	[_trackingAreasToViews release];
-    [super dealloc];
-}
 
-- (id)initWithWindow:(NSWindow *)window {
-	if (!(self = [super initWithWindow:window]))
+- (id)init {
+	if (!(self = [super initWithWindowNibName:[self windowNibName]]))
 		return nil;
 	
 	_viewsToTrackingAreas = [[NSMapTable mapTableWithWeakToWeakObjects] retain];
 	_trackingAreasToViews = [[NSMapTable mapTableWithWeakToWeakObjects] retain];
 	
 	return self;
+}
+
+- (NSString *)windowNibName {
+	return @"RSToolTipWindow";
 }
 
 - (void)mouseEntered:(NSEvent *)theEvent {
@@ -75,7 +72,7 @@ static const NSTimeInterval kCloseToolTipDelay = 0.25;
 	else
 		_closeTimer = [NSTimer scheduledTimerWithTimeInterval:kCloseToolTipDelay target:self selector:@selector(_closeTimerCallback:) userInfo:nil repeats:NO];
 }
-#pragma mark NSAnimationDelegate
+#pragma mark CAAnimationDelegate
 - (void)animationDidStop:(CAAnimation *)animation finished:(BOOL)flag  {
 	if (flag)
 		[[self window] orderOut:nil];
@@ -85,7 +82,7 @@ static const NSTimeInterval kCloseToolTipDelay = 0.25;
 	static RSToolTipManager *toolTipManager;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		toolTipManager = [[RSToolTipManager alloc] initWithWindowNibName:@"RSToolTipWindow"];
+		toolTipManager = [[RSToolTipManager alloc] init];
 	});
 	return toolTipManager;
 }

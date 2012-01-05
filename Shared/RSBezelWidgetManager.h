@@ -10,12 +10,12 @@
 
 @class RSBezelView;
 
-@interface RSBezelWindowController : NSWindowController {
+@interface RSBezelWidgetManager : NSWindowController {
 	NSTimer *_fadeTimer;
 }
 @property (readwrite,assign,nonatomic) IBOutlet RSBezelView *bezelView;
 
-+ (RSBezelWindowController *)sharedWindowController;
++ (RSBezelWidgetManager *)sharedWindowController;
 
 - (void)showImage:(NSImage *)image atPoint:(NSPoint)point;
 - (void)showImage:(NSImage *)image centeredInView:(NSView *)view;

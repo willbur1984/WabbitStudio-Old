@@ -6,19 +6,19 @@
 //  Copyright (c) 2012 Revolution Software. All rights reserved.
 //
 
-#import "RSBezelWindowController.h"
+#import "RSBezelWidgetManager.h"
 #import "RSDefines.h"
 #import "RSBezelView.h"
 #import <QuartzCore/QuartzCore.h>
 
-@interface RSBezelWindowController ()
+@interface RSBezelWidgetManager ()
 
 @end
 
-@implementation RSBezelWindowController
+@implementation RSBezelWidgetManager
 #pragma mark *** Subclass Overrides ***
 - (id)init {
-	return [self initWithWindowNibName:[self windowNibName]];
+	return [super initWithWindowNibName:[self windowNibName]];
 }
 
 - (NSString *)windowNibName {
@@ -42,7 +42,7 @@
 		[[self window] orderOut:nil];
 }
 #pragma mark *** Public Methods ***
-+ (RSBezelWindowController *)sharedWindowController; {
++ (RSBezelWidgetManager *)sharedWindowController; {
 	static id sharedInstance;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{

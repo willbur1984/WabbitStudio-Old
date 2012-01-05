@@ -14,6 +14,7 @@
 #import "NSArray+WCExtensions.h"
 #import "NSString+WCExtensions.h"
 #import "NSEvent+RSExtensions.h"
+#import "NSAttributedString+WCExtensions.h"
 
 @interface WCJumpBarViewController ()
 @property (readwrite,copy,nonatomic) NSString *textViewSelectedLineAndColumn;
@@ -179,11 +180,13 @@
 			WCSourceSymbol *symbol = [symbols objectAtIndex:symbolIndex];
 			NSMenuItem *item = [[self symbolsMenu] itemAtIndex:symbolIndex];
 			
-			[item setTarget:self];
-			[item setAction:@selector(_symbolsMenuClick:)];
-			[item setTitle:[symbol name]];
-			[item setImage:[symbol icon]];
-			[item setRepresentedObject:symbol];
+			if ([self symbolsMenuNeedsUpdate]) {
+				[item setTarget:self];
+				[item setAction:@selector(_symbolsMenuClick:)];
+				[item setTitle:[NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 (%@:%lu)", @"jump bar symbols menu format string"),[symbol name],[[self jumpBarDataSource] displayName],[[[self textView] textStorage] lineNumberForRange:[symbol range]]+1]];
+				[item setImage:[symbol icon]];
+				[item setRepresentedObject:symbol];
+			}
 			
 			if (symbol == selectedSymbol) {
 				selectedSymbolIndex = symbolIndex;
@@ -201,14 +204,18 @@
 			WCSourceSymbol *symbol = [symbols objectAtIndex:symbolIndex];
 			NSMenuItem *item = [[self symbolsMenu] itemAtIndex:symbolIndex];
 			
-			[item setTarget:self];
-			[item setAction:@selector(_symbolsMenuClick:)];
-			[item setTitle:[symbol name]];
-			[item setImage:[symbol icon]];
-			[item setRepresentedObject:symbol];
+			if ([self symbolsMenuNeedsUpdate]) {
+				[item setTarget:self];
+				[item setAction:@selector(_symbolsMenuClick:)];
+				[item setTitle:[NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 (%@:%lu)", @"jump bar symbols menu format string"),[symbol name],[[self jumpBarDataSource] displayName],[[[self textView] textStorage] lineNumberForRange:[symbol range]]+1]];
+				[item setImage:[symbol icon]];
+				[item setRepresentedObject:symbol];
+			}
 			[item setState:(symbolIndex == selectedSymbolIndex)?NSOnState:NSOffState];
 		}
 	}
+	
+	[self setSymbolsMenuNeedsUpdate:NO];
 	
 	NSRect cellRect = [[[self jumpBar] cell] rectOfPathComponentCell:clickedCell withFrame:[[self jumpBar] bounds] inView:[self jumpBar]];
 	

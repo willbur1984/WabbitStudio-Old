@@ -9,7 +9,7 @@
 #import <AppKit/NSWindowController.h>
 #import "RSToolTipView.h"
 
-@interface RSToolTipManager : NSWindowController <NSAnimationDelegate> {
+@interface RSToolTipManager : NSWindowController {
 @private	
     NSMapTable *_viewsToTrackingAreas;
 	NSMapTable *_trackingAreasToViews;

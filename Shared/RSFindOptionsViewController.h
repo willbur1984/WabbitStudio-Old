@@ -11,15 +11,15 @@
 
 typedef enum _RSFindOptionsFindStyle {
 	RSFindOptionsFindStyleTextual = 0,
-	RSFindOptionsFindStyleRegularExpression
+	RSFindOptionsFindStyleRegularExpression = 1
 	
 } RSFindOptionsFindStyle;
 
 typedef enum _RSFindOptionsMatchStyle {
 	RSFindOptionsMatchStyleContains = 0,
-	RSFindOptionsMatchStyleStartsWith,
-	RSFindOptionsMatchStyleEndsWith,
-	RSFindOptionsMatchStyleWholeWord
+	RSFindOptionsMatchStyleStartsWith = 1,
+	RSFindOptionsMatchStyleEndsWith = 2,
+	RSFindOptionsMatchStyleWholeWord = 3
 	
 } RSFindOptionsMatchStyle;
 
@@ -41,7 +41,9 @@ typedef enum _RSFindOptionsMatchStyle {
 @property (readwrite,assign,nonatomic) BOOL matchCase;
 @property (readwrite,assign,nonatomic) BOOL anchorsMatchLines;
 @property (readwrite,assign,nonatomic) BOOL dotMatchesNewlines;
+@property (readonly,nonatomic,getter = areFindOptionsVisible) BOOL findOptionsVisible;
 
 - (void)showFindOptionsViewRelativeToRect:(NSRect)rect ofView:(NSView *)view preferredEdge:(NSRectEdge)preferredEdge;
+- (void)hideFindOptionsView;
 
 @end

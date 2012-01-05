@@ -10,6 +10,7 @@
 #import "WCArgumentPlaceholderCell.h"
 #import "RSDefines.h"
 #import "NSPointerArray+WCExtensions.h"
+#import "NSString+WCExtensions.h"
 
 @implementation NSAttributedString (WCExtensions)
 - (NSRange)nextArgumentPlaceholderRangeForRange:(NSRange)compareRange inRange:(NSRange)range wrapAround:(BOOL)wrapAround; {
@@ -57,5 +58,9 @@
 		return *(NSRangePointer)[ranges pointerAtIndex:rangeCount-1];
 	
 	return retval;
+}
+
+- (NSUInteger)lineNumberForRange:(NSRange)range; {
+	return [[self string] lineNumberForRange:range];
 }
 @end

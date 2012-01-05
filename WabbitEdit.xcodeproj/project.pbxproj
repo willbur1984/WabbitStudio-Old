@@ -67,10 +67,15 @@
 		072880BF14B4F16D0082DE4C /* FindNoWrapIndicatorReverse.png in Resources */ = {isa = PBXBuildFile; fileRef = 072880BB14B4F16D0082DE4C /* FindNoWrapIndicatorReverse.png */; };
 		072880C014B4F16D0082DE4C /* FindWrapIndicator.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 072880BC14B4F16D0082DE4C /* FindWrapIndicator.tiff */; };
 		072880C114B4F16D0082DE4C /* FindWrapIndicatorReverse.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 072880BD14B4F16D0082DE4C /* FindWrapIndicatorReverse.tiff */; };
-		072880C514B4F2170082DE4C /* RSBezelWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 072880C414B4F2170082DE4C /* RSBezelWindowController.m */; };
+		072880C514B4F2170082DE4C /* RSBezelWidgetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 072880C414B4F2170082DE4C /* RSBezelWidgetManager.m */; };
 		072880C814B4F6920082DE4C /* RSBezelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 072880C714B4F6920082DE4C /* RSBezelView.m */; };
 		072880CB14B4F8790082DE4C /* RSBezelWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 072880CA14B4F8790082DE4C /* RSBezelWindow.m */; };
 		072880CE14B4F9030082DE4C /* RSBezelWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 072880CC14B4F9030082DE4C /* RSBezelWindow.xib */; };
+		072880D114B546D10082DE4C /* WCFindableTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 072880D014B546D10082DE4C /* WCFindableTextView.m */; };
+		072880D414B5714D0082DE4C /* RSFindBarFieldEditor.m in Sources */ = {isa = PBXBuildFile; fileRef = 072880D314B5714D0082DE4C /* RSFindBarFieldEditor.m */; };
+		072880D714B572430082DE4C /* RSFindSearchFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 072880D614B572430082DE4C /* RSFindSearchFieldCell.m */; };
+		072880DA14B57A3A0082DE4C /* RSFindTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 072880D914B57A3A0082DE4C /* RSFindTextField.m */; };
+		072880DD14B57A660082DE4C /* RSFindTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 072880DC14B57A660082DE4C /* RSFindTextFieldCell.m */; };
 		072BBC3A14AA65AD0044ECC2 /* RSPreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 072BBC3914AA65AD0044ECC2 /* RSPreferencesWindowController.m */; };
 		072BBC3E14AA65F80044ECC2 /* NSEvent+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 072BBC3D14AA65F80044ECC2 /* NSEvent+RSExtensions.m */; };
 		072BBC4214AA66900044ECC2 /* WCPreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 072BBC4114AA66900044ECC2 /* WCPreferencesWindowController.m */; };
@@ -237,13 +242,23 @@
 		072880BB14B4F16D0082DE4C /* FindNoWrapIndicatorReverse.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FindNoWrapIndicatorReverse.png; sourceTree = "<group>"; };
 		072880BC14B4F16D0082DE4C /* FindWrapIndicator.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = FindWrapIndicator.tiff; sourceTree = "<group>"; };
 		072880BD14B4F16D0082DE4C /* FindWrapIndicatorReverse.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = FindWrapIndicatorReverse.tiff; sourceTree = "<group>"; };
-		072880C314B4F2170082DE4C /* RSBezelWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSBezelWindowController.h; sourceTree = "<group>"; };
-		072880C414B4F2170082DE4C /* RSBezelWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSBezelWindowController.m; sourceTree = "<group>"; };
+		072880C314B4F2170082DE4C /* RSBezelWidgetManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSBezelWidgetManager.h; sourceTree = "<group>"; };
+		072880C414B4F2170082DE4C /* RSBezelWidgetManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSBezelWidgetManager.m; sourceTree = "<group>"; };
 		072880C614B4F6920082DE4C /* RSBezelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSBezelView.h; sourceTree = "<group>"; };
 		072880C714B4F6920082DE4C /* RSBezelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSBezelView.m; sourceTree = "<group>"; };
 		072880C914B4F8790082DE4C /* RSBezelWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSBezelWindow.h; sourceTree = "<group>"; };
 		072880CA14B4F8790082DE4C /* RSBezelWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSBezelWindow.m; sourceTree = "<group>"; };
 		072880CD14B4F9030082DE4C /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = RSBezelWindow.xib; sourceTree = "<group>"; };
+		072880CF14B546D10082DE4C /* WCFindableTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCFindableTextView.h; sourceTree = "<group>"; };
+		072880D014B546D10082DE4C /* WCFindableTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCFindableTextView.m; sourceTree = "<group>"; };
+		072880D214B5714D0082DE4C /* RSFindBarFieldEditor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSFindBarFieldEditor.h; sourceTree = "<group>"; };
+		072880D314B5714D0082DE4C /* RSFindBarFieldEditor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSFindBarFieldEditor.m; sourceTree = "<group>"; };
+		072880D514B572430082DE4C /* RSFindSearchFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSFindSearchFieldCell.h; sourceTree = "<group>"; };
+		072880D614B572430082DE4C /* RSFindSearchFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSFindSearchFieldCell.m; sourceTree = "<group>"; };
+		072880D814B57A3A0082DE4C /* RSFindTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSFindTextField.h; sourceTree = "<group>"; };
+		072880D914B57A3A0082DE4C /* RSFindTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSFindTextField.m; sourceTree = "<group>"; };
+		072880DB14B57A660082DE4C /* RSFindTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSFindTextFieldCell.h; sourceTree = "<group>"; };
+		072880DC14B57A660082DE4C /* RSFindTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSFindTextFieldCell.m; sourceTree = "<group>"; };
 		072BBC3814AA65AD0044ECC2 /* RSPreferencesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSPreferencesWindowController.h; sourceTree = "<group>"; };
 		072BBC3914AA65AD0044ECC2 /* RSPreferencesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSPreferencesWindowController.m; sourceTree = "<group>"; };
 		072BBC3C14AA65F80044ECC2 /* NSEvent+RSExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSEvent+RSExtensions.h"; sourceTree = "<group>"; };
@@ -421,6 +436,8 @@
 				071ECD0014A46BEA002409F8 /* WCSourceTextView.h */,
 				071ECD0114A46BEA002409F8 /* WCSourceTextView.m */,
 				07F5F76514A5732100F1F326 /* WCSourceTextViewDelegate.h */,
+				072880CF14B546D10082DE4C /* WCFindableTextView.h */,
+				072880D014B546D10082DE4C /* WCFindableTextView.m */,
 				0706D64E14A8F45B0092F880 /* WCSourceTextViewController.h */,
 				0706D64F14A8F45B0092F880 /* WCSourceTextViewController.m */,
 				07F5F76B14A59BCC00F1F326 /* WCLineNumberRulerView.h */,
@@ -586,8 +603,8 @@
 		0725433C14A7998200C961B7 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				072880C214B4F1780082DE4C /* Bezel Window */,
 				07F5F76E14A5A46900F1F326 /* RSDefines.h */,
+				072880C214B4F1780082DE4C /* Bezel Window */,
 				07B4740114AE3C7D00E3F9D0 /* Transformers */,
 				078F041E14AD78A50080ADBC /* ToolTips */,
 				0791BE4A14AD79DC0004AC16 /* Cells */,
@@ -634,8 +651,8 @@
 		072880C214B4F1780082DE4C /* Bezel Window */ = {
 			isa = PBXGroup;
 			children = (
-				072880C314B4F2170082DE4C /* RSBezelWindowController.h */,
-				072880C414B4F2170082DE4C /* RSBezelWindowController.m */,
+				072880C314B4F2170082DE4C /* RSBezelWidgetManager.h */,
+				072880C414B4F2170082DE4C /* RSBezelWidgetManager.m */,
 				072880C614B4F6920082DE4C /* RSBezelView.h */,
 				072880C714B4F6920082DE4C /* RSBezelView.m */,
 				072880C914B4F8790082DE4C /* RSBezelWindow.h */,
@@ -700,6 +717,14 @@
 				0791BE5114AD7F530004AC16 /* RSFindBarView.m */,
 				07B4740914AE433300E3F9D0 /* RSFindSearchField.h */,
 				07B4740A14AE433300E3F9D0 /* RSFindSearchField.m */,
+				072880D514B572430082DE4C /* RSFindSearchFieldCell.h */,
+				072880D614B572430082DE4C /* RSFindSearchFieldCell.m */,
+				072880D814B57A3A0082DE4C /* RSFindTextField.h */,
+				072880D914B57A3A0082DE4C /* RSFindTextField.m */,
+				072880DB14B57A660082DE4C /* RSFindTextFieldCell.h */,
+				072880DC14B57A660082DE4C /* RSFindTextFieldCell.m */,
+				072880D214B5714D0082DE4C /* RSFindBarFieldEditor.h */,
+				072880D314B5714D0082DE4C /* RSFindBarFieldEditor.m */,
 			);
 			name = "Find Bar";
 			sourceTree = "<group>";
@@ -957,9 +982,14 @@
 				07B4740514AE3CAA00E3F9D0 /* RSNumberToBoolTransformer.m in Sources */,
 				07B4740814AE3E0A00E3F9D0 /* RSNegateNumberToBoolTransformer.m in Sources */,
 				07B4740B14AE433300E3F9D0 /* RSFindSearchField.m in Sources */,
-				072880C514B4F2170082DE4C /* RSBezelWindowController.m in Sources */,
+				072880C514B4F2170082DE4C /* RSBezelWidgetManager.m in Sources */,
 				072880C814B4F6920082DE4C /* RSBezelView.m in Sources */,
 				072880CB14B4F8790082DE4C /* RSBezelWindow.m in Sources */,
+				072880D114B546D10082DE4C /* WCFindableTextView.m in Sources */,
+				072880D414B5714D0082DE4C /* RSFindBarFieldEditor.m in Sources */,
+				072880D714B572430082DE4C /* RSFindSearchFieldCell.m in Sources */,
+				072880DA14B57A3A0082DE4C /* RSFindTextField.m in Sources */,
+				072880DD14B57A660082DE4C /* RSFindTextFieldCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

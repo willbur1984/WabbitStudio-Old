@@ -78,6 +78,8 @@
 	
 	[[[self sourceTextViewController] view] setFrame:NSMakeRect(NSMinX(contentViewFrame), NSMinY(contentViewFrame), NSWidth(contentViewFrame), NSHeight(contentViewFrame)-NSHeight(jumpBarViewFrame))];
 	[[[self jumpBarViewController] view] setFrame:NSMakeRect(NSMinX(contentViewFrame), NSMaxY(contentViewFrame)-NSHeight(jumpBarViewFrame), NSWidth(contentViewFrame), NSHeight(jumpBarViewFrame))];
+	
+	//[[[self sourceTextViewController] view] setFrame:NSMakeRect(NSMinX(contentViewFrame), NSMinY(contentViewFrame), NSWidth(contentViewFrame), NSHeight(contentViewFrame))];
 }
 
 + (BOOL)autosavesInPlace {

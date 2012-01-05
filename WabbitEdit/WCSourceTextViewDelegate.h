@@ -8,7 +8,7 @@
 
 #import <AppKit/NSTextView.h>
 
-@class WCSourceTextView,WCSourceScanner;
+@class WCSourceTextView,WCSourceScanner,WCSourceHighlighter;
 
 @protocol WCSourceTextViewDelegate <NSTextViewDelegate>
 @required
@@ -18,4 +18,6 @@
 - (NSArray *)sourceTextView:(WCSourceTextView *)textView sourceSymbolsForSymbolName:(NSString *)name;
 
 - (WCSourceScanner *)sourceScannerForSourceTextView:(WCSourceTextView *)textView;
+
+- (WCSourceHighlighter *)sourceHighlighterForSourceTextView:(WCSourceTextView *)textView;
 @end
