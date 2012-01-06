@@ -101,6 +101,10 @@
 	return YES;
 }
 
+- (NSDocument *)document {
+	return self;
+}
+
 - (NSArray *)sourceTokensForSourceTextView:(WCSourceTextView *)textView {
 	return [[self sourceScanner] tokens];
 }

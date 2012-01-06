@@ -86,6 +86,7 @@
 		072BBC5914AA69EF0044ECC2 /* WCPreferencesWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 072BBC5714AA69EF0044ECC2 /* WCPreferencesWindow.xib */; };
 		072BBC5C14AA6D190044ECC2 /* RSGlassGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 072BBC5B14AA6D190044ECC2 /* RSGlassGradientView.m */; };
 		072BBC5F14AA700B0044ECC2 /* RSBottomBorderedGlassGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 072BBC5E14AA700B0044ECC2 /* RSBottomBorderedGlassGradientView.m */; };
+		073B5A9114B67B7400FCDC0F /* NSImage+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 073B5A9014B67B7400FCDC0F /* NSImage+RSExtensions.m */; };
 		0745BE0614AAC4B400F541DC /* RSBorderlessButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0745BE0514AAC4B400F541DC /* RSBorderlessButtonCell.m */; };
 		0745BE0914AAD3DE00F541DC /* RSBorderlessPopUpButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0745BE0814AAD3DE00F541DC /* RSBorderlessPopUpButtonCell.m */; };
 		0745BE0C14AAD51D00F541DC /* RSBorderedGlassGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0745BE0B14AAD51D00F541DC /* RSBorderedGlassGradientView.m */; };
@@ -287,6 +288,8 @@
 		072BBC5B14AA6D190044ECC2 /* RSGlassGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSGlassGradientView.m; sourceTree = "<group>"; };
 		072BBC5D14AA700B0044ECC2 /* RSBottomBorderedGlassGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSBottomBorderedGlassGradientView.h; sourceTree = "<group>"; };
 		072BBC5E14AA700B0044ECC2 /* RSBottomBorderedGlassGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSBottomBorderedGlassGradientView.m; sourceTree = "<group>"; };
+		073B5A8F14B67B7400FCDC0F /* NSImage+RSExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+RSExtensions.h"; sourceTree = "<group>"; };
+		073B5A9014B67B7400FCDC0F /* NSImage+RSExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+RSExtensions.m"; sourceTree = "<group>"; };
 		0745BE0414AAC4B400F541DC /* RSBorderlessButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSBorderlessButtonCell.h; sourceTree = "<group>"; };
 		0745BE0514AAC4B400F541DC /* RSBorderlessButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSBorderlessButtonCell.m; sourceTree = "<group>"; };
 		0745BE0714AAD3DE00F541DC /* RSBorderlessPopUpButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSBorderlessPopUpButtonCell.h; sourceTree = "<group>"; };
@@ -585,6 +588,7 @@
 				072BBC5014AA68B80044ECC2 /* WCApplicationDelegate.m */,
 				0745BE1C14AB921300F541DC /* WCMiscellaneousPerformer.h */,
 				0745BE1D14AB921300F541DC /* WCMiscellaneousPerformer.m */,
+				073B5A9314B67C6E00FCDC0F /* Model */,
 				072BBC3F14AA66730044ECC2 /* Preferences */,
 				0708964114A6C81C0017BBE4 /* Documents */,
 				0708964214A6C8660017BBE4 /* Source Editor */,
@@ -698,6 +702,13 @@
 				076966E214B6366C005448F7 /* Advanced */,
 			);
 			name = Preferences;
+			sourceTree = "<group>";
+		};
+		073B5A9314B67C6E00FCDC0F /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 		0745BE2914ABF7F200F541DC /* Fonts & Colors */ = {
@@ -842,6 +853,8 @@
 		0791BE4F14AD7A370004AC16 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				073B5A8F14B67B7400FCDC0F /* NSImage+RSExtensions.h */,
+				073B5A9014B67B7400FCDC0F /* NSImage+RSExtensions.m */,
 				072BBC3C14AA65F80044ECC2 /* NSEvent+RSExtensions.h */,
 				072BBC3D14AA65F80044ECC2 /* NSEvent+RSExtensions.m */,
 			);
@@ -1040,6 +1053,7 @@
 				076966E614B636CD005448F7 /* WCAdvancedViewController.m in Sources */,
 				07EB8E2E14B644CA00F8A8C6 /* WCReallyAdvancedViewController.m in Sources */,
 				07EB8E3614B64D2500F8A8C6 /* WCKeyboardViewController.m in Sources */,
+				073B5A9114B67B7400FCDC0F /* NSImage+RSExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

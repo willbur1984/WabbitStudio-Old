@@ -17,6 +17,7 @@
 #import "NSAttributedString+WCExtensions.h"
 #import "WCReallyAdvancedViewController.h"
 #import "NSObject+WCExtensions.h"
+#import "NSImage+RSExtensions.h"
 
 @interface WCJumpBarViewController ()
 @property (readwrite,copy,nonatomic) NSString *textViewSelectedLineAndColumn;
@@ -25,6 +26,7 @@
 @property (readonly,nonatomic) id <WCJumpBarDataSource> jumpBarDataSource;
 
 - (void)_updatePathComponentCells;
+- (void)_updateFilePathComponentCell;
 - (void)_updateSymbolPathComponentCell;
 - (void)_updateTextViewSelectedLineAndColumn;
 - (void)_updateSymbolsMenuItemsWithSymbols:(NSArray *)symbols selectedSymbol:(WCSourceSymbol *)selectedSymbol selectedSymbolIndex:(NSUInteger *)selectedSymbolIndex sortedByName:(BOOL)sortedByName;
@@ -63,6 +65,10 @@
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_sourceScannerDidFinishScanningSymbols:) name:WCSourceScannerDidFinishScanningSymbolsNotification object:[jumpBarDataSource sourceScanner]];
 	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_undoManagerDidRedo:) name:NSUndoManagerDidRedoChangeNotification object:[[jumpBarDataSource document] undoManager]];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_undoManagerDidUndo:) name:NSUndoManagerDidUndoChangeNotification object:[[jumpBarDataSource document] undoManager]];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_undoManagerDidCloseUndoGroup:) name:NSUndoManagerDidCloseUndoGroupNotification object:[[jumpBarDataSource document] undoManager]];
+	
 	return self;
 }
 
@@ -78,17 +84,18 @@
 - (void)menu:(NSMenu *)menu willHighlightItem:(NSMenuItem *)item {
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCReallyAdvancedJumpBarShowFileAndLineNumberKey])
 		return;
-	
-	if ([menu highlightedItem]) {
-		NSMenuItem *oldItem = [menu highlightedItem];
+	else if (menu == [self symbolsMenu]) {
+		if ([menu highlightedItem]) {
+			NSMenuItem *oldItem = [menu highlightedItem];
+			
+			[oldItem setTitle:[[oldItem representedObject] name]];
+		}
 		
-		[oldItem setTitle:[[oldItem representedObject] name]];
-	}
-	
-	if (item) {
-		WCSourceSymbol *symbol = [item representedObject];
-		
-		[item setTitle:[NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 (%@:%lu)", @"jump bar symbols menu format string"),[symbol name],[[self jumpBarDataSource] displayName],[[[self textView] textStorage] lineNumberForRange:[symbol range]]+1]];
+		if (item) {
+			WCSourceSymbol *symbol = [item representedObject];
+			
+			[item setTitle:[NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 (%@:%lu)", @"jump bar symbols menu format string"),[symbol name],[[self jumpBarDataSource] displayName],[[[self textView] textStorage] lineNumberForRange:[symbol range]]+1]];
+		}
 	}
 }
 
@@ -133,6 +140,26 @@
 	}
 	
 	[pathCells addObject:[[[WCJumpBarComponentCell alloc] initTextCell:NSLocalizedString(@"No Symbols", @"No Symbols")] autorelease]];
+	
+	[[self jumpBar] setPathComponentCells:pathCells];
+}
+
+- (void)_updateFilePathComponentCell; {
+	NSMutableArray *pathCells = [[[[self jumpBar] pathComponentCells] mutableCopy] autorelease];
+	NSImage *fileIcon;
+	
+	if ([[self jumpBarDataSource] fileURL])
+		fileIcon = [[NSWorkspace sharedWorkspace] iconForFile:[[[self jumpBarDataSource] fileURL] path]];
+	else
+		fileIcon = [NSImage imageNamed:@"UntitledFile"];
+	
+	if ([[[self jumpBarDataSource] document] isDocumentEdited])
+		fileIcon = [fileIcon unsavedImageFromImage];
+	
+	WCJumpBarComponentCell *fileCell = [[[WCJumpBarComponentCell alloc] initTextCell:[[self jumpBarDataSource] displayName]] autorelease];
+	[fileCell setImage:fileIcon];
+	
+	[pathCells replaceObjectAtIndex:[pathCells count]-2 withObject:fileCell];
 	
 	[[self jumpBar] setPathComponentCells:pathCells];
 }
@@ -286,5 +313,13 @@
 - (void)_sourceScannerDidFinishScanningSymbols:(NSNotification *)note {	
 	[self _updateSymbolPathComponentCell];
 }
-
+- (void)_undoManagerDidRedo:(NSNotification *)note {
+	[self _updateFilePathComponentCell];
+}
+- (void)_undoManagerDidUndo:(NSNotification *)note {
+	[self _updateFilePathComponentCell];
+}
+- (void)_undoManagerDidCloseUndoGroup:(NSNotification *)note {
+	[self _updateFilePathComponentCell];
+}
 @end

@@ -15,4 +15,5 @@
 - (NSURL *)fileURL;
 - (NSString *)displayName;
 - (WCSourceScanner *)sourceScanner;
+- (NSDocument *)document;
 @end
