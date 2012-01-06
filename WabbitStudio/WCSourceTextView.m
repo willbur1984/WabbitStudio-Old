@@ -24,6 +24,7 @@
 #import "RSBezelWidgetManager.h"
 #import "WCSourceHighlighter.h"
 #import "WCKeyboardViewController.h"
+#import "WCJumpInWindowController.h"
 
 @interface WCSourceTextView ()
 
@@ -33,6 +34,7 @@
 - (void)_highlightMatchingTempLabel;
 - (NSRange)_symbolRangeForRange:(NSRange)range;
 - (void)_insertMatchingBraceWithString:(id)string;
+- (void)_handleAutoCompletionWithString:(id)string;
 @end
 
 @implementation WCSourceTextView
@@ -193,7 +195,7 @@
 }
 
 - (IBAction)insertNewline:(id)sender {
-	[super insertNewline:sender];
+	[super insertNewline:nil];
 	
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorAutomaticallyIndentAfterNewlinesKey]) {
 		NSString *previousLineWhitespaceString;
@@ -209,6 +211,8 @@
 	[super insertText:insertString];
 	
 	[self _insertMatchingBraceWithString:insertString];
+	
+	[self _handleAutoCompletionWithString:insertString];
 }
 #pragma mark NSObject+WCExtensions
 - (NSSet *)userDefaultsKeyPathsToObserve {
@@ -242,6 +246,19 @@
 		return nil;
 	return symbols;
 }
+#pragma mark WCJumpInDataSource
+- (NSArray *)jumpInItems {
+	return [[self delegate] sourceSymbolsForSourceTextView:self];
+}
+- (NSTextView *)jumpInTextView {
+	return self;
+}
+- (NSString *)jumpInFileName {
+	WCSourceScanner *sourceScanner = [[self delegate] sourceScannerForSourceTextView:self];
+	
+	return [[sourceScanner delegate] fileDisplayNameForSourceScanner:sourceScanner];
+}
+
 #pragma mark *** Public Methods ***
 #pragma mark IBActions
 - (IBAction)jumpToNextPlaceholder:(id)sender; {
@@ -313,6 +330,9 @@
 		if (![menu popUpMenuPositioningItem:nil atLocation:lineRect.origin inView:self])
 			[currentCursor push];
 	}
+}
+- (IBAction)jumpInFile:(id)sender; {
+	[[WCJumpInWindowController sharedWindowController] showJumpInWindowWithDataSource:self];
 }
 - (IBAction)shiftLeft:(id)sender; {
 	if ([self selectedRange].length) {
@@ -746,6 +766,41 @@
 	[self setSelectedRange:NSMakeRange([self selectedRange].location-1, 0)];
 }
 
+- (void)_handleAutoCompletionWithString:(id)string; {
+	if (![[NSUserDefaults standardUserDefaults] boolForKey:WCEditorSuggestCompletionsWhileTypingKey])
+		return;
+	else if ([string length] != 1 ||
+			 [[self undoManager] isUndoing] ||
+			 [[self undoManager] isRedoing]) {
+		[_completionTimer invalidate];
+		_completionTimer = nil;
+		return;
+	}
+	
+	static NSCharacterSet *legalChars;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		NSMutableCharacterSet *charSet = [[[NSCharacterSet letterCharacterSet] mutableCopy] autorelease];
+		[charSet formUnionWithCharacterSet:[NSCharacterSet decimalDigitCharacterSet]];
+		[charSet formUnionWithCharacterSet:[NSCharacterSet characterSetWithCharactersInString:@"_!?.#"]];
+		legalChars = [charSet copy];
+	});
+	
+	if (![legalChars characterIsMember:[string characterAtIndex:0]]) {
+		[_completionTimer invalidate];
+		_completionTimer = nil;
+		return;
+	}
+	
+	CGFloat completionDelay = [[NSUserDefaults standardUserDefaults] floatForKey:WCEditorSuggestCompletionsWhileTypingDelayKey];
+	
+	if (_completionTimer)
+		[_completionTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:completionDelay]];
+	else {
+		_completionTimer = [NSTimer scheduledTimerWithTimeInterval:completionDelay target:self selector:@selector(_completionTimerCallback:) userInfo:nil repeats:NO];
+	}
+}
+
 - (NSRange)_symbolRangeForRange:(NSRange)range; {
 	if (![[self string] length])
 		return NSNotFoundRange;
@@ -804,5 +859,12 @@
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
 	
 	[self setInsertionPointColor:[currentTheme cursorColor]];
+}
+#pragma mark Callbacks
+- (void)_completionTimerCallback:(NSTimer *)timer {
+	[_completionTimer invalidate];
+	_completionTimer = nil;
+	
+	[self complete:nil];
 }
 @end

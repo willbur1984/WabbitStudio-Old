@@ -87,6 +87,12 @@
 		072BBC5C14AA6D190044ECC2 /* RSGlassGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 072BBC5B14AA6D190044ECC2 /* RSGlassGradientView.m */; };
 		072BBC5F14AA700B0044ECC2 /* RSBottomBorderedGlassGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 072BBC5E14AA700B0044ECC2 /* RSBottomBorderedGlassGradientView.m */; };
 		073B5A9114B67B7400FCDC0F /* NSImage+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 073B5A9014B67B7400FCDC0F /* NSImage+RSExtensions.m */; };
+		073B5A9F14B6A4BF00FCDC0F /* WCJumpInWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 073B5A9E14B6A4BF00FCDC0F /* WCJumpInWindowController.m */; };
+		073B5AA414B6A92B00FCDC0F /* WCJumpInMatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 073B5AA314B6A92B00FCDC0F /* WCJumpInMatch.m */; };
+		073B5AA714B6AA8A00FCDC0F /* WCJumpInWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 073B5AA514B6AA8A00FCDC0F /* WCJumpInWindow.xib */; };
+		073B5AAA14B6AD7300FCDC0F /* WCJumpInTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 073B5AA914B6AD7300FCDC0F /* WCJumpInTableView.m */; };
+		073B5AAD14B6EFB800FCDC0F /* WCJumpInRowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 073B5AAC14B6EFB800FCDC0F /* WCJumpInRowView.m */; };
+		073B5AB014B7007600FCDC0F /* WCJumpInSearchOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 073B5AAF14B7007500FCDC0F /* WCJumpInSearchOperation.m */; };
 		0745BE0614AAC4B400F541DC /* RSBorderlessButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0745BE0514AAC4B400F541DC /* RSBorderlessButtonCell.m */; };
 		0745BE0914AAD3DE00F541DC /* RSBorderlessPopUpButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0745BE0814AAD3DE00F541DC /* RSBorderlessPopUpButtonCell.m */; };
 		0745BE0C14AAD51D00F541DC /* RSBorderedGlassGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0745BE0B14AAD51D00F541DC /* RSBorderedGlassGradientView.m */; };
@@ -290,6 +296,19 @@
 		072BBC5E14AA700B0044ECC2 /* RSBottomBorderedGlassGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSBottomBorderedGlassGradientView.m; sourceTree = "<group>"; };
 		073B5A8F14B67B7400FCDC0F /* NSImage+RSExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+RSExtensions.h"; sourceTree = "<group>"; };
 		073B5A9014B67B7400FCDC0F /* NSImage+RSExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+RSExtensions.m"; sourceTree = "<group>"; };
+		073B5A9D14B6A4BF00FCDC0F /* WCJumpInWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCJumpInWindowController.h; sourceTree = "<group>"; };
+		073B5A9E14B6A4BF00FCDC0F /* WCJumpInWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCJumpInWindowController.m; sourceTree = "<group>"; };
+		073B5AA014B6A52A00FCDC0F /* WCJumpInDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCJumpInDataSource.h; sourceTree = "<group>"; };
+		073B5AA114B6A5EB00FCDC0F /* WCJumpInItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCJumpInItem.h; sourceTree = "<group>"; };
+		073B5AA214B6A92B00FCDC0F /* WCJumpInMatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCJumpInMatch.h; sourceTree = "<group>"; };
+		073B5AA314B6A92B00FCDC0F /* WCJumpInMatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCJumpInMatch.m; sourceTree = "<group>"; };
+		073B5AA614B6AA8A00FCDC0F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCJumpInWindow.xib; sourceTree = "<group>"; };
+		073B5AA814B6AD7300FCDC0F /* WCJumpInTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCJumpInTableView.h; sourceTree = "<group>"; };
+		073B5AA914B6AD7300FCDC0F /* WCJumpInTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCJumpInTableView.m; sourceTree = "<group>"; };
+		073B5AAB14B6EFB800FCDC0F /* WCJumpInRowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCJumpInRowView.h; sourceTree = "<group>"; };
+		073B5AAC14B6EFB800FCDC0F /* WCJumpInRowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCJumpInRowView.m; sourceTree = "<group>"; };
+		073B5AAE14B7007500FCDC0F /* WCJumpInSearchOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCJumpInSearchOperation.h; sourceTree = "<group>"; };
+		073B5AAF14B7007500FCDC0F /* WCJumpInSearchOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCJumpInSearchOperation.m; sourceTree = "<group>"; };
 		0745BE0414AAC4B400F541DC /* RSBorderlessButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSBorderlessButtonCell.h; sourceTree = "<group>"; };
 		0745BE0514AAC4B400F541DC /* RSBorderlessButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSBorderlessButtonCell.m; sourceTree = "<group>"; };
 		0745BE0714AAD3DE00F541DC /* RSBorderlessPopUpButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSBorderlessPopUpButtonCell.h; sourceTree = "<group>"; };
@@ -417,6 +436,7 @@
 				07EB8E2414B63EB800F8A8C6 /* WCAdvancedView.xib */,
 				07EB8E3014B6499500F8A8C6 /* WCReallyAdvancedView.xib */,
 				07EB8E3A14B64DB600F8A8C6 /* WCKeyboardView.xib */,
+				073B5AA514B6AA8A00FCDC0F /* WCJumpInWindow.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -460,23 +480,13 @@
 		0708964214A6C8660017BBE4 /* Source Editor */ = {
 			isa = PBXGroup;
 			children = (
-				071ECD0014A46BEA002409F8 /* WCSourceTextView.h */,
-				071ECD0114A46BEA002409F8 /* WCSourceTextView.m */,
-				07F5F76514A5732100F1F326 /* WCSourceTextViewDelegate.h */,
-				072880CF14B546D10082DE4C /* WCFindableTextView.h */,
-				072880D014B546D10082DE4C /* WCFindableTextView.m */,
 				0706D64E14A8F45B0092F880 /* WCSourceTextViewController.h */,
 				0706D64F14A8F45B0092F880 /* WCSourceTextViewController.m */,
-				07F5F76B14A59BCC00F1F326 /* WCLineNumberRulerView.h */,
-				07F5F76C14A59BCC00F1F326 /* WCLineNumberRulerView.m */,
-				0706D65914A8F8680092F880 /* WCSourceRulerView.h */,
-				0706D65A14A8F8690092F880 /* WCSourceRulerView.m */,
-				07F5F75514A4F37200F1F326 /* WCSourceHighlighter.h */,
-				07F5F75614A4F37200F1F326 /* WCSourceHighlighter.m */,
-				0706D65614A8F6D60092F880 /* WCSourceTextStorage.h */,
-				0706D65714A8F6D60092F880 /* WCSourceTextStorage.m */,
-				0745BE1B14AAFA0D00F541DC /* WCSourceTextStorageDelegate.h */,
+				073B5A9A14B6A43900FCDC0F /* Views */,
+				073B5A9C14B6A45D00FCDC0F /* Highlighter */,
+				073B5A9B14B6A45400FCDC0F /* Storage */,
 				0708964014A6C8050017BBE4 /* Tokens/Symbols */,
+				073B5A9814B6A3E400FCDC0F /* Jump In Window */,
 				0725436D14A83A1400C961B7 /* Jump Bar */,
 				0708964314A6C88A0017BBE4 /* Completion */,
 			);
@@ -709,6 +719,60 @@
 			children = (
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		073B5A9814B6A3E400FCDC0F /* Jump In Window */ = {
+			isa = PBXGroup;
+			children = (
+				073B5A9D14B6A4BF00FCDC0F /* WCJumpInWindowController.h */,
+				073B5A9E14B6A4BF00FCDC0F /* WCJumpInWindowController.m */,
+				073B5AA014B6A52A00FCDC0F /* WCJumpInDataSource.h */,
+				073B5AA114B6A5EB00FCDC0F /* WCJumpInItem.h */,
+				073B5AA214B6A92B00FCDC0F /* WCJumpInMatch.h */,
+				073B5AA314B6A92B00FCDC0F /* WCJumpInMatch.m */,
+				073B5AA814B6AD7300FCDC0F /* WCJumpInTableView.h */,
+				073B5AA914B6AD7300FCDC0F /* WCJumpInTableView.m */,
+				073B5AAB14B6EFB800FCDC0F /* WCJumpInRowView.h */,
+				073B5AAC14B6EFB800FCDC0F /* WCJumpInRowView.m */,
+				073B5AAE14B7007500FCDC0F /* WCJumpInSearchOperation.h */,
+				073B5AAF14B7007500FCDC0F /* WCJumpInSearchOperation.m */,
+			);
+			name = "Jump In Window";
+			sourceTree = "<group>";
+		};
+		073B5A9A14B6A43900FCDC0F /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				071ECD0014A46BEA002409F8 /* WCSourceTextView.h */,
+				071ECD0114A46BEA002409F8 /* WCSourceTextView.m */,
+				07F5F76514A5732100F1F326 /* WCSourceTextViewDelegate.h */,
+				072880CF14B546D10082DE4C /* WCFindableTextView.h */,
+				072880D014B546D10082DE4C /* WCFindableTextView.m */,
+				07F5F76B14A59BCC00F1F326 /* WCLineNumberRulerView.h */,
+				07F5F76C14A59BCC00F1F326 /* WCLineNumberRulerView.m */,
+				0706D65914A8F8680092F880 /* WCSourceRulerView.h */,
+				0706D65A14A8F8690092F880 /* WCSourceRulerView.m */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		073B5A9B14B6A45400FCDC0F /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				0706D65614A8F6D60092F880 /* WCSourceTextStorage.h */,
+				0706D65714A8F6D60092F880 /* WCSourceTextStorage.m */,
+				0745BE1B14AAFA0D00F541DC /* WCSourceTextStorageDelegate.h */,
+			);
+			name = Storage;
+			sourceTree = "<group>";
+		};
+		073B5A9C14B6A45D00FCDC0F /* Highlighter */ = {
+			isa = PBXGroup;
+			children = (
+				07F5F75514A4F37200F1F326 /* WCSourceHighlighter.h */,
+				07F5F75614A4F37200F1F326 /* WCSourceHighlighter.m */,
+			);
+			name = Highlighter;
 			sourceTree = "<group>";
 		};
 		0745BE2914ABF7F200F541DC /* Fonts & Colors */ = {
@@ -963,6 +1027,7 @@
 				07EB8E3214B6499500F8A8C6 /* WCReallyAdvancedView.xib in Resources */,
 				07EB8E3914B64D9A00F8A8C6 /* Keyboard.tiff in Resources */,
 				07EB8E3C14B64DB600F8A8C6 /* WCKeyboardView.xib in Resources */,
+				073B5AA714B6AA8A00FCDC0F /* WCJumpInWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1054,6 +1119,11 @@
 				07EB8E2E14B644CA00F8A8C6 /* WCReallyAdvancedViewController.m in Sources */,
 				07EB8E3614B64D2500F8A8C6 /* WCKeyboardViewController.m in Sources */,
 				073B5A9114B67B7400FCDC0F /* NSImage+RSExtensions.m in Sources */,
+				073B5A9F14B6A4BF00FCDC0F /* WCJumpInWindowController.m in Sources */,
+				073B5AA414B6A92B00FCDC0F /* WCJumpInMatch.m in Sources */,
+				073B5AAA14B6AD7300FCDC0F /* WCJumpInTableView.m in Sources */,
+				073B5AAD14B6EFB800FCDC0F /* WCJumpInRowView.m in Sources */,
+				073B5AB014B7007600FCDC0F /* WCJumpInSearchOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1141,6 +1211,14 @@
 				072BBC5814AA69EF0044ECC2 /* en */,
 			);
 			name = WCPreferencesWindow.xib;
+			sourceTree = "<group>";
+		};
+		073B5AA514B6AA8A00FCDC0F /* WCJumpInWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				073B5AA614B6AA8A00FCDC0F /* en */,
+			);
+			name = WCJumpInWindow.xib;
 			sourceTree = "<group>";
 		};
 		0745BE3114ABF86700F541DC /* WCEditorView.xib */ = {

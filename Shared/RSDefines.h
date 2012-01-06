@@ -38,6 +38,7 @@
 #define NSLogInteger(intToLog) NSLog(@"%ld",(intToLog))
 #define NSLogUnsignedInteger(uintToLog) NSLog(@"%lu",(uintToLog))
 #define NSLogSize(sizeToLog) NSLog(@"%@",NSStringFromSize(sizeToLog))
+#define NSLogFloat(floatToLog) NSLog(@"%f",(floatToLog))
 
 static const NSRange NSNotFoundRange = {.location = NSNotFound};
 static const NSRange NSEmptyRange = {.location = 0, .length = 0};

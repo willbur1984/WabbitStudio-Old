@@ -15,7 +15,6 @@
 #import "NSTextView+WCExtensions.h"
 #import "WCArgumentPlaceholderCell.h"
 #import "RSDefines.h"
-#import "WCEditorViewController.h"
 #import "WCFontAndColorTheme.h"
 #import "WCFontAndColorThemeManager.h"
 
@@ -31,8 +30,7 @@
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
-	[_completionTimer invalidate];
-	_completionTimer = nil;
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	_textStorage = nil;
 	_sourceScanner = nil;
 	_sourceHighlighter = nil;
@@ -60,8 +58,6 @@
 	[[self textView] setSelectedRange:NSEmptyRange];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewBoundsDidChange:) name:NSViewBoundsDidChangeNotification object:[[[self textView] enclosingScrollView] contentView]];
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidProcessEditing:) name:NSTextStorageDidProcessEditingNotification object:[self textStorage]];
 }
 
 - (void)textView:(NSTextView *)textView clickedOnCell:(id<NSTextAttachmentCell>)cell inRect:(NSRect)cellFrame atIndex:(NSUInteger)charIndex {
@@ -130,52 +126,6 @@
 		_scrollingHighlightTimer = [NSTimer timerWithTimeInterval:kScrollingHighlightTimerDelay target:self selector:@selector(_scrollingHighlightTimerCallback:) userInfo:nil repeats:NO];
 		[[NSRunLoop mainRunLoop] addTimer:_scrollingHighlightTimer forMode:NSRunLoopCommonModes];
 	}
-}
-
-- (void)_textStorageDidProcessEditing:(NSNotification *)note {
-	if (([[note object] editedMask] & NSTextStorageEditedCharacters) == 0)
-		return;
-	else if (![[NSUserDefaults standardUserDefaults] boolForKey:WCEditorSuggestCompletionsWhileTypingKey])
-		return;
-	else if ([[[self textView] window] firstResponder] != [self textView] ||
-			 [[note object] changeInLength] != 1 ||
-			 [[self undoManager] isUndoing] ||
-			 [[self undoManager] isRedoing]) {
-		[_completionTimer invalidate];
-		_completionTimer = nil;
-		return;
-	}
-	
-	static NSCharacterSet *legalChars;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		NSMutableCharacterSet *charSet = [[[NSCharacterSet letterCharacterSet] mutableCopy] autorelease];
-		[charSet formUnionWithCharacterSet:[NSCharacterSet decimalDigitCharacterSet]];
-		[charSet formUnionWithCharacterSet:[NSCharacterSet characterSetWithCharactersInString:@"_!?.#"]];
-		legalChars = [charSet copy];
-	});
-	
-	unichar charAtIndex = [[[self textView] string] characterAtIndex:[[note object] editedRange].location];
-	if (![legalChars characterIsMember:charAtIndex]) {
-		[_completionTimer invalidate];
-		_completionTimer = nil;
-		return;
-	}
-	
-	CGFloat kCompletionTimerDelay = [[NSUserDefaults standardUserDefaults] floatForKey:WCEditorSuggestCompletionsWhileTypingDelayKey];
-	
-	if (_completionTimer)
-		[_completionTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:kCompletionTimerDelay]];
-	else {
-		_completionTimer = [NSTimer scheduledTimerWithTimeInterval:kCompletionTimerDelay target:self selector:@selector(_completionTimerCallback:) userInfo:nil repeats:NO];
-	}
-}
-
-- (void)_completionTimerCallback:(NSTimer *)timer {
-	[_completionTimer invalidate];
-	_completionTimer = nil;
-	
-	[[self textView] complete:nil];
 }
 
 - (void)_scrollingHighlightTimerCallback:(NSTimer *)timer {

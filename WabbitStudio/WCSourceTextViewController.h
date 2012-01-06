@@ -16,7 +16,6 @@
 	__weak WCSourceTextStorage *_textStorage;
 	__weak WCSourceHighlighter *_sourceHighlighter;
 	NSTimer *_scrollingHighlightTimer;
-	NSTimer *_completionTimer;
 }
 @property (readwrite,assign,nonatomic) IBOutlet WCSourceTextView *textView;
 

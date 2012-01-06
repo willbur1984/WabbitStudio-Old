@@ -46,6 +46,19 @@
 	return retval;
 }
 
+- (NSRange)jumpInRange {
+	return [self range];
+}
+- (NSImage *)jumpInImage {
+	return [self icon];
+}
+- (NSString *)jumpInName {
+	return [self name];
+}
+- (NSURL *)jumpInLocationURL {
+	return [[NSURL URLWithString:[self jumpInName]] URLByAppendingPathComponent:[NSString stringWithFormat:NSLocalizedString(@"line %lu", @"jump in location url line format string"),[[[[self sourceScanner] textStorage] string] lineNumberForRange:[self range]]+1]];
+}
+
 + (id)sourceSymbolOfType:(WCSourceSymbolType)type range:(NSRange)range name:(NSString *)name; {
 	return [[[[self class] alloc] initWithType:type range:range name:name] autorelease];
 }

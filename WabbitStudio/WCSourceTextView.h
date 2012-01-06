@@ -9,12 +9,14 @@
 #import "WCFindableTextView.h"
 #import "WCSourceTextViewDelegate.h"
 #import "RSToolTipView.h"
+#import "WCJumpInDataSource.h"
 
-@interface WCSourceTextView : WCFindableTextView <RSToolTipView> {
+@interface WCSourceTextView : WCFindableTextView <RSToolTipView,WCJumpInDataSource> {
 	__weak id <WCSourceTextViewDelegate> _delegate;
 	id _windowDidResignKeyObservingToken;
 	id _windowDidBecomeKeyObservingToken;
 	id _windowDidResizeObservingToken;
+	NSTimer *_completionTimer;
 }
 @property (readwrite,assign,nonatomic) IBOutlet id <WCSourceTextViewDelegate> delegate;
 
@@ -23,6 +25,8 @@
 
 - (IBAction)jumpToSelection:(id)sender;
 - (IBAction)jumpToDefinition:(id)sender;
+
+- (IBAction)jumpInFile:(id)sender;
 
 - (IBAction)shiftLeft:(id)sender;
 - (IBAction)shiftRight:(id)sender;

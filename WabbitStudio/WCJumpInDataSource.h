@@ -1,0 +1,17 @@
+//
+//  WCJumpInDataSource.h
+//  WabbitStudio
+//
+//  Created by William Towe on 1/5/12.
+//  Copyright (c) 2012 Revolution Software. All rights reserved.
+//
+
+#import <Foundation/NSObject.h>
+
+@protocol WCJumpInDataSource <NSObject>
+@required
+// return an array of id <WCJumpInItem> objects
+- (NSArray *)jumpInItems;
+- (NSTextView *)jumpInTextView;
+- (NSString *)jumpInFileName;
+@end

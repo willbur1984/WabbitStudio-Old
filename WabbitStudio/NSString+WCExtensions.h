@@ -12,4 +12,7 @@
 - (NSUInteger)lineNumberForRange:(NSRange)range;
 
 - (NSString *)camelCaseString;
+
+// this is extremely expensive
+- (NSSet *)substrings;
 @end
