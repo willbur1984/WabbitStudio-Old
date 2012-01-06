@@ -15,7 +15,6 @@
 @interface WCJumpInWindowController ()
 @property (readwrite,copy,nonatomic) NSArray *items;
 @property (readwrite,assign,nonatomic) id <WCJumpInDataSource> dataSource;
-@property (readwrite,copy,nonatomic) NSString *statusString;
 @end
 
 @implementation WCJumpInWindowController
@@ -62,7 +61,7 @@
 	}
 	else if (commandSelector == @selector(moveDown:)) {
 		NSIndexSet *indexes = [[self tableView] selectedRowIndexes];
-		if (![indexes count] || [indexes firstIndex] == [[self matches] count])
+		if (![indexes count] || [indexes firstIndex] == [[self matches] count]-1)
 			NSBeep();
 		else {
 			[[self tableView] selectRowIndexes:[NSIndexSet indexSetWithIndex:[indexes firstIndex]+1] byExtendingSelection:NO];

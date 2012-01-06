@@ -10,48 +10,62 @@
 #import "WCJumpInWindowController.h"
 #import "NSString+WCExtensions.h"
 #import "WCJumpInMatch.h"
+#import "RSDefines.h"
 
 @implementation WCJumpInSearchOperation
 - (void)dealloc {
 	_windowController = nil;
+	[_searchString release];
 	[super dealloc];
 }
 
 - (void)main {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	NSString *searchString = [[[_windowController searchString] copy] autorelease];
+	NSString *inputString = _searchString;
 	
 	NSMutableArray *matches = [NSMutableArray arrayWithCapacity:0];
-	NSSet *substrings = [searchString substrings];
+	NSMutableString *pattern = [NSMutableString stringWithCapacity:0];
+	NSUInteger inputIndex, inputLength = [inputString length];
 	
-	if ([self isCancelled])
-		goto CLEANUP;
+	for (inputIndex=0; inputIndex<inputLength; inputIndex++) {
+		[pattern appendFormat:@"[^%@]*(%@)",[inputString substringWithRange:NSMakeRange(inputIndex, 1)],[inputString substringWithRange:NSMakeRange(inputIndex, 1)]];
+	}
+	
+	[pattern appendString:@".*"];
+	
+	NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionCaseInsensitive error:NULL];
+	
+#ifdef DEBUG
+    NSAssert(regex, @"regex cannot be nil!");
+	NSLogObject(pattern);
+#endif
 	
 	for (id <WCJumpInItem> item in [_windowController items]) {
 		NSMutableIndexSet *indexes = [NSMutableIndexSet indexSet];
+		NSString *itemString = [[item jumpInName] lowercaseString];
 		
-		for (NSString *string in substrings) {
-			NSRange matchRange = [[item jumpInName] rangeOfString:string options:NSLiteralSearch|NSCaseInsensitiveSearch];
-			if (matchRange.location == NSNotFound)
-				continue;
-			
-			[indexes addIndexesInRange:matchRange];
-		}
+		NSTextCheckingResult *result = [regex firstMatchInString:itemString options:0 range:NSMakeRange(0, [itemString length])];
 		
-		if ([self isCancelled])
-			goto CLEANUP;
-		
-		if (![indexes count] || [indexes count] > [searchString length])
+		if (!result)
 			continue;
 		
+		NSUInteger rangeIndex, rangeCount = [result numberOfRanges];
+		for (rangeIndex=1; rangeIndex<rangeCount; rangeIndex++) {
+			[indexes addIndexesInRange:[result rangeAtIndex:rangeIndex]];
+		}
+		
 		NSMutableArray *ranges = [NSMutableArray arrayWithCapacity:0];
+		CGFloat itemWeight = [indexes count];
 		
 		[indexes enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
 			[ranges addObject:[NSValue valueWithRange:range]];
 		}];
 		
-		[matches addObject:[WCJumpInMatch jumpInMatchWithItem:item ranges:ranges weight:[indexes count]]];
+		[matches addObject:[WCJumpInMatch jumpInMatchWithItem:item ranges:ranges weight:itemWeight/[ranges count]]];
 	}
+	
+	if ([self isCancelled])
+		goto CLEANUP;
 	
 	[matches sortUsingDescriptors:[NSArray arrayWithObjects:[NSSortDescriptor sortDescriptorWithKey:@"weightNumber" ascending:NO selector:@selector(compare:)],[NSSortDescriptor sortDescriptorWithKey:@"self" ascending:YES comparator:^NSComparisonResult(id obj1, id obj2) {
 		return [[[obj1 item] jumpInName] localizedStandardCompare:[[obj2 item] jumpInName]];
@@ -61,8 +75,11 @@
 		goto CLEANUP;
 	
 	dispatch_async(dispatch_get_main_queue(), ^{
-		[[_windowController mutableMatches] removeAllObjects];
-		[[_windowController mutableMatches] addObjectsFromArray:matches];
+		if ([matches count])
+			[_windowController setStatusString:nil];
+		else
+			[_windowController setStatusString:[NSString stringWithFormat:NSLocalizedString(@"found %lu of %lu matche(s)", @"jump in window status format string"),[matches count],[[_windowController items] count]]];
+		[[_windowController mutableMatches] setArray:matches];
 	});
 	
 CLEANUP:
@@ -74,6 +91,7 @@ CLEANUP:
 		return nil;
 	
 	_windowController = windowController;
+	_searchString = [[windowController searchString] copy];
 	
 	return self;
 }

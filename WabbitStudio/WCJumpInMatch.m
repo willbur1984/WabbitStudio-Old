@@ -22,6 +22,10 @@
 	[super dealloc];
 }
 
+- (NSString *)description {
+	return [NSString stringWithFormat:@"item: %@ weight: %f",[self item],[self weight]];
+}
+
 - (id)forwardingTargetForSelector:(SEL)selector {
 	return [self item];
 }

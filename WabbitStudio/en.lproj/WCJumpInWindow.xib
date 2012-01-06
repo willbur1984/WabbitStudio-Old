@@ -84,7 +84,7 @@
 											<string key="NSFrameSize">{350, 217}</string>
 											<reference key="NSSuperview" ref="693511109"/>
 											<reference key="NSWindow"/>
-											<reference key="NSNextKeyView" ref="123251441"/>
+											<reference key="NSNextKeyView" ref="667851288"/>
 											<string key="NSReuseIdentifierKey">_NS:1828</string>
 											<bool key="NSEnabled">YES</bool>
 											<object class="_NSCornerView" key="NSCornerView">
@@ -219,7 +219,7 @@
 							<string key="NSFrame">{{0, 49}, {350, 217}}</string>
 							<reference key="NSSuperview" ref="1006"/>
 							<reference key="NSWindow"/>
-							<reference key="NSNextKeyView" ref="667851288"/>
+							<reference key="NSNextKeyView" ref="693511109"/>
 							<string key="NSReuseIdentifierKey">_NS:1824</string>
 							<int key="NSsFlags">133648</int>
 							<reference key="NSVScroller" ref="1017652525"/>
@@ -263,7 +263,6 @@
 							<string key="NSFrame">{{263, 12}, {73, 32}}</string>
 							<reference key="NSSuperview" ref="1006"/>
 							<reference key="NSWindow"/>
-							<reference key="NSNextKeyView"/>
 							<string key="NSReuseIdentifierKey">_NS:687</string>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="889562769">
@@ -417,7 +416,7 @@
 				<string key="NSScreenRect">{{0, 0}, {1680, 1028}}</string>
 				<string key="NSMinSize">{350, 322}</string>
 				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
-				<int key="NSWindowAnimationBehavior">3</int>
+				<int key="NSWindowAnimationBehavior">5</int>
 				<bool key="NSWindowIsRestorable">NO</bool>
 			</object>
 			<object class="NSArrayController" id="1025901847">

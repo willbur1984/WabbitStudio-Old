@@ -12,6 +12,7 @@
 
 @interface WCJumpInSearchOperation : NSOperation {
 	__weak WCJumpInWindowController *_windowController;
+	NSString *_searchString;
 }
 - (id)initWithJumpInWindowController:(WCJumpInWindowController *)windowController;
 @end

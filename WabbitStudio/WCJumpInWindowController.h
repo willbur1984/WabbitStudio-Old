@@ -24,7 +24,7 @@
 @property (readwrite,assign,nonatomic) IBOutlet NSTableView *tableView;
 
 @property (readwrite,copy,nonatomic) NSString *searchString;
-@property (readonly,copy,nonatomic) NSString *statusString;
+@property (readwrite,copy,nonatomic) NSString *statusString;
 @property (readonly,copy,nonatomic) NSArray *items;
 @property (readonly,nonatomic) NSArray *matches;
 @property (readonly,nonatomic) NSMutableArray *mutableMatches;
