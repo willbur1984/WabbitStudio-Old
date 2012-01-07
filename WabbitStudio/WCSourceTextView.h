@@ -26,6 +26,7 @@
 - (IBAction)jumpToSelection:(id)sender;
 - (IBAction)jumpToDefinition:(id)sender;
 
+- (IBAction)jumpToLine:(id)sender;
 - (IBAction)jumpInFile:(id)sender;
 
 - (IBAction)shiftLeft:(id)sender;

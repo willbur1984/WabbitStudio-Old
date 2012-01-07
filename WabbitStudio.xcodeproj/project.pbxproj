@@ -120,6 +120,8 @@
 		07B4740514AE3CAA00E3F9D0 /* RSNumberToBoolTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B4740414AE3CAA00E3F9D0 /* RSNumberToBoolTransformer.m */; };
 		07B4740814AE3E0A00E3F9D0 /* RSNegateNumberToBoolTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B4740714AE3E0A00E3F9D0 /* RSNegateNumberToBoolTransformer.m */; };
 		07B4740B14AE433300E3F9D0 /* RSFindSearchField.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B4740A14AE433300E3F9D0 /* RSFindSearchField.m */; };
+		07BC6CB614B7DE43007ECB3F /* WCJumpToLineWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07BC6CB514B7DE43007ECB3F /* WCJumpToLineWindowController.m */; };
+		07BC6CB914B7E3DD007ECB3F /* WCJumpToLineWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07BC6CB714B7E3DD007ECB3F /* WCJumpToLineWindow.xib */; };
 		07CC8F3F14B7DBDB0081EE69 /* WCJumpInCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CC8F3E14B7DBDB0081EE69 /* WCJumpInCellView.m */; };
 		07EB8E2214B63C4F00F8A8C6 /* BGHUDAppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0791BE5314ADA3B80004AC16 /* BGHUDAppKit.framework */; };
 		07EB8E2314B63C5600F8A8C6 /* BGHUDAppKit.framework in Copy Private Frameworks */ = {isa = PBXBuildFile; fileRef = 0791BE5314ADA3B80004AC16 /* BGHUDAppKit.framework */; };
@@ -364,6 +366,9 @@
 		07B4740714AE3E0A00E3F9D0 /* RSNegateNumberToBoolTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSNegateNumberToBoolTransformer.m; sourceTree = "<group>"; };
 		07B4740914AE433300E3F9D0 /* RSFindSearchField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSFindSearchField.h; sourceTree = "<group>"; };
 		07B4740A14AE433300E3F9D0 /* RSFindSearchField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSFindSearchField.m; sourceTree = "<group>"; };
+		07BC6CB414B7DE43007ECB3F /* WCJumpToLineWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCJumpToLineWindowController.h; sourceTree = "<group>"; };
+		07BC6CB514B7DE43007ECB3F /* WCJumpToLineWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCJumpToLineWindowController.m; sourceTree = "<group>"; };
+		07BC6CB814B7E3DD007ECB3F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCJumpToLineWindow.xib; sourceTree = "<group>"; };
 		07CC8F3D14B7DBDB0081EE69 /* WCJumpInCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCJumpInCellView.h; sourceTree = "<group>"; };
 		07CC8F3E14B7DBDB0081EE69 /* WCJumpInCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCJumpInCellView.m; sourceTree = "<group>"; };
 		07EB8E2514B63EB800F8A8C6 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCAdvancedView.xib; sourceTree = "<group>"; };
@@ -440,6 +445,7 @@
 				07EB8E3014B6499500F8A8C6 /* WCReallyAdvancedView.xib */,
 				07EB8E3A14B64DB600F8A8C6 /* WCKeyboardView.xib */,
 				073B5AA514B6AA8A00FCDC0F /* WCJumpInWindow.xib */,
+				07BC6CB714B7E3DD007ECB3F /* WCJumpToLineWindow.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -485,11 +491,12 @@
 			children = (
 				0706D64E14A8F45B0092F880 /* WCSourceTextViewController.h */,
 				0706D64F14A8F45B0092F880 /* WCSourceTextViewController.m */,
+				07BC6CB314B7DDF2007ECB3F /* Jump to Line */,
 				073B5A9A14B6A43900FCDC0F /* Views */,
 				073B5A9C14B6A45D00FCDC0F /* Highlighter */,
 				073B5A9B14B6A45400FCDC0F /* Storage */,
 				0708964014A6C8050017BBE4 /* Tokens/Symbols */,
-				073B5A9814B6A3E400FCDC0F /* Jump In Window */,
+				073B5A9814B6A3E400FCDC0F /* Jump in File */,
 				0725436D14A83A1400C961B7 /* Jump Bar */,
 				0708964314A6C88A0017BBE4 /* Completion */,
 			);
@@ -724,7 +731,7 @@
 			name = Model;
 			sourceTree = "<group>";
 		};
-		073B5A9814B6A3E400FCDC0F /* Jump In Window */ = {
+		073B5A9814B6A3E400FCDC0F /* Jump in File */ = {
 			isa = PBXGroup;
 			children = (
 				073B5A9D14B6A4BF00FCDC0F /* WCJumpInWindowController.h */,
@@ -742,7 +749,7 @@
 				07CC8F3D14B7DBDB0081EE69 /* WCJumpInCellView.h */,
 				07CC8F3E14B7DBDB0081EE69 /* WCJumpInCellView.m */,
 			);
-			name = "Jump In Window";
+			name = "Jump in File";
 			sourceTree = "<group>";
 		};
 		073B5A9A14B6A43900FCDC0F /* Views */ = {
@@ -941,6 +948,15 @@
 			name = Transformers;
 			sourceTree = "<group>";
 		};
+		07BC6CB314B7DDF2007ECB3F /* Jump to Line */ = {
+			isa = PBXGroup;
+			children = (
+				07BC6CB414B7DE43007ECB3F /* WCJumpToLineWindowController.h */,
+				07BC6CB514B7DE43007ECB3F /* WCJumpToLineWindowController.m */,
+			);
+			name = "Jump to Line";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1033,6 +1049,7 @@
 				07EB8E3914B64D9A00F8A8C6 /* Keyboard.tiff in Resources */,
 				07EB8E3C14B64DB600F8A8C6 /* WCKeyboardView.xib in Resources */,
 				073B5AA714B6AA8A00FCDC0F /* WCJumpInWindow.xib in Resources */,
+				07BC6CB914B7E3DD007ECB3F /* WCJumpToLineWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1130,6 +1147,7 @@
 				073B5AAD14B6EFB800FCDC0F /* WCJumpInRowView.m in Sources */,
 				073B5AB014B7007600FCDC0F /* WCJumpInSearchOperation.m in Sources */,
 				07CC8F3F14B7DBDB0081EE69 /* WCJumpInCellView.m in Sources */,
+				07BC6CB614B7DE43007ECB3F /* WCJumpToLineWindowController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1257,6 +1275,14 @@
 				078F041B14AD78640080ADBC /* en */,
 			);
 			name = RSFindBarView.xib;
+			sourceTree = "<group>";
+		};
+		07BC6CB714B7E3DD007ECB3F /* WCJumpToLineWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				07BC6CB814B7E3DD007ECB3F /* en */,
+			);
+			name = WCJumpToLineWindow.xib;
 			sourceTree = "<group>";
 		};
 		07EB8E2414B63EB800F8A8C6 /* WCAdvancedView.xib */ = {

@@ -699,11 +699,11 @@
 						<object class="NSMenu" key="NSSubmenu" id="287866681">
 							<string key="NSTitle">Navigate</string>
 							<array class="NSMutableArray" key="NSMenuItems">
-								<object class="NSMenuItem" id="628564588">
+								<object class="NSMenuItem" id="746437658">
 									<reference key="NSMenu" ref="287866681"/>
-									<string key="NSTitle">Jump to Definition</string>
-									<string key="NSKeyEquiv">j</string>
-									<int key="NSKeyEquivModMask">1310720</int>
+									<string key="NSTitle">Jump to Line</string>
+									<string key="NSKeyEquiv">l</string>
+									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="1033313550"/>
 									<reference key="NSMixedImage" ref="310636482"/>
@@ -727,10 +727,19 @@
 									<reference key="NSOnImage" ref="1033313550"/>
 									<reference key="NSMixedImage" ref="310636482"/>
 								</object>
+								<object class="NSMenuItem" id="628564588">
+									<reference key="NSMenu" ref="287866681"/>
+									<string key="NSTitle">Jump to Definition</string>
+									<string key="NSKeyEquiv">J</string>
+									<int key="NSKeyEquivModMask">1048576</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="1033313550"/>
+									<reference key="NSMixedImage" ref="310636482"/>
+								</object>
 								<object class="NSMenuItem" id="266613308">
 									<reference key="NSMenu" ref="287866681"/>
 									<string key="NSTitle">Jump in File…</string>
-									<string key="NSKeyEquiv">l</string>
+									<string key="NSKeyEquiv">j</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="1033313550"/>
@@ -1366,6 +1375,14 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
+						<string key="label">jumpToLine:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="746437658"/>
+					</object>
+					<int key="connectionID">581</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
 						<string key="label">preferences:</string>
 						<reference key="source" ref="968104485"/>
 						<reference key="destination" ref="609285721"/>
@@ -1937,9 +1954,10 @@
 							<reference ref="988059890"/>
 							<reference ref="955723144"/>
 							<reference ref="679109234"/>
-							<reference ref="628564588"/>
 							<reference ref="266613308"/>
 							<reference ref="1002091205"/>
+							<reference ref="628564588"/>
+							<reference ref="746437658"/>
 						</array>
 						<reference key="parent" ref="1059282136"/>
 					</object>
@@ -2059,6 +2077,11 @@
 						<reference key="object" ref="1002091205"/>
 						<reference key="parent" ref="287866681"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">580</int>
+						<reference key="object" ref="746437658"/>
+						<reference key="parent" ref="287866681"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -2155,6 +2178,7 @@
 				<string key="577.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="578.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="58.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="580.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="72.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="73.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="74.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2171,7 +2195,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">579</int>
+			<int key="maxID">581</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -2269,6 +2293,7 @@
 						<string key="commentUncommentSelection:">id</string>
 						<string key="jumpInFile:">id</string>
 						<string key="jumpToDefinition:">id</string>
+						<string key="jumpToLine:">id</string>
 						<string key="jumpToNextPlaceholder:">id</string>
 						<string key="jumpToPreviousPlaceholder:">id</string>
 						<string key="jumpToSelection:">id</string>
@@ -2291,6 +2316,10 @@
 						</object>
 						<object class="IBActionInfo" key="jumpToDefinition:">
 							<string key="name">jumpToDefinition:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="jumpToLine:">
+							<string key="name">jumpToLine:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="jumpToNextPlaceholder:">

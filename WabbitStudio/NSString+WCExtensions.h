@@ -10,9 +10,19 @@
 
 @interface NSString (WCExtensions)
 - (NSUInteger)lineNumberForRange:(NSRange)range;
+- (NSRange)rangeForLineNumber:(NSUInteger)lineNumber;
+- (NSRange)lineNumberRangeForRange:(NSRange)range;
+- (NSUInteger)numberOfLines;
 
 - (NSString *)camelCaseString;
 
-// this is extremely expensive
-- (NSSet *)substrings;
+- (NSUInteger)valueFromHexadecimalString;
+- (NSUInteger)valueFromBinaryString;
+- (NSUInteger)valueFromString;
+
+- (NSString *)stringByRemovingInvalidHexadecimalDigits;
+- (NSString *)stringByRemovingInvalidBinaryDigits;
+- (NSString *)stringByRemovingInvalidDigits;
+
++ (NSString *)UUIDString;
 @end

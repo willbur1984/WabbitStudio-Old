@@ -25,6 +25,7 @@
 #import "WCSourceHighlighter.h"
 #import "WCKeyboardViewController.h"
 #import "WCJumpInWindowController.h"
+#import "WCJumpToLineWindowController.h"
 
 @interface WCSourceTextView ()
 
@@ -225,6 +226,16 @@
 	else
 		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
+#pragma mark NSMenuValidation
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
+	if ([menuItem action] == @selector(jumpInFile:)) {
+		WCSourceScanner *sourceScanner = [[self delegate] sourceScannerForSourceTextView:self];
+		
+		[menuItem setTitle:[NSString stringWithFormat:NSLocalizedString(@"Jump in \"%@\"", @"jump in file menu item title format string"),[[sourceScanner delegate] fileDisplayNameForSourceScanner:sourceScanner]]];
+	}
+	return YES;
+}
+
 #pragma mark NSUserInterfaceValidations
 - (BOOL)validateUserInterfaceItem:(id<NSValidatedUserInterfaceItem>)anItem {
 	return [super validateUserInterfaceItem:anItem];
@@ -278,6 +289,9 @@
 	}
 	
 	[self setSelectedRange:placeholderRange];
+}
+- (IBAction)jumpToLine:(id)sender; {
+	[[WCJumpToLineWindowController sharedWindowController] showJumpToLineWindowForTextView:self];
 }
 - (IBAction)jumpToSelection:(id)sender; {
 	[self scrollRangeToVisible:[self selectedRange]];
@@ -787,6 +801,15 @@
 	});
 	
 	if (![legalChars characterIsMember:[string characterAtIndex:0]]) {
+		[_completionTimer invalidate];
+		_completionTimer = nil;
+		return;
+	}
+	
+	NSRange completionRange = [self rangeForUserCompletion];
+	NSRange lineRange = [[self string] lineRangeForRange:completionRange];
+	
+	if (completionRange.location == lineRange.location) {
 		[_completionTimer invalidate];
 		_completionTimer = nil;
 		return;
