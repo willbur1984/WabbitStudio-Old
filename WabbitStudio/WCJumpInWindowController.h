@@ -16,6 +16,10 @@
 	NSString *_searchString;
 	NSString *_statusString;
 	NSOperationQueue *_operationQueue;
+	struct {
+		unsigned int searching:1;
+		unsigned int RESERVED:31;
+	} _jumpInFlags;
 }
 @property (readwrite,assign,nonatomic) IBOutlet NSArrayController *arrayController;
 @property (readwrite,assign,nonatomic) IBOutlet NSButton *jumpButton;
@@ -28,6 +32,7 @@
 @property (readonly,copy,nonatomic) NSArray *items;
 @property (readonly,nonatomic) NSArray *matches;
 @property (readonly,nonatomic) NSMutableArray *mutableMatches;
+@property (readwrite,assign,nonatomic,getter = isSearching) BOOL searching; 
 
 + (WCJumpInWindowController *)sharedWindowController;
 

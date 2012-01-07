@@ -72,8 +72,6 @@ typedef enum _RSFindBarViewControllerViewMode {
 - (IBAction)replace:(id)sender;
 - (IBAction)replaceAndFind:(id)sender;
 
-+ (NSDictionary *)findTextAttributes;
-
 - (void)performCleanup;
 
 @end

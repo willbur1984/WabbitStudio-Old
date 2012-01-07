@@ -38,6 +38,9 @@
 	[super windowDidLoad];
 	
 	[[self window] makeFirstResponder:[self searchField]];
+	
+	[[self tableView] setTarget:self];
+	[[self tableView] setDoubleAction:@selector(_tableViewDoubleClick:)];
 }
 
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector {
@@ -111,9 +114,13 @@
 
 - (IBAction)search:(id)sender; {
 	if (![[self searchString] length]) {
-		[[self mutableMatches] removeAllObjects];
+		[[self mutableMatches] setArray:nil];
+		[self setStatusString:nil];
+		[self setSearching:NO];
 		return;
 	}
+	
+	[self setSearching:YES];
 	
 	[_operationQueue cancelAllOperations];
 	[_operationQueue addOperation:[[[WCJumpInSearchOperation alloc] initWithJumpInWindowController:self] autorelease]];
@@ -150,10 +157,10 @@
 	[_matches replaceObjectsAtIndexes:indexes withObjects:array];
 }
 @dynamic dataSource;
-- (id<WCJumpInDataSource>)dataSource {
+- (id <WCJumpInDataSource>)dataSource {
 	return _dataSource;
 }
-- (void)setDataSource:(id<WCJumpInDataSource>)dataSource {
+- (void)setDataSource:(id <WCJumpInDataSource>)dataSource {
 	_dataSource = dataSource;
 	
 	[self setItems:[dataSource jumpInItems]];
@@ -168,5 +175,20 @@
 @synthesize cancelButton=_cancelButton;
 @synthesize searchField=_searchField;
 @synthesize tableView=_tableView;
+@dynamic searching;
+- (BOOL)isSearching {
+	return _jumpInFlags.searching;
+}
+- (void)setSearching:(BOOL)searching {
+	_jumpInFlags.searching = searching;
+}
 
+- (IBAction)_tableViewDoubleClick:(id)sender {
+	if (![[[self arrayController] selectedObjects] count]) {
+		NSBeep();
+		return;
+	}
+	
+	[self jump:nil];
+}
 @end

@@ -74,7 +74,7 @@
 - (void)showCompletionWindowControllerForSourceTextView:(WCSourceTextView *)textView; {
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		[[self window] setAnimationBehavior:NSWindowAnimationBehaviorUtilityWindow];
+		[[self window] setAnimationBehavior:NSWindowAnimationBehaviorAlertPanel];
 	});
 	
 	if ([self textView])

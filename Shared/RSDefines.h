@@ -144,4 +144,11 @@ static inline uint8_t BinaryValueForCharacter(unichar character) {
 			return 0;
 	}
 }
+
+static inline NSDictionary *RSFindTextAttributes() {
+	return [NSDictionary dictionaryWithObjectsAndKeys:[NSColor yellowColor],NSBackgroundColorAttributeName,[NSColor orangeColor],NSUnderlineColorAttributeName,[NSNumber numberWithUnsignedInteger:NSUnderlinePatternSolid|NSUnderlineStyleDouble],NSUnderlineStyleAttributeName, nil];
+}
+static inline NSDictionary *RSTransparentFindTextAttributes() {
+	return [NSDictionary dictionaryWithObjectsAndKeys:[[NSColor yellowColor] colorWithAlphaComponent:0.5],NSBackgroundColorAttributeName,[[NSColor orangeColor] colorWithAlphaComponent:0.5],NSUnderlineColorAttributeName,[NSNumber numberWithUnsignedInteger:NSUnderlinePatternSolid|NSUnderlineStyleDouble],NSUnderlineStyleAttributeName, nil];
+}
 #endif

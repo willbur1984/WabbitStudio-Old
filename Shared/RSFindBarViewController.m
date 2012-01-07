@@ -158,10 +158,6 @@
 	return self;
 }
 
-+ (NSDictionary *)findTextAttributes; {
-	return [NSDictionary dictionaryWithObjectsAndKeys:[NSColor yellowColor],NSBackgroundColorAttributeName,[NSColor orangeColor],NSUnderlineColorAttributeName,[NSNumber numberWithUnsignedInteger:NSUnderlinePatternSolid|NSUnderlineStyleDouble],NSUnderlineStyleAttributeName, nil];
-}
-
 - (void)performCleanup; {
 	[[NSNotificationCenter defaultCenter] removeObserver:_textStorageDidProcessEditingObservingToken];
 }
@@ -494,7 +490,7 @@ static const CGFloat kReplaceControlsHeight = 22.0;
 @synthesize findRegularExpression=_findRegularExpression;
 #pragma mark *** Private Methods ***
 - (void)_addFindTextAttributes {	
-	NSDictionary *attributes = [[self class] findTextAttributes];
+	NSDictionary *attributes = RSFindTextAttributes();
 	NSUInteger rangeIndex, rangeCount = [_findRanges count];
 	for (rangeIndex = 0; rangeIndex < rangeCount; rangeIndex++) {
 		NSRange range = *(NSRangePointer)[_findRanges pointerAtIndex:rangeIndex];

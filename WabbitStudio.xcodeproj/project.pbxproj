@@ -120,6 +120,7 @@
 		07B4740514AE3CAA00E3F9D0 /* RSNumberToBoolTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B4740414AE3CAA00E3F9D0 /* RSNumberToBoolTransformer.m */; };
 		07B4740814AE3E0A00E3F9D0 /* RSNegateNumberToBoolTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B4740714AE3E0A00E3F9D0 /* RSNegateNumberToBoolTransformer.m */; };
 		07B4740B14AE433300E3F9D0 /* RSFindSearchField.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B4740A14AE433300E3F9D0 /* RSFindSearchField.m */; };
+		07CC8F3F14B7DBDB0081EE69 /* WCJumpInCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CC8F3E14B7DBDB0081EE69 /* WCJumpInCellView.m */; };
 		07EB8E2214B63C4F00F8A8C6 /* BGHUDAppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0791BE5314ADA3B80004AC16 /* BGHUDAppKit.framework */; };
 		07EB8E2314B63C5600F8A8C6 /* BGHUDAppKit.framework in Copy Private Frameworks */ = {isa = PBXBuildFile; fileRef = 0791BE5314ADA3B80004AC16 /* BGHUDAppKit.framework */; };
 		07EB8E2614B63EB800F8A8C6 /* WCAdvancedView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07EB8E2414B63EB800F8A8C6 /* WCAdvancedView.xib */; };
@@ -363,6 +364,8 @@
 		07B4740714AE3E0A00E3F9D0 /* RSNegateNumberToBoolTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSNegateNumberToBoolTransformer.m; sourceTree = "<group>"; };
 		07B4740914AE433300E3F9D0 /* RSFindSearchField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSFindSearchField.h; sourceTree = "<group>"; };
 		07B4740A14AE433300E3F9D0 /* RSFindSearchField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSFindSearchField.m; sourceTree = "<group>"; };
+		07CC8F3D14B7DBDB0081EE69 /* WCJumpInCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCJumpInCellView.h; sourceTree = "<group>"; };
+		07CC8F3E14B7DBDB0081EE69 /* WCJumpInCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCJumpInCellView.m; sourceTree = "<group>"; };
 		07EB8E2514B63EB800F8A8C6 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCAdvancedView.xib; sourceTree = "<group>"; };
 		07EB8E2714B641B900F8A8C6 /* SplitterHandle.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = SplitterHandle.pdf; sourceTree = "<group>"; };
 		07EB8E2914B644A600F8A8C6 /* ReallyAdvanced.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ReallyAdvanced.png; sourceTree = "<group>"; };
@@ -736,6 +739,8 @@
 				073B5AAC14B6EFB800FCDC0F /* WCJumpInRowView.m */,
 				073B5AAE14B7007500FCDC0F /* WCJumpInSearchOperation.h */,
 				073B5AAF14B7007500FCDC0F /* WCJumpInSearchOperation.m */,
+				07CC8F3D14B7DBDB0081EE69 /* WCJumpInCellView.h */,
+				07CC8F3E14B7DBDB0081EE69 /* WCJumpInCellView.m */,
 			);
 			name = "Jump In Window";
 			sourceTree = "<group>";
@@ -1124,6 +1129,7 @@
 				073B5AAA14B6AD7300FCDC0F /* WCJumpInTableView.m in Sources */,
 				073B5AAD14B6EFB800FCDC0F /* WCJumpInRowView.m in Sources */,
 				073B5AB014B7007600FCDC0F /* WCJumpInSearchOperation.m in Sources */,
+				07CC8F3F14B7DBDB0081EE69 /* WCJumpInCellView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

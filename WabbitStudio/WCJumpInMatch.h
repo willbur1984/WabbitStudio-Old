@@ -11,7 +11,6 @@
 
 @interface WCJumpInMatch : NSObject {
 	__weak id <WCJumpInItem> _item;
-	NSRange _range;
 	NSAttributedString *_name;
 	NSArray *_ranges;
 	CGFloat _weight;
@@ -19,9 +18,6 @@
 @property (readonly,nonatomic) id <WCJumpInItem> item;
 @property (readonly,nonatomic) NSAttributedString *name;
 @property (readonly,nonatomic) CGFloat weight;
-
-+ (WCJumpInMatch *)jumpInMatchWithItem:(id <WCJumpInItem>)item range:(NSRange)range weight:(CGFloat)weight;
-- (id)initWithItem:(id <WCJumpInItem>)item range:(NSRange)range weight:(CGFloat)weight;
 
 + (WCJumpInMatch *)jumpInMatchWithItem:(id<WCJumpInItem>)item ranges:(NSArray *)ranges weight:(CGFloat)weight;
 - (id)initWithItem:(id<WCJumpInItem>)item ranges:(NSArray *)ranges weight:(CGFloat)weight;
