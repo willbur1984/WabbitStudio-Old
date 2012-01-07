@@ -800,7 +800,8 @@
 		legalChars = [charSet copy];
 	});
 	
-	if (![legalChars characterIsMember:[string characterAtIndex:0]]) {
+	unichar stringChar = [string characterAtIndex:0];
+	if (![legalChars characterIsMember:stringChar]) {
 		[_completionTimer invalidate];
 		_completionTimer = nil;
 		return;
@@ -810,9 +811,11 @@
 	NSRange lineRange = [[self string] lineRangeForRange:completionRange];
 	
 	if (completionRange.location == lineRange.location) {
-		[_completionTimer invalidate];
-		_completionTimer = nil;
-		return;
+		if (stringChar != '.' && stringChar != '#') {
+			[_completionTimer invalidate];
+			_completionTimer = nil;
+			return;
+		}
 	}
 	
 	CGFloat completionDelay = [[NSUserDefaults standardUserDefaults] floatForKey:WCEditorSuggestCompletionsWhileTypingDelayKey];

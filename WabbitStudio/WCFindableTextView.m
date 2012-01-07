@@ -115,6 +115,10 @@
 	return [super validateUserInterfaceItem:anItem];
 }
 
+- (void)performCleanup; {
+	[_findBarViewController performCleanup];
+}
+
 @dynamic findBarViewController;
 - (RSFindBarViewController *)findBarViewController {
 	if (!_findBarViewController) {

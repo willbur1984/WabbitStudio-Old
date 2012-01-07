@@ -13,6 +13,8 @@
 #import "WCJumpBarViewController.h"
 #import "WCSourceTextStorage.h"
 #import "WCSourceTextViewController.h"
+#import "WCSourceTextView.h"
+#import "RSFindBarViewController.h"
 
 @interface WCSourceFileDocument ()
 @property (readonly,nonatomic) WCSourceTextStorage *textStorage;
@@ -99,6 +101,10 @@
 	_fileContents = [string retain];
 	
 	return YES;
+}
+
+- (void)windowWillClose:(NSNotification *)notification {
+	[[self undoManager] removeAllActions];
 }
 
 - (NSDocument *)document {

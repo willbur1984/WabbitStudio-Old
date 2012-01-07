@@ -15,4 +15,6 @@
 	id _windowWillCloseObservingToken;
 }
 @property (readonly,nonatomic) RSFindBarViewController *findBarViewController;
+
+- (void)performCleanup;
 @end
