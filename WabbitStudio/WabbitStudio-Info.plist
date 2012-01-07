@@ -46,6 +46,24 @@
 			<key>NSDocumentClass</key>
 			<string>WCSourceFileDocument</string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>inc</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>include</string>
+			<key>CFBundleTypeName</key>
+			<string>Active Server Include file</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.panic.coda.active-server-include-file</string>
+			</array>
+			<key>NSDocumentClass</key>
+			<string>WCSourceFileDocument</string>
+		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
@@ -114,6 +132,23 @@
 				<array>
 					<string>inc</string>
 					<string>INC</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.plain-text</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Active Server Include file</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.panic.coda.active-server-include-file</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>inc</string>
 				</array>
 			</dict>
 		</dict>

@@ -52,6 +52,10 @@ NSString *const WCFontsAndColorsUserThemeIdentifiersKey = @"WCFontsAndColorsUser
 		[[self pairsTableView] noteHeightOfRowsWithIndexesChanged:[[self pairsArrayController] selectionIndexes]];
 	}
 }
+#pragma mark NSControlTextEditingDelegate
+- (BOOL)control:(NSControl *)control textShouldEndEditing:(NSText *)fieldEditor {
+	return ([[fieldEditor string] length]);
+}
 #pragma mark NSTableViewDelegate
 - (CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row {	
 	CGFloat rowHeight = [tableView rowHeight];

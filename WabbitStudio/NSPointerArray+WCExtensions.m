@@ -45,6 +45,27 @@ static NSString *NSRangeDescriptionFunction(const void *item) {
     }
     return *(NSRangePointer)[self pointerAtIndex:left];
 }
+- (NSPointerArray *)rangesForRange:(NSRange)range; {
+	NSUInteger rangeIndex = [self objectIndexForRange:range];
+	
+	if (rangeIndex == NSNotFound)
+		return nil;
+	
+	NSPointerArray *retval = [NSPointerArray pointerArrayForRanges];
+	
+	while (rangeIndex < [self count]) {
+		NSRange cmpRange = *(NSRangePointer)[self pointerAtIndex:rangeIndex++];
+		
+		if (cmpRange.location < range.location)
+			continue;
+		else if (cmpRange.location > NSMaxRange(range))
+			break;
+		
+		[retval addPointer:&cmpRange];
+	}
+	return retval;
+}
+
 - (NSUInteger)objectIndexForRange:(NSRange)range {
 	if (![self count])
 		return NSNotFound;

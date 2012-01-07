@@ -10,7 +10,7 @@
 
 @class RSFindBarViewController;
 
-@interface WCFindableTextView : NSTextView {
+@interface WCFindableTextView : NSTextView <NSTextFinderClient> {
 	RSFindBarViewController *_findBarViewController;
 	id _windowWillCloseObservingToken;
 }

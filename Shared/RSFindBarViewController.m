@@ -12,17 +12,20 @@
 #import "RSDefines.h"
 #import "RSBezelWidgetManager.h"
 #import "WCDefines.h"
+#import "NSTextView+WCExtensions.h"
 
 @interface RSFindBarViewController ()
 @property (readwrite,assign,nonatomic) BOOL wrapAround;
-@property (readwrite,copy,nonatomic) NSString *lastFindString;
 @property (readonly,nonatomic) RSFindOptionsViewController *findOptionsViewController;
 @property (readwrite,retain,nonatomic) NSRegularExpression *findRegularExpression;
 @property (readwrite,copy,nonatomic) NSString *statusString;
 @property (readwrite,assign,nonatomic) RSFindBarViewControllerViewMode viewMode;
 
+- (void)_findHighlightNearestRange:(BOOL)highlightNearestRange;
 - (void)_addFindTextAttributes;
 - (void)_removeFindTextAttributes;
+- (void)_addFindTextAttributesInRange:(NSRange)range;
+- (void)_removeFindTextAttributesInRange:(NSRange)range;
 - (NSRange)_nextRangeDidWrap:(BOOL *)didWrap includeSelectedRange:(BOOL)includeSelectedRange;
 - (NSRange)_previousRangeDidWrap:(BOOL *)didWrap;
 @end
@@ -36,8 +39,8 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	_textView = nil;
 	[_findString release];
-	[_lastFindString release];
 	[_findRegularExpression release];
+	[_replaceString release];
 	[_statusString release];
 	[_findRanges release];
 	[_showFindBarAnimation release];
@@ -96,7 +99,7 @@
 		
 		[[self view] removeFromSuperviewWithoutNeedingDisplay];
 		
-		[[NSNotificationCenter defaultCenter] removeObserver:_textStorageDidProcessEditingObservingToken];
+		[self performCleanup];
 	}
 	else if (animation == _showReplaceControlsAnimation) {
 		[_showReplaceControlsAnimation release];
@@ -155,12 +158,15 @@
 	_findRanges = [[NSPointerArray pointerArrayForRanges] retain];
 	_findOptionsViewController = [[RSFindOptionsViewController alloc] init];
 	[_findOptionsViewController setDelegate:self];
+	_replaceString = @"";
 	
 	return self;
 }
 
 - (void)performCleanup; {
 	[[NSNotificationCenter defaultCenter] removeObserver:_textStorageDidProcessEditingObservingToken];
+	[[NSNotificationCenter defaultCenter] removeObserver:_viewBoundsDidChangeObservingToken];
+	[[NSNotificationCenter defaultCenter] removeObserver:_windowDidResizeObservingToken];
 }
 #pragma mark IBActions
 - (IBAction)toggleFindBar:(id)sender; {
@@ -184,6 +190,12 @@ static const NSAnimationCurve kFindBarShowHideAnimationCurve = NSAnimationEaseIn
 		[self setStatusString:nil];
 		[_findRanges setCount:0];
 		[self performSelector:@selector(_removeFindTextAttributes) withObject:nil afterDelay:0.0];
+	}];
+	_viewBoundsDidChangeObservingToken = [[NSNotificationCenter defaultCenter] addObserverForName:NSViewBoundsDidChangeNotification object:[[[self textView] enclosingScrollView] contentView] queue:nil usingBlock:^(NSNotification *note) {
+		NSRange visibleRange = [[self textView] visibleRange];
+		
+		[self _removeFindTextAttributesInRange:visibleRange];
+		[self _addFindTextAttributesInRange:visibleRange];
 	}];
 	
 	[[[[self textView] window] contentView] addSubview:[self view] positioned:NSWindowBelow relativeTo:[[[[[self textView] window] contentView] subviews] objectAtIndex:0]];
@@ -236,8 +248,7 @@ static const NSAnimationCurve kFindBarShowHideAnimationCurve = NSAnimationEaseIn
 static const CGFloat kReplaceControlsHeight = 22.0;
 - (IBAction)showReplaceControls:(id)sender; {
 	if ([self areReplaceControlsVisible]) {
-		if (![self isFindBarVisible])
-			[self showFindBar:nil];
+		[self showFindBar:nil];
 		return;
 	}
 	else if (![self isFindBarVisible]) {
@@ -278,9 +289,215 @@ static const CGFloat kReplaceControlsHeight = 22.0;
 }
 
 - (IBAction)find:(id)sender; {
+	[self _findHighlightNearestRange:YES];
+}
+- (IBAction)findNext:(id)sender; {
+	if (![[self findString] length]) {
+		NSBeep();
+		return;
+	}
+	
+	BOOL didWrap = NO;
+	NSRange foundRange = [self _nextRangeDidWrap:&didWrap includeSelectedRange:NO];
+	
+	if (foundRange.location == NSNotFound) {
+		NSBeep();
+		
+		if (![self wrapAround])
+			[[RSBezelWidgetManager sharedWindowController] showImage:[NSImage imageNamed:@"FindNoWrapIndicator"] centeredInView:[[self textView] enclosingScrollView]];
+	}
+	else {
+		[[self textView] setSelectedRange:foundRange];
+		[[self textView] scrollRangeToVisible:foundRange];
+		[[self textView] showFindIndicatorForRange:foundRange];
+		
+		if (didWrap)
+			[[RSBezelWidgetManager sharedWindowController] showImage:[NSImage imageNamed:@"FindWrapIndicator"] centeredInView:[[self textView] enclosingScrollView]];
+	}
+}
+- (IBAction)findPrevious:(id)sender; {
+	if (![[self findString] length]) {
+		NSBeep();
+		return;
+	}
+	
+	BOOL didWrap = NO;
+	NSRange foundRange = [self _previousRangeDidWrap:&didWrap];
+	
+	if (foundRange.location == NSNotFound) {
+		NSBeep();
+		
+		if (![self wrapAround])
+			[[RSBezelWidgetManager sharedWindowController] showImage:[NSImage imageNamed:@"FindNoWrapIndicatorReverse"] centeredInView:[[self textView] enclosingScrollView]];
+	}
+	else {
+		[[self textView] setSelectedRange:foundRange];
+		[[self textView] scrollRangeToVisible:foundRange];
+		[[self textView] showFindIndicatorForRange:foundRange];
+		
+		if (didWrap)
+			[[RSBezelWidgetManager sharedWindowController] showImage:[NSImage imageNamed:@"FindWrapIndicatorReverse"] centeredInView:[[self textView] enclosingScrollView]];
+	}
+}
+- (IBAction)findNextOrPrevious:(NSSegmentedControl *)sender; {
+	if ([sender selectedSegment] == 0)
+		[self findPrevious:nil];
+	else
+		[self findNext:nil];
+}
+- (IBAction)replaceAll:(id)sender; {
+	if (![[self findString] length]) {
+		NSBeep();
+		return;
+	}
+	else if (![_findRanges count]) {
+		[self _findHighlightNearestRange:NO];
+		if (![_findRanges count]) {
+			NSBeep();
+			return;
+		}
+	}
+	
+	NSUInteger rangeIndex, rangeCount = [_findRanges count];
+	NSMutableArray *replaceRanges = [NSMutableArray arrayWithCapacity:rangeCount];
+	NSMutableArray *replaceStrings = [NSMutableArray arrayWithCapacity:rangeCount];
+	
+	for (rangeIndex=0; rangeIndex<rangeCount; rangeIndex++) {
+		NSRange replaceRange = *(NSRangePointer)[_findRanges pointerAtIndex:rangeIndex];
+		
+		[replaceRanges addObject:[NSValue valueWithRange:replaceRange]];
+		
+		NSString *replaceString;
+		if ([[self findOptionsViewController] findStyle] == RSFindOptionsFindStyleTextual)
+			replaceString = [self replaceString];
+		else
+			replaceString = [[self findRegularExpression] stringByReplacingMatchesInString:[[[self textView] string] substringWithRange:replaceRange] options:0 range:NSMakeRange(0, replaceRange.length) withTemplate:[self replaceString]];
+		
+		[replaceStrings addObject:replaceString];
+	}
+	
+	if ([[self textView] shouldChangeTextInRanges:replaceRanges replacementStrings:replaceStrings]) {
+		[[[self textView] textStorage] beginEditing];
+		
+		for (rangeIndex=[replaceRanges count]-1; rangeIndex>0; rangeIndex--) {
+			NSRange replaceRange = [[replaceRanges objectAtIndex:rangeIndex] rangeValue];
+			
+			[[self textView] replaceCharactersInRange:replaceRange withString:[replaceStrings objectAtIndex:rangeIndex]];
+		}
+		
+		[[[self textView] textStorage] endEditing];
+		[[self textView] didChangeText];
+	}
+	
+	if (rangeCount == 1)
+		[self setStatusString:NSLocalizedString(@"replaced 1 match", @"replace all 1 match status format string")];
+	else
+		[self setStatusString:[NSString stringWithFormat:NSLocalizedString(@"replaced %lu matches", @"replace all multiple matches status format string"),rangeCount]];
+}
+- (IBAction)replace:(id)sender; {
+	if (![[self findString] length]) {
+		NSBeep();
+		return;
+	}
+	
+	BOOL didWrap;
+	NSRange replaceRange = [self _nextRangeDidWrap:&didWrap includeSelectedRange:YES];
+	
+	if (replaceRange.location == NSNotFound) {
+		NSBeep();
+		
+		if (![self wrapAround])
+			[[RSBezelWidgetManager sharedWindowController] showImage:[NSImage imageNamed:@"FindNoWrapIndicator"] centeredInView:[[self textView] enclosingScrollView]];
+	}
+	else {
+		[[self textView] setSelectedRange:replaceRange];
+		[[self textView] scrollRangeToVisible:replaceRange];
+		
+		NSString *replaceString;
+		if ([[self findOptionsViewController] findStyle] == RSFindOptionsFindStyleTextual)
+			replaceString = [self replaceString];
+		else
+			replaceString = [[self findRegularExpression] stringByReplacingMatchesInString:[[[self textView] string] substringWithRange:replaceRange] options:0 range:NSMakeRange(0, replaceRange.length) withTemplate:[self replaceString]];
+		
+		if ([[self textView] shouldChangeTextInRange:replaceRange replacementString:replaceString]) {
+			[[self textView] replaceCharactersInRange:replaceRange withString:replaceString];
+			[[self textView] didChangeText];
+		}
+		
+		if (didWrap)
+			[[RSBezelWidgetManager sharedWindowController] showImage:[NSImage imageNamed:@"FindWrapIndicator"] centeredInView:[[self textView] enclosingScrollView]];
+	}
+}
+- (IBAction)replaceAndFind:(id)sender; {
+	if (![[self findString] length]) {
+		NSBeep();
+		return;
+	}
+	
+	BOOL didWrap;
+	NSRange replaceRange = [self _nextRangeDidWrap:&didWrap includeSelectedRange:YES];
+	
+	if (replaceRange.location == NSNotFound) {
+		NSBeep();
+		
+		if (![self wrapAround])
+			[[RSBezelWidgetManager sharedWindowController] showImage:[NSImage imageNamed:@"FindNoWrapIndicator"] centeredInView:[[self textView] enclosingScrollView]];
+	}
+	else {
+		[[self textView] setSelectedRange:replaceRange];
+		[[self textView] scrollRangeToVisible:replaceRange];
+		
+		NSString *replaceString;
+		if ([[self findOptionsViewController] findStyle] == RSFindOptionsFindStyleTextual)
+			replaceString = [self replaceString];
+		else
+			replaceString = [[self findRegularExpression] stringByReplacingMatchesInString:[[[self textView] string] substringWithRange:replaceRange] options:0 range:NSMakeRange(0, replaceRange.length) withTemplate:[self replaceString]];
+		
+		if ([[self textView] shouldChangeTextInRange:replaceRange replacementString:replaceString]) {
+			[[self textView] replaceCharactersInRange:replaceRange withString:replaceString];
+			[[self textView] didChangeText];
+		}
+		
+		[self findNext:nil];
+		
+		if (didWrap)
+			[[RSBezelWidgetManager sharedWindowController] showImage:[NSImage imageNamed:@"FindWrapIndicator"] centeredInView:[[self textView] enclosingScrollView]];
+	}
+}
+#pragma mark Properties
+@synthesize searchField=_searchField;
+@synthesize replaceTextField=_replaceTextField;
+@synthesize replaceAllButton=_replaceAllButton;
+@synthesize replaceButton=_replaceButton;
+@synthesize replaceAndFindButton=_replaceAndFindButton;
+
+@synthesize findString=_findString;
+@synthesize findRegularExpression=_findRegularExpression;
+@synthesize replaceString=_replaceString;
+@synthesize statusString=_statusString;
+@dynamic wrapAround;
+- (BOOL)wrapAround {
+	return _findFlags.wrapAround;
+}
+- (void)setWrapAround:(BOOL)wrapAround {
+	_findFlags.wrapAround = wrapAround;
+}
+@dynamic findBarVisible;
+- (BOOL)isFindBarVisible {
+	return ([[self view] window] != nil);
+}
+@dynamic replaceControlsVisible;
+- (BOOL)areReplaceControlsVisible {
+	return ([self viewMode] == RSFindBarViewControllerViewModeFindAndReplace);
+}
+@synthesize viewMode=_viewMode;
+@synthesize textView=_textView;
+@synthesize findOptionsViewController=_findOptionsViewController;
+#pragma mark *** Private Methods ***
+- (void)_findHighlightNearestRange:(BOOL)highlightNearestRange; {
 	[self setStatusString:nil];
 	[_findRanges setCount:0];
-	[self _removeFindTextAttributes];
+	[self _removeFindTextAttributesInRange:[[self textView] visibleRange]];
 	
 	if (![[self findString] length]) {
 		NSBeep();
@@ -380,129 +597,39 @@ static const CGFloat kReplaceControlsHeight = 22.0;
 		[[self searchField] setRecentSearches:recentSearches];
 	}
 	
-	[self _addFindTextAttributes];
-	
-	NSRange nearRange = [self _nextRangeDidWrap:NULL includeSelectedRange:YES];
-	
-	[[self textView] setSelectedRange:nearRange];
-	[[self textView] scrollRangeToVisible:nearRange];
-	[[self textView] showFindIndicatorForRange:nearRange];
-}
-- (IBAction)findNext:(id)sender; {
-	if (![[self findString] length]) {
-		NSBeep();
-		return;
-	}
-	
-	BOOL didWrap = NO;
-	NSRange foundRange = [self _nextRangeDidWrap:&didWrap includeSelectedRange:NO];
-	
-	if (foundRange.location == NSNotFound) {
-		NSBeep();
+	if ([_findRanges count]) {
+		[self _addFindTextAttributesInRange:[[self textView] visibleRange]];
 		
-		if (![self wrapAround])
-			[[RSBezelWidgetManager sharedWindowController] showImage:[NSImage imageNamed:@"FindNoWrapIndicator"] centeredInView:[[self textView] enclosingScrollView]];
-	}
-	else {
-		[[self textView] setSelectedRange:foundRange];
-		[[self textView] scrollRangeToVisible:foundRange];
-		[[self textView] showFindIndicatorForRange:foundRange];
-		
-		if (didWrap)
-			[[RSBezelWidgetManager sharedWindowController] showImage:[NSImage imageNamed:@"FindWrapIndicator"] centeredInView:[[self textView] enclosingScrollView]];
+		if (highlightNearestRange) {
+			NSRange nearRange = [self _nextRangeDidWrap:NULL includeSelectedRange:YES];
+			
+			[[self textView] setSelectedRange:nearRange];
+			[[self textView] scrollRangeToVisible:nearRange];
+			[[self textView] showFindIndicatorForRange:nearRange];
+		}
 	}
 }
-- (IBAction)findPrevious:(id)sender; {
-	if (![[self findString] length]) {
-		NSBeep();
-		return;
-	}
-	
-	BOOL didWrap = NO;
-	NSRange foundRange = [self _previousRangeDidWrap:&didWrap];
-	
-	if (foundRange.location == NSNotFound) {
-		NSBeep();
-		
-		if (![self wrapAround])
-			[[RSBezelWidgetManager sharedWindowController] showImage:[NSImage imageNamed:@"FindNoWrapIndicatorReverse"] centeredInView:[[self textView] enclosingScrollView]];
-	}
-	else {
-		[[self textView] setSelectedRange:foundRange];
-		[[self textView] scrollRangeToVisible:foundRange];
-		[[self textView] showFindIndicatorForRange:foundRange];
-		
-		if (didWrap)
-			[[RSBezelWidgetManager sharedWindowController] showImage:[NSImage imageNamed:@"FindWrapIndicatorReverse"] centeredInView:[[self textView] enclosingScrollView]];
-	}
-}
-- (IBAction)findNextOrPrevious:(NSSegmentedControl *)sender; {
-	if ([sender selectedSegment] == 0)
-		[self findPrevious:nil];
-	else
-		[self findNext:nil];
-}
-- (IBAction)replaceAll:(id)sender; {
-	if (![_findRanges count]) {
-		NSBeep();
-		return;
-	}
-}
-- (IBAction)replace:(id)sender; {
-	if (![_findRanges count]) {
-		NSBeep();
-		return;
-	}
-}
-- (IBAction)replaceAndFind:(id)sender; {
-	if (![[self findString] length] || ![_findRanges count]) {
-		NSBeep();
-		return;
-	}
-}
-#pragma mark Properties
-@synthesize searchField=_searchField;
-@synthesize replaceTextField=_replaceTextField;
-@synthesize replaceAllButton=_replaceAllButton;
-@synthesize replaceButton=_replaceButton;
-@synthesize replaceAndFindButton=_replaceAndFindButton;
-
-@synthesize findString=_findString;
-@synthesize statusString=_statusString;
-@dynamic wrapAround;
-- (BOOL)wrapAround {
-	return _findFlags.wrapAround;
-}
-- (void)setWrapAround:(BOOL)wrapAround {
-	_findFlags.wrapAround = wrapAround;
-}
-@dynamic findBarVisible;
-- (BOOL)isFindBarVisible {
-	return ([[self view] window] != nil);
-}
-@dynamic replaceControlsVisible;
-- (BOOL)areReplaceControlsVisible {
-	return ([self viewMode] == RSFindBarViewControllerViewModeFindAndReplace);
-}
-@synthesize viewMode=_viewMode;
-@synthesize textView=_textView;
-@synthesize lastFindString=_lastFindString;
-@synthesize findOptionsViewController=_findOptionsViewController;
-@synthesize findRegularExpression=_findRegularExpression;
-#pragma mark *** Private Methods ***
 - (void)_addFindTextAttributes {	
-	NSDictionary *attributes = WCFindTextAttributes();
-	NSUInteger rangeIndex, rangeCount = [_findRanges count];
-	for (rangeIndex = 0; rangeIndex < rangeCount; rangeIndex++) {
-		NSRange range = *(NSRangePointer)[_findRanges pointerAtIndex:rangeIndex];
-		
-		[[[self textView] layoutManager] addTemporaryAttributes:attributes forCharacterRange:range];
-	}
+	[self _addFindTextAttributesInRange:NSMakeRange(0, [[[self textView] string] length])];
 }
 - (void)_removeFindTextAttributes {
-	[[[self textView] layoutManager] removeTemporaryAttribute:NSBackgroundColorAttributeName forCharacterRange:NSMakeRange(0, [[[self textView] string] length])];
-	[[[self textView] layoutManager] removeTemporaryAttribute:NSUnderlineStyleAttributeName forCharacterRange:NSMakeRange(0, [[[self textView] string] length])];
-	[[[self textView] layoutManager] removeTemporaryAttribute:NSUnderlineColorAttributeName forCharacterRange:NSMakeRange(0, [[[self textView] string] length])];
+	[self _removeFindTextAttributesInRange:NSMakeRange(0, [[[self textView] string] length])];
+}
+- (void)_addFindTextAttributesInRange:(NSRange)range; {
+	NSDictionary *attributes = WCFindTextAttributes();
+	NSPointerArray *ranges = [_findRanges rangesForRange:range];
+	NSUInteger rangeIndex, rangeCount = [ranges count];
+	
+	for (rangeIndex = 0; rangeIndex < rangeCount; rangeIndex++) {
+		NSRange attrRange = *(NSRangePointer)[ranges pointerAtIndex:rangeIndex];
+		
+		[[[self textView] layoutManager] addTemporaryAttributes:attributes forCharacterRange:attrRange];
+	}
+}
+- (void)_removeFindTextAttributesInRange:(NSRange)range; {
+	[[[self textView] layoutManager] removeTemporaryAttribute:NSBackgroundColorAttributeName forCharacterRange:range];
+	[[[self textView] layoutManager] removeTemporaryAttribute:NSUnderlineStyleAttributeName forCharacterRange:range];
+	[[[self textView] layoutManager] removeTemporaryAttribute:NSUnderlineColorAttributeName forCharacterRange:range];
 }
 
 - (NSRange)_nextRangeDidWrap:(BOOL *)didWrap includeSelectedRange:(BOOL)includeSelectedRange; {

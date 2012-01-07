@@ -72,7 +72,7 @@
 										<string key="NSFrameSize">{400, 294}</string>
 										<reference key="NSSuperview" ref="878786340"/>
 										<reference key="NSWindow"/>
-										<reference key="NSNextKeyView" ref="441687481"/>
+										<reference key="NSNextKeyView" ref="245182740"/>
 										<string key="NSReuseIdentifierKey">_NS:1828</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSTableHeaderView" key="NSHeaderView" id="677387049">
@@ -230,7 +230,7 @@
 						<string key="NSFrame">{{178, 118}, {402, 312}}</string>
 						<reference key="NSSuperview" ref="1005"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="245182740"/>
+						<reference key="NSNextKeyView" ref="878786340"/>
 						<string key="NSReuseIdentifierKey">_NS:1824</string>
 						<int key="NSsFlags">133682</int>
 						<reference key="NSVScroller" ref="441687481"/>
@@ -251,7 +251,6 @@
 								<string key="NSFrame">{{319, 8}, {68, 14}}</string>
 								<reference key="NSSuperview" ref="981571715"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:3944</string>
 								<bool key="NSEnabled">YES</bool>
 								<object class="NSTextFieldCell" key="NSCell" id="780433865">
@@ -625,7 +624,6 @@
 										</object>
 										<reference key="NSMenuFont" ref="199815728"/>
 									</object>
-									<int key="NSSelectedIndex">3</int>
 									<bool key="NSPullDown">YES</bool>
 									<int key="NSPreferredEdge">1</int>
 									<bool key="NSUsesItemFromMenu">YES</bool>
@@ -718,7 +716,7 @@
 										<string key="NSFrameSize">{148, 368}</string>
 										<reference key="NSSuperview" ref="336006499"/>
 										<reference key="NSWindow"/>
-										<reference key="NSNextKeyView" ref="300670609"/>
+										<reference key="NSNextKeyView" ref="94448375"/>
 										<string key="NSReuseIdentifierKey">_NS:1828</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSTableHeaderView" key="NSHeaderView" id="9117772">
@@ -845,7 +843,7 @@
 						<string key="NSFrame">{{20, 44}, {150, 386}}</string>
 						<reference key="NSSuperview" ref="1005"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="94448375"/>
+						<reference key="NSNextKeyView" ref="336006499"/>
 						<string key="NSReuseIdentifierKey">_NS:1824</string>
 						<int key="NSsFlags">133682</int>
 						<reference key="NSVScroller" ref="300670609"/>

@@ -19,7 +19,7 @@ typedef enum _RSFindBarViewControllerViewMode {
 	__weak NSTextView *_textView;
 	RSFindBarViewControllerViewMode _viewMode;
 	NSString *_findString;
-	NSString *_lastFindString;
+	NSString *_replaceString;
 	NSRegularExpression *_findRegularExpression;
 	NSString *_statusString;
 	NSPointerArray *_findRanges;
@@ -29,6 +29,8 @@ typedef enum _RSFindBarViewControllerViewMode {
 	NSViewAnimation *_hideReplaceControlsAnimation;
 	RSFindOptionsViewController *_findOptionsViewController;
 	id _textStorageDidProcessEditingObservingToken;
+	id _viewBoundsDidChangeObservingToken;
+	id _windowDidResizeObservingToken;
 	struct {
 		unsigned int wrapAround:1;
 		unsigned int runShowReplaceControlsAnimationAfterShowFindBarAnimationCompletes:1;
@@ -44,6 +46,7 @@ typedef enum _RSFindBarViewControllerViewMode {
 @property (readonly,nonatomic) NSTextView *textView;
 @property (readonly,assign,nonatomic) RSFindBarViewControllerViewMode viewMode;
 @property (readwrite,copy,nonatomic) NSString *findString;
+@property (readwrite,copy,nonatomic) NSString *replaceString;
 @property (readonly,copy,nonatomic) NSString *statusString;
 @property (readonly,assign,nonatomic) BOOL wrapAround;
 @property (readonly,nonatomic,getter = isFindBarVisible) BOOL findBarVisible;

@@ -9,6 +9,8 @@
 #import "WCFindableTextView.h"
 #import "RSFindBarViewController.h"
 #import "WCKeyboardViewController.h"
+#import "NSTextView+WCExtensions.h"
+#import "RSDefines.h"
 
 @implementation WCFindableTextView
 - (void)dealloc {
@@ -60,9 +62,14 @@
 			[[self findBarViewController] showReplaceControls:nil];
 			break;
 		case NSTextFinderActionReplace:
+			[[self findBarViewController] replace:nil];
+			break;
 		case NSTextFinderActionReplaceAll:
-		case NSTextFinderActionReplaceAllInSelection:
+			[[self findBarViewController] replaceAll:nil];
+			break;
 		case NSTextFinderActionReplaceAndFind:
+			[[self findBarViewController] replaceAndFind:nil];
+			break;
 		default:
 			break;
 	}
@@ -89,7 +96,44 @@
 	
 	[self setSelectedRange:NSMakeRange(NSMaxRange(lineRange), 0)];
 }
-
+/*
+- (BOOL)allowsMultipleSelection {
+	return NO;
+}
+- (NSRange)firstSelectedRange {
+	return [self selectedRange];
+}
+- (BOOL)shouldReplaceCharactersInRanges:(NSArray *)ranges withStrings:(NSArray *)strings {
+	return [self shouldChangeTextInRanges:ranges replacementStrings:strings];
+}
+- (void)didReplaceCharacters {
+	[self didChangeText];
+}
+- (NSView *)contentViewAtIndex:(NSUInteger)index effectiveCharacterRange:(NSRangePointer)outRange {
+	if (outRange) {
+		*outRange = NSMakeRange(0, [[self string] length]);
+	}
+	return self;
+}
+- (NSArray *)rectsForCharacterRange:(NSRange)range {
+	NSUInteger rectCount;
+	NSRectArray rects = [[self layoutManager] rectArrayForCharacterRange:range withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[self textContainer] rectCount:&rectCount];
+	
+	if (rectCount) {
+		NSMutableArray *rectArray = [NSMutableArray arrayWithCapacity:rectCount];
+		NSUInteger rectIndex;
+		
+		for (rectIndex=0; rectIndex<rectCount; rectIndex++)
+			[rectArray addObject:[NSValue valueWithRect:rects[rectIndex]]];
+		
+		return rectArray;
+	}
+	return nil;
+}
+- (NSArray *)visibleCharacterRanges {
+	return [NSArray arrayWithObject:[NSValue valueWithRange:[self visibleRange]]];
+}
+*/
 - (BOOL)validateUserInterfaceItem:(id<NSValidatedUserInterfaceItem>)anItem {
 	if ([anItem action] == @selector(performTextFinderAction:)) {
 		switch ([anItem tag]) {
