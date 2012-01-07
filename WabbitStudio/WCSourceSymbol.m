@@ -11,7 +11,7 @@
 #import "WCFontAndColorTheme.h"
 #import "WCFontAndColorThemeManager.h"
 #import "WCSourceScanner.h"
-#import "NSString+WCExtensions.h"
+#import "NSString+RSExtensions.h"
 
 @interface WCSourceSymbol ()
 + (NSImage *)_sourceSymbolIconForSourceSymbolType:(WCSourceSymbolType)sourceSymbolType;

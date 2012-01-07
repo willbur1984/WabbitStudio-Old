@@ -9,20 +9,5 @@
 #import <Foundation/Foundation.h>
 
 @interface NSString (WCExtensions)
-- (NSUInteger)lineNumberForRange:(NSRange)range;
-- (NSRange)rangeForLineNumber:(NSUInteger)lineNumber;
-- (NSRange)lineNumberRangeForRange:(NSRange)range;
-- (NSUInteger)numberOfLines;
-
-- (NSString *)camelCaseString;
-
-- (NSUInteger)valueFromHexadecimalString;
-- (NSUInteger)valueFromBinaryString;
-- (NSUInteger)valueFromString;
-
-- (NSString *)stringByRemovingInvalidHexadecimalDigits;
-- (NSString *)stringByRemovingInvalidBinaryDigits;
-- (NSString *)stringByRemovingInvalidDigits;
-
-+ (NSString *)UUIDString;
+- (NSRange)symbolRangeForRange:(NSRange)range;
 @end

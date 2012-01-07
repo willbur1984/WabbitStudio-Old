@@ -8,7 +8,7 @@
 
 #import "WCDefineSymbol.h"
 #import "WCSourceScanner.h"
-#import "NSString+WCExtensions.h"
+#import "NSString+RSExtensions.h"
 
 @implementation WCDefineSymbol
 - (void)dealloc {

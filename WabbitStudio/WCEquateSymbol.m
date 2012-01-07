@@ -8,7 +8,7 @@
 
 #import "WCEquateSymbol.h"
 #import "WCSourceScanner.h"
-#import "NSString+WCExtensions.h"
+#import "NSString+RSExtensions.h"
 
 @implementation WCEquateSymbol
 - (void)dealloc {

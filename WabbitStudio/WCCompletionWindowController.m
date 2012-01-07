@@ -15,6 +15,7 @@
 #import "WCArgumentPlaceholderCell.h"
 #import "WCSourceToken.h"
 #import "NSArray+WCExtensions.h"
+#import "NSAttributedString+WCExtensions.h"
 
 @interface WCCompletionWindowController ()
 @property (readwrite,assign,nonatomic) WCSourceTextView *textView;
@@ -24,6 +25,7 @@
 - (BOOL)_updateCompletions;
 - (void)_setupCompletionsWithDictionaryURL:(NSURL *)dictURL completionsTrie:(NDMutableTrie *)trie completionType:(WCSourceTokenType)type;
 - (void)_addStaticCompletionsFromCompletionsTrie:(NDTrie *)trie toArray:(NSMutableArray *)array forPrefix:(NSString *)prefix;
+- (void)_selectFirstArgumentPlaceholderWithOldSelectedRange:(NSRange)oldSelectedRange;
 @end
 
 @implementation WCCompletionWindowController
@@ -193,6 +195,7 @@
 	
 	if (insertCompletion) {
 		id <WCCompletionItem> itemToInsert = [[[self arrayController] selectedObjects] lastObject];
+		NSRange oldSelectedRange = [[self textView] selectedRange];
 		NSRange completionRange = [[self textView] rangeForUserCompletion];
 		if (completionRange.location == NSNotFound)
 			completionRange = [[self textView] selectedRange];
@@ -225,6 +228,8 @@
 			if ([[self textView] shouldChangeTextInRange:completionRange replacementString:[attributedString string]]) {
 				[[[self textView] textStorage] replaceCharactersInRange:completionRange withAttributedString:attributedString];
 				[[self textView] didChangeText];
+				
+				[self _selectFirstArgumentPlaceholderWithOldSelectedRange:oldSelectedRange];
 			}
 		}
 		else if ([itemToInsert respondsToSelector:@selector(completionDictionary)]) {
@@ -280,6 +285,8 @@
 			if ([[self textView] shouldChangeTextInRange:completionRange replacementString:[attributedString string]]) {
 				[[[self textView] textStorage] replaceCharactersInRange:completionRange withAttributedString:attributedString];
 				[[self textView] didChangeText];
+				
+				[self _selectFirstArgumentPlaceholderWithOldSelectedRange:oldSelectedRange];
 			}
 		}
 		else {
@@ -418,6 +425,14 @@
 		else
 			[array addObject:variants];
 	}
+}
+- (void)_selectFirstArgumentPlaceholderWithOldSelectedRange:(NSRange)oldSelectedRange; {
+	NSRange placeholderRange = [[[self textView] textStorage] nextArgumentPlaceholderRangeForRange:oldSelectedRange inRange:[[[self textView] string] lineRangeForRange:oldSelectedRange] wrapAround:NO];
+	
+	if (placeholderRange.location == NSNotFound)
+		return;
+	
+	[[self textView] setSelectedRange:placeholderRange];
 }
 
 - (void)_tableViewDoubleClick:(id)sender {

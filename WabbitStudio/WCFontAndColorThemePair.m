@@ -8,7 +8,7 @@
 
 #import "WCFontAndColorThemePair.h"
 #import "WCFontAndColorTheme.h"
-#import "NSString+WCExtensions.h"
+#import "NSString+RSExtensions.h"
 
 static NSDictionary *FontAndColorTypesToNames;
 

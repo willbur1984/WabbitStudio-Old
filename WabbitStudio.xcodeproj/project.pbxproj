@@ -106,6 +106,7 @@
 		0745BE3314ABF86700F541DC /* WCEditorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0745BE3114ABF86700F541DC /* WCEditorView.xib */; };
 		0745BE3514ABFB0D00F541DC /* Editor.png in Resources */ = {isa = PBXBuildFile; fileRef = 0745BE3414ABFB0D00F541DC /* Editor.png */; };
 		076966E614B636CD005448F7 /* WCAdvancedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 076966E414B636CD005448F7 /* WCAdvancedViewController.m */; };
+		07892EDA14B81375006FDB52 /* NSString+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07892ED914B81375006FDB52 /* NSString+RSExtensions.m */; };
 		078F03FD14AD0D760080ADBC /* RSToolTipBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F03F614AD0D760080ADBC /* RSToolTipBackgroundView.m */; };
 		078F03FE14AD0D760080ADBC /* RSToolTipManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F03F914AD0D760080ADBC /* RSToolTipManager.m */; };
 		078F03FF14AD0D760080ADBC /* RSToolTipPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F03FB14AD0D760080ADBC /* RSToolTipPanel.m */; };
@@ -337,6 +338,8 @@
 		0745BE3414ABFB0D00F541DC /* Editor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Editor.png; sourceTree = "<group>"; };
 		076966E314B636CD005448F7 /* WCAdvancedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCAdvancedViewController.h; sourceTree = "<group>"; };
 		076966E414B636CD005448F7 /* WCAdvancedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCAdvancedViewController.m; sourceTree = "<group>"; };
+		07892ED814B81375006FDB52 /* NSString+RSExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+RSExtensions.h"; sourceTree = "<group>"; };
+		07892ED914B81375006FDB52 /* NSString+RSExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+RSExtensions.m"; sourceTree = "<group>"; };
 		078F03F514AD0D760080ADBC /* RSToolTipBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSToolTipBackgroundView.h; sourceTree = "<group>"; };
 		078F03F614AD0D760080ADBC /* RSToolTipBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSToolTipBackgroundView.m; sourceTree = "<group>"; };
 		078F03F814AD0D760080ADBC /* RSToolTipManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSToolTipManager.h; sourceTree = "<group>"; };
@@ -933,6 +936,8 @@
 				073B5A9014B67B7400FCDC0F /* NSImage+RSExtensions.m */,
 				072BBC3C14AA65F80044ECC2 /* NSEvent+RSExtensions.h */,
 				072BBC3D14AA65F80044ECC2 /* NSEvent+RSExtensions.m */,
+				07892ED814B81375006FDB52 /* NSString+RSExtensions.h */,
+				07892ED914B81375006FDB52 /* NSString+RSExtensions.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -1148,6 +1153,7 @@
 				073B5AB014B7007600FCDC0F /* WCJumpInSearchOperation.m in Sources */,
 				07CC8F3F14B7DBDB0081EE69 /* WCJumpInCellView.m in Sources */,
 				07BC6CB614B7DE43007ECB3F /* WCJumpToLineWindowController.m in Sources */,
+				07892EDA14B81375006FDB52 /* NSString+RSExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

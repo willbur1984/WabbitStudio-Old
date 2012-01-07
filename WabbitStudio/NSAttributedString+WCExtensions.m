@@ -10,7 +10,7 @@
 #import "WCArgumentPlaceholderCell.h"
 #import "RSDefines.h"
 #import "NSPointerArray+WCExtensions.h"
-#import "NSString+WCExtensions.h"
+#import "NSString+RSExtensions.h"
 
 @implementation NSAttributedString (WCExtensions)
 - (NSRange)nextArgumentPlaceholderRangeForRange:(NSRange)compareRange inRange:(NSRange)range wrapAround:(BOOL)wrapAround; {

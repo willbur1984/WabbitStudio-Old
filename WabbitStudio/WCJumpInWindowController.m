@@ -11,6 +11,7 @@
 #import "RSDefines.h"
 #import "NSString+WCExtensions.h"
 #import "WCJumpInSearchOperation.h"
+#import "WCReallyAdvancedViewController.h"
 
 @interface WCJumpInWindowController ()
 @property (readwrite,copy,nonatomic) NSArray *items;
@@ -88,6 +89,14 @@
 	[self setDataSource:dataSource];
 	
 	[[self window] makeFirstResponder:[self searchField]];
+	
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCReallyAdvancedJumpInFileSearchUsingCurrentEditorSelectionKey]) {
+		NSRange symbolRange = [[[[self dataSource] jumpInTextView] string] symbolRangeForRange:[[[self dataSource] jumpInTextView] selectedRange]];
+		if (symbolRange.location != NSNotFound) {
+			[self setSearchString:[[[[self dataSource] jumpInTextView] string] substringWithRange:symbolRange]];
+			[self search:nil];
+		}
+	}
 	
 	NSInteger result = [[NSApplication sharedApplication] runModalForWindow:[self window]];
 	

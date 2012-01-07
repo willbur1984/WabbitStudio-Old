@@ -7,7 +7,7 @@
 //
 
 #import "WCJumpToLineWindowController.h"
-#import "NSString+WCExtensions.h"
+#import "NSString+RSExtensions.h"
 
 @interface WCJumpToLineWindowController ()
 @property (readwrite,assign,nonatomic) NSTextView *textView;

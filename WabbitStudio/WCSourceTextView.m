@@ -26,6 +26,7 @@
 #import "WCKeyboardViewController.h"
 #import "WCJumpInWindowController.h"
 #import "WCJumpToLineWindowController.h"
+#import "NSString+WCExtensions.h"
 
 @interface WCSourceTextView ()
 
@@ -33,7 +34,6 @@
 - (void)_drawCurrentLineHighlightInRect:(NSRect)rect;
 - (void)_highlightMatchingBrace;
 - (void)_highlightMatchingTempLabel;
-- (NSRange)_symbolRangeForRange:(NSRange)range;
 - (void)_insertMatchingBraceWithString:(id)string;
 - (void)_handleAutoCompletionWithString:(id)string;
 @end
@@ -127,7 +127,7 @@
 		return proposedCharRange;
 	
 	// look for a symbol inside the proposed range
-	NSRange symbolRange = [self _symbolRangeForRange:proposedCharRange];
+	NSRange symbolRange = [[self string] symbolRangeForRange:proposedCharRange];
 	if (symbolRange.location == NSNotFound)
 		return proposedCharRange;
 	return symbolRange;
@@ -248,7 +248,7 @@
 	else if ([[NSCharacterSet whitespaceAndNewlineCharacterSet] characterIsMember:[[self string] characterAtIndex:charIndex]])
 		return nil;
 	
-	NSRange toolTipRange = [self _symbolRangeForRange:NSMakeRange(charIndex, 0)];
+	NSRange toolTipRange = [[self string] symbolRangeForRange:NSMakeRange(charIndex, 0)];
 	if (toolTipRange.location == NSNotFound)
 		return nil;
 	
@@ -297,7 +297,7 @@
 	[self scrollRangeToVisible:[self selectedRange]];
 }
 - (IBAction)jumpToDefinition:(id)sender; {
-	NSRange symbolRange = [self _symbolRangeForRange:[self selectedRange]];
+	NSRange symbolRange = [[self string] symbolRangeForRange:[self selectedRange]];
 	if (symbolRange.location == NSNotFound) {
 		NSBeep();
 		
@@ -567,6 +567,7 @@
 	
 	[super setDelegate:delegate];
 }
+
 #pragma mark *** Private Methods ***
 - (void)_commonInit; {
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
@@ -641,7 +642,7 @@
 	for (characterIndex = [self selectedRange].location-1; characterIndex > 0; characterIndex--) {
 		unichar charAtIndex = [[self string] characterAtIndex:characterIndex];
 		
-		// keep track of opening and closing braces
+		// increment the number of opening braces
 		if ([openingCharacterSet characterIsMember:charAtIndex]) {
 			numberOfOpeningBraces++;
 			
@@ -654,11 +655,13 @@
 					[self showFindIndicatorForRange:NSMakeRange(characterIndex, 1)];
 					return;
 				}
+			// otherwise the braces don't match, beep at the user because we are angry
 			else if (numberOfOpeningBraces > numberOfClosingBraces) {
 				NSBeep();
 				return;
 			}
 		}
+		// increment the number of closing braces
 		else if ([closingCharacterSet characterIsMember:charAtIndex])
 			numberOfClosingBraces++;
 	}
@@ -683,22 +686,28 @@
 	else if ([[self string] lineRangeForRange:selectedRange].location == selectedRange.location-1)
 		return;
 	
+	// number of references (going forwards or backwards) we are looking for
 	__block NSInteger numberOfReferences = 0;
 	
 	NSUInteger stringLength = [[self string] length];
 	NSInteger charIndex;
 	
+	// count of the number of references so we know how many temp labels to skip over
 	for (charIndex = selectedRange.location-2; charIndex > 0; charIndex--) {
 		unichar charAtIndex = [[self string] characterAtIndex:charIndex];
 		
+		// '+' means search forward in the file
 		if (charAtIndex == '+')
 			numberOfReferences++;
+		// '-' means seach backwards in the file
 		else if (charAtIndex == '-')
 			numberOfReferences--;
+		// otherwise we are done counting references
 		else
 			break;
 	}
 	
+	// if we didn't count any references, it's an underscore by itself
 	if (!numberOfReferences) {
 		static NSCharacterSet *delimiterCharSet;
 		static dispatch_once_t onceToken;
@@ -708,42 +717,55 @@
 			delimiterCharSet = [charSet copy];
 		});
 		
+		// we need to make sure it isn't part of another word before continuing the search
 		if (![delimiterCharSet characterIsMember:[[self string] characterAtIndex:selectedRange.location-2]])
 			return;
 		
+		// otherwise count it as a single forward reference
 		numberOfReferences++;
 	}
 	
+	// always enumerate by lines, adding the reverse flag when we have a negative number of references
 	__block BOOL foundMatchingTempLabel = NO;
 	NSStringEnumerationOptions enumOptions = NSStringEnumerationByLines;
 	if (numberOfReferences < 0)
 		enumOptions |= NSStringEnumerationReverse;
+	// we want to search either from our selected index forward to the end of the file
+	// or backwards from our selected index to the beginning of the file
 	NSRange enumRange = (numberOfReferences > 0)?NSMakeRange(selectedRange.location, stringLength-selectedRange.location):NSMakeRange(0, selectedRange.location);
 	
 	[[self string] enumerateSubstringsInRange:enumRange options:enumOptions usingBlock:^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
+		// the first character has to be an underscore
 		if (substringRange.length && [substring characterAtIndex:0] == '_') {
-			NSRange symbolRange = [self _symbolRangeForRange:NSMakeRange(substringRange.location, 0)];
+			// make sure the underscore isn't part of another symbol (i.e. a label)
+			NSRange symbolRange = [[self string] symbolRangeForRange:NSMakeRange(substringRange.location, 0)];
 			if (symbolRange.length != 1)
 				return;
 			
+			// make sure the underscore isn't part of a block comment
 			WCSourceToken *token = [[[[self delegate] sourceScannerForSourceTextView:self] tokens] sourceTokenForRange:substringRange];
 			if (NSLocationInRange(substringRange.location, [token range]) &&
 				[token type] == WCSourceTokenTypeComment)
 				return;
 			
+			// decrement the number of references, checking for 0
 			if (numberOfReferences > 0 && (!(--numberOfReferences))) {
 				foundMatchingTempLabel = YES;
-				[self showFindIndicatorForRange:NSMakeRange(substringRange.location, 1)];
 				*stop = YES;
+				
+				[self showFindIndicatorForRange:NSMakeRange(substringRange.location, 1)];
 			}
+			// increment the number of references, checking for 0
 			else if (numberOfReferences < 0 && (!(++numberOfReferences))) {
 				foundMatchingTempLabel = YES;
-				[self showFindIndicatorForRange:NSMakeRange(substringRange.location, 1)];
 				*stop = YES;
+				
+				[self showFindIndicatorForRange:NSMakeRange(substringRange.location, 1)];
 			}
 		}
 	}];
 	
+	// if we didn't find a matching temp label, beep at the user because we are angry
 	if (!foundMatchingTempLabel)
 		NSBeep();
 }
@@ -751,6 +773,7 @@
 - (void)_insertMatchingBraceWithString:(id)string; {
 	if (![[NSUserDefaults standardUserDefaults] boolForKey:WCEditorAutomaticallyInsertMatchingBraceKey])
 		return;
+	// "string" can only be an opening brace character if it's 1 character long
 	else if ([string length] != 1)
 		return;
 	
@@ -760,9 +783,11 @@
 		openBraceCharacters = [[NSCharacterSet characterSetWithCharactersInString:@"{(["] retain];
 	});
 	
+	// if the only character isn't part of the brace characters we recognize, return early
 	if (![openBraceCharacters characterIsMember:[string characterAtIndex:0]])
 		return;
 	
+	// insert the appropriate matching brace character
 	switch ([string characterAtIndex:0]) {
 		case '(':
 			[super insertText:@")"];
@@ -777,12 +802,15 @@
 			break;
 	}
 	
+	// adjust the selected range since we inserted an additional character
 	[self setSelectedRange:NSMakeRange([self selectedRange].location-1, 0)];
 }
 
 - (void)_handleAutoCompletionWithString:(id)string; {
 	if (![[NSUserDefaults standardUserDefaults] boolForKey:WCEditorSuggestCompletionsWhileTypingKey])
 		return;
+	// only trigger auto completion when the user types a single character
+	// disregard single character inserts if they are part of an undo or redo
 	else if ([string length] != 1 ||
 			 [[self undoManager] isUndoing] ||
 			 [[self undoManager] isRedoing]) {
@@ -791,6 +819,7 @@
 		return;
 	}
 	
+	// only trigger on certain characters, for now this is letters, numbers and a few additional symbol characters
 	static NSCharacterSet *legalChars;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
@@ -800,8 +829,8 @@
 		legalChars = [charSet copy];
 	});
 	
-	unichar stringChar = [string characterAtIndex:0];
-	if (![legalChars characterIsMember:stringChar]) {
+	// if our single character isn't part of our legal character set, return early
+	if (![legalChars characterIsMember:[string characterAtIndex:0]]) {
 		[_completionTimer invalidate];
 		_completionTimer = nil;
 		return;
@@ -810,8 +839,11 @@
 	NSRange completionRange = [self rangeForUserCompletion];
 	NSRange lineRange = [[self string] lineRangeForRange:completionRange];
 	
+	// special case, don't complete when typing at the beginning of a line, the user is usually typing a new label in this case, no need to put the completion up and annoy them
+	// the exception being if the first character typed was a '#' or '.' which are preprocessor and directive keywords respectively
 	if (completionRange.location == lineRange.location) {
-		if (stringChar != '.' && stringChar != '#') {
+		unichar lineChar = [[self string] characterAtIndex:lineRange.location];
+		if (lineChar != '.' && lineChar != '#') {
 			[_completionTimer invalidate];
 			_completionTimer = nil;
 			return;
@@ -820,27 +852,13 @@
 	
 	CGFloat completionDelay = [[NSUserDefaults standardUserDefaults] floatForKey:WCEditorSuggestCompletionsWhileTypingDelayKey];
 	
+	// if the timer already exists, restart it
 	if (_completionTimer)
 		[_completionTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:completionDelay]];
+	// otherwise create the timer
 	else {
 		_completionTimer = [NSTimer scheduledTimerWithTimeInterval:completionDelay target:self selector:@selector(_completionTimerCallback:) userInfo:nil repeats:NO];
 	}
-}
-
-- (NSRange)_symbolRangeForRange:(NSRange)range; {
-	if (![[self string] length])
-		return NSNotFoundRange;
-	
-	__block NSRange symbolRange = NSNotFoundRange;
-	NSRange lineRange = [[self string] lineRangeForRange:range];
-	
-	[[WCSourceScanner symbolRegularExpression] enumerateMatchesInString:[self string] options:0 range:lineRange usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-		if (NSLocationInOrEqualToRange(range.location, [result range])) {
-			symbolRange = [result range];
-			*stop = YES;
-		}
-	}];
-	return symbolRange;
 }
 #pragma mark IBActions
 - (IBAction)_symbolMenuClicked:(id)sender {
@@ -851,6 +869,7 @@
 #pragma mark Notifications
 - (void)_textViewDidChangeSelection:(NSNotification *)note {
 	NSRange oldSelectedRange = [[[note userInfo] objectForKey:@"NSOldSelectedCharacterRange"] rangeValue];
+	// we only want to match braces and temp labels if there was no previous selection, the new selected index is greater than the previous one, and the difference between them is 1 (meaning the user only moved the caret a single position)
 	if (!oldSelectedRange.length &&
 		oldSelectedRange.location < [self selectedRange].location &&
 		[self selectedRange].location - oldSelectedRange.location == 1) {

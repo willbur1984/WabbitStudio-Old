@@ -12,7 +12,7 @@
 #import "WCSourceSymbol.h"
 #import "WCSourceScanner.h"
 #import "NSArray+WCExtensions.h"
-#import "NSString+WCExtensions.h"
+#import "NSString+RSExtensions.h"
 #import "NSEvent+RSExtensions.h"
 #import "NSAttributedString+WCExtensions.h"
 #import "WCReallyAdvancedViewController.h"

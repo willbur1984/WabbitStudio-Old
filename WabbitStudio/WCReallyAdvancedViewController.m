@@ -11,6 +11,8 @@
 NSString *const WCReallyAdvancedJumpBarSortItemsByKey = @"reallyAdvancedJumpBarSortItemsBy";
 NSString *const WCReallyAdvancedJumpBarShowFileAndLineNumberKey = @"reallyAdvancedJumpBarShowFileAndLineNumber";
 
+NSString *const WCReallyAdvancedJumpInFileSearchUsingCurrentEditorSelectionKey = @"reallyAdvancedJumpInFileSearchUsingCurrentEditorSelection";
+
 @implementation WCReallyAdvancedViewController
 #pragma mark *** Subclass Overrides ***
 - (id)init {
@@ -30,7 +32,7 @@ NSString *const WCReallyAdvancedJumpBarShowFileAndLineNumberKey = @"reallyAdvanc
 }
 #pragma mark RSUserDefaultsProvider
 + (NSDictionary *)userDefaults {
-	return [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithUnsignedInteger:WCReallyAdvancedJumpBarSortItemsByLocation],WCReallyAdvancedJumpBarSortItemsByKey,[NSNumber numberWithBool:YES],WCReallyAdvancedJumpBarShowFileAndLineNumberKey, nil];
+	return [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithUnsignedInteger:WCReallyAdvancedJumpBarSortItemsByLocation],WCReallyAdvancedJumpBarSortItemsByKey,[NSNumber numberWithBool:YES],WCReallyAdvancedJumpBarShowFileAndLineNumberKey,[NSNumber numberWithBool:YES],WCReallyAdvancedJumpInFileSearchUsingCurrentEditorSelectionKey, nil];
 }
 #pragma mark *** Public Methods ***
 #pragma mark Properties

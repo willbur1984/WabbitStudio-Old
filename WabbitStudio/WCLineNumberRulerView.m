@@ -8,7 +8,7 @@
 
 #import "WCLineNumberRulerView.h"
 #import "RSDefines.h"
-#import "NSString+WCExtensions.h"
+#import "NSString+RSExtensions.h"
 #import "WCFontAndColorTheme.h"
 #import "WCFontAndColorThemeManager.h"
 #import "WCEditorViewController.h"

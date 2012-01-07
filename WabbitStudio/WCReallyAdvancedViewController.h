@@ -18,6 +18,8 @@ typedef enum _WCReallyAdvancedJumpBarSortItemsBy {
 extern NSString *const WCReallyAdvancedJumpBarSortItemsByKey;
 extern NSString *const WCReallyAdvancedJumpBarShowFileAndLineNumberKey;
 
+extern NSString *const WCReallyAdvancedJumpInFileSearchUsingCurrentEditorSelectionKey;
+
 @interface WCReallyAdvancedViewController : NSViewController <RSPreferencesModule,RSUserDefaultsProvider>
 @property (readwrite,assign,nonatomic) IBOutlet NSView *initialFirstResponder;
 @end
