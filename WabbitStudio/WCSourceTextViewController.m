@@ -17,6 +17,7 @@
 #import "RSDefines.h"
 #import "WCFontAndColorTheme.h"
 #import "WCFontAndColorThemeManager.h"
+#import "WCEditorViewController.h"
 
 @interface WCSourceTextViewController ()
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
@@ -56,6 +57,8 @@
 	[[[self textView] enclosingScrollView] setRulersVisible:YES];
 	
 	[[self textView] setSelectedRange:NSEmptyRange];
+	
+	[[self textView] setWrapLines:[[NSUserDefaults standardUserDefaults] boolForKey:WCEditorWrapLinesToEditorWidthKey]];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewBoundsDidChange:) name:NSViewBoundsDidChangeNotification object:[[[self textView] enclosingScrollView] contentView]];
 }

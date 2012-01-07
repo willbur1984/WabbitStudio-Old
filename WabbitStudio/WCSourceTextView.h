@@ -19,6 +19,7 @@
 	NSTimer *_completionTimer;
 }
 @property (readwrite,assign,nonatomic) IBOutlet id <WCSourceTextViewDelegate> delegate;
+@property (readwrite,assign,nonatomic) BOOL wrapLines;
 
 - (IBAction)jumpToNextPlaceholder:(id)sender;
 - (IBAction)jumpToPreviousPlaceholder:(id)sender;

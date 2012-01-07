@@ -217,12 +217,15 @@
 }
 #pragma mark NSObject+WCExtensions
 - (NSSet *)userDefaultsKeyPathsToObserve {
-	return [NSSet setWithObjects:WCEditorShowCurrentLineHighlightKey, nil];
+	return [NSSet setWithObjects:WCEditorShowCurrentLineHighlightKey,WCEditorWrapLinesToEditorWidthKey, nil];
 }
 #pragma mark NSKeyValueObserving
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if ([keyPath isEqualToString:[kUserDefaultsKeyPathPrefix stringByAppendingString:WCEditorShowCurrentLineHighlightKey]])
 		[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
+	else if ([keyPath isEqualToString:[kUserDefaultsKeyPathPrefix stringByAppendingFormat:WCEditorWrapLinesToEditorWidthKey]]) {
+		[self setWrapLines:[[NSUserDefaults standardUserDefaults] boolForKey:WCEditorWrapLinesToEditorWidthKey]];
+	}
 	else
 		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
@@ -567,7 +570,32 @@
 	
 	[super setDelegate:delegate];
 }
-
+@dynamic wrapLines;
+- (BOOL)wrapLines {
+	return (![[self enclosingScrollView] hasHorizontalScroller]);
+}
+- (void)setWrapLines:(BOOL)wrapLines {
+	if ([self wrapLines] == wrapLines)
+		return;
+	
+	NSScrollView *textScrollView = [self enclosingScrollView];
+	NSSize contentSize = [textScrollView contentSize];
+	[self setMinSize:contentSize];
+	NSTextContainer *textContainer = [self textContainer];
+	
+	if (wrapLines) {
+		[textScrollView setHasHorizontalScroller:NO];
+		[textContainer setContainerSize:NSMakeSize(contentSize.width, CGFLOAT_MAX)];
+		[textContainer setWidthTracksTextView: YES];
+		[self setHorizontallyResizable: NO];
+	}
+	else {
+		[textScrollView setHasHorizontalScroller:YES];
+		[textContainer setContainerSize:NSMakeSize(CGFLOAT_MAX, CGFLOAT_MAX)];
+		[textContainer setWidthTracksTextView: NO];
+		[self setHorizontallyResizable: YES];
+	}
+}
 #pragma mark *** Private Methods ***
 - (void)_commonInit; {
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];

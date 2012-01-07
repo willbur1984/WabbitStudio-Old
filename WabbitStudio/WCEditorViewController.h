@@ -18,6 +18,7 @@ extern NSString *const WCEditorAutomaticallyInsertMatchingBraceKey;
 extern NSString *const WCEditorSuggestCompletionsWhileTypingKey;
 extern NSString *const WCEditorSuggestCompletionsWhileTypingDelayKey;
 extern NSString *const WCEditorAutomaticallyIndentAfterNewlinesKey;
+extern NSString *const WCEditorWrapLinesToEditorWidthKey;
 
 @interface WCEditorViewController : NSViewController <RSPreferencesModule,RSUserDefaultsProvider>
 @property (readwrite,assign,nonatomic) IBOutlet NSView *initialFirstResponder;
