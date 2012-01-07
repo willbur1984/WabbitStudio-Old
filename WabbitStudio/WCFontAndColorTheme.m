@@ -64,6 +64,7 @@ static WCFontToStringValueTransformer *fontToStringValueTransformer;
 }
 
 - (void)dealloc {
+	[_URL release];
 	[_name release];
 	[_identifier release];
 	[_pairs release];
@@ -292,6 +293,22 @@ static WCFontToStringValueTransformer *fontToStringValueTransformer;
 	return self;
 }
 
++ (WCFontAndColorTheme *)fontAndColorThemeWithContentsOfURL:(NSURL *)url; {
+	return [[[[self class] alloc] initWithContentsOfURL:url] autorelease];
+}
+- (id)initWithContentsOfURL:(NSURL *)url; {
+	NSDictionary *plist = [NSDictionary dictionaryWithContentsOfURL:url];
+	if (!plist) {
+		[self release];
+		return nil;
+	}
+	
+	_URL = [url copy];
+	
+	return [self initWithPlistRepresentation:plist];
+}
+
+@synthesize URL=_URL;
 @synthesize name=_name;
 @synthesize identifier=_identifier;
 @dynamic pairs;

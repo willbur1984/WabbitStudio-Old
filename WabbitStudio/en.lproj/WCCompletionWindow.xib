@@ -47,7 +47,7 @@
 				<string key="NSWindowRect">{{196, 240}, {240, 135}}</string>
 				<int key="NSWTFlags">1618478080</int>
 				<string key="NSWindowTitle">Window</string>
-				<string key="NSWindowClass">NSWindow</string>
+				<string key="NSWindowClass">WCCompletionWindow</string>
 				<nil key="NSViewClass"/>
 				<nil key="NSUserInterfaceItemIdentifier"/>
 				<object class="NSView" key="NSWindowView" id="1006">
@@ -68,10 +68,10 @@
 										<object class="NSTableView" id="693927492">
 											<reference key="NSNextResponder" ref="106550615"/>
 											<int key="NSvFlags">4352</int>
-											<string key="NSFrameSize">{229, 135}</string>
+											<string key="NSFrameSize">{240, 135}</string>
 											<reference key="NSSuperview" ref="106550615"/>
 											<reference key="NSWindow"/>
-											<reference key="NSNextKeyView" ref="870196331"/>
+											<reference key="NSNextKeyView" ref="559131881"/>
 											<string key="NSReuseIdentifierKey">_NS:1828</string>
 											<bool key="NSEnabled">YES</bool>
 											<object class="_NSCornerView" key="NSCornerView">
@@ -122,7 +122,7 @@
 													<reference key="NSTableView" ref="693927492"/>
 												</object>
 												<object class="NSTableColumn" id="329649113">
-													<double key="NSWidth">203</double>
+													<double key="NSWidth">214</double>
 													<double key="NSMinWidth">40</double>
 													<double key="NSMaxWidth">1000</double>
 													<object class="NSTableHeaderCell" key="NSHeaderCell">
@@ -187,11 +187,12 @@
 											<int key="NSDraggingSourceMaskForLocal">15</int>
 											<int key="NSDraggingSourceMaskForNonLocal">0</int>
 											<bool key="NSAllowsTypeSelect">NO</bool>
-											<int key="NSTableViewDraggingDestinationStyle">0</int>
+											<int key="NSTableViewSelectionHighlightStyle">1</int>
+											<int key="NSTableViewDraggingDestinationStyle">1</int>
 											<int key="NSTableViewGroupRowStyle">1</int>
 										</object>
 									</object>
-									<string key="NSFrameSize">{229, 135}</string>
+									<string key="NSFrameSize">{240, 135}</string>
 									<reference key="NSSuperview" ref="794556002"/>
 									<reference key="NSWindow"/>
 									<reference key="NSNextKeyView" ref="693927492"/>
@@ -207,10 +208,11 @@
 								</object>
 								<object class="NSScroller" id="559131881">
 									<reference key="NSNextResponder" ref="794556002"/>
-									<int key="NSvFlags">256</int>
+									<int key="NSvFlags">-2147483392</int>
 									<string key="NSFrame">{{229, 0}, {11, 135}}</string>
 									<reference key="NSSuperview" ref="794556002"/>
 									<reference key="NSWindow"/>
+									<reference key="NSNextKeyView"/>
 									<string key="NSReuseIdentifierKey">_NS:1845</string>
 									<int key="NSsFlags">256</int>
 									<reference key="NSTarget" ref="794556002"/>
@@ -234,9 +236,9 @@
 							<string key="NSFrameSize">{240, 135}</string>
 							<reference key="NSSuperview" ref="1006"/>
 							<reference key="NSWindow"/>
-							<reference key="NSNextKeyView" ref="106550615"/>
+							<reference key="NSNextKeyView" ref="870196331"/>
 							<string key="NSReuseIdentifierKey">_NS:1824</string>
-							<int key="NSsFlags">133136</int>
+							<int key="NSsFlags">133648</int>
 							<reference key="NSVScroller" ref="559131881"/>
 							<reference key="NSHScroller" ref="870196331"/>
 							<reference key="NSContentView" ref="106550615"/>
@@ -250,7 +252,7 @@
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1680, 1028}}</string>
 				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
-				<int key="NSWindowAnimationBehavior">5</int>
+				<int key="NSWindowAnimationBehavior">2</int>
 				<bool key="NSWindowIsRestorable">NO</bool>
 			</object>
 			<object class="NSArrayController" id="489307146">
@@ -545,6 +547,14 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/WCCompletionTableView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">WCCompletionWindow</string>
+					<string key="superclassName">NSWindow</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/WCCompletionWindow.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

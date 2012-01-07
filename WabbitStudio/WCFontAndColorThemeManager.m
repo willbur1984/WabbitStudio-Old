@@ -152,8 +152,14 @@ NSString *const WCFontAndColorThemeManagerFontDidChangeFontNameKey = @"fontName"
 		
 		if (!data)
 			return NO;
-		else if (![data writeToURL:[[directoryURL URLByAppendingPathComponent:[theme name]] URLByAppendingPathExtension:@"plist"] options:NSDataWritingAtomic error:outError])
-			return NO;
+		else {
+			NSURL *themeURL = [[directoryURL URLByAppendingPathComponent:[theme name]] URLByAppendingPathExtension:@"plist"];
+			
+			if (![data writeToURL:themeURL options:NSDataWritingAtomic error:outError])
+				return NO;
+			
+			[theme setURL:themeURL];
+		}
 		
 		[_unsavedThemes removeObject:theme];
 	}
@@ -180,8 +186,13 @@ NSString *const WCFontAndColorThemeManagerFontDidChangeFontNameKey = @"fontName"
 	[_themes insertObject:object atIndex:index];
 }
 - (void)removeObjectFromThemesAtIndex:(NSUInteger)index {
-	[_unsavedThemes removeObject:[_themes objectAtIndex:index]];
-	[_userThemeIdentifiers removeObject:[[_themes objectAtIndex:index] identifier]];
+	WCFontAndColorTheme *theme = [_themes objectAtIndex:index];
+	
+	if ([theme URL])
+		[[NSWorkspace sharedWorkspace] recycleURLs:[NSArray arrayWithObject:[theme URL]] completionHandler:NULL];
+	
+	[_unsavedThemes removeObject:theme];
+	[_userThemeIdentifiers removeObject:[theme identifier]];
 	[_themes removeObjectAtIndex:index];
 }
 - (void)insertThemes:(NSArray *)array atIndexes:(NSIndexSet *)indexes {
@@ -192,10 +203,18 @@ NSString *const WCFontAndColorThemeManagerFontDidChangeFontNameKey = @"fontName"
 	[_themes insertObjects:array atIndexes:indexes];
 }
 - (void)removeThemesAtIndexes:(NSIndexSet *)indexes {
-	for (WCFontAndColorTheme *theme in [_themes objectsAtIndexes:indexes]) {
+	NSArray *themes = [_themes objectsAtIndexes:indexes];
+	NSMutableArray *URLs = [NSMutableArray arrayWithCapacity:[themes count]];
+	for (WCFontAndColorTheme *theme in themes) {
 		[_unsavedThemes removeObject:theme];
 		[_userThemeIdentifiers removeObject:[theme identifier]];
+		
+		if ([theme URL])
+			[URLs addObject:[theme URL]];
 	}
+	
+	if ([URLs count])
+		[[NSWorkspace sharedWorkspace] recycleURLs:URLs completionHandler:NULL];
 	
 	[_themes removeObjectsAtIndexes:indexes];
 }
@@ -226,9 +245,10 @@ NSString *const WCFontAndColorThemeManagerFontDidChangeFontNameKey = @"fontName"
 		retval = [[NSMutableArray alloc] initWithCapacity:0];
 		
 		for (NSURL *themeURL in [[NSFileManager defaultManager] contentsOfDirectoryAtURL:[[WCMiscellaneousPerformer sharedPerformer] applicationFontAndColorThemesDirectoryURL] includingPropertiesForKeys:[NSArray array] options:NSDirectoryEnumerationSkipsHiddenFiles|NSDirectoryEnumerationSkipsPackageDescendants|NSDirectoryEnumerationSkipsSubdirectoryDescendants error:NULL]) {
-			WCFontAndColorTheme *theme = [[[WCFontAndColorTheme alloc] initWithPlistRepresentation:[NSDictionary dictionaryWithContentsOfURL:themeURL]] autorelease];
+			WCFontAndColorTheme *theme = [WCFontAndColorTheme fontAndColorThemeWithContentsOfURL:themeURL];
 			
-			[retval addObject:theme];
+			if (theme)
+				[retval addObject:theme];
 		}
 	});
 	return [[retval copy] autorelease];

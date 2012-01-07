@@ -118,6 +118,7 @@
 		078F041814AD784E0080ADBC /* RSFindBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F041614AD784E0080ADBC /* RSFindBarViewController.m */; };
 		078F041C14AD78640080ADBC /* RSFindBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 078F041A14AD78640080ADBC /* RSFindBarView.xib */; };
 		0791BE5214AD7F530004AC16 /* RSFindBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0791BE5114AD7F530004AC16 /* RSFindBarView.m */; };
+		07A7A0FE14B8C83900507FC7 /* WCCompletionWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A7A0FD14B8C83900507FC7 /* WCCompletionWindow.m */; };
 		07B4740514AE3CAA00E3F9D0 /* RSNumberToBoolTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B4740414AE3CAA00E3F9D0 /* RSNumberToBoolTransformer.m */; };
 		07B4740814AE3E0A00E3F9D0 /* RSNegateNumberToBoolTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B4740714AE3E0A00E3F9D0 /* RSNegateNumberToBoolTransformer.m */; };
 		07B4740B14AE433300E3F9D0 /* RSFindSearchField.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B4740A14AE433300E3F9D0 /* RSFindSearchField.m */; };
@@ -363,6 +364,8 @@
 		0791BE5014AD7F530004AC16 /* RSFindBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSFindBarView.h; sourceTree = "<group>"; };
 		0791BE5114AD7F530004AC16 /* RSFindBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSFindBarView.m; sourceTree = "<group>"; };
 		0791BE5314ADA3B80004AC16 /* BGHUDAppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BGHUDAppKit.framework; sourceTree = "<group>"; };
+		07A7A0FC14B8C83900507FC7 /* WCCompletionWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCCompletionWindow.h; sourceTree = "<group>"; };
+		07A7A0FD14B8C83900507FC7 /* WCCompletionWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCCompletionWindow.m; sourceTree = "<group>"; };
 		07B4740314AE3CAA00E3F9D0 /* RSNumberToBoolTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSNumberToBoolTransformer.h; sourceTree = "<group>"; };
 		07B4740414AE3CAA00E3F9D0 /* RSNumberToBoolTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSNumberToBoolTransformer.m; sourceTree = "<group>"; };
 		07B4740614AE3E0A00E3F9D0 /* RSNegateNumberToBoolTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSNegateNumberToBoolTransformer.h; sourceTree = "<group>"; };
@@ -512,6 +515,8 @@
 			children = (
 				0708962D14A656E90017BBE4 /* WCCompletionWindowController.h */,
 				0708962E14A656E90017BBE4 /* WCCompletionWindowController.m */,
+				07A7A0FC14B8C83900507FC7 /* WCCompletionWindow.h */,
+				07A7A0FD14B8C83900507FC7 /* WCCompletionWindow.m */,
 				0708963314A65BF50017BBE4 /* WCCompletionItem.h */,
 				0708965314A6CE900017BBE4 /* WCCompletionChoice.h */,
 				0708965414A6CE900017BBE4 /* WCCompletionChoice.m */,
@@ -1156,6 +1161,7 @@
 				07CC8F3F14B7DBDB0081EE69 /* WCJumpInCellView.m in Sources */,
 				07BC6CB614B7DE43007ECB3F /* WCJumpToLineWindowController.m in Sources */,
 				07892EDA14B81375006FDB52 /* NSString+RSExtensions.m in Sources */,
+				07A7A0FE14B8C83900507FC7 /* WCCompletionWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -29,7 +29,14 @@ static NSTextContainer *_textContainer;
 	});
 }
 
-- (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView characterIndex:(NSUInteger)charIndex {
+- (void)highlight:(BOOL)flag withFrame:(NSRect)cellFrame inView:(NSView *)controlView {
+#ifdef DEBUG
+	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
+#endif
+	[super highlight:flag withFrame:cellFrame inView:controlView];
+}
+
+- (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView characterIndex:(NSUInteger)charIndex layoutManager:(NSLayoutManager *)layoutManager {
 	static NSColor *lightSelectedFillColor;
 	static NSColor *lightNotSelectedKeyFillColor;
 	static NSColor *lightNotSelectedKeyStrokeColor;
@@ -56,12 +63,9 @@ static NSTextContainer *_textContainer;
 	});
 	
 	NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:cellFrame xRadius:5.0 yRadius:5.0];
-	BOOL isSelected = NO;
-	BOOL backgroundColorIsLight = YES;
-	if ([controlView isKindOfClass:[NSTextView class]]) {
-		isSelected = NSLocationInRange(charIndex, [(NSTextView *)controlView selectedRange]);
-		backgroundColorIsLight = [[[(NSTextView *)controlView backgroundColor] contrastingLabelColor] isEqualTo:[NSColor blackColor]];
-	}
+	NSTextView *textView = [layoutManager firstTextView];
+	BOOL isSelected = NSLocationInRange(charIndex, [textView selectedRange]);
+	BOOL backgroundColorIsLight = [[[textView backgroundColor] contrastingLabelColor] isEqualTo:[NSColor blackColor]];;
 	
 	if ([[controlView window] isKeyWindow]) {
 		if (isSelected) {

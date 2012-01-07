@@ -76,7 +76,7 @@
 - (void)showCompletionWindowControllerForSourceTextView:(WCSourceTextView *)textView; {
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		[[self window] setAnimationBehavior:NSWindowAnimationBehaviorAlertPanel];
+		[[self window] setAnimationBehavior:NSWindowAnimationBehaviorUtilityWindow];
 	});
 	
 	if ([self textView])
@@ -191,7 +191,7 @@
 }
 
 - (void)_closeCompletionWindowControllerAndInsertCompletion:(BOOL)insertCompletion; {
-	[[self window] close];
+	[[self window] orderOut:nil];
 	
 	if (insertCompletion) {
 		id <WCCompletionItem> itemToInsert = [[[self arrayController] selectedObjects] lastObject];
@@ -358,7 +358,7 @@
 		[stringSizeCell setAlignment:NSLeftTextAlignment];
 		[stringSizeCell setBackgroundStyle:NSBackgroundStyleLowered];
 		[stringSizeCell setControlSize:NSSmallControlSize];
-		[stringSizeCell setFont:[NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]]];
+		[stringSizeCell setFont:[NSFont boldSystemFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]]];
 	});
 	
 	CGFloat requiredWidth = ([[self completions] count])?0.0:125.0;

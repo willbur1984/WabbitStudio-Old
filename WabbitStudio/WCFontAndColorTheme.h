@@ -50,6 +50,7 @@ extern NSString *const WCFontAndColorThemeMacroFontKey;
 extern NSString *const WCFontAndColorThemeMacroColorKey;
 
 @interface WCFontAndColorTheme : NSObject <RSPlistArchiving,NSCopying,NSMutableCopying> {
+	NSURL *_URL;
 	NSString *_name;
 	NSString *_identifier;
 	NSMutableArray *_pairs;
@@ -91,6 +92,7 @@ extern NSString *const WCFontAndColorThemeMacroColorKey;
 	NSFont *_macroFont;
 	NSColor *_macroColor;
 }
+@property (readwrite,copy,nonatomic) NSURL *URL;
 @property (readwrite,copy,nonatomic) NSString *name;
 @property (readwrite,copy,nonatomic) NSString *identifier;
 @property (readonly,nonatomic) NSArray *pairs;
@@ -131,5 +133,8 @@ extern NSString *const WCFontAndColorThemeMacroColorKey;
 @property (readwrite,retain,nonatomic) NSColor *defineColor;
 @property (readwrite,retain,nonatomic) NSFont *macroFont;
 @property (readwrite,retain,nonatomic) NSColor *macroColor;
+
++ (WCFontAndColorTheme *)fontAndColorThemeWithContentsOfURL:(NSURL *)url;
+- (id)initWithContentsOfURL:(NSURL *)url;
 
 @end
