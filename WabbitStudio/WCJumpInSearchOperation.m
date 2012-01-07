@@ -39,6 +39,7 @@
 	
 #ifdef DEBUG
     NSAssert(regex, @"regex cannot be nil!");
+	RSLogObject(pattern);
 #endif
 	
 	if ([self isCancelled])

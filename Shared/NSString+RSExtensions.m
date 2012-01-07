@@ -87,7 +87,7 @@
 	NSUInteger total = 0, exponent = 0, base = 16;
 	
 	while (index > 0) {
-		uint8_t value = HexValueForCharacter([string characterAtIndex:--index]);
+		uint8_t value = RSHexValueForCharacter([string characterAtIndex:--index]);
 		total += value * (NSUInteger)powf(base, exponent++);
 	}
 	return total;
@@ -102,7 +102,7 @@
 	NSUInteger total = 0, exponent = 0, base = 2;
 	
 	while (index > 0) {
-		uint8_t value = HexValueForCharacter([string characterAtIndex:--index]);
+		uint8_t value = RSHexValueForCharacter([string characterAtIndex:--index]);
 		total += value * (NSUInteger)powf(base, exponent++);
 	}
 	return total;
@@ -117,7 +117,7 @@
 	NSUInteger total = 0, exponent = 0, base = 10;
 	
 	while (index > 0) {
-		uint8_t value = ValueForCharacter([string characterAtIndex:--index]);
+		uint8_t value = RSValueForCharacter([string characterAtIndex:--index]);
 		total += value * (NSUInteger)powf(base, exponent++);
 	}
 	return total;

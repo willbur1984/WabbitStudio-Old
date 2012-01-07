@@ -6,9 +6,8 @@
 //  Copyright 2011 Revolution Software. All rights reserved.
 //
 
-#ifdef __OBJC__
-#import <Foundation/NSGeometry.h>
-#import <Foundation/NSString.h>
+#ifndef RSDEFINES_H
+#define RSDEFINES_H
 
 #define KEY_CODE_RETURN 36
 #define KEY_CODE_ENTER 76
@@ -40,11 +39,36 @@
 #define NSLogSize(sizeToLog) NSLog(@"%@",NSStringFromSize(sizeToLog))
 #define NSLogFloat(floatToLog) NSLog(@"%f",(floatToLog))
 
+#define RSLogObject(objectToLog) RSLog(@"%@",(objectToLog))
+#define RSLogRange(rangeToLog) RSLog(@"%@",NSStringFromRange(rangeToLog))
+#define RSLogRect(rectToLog) RSLog(@"%@",NSStringFromRect(rectToLog))
+#define RSLogInteger(intToLog) RSLog(@"%ld",(intToLog))
+#define RSLogUnsignedInteger(uintToLog) RSLog(@"%lu",(uintToLog))
+#define RSLogSize(sizeToLog) RSLog(@"%@",NSStringFromSize(sizeToLog))
+#define RSLogFloat(floatToLog) RSLog(@"%f",(floatToLog))
+
+#ifdef __OBJC__
+#import <Foundation/NSGeometry.h>
+#import <Foundation/NSString.h>
+
 static const NSRange NSNotFoundRange = {.location = NSNotFound};
 static const NSRange NSEmptyRange = {.location = 0, .length = 0};
 
 static const NSSize NSSmallSize = {.width = 16.0, .height = 16.0};
 static const NSSize NSMiniSize = {.width = 14.0, .height = 14.0};
+
+static inline void RSLog(NSString *format, ...) {
+	va_list args;
+	va_start(args, format);
+	
+	NSString *string = [[NSString alloc] initWithFormat:[format stringByAppendingString:@"\n"] arguments:args];
+	
+	va_end(args);
+	
+	[(NSFileHandle *)[NSFileHandle fileHandleWithStandardOutput] writeData:[string dataUsingEncoding:NSUTF8StringEncoding]];
+	
+	[string release];
+}
 
 static inline NSRect NSCenteredRect(NSRect rect1, NSRect rect2) {
 	return NSMakeRect((NSMinX(rect2)+floor(NSWidth(rect2)/2.0))-floor(NSWidth(rect1)/2.0), (NSMinY(rect2)+floor(NSHeight(rect2)/2.0))-floor(NSHeight(rect1)/2.0), NSWidth(rect1), NSHeight(rect1));
@@ -62,93 +86,5 @@ static inline BOOL NSLocationInOrEqualToRange(NSUInteger loc, NSRange range) {
 	return (loc - range.location <= range.length);
 }
 
-static inline uint8_t HexValueForCharacter(unichar character) {
-	switch (character) {
-		case '0':
-			return 0;
-		case '1':
-			return 1;
-		case '2':
-			return 2;
-		case '3':
-			return 3;
-		case '4':
-			return 4;
-		case '5':
-			return 5;
-		case '6':
-			return 6;
-		case '7':
-			return 7;
-		case '8':
-			return 8;
-		case '9':
-			return 9;
-		case 'a':
-		case 'A':
-			return 10;
-		case 'b':
-		case 'B':
-			return 11;
-		case 'c':
-		case 'C':
-			return 12;
-		case 'd':
-		case 'D':
-			return 13;
-		case 'e':
-		case 'E':
-			return 14;
-		case 'f':
-		case 'F':
-			return 15;
-		default:
-			return 0;
-	}
-}
-
-static inline uint8_t ValueForCharacter(unichar character) {
-	switch (character) {
-		case '0':
-			return 0;
-		case '1':
-			return 1;
-		case '2':
-			return 2;
-		case '3':
-			return 3;
-		case '4':
-			return 4;
-		case '5':
-			return 5;
-		case '6':
-			return 6;
-		case '7':
-			return 7;
-		case '8':
-			return 8;
-		case '9':
-			return 9;
-		default:
-			return 0;
-	}
-}
-
-static inline uint8_t BinaryValueForCharacter(unichar character) {
-	switch (character) {
-		case '0':
-			return 0;
-		case '1':
-			return 1;
-		default:
-			return 0;
-	}
-}
-
-static inline NSDictionary *RSFindTextAttributes() {
-	return [NSDictionary dictionaryWithObjectsAndKeys:[NSColor yellowColor],NSBackgroundColorAttributeName,[NSColor orangeColor],NSUnderlineColorAttributeName,[NSNumber numberWithUnsignedInteger:NSUnderlinePatternSolid|NSUnderlineStyleDouble],NSUnderlineStyleAttributeName, nil];
-}
-static inline NSDictionary *RSTransparentFindTextAttributes() {
-	return [NSDictionary dictionaryWithObjectsAndKeys:[[NSColor yellowColor] colorWithAlphaComponent:0.5],NSBackgroundColorAttributeName,[[NSColor orangeColor] colorWithAlphaComponent:0.5],NSUnderlineColorAttributeName,[NSNumber numberWithUnsignedInteger:NSUnderlinePatternSolid|NSUnderlineStyleDouble],NSUnderlineStyleAttributeName, nil];
-}
+#endif
 #endif

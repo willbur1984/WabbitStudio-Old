@@ -11,6 +11,7 @@
 #import "RSFindOptionsViewController.h"
 #import "RSDefines.h"
 #import "RSBezelWidgetManager.h"
+#import "WCDefines.h"
 
 @interface RSFindBarViewController ()
 @property (readwrite,assign,nonatomic) BOOL wrapAround;
@@ -490,7 +491,7 @@ static const CGFloat kReplaceControlsHeight = 22.0;
 @synthesize findRegularExpression=_findRegularExpression;
 #pragma mark *** Private Methods ***
 - (void)_addFindTextAttributes {	
-	NSDictionary *attributes = RSFindTextAttributes();
+	NSDictionary *attributes = WCFindTextAttributes();
 	NSUInteger rangeIndex, rangeCount = [_findRanges count];
 	for (rangeIndex = 0; rangeIndex < rangeCount; rangeIndex++) {
 		NSRange range = *(NSRangePointer)[_findRanges pointerAtIndex:rangeIndex];

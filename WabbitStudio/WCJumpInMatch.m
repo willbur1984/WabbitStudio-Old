@@ -7,7 +7,7 @@
 //
 
 #import "WCJumpInMatch.h"
-#import "RSDefines.h"
+#import "WCDefines.h"
 
 @interface WCJumpInMatch ()
 @property (readonly,nonatomic) NSArray *ranges;
@@ -54,7 +54,7 @@
 		NSMutableAttributedString *temp = [[[NSMutableAttributedString alloc] initWithString:[[self item] jumpInName] attributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSRegularControlSize]],NSFontAttributeName, nil]] autorelease];
 		
 		if ([[self ranges] count]) {
-			NSDictionary *attributes = RSTransparentFindTextAttributes();
+			NSDictionary *attributes = WCTransparentFindTextAttributes();
 			for (NSValue *rangeValue in [self ranges])
 				[temp addAttributes:attributes range:[rangeValue rangeValue]];
 		}

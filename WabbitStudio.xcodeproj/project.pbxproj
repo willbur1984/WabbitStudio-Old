@@ -369,6 +369,7 @@
 		07B4740714AE3E0A00E3F9D0 /* RSNegateNumberToBoolTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSNegateNumberToBoolTransformer.m; sourceTree = "<group>"; };
 		07B4740914AE433300E3F9D0 /* RSFindSearchField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSFindSearchField.h; sourceTree = "<group>"; };
 		07B4740A14AE433300E3F9D0 /* RSFindSearchField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSFindSearchField.m; sourceTree = "<group>"; };
+		07BB432D14B83E800062AD00 /* WCDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCDefines.h; sourceTree = "<group>"; };
 		07BC6CB414B7DE43007ECB3F /* WCJumpToLineWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCJumpToLineWindowController.h; sourceTree = "<group>"; };
 		07BC6CB514B7DE43007ECB3F /* WCJumpToLineWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCJumpToLineWindowController.m; sourceTree = "<group>"; };
 		07BC6CB814B7E3DD007ECB3F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCJumpToLineWindow.xib; sourceTree = "<group>"; };
@@ -607,6 +608,7 @@
 		071ECCC814A4233C002409F8 /* WabbitStudio */ = {
 			isa = PBXGroup;
 			children = (
+				07BB432D14B83E800062AD00 /* WCDefines.h */,
 				072BBC4F14AA68B80044ECC2 /* WCApplicationDelegate.h */,
 				072BBC5014AA68B80044ECC2 /* WCApplicationDelegate.m */,
 				0745BE1C14AB921300F541DC /* WCMiscellaneousPerformer.h */,
