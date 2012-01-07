@@ -283,6 +283,7 @@
 	if (![[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCurrentLineHighlightKey])
 		return;
 	
+	/*
 	NSUInteger numRects;
 	NSRectArray rects;
 	
@@ -303,6 +304,7 @@
 			NSRectFill(lineRect);
 		}
 	}
+	 */
 }
 
 - (void)_textStorageDidProcessEditing:(NSNotification *)note {

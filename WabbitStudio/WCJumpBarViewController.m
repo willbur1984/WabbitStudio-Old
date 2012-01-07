@@ -195,7 +195,10 @@
 	NSRange lineRange = [[[self textView] string] lineRangeForRange:selectedRange];
 	NSUInteger lineNumber = [[[self textView] string] lineNumberForRange:selectedRange];
 	
-	[self setTextViewSelectedLineAndColumn:[NSString stringWithFormat:NSLocalizedString(@"%lu:%lu", @"text view selected line and column format string"),++lineNumber,selectedRange.location-lineRange.location]];
+	if (selectedRange.length)
+		[self setTextViewSelectedLineAndColumn:[NSString stringWithFormat:NSLocalizedString(@"%lu:%lu (%lu)", @"text view selected line and column format string"),++lineNumber,selectedRange.location-lineRange.location,selectedRange.length]];
+	else
+		[self setTextViewSelectedLineAndColumn:[NSString stringWithFormat:NSLocalizedString(@"%lu:%lu", @"text view selected line and column format string"),++lineNumber,selectedRange.location-lineRange.location]];
 }
 
 - (void)_updateSymbolsMenuItemsWithSymbols:(NSArray *)symbols selectedSymbol:(WCSourceSymbol *)selectedSymbol selectedSymbolIndex:(NSUInteger *)selectedSymbolIndex sortedByName:(BOOL)sortedByName; {

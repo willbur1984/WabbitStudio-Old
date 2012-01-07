@@ -610,7 +610,7 @@
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
 	
 	[[currentTheme currentLineColor] setFill];
-	NSRectFill(lineRect);
+	[[NSBezierPath bezierPathWithRoundedRect:NSInsetRect(lineRect, 1.0, 0) xRadius:5.0 yRadius:5.0] fill];
 }
 
 - (void)_highlightMatchingBrace; {
