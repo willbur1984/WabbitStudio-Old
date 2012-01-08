@@ -15,6 +15,9 @@
 #import "WCSourceTextViewController.h"
 #import "WCSourceTextView.h"
 #import "RSFindBarViewController.h"
+#import "NSString+RSExtensions.h"
+#import "WCEditorViewController.h"
+#import "NSUserDefaults+RSExtensions.h"
 
 @interface WCSourceFileDocument ()
 @property (readonly,nonatomic) WCSourceTextStorage *textStorage;
@@ -38,6 +41,8 @@
 - (id)init {
 	if (!(self = [super init]))
 		return nil;
+	
+	_fileEncoding = [[NSUserDefaults standardUserDefaults] unsignedIntegerForKey:WCEditorDefaultTextEncodingKey];
 	
 	return self;
 }
@@ -91,14 +96,40 @@
 }
 
 - (NSData *)dataOfType:(NSString *)typeName error:(NSError **)outError {
-	NSString *string = [[self textStorage] string];
-	NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
+	NSMutableString *string = [[[[self textStorage] string] mutableCopy] autorelease];
 	
-	return data;
+	// remove any attachment characters
+	[string replaceOccurrencesOfString:[NSString attachmentCharacterString] withString:@"" options:NSLiteralSearch range:NSMakeRange(0, [string length])];
+	
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorConvertExistingFileLineEndingsOnSaveKey]) {
+		WCEditorDefaultLineEndings lineEnding = [[[NSUserDefaults standardUserDefaults] objectForKey:WCEditorDefaultLineEndingsKey] unsignedIntValue];
+		switch (lineEnding) {
+			case WCEditorDefaultLineEndingsUnix:
+				[string replaceOccurrencesOfString:[NSString windowsLineEndingString] withString:[NSString unixLineEndingString] options:NSLiteralSearch range:NSMakeRange(0, [string length])];
+				[string replaceOccurrencesOfString:[NSString macOSLineEndingString] withString:[NSString unixLineEndingString] options:NSLiteralSearch range:NSMakeRange(0, [string length])];
+				break;
+			case WCEditorDefaultLineEndingsMacOS:
+				[string replaceOccurrencesOfString:[NSString windowsLineEndingString] withString:[NSString macOSLineEndingString] options:NSLiteralSearch range:NSMakeRange(0, [string length])];
+				[string replaceOccurrencesOfString:[NSString unixLineEndingString] withString:[NSString macOSLineEndingString] options:NSLiteralSearch range:NSMakeRange(0, [string length])];
+				break;
+			case WCEditorDefaultLineEndingsWindows:
+				[string replaceOccurrencesOfString:[NSString windowsLineEndingString] withString:[NSString unixLineEndingString] options:NSLiteralSearch range:NSMakeRange(0, [string length])];
+				[string replaceOccurrencesOfString:[NSString macOSLineEndingString] withString:[NSString unixLineEndingString] options:NSLiteralSearch range:NSMakeRange(0, [string length])];
+				[string replaceOccurrencesOfString:[NSString unixLineEndingString] withString:[NSString windowsLineEndingString] options:NSLiteralSearch range:NSMakeRange(0, [string length])];
+				break;
+			default:
+				break;
+		}
+	}
+	
+	return [string dataUsingEncoding:_fileEncoding];
 }
 
-- (BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError {
-	NSString *string = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+- (BOOL)readFromURL:(NSURL *)url ofType:(NSString *)typeName error:(NSError **)outError {
+	NSString *string = [NSString stringWithContentsOfURL:url usedEncoding:&_fileEncoding error:outError];
+	
+	if (!string)
+		return NO;
 	
 	_fileContents = [string retain];
 	

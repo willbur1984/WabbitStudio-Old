@@ -7,6 +7,8 @@
 //
 
 #import "WCEditorViewController.h"
+#import "EncodingManager.h"
+#import "NSUserDefaults+RSExtensions.h"
 
 NSString *const WCEditorShowCurrentLineHighlightKey = @"editorShowCurrentLineHighlight";
 NSString *const WCEditorShowLineNumbersKey = @"editorShowLineNumbers";
@@ -21,6 +23,9 @@ NSString *const WCEditorIndentUsingKey = @"editorIndentUsing";
 NSString *const WCEditorTabWidthKey = @"editorTabWidth";
 NSString *const WCEditorShowPageGuideAtColumnKey = @"editorShowPageGuideAtColumn";
 NSString *const WCEditorPageGuideColumnNumberKey = @"editorPageGuideColumnNumber";
+NSString *const WCEditorDefaultLineEndingsKey = @"editorDefaultLineEndings";
+NSString *const WCEditorConvertExistingFileLineEndingsOnSaveKey = @"editorConvertExistingFileLineEndingsOnSave";
+NSString *const WCEditorDefaultTextEncodingKey = @"editorDefaultTextEncoding";
 
 @implementation WCEditorViewController
 
@@ -32,6 +37,13 @@ NSString *const WCEditorPageGuideColumnNumberKey = @"editorPageGuideColumnNumber
 
 - (id)init {
 	return [self initWithNibName:@"WCEditorView" bundle:nil];
+}
+
+- (void)loadView {
+	[super loadView];
+	
+	NSStringEncoding defaultEncoding = [[[NSUserDefaults standardUserDefaults] objectForKey:WCEditorDefaultTextEncodingKey] unsignedIntegerValue];
+	[[EncodingManager sharedInstance] setupPopUpCell:[[self popUpButton] cell] selectedEncoding:defaultEncoding withDefaultEntry:NO];
 }
 #pragma mark RSPreferencesModule
 - (NSString *)identifier {
@@ -47,8 +59,19 @@ NSString *const WCEditorPageGuideColumnNumberKey = @"editorPageGuideColumnNumber
 }
 #pragma mark RSUserDefaultsProvider
 + (NSDictionary *)userDefaults {
-	return [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],WCEditorShowCurrentLineHighlightKey,[NSNumber numberWithBool:YES],WCEditorShowLineNumbersKey,[NSNumber numberWithBool:YES],WCEditorShowMatchingBraceHighlightKey,[NSNumber numberWithBool:YES],WCEditorShowMatchingTemporaryLabelHighlightKey,[NSNumber numberWithBool:YES],WCEditorAutomaticallyInsertMatchingBraceKey,[NSNumber numberWithBool:YES],WCEditorSuggestCompletionsWhileTypingKey,[NSNumber numberWithFloat:0.35],WCEditorSuggestCompletionsWhileTypingDelayKey,[NSNumber numberWithBool:YES],WCEditorAutomaticallyIndentAfterNewlinesKey,[NSNumber numberWithBool:YES],WCEditorWrapLinesToEditorWidthKey,[NSNumber numberWithUnsignedInteger:WCEditorIndentUsingTabs],WCEditorIndentUsingKey,[NSNumber numberWithUnsignedInteger:4],WCEditorTabWidthKey,[NSNumber numberWithUnsignedInteger:100],WCEditorPageGuideColumnNumberKey, nil];
+	return [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],WCEditorShowCurrentLineHighlightKey,[NSNumber numberWithBool:YES],WCEditorShowLineNumbersKey,[NSNumber numberWithBool:YES],WCEditorShowMatchingBraceHighlightKey,[NSNumber numberWithBool:YES],WCEditorShowMatchingTemporaryLabelHighlightKey,[NSNumber numberWithBool:YES],WCEditorAutomaticallyInsertMatchingBraceKey,[NSNumber numberWithBool:YES],WCEditorSuggestCompletionsWhileTypingKey,[NSNumber numberWithFloat:0.35],WCEditorSuggestCompletionsWhileTypingDelayKey,[NSNumber numberWithBool:YES],WCEditorAutomaticallyIndentAfterNewlinesKey,[NSNumber numberWithBool:YES],WCEditorWrapLinesToEditorWidthKey,[NSNumber numberWithUnsignedInteger:WCEditorIndentUsingTabs],WCEditorIndentUsingKey,[NSNumber numberWithUnsignedInteger:4],WCEditorTabWidthKey,[NSNumber numberWithUnsignedInteger:100],WCEditorPageGuideColumnNumberKey,[NSNumber numberWithUnsignedInteger:NSUTF8StringEncoding],WCEditorDefaultTextEncodingKey, nil];
 }
-
+#pragma mark *** Public Methods ***
+#pragma mark IBActions
+- (IBAction)changeDefaultTextEncoding:(id)sender; {
+	NSStringEncoding selectedEncoding = [[sender representedObject] unsignedIntegerValue];
+	
+	if (selectedEncoding == NoStringEncoding)
+		return;
+	
+	[[NSUserDefaults standardUserDefaults] setUnsignedInteger:selectedEncoding forKey:WCEditorDefaultTextEncodingKey];
+}
+#pragma mark Properties
 @synthesize initialFirstResponder=_initialFirstResponder;
+@synthesize popUpButton=_popUpButton;
 @end

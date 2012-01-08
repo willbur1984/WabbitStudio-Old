@@ -194,4 +194,38 @@
 	// toll free bridging is cool!
 	return [(NSString *)UUIDString autorelease];
 }
+
++ (NSString *)unixLineEndingString; {
+	static NSString *retval;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		retval = [[NSString alloc] initWithFormat:@"%C",0x000A];
+	});
+	return retval;
+}
++ (NSString *)macOSLineEndingString; {
+	static NSString *retval;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		retval = [[NSString alloc] initWithFormat:@"%C",0x000D];
+	});
+	return retval;
+}
++ (NSString *)windowsLineEndingString; {
+	static NSString *retval;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		retval = [[NSString alloc] initWithFormat:@"%C%C",0x000D,0x000A];
+	});
+	return retval;
+}
+
++ (NSString *)attachmentCharacterString; {
+	static NSString *retval;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		retval = [[NSString alloc] initWithFormat:@"%C",NSAttachmentCharacter];
+	});	
+	return retval;
+}
 @end

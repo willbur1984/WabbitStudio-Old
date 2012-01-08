@@ -15,6 +15,8 @@
 
 @interface WCSourceFileDocument : NSDocument <WCJumpBarDataSource,WCSourceTextStorageDelegate,WCSourceScannerDelegate,NSWindowDelegate> {
 	NSString *_fileContents;
+	NSStringEncoding _fileEncoding;
+	
 	WCSourceTextStorage *_textStorage;
 	WCSourceScanner *_sourceScanner;
 	WCSourceHighlighter *_sourceHighlighter;

@@ -144,7 +144,7 @@
 			case NSTextFinderActionShowFindInterface:
 			case NSTextFinderActionPreviousMatch:
 			case NSTextFinderActionNextMatch:
-				return YES;
+				return [self isSelectable];
 			case NSTextFinderActionHideFindInterface:
 				return [_findBarViewController isFindBarVisible];
 			case NSTextFinderActionSetSearchString:

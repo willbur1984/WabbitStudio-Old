@@ -28,7 +28,19 @@ extern NSString *const WCEditorIndentUsingKey;
 extern NSString *const WCEditorTabWidthKey;
 extern NSString *const WCEditorShowPageGuideAtColumnKey;
 extern NSString *const WCEditorPageGuideColumnNumberKey;
+typedef enum _WCEditorDefaultLineEndings {
+	WCEditorDefaultLineEndingsUnix = 0,
+	WCEditorDefaultLineEndingsMacOS = 1,
+	WCEditorDefaultLineEndingsWindows = 2
+	
+} WCEditorDefaultLineEndings;
+extern NSString *const WCEditorDefaultLineEndingsKey;
+extern NSString *const WCEditorConvertExistingFileLineEndingsOnSaveKey;
+extern NSString *const WCEditorDefaultTextEncodingKey;
 
 @interface WCEditorViewController : NSViewController <RSPreferencesModule,RSUserDefaultsProvider>
 @property (readwrite,assign,nonatomic) IBOutlet NSView *initialFirstResponder;
+@property (readwrite,assign,nonatomic) IBOutlet NSPopUpButton *popUpButton;
+
+- (IBAction)changeDefaultTextEncoding:(id)sender;
 @end

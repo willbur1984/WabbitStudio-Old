@@ -106,6 +106,9 @@
 		0745BE3314ABF86700F541DC /* WCEditorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0745BE3114ABF86700F541DC /* WCEditorView.xib */; };
 		0745BE3514ABFB0D00F541DC /* Editor.png in Resources */ = {isa = PBXBuildFile; fileRef = 0745BE3414ABFB0D00F541DC /* Editor.png */; };
 		076966E614B636CD005448F7 /* WCAdvancedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 076966E414B636CD005448F7 /* WCAdvancedViewController.m */; };
+		07713F1314B954FC00324F77 /* SelectEncodingsPanel.nib in Resources */ = {isa = PBXBuildFile; fileRef = 07713F1114B954FC00324F77 /* SelectEncodingsPanel.nib */; };
+		07713F1614B9551400324F77 /* EncodingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 07713F1514B9551400324F77 /* EncodingManager.m */; };
+		07713F1914B9586400324F77 /* NSUserDefaults+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07713F1814B9586400324F77 /* NSUserDefaults+RSExtensions.m */; };
 		07892EDA14B81375006FDB52 /* NSString+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07892ED914B81375006FDB52 /* NSString+RSExtensions.m */; };
 		078F03FD14AD0D760080ADBC /* RSToolTipBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F03F614AD0D760080ADBC /* RSToolTipBackgroundView.m */; };
 		078F03FE14AD0D760080ADBC /* RSToolTipManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F03F914AD0D760080ADBC /* RSToolTipManager.m */; };
@@ -339,6 +342,11 @@
 		0745BE3414ABFB0D00F541DC /* Editor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Editor.png; sourceTree = "<group>"; };
 		076966E314B636CD005448F7 /* WCAdvancedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCAdvancedViewController.h; sourceTree = "<group>"; };
 		076966E414B636CD005448F7 /* WCAdvancedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCAdvancedViewController.m; sourceTree = "<group>"; };
+		07713F1214B954FC00324F77 /* en */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = en; path = SelectEncodingsPanel.nib; sourceTree = "<group>"; };
+		07713F1414B9551400324F77 /* EncodingManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncodingManager.h; sourceTree = "<group>"; };
+		07713F1514B9551400324F77 /* EncodingManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncodingManager.m; sourceTree = "<group>"; };
+		07713F1714B9586400324F77 /* NSUserDefaults+RSExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSUserDefaults+RSExtensions.h"; sourceTree = "<group>"; };
+		07713F1814B9586400324F77 /* NSUserDefaults+RSExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSUserDefaults+RSExtensions.m"; sourceTree = "<group>"; };
 		07892ED814B81375006FDB52 /* NSString+RSExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+RSExtensions.h"; sourceTree = "<group>"; };
 		07892ED914B81375006FDB52 /* NSString+RSExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+RSExtensions.m"; sourceTree = "<group>"; };
 		078F03F514AD0D760080ADBC /* RSToolTipBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSToolTipBackgroundView.h; sourceTree = "<group>"; };
@@ -440,6 +448,7 @@
 		0708963F14A6C7B90017BBE4 /* Xibs */ = {
 			isa = PBXGroup;
 			children = (
+				07713F1114B954FC00324F77 /* SelectEncodingsPanel.nib */,
 				071ECCD714A4233C002409F8 /* WCSourceFileDocument.xib */,
 				071ECCDA14A4233D002409F8 /* WCMainMenu.xib */,
 				0708963014A659300017BBE4 /* WCCompletionWindow.xib */,
@@ -557,6 +566,8 @@
 		0708964614A6C9020017BBE4 /* External */ = {
 			isa = PBXGroup;
 			children = (
+				07713F1414B9551400324F77 /* EncodingManager.h */,
+				07713F1514B9551400324F77 /* EncodingManager.m */,
 				078F040914AD5BFA0080ADBC /* NSColor+ContrastingLabelExtensions.h */,
 				078F040A14AD5BFA0080ADBC /* NSColor+ContrastingLabelExtensions.m */,
 				0725433614A7996000C961B7 /* NSBezierPath+MCAdditions.h */,
@@ -937,6 +948,8 @@
 				072BBC3D14AA65F80044ECC2 /* NSEvent+RSExtensions.m */,
 				07892ED814B81375006FDB52 /* NSString+RSExtensions.h */,
 				07892ED914B81375006FDB52 /* NSString+RSExtensions.m */,
+				07713F1714B9586400324F77 /* NSUserDefaults+RSExtensions.h */,
+				07713F1814B9586400324F77 /* NSUserDefaults+RSExtensions.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -1054,6 +1067,7 @@
 				07EB8E3C14B64DB600F8A8C6 /* WCKeyboardView.xib in Resources */,
 				073B5AA714B6AA8A00FCDC0F /* WCJumpInWindow.xib in Resources */,
 				07BC6CB914B7E3DD007ECB3F /* WCJumpToLineWindow.xib in Resources */,
+				07713F1314B954FC00324F77 /* SelectEncodingsPanel.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1154,6 +1168,8 @@
 				07BC6CB614B7DE43007ECB3F /* WCJumpToLineWindowController.m in Sources */,
 				07892EDA14B81375006FDB52 /* NSString+RSExtensions.m in Sources */,
 				07A7A0FE14B8C83900507FC7 /* WCCompletionWindow.m in Sources */,
+				07713F1614B9551400324F77 /* EncodingManager.m in Sources */,
+				07713F1914B9586400324F77 /* NSUserDefaults+RSExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1257,6 +1273,14 @@
 				0745BE3214ABF86700F541DC /* en */,
 			);
 			name = WCEditorView.xib;
+			sourceTree = "<group>";
+		};
+		07713F1114B954FC00324F77 /* SelectEncodingsPanel.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				07713F1214B954FC00324F77 /* en */,
+			);
+			name = SelectEncodingsPanel.nib;
 			sourceTree = "<group>";
 		};
 		078F040214AD0FA00080ADBC /* RSToolTipWindow.xib */ = {

@@ -27,6 +27,7 @@
 #import "WCJumpInWindowController.h"
 #import "WCJumpToLineWindowController.h"
 #import "NSString+WCExtensions.h"
+#import "NSString+RSExtensions.h"
 
 @interface WCSourceTextView ()
 
@@ -209,7 +210,20 @@
 }
 
 - (IBAction)insertNewline:(id)sender {
-	[super insertNewline:nil];
+	WCEditorDefaultLineEndings lineEnding = [[[NSUserDefaults standardUserDefaults] objectForKey:WCEditorDefaultLineEndingsKey] unsignedIntValue];
+	switch (lineEnding) {
+		case WCEditorDefaultLineEndingsUnix:
+			[super insertNewline:nil];
+			break;
+		case WCEditorDefaultLineEndingsMacOS:
+			[super insertText:[NSString macOSLineEndingString]];
+			break;
+		case WCEditorDefaultLineEndingsWindows:
+			[super insertText:[NSString windowsLineEndingString]];
+			break;
+		default:
+			break;
+	}	
 	
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorAutomaticallyIndentAfterNewlinesKey]) {
 		NSString *previousLineWhitespaceString;

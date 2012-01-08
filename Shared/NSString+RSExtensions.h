@@ -25,6 +25,12 @@
 - (NSString *)stringByRemovingInvalidDigits;
 
 + (NSString *)UUIDString;
+
++ (NSString *)unixLineEndingString;
++ (NSString *)macOSLineEndingString;
++ (NSString *)windowsLineEndingString;
+
++ (NSString *)attachmentCharacterString;
 @end
 
 static inline uint8_t RSHexValueForCharacter(unichar character) {
