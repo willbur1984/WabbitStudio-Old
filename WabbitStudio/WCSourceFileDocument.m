@@ -39,9 +39,6 @@
 	if (!(self = [super init]))
 		return nil;
 	
-	_textStorage = [[WCSourceTextStorage alloc] init];
-	[_textStorage setDelegate:self];
-	
 	return self;
 }
 
@@ -52,16 +49,21 @@
 - (void)windowControllerDidLoadNib:(NSWindowController *)windowController {
 	[super windowControllerDidLoadNib:windowController];
 	
-	_sourceScanner = [[WCSourceScanner alloc] initWithTextStorage:[self textStorage]];
-	[_sourceScanner setDelegate:self];
-	[_sourceScanner setNeedsToScanSymbols:YES];
-	
 	if (_fileContents) {
-		[[self textStorage] replaceCharactersInRange:NSMakeRange(0, 0) withString:_fileContents];
+		_textStorage = [[WCSourceTextStorage alloc] initWithString:_fileContents];
 		
 		[_fileContents release];
 		_fileContents = nil;
 	}
+	else
+		_textStorage = [[WCSourceTextStorage alloc] init];
+	
+	[_textStorage setDelegate:self];
+	
+	_sourceScanner = [[WCSourceScanner alloc] initWithTextStorage:[self textStorage]];
+	[_sourceScanner setDelegate:self];
+	[_sourceScanner setNeedsToScanSymbols:YES];
+	[_sourceScanner scanTokens];
 	
 	_sourceHighlighter = [[WCSourceHighlighter alloc] initWithSourceScanner:[self sourceScanner]];
 	

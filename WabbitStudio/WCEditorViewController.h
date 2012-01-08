@@ -19,6 +19,13 @@ extern NSString *const WCEditorSuggestCompletionsWhileTypingKey;
 extern NSString *const WCEditorSuggestCompletionsWhileTypingDelayKey;
 extern NSString *const WCEditorAutomaticallyIndentAfterNewlinesKey;
 extern NSString *const WCEditorWrapLinesToEditorWidthKey;
+typedef enum _WCEditorIndentUsing {
+	WCEditorIndentUsingSpaces = 0,
+	WCEditorIndentUsingTabs = 1
+	
+} WCEditorIndentUsing;
+extern NSString *const WCEditorIndentUsingKey;
+extern NSString *const WCEditorTabWidthKey;
 
 @interface WCEditorViewController : NSViewController <RSPreferencesModule,RSUserDefaultsProvider>
 @property (readwrite,assign,nonatomic) IBOutlet NSView *initialFirstResponder;

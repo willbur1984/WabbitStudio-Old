@@ -44,6 +44,11 @@ NSString *const WCSourceScannerDidFinishScanningSymbolsNotification = @"WCSource
 	return self;
 }
 
+- (void)scanTokens; {
+	[_operationQueue cancelAllOperations];
+	[_operationQueue addOperation:[WCScanTokensOperation scanTokensOperationWithScanner:self]];
+}
+
 + (NSRegularExpression *)commentRegularExpression; {
 	static NSRegularExpression *retval;
 	static dispatch_once_t onceToken;
@@ -219,7 +224,6 @@ NSString *const WCSourceScannerDidFinishScanningSymbolsNotification = @"WCSource
 	[_tokenScanningTimer invalidate];
 	_tokenScanningTimer = nil;
 	
-	[_operationQueue cancelAllOperations];
-	[_operationQueue addOperation:[WCScanTokensOperation scanTokensOperationWithScanner:self]];
+	[self scanTokens];
 }
 @end

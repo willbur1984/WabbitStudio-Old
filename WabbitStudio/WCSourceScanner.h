@@ -44,6 +44,8 @@ extern NSString *const WCSourceScannerDidFinishScanningSymbolsNotification;
 
 - (id)initWithTextStorage:(NSTextStorage *)textStorage;
 
+- (void)scanTokens;
+
 + (NSRegularExpression *)commentRegularExpression;
 + (NSRegularExpression *)multilineCommentRegularExpression;
 + (NSRegularExpression *)mnemonicRegularExpression;

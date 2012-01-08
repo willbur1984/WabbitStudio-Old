@@ -618,7 +618,6 @@
 				072BBC5014AA68B80044ECC2 /* WCApplicationDelegate.m */,
 				0745BE1C14AB921300F541DC /* WCMiscellaneousPerformer.h */,
 				0745BE1D14AB921300F541DC /* WCMiscellaneousPerformer.m */,
-				073B5A9314B67C6E00FCDC0F /* Model */,
 				072BBC3F14AA66730044ECC2 /* Preferences */,
 				0708964114A6C81C0017BBE4 /* Documents */,
 				0708964214A6C8660017BBE4 /* Source Editor */,
@@ -732,13 +731,6 @@
 				076966E214B6366C005448F7 /* Advanced */,
 			);
 			name = Preferences;
-			sourceTree = "<group>";
-		};
-		073B5A9314B67C6E00FCDC0F /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Model;
 			sourceTree = "<group>";
 		};
 		073B5A9814B6A3E400FCDC0F /* Jump in File */ = {

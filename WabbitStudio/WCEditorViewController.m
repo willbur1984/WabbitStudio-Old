@@ -17,6 +17,8 @@ NSString *const WCEditorSuggestCompletionsWhileTypingKey = @"editorSuggestComple
 NSString *const WCEditorSuggestCompletionsWhileTypingDelayKey = @"editorSuggestCompletionsWhileTypingDelay";
 NSString *const WCEditorAutomaticallyIndentAfterNewlinesKey = @"editorAutomaticallyIndentAfterNewlines";
 NSString *const WCEditorWrapLinesToEditorWidthKey = @"editorWrapLinesToEditorWidth";
+NSString *const WCEditorIndentUsingKey = @"editorIndentUsing";
+NSString *const WCEditorTabWidthKey = @"editorTabWidth";
 
 @implementation WCEditorViewController
 
@@ -43,7 +45,7 @@ NSString *const WCEditorWrapLinesToEditorWidthKey = @"editorWrapLinesToEditorWid
 }
 #pragma mark RSUserDefaultsProvider
 + (NSDictionary *)userDefaults {
-	return [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],WCEditorShowCurrentLineHighlightKey,[NSNumber numberWithBool:YES],WCEditorShowLineNumbersKey,[NSNumber numberWithBool:YES],WCEditorShowMatchingBraceHighlightKey,[NSNumber numberWithBool:YES],WCEditorShowMatchingTemporaryLabelHighlightKey,[NSNumber numberWithBool:YES],WCEditorAutomaticallyInsertMatchingBraceKey,[NSNumber numberWithBool:YES],WCEditorSuggestCompletionsWhileTypingKey,[NSNumber numberWithFloat:0.35],WCEditorSuggestCompletionsWhileTypingDelayKey,[NSNumber numberWithBool:YES],WCEditorAutomaticallyIndentAfterNewlinesKey,[NSNumber numberWithBool:YES],WCEditorWrapLinesToEditorWidthKey, nil];
+	return [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],WCEditorShowCurrentLineHighlightKey,[NSNumber numberWithBool:YES],WCEditorShowLineNumbersKey,[NSNumber numberWithBool:YES],WCEditorShowMatchingBraceHighlightKey,[NSNumber numberWithBool:YES],WCEditorShowMatchingTemporaryLabelHighlightKey,[NSNumber numberWithBool:YES],WCEditorAutomaticallyInsertMatchingBraceKey,[NSNumber numberWithBool:YES],WCEditorSuggestCompletionsWhileTypingKey,[NSNumber numberWithFloat:0.35],WCEditorSuggestCompletionsWhileTypingDelayKey,[NSNumber numberWithBool:YES],WCEditorAutomaticallyIndentAfterNewlinesKey,[NSNumber numberWithBool:YES],WCEditorWrapLinesToEditorWidthKey,[NSNumber numberWithUnsignedInteger:WCEditorIndentUsingTabs],WCEditorIndentUsingKey,[NSNumber numberWithUnsignedInteger:4],WCEditorTabWidthKey, nil];
 }
 
 @synthesize initialFirstResponder=_initialFirstResponder;

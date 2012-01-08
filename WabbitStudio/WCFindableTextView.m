@@ -19,6 +19,10 @@
 	[super dealloc];
 }
 
+- (BOOL)isOpaque {
+	return YES;
+}
+
 - (void)viewWillMoveToWindow:(NSWindow *)newWindow {
 	[super viewWillMoveToWindow:newWindow];
 	

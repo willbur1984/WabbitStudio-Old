@@ -47,6 +47,7 @@
 	
 	[[self textView] setFont:[currentTheme plainTextFont]];
 	[[self textView] setTextColor:[currentTheme plainTextColor]];
+	[[self textView] setDefaultParagraphStyle:[[self textStorage] paragraphStyle]];
 	
 	WCSourceRulerView *rulerView = [[[WCSourceRulerView alloc] initWithScrollView:[[self textView] enclosingScrollView] orientation:NSVerticalRuler] autorelease];
 	
@@ -73,7 +74,7 @@
 	
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
 	
-	return [NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName, nil];
+	return [NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName,[[self textStorage] paragraphStyle],NSParagraphStyleAttributeName, nil];
 }
 
 - (NSArray *)sourceSymbolsForSourceTextView:(WCSourceTextView *)textView {
