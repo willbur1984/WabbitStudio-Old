@@ -32,6 +32,7 @@
 
 - (void)_commonInit;
 - (void)_drawCurrentLineHighlightInRect:(NSRect)rect;
+- (void)_drawPageGuideInRect:(NSRect)rect;
 - (void)_highlightMatchingBrace;
 - (void)_highlightMatchingTempLabel;
 - (void)_insertMatchingBraceWithString:(id)string;
@@ -98,6 +99,7 @@
 - (void)drawViewBackgroundInRect:(NSRect)rect {
 	[super drawViewBackgroundInRect:rect];
 	
+	[self _drawPageGuideInRect:rect];
 	[self _drawCurrentLineHighlightInRect:rect];
 }
 
@@ -167,7 +169,18 @@
 
 - (IBAction)insertTab:(id)sender {
 	if (![[NSUserDefaults standardUserDefaults] boolForKey:WCKeyboardUseTabToNavigateArgumentPlaceholdersKey]) {
-		[super insertTab:nil];
+		if ([[[NSUserDefaults standardUserDefaults] objectForKey:WCEditorIndentUsingKey] unsignedIntegerValue] == WCEditorIndentUsingTabs)
+			[super insertTab:nil];
+		else {
+			NSUInteger tabWidth = [[[NSUserDefaults standardUserDefaults] objectForKey:WCEditorTabWidthKey] unsignedIntegerValue];
+			NSMutableString *spacesString = [NSMutableString stringWithCapacity:tabWidth];
+			NSUInteger charIndex;
+			
+			for (charIndex=0; charIndex<tabWidth; charIndex++)
+				[spacesString appendString:@" "];
+			
+			[super insertText:spacesString];
+		}
 		return;
 	}
 	
@@ -217,15 +230,16 @@
 }
 #pragma mark NSObject+WCExtensions
 - (NSSet *)userDefaultsKeyPathsToObserve {
-	return [NSSet setWithObjects:WCEditorShowCurrentLineHighlightKey,WCEditorWrapLinesToEditorWidthKey, nil];
+	return [NSSet setWithObjects:WCEditorShowCurrentLineHighlightKey,WCEditorWrapLinesToEditorWidthKey,WCEditorPageGuideColumnNumberKey,WCEditorShowPageGuideAtColumnKey, nil];
 }
 #pragma mark NSKeyValueObserving
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-	if ([keyPath isEqualToString:[kUserDefaultsKeyPathPrefix stringByAppendingString:WCEditorShowCurrentLineHighlightKey]])
+	if ([keyPath isEqualToString:[kUserDefaultsKeyPathPrefix stringByAppendingString:WCEditorShowCurrentLineHighlightKey]] ||
+		[keyPath isEqualToString:[kUserDefaultsKeyPathPrefix stringByAppendingString:WCEditorPageGuideColumnNumberKey]] ||
+		[keyPath isEqualToString:[kUserDefaultsKeyPathPrefix stringByAppendingString:WCEditorShowPageGuideAtColumnKey]])
 		[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
-	else if ([keyPath isEqualToString:[kUserDefaultsKeyPathPrefix stringByAppendingFormat:WCEditorWrapLinesToEditorWidthKey]]) {
+	else if ([keyPath isEqualToString:[kUserDefaultsKeyPathPrefix stringByAppendingFormat:WCEditorWrapLinesToEditorWidthKey]])
 		[self setWrapLines:[[NSUserDefaults standardUserDefaults] boolForKey:WCEditorWrapLinesToEditorWidthKey]];
-	}
 	else
 		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
@@ -640,6 +654,33 @@
 	
 	[[currentTheme currentLineColor] setFill];
 	[[NSBezierPath bezierPathWithRoundedRect:NSInsetRect(lineRect, 1.0, 0) xRadius:5.0 yRadius:5.0] fill];
+}
+
+- (void)_drawPageGuideInRect:(NSRect)rect; {
+	if (![[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowPageGuideAtColumnKey])
+		return;
+	
+	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
+	NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName, nil];
+	CGFloat width = [@" " sizeWithAttributes:attributes].width;
+	NSUInteger columnNumber = [[[NSUserDefaults standardUserDefaults] objectForKey:WCEditorPageGuideColumnNumberKey] unsignedIntegerValue];
+	CGFloat xPosition = floor(width*columnNumber);
+	NSRect guideRect = NSMakeRect(xPosition, NSMinY([self bounds]), 1.0, NSHeight([self bounds]));
+	
+	if (!NSIntersectsRect(guideRect, rect) ||
+		![self needsToDrawRect:guideRect])
+		return;
+	
+	guideRect.size.width = NSWidth([self bounds]) - xPosition;
+	
+	[[[NSColor lightGrayColor] colorWithAlphaComponent:0.35] setFill];
+	NSRectFillUsingOperation(guideRect, NSCompositeSourceOver);
+	
+	
+	guideRect.size.width = 1.0;
+	
+	[[NSColor lightGrayColor] setFill];
+	NSRectFill(guideRect);
 }
 
 - (void)_highlightMatchingBrace; {

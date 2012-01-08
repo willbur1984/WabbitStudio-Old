@@ -26,6 +26,8 @@ typedef enum _WCEditorIndentUsing {
 } WCEditorIndentUsing;
 extern NSString *const WCEditorIndentUsingKey;
 extern NSString *const WCEditorTabWidthKey;
+extern NSString *const WCEditorShowPageGuideAtColumnKey;
+extern NSString *const WCEditorPageGuideColumnNumberKey;
 
 @interface WCEditorViewController : NSViewController <RSPreferencesModule,RSUserDefaultsProvider>
 @property (readwrite,assign,nonatomic) IBOutlet NSView *initialFirstResponder;
