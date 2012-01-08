@@ -21,7 +21,7 @@
 @property (readwrite,copy,nonatomic) NSString *statusString;
 @property (readwrite,assign,nonatomic) RSFindBarViewControllerViewMode viewMode;
 
-- (void)_findHighlightNearestRange:(BOOL)highlightNearestRange;
+- (void)_findAndHighlightNearestRange:(BOOL)highlightNearestRange;
 - (void)_addFindTextAttributes;
 - (void)_removeFindTextAttributes;
 - (void)_addFindTextAttributesInRange:(NSRange)range;
@@ -79,7 +79,7 @@
 			[[self searchField] setNextKeyView:[self textView]];
 		
 		if (![[self findString] length]) {
-			NSString *pboardString = [[NSPasteboard generalPasteboard] stringForType:NSPasteboardTypeString];
+			NSString *pboardString = [[NSPasteboard pasteboardWithName:NSFindPboard] stringForType:NSPasteboardTypeString];
 			if ([pboardString length])
 				[self setFindString:pboardString];
 		}
@@ -198,7 +198,7 @@ static const NSAnimationCurve kFindBarShowHideAnimationCurve = NSAnimationEaseIn
 		[self _addFindTextAttributesInRange:visibleRange];
 	}];
 	
-	[[[[self textView] window] contentView] addSubview:[self view] positioned:NSWindowBelow relativeTo:[[[[[self textView] window] contentView] subviews] objectAtIndex:0]];
+	[[[[self textView] enclosingScrollView] superview] addSubview:[self view] positioned:NSWindowBelow relativeTo:[[[[[self textView] enclosingScrollView] superview] subviews] objectAtIndex:0]];
 	
 	NSRect scrollViewFrame = [[[self textView] enclosingScrollView] frame];
 	NSRect findBarFrame = [[self view] frame];
@@ -289,7 +289,7 @@ static const CGFloat kReplaceControlsHeight = 22.0;
 }
 
 - (IBAction)find:(id)sender; {
-	[self _findHighlightNearestRange:YES];
+	[self _findAndHighlightNearestRange:YES];
 }
 - (IBAction)findNext:(id)sender; {
 	if (![[self findString] length]) {
@@ -351,7 +351,7 @@ static const CGFloat kReplaceControlsHeight = 22.0;
 		return;
 	}
 	else if (![_findRanges count]) {
-		[self _findHighlightNearestRange:NO];
+		[self _findAndHighlightNearestRange:NO];
 		if (![_findRanges count]) {
 			NSBeep();
 			return;
@@ -494,7 +494,7 @@ static const CGFloat kReplaceControlsHeight = 22.0;
 @synthesize textView=_textView;
 @synthesize findOptionsViewController=_findOptionsViewController;
 #pragma mark *** Private Methods ***
-- (void)_findHighlightNearestRange:(BOOL)highlightNearestRange; {
+- (void)_findAndHighlightNearestRange:(BOOL)highlightNearestRange; {
 	[self setStatusString:nil];
 	[_findRanges setCount:0];
 	[self _removeFindTextAttributesInRange:[[self textView] visibleRange]];
@@ -606,6 +606,11 @@ static const CGFloat kReplaceControlsHeight = 22.0;
 			[[self textView] setSelectedRange:nearRange];
 			[[self textView] scrollRangeToVisible:nearRange];
 			[[self textView] showFindIndicatorForRange:nearRange];
+			
+			NSPasteboard *findPboard = [NSPasteboard pasteboardWithName:NSFindPboard];
+			
+			[findPboard declareTypes:[NSArray arrayWithObject:NSPasteboardTypeString] owner:nil];
+			[findPboard setString:[self findString] forType:NSPasteboardTypeString];
 		}
 	}
 }

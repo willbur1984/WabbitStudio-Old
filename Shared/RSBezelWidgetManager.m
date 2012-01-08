@@ -52,7 +52,8 @@
 }
 
 static const NSTimeInterval kFadeDelay = 0.5;
-- (void)showImage:(NSImage *)image atPoint:(NSPoint)point; {
+
+- (void)showImage:(NSImage *)image centeredInView:(NSView *)view; {
 	[_fadeTimer invalidate];
 	_fadeTimer = nil;
 	
@@ -60,19 +61,18 @@ static const NSTimeInterval kFadeDelay = 0.5;
 	
 	[[self bezelView] setImage:image];
 	
-	[[self window] setFrame:[[self window] frameRectForContentRect:[[self bezelView] frame]] display:YES];
-	[[self window] setFrameTopLeftPoint:NSMakePoint(point.x-floor(NSWidth([[self window] frame])/2.0), point.y-floor(NSHeight([[self window] frame])/2.0))];
+	NSRect frameRect = [[self window] frameRectForContentRect:[[self bezelView] frame]];
+	NSRect centerRect = NSCenteredRectWithSize(frameRect.size, [[view window] convertRectToScreen:[view convertRectToBase:[view bounds]]]);
+	centerRect.origin.y -= floor(NSHeight(centerRect)/2.0);
+	
+	[[self window] setFrame:centerRect display:YES];
+	
 	[[self window] orderFront:nil];
 	
 	_fadeTimer = [NSTimer scheduledTimerWithTimeInterval:kFadeDelay target:self selector:@selector(_closeTimerCallback:) userInfo:nil repeats:NO];
 }
-- (void)showImage:(NSImage *)image centeredInView:(NSView *)view; {
-	NSPoint centerPoint = NSCenteredPointInRect([view bounds]);
-	
-	[self showImage:image atPoint:[[view window] convertBaseToScreen:[view convertPointToBase:centerPoint]]];
-}
 
-- (void)showString:(NSString *)string atPoint:(NSPoint)point; {
+- (void)showString:(NSString *)string centeredInView:(NSView *)view; {
 	[_fadeTimer invalidate];
 	_fadeTimer = nil;
 	
@@ -80,16 +80,15 @@ static const NSTimeInterval kFadeDelay = 0.5;
 	
 	[[self bezelView] setString:string];
 	
-	[[self window] setFrame:[[self window] frameRectForContentRect:[[self bezelView] frame]] display:YES];
-	[[self window] setFrameTopLeftPoint:NSMakePoint(point.x-floor(NSWidth([[self window] frame])/2.0), point.y-floor(NSHeight([[self window] frame])/2.0))];
+	NSRect frameRect = [[self window] frameRectForContentRect:[[self bezelView] frame]];
+	NSRect centerRect = NSCenteredRectWithSize(frameRect.size, [[view window] convertRectToScreen:[view convertRectToBase:[view bounds]]]);
+	centerRect.origin.y -= floor(NSHeight(centerRect)/2.0);
+	
+	[[self window] setFrame:centerRect display:YES];
+	
 	[[self window] orderFront:nil];
 	
 	_fadeTimer = [NSTimer scheduledTimerWithTimeInterval:kFadeDelay target:self selector:@selector(_closeTimerCallback:) userInfo:nil repeats:NO];
-}
-- (void)showString:(NSString *)string centeredInView:(NSView *)view; {
-	NSPoint centerPoint = NSCenteredPointInRect([view bounds]);
-	
-	[self showString:string atPoint:[[view window] convertBaseToScreen:[view convertPointToBase:centerPoint]]];
 }
 #pragma mark Properties
 @synthesize bezelView=_bezelView;

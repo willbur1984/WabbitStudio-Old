@@ -11,9 +11,9 @@
 #import "WCSourceTextStorageDelegate.h"
 #import "WCSourceScannerDelegate.h"
 
-@class WCSourceScanner,WCSourceHighlighter,WCJumpBarViewController,WCSourceTextStorage,WCSourceTextViewController;
+@class WCSourceScanner,WCSourceHighlighter,WCJumpBarViewController,WCSourceTextStorage,WCSourceTextViewController,WCSplitView;
 
-@interface WCSourceFileDocument : NSDocument <WCJumpBarDataSource,WCSourceTextStorageDelegate,WCSourceScannerDelegate,NSWindowDelegate> {
+@interface WCSourceFileDocument : NSDocument <WCJumpBarDataSource,WCSourceTextStorageDelegate,WCSourceScannerDelegate,NSWindowDelegate,NSSplitViewDelegate> {
 	NSString *_fileContents;
 	NSStringEncoding _fileEncoding;
 	
@@ -21,13 +21,16 @@
 	WCSourceScanner *_sourceScanner;
 	WCSourceHighlighter *_sourceHighlighter;
 	
-	WCJumpBarViewController *_jumpBarViewController;
 	WCSourceTextViewController *_sourceTextViewController;
+	WCSplitView *_splitView;
+	WCSourceTextViewController *_secondSourceTextViewController;
 }
 
 @property (readonly,nonatomic) WCJumpBarViewController *jumpBarViewController;
 @property (readonly,nonatomic) WCSourceTextViewController *sourceTextViewController;
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
 @property (readonly,nonatomic) WCSourceHighlighter *sourceHighlighter;
+@property (readonly,nonatomic) WCSourceTextStorage *textStorage;
 
+- (IBAction)splitEditorWindow:(id)sender;
 @end

@@ -17,9 +17,6 @@
 
 + (RSBezelWidgetManager *)sharedWindowController;
 
-- (void)showImage:(NSImage *)image atPoint:(NSPoint)point;
 - (void)showImage:(NSImage *)image centeredInView:(NSView *)view;
-
-- (void)showString:(NSString *)string atPoint:(NSPoint)point;
 - (void)showString:(NSString *)string centeredInView:(NSView *)view;
 @end

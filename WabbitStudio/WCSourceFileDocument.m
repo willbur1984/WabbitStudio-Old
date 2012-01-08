@@ -9,7 +9,6 @@
 #import "WCSourceFileDocument.h"
 #import "WCSourceScanner.h"
 #import "WCSourceHighlighter.h"
-//#import "RSDefines.h"
 #import "WCJumpBarViewController.h"
 #import "WCSourceTextStorage.h"
 #import "WCSourceTextViewController.h"
@@ -18,9 +17,11 @@
 #import "NSString+RSExtensions.h"
 #import "WCEditorViewController.h"
 #import "NSUserDefaults+RSExtensions.h"
+#import "WCDocumentController.h"
+#import "WCSplitView.h"
 
 @interface WCSourceFileDocument ()
-@property (readonly,nonatomic) WCSourceTextStorage *textStorage;
+
 @end
 
 @implementation WCSourceFileDocument
@@ -30,7 +31,8 @@
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
 	[_sourceTextViewController release];
-	[_jumpBarViewController release];
+	[_secondSourceTextViewController release];
+	[_splitView release];
 	[_fileContents release];
 	[_sourceHighlighter release];
 	[_sourceScanner release];
@@ -43,6 +45,8 @@
 		return nil;
 	
 	_fileEncoding = [[NSUserDefaults standardUserDefaults] unsignedIntegerForKey:WCEditorDefaultTextEncodingKey];
+	_textStorage = [[WCSourceTextStorage alloc] initWithString:@""];
+	[_textStorage setDelegate:self];
 	
 	return self;
 }
@@ -54,17 +58,6 @@
 - (void)windowControllerDidLoadNib:(NSWindowController *)windowController {
 	[super windowControllerDidLoadNib:windowController];
 	
-	if (_fileContents) {
-		_textStorage = [[WCSourceTextStorage alloc] initWithString:_fileContents];
-		
-		[_fileContents release];
-		_fileContents = nil;
-	}
-	else
-		_textStorage = [[WCSourceTextStorage alloc] init];
-	
-	[_textStorage setDelegate:self];
-	
 	_sourceScanner = [[WCSourceScanner alloc] initWithTextStorage:[self textStorage]];
 	[_sourceScanner setDelegate:self];
 	[_sourceScanner setNeedsToScanSymbols:YES];
@@ -72,35 +65,41 @@
 	
 	_sourceHighlighter = [[WCSourceHighlighter alloc] initWithSourceScanner:[self sourceScanner]];
 	
-	_sourceTextViewController = [[WCSourceTextViewController alloc] initWithTextStorage:[self textStorage] sourceScanner:[self sourceScanner] sourceHighlighter:[self sourceHighlighter]];
+	_sourceTextViewController = [[WCSourceTextViewController alloc] initWithSourceFileDocument:self];
 	
-	NSView *contentView = [[windowController window] contentView];
-	NSRect contentViewFrame = [contentView frame];
-	
-	[contentView addSubview:[[self sourceTextViewController] view]];
-	
-	_jumpBarViewController = [[WCJumpBarViewController alloc] initWithTextView:(NSTextView *)[[self sourceTextViewController] textView] jumpBarDataSource:self];
-	
-	[contentView addSubview:[[self jumpBarViewController] view]];
-	
-	NSRect jumpBarViewFrame = [[[self jumpBarViewController] view] frame];
-	
-	[[[self sourceTextViewController] view] setFrame:NSMakeRect(NSMinX(contentViewFrame), NSMinY(contentViewFrame), NSWidth(contentViewFrame), NSHeight(contentViewFrame)-NSHeight(jumpBarViewFrame))];
-	[[[self jumpBarViewController] view] setFrame:NSMakeRect(NSMinX(contentViewFrame), NSMaxY(contentViewFrame)-NSHeight(jumpBarViewFrame), NSWidth(contentViewFrame), NSHeight(jumpBarViewFrame))];
-	
-	//[[[self sourceTextViewController] view] setFrame:NSMakeRect(NSMinX(contentViewFrame), NSMinY(contentViewFrame), NSWidth(contentViewFrame), NSHeight(contentViewFrame))];
+	[[[self sourceTextViewController] view] setFrame:[[[windowController window] contentView] frame]];
+	[[[windowController window] contentView] addSubview:[[self sourceTextViewController] view]];
 }
 
 + (BOOL)autosavesInPlace {
     return NO;
 }
 
-- (NSData *)dataOfType:(NSString *)typeName error:(NSError **)outError {
++ (BOOL)canConcurrentlyReadDocumentsOfType:(NSString *)typeName {
+	if ([typeName isEqualToString:WCAssemblyFileUTI] ||
+		[typeName isEqualToString:WCIncludeFileUTI] ||
+		[typeName isEqualToString:WCActiveServerIncludeFileUTI])
+		return YES;
+	return NO;
+}
+
+- (BOOL)canAsynchronouslyWriteToURL:(NSURL *)url ofType:(NSString *)typeName forSaveOperation:(NSSaveOperationType)saveOperation {
+	if ([typeName isEqualToString:WCAssemblyFileUTI] ||
+		[typeName isEqualToString:WCIncludeFileUTI] ||
+		[typeName isEqualToString:WCActiveServerIncludeFileUTI])
+		return YES;
+	return NO;
+}
+
+- (BOOL)writeToURL:(NSURL *)url ofType:(NSString *)typeName error:(NSError **)outError {
 	NSMutableString *string = [[[[self textStorage] string] mutableCopy] autorelease];
+	
+	[self unblockUserInteraction];
 	
 	// remove any attachment characters
 	[string replaceOccurrencesOfString:[NSString attachmentCharacterString] withString:@"" options:NSLiteralSearch range:NSMakeRange(0, [string length])];
 	
+	// fix our line endings if the user requested it
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorConvertExistingFileLineEndingsOnSaveKey]) {
 		WCEditorDefaultLineEndings lineEnding = [[[NSUserDefaults standardUserDefaults] objectForKey:WCEditorDefaultLineEndingsKey] unsignedIntValue];
 		switch (lineEnding) {
@@ -122,7 +121,7 @@
 		}
 	}
 	
-	return [string dataUsingEncoding:_fileEncoding];
+	return [[string dataUsingEncoding:_fileEncoding] writeToURL:url options:NSDataWritingAtomic error:outError];
 }
 
 - (BOOL)readFromURL:(NSURL *)url ofType:(NSString *)typeName error:(NSError **)outError {
@@ -131,7 +130,7 @@
 	if (!string)
 		return NO;
 	
-	_fileContents = [string retain];
+	[_textStorage replaceCharactersInRange:NSMakeRange(0, [_textStorage length]) withString:string];
 	
 	return YES;
 }
@@ -160,6 +159,44 @@
 
 - (NSString *)fileDisplayNameForSourceScanner:(WCSourceScanner *)scanner {
 	return [self displayName];
+}
+
+- (IBAction)splitEditorWindow:(id)sender; {
+	NSView *contentView = [[self windowForSheet] contentView];
+	// close the split view
+	if ([[contentView subviews] count] &&
+		[[[contentView subviews] objectAtIndex:0] isKindOfClass:[NSSplitView class]]) {
+		
+	}
+	// create the split view and add the second source text view controller's view to it
+	else {
+		_splitView = [[WCSplitView alloc] initWithFrame:[contentView frame]];
+		[_splitView setAutoresizingMask:NSViewHeightSizable|NSViewWidthSizable|NSViewMinXMargin|NSViewMinYMargin];
+		[_splitView setAutoresizesSubviews:YES];
+		[_splitView setDividerStyle:NSSplitViewDividerStyleThin];
+		[_splitView setVertical:NO];
+		[_splitView setDelegate:self];
+		[_splitView setDividerColor:[NSColor colorWithCalibratedWhite:67.0/255.0 alpha:1.0]];
+		
+		[[[self sourceTextViewController] view] removeFromSuperviewWithoutNeedingDisplay];
+		
+		[contentView addSubview:_splitView];
+		[_splitView setFrame:[contentView frame]];
+		
+		[_splitView addSubview:[[self sourceTextViewController] view]];
+		
+		_secondSourceTextViewController = [[WCSourceTextViewController alloc] initWithSourceFileDocument:self];
+		
+		[_splitView addSubview:[_secondSourceTextViewController view]];
+
+		CGFloat subviewHeight = floor(NSHeight([contentView frame]));
+		NSRect secondSubviewFrame = [[[_splitView subviews] objectAtIndex:1] frame];
+		secondSubviewFrame.size.height = subviewHeight;
+		
+		[[[_splitView subviews] objectAtIndex:1] setFrame:secondSubviewFrame];
+		
+		[[self sourceHighlighter] performHighlightingInVisibleRange];
+	}
 }
 
 @synthesize jumpBarViewController=_jumpBarViewController;

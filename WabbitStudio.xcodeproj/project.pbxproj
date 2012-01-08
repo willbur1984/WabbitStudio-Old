@@ -109,6 +109,8 @@
 		07713F1314B954FC00324F77 /* SelectEncodingsPanel.nib in Resources */ = {isa = PBXBuildFile; fileRef = 07713F1114B954FC00324F77 /* SelectEncodingsPanel.nib */; };
 		07713F1614B9551400324F77 /* EncodingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 07713F1514B9551400324F77 /* EncodingManager.m */; };
 		07713F1914B9586400324F77 /* NSUserDefaults+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07713F1814B9586400324F77 /* NSUserDefaults+RSExtensions.m */; };
+		07862BA614BA33040057EB89 /* WCDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07862BA514BA33040057EB89 /* WCDocumentController.m */; };
+		07862BA914BA46720057EB89 /* WCSplitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07862BA814BA46720057EB89 /* WCSplitView.m */; };
 		07892EDA14B81375006FDB52 /* NSString+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07892ED914B81375006FDB52 /* NSString+RSExtensions.m */; };
 		078F03FD14AD0D760080ADBC /* RSToolTipBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F03F614AD0D760080ADBC /* RSToolTipBackgroundView.m */; };
 		078F03FE14AD0D760080ADBC /* RSToolTipManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F03F914AD0D760080ADBC /* RSToolTipManager.m */; };
@@ -347,6 +349,10 @@
 		07713F1514B9551400324F77 /* EncodingManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncodingManager.m; sourceTree = "<group>"; };
 		07713F1714B9586400324F77 /* NSUserDefaults+RSExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSUserDefaults+RSExtensions.h"; sourceTree = "<group>"; };
 		07713F1814B9586400324F77 /* NSUserDefaults+RSExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSUserDefaults+RSExtensions.m"; sourceTree = "<group>"; };
+		07862BA414BA33040057EB89 /* WCDocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCDocumentController.h; sourceTree = "<group>"; };
+		07862BA514BA33040057EB89 /* WCDocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCDocumentController.m; sourceTree = "<group>"; };
+		07862BA714BA46720057EB89 /* WCSplitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSplitView.h; sourceTree = "<group>"; };
+		07862BA814BA46720057EB89 /* WCSplitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSplitView.m; sourceTree = "<group>"; };
 		07892ED814B81375006FDB52 /* NSString+RSExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+RSExtensions.h"; sourceTree = "<group>"; };
 		07892ED914B81375006FDB52 /* NSString+RSExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+RSExtensions.m"; sourceTree = "<group>"; };
 		078F03F514AD0D760080ADBC /* RSToolTipBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSToolTipBackgroundView.h; sourceTree = "<group>"; };
@@ -579,7 +585,7 @@
 				0708963C14A67D190017BBE4 /* NSBezierPath+StrokeExtensions.h */,
 				0708963D14A67D1A0017BBE4 /* NSBezierPath+StrokeExtensions.m */,
 			);
-			name = External;
+			path = External;
 			sourceTree = "<group>";
 		};
 		071ECCB314A4233C002409F8 = {
@@ -629,6 +635,8 @@
 				072BBC5014AA68B80044ECC2 /* WCApplicationDelegate.m */,
 				0745BE1C14AB921300F541DC /* WCMiscellaneousPerformer.h */,
 				0745BE1D14AB921300F541DC /* WCMiscellaneousPerformer.m */,
+				07862BA414BA33040057EB89 /* WCDocumentController.h */,
+				07862BA514BA33040057EB89 /* WCDocumentController.m */,
 				072BBC3F14AA66730044ECC2 /* Preferences */,
 				0708964114A6C81C0017BBE4 /* Documents */,
 				0708964214A6C8660017BBE4 /* Source Editor */,
@@ -777,6 +785,8 @@
 				07F5F76C14A59BCC00F1F326 /* WCLineNumberRulerView.m */,
 				0706D65914A8F8680092F880 /* WCSourceRulerView.h */,
 				0706D65A14A8F8690092F880 /* WCSourceRulerView.m */,
+				07862BA714BA46720057EB89 /* WCSplitView.h */,
+				07862BA814BA46720057EB89 /* WCSplitView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1170,6 +1180,8 @@
 				07A7A0FE14B8C83900507FC7 /* WCCompletionWindow.m in Sources */,
 				07713F1614B9551400324F77 /* EncodingManager.m in Sources */,
 				07713F1914B9586400324F77 /* NSUserDefaults+RSExtensions.m in Sources */,
+				07862BA614BA33040057EB89 /* WCDocumentController.m in Sources */,
+				07862BA914BA46720057EB89 /* WCSplitView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

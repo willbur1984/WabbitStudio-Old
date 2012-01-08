@@ -18,6 +18,8 @@
 #import "WCFontAndColorTheme.h"
 #import "WCFontAndColorThemeManager.h"
 #import "WCEditorViewController.h"
+#import "WCJumpBarViewController.h"
+#import "WCSourceFileDocument.h"
 
 @interface WCSourceTextViewController ()
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
@@ -32,6 +34,7 @@
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[_jumpBarViewController release];
 	_textStorage = nil;
 	_sourceScanner = nil;
 	_sourceHighlighter = nil;
@@ -40,6 +43,14 @@
 
 - (void)loadView {
 	[super loadView];
+	
+	NSRect scrollViewFrame = [[[self textView] enclosingScrollView] frame];
+	NSRect jumpBarFrame = [[[self jumpBarViewController] view] frame];
+	
+	[[self view] addSubview:[[self jumpBarViewController] view]];
+	
+	[[[self textView] enclosingScrollView] setFrame:NSMakeRect(NSMinX(scrollViewFrame), NSMinY(scrollViewFrame), NSWidth(scrollViewFrame), NSHeight(scrollViewFrame)-NSHeight(jumpBarFrame))];
+	[[[self jumpBarViewController] view] setFrame:NSMakeRect(NSMinX(scrollViewFrame), NSMaxY(scrollViewFrame)-NSHeight(jumpBarFrame), NSWidth(scrollViewFrame), NSHeight(jumpBarFrame))];
 	
 	[[[self textView] layoutManager] replaceTextStorage:[self textStorage]];
 	
@@ -116,11 +127,29 @@
 	
 	return self;
 }
+- (id)initWithSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument; {
+	if (!(self = [super initWithNibName:@"WCSourceTextView" bundle:nil]))
+		return nil;
+	
+	_sourceFileDocument = sourceFileDocument;
+	_textStorage = [sourceFileDocument textStorage];
+	_sourceScanner = [sourceFileDocument sourceScanner];
+	_sourceHighlighter = [sourceFileDocument sourceHighlighter];
+	
+	return self;
+}
 
 @synthesize textView=_textView;
 @synthesize sourceScanner=_sourceScanner;
 @synthesize textStorage=_textStorage;
 @synthesize sourceHighlighter=_sourceHighlighter;
+@dynamic jumpBarViewController;
+- (WCJumpBarViewController *)jumpBarViewController {
+	if (!_jumpBarViewController) {
+		_jumpBarViewController = [[WCJumpBarViewController alloc] initWithTextView:[self textView] jumpBarDataSource:_sourceFileDocument];
+	}
+	return _jumpBarViewController;
+}
 
 - (void)_viewBoundsDidChange:(NSNotification *)note {
 	static const NSTimeInterval kScrollingHighlightTimerDelay = 0.1;
