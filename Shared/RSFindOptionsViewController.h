@@ -32,7 +32,9 @@ typedef enum _RSFindOptionsMatchStyle {
 		unsigned int matchCase:1;
 		unsigned int anchorsMatchLines:1;
 		unsigned int dotMatchesNewlines:1;
-		unsigned int RESERVED:29;
+		unsigned int wrapAround:1;
+		unsigned int wrapAroundEnabled:1;
+		unsigned int RESERVED:27;
 	} _findFlags;
 }
 @property (readwrite,assign,nonatomic) id <RSFindOptionsViewControllerDelegate> delegate;
@@ -41,6 +43,8 @@ typedef enum _RSFindOptionsMatchStyle {
 @property (readwrite,assign,nonatomic) BOOL matchCase;
 @property (readwrite,assign,nonatomic) BOOL anchorsMatchLines;
 @property (readwrite,assign,nonatomic) BOOL dotMatchesNewlines;
+@property (readwrite,assign,nonatomic) BOOL wrapAround;
+@property (readwrite,assign,nonatomic) BOOL wrapAroundEnabled;
 @property (readonly,nonatomic,getter = areFindOptionsVisible) BOOL findOptionsVisible;
 
 - (void)showFindOptionsViewRelativeToRect:(NSRect)rect ofView:(NSView *)view preferredEdge:(NSRectEdge)preferredEdge;

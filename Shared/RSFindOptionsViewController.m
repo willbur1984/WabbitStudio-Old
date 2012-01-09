@@ -23,6 +23,8 @@
 	[_popover setDelegate:self];
 	[_popover setBehavior:NSPopoverBehaviorApplicationDefined];
 	[_popover setAppearance:NSPopoverAppearanceHUD];
+	_findFlags.wrapAround = YES;
+	_findFlags.wrapAroundEnabled = YES;
 	
 	return self;
 }
@@ -59,10 +61,10 @@
 	
 	NSSize contentSize = [_popover contentSize];
 	if (_findStyle == RSFindOptionsFindStyleTextual) {
-		contentSize.height -= 40.0;
+		contentSize.height -= 50.0;
 	}
 	else {
-		contentSize.height += 40.0;
+		contentSize.height += 50.0;
 	}
 	[_popover setContentSize:contentSize];
 }
@@ -108,6 +110,20 @@
 	
 	if ([[self delegate] respondsToSelector:@selector(findOptionsViewControllerDidChangeFindOptions:)])
 		[[self delegate] findOptionsViewControllerDidChangeFindOptions:self];
+}
+@dynamic wrapAround;
+- (BOOL)wrapAround {
+	return _findFlags.wrapAround;
+}
+- (void)setWrapAround:(BOOL)wrapAround {
+	_findFlags.wrapAround = wrapAround;
+}
+@dynamic wrapAroundEnabled;
+- (BOOL)wrapAroundEnabled {
+	return _findFlags.wrapAroundEnabled;
+}
+- (void)setWrapAroundEnabled:(BOOL)wrapAroundEnabled {
+	_findFlags.wrapAroundEnabled = wrapAroundEnabled;
 }
 @dynamic findOptionsVisible;
 - (BOOL)areFindOptionsVisible {

@@ -144,10 +144,6 @@
 	return self;
 }
 
-- (IBAction)toggleEditorSplitView:(id)sender; {
-	
-}
-
 @synthesize textView=_textView;
 @synthesize sourceScanner=_sourceScanner;
 @synthesize textStorage=_textStorage;

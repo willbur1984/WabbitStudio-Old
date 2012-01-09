@@ -21,7 +21,7 @@
 @property (readwrite,copy,nonatomic) NSString *statusString;
 @property (readwrite,assign,nonatomic) RSFindBarViewControllerViewMode viewMode;
 
-- (void)_findAndHighlightNearestRange:(BOOL)highlightNearestRange;
+- (void)_findAndHighlightNearestRange:(BOOL)highlightNearestRange highlightMatches:(BOOL)highlightMatches;
 - (void)_addFindTextAttributes;
 - (void)_removeFindTextAttributes;
 - (void)_addFindTextAttributesInRange:(NSRange)range;
@@ -37,6 +37,7 @@
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[_textStorageDidProcessEditingTimer invalidate];
 	_textView = nil;
 	[_findString release];
 	[_findRegularExpression release];
@@ -154,7 +155,6 @@
 		return nil;
 	
 	_textView = textView;
-	_findFlags.wrapAround = YES;
 	_findRanges = [[NSPointerArray pointerArrayForRanges] retain];
 	_findOptionsViewController = [[RSFindOptionsViewController alloc] init];
 	[_findOptionsViewController setDelegate:self];
@@ -187,9 +187,15 @@ static const NSAnimationCurve kFindBarShowHideAnimationCurve = NSAnimationEaseIn
 		if (([[note object] editedMask] & NSTextStorageEditedCharacters) == 0)
 			return;
 		
-		[self setStatusString:nil];
-		[_findRanges setCount:0];
-		[self performSelector:@selector(_removeFindTextAttributes) withObject:nil afterDelay:0.0];
+		if ([_findRanges count]) {
+			[_findRanges setCount:0];
+			[self performSelector:@selector(_removeFindTextAttributes) withObject:nil afterDelay:0.0];
+		}
+		
+		if (_textStorageDidProcessEditingTimer)
+			[_textStorageDidProcessEditingTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:0.5]];
+		else
+			_textStorageDidProcessEditingTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(_textStorageDidProcessEditingTimerCallback:) userInfo:nil repeats:NO];
 	}];
 	_viewBoundsDidChangeObservingToken = [[NSNotificationCenter defaultCenter] addObserverForName:NSViewBoundsDidChangeNotification object:[[[self textView] enclosingScrollView] contentView] queue:nil usingBlock:^(NSNotification *note) {
 		NSRange visibleRange = [[self textView] visibleRange];
@@ -289,7 +295,7 @@ static const CGFloat kReplaceControlsHeight = 22.0;
 }
 
 - (IBAction)find:(id)sender; {
-	[self _findAndHighlightNearestRange:YES];
+	[self _findAndHighlightNearestRange:YES highlightMatches:YES];
 }
 - (IBAction)findNext:(id)sender; {
 	if (![[self findString] length]) {
@@ -351,7 +357,7 @@ static const CGFloat kReplaceControlsHeight = 22.0;
 		return;
 	}
 	else if (![_findRanges count]) {
-		[self _findAndHighlightNearestRange:NO];
+		[self _findAndHighlightNearestRange:NO highlightMatches:NO];
 		if (![_findRanges count]) {
 			NSBeep();
 			return;
@@ -477,10 +483,10 @@ static const CGFloat kReplaceControlsHeight = 22.0;
 @synthesize statusString=_statusString;
 @dynamic wrapAround;
 - (BOOL)wrapAround {
-	return _findFlags.wrapAround;
+	return [[self findOptionsViewController] wrapAround];
 }
 - (void)setWrapAround:(BOOL)wrapAround {
-	_findFlags.wrapAround = wrapAround;
+	[[self findOptionsViewController] setWrapAround:wrapAround];
 }
 @dynamic findBarVisible;
 - (BOOL)isFindBarVisible {
@@ -494,7 +500,7 @@ static const CGFloat kReplaceControlsHeight = 22.0;
 @synthesize textView=_textView;
 @synthesize findOptionsViewController=_findOptionsViewController;
 #pragma mark *** Private Methods ***
-- (void)_findAndHighlightNearestRange:(BOOL)highlightNearestRange; {
+- (void)_findAndHighlightNearestRange:(BOOL)highlightNearestRange highlightMatches:(BOOL)highlightMatches; {
 	[self setStatusString:nil];
 	[_findRanges setCount:0];
 	[self _removeFindTextAttributesInRange:[[self textView] visibleRange]];
@@ -598,7 +604,8 @@ static const CGFloat kReplaceControlsHeight = 22.0;
 	}
 	
 	if ([_findRanges count]) {
-		[self _addFindTextAttributesInRange:[[self textView] visibleRange]];
+		if (highlightMatches)
+			[self _addFindTextAttributesInRange:[[self textView] visibleRange]];
 		
 		if (highlightNearestRange) {
 			NSRange nearRange = [self _nextRangeDidWrap:NULL includeSelectedRange:YES];
@@ -703,5 +710,12 @@ static const CGFloat kReplaceControlsHeight = 22.0;
 		}
 	}
 	return foundRange;
+}
+
+- (void)_textStorageDidProcessEditingTimerCallback:(NSTimer *)timer {
+	[_textStorageDidProcessEditingTimer invalidate];
+	_textStorageDidProcessEditingTimer = nil;
+	
+	[self _findAndHighlightNearestRange:NO highlightMatches:NO];
 }
 @end

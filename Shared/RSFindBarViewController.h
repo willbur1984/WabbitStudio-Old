@@ -31,10 +31,10 @@ typedef enum _RSFindBarViewControllerViewMode {
 	id _textStorageDidProcessEditingObservingToken;
 	id _viewBoundsDidChangeObservingToken;
 	id _windowDidResizeObservingToken;
+	NSTimer *_textStorageDidProcessEditingTimer;
 	struct {
-		unsigned int wrapAround:1;
 		unsigned int runShowReplaceControlsAnimationAfterShowFindBarAnimationCompletes:1;
-		unsigned int RESERVED:30;
+		unsigned int RESERVED:31;
 	} _findFlags;
 }
 @property (readwrite,assign,nonatomic) IBOutlet NSSearchField *searchField;

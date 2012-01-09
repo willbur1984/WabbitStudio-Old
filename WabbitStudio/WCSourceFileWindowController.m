@@ -73,14 +73,15 @@
 }
 
 - (IBAction)toggleEditorSplitView:(id)sender; {
-	NSView *contentView = [[[self sourceTextViewController] view] superview];
 	// close the split view
-	if ([[contentView subviews] count] &&
-		[[[contentView subviews] objectAtIndex:0] isKindOfClass:[NSSplitView class]]) {
+	if ([[_splitView subviews] count]) {
+		NSView *contentView = [[[self sourceTextViewController] view] superview];
+		if (contentView == [self splitView])
+			contentView = [[self window] contentView];
 		
-		[[self splitView] removeFromSuperviewWithoutNeedingDisplay];
 		[[[self sourceTextViewController] view] removeFromSuperviewWithoutNeedingDisplay];
 		[[[self bottomSourceTextViewController] view] removeFromSuperviewWithoutNeedingDisplay];
+		[[self splitView] removeFromSuperviewWithoutNeedingDisplay];
 		
 		[[[self sourceTextViewController] view] setFrame:[contentView frame]];
 		[contentView addSubview:[[self sourceTextViewController] view]];
@@ -89,6 +90,7 @@
 	}
 	// create the split view and add the second source text view controller's view to it
 	else {
+		NSView *contentView = [[[self sourceTextViewController] view] superview];
 		BOOL verticalSplit = [NSEvent isOptionKeyPressed];
 		if (verticalSplit) {
 			[[self splitView] setDividerStyle:NSSplitViewDividerStylePaneSplitter];
@@ -108,12 +110,28 @@
 		[[self splitView] addSubview:[[self sourceTextViewController] view]];
 		[[self splitView] addSubview:[[self bottomSourceTextViewController] view]];
 		
+		NSRect firstSubviewFrame = [[[self sourceTextViewController] view] frame];
+		NSRect secondSubviewFrame = [[[self bottomSourceTextViewController] view] frame];
+		CGFloat total;
+		
 		if (verticalSplit) {
+			total = NSWidth(firstSubviewFrame)+NSWidth(secondSubviewFrame)+[[self splitView] dividerThickness];
 			
+			firstSubviewFrame.size.width = floor(total/2.0);
+			secondSubviewFrame.size.width = total-NSWidth(firstSubviewFrame)-[[self splitView] dividerThickness];
 		}
 		else {
+			total = NSHeight(firstSubviewFrame)+NSHeight(secondSubviewFrame)+[[self splitView] dividerThickness];
+			
+			firstSubviewFrame.size.height = floor(total/2.0);
+			secondSubviewFrame.size.height = total-NSHeight(firstSubviewFrame)-[[self splitView] dividerThickness];
 			
 		}
+		
+		[[[self sourceTextViewController] view] setFrame:firstSubviewFrame];
+		[[[self bottomSourceTextViewController] view] setFrame:secondSubviewFrame];
+		
+		[[self splitView] adjustSubviews];
 		
 		[[[self sourceTextViewController] textView] scrollRangeToVisible:[[[self sourceTextViewController] textView] selectedRange]];
 		[[[self bottomSourceTextViewController] textView] setSelectedRange:[[[self sourceTextViewController] textView] selectedRange]];
