@@ -26,7 +26,9 @@
 
 @dynamic dividerColor;
 - (NSColor *)dividerColor {
-	return _dividerColor;
+	if ([self dividerStyle] == NSSplitViewDividerStyleThin)
+		return _dividerColor;
+	return [super dividerColor];
 }
 - (void)setDividerColor:(NSColor *)dividerColor {
 	if (_dividerColor == dividerColor)

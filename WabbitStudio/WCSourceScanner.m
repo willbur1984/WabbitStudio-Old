@@ -18,6 +18,7 @@ NSString *const WCSourceScannerDidFinishScanningSymbolsNotification = @"WCSource
 @implementation WCSourceScanner
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	_textStorage = nil;
 	[_operationQueue release];
 	[_tokens release];
@@ -46,7 +47,19 @@ NSString *const WCSourceScannerDidFinishScanningSymbolsNotification = @"WCSource
 
 - (void)scanTokens; {
 	[_operationQueue cancelAllOperations];
-	[_operationQueue addOperation:[WCScanTokensOperation scanTokensOperationWithScanner:self]];
+	
+	if ([self needsToScanSymbols]) {
+		NSOperation *scanTokensOperation = [WCScanTokensOperation scanTokensOperationWithScanner:self];
+		NSOperation *scanSymbolsOperation = [WCScanSymbolsOperation scanSymbolsOperationWithSourceScanner:self];
+		
+		[scanSymbolsOperation addDependency:scanTokensOperation];
+		
+		[_operationQueue addOperation:scanTokensOperation];
+		[_operationQueue addOperation:scanSymbolsOperation];
+	}
+	else {
+		[_operationQueue addOperation:[WCScanTokensOperation scanTokensOperationWithScanner:self]];
+	}
 }
 
 + (NSRegularExpression *)commentRegularExpression; {
@@ -184,20 +197,7 @@ NSString *const WCSourceScannerDidFinishScanningSymbolsNotification = @"WCSource
 @synthesize symbols=_symbols;
 @synthesize symbolsSortedByName=_symbolsSortedByName;
 
-@dynamic needsToScanSymbols;
-- (BOOL)needsToScanSymbols {
-	return _needsToScanSymbols;
-}
-- (void)setNeedsToScanSymbols:(BOOL)needsToScanSymbols {
-	_needsToScanSymbols = needsToScanSymbols;
-	
-	if (_needsToScanSymbols) {
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_sourceScannerDidFinishScanning:) name:WCSourceScannerDidFinishScanningNotification object:self];
-	}
-	else {
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:WCSourceScannerDidFinishScanningNotification object:nil];
-	}
-}
+@synthesize needsToScanSymbols=_needsToScanSymbols;
 
 @synthesize labelNamesToLabelSymbols=_labelNamesToLabelSymbols;
 @synthesize equateNamesToEquateSymbols=_equateNamesToEquateSymbols;
@@ -209,21 +209,8 @@ NSString *const WCSourceScannerDidFinishScanningSymbolsNotification = @"WCSource
 	if (([[note object] editedMask] & NSTextStorageEditedCharacters) == 0)
 		return;
 	
-	if (_tokenScanningTimer)
-		[_tokenScanningTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:0.25]];
-	else
-		_tokenScanningTimer = [NSTimer scheduledTimerWithTimeInterval:0.25 target:self selector:@selector(_tokenScanningTimerCallback:) userInfo:nil repeats:NO];
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	[self performSelector:@selector(scanTokens) withObject:nil afterDelay:0.35];
 }
 
-- (void)_sourceScannerDidFinishScanning:(NSNotification *)note {
-	[_operationQueue cancelAllOperations];
-	[_operationQueue addOperation:[WCScanSymbolsOperation scanSymbolsOperationWithSourceScanner:self]];
-}
-
-- (void)_tokenScanningTimerCallback:(NSTimer *)timer {
-	[_tokenScanningTimer invalidate];
-	_tokenScanningTimer = nil;
-	
-	[self scanTokens];
-}
 @end

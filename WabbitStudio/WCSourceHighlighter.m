@@ -34,9 +34,13 @@
 	//_needsToPerformFullHighlight = YES;
 	_sourceScanner = sourceScanner;
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageWillProcessEditing:) name:NSTextStorageWillProcessEditingNotification object:[sourceScanner textStorage]];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_sourceScannerDidFinishScanning:) name:WCSourceScannerDidFinishScanningNotification object:sourceScanner];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_sourceScannerDidFinishScanningSymbols:) name:WCSourceScannerDidFinishScanningSymbolsNotification object:sourceScanner];
+	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageWillProcessEditing:) name:NSTextStorageWillProcessEditingNotification object:[sourceScanner textStorage]];
+	if ([sourceScanner needsToScanSymbols]) {
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_sourceScannerDidFinishScanningSymbols:) name:WCSourceScannerDidFinishScanningSymbolsNotification object:sourceScanner];
+	}
+	else {
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_sourceScannerDidFinishScanning:) name:WCSourceScannerDidFinishScanningNotification object:sourceScanner];
+	}
 	
 	return self;
 }
@@ -140,13 +144,6 @@
 }
 
 - (void)_sourceScannerDidFinishScanningSymbols:(NSNotification *)note {
-	for (NSLayoutManager *layoutManager in [[[self sourceScanner] textStorage] layoutManagers]) {
-		for (NSTextContainer *textContainer in [layoutManager textContainers]) {
-			if ([[textContainer textView] isHidden])
-				continue;
-			
-			[self performHighlightingInRange:[[textContainer textView] visibleRange]];
-		}
-	}
+	[self performHighlightingInVisibleRange];
 }
 @end

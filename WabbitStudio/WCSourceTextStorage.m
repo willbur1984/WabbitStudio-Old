@@ -13,6 +13,8 @@
 #import "NSAttributedString+WCExtensions.h"
 #import "WCEditorViewController.h"
 #import "NSObject+WCExtensions.h"
+#import "RSDefines.h"
+#import "NSArray+WCExtensions.h"
 
 @interface WCSourceTextStorage ()
 - (void)_calculateLineStartIndexes;
@@ -78,21 +80,24 @@
 	[self edited:NSTextStorageEditedAttributes range:range changeInLength:0];
 }
 
+- (void)fixAttachmentAttributeInRange:(NSRange)range {
+	NSRange effectiveRange;
+	id attributeValue;
+	while (range.length > 0) {
+		if ((attributeValue = [self attribute:NSAttachmentAttributeName atIndex:range.location longestEffectiveRange:&effectiveRange inRange:range])) {
+			NSUInteger charIndex;
+			for (charIndex=effectiveRange.location; charIndex<NSMaxRange(effectiveRange); charIndex++) {
+				if ([[self string] characterAtIndex:charIndex] != NSAttachmentCharacter)
+					[self removeAttribute:NSAttachmentAttributeName range:NSMakeRange(charIndex, 1)];
+			}
+		}
+		
+		range = NSMakeRange(NSMaxRange(effectiveRange),NSMaxRange(range)-NSMaxRange(effectiveRange));
+	}
+}
+
 - (NSUInteger)lineNumberForRange:(NSRange)range {
-	NSUInteger left = 0, right = [[self lineStartIndexes] count], mid, lineStart;
-	
-    while ((right - left) > 1) {
-        mid = (right + left) / 2;
-        lineStart = [[[self lineStartIndexes] objectAtIndex:mid] unsignedIntegerValue];
-        
-        if (range.location < lineStart)
-			right = mid;
-        else if (range.location > lineStart)
-			left = mid;
-        else
-			return mid;
-    }
-    return left;
+	return [[self lineStartIndexes] lineNumberForRange:range];
 }
 
 - (NSSet *)userDefaultsKeyPathsToObserve {

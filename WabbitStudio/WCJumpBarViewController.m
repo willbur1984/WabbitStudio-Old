@@ -21,7 +21,6 @@
 
 @interface WCJumpBarViewController ()
 @property (readwrite,copy,nonatomic) NSString *textViewSelectedLineAndColumn;
-@property (readonly,nonatomic) NSTextView *textView;
 @property (readonly,nonatomic) NSMenu *symbolsMenu;
 @property (readonly,nonatomic) id <WCJumpBarDataSource> jumpBarDataSource;
 
@@ -112,6 +111,7 @@
 }
 
 @synthesize jumpBar=_jumpBar;
+@synthesize jumpBarView=_jumpBarView;
 @synthesize jumpBarDataSource=_jumpBarDataSource;
 @synthesize textView=_textView;
 

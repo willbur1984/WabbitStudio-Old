@@ -9,7 +9,7 @@
 #import <AppKit/NSViewController.h>
 #import "WCJumpBarDataSource.h"
 
-@class WCJumpBar;
+@class WCJumpBar,WCJumpBarView;
 
 @interface WCJumpBarViewController : NSViewController <NSMenuDelegate> {
 	__weak NSTextView *_textView;
@@ -18,7 +18,8 @@
 	NSMenu *_symbolsMenu;
 }
 @property (readwrite,assign,nonatomic) IBOutlet WCJumpBar *jumpBar;
-
+@property (readwrite,assign,nonatomic) IBOutlet WCJumpBarView *jumpBarView;
+@property (readonly,nonatomic) NSTextView *textView;
 @property (readonly,copy,nonatomic) NSString *textViewSelectedLineAndColumn;
 
 - (id)initWithTextView:(NSTextView *)textView jumpBarDataSource:(id <WCJumpBarDataSource>)jumpBarDataSource;

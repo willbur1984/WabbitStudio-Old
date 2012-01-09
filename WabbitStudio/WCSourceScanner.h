@@ -19,7 +19,6 @@ extern NSString *const WCSourceScannerDidFinishScanningSymbolsNotification;
 	__weak id <WCSourceScannerDelegate> _delegate;
 	NSOperationQueue *_operationQueue;
 	NSArray *_tokens;
-	NSTimer *_tokenScanningTimer;
 	BOOL _needsToScanSymbols;
 	NSArray *_symbols;
 	NSArray *_symbolsSortedByName;

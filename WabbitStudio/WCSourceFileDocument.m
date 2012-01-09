@@ -18,7 +18,7 @@
 #import "WCEditorViewController.h"
 #import "NSUserDefaults+RSExtensions.h"
 #import "WCDocumentController.h"
-#import "WCSplitView.h"
+#import "WCSourceFileWindowController.h"
 
 @interface WCSourceFileDocument ()
 
@@ -30,9 +30,6 @@
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
-	[_sourceTextViewController release];
-	[_secondSourceTextViewController release];
-	[_splitView release];
 	[_fileContents release];
 	[_sourceHighlighter release];
 	[_sourceScanner release];
@@ -47,6 +44,11 @@
 	_fileEncoding = [[NSUserDefaults standardUserDefaults] unsignedIntegerForKey:WCEditorDefaultTextEncodingKey];
 	_textStorage = [[WCSourceTextStorage alloc] initWithString:@""];
 	[_textStorage setDelegate:self];
+	_sourceScanner = [[WCSourceScanner alloc] initWithTextStorage:[self textStorage]];
+	[_sourceScanner setDelegate:self];
+	[_sourceScanner setNeedsToScanSymbols:YES];
+	
+	_sourceHighlighter = [[WCSourceHighlighter alloc] initWithSourceScanner:[self sourceScanner]];
 	
 	return self;
 }
@@ -55,20 +57,10 @@
 	return @"WCSourceFileDocument";
 }
 
-- (void)windowControllerDidLoadNib:(NSWindowController *)windowController {
-	[super windowControllerDidLoadNib:windowController];
+- (void)makeWindowControllers {
+	WCSourceFileWindowController *windowController = [[[WCSourceFileWindowController alloc] init] autorelease];
 	
-	_sourceScanner = [[WCSourceScanner alloc] initWithTextStorage:[self textStorage]];
-	[_sourceScanner setDelegate:self];
-	[_sourceScanner setNeedsToScanSymbols:YES];
-	[_sourceScanner scanTokens];
-	
-	_sourceHighlighter = [[WCSourceHighlighter alloc] initWithSourceScanner:[self sourceScanner]];
-	
-	_sourceTextViewController = [[WCSourceTextViewController alloc] initWithSourceFileDocument:self];
-	
-	[[[self sourceTextViewController] view] setFrame:[[[windowController window] contentView] frame]];
-	[[[windowController window] contentView] addSubview:[[self sourceTextViewController] view]];
+	[self addWindowController:windowController];
 }
 
 + (BOOL)autosavesInPlace {
@@ -131,12 +123,9 @@
 		return NO;
 	
 	[_textStorage replaceCharactersInRange:NSMakeRange(0, [_textStorage length]) withString:string];
+	[_sourceScanner scanTokens];
 	
 	return YES;
-}
-
-- (void)windowWillClose:(NSNotification *)notification {
-	[[self undoManager] removeAllActions];
 }
 
 - (NSDocument *)document {
@@ -161,46 +150,6 @@
 	return [self displayName];
 }
 
-- (IBAction)splitEditorWindow:(id)sender; {
-	NSView *contentView = [[self windowForSheet] contentView];
-	// close the split view
-	if ([[contentView subviews] count] &&
-		[[[contentView subviews] objectAtIndex:0] isKindOfClass:[NSSplitView class]]) {
-		
-	}
-	// create the split view and add the second source text view controller's view to it
-	else {
-		_splitView = [[WCSplitView alloc] initWithFrame:[contentView frame]];
-		[_splitView setAutoresizingMask:NSViewHeightSizable|NSViewWidthSizable|NSViewMinXMargin|NSViewMinYMargin];
-		[_splitView setAutoresizesSubviews:YES];
-		[_splitView setDividerStyle:NSSplitViewDividerStyleThin];
-		[_splitView setVertical:NO];
-		[_splitView setDelegate:self];
-		[_splitView setDividerColor:[NSColor colorWithCalibratedWhite:67.0/255.0 alpha:1.0]];
-		
-		[[[self sourceTextViewController] view] removeFromSuperviewWithoutNeedingDisplay];
-		
-		[contentView addSubview:_splitView];
-		[_splitView setFrame:[contentView frame]];
-		
-		[_splitView addSubview:[[self sourceTextViewController] view]];
-		
-		_secondSourceTextViewController = [[WCSourceTextViewController alloc] initWithSourceFileDocument:self];
-		
-		[_splitView addSubview:[_secondSourceTextViewController view]];
-
-		CGFloat subviewHeight = floor(NSHeight([contentView frame]));
-		NSRect secondSubviewFrame = [[[_splitView subviews] objectAtIndex:1] frame];
-		secondSubviewFrame.size.height = subviewHeight;
-		
-		[[[_splitView subviews] objectAtIndex:1] setFrame:secondSubviewFrame];
-		
-		[[self sourceHighlighter] performHighlightingInVisibleRange];
-	}
-}
-
-@synthesize jumpBarViewController=_jumpBarViewController;
-@synthesize sourceTextViewController=_sourceTextViewController;
 @synthesize sourceScanner=_sourceScanner;
 @synthesize sourceHighlighter=_sourceHighlighter;
 @synthesize textStorage=_textStorage;

@@ -7,6 +7,7 @@
 //
 
 #import "WCJumpBarView.h"
+#import "KBResponderNotifyingWindow.h"
 
 @interface WCJumpBarView ()
 - (void)_commonInit;
@@ -15,7 +16,13 @@
 @implementation WCJumpBarView
 
 - (void)dealloc {
+#ifdef DEBUG
+	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
+#endif
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[[NSNotificationCenter defaultCenter] removeObserver:_windowDidResignKeyObservingToken];
+	[[NSNotificationCenter defaultCenter] removeObserver:_windowDidBecomeKeyObservingToken];
+	[[NSNotificationCenter defaultCenter] removeObserver:_firstResponderDidChangeObservingToken];
 	[_fillGradient release];
 	[_alternateFillGradient release];
 	[_bottomFillColor release];
@@ -42,12 +49,17 @@
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
-	if ([[self window] isKeyWindow])
+	NSResponder *firstResponder = [[self window] firstResponder];
+	if ([[self window] isKeyWindow] &&
+		[firstResponder isKindOfClass:[NSView class]] &&
+		[(NSView *)firstResponder isDescendantOf:[self superview]])
 		[_fillGradient drawInRect:[self bounds] angle:90.0];
 	else
 		[_alternateFillGradient drawInRect:[self bounds] angle:90.0];
 	
-	if ([[self window] isKeyWindow])
+	if ([[self window] isKeyWindow] &&
+		   [firstResponder isKindOfClass:[NSView class]] &&
+		   [(NSView *)firstResponder isDescendantOf:[self superview]])
 		[_bottomFillColor setFill];
 	else
 		[_alternateBottomFillColor setFill];
@@ -59,14 +71,21 @@
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:_windowDidResignKeyObservingToken];
 	[[NSNotificationCenter defaultCenter] removeObserver:_windowDidBecomeKeyObservingToken];
+	[[NSNotificationCenter defaultCenter] removeObserver:_firstResponderDidChangeObservingToken];
 	
 	if (newWindow) {
-		[[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidResignKeyNotification object:newWindow queue:nil usingBlock:^(NSNotification *note) {
+		_windowDidResignKeyObservingToken = [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidResignKeyNotification object:newWindow queue:nil usingBlock:^(NSNotification *note) {
 			[self setNeedsDisplay:YES];
 		}];
-		[[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidBecomeKeyNotification object:newWindow queue:nil usingBlock:^(NSNotification *note) {
+		_windowDidBecomeKeyObservingToken = [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidBecomeKeyNotification object:newWindow queue:nil usingBlock:^(NSNotification *note) {
 			[self setNeedsDisplay:YES];
 		}];
+		
+		if ([newWindow isKindOfClass:[KBResponderNotifyingWindow class]]) {
+			_firstResponderDidChangeObservingToken = [[NSNotificationCenter defaultCenter] addObserverForName:KBWindowFirstResponderDidChangeNotification object:newWindow queue:nil usingBlock:^(NSNotification *note) {
+				[self setNeedsDisplay:YES];
+			}];
+		}
 	}
 }
 

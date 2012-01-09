@@ -9,7 +9,7 @@
 #import <AppKit/NSViewController.h>
 #import "WCSourceTextViewDelegate.h"
 
-@class WCSourceScanner,WCSourceTextView,WCSourceTextStorage,WCSourceHighlighter,WCJumpBarViewController,WCSourceFileDocument;
+@class WCSourceScanner,WCSourceTextView,WCSourceTextStorage,WCSourceHighlighter,WCJumpBarViewController,WCSourceFileDocument,WCSplitView;
 
 @interface WCSourceTextViewController : NSViewController <WCSourceTextViewDelegate> {
 	__weak WCSourceScanner *_sourceScanner;
@@ -20,8 +20,9 @@
 	WCJumpBarViewController *_jumpBarViewController;
 }
 @property (readwrite,assign,nonatomic) IBOutlet WCSourceTextView *textView;
-@property (readonly,nonatomic) WCJumpBarViewController *jumpBarViewController;
 
-- (id)initWithTextStorage:(WCSourceTextStorage *)textStorage sourceScanner:(WCSourceScanner *)sourceScanner sourceHighlighter:(WCSourceHighlighter *)sourceHighlighter;
+@property (readonly,nonatomic) WCSourceHighlighter *sourceHighlighter;
+
 - (id)initWithSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument;
+
 @end

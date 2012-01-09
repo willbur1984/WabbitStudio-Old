@@ -9,10 +9,10 @@
 #import "NSPointerArray+WCExtensions.h"
 #import "RSDefines.h"
 
-static NSUInteger NSRangeSizeFunction(const void *item) {
+static inline NSUInteger NSRangeSizeFunction(const void *item) {
 	return sizeof(NSRange);
 }
-static NSString *NSRangeDescriptionFunction(const void *item) {
+static inline NSString *NSRangeDescriptionFunction(const void *item) {
 	return NSStringFromRange(*(NSRangePointer)item);
 }
 

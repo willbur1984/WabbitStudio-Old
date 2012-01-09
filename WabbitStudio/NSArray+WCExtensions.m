@@ -90,4 +90,21 @@
 		return [self subarrayWithRange:NSMakeRange(startIndex, endIndex-startIndex)];
 	}
 }
+
+- (NSUInteger)lineNumberForRange:(NSRange)range; {
+	NSUInteger left = 0, right = [self count], mid, lineStart;
+	
+    while ((right - left) > 1) {
+        mid = (right + left) / 2;
+        lineStart = [[self objectAtIndex:mid] unsignedIntegerValue];
+        
+        if (range.location < lineStart)
+			right = mid;
+        else if (range.location > lineStart)
+			left = mid;
+        else
+			return mid;
+    }
+    return left;
+}
 @end

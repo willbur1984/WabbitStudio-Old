@@ -242,6 +242,7 @@
 	
 	[self _handleAutoCompletionWithString:insertString];
 }
+ 
 #pragma mark NSObject+WCExtensions
 - (NSSet *)userDefaultsKeyPathsToObserve {
 	return [NSSet setWithObjects:WCEditorShowCurrentLineHighlightKey,WCEditorWrapLinesToEditorWidthKey,WCEditorPageGuideColumnNumberKey,WCEditorShowPageGuideAtColumnKey, nil];
@@ -281,6 +282,11 @@
 	
 	NSRange toolTipRange = [[self string] symbolRangeForRange:NSMakeRange(charIndex, 0)];
 	if (toolTipRange.location == NSNotFound)
+		return nil;
+	
+	WCSourceToken *token = [[[self delegate] sourceTokensForSourceTextView:self] sourceTokenForRange:toolTipRange];
+	if (NSLocationInRange(toolTipRange.location, [token range]) &&
+		[token type] == WCSourceTokenTypeComment)
 		return nil;
 	
 	NSArray *symbols = [[self delegate] sourceTextView:self sourceSymbolsForSymbolName:[[self string] substringWithRange:toolTipRange]];
@@ -661,13 +667,17 @@
 	lineRect.origin.x = NSMinX([self bounds]);
 	lineRect.size.width = NSWidth([self bounds]);
 	
-	if (!NSIntersectsRect(lineRect, rect))
+	if (!NSIntersectsRect(lineRect, rect) ||
+		![self needsToDrawRect:lineRect])
 		return;
 	
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
 	
+	[[[currentTheme currentLineColor] colorWithAlphaComponent:0.75] setFill];
+	NSRectFillUsingOperation(lineRect, NSCompositeSourceOver);
 	[[currentTheme currentLineColor] setFill];
-	[[NSBezierPath bezierPathWithRoundedRect:NSInsetRect(lineRect, 1.0, 0) xRadius:5.0 yRadius:5.0] fill];
+	NSRectFill(NSMakeRect(NSMinX(lineRect), NSMinY(lineRect), NSWidth(lineRect), 1.0));
+	NSRectFill(NSMakeRect(NSMinX(lineRect), NSMaxY(lineRect)-1, NSWidth(lineRect), 1.0));
 }
 
 - (void)_drawPageGuideInRect:(NSRect)rect; {

@@ -22,7 +22,5 @@
 - (void)drawCurrentLineHighlightInRect:(NSRect)rect;
 - (void)drawLineNumbersInRect:(NSRect)lineNumbersRect;
 
-- (NSUInteger)lineNumberForCharacterIndex:(NSUInteger)index;
-
 - (NSDictionary *)textAttributesForLineNumber:(NSUInteger)lineNumber selectedLineNumber:(NSUInteger)selectedLineNumber;
 @end

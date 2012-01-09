@@ -13,6 +13,8 @@
 #import "WCFontAndColorThemeManager.h"
 #import "WCEditorViewController.h"
 #import "NSObject+WCExtensions.h"
+#import "NSArray+WCExtensions.h"
+#import "NSParagraphStyle+RSExtensions.h"
 
 #define DEFAULT_THICKNESS	20.0
 #define RULER_MARGIN		8.0
@@ -139,7 +141,7 @@
 	// It doesn't show up in the glyphs so would not be accounted for.
 	range.length++;
 	
-	for (lineNumber = [self lineNumberForCharacterIndex:range.location]; lineNumber < numberOfLines; lineNumber++) {
+	for (lineNumber = [[self lineStartIndexes] lineNumberForRange:range]; lineNumber < numberOfLines; lineNumber++) {
 		lineStartIndex = [[[self lineStartIndexes] objectAtIndex:lineNumber] unsignedIntegerValue];
 		
 		if (NSLocationInRange(lineStartIndex, range)) {
@@ -168,23 +170,6 @@
 		if (lineStartIndex > NSMaxRange(range))
 			break;
 	}
-}
-
-- (NSUInteger)lineNumberForCharacterIndex:(NSUInteger)index {
-    NSUInteger left = 0, right = [[self lineStartIndexes] count], mid, lineStart;
-	
-    while ((right - left) > 1) {
-        mid = (right + left) / 2;
-        lineStart = [[[self lineStartIndexes] objectAtIndex:mid] unsignedIntegerValue];
-        
-        if (index < lineStart)
-			right = mid;
-        else if (index > lineStart)
-			left = mid;
-        else
-			return mid;
-    }
-    return left;
 }
 
 - (NSDictionary *)textAttributesForLineNumber:(NSUInteger)lineNumber selectedLineNumber:(NSUInteger)selectedLineNumber; {
@@ -241,24 +226,12 @@
 }
 @dynamic textAttributes;
 - (NSDictionary *)textAttributes {
-	NSMutableParagraphStyle *style = [[[NSParagraphStyle defaultParagraphStyle] mutableCopy] autorelease];
-	[style setAlignment:NSRightTextAlignment];
-    return [NSDictionary dictionaryWithObjectsAndKeys:
-            [self textFont], NSFontAttributeName, 
-            [self textColor], NSForegroundColorAttributeName,
-			style,NSParagraphStyleAttributeName,
-            nil];
+    return [NSDictionary dictionaryWithObjectsAndKeys:[self textFont],NSFontAttributeName,[self textColor],NSForegroundColorAttributeName,[NSParagraphStyle rightAlignedParagraphStyle],NSParagraphStyleAttributeName,nil];
 }
 
 @dynamic selectedTextAttributes;
 - (NSDictionary *)selectedTextAttributes {
-	NSMutableParagraphStyle *style = [[[NSParagraphStyle defaultParagraphStyle] mutableCopy] autorelease];
-	[style setAlignment:NSRightTextAlignment];
-    return [NSDictionary dictionaryWithObjectsAndKeys:
-            [self textFont], NSFontAttributeName, 
-            [NSColor textColor], NSForegroundColorAttributeName,
-			style,NSParagraphStyleAttributeName,
-            nil];
+    return [NSDictionary dictionaryWithObjectsAndKeys:[self textFont],NSFontAttributeName,[NSColor textColor],NSForegroundColorAttributeName,[NSParagraphStyle rightAlignedParagraphStyle],NSParagraphStyleAttributeName,nil];
 }
 
 - (void)_calculateLineStartIndexes; {

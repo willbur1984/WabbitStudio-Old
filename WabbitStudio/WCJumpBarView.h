@@ -8,6 +8,8 @@
 
 #import <AppKit/NSView.h>
 
+@class WCJumpBarViewController;
+
 @interface WCJumpBarView : NSView {
 	NSGradient *_fillGradient;
 	NSGradient *_alternateFillGradient;
@@ -15,5 +17,6 @@
 	NSColor *_alternateBottomFillColor;
 	id _windowDidResignKeyObservingToken;
 	id _windowDidBecomeKeyObservingToken;
+	id _firstResponderDidChangeObservingToken;
 }
 @end

@@ -18,4 +18,6 @@
 - (NSUInteger)sourceSymbolIndexForRange:(NSRange)range;
 - (WCSourceSymbol *)sourceSymbolForRange:(NSRange)range;
 - (NSArray *)sourceSymbolsForRange:(NSRange)range;
+
+- (NSUInteger)lineNumberForRange:(NSRange)range;
 @end

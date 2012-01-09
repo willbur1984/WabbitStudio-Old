@@ -29,11 +29,11 @@ static NSTextContainer *_textContainer;
 	});
 }
 
-- (void)highlight:(BOOL)flag withFrame:(NSRect)cellFrame inView:(NSView *)controlView {
+- (void)dealloc {
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
-	[super highlight:flag withFrame:cellFrame inView:controlView];
+	[super dealloc];
 }
 
 - (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView characterIndex:(NSUInteger)charIndex layoutManager:(NSLayoutManager *)layoutManager {

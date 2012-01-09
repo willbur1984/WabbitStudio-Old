@@ -24,7 +24,7 @@
 @interface WCSourceTextViewController ()
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
 @property (readonly,nonatomic) WCSourceTextStorage *textStorage;
-@property (readonly,nonatomic) WCSourceHighlighter *sourceHighlighter;
+@property (readonly,nonatomic) WCJumpBarViewController *jumpBarViewController;
 @end
 
 @implementation WCSourceTextViewController
@@ -38,7 +38,12 @@
 	_textStorage = nil;
 	_sourceScanner = nil;
 	_sourceHighlighter = nil;
+	_sourceFileDocument = nil;
 	[super dealloc];
+}
+
+- (NSString *)nibName {
+	return @"WCSourceTextView";
 }
 
 - (void)loadView {
@@ -118,7 +123,7 @@
 }
 
 - (id)initWithTextStorage:(WCSourceTextStorage *)textStorage sourceScanner:(WCSourceScanner *)sourceScanner sourceHighlighter:(WCSourceHighlighter *)sourceHighlighter; {
-	if (!(self = [super initWithNibName:@"WCSourceTextView" bundle:nil]))
+	if (!(self = [super initWithNibName:[self nibName] bundle:nil]))
 		return nil;
 	
 	_textStorage = textStorage;
@@ -137,6 +142,10 @@
 	_sourceHighlighter = [sourceFileDocument sourceHighlighter];
 	
 	return self;
+}
+
+- (IBAction)toggleEditorSplitView:(id)sender; {
+	
 }
 
 @synthesize textView=_textView;
