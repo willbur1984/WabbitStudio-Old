@@ -31,7 +31,8 @@
 	// "abc" would transform into "[^a]*(a)[^b]*(b)[^c]*(c).*"
 	// the capture groups let us track the ranges in the itemString that match the inputString
 	for (inputIndex=0; inputIndex<inputLength; inputIndex++) {
-		[pattern appendFormat:@"[^%@]*(%@)",[inputString substringWithRange:NSMakeRange(inputIndex, 1)],[inputString substringWithRange:NSMakeRange(inputIndex, 1)]];
+		NSString *substring = [NSRegularExpression escapedPatternForString:[inputString substringWithRange:NSMakeRange(inputIndex, 1)]];
+		[pattern appendFormat:@"[^%@]*(%@)",substring,substring];
 	}
 	[pattern appendString:@".*"];
 	
@@ -39,7 +40,6 @@
 	
 #ifdef DEBUG
     NSAssert(regex, @"regex cannot be nil!");
-	RSLogObject(pattern);
 #endif
 	
 	if ([self isCancelled])

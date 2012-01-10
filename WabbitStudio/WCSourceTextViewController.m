@@ -20,23 +20,26 @@
 #import "WCEditorViewController.h"
 #import "WCJumpBarViewController.h"
 #import "WCSourceFileDocument.h"
+#import "NSView+MCExtensions.h"
+#import "WCStandardSourceTextViewController.h"
 
 @interface WCSourceTextViewController ()
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
-@property (readonly,nonatomic) WCSourceTextStorage *textStorage;
+@property (readonly,nonatomic) WCStandardSourceTextViewController *standardSourceTextViewController;
 @end
 
 @implementation WCSourceTextViewController
-
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[[self view] setViewController:nil];
+	[_scrollingHighlightTimer invalidate];
+	_scrollingHighlightTimer = nil;
+	_standardSourceTextViewController = nil;
 	[_jumpBarViewController release];
-	_textStorage = nil;
-	_sourceScanner = nil;
-	_sourceHighlighter = nil;
 	_sourceFileDocument = nil;
 	[super dealloc];
 }
@@ -47,6 +50,8 @@
 
 - (void)loadView {
 	[super loadView];
+	
+	[[self view] setViewController:self];
 	
 	NSRect scrollViewFrame = [[[self textView] enclosingScrollView] frame];
 	NSRect jumpBarFrame = [[[self jumpBarViewController] view] frame];
@@ -66,6 +71,8 @@
 	
 	WCSourceRulerView *rulerView = [[[WCSourceRulerView alloc] initWithScrollView:[[self textView] enclosingScrollView] orientation:NSVerticalRuler] autorelease];
 	
+	[rulerView setClientView:[self textView]];
+	
 	[[[self textView] enclosingScrollView] setVerticalRulerView:rulerView];
 	
 	[[[self textView] enclosingScrollView] setHasHorizontalScroller:NO];
@@ -77,8 +84,14 @@
 	[[self textView] setWrapLines:[[NSUserDefaults standardUserDefaults] boolForKey:WCEditorWrapLinesToEditorWidthKey]];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewBoundsDidChange:) name:NSViewBoundsDidChangeNotification object:[[[self textView] enclosingScrollView] contentView]];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewBoundsDidChange:) name:NSViewFrameDidChangeNotification object:[self textView]];
+}
+#pragma mark NSMenuValidation
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
+	return [[self standardSourceTextViewController] validateMenuItem:menuItem];
 }
 
+#pragma mark NSTextViewDelegate
 - (void)textView:(NSTextView *)textView clickedOnCell:(id<NSTextAttachmentCell>)cell inRect:(NSRect)cellFrame atIndex:(NSUInteger)charIndex {
 	if (![cell isKindOfClass:[WCArgumentPlaceholderCell class]])
 		return;
@@ -92,6 +105,7 @@
 	return [NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName,[[self textStorage] paragraphStyle],NSParagraphStyleAttributeName, nil];
 }
 
+#pragma mark WCSourceTextViewDelegate
 - (NSArray *)sourceSymbolsForSourceTextView:(WCSourceTextView *)textView {
 	return [[self sourceScanner] symbols];
 }
@@ -120,33 +134,49 @@
 - (WCSourceHighlighter *)sourceHighlighterForSourceTextView:(WCSourceTextView *)textView; {
 	return [self sourceHighlighter];
 }
-
-- (id)initWithTextStorage:(WCSourceTextStorage *)textStorage sourceScanner:(WCSourceScanner *)sourceScanner sourceHighlighter:(WCSourceHighlighter *)sourceHighlighter; {
+#pragma mark *** Public Methods ***
+- (id)initWithSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument; {
+	return [self initWithSourceFileDocument:sourceFileDocument standardSourceTextViewController:nil];
+}
+- (id)initWithSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument standardSourceTextViewController:(WCStandardSourceTextViewController *)sourceTextViewController; {
 	if (!(self = [super initWithNibName:[self nibName] bundle:nil]))
 		return nil;
 	
-	_textStorage = textStorage;
-	_sourceScanner = sourceScanner;
-	_sourceHighlighter = sourceHighlighter;
-	
-	return self;
-}
-- (id)initWithSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument; {
-	if (!(self = [super initWithNibName:@"WCSourceTextView" bundle:nil]))
-		return nil;
-	
 	_sourceFileDocument = sourceFileDocument;
-	_textStorage = [sourceFileDocument textStorage];
-	_sourceScanner = [sourceFileDocument sourceScanner];
-	_sourceHighlighter = [sourceFileDocument sourceHighlighter];
+	_standardSourceTextViewController = sourceTextViewController;
 	
 	return self;
 }
-
+#pragma mark IBActions
+- (IBAction)showStandardEditor:(id)sender; {
+	[[self standardSourceTextViewController] showStandardEditor:nil];
+}
+- (IBAction)showDocumentItems:(id)sender; {
+	[[self jumpBarViewController] showDocumentItems:nil];
+}
+- (IBAction)showAssistantEditor:(id)sender; {
+	[[self standardSourceTextViewController] showAssistantEditor:nil];
+}
+- (IBAction)addAssistantEditor:(id)sender; {
+	[[self standardSourceTextViewController] addAssistantEditorForSourceTextViewController:self];
+}
+- (IBAction)removeAssistantEditor:(id)sender; {
+	[[self standardSourceTextViewController] removeAssistantEditorForSourceTextViewController:self];
+}
+#pragma mark Properties
 @synthesize textView=_textView;
-@synthesize sourceScanner=_sourceScanner;
-@synthesize textStorage=_textStorage;
-@synthesize sourceHighlighter=_sourceHighlighter;
+@dynamic sourceScanner;
+- (WCSourceScanner *)sourceScanner {
+	return [_sourceFileDocument sourceScanner];
+}
+@dynamic textStorage;
+- (WCSourceTextStorage *)textStorage {
+	return [_sourceFileDocument textStorage];
+}
+@dynamic sourceHighlighter;
+- (WCSourceHighlighter *)sourceHighlighter {
+	return [_sourceFileDocument sourceHighlighter];
+}
 @dynamic jumpBarViewController;
 - (WCJumpBarViewController *)jumpBarViewController {
 	if (!_jumpBarViewController) {
@@ -154,7 +184,11 @@
 	}
 	return _jumpBarViewController;
 }
+@synthesize standardSourceTextViewController=_standardSourceTextViewController;
+@synthesize sourceFileDocument=_sourceFileDocument;
+#pragma mark *** Private Methods ***
 
+#pragma mark Notifications
 - (void)_viewBoundsDidChange:(NSNotification *)note {
 	static const NSTimeInterval kScrollingHighlightTimerDelay = 0.1;
 	if (_scrollingHighlightTimer)
@@ -164,7 +198,7 @@
 		[[NSRunLoop mainRunLoop] addTimer:_scrollingHighlightTimer forMode:NSRunLoopCommonModes];
 	}
 }
-
+#pragma mark Callbacks
 - (void)_scrollingHighlightTimerCallback:(NSTimer *)timer {
 	[_scrollingHighlightTimer invalidate];
 	_scrollingHighlightTimer = nil;

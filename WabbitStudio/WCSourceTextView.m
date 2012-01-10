@@ -76,7 +76,6 @@
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:_windowDidBecomeKeyObservingToken];
 	[[NSNotificationCenter defaultCenter] removeObserver:_windowDidResignKeyObservingToken];
-	[[NSNotificationCenter defaultCenter] removeObserver:_windowDidResizeObservingToken];
 }
 
 - (void)viewDidMoveToWindow {
@@ -90,9 +89,6 @@
 		}];
 		_windowDidResignKeyObservingToken = [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidResignKeyNotification object:[self window] queue:nil usingBlock:^(NSNotification *note) {
 			[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
-		}];
-		_windowDidResizeObservingToken = [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidResizeNotification object:[self window] queue:nil usingBlock:^(NSNotification *note) {
-			[[[self delegate] sourceHighlighterForSourceTextView:self] performHighlightingInVisibleRange];
 		}];
 	}
 }

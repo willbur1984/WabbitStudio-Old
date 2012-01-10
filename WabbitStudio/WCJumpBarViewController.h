@@ -24,4 +24,5 @@
 
 - (id)initWithTextView:(NSTextView *)textView jumpBarDataSource:(id <WCJumpBarDataSource>)jumpBarDataSource;
 
+- (IBAction)showDocumentItems:(id)sender;
 @end

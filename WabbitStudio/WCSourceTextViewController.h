@@ -9,12 +9,10 @@
 #import <AppKit/NSViewController.h>
 #import "WCSourceTextViewDelegate.h"
 
-@class WCSourceScanner,WCSourceTextView,WCSourceTextStorage,WCSourceHighlighter,WCJumpBarViewController,WCSourceFileDocument,WCSplitView;
+@class WCSourceScanner,WCSourceTextView,WCSourceTextStorage,WCSourceHighlighter,WCJumpBarViewController,WCSourceFileDocument,WCSplitView,WCStandardSourceTextViewController;
 
 @interface WCSourceTextViewController : NSViewController <WCSourceTextViewDelegate> {
-	__weak WCSourceScanner *_sourceScanner;
-	__weak WCSourceTextStorage *_textStorage;
-	__weak WCSourceHighlighter *_sourceHighlighter;
+	__weak WCStandardSourceTextViewController *_standardSourceTextViewController;
 	__weak WCSourceFileDocument *_sourceFileDocument;
 	NSTimer *_scrollingHighlightTimer;
 	WCJumpBarViewController *_jumpBarViewController;
@@ -23,7 +21,16 @@
 
 @property (readonly,nonatomic) WCSourceHighlighter *sourceHighlighter;
 @property (readonly,nonatomic) WCJumpBarViewController *jumpBarViewController;
+@property (readonly,nonatomic) WCSourceFileDocument *sourceFileDocument;
+@property (readonly,nonatomic) WCSourceTextStorage *textStorage;
 
 - (id)initWithSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument;
+- (id)initWithSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument standardSourceTextViewController:(WCStandardSourceTextViewController *)sourceTextViewController;
 
+- (IBAction)showStandardEditor:(id)sender;
+- (IBAction)showDocumentItems:(id)sender;
+
+- (IBAction)showAssistantEditor:(id)sender;
+- (IBAction)addAssistantEditor:(id)sender;
+- (IBAction)removeAssistantEditor:(id)sender;
 @end

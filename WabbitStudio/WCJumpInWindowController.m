@@ -108,6 +108,7 @@
 	}
 	
 	[self setSearchString:nil];
+	[self setStatusString:nil];
 	[[self mutableMatches] removeAllObjects];
 	[self setDataSource:nil];
 }
@@ -122,7 +123,8 @@
 }
 
 - (IBAction)search:(id)sender; {
-	if (![[self searchString] length]) {
+	// require a search string of at least 2 characters, this matches Xcode's behavior
+	if ([[self searchString] length] <= 1) {
 		[[self mutableMatches] setArray:nil];
 		[self setStatusString:nil];
 		[self setSearching:NO];

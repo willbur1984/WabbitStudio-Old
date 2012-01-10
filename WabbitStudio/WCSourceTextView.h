@@ -15,7 +15,6 @@
 	__weak id <WCSourceTextViewDelegate> _delegate;
 	id _windowDidResignKeyObservingToken;
 	id _windowDidBecomeKeyObservingToken;
-	id _windowDidResizeObservingToken;
 	NSTimer *_completionTimer;
 }
 @property (readwrite,assign,nonatomic) IBOutlet id <WCSourceTextViewDelegate> delegate;

@@ -20,4 +20,6 @@
 - (NSArray *)sourceSymbolsForRange:(NSRange)range;
 
 - (NSUInteger)lineNumberForRange:(NSRange)range;
+
+- (id)firstObject;
 @end

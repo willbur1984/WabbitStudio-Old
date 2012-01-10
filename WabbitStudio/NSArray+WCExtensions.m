@@ -107,4 +107,9 @@
     }
     return left;
 }
+- (id)firstObject {
+	if ([self count])
+		return [self objectAtIndex:0];
+	return nil;
+}
 @end

@@ -8,12 +8,9 @@
 
 #import <AppKit/NSWindowController.h>
 
-@class WCSourceTextViewController,WCSplitView;
+@class WCStandardSourceTextViewController;
 
-@interface WCSourceFileWindowController : NSWindowController <NSSplitViewDelegate> {
-	WCSourceTextViewController *_sourceTextViewController;
-	WCSplitView *_splitView;
-	WCSourceTextViewController *_bottomSourceTextViewController;
+@interface WCSourceFileWindowController : NSWindowController {
+	WCStandardSourceTextViewController *_sourceTextViewController;
 }
-- (IBAction)toggleEditorSplitView:(id)sender;
 @end

@@ -46,12 +46,8 @@
 	
 	_lineStartIndexes = [[NSMutableArray alloc] initWithCapacity:0];
 	
-	[self setClientView:[scrollView documentView]];
-	
 	[self setupUserDefaultsObserving];
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidProcessEditing:) name:NSTextStorageDidProcessEditingNotification object:[[scrollView documentView] textStorage]];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textViewDidChangeSelection:) name:NSTextViewDidChangeSelectionNotification object:[scrollView documentView]];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_currentThemeDidChange:) name:WCFontAndColorThemeManagerCurrentThemeDidChangeNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_currentLineColorDidChange:) name:WCFontAndColorThemeManagerCurrentLineColorDidChangeNotification object:nil];
 	
@@ -60,15 +56,14 @@
 	return self;
 }
 
-- (void)viewWillMoveToWindow:(NSWindow *)newWindow {
-	[super viewWillMoveToWindow:newWindow];
+- (void)setClientView:(NSView *)client {
+	[super setClientView:client];
 	
-	[[NSNotificationCenter defaultCenter] removeObserver:_windowDidResizeObservingToken];
-	
-	if (newWindow) {
-		_windowDidResizeObservingToken = [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidResizeNotification object:newWindow queue:nil usingBlock:^(NSNotification *note) {
-			[self setNeedsDisplay:YES];
-		}];
+	if ([client isKindOfClass:[NSTextView class]]) {
+		NSTextView *textView = (NSTextView *)client;
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidProcessEditing:) name:NSTextStorageDidProcessEditingNotification object:[textView textStorage]];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textViewDidChangeSelection:) name:NSTextViewDidChangeSelectionNotification object:textView];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewFrameDidChange:) name:NSViewFrameDidChangeNotification object:client];
 	}
 }
 
@@ -82,24 +77,24 @@
 		[self setRuleThickness:newThickness];
 }
 
-- (void)drawHashMarksAndLabelsInRect:(NSRect)rect {	
+- (void)drawHashMarksAndLabelsInRect:(NSRect)rect {
 	[[self backgroundColor] set];
 	NSRectFill([self bounds]);
 	
 	[self drawCurrentLineHighlightInRect:rect];
 	[self drawLineNumbersInRect:rect];
 	
-	[[NSColor colorWithCalibratedWhite:0.58 alpha:1.0] setStroke];
-	[[NSBezierPath bezierPathWithRect:NSMakeRect(NSWidth([self bounds]), 0, 0, NSHeight([self bounds]))] stroke];
-	/*
-	[[NSColor colorWithCalibratedWhite:0.64 alpha:1.0] setStroke];
+	//[[NSColor colorWithCalibratedWhite:0.58 alpha:1.0] setStroke];
+	//[[NSBezierPath bezierPathWithRect:NSMakeRect(NSWidth([self bounds]), 0, 0, NSHeight([self bounds]))] stroke];
+	
+	//[[NSColor colorWithCalibratedWhite:0.58 alpha:1.0] setStroke];
+	[[NSColor darkGrayColor] setStroke];
 	NSBezierPath *dottedLine = [NSBezierPath bezierPathWithRect:NSMakeRect(NSWidth([self bounds]), 0, 0, NSHeight([self bounds]))];
 	CGFloat dash[2];
 	dash[0] = 1.0;
 	dash[1] = 2.0;
 	[dottedLine setLineDash:dash count:2 phase:1.0];
 	[dottedLine stroke];
-	 */
 }
 
 - (NSSet *)userDefaultsKeyPathsToObserve {
@@ -291,6 +286,9 @@
 	[self setNeedsDisplay:YES];
 }
 - (void)_currentLineColorDidChange:(NSNotification *)note {
+	[self setNeedsDisplay:YES];
+}
+- (void)_viewFrameDidChange:(NSNotification *)note {
 	[self setNeedsDisplay:YES];
 }
 @end

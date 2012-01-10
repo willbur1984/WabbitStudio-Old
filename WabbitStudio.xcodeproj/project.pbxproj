@@ -105,6 +105,7 @@
 		0745BE3314ABF86700F541DC /* WCEditorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0745BE3114ABF86700F541DC /* WCEditorView.xib */; };
 		0745BE3514ABFB0D00F541DC /* Editor.png in Resources */ = {isa = PBXBuildFile; fileRef = 0745BE3414ABFB0D00F541DC /* Editor.png */; };
 		076966E614B636CD005448F7 /* WCAdvancedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 076966E414B636CD005448F7 /* WCAdvancedViewController.m */; };
+		076B7F8814BC15B600CC10E3 /* WCStandardSourceTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 076B7F8714BC15B600CC10E3 /* WCStandardSourceTextViewController.m */; };
 		07713F1314B954FC00324F77 /* SelectEncodingsPanel.nib in Resources */ = {isa = PBXBuildFile; fileRef = 07713F1114B954FC00324F77 /* SelectEncodingsPanel.nib */; };
 		07713F1614B9551400324F77 /* EncodingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 07713F1514B9551400324F77 /* EncodingManager.m */; };
 		07713F1914B9586400324F77 /* NSUserDefaults+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07713F1814B9586400324F77 /* NSUserDefaults+RSExtensions.m */; };
@@ -348,6 +349,8 @@
 		0745BE3414ABFB0D00F541DC /* Editor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Editor.png; sourceTree = "<group>"; };
 		076966E314B636CD005448F7 /* WCAdvancedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCAdvancedViewController.h; sourceTree = "<group>"; };
 		076966E414B636CD005448F7 /* WCAdvancedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCAdvancedViewController.m; sourceTree = "<group>"; };
+		076B7F8614BC15B600CC10E3 /* WCStandardSourceTextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCStandardSourceTextViewController.h; sourceTree = "<group>"; };
+		076B7F8714BC15B600CC10E3 /* WCStandardSourceTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCStandardSourceTextViewController.m; sourceTree = "<group>"; };
 		07713F1214B954FC00324F77 /* en */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = en; path = SelectEncodingsPanel.nib; sourceTree = "<group>"; };
 		07713F1414B9551400324F77 /* EncodingManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncodingManager.h; sourceTree = "<group>"; };
 		07713F1514B9551400324F77 /* EncodingManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncodingManager.m; sourceTree = "<group>"; };
@@ -528,6 +531,8 @@
 			children = (
 				0706D64E14A8F45B0092F880 /* WCSourceTextViewController.h */,
 				0706D64F14A8F45B0092F880 /* WCSourceTextViewController.m */,
+				076B7F8614BC15B600CC10E3 /* WCStandardSourceTextViewController.h */,
+				076B7F8714BC15B600CC10E3 /* WCStandardSourceTextViewController.m */,
 				07BC6CB314B7DDF2007ECB3F /* Jump to Line */,
 				073B5A9A14B6A43900FCDC0F /* Views */,
 				073B5A9C14B6A45D00FCDC0F /* Highlighter */,
@@ -1220,6 +1225,7 @@
 				07862BC114BA90210057EB89 /* NSObject+MCExtensions.m in Sources */,
 				07862BC214BA90210057EB89 /* NSView+MCExtensions.m in Sources */,
 				07862BC814BBA5B00057EB89 /* NSParagraphStyle+RSExtensions.m in Sources */,
+				076B7F8814BC15B600CC10E3 /* WCStandardSourceTextViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
