@@ -700,7 +700,7 @@
 											<object class="NSMenuItem" id="824819909">
 												<reference key="NSMenu" ref="1058866286"/>
 												<string key="NSTitle">Show Symbols</string>
-												<string key="NSKeyEquiv">6</string>
+												<string key="NSKeyEquiv">1</string>
 												<int key="NSKeyEquivModMask">262144</int>
 												<int key="NSMnemonicLoc">2147483647</int>
 												<reference key="NSOnImage" ref="1033313550"/>
@@ -741,8 +741,19 @@
 											</object>
 											<object class="NSMenuItem" id="553351460">
 												<reference key="NSMenu" ref="338451871"/>
-												<string key="NSTitle">Add Assistant Editor</string>
-												<string key="NSKeyEquiv"/>
+												<string key="NSTitle">Add Horizontal Assistant Editor</string>
+												<string key="NSKeyEquiv">W</string>
+												<int key="NSKeyEquivModMask">1048576</int>
+												<int key="NSMnemonicLoc">2147483647</int>
+												<reference key="NSOnImage" ref="1033313550"/>
+												<reference key="NSMixedImage" ref="310636482"/>
+											</object>
+											<object class="NSMenuItem" id="955829326">
+												<reference key="NSMenu" ref="338451871"/>
+												<bool key="NSIsAlternate">YES</bool>
+												<string key="NSTitle">Add Vertical Assistant Editor</string>
+												<string key="NSKeyEquiv">W</string>
+												<int key="NSKeyEquivModMask">1572864</int>
 												<int key="NSMnemonicLoc">2147483647</int>
 												<reference key="NSOnImage" ref="1033313550"/>
 												<reference key="NSMixedImage" ref="310636482"/>
@@ -750,7 +761,8 @@
 											<object class="NSMenuItem" id="436350630">
 												<reference key="NSMenu" ref="338451871"/>
 												<string key="NSTitle">Remove Assistant Editor</string>
-												<string key="NSKeyEquiv"/>
+												<string key="NSKeyEquiv">W</string>
+												<int key="NSKeyEquivModMask">1310720</int>
 												<int key="NSMnemonicLoc">2147483647</int>
 												<reference key="NSOnImage" ref="1033313550"/>
 												<reference key="NSMixedImage" ref="310636482"/>
@@ -1554,6 +1566,14 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
+						<string key="label">addAssistantEditor:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="955829326"/>
+					</object>
+					<int key="connectionID">612</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
 						<string key="label">preferences:</string>
 						<reference key="source" ref="968104485"/>
 						<reference key="destination" ref="609285721"/>
@@ -2327,6 +2347,7 @@
 							<reference ref="553351460"/>
 							<reference ref="154197435"/>
 							<reference ref="436350630"/>
+							<reference ref="955829326"/>
 						</array>
 						<reference key="parent" ref="361782036"/>
 					</object>
@@ -2348,6 +2369,11 @@
 					<object class="IBObjectRecord">
 						<int key="objectID">602</int>
 						<reference key="object" ref="553351460"/>
+						<reference key="parent" ref="338451871"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">611</int>
+						<reference key="object" ref="955829326"/>
 						<reference key="parent" ref="338451871"/>
 					</object>
 				</array>
@@ -2462,6 +2488,7 @@
 				<string key="601.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="602.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="603.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="611.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="72.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="73.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="74.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2478,7 +2505,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">610</int>
+			<int key="maxID">612</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
