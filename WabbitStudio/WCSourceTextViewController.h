@@ -22,6 +22,7 @@
 @property (readwrite,assign,nonatomic) IBOutlet WCSourceTextView *textView;
 
 @property (readonly,nonatomic) WCSourceHighlighter *sourceHighlighter;
+@property (readonly,nonatomic) WCJumpBarViewController *jumpBarViewController;
 
 - (id)initWithSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument;
 

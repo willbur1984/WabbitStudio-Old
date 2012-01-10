@@ -14,6 +14,7 @@
 #import "WCSourceHighlighter.h"
 #import "NSTextView+WCExtensions.h"
 #import "WCSourceTextView.h"
+#import "WCJumpBarViewController.h"
 
 @interface WCSourceFileWindowController ()
 @property (readonly,nonatomic) WCSourceTextViewController *sourceTextViewController;
@@ -60,16 +61,27 @@
 		if ([[_splitView subviews] count])
 			[menuItem setTitle:NSLocalizedString(@"Close Editor Split", @"Close Editor Split")];
 		else if (([menuItem keyEquivalentModifierMask] & NSAlternateKeyMask) != 0)
-			[menuItem setTitle:NSLocalizedString(@"Split Editor Vertically", @"Split Editor Vertically")];
+			[menuItem setTitle:[NSString stringWithFormat:NSLocalizedString(@"Split \"%@\" Vertically", @"split editor vertically format string"),[[self document] displayName]]];
 		else
-			[menuItem setTitle:NSLocalizedString(@"Split Editor", @"Split Editor")];
+			[menuItem setTitle:[NSString stringWithFormat:NSLocalizedString(@"Split \"%@\" Horizontally", @"split editor horizontally format string"),[[self document] displayName]]];
 	}
 	return YES;
 }
 
-- (NSRect)splitView:(NSSplitView *)splitView effectiveRect:(NSRect)proposedEffectiveRect forDrawnRect:(NSRect)drawnRect ofDividerAtIndex:(NSInteger)dividerIndex {
-	proposedEffectiveRect.size.height = 5.0;
-	return proposedEffectiveRect;
+- (NSRect)splitView:(NSSplitView *)splitView additionalEffectiveRectOfDividerAtIndex:(NSInteger)dividerIndex {
+	if ([splitView isVertical])
+		return NSZeroRect;
+	return [splitView convertRect:[[[self bottomSourceTextViewController] jumpBarViewController] additionalEffectiveSplitViewRect] fromView:[[[self bottomSourceTextViewController] jumpBarViewController] view]];
+}
+- (CGFloat)splitView:(NSSplitView *)splitView constrainMaxCoordinate:(CGFloat)proposedMaximumPosition ofSubviewAt:(NSInteger)dividerIndex {
+	if ([splitView isVertical])
+		return proposedMaximumPosition-floor([[self window] minSize].width/3.0);
+	return proposedMaximumPosition-floor([[self window] minSize].height/3.0);
+}
+- (CGFloat)splitView:(NSSplitView *)splitView constrainMinCoordinate:(CGFloat)proposedMinimumPosition ofSubviewAt:(NSInteger)dividerIndex {
+	if ([splitView isVertical])
+		return proposedMinimumPosition+floor([[self window] minSize].width/3.0);
+	return proposedMinimumPosition+floor([[self window] minSize].height/3.0);
 }
 
 - (IBAction)toggleEditorSplitView:(id)sender; {

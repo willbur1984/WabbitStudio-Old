@@ -111,9 +111,15 @@
 }
 
 @synthesize jumpBar=_jumpBar;
-@synthesize jumpBarView=_jumpBarView;
 @synthesize jumpBarDataSource=_jumpBarDataSource;
 @synthesize textView=_textView;
+@dynamic additionalEffectiveSplitViewRect;
+- (NSRect)additionalEffectiveSplitViewRect {
+	NSRect jumpBarBounds = [[self jumpBar] bounds];
+	NSRect symbolCellBounds = [(NSPathCell *)[[self jumpBar] cell] rectOfPathComponentCell:[[[self jumpBar] pathComponentCells] lastObject] withFrame:jumpBarBounds inView:[self jumpBar]];
+	
+	return [[self view] convertRect:NSMakeRect(NSMaxX(symbolCellBounds), NSMinY([[self view] bounds]), NSWidth([[self view] bounds])-NSMaxX(symbolCellBounds), NSHeight([[self view] bounds])) fromView:[self jumpBar]];
+}
 
 @synthesize textViewSelectedLineAndColumn=_textViewSelectedLineAndColumn;
 @synthesize symbolsMenu=_symbolsMenu;

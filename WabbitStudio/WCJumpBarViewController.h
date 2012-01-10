@@ -18,9 +18,9 @@
 	NSMenu *_symbolsMenu;
 }
 @property (readwrite,assign,nonatomic) IBOutlet WCJumpBar *jumpBar;
-@property (readwrite,assign,nonatomic) IBOutlet WCJumpBarView *jumpBarView;
 @property (readonly,nonatomic) NSTextView *textView;
 @property (readonly,copy,nonatomic) NSString *textViewSelectedLineAndColumn;
+@property (readonly,nonatomic) NSRect additionalEffectiveSplitViewRect;
 
 - (id)initWithTextView:(NSTextView *)textView jumpBarDataSource:(id <WCJumpBarDataSource>)jumpBarDataSource;
 

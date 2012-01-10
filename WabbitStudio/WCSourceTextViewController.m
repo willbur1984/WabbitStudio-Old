@@ -24,7 +24,6 @@
 @interface WCSourceTextViewController ()
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
 @property (readonly,nonatomic) WCSourceTextStorage *textStorage;
-@property (readonly,nonatomic) WCJumpBarViewController *jumpBarViewController;
 @end
 
 @implementation WCSourceTextViewController
