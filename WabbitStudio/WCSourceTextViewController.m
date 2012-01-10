@@ -98,6 +98,13 @@
 	
 	[textView setSelectedRange:NSMakeRange(charIndex, 1)];
 }
+- (void)textView:(NSTextView *)textView doubleClickedOnCell:(id<NSTextAttachmentCell>)cell inRect:(NSRect)cellFrame atIndex:(NSUInteger)charIndex {
+	if (![cell isKindOfClass:[WCArgumentPlaceholderCell class]])
+		return;
+	
+	[textView insertText:[(WCArgumentPlaceholderCell *)cell stringValue] replacementRange:NSMakeRange(charIndex, 1)];
+	[textView setSelectedRange:NSMakeRange(charIndex, [[(WCArgumentPlaceholderCell *)cell stringValue] length])];
+}
 - (NSDictionary *)textView:(NSTextView *)textView shouldChangeTypingAttributes:(NSDictionary *)oldTypingAttributes toAttributes:(NSDictionary *)newTypingAttributes; {
 	
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];

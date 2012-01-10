@@ -9,7 +9,7 @@
 #import <AppKit/NSViewController.h>
 #import "WCSourceTextViewDelegate.h"
 
-@class WCSourceScanner,WCSourceTextView,WCSourceTextStorage,WCSourceHighlighter,WCJumpBarViewController,WCSourceFileDocument,WCSplitView,WCStandardSourceTextViewController;
+@class WCSourceTextView,WCSourceTextStorage,WCSourceHighlighter,WCJumpBarViewController,WCSourceFileDocument,WCStandardSourceTextViewController;
 
 @interface WCSourceTextViewController : NSViewController <WCSourceTextViewDelegate> {
 	__weak WCStandardSourceTextViewController *_standardSourceTextViewController;
