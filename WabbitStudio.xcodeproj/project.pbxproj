@@ -75,6 +75,7 @@
 		072880D714B572430082DE4C /* RSFindSearchFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 072880D614B572430082DE4C /* RSFindSearchFieldCell.m */; };
 		072880DA14B57A3A0082DE4C /* RSFindTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 072880D914B57A3A0082DE4C /* RSFindTextField.m */; };
 		072880DD14B57A660082DE4C /* RSFindTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 072880DC14B57A660082DE4C /* RSFindTextFieldCell.m */; };
+		072AF0FC14BCB72600F2147E /* RSTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 072AF0FB14BCB72600F2147E /* RSTreeNode.m */; };
 		072BBC3A14AA65AD0044ECC2 /* RSPreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 072BBC3914AA65AD0044ECC2 /* RSPreferencesWindowController.m */; };
 		072BBC3E14AA65F80044ECC2 /* NSEvent+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 072BBC3D14AA65F80044ECC2 /* NSEvent+RSExtensions.m */; };
 		072BBC4214AA66900044ECC2 /* WCPreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 072BBC4114AA66900044ECC2 /* WCPreferencesWindowController.m */; };
@@ -290,6 +291,8 @@
 		072880D914B57A3A0082DE4C /* RSFindTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSFindTextField.m; sourceTree = "<group>"; };
 		072880DB14B57A660082DE4C /* RSFindTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSFindTextFieldCell.h; sourceTree = "<group>"; };
 		072880DC14B57A660082DE4C /* RSFindTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSFindTextFieldCell.m; sourceTree = "<group>"; };
+		072AF0FA14BCB72600F2147E /* RSTreeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSTreeNode.h; sourceTree = "<group>"; };
+		072AF0FB14BCB72600F2147E /* RSTreeNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSTreeNode.m; sourceTree = "<group>"; };
 		072BBC3814AA65AD0044ECC2 /* RSPreferencesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSPreferencesWindowController.h; sourceTree = "<group>"; };
 		072BBC3914AA65AD0044ECC2 /* RSPreferencesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSPreferencesWindowController.m; sourceTree = "<group>"; };
 		072BBC3C14AA65F80044ECC2 /* NSEvent+RSExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSEvent+RSExtensions.h"; sourceTree = "<group>"; };
@@ -710,6 +713,7 @@
 			isa = PBXGroup;
 			children = (
 				07F5F76E14A5A46900F1F326 /* RSDefines.h */,
+				072AF0F914BCB71100F2147E /* Model */,
 				072880C214B4F1780082DE4C /* Bezel Window */,
 				07B4740114AE3C7D00E3F9D0 /* Transformers */,
 				078F041E14AD78A50080ADBC /* ToolTips */,
@@ -765,6 +769,15 @@
 				072880CA14B4F8790082DE4C /* RSBezelWindow.m */,
 			);
 			name = "Bezel Window";
+			sourceTree = "<group>";
+		};
+		072AF0F914BCB71100F2147E /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				072AF0FA14BCB72600F2147E /* RSTreeNode.h */,
+				072AF0FB14BCB72600F2147E /* RSTreeNode.m */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 		072BBC3F14AA66730044ECC2 /* Preferences */ = {
@@ -1226,6 +1239,7 @@
 				07862BC214BA90210057EB89 /* NSView+MCExtensions.m in Sources */,
 				07862BC814BBA5B00057EB89 /* NSParagraphStyle+RSExtensions.m in Sources */,
 				076B7F8814BC15B600CC10E3 /* WCStandardSourceTextViewController.m in Sources */,
+				072AF0FC14BCB72600F2147E /* RSTreeNode.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
