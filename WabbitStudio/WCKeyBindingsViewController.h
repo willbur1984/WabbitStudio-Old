@@ -11,6 +11,8 @@
 #import "RSUserDefaultsProvider.h"
 #import "MGScopeBarDelegateProtocol.h"
 
+extern NSString *const WCKeyBindingsUserCommandSetIdentifiersKey;
+
 @interface WCKeyBindingsViewController : NSViewController <RSPreferencesModule,RSUserDefaultsProvider,MGScopeBarDelegate,NSOutlineViewDelegate> {
 	NSArray *_scopeBarItemTitles;
 	NSDictionary *_scopeBarItemIdentifiersToTitles;

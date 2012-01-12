@@ -24,6 +24,28 @@ static NSString *const RSTreeNodeChildNodesKey = @"childNodes";
 	[_childNodes release];
 	[super dealloc];
 }
+#pragma mark NSCopying
+- (id)copyWithZone:(NSZone *)zone {
+	RSTreeNode *copy = [[[self class] alloc] initWithRepresentedObject:[self representedObject]];
+	
+	copy->_parentNode = _parentNode;
+	
+	[[copy mutableChildNodes] addObjectsFromArray:[self childNodes]];
+	
+	return copy;
+}
+#pragma mark NSMutableCopying
+- (id)mutableCopyWithZone:(NSZone *)zone {
+	RSTreeNode *copy = [[[self class] alloc] initWithRepresentedObject:[self representedObject]];
+	
+	copy->_parentNode = _parentNode;
+	
+	for (RSTreeNode *node in [self childNodes])
+		[[copy mutableChildNodes] addObject:[[node copy] autorelease]];
+	
+	return copy;
+}
+
 #pragma mark RSPlistArchiving
 - (NSDictionary *)plistRepresentation {
 	NSMutableArray *childNodePlists = [NSMutableArray arrayWithCapacity:[[self childNodes] count]];

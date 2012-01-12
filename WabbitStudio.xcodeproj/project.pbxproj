@@ -1147,12 +1147,7 @@
 				07A8AFBB14BDF0D2008CB9FF /* WCKeyBindingsEditCommandPairWindowController.m */,
 				07A8AFE314BE2CE8008CB9FF /* WCKeyBindingsOutlineView.h */,
 				07A8AFE414BE2CE9008CB9FF /* WCKeyBindingsOutlineView.m */,
-				07A8AF9B14BDD8E4008CB9FF /* WCKeyBindingCommandSet.h */,
-				07A8AF9C14BDD8E4008CB9FF /* WCKeyBindingCommandSet.m */,
-				07A8AF9E14BDD9DF008CB9FF /* WCKeyBindingCommandPair.h */,
-				07A8AF9F14BDD9DF008CB9FF /* WCKeyBindingCommandPair.m */,
-				07A8AFA114BDDFCC008CB9FF /* WCKeyBindingCommandSetManager.h */,
-				07A8AFA214BDDFCD008CB9FF /* WCKeyBindingCommandSetManager.m */,
+				07A8AFF114BED23F008CB9FF /* Command Sets */,
 			);
 			name = "Key Bindings";
 			sourceTree = "<group>";
@@ -1164,6 +1159,19 @@
 				07A8AFBF14BDF2E2008CB9FF /* NSAlert-OAExtensions.m */,
 			);
 			path = External;
+			sourceTree = "<group>";
+		};
+		07A8AFF114BED23F008CB9FF /* Command Sets */ = {
+			isa = PBXGroup;
+			children = (
+				07A8AF9B14BDD8E4008CB9FF /* WCKeyBindingCommandSet.h */,
+				07A8AF9C14BDD8E4008CB9FF /* WCKeyBindingCommandSet.m */,
+				07A8AF9E14BDD9DF008CB9FF /* WCKeyBindingCommandPair.h */,
+				07A8AF9F14BDD9DF008CB9FF /* WCKeyBindingCommandPair.m */,
+				07A8AFA114BDDFCC008CB9FF /* WCKeyBindingCommandSetManager.h */,
+				07A8AFA214BDDFCD008CB9FF /* WCKeyBindingCommandSetManager.m */,
+			);
+			name = "Command Sets";
 			sourceTree = "<group>";
 		};
 		07B4740114AE3C7D00E3F9D0 /* Transformers */ = {

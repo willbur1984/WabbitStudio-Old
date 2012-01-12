@@ -15,4 +15,6 @@
 
 - (NSURL *)applicationFontAndColorThemesDirectoryURL;
 - (NSURL *)userFontAndColorThemesDirectoryURL;
+
+- (NSURL *)userKeyBindingCommandSetsDirectoryURL;
 @end

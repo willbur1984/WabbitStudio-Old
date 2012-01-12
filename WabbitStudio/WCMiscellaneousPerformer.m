@@ -26,7 +26,8 @@
 	}
 	
 	// create a URL with the name of the application added at the end
-	NSURL *directoryURL = [[NSURL fileURLWithPath:[paths objectAtIndex:0]] URLByAppendingPathComponent:[[NSProcessInfo processInfo] processName] isDirectory:YES];
+	NSString *applicationName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
+	NSURL *directoryURL = [[NSURL fileURLWithPath:[paths objectAtIndex:0]] URLByAppendingPathComponent:applicationName isDirectory:YES];
 	
 	// it doesn't exist, we need to create it
 	if (![directoryURL checkResourceIsReachableAndReturnError:NULL]) {
@@ -47,6 +48,23 @@
 		return nil;
 	
 	NSURL *directoryURL = [appSupportURL URLByAppendingPathComponent:NSLocalizedString(@"FontAndColorThemes", @"FontAndColorThemes") isDirectory:YES];
+	
+	// it doesn't exist, we need to create it
+	if (![directoryURL checkResourceIsReachableAndReturnError:NULL]) {
+		if (![[NSFileManager defaultManager] createDirectoryAtURL:directoryURL withIntermediateDirectories:YES attributes:nil error:NULL]) {
+			NSLog(@"Unable to create \"%@\" directory for %@.",[directoryURL lastPathComponent],[[NSProcessInfo processInfo] processName]);
+			return nil;
+		}
+	}
+	return directoryURL;
+}
+
+- (NSURL *)userKeyBindingCommandSetsDirectoryURL; {
+	NSURL *appSupportURL = [self applicationSupportDirectoryURL];
+	if (!appSupportURL)
+		return nil;
+	
+	NSURL *directoryURL = [appSupportURL URLByAppendingPathComponent:NSLocalizedString(@"KeyBindingCommandSets", @"KeyBindingCommandSets") isDirectory:YES];
 	
 	// it doesn't exist, we need to create it
 	if (![directoryURL checkResourceIsReachableAndReturnError:NULL]) {

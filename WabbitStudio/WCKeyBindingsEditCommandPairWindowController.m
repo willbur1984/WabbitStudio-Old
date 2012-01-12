@@ -57,8 +57,7 @@
 	
 	[[NSApplication sharedApplication] beginSheet:[self window] modalForWindow:[[WCPreferencesWindowController sharedWindowController] window] didEndBlock:^(NSInteger returnCode) {
 		if (returnCode == NSOKButton) {
-			[[[self commandPair] menuItem] setKeyEquivalent:[[self recorderControl] keyCharsIgnoringModifiers]];
-			[[[self commandPair] menuItem] setKeyEquivalentModifierMask:[[self recorderControl] keyCombo].flags];
+			[[self commandPair] setKeyCombo:[[self recorderControl] keyCombo]];
 		}
 		[self setCommandPair:nil];
 	}];

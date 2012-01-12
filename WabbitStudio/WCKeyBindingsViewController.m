@@ -13,6 +13,8 @@
 #import "WCKeyBindingsEditCommandPairWindowController.h"
 #import "RSDefines.h"
 
+NSString *const WCKeyBindingsUserCommandSetIdentifiersKey = @"WCKeyBindingsUserCommandSetIdentifiersKey";
+
 @interface WCKeyBindingsViewController ()
 @property (readwrite,copy,nonatomic) NSString *searchString;
 @end
@@ -94,10 +96,10 @@ static const NSInteger kNumberOfScopeBarGroups = 1;
 }
 #pragma mark NSOutlineViewDelegate
 - (BOOL)outlineView:(NSOutlineView *)outlineView isGroupItem:(id)item {	
-	return (![[item representedObject] isLeafNode]);
+	return ([[[item representedObject] menuItem] menu] == [[NSApplication sharedApplication] mainMenu]);
 }
 - (BOOL)outlineView:(NSOutlineView *)outlineView shouldSelectItem:(id)item {
-	return ([[item representedObject] isLeafNode]);
+	return ([[[item representedObject] menuItem] menu] != [[NSApplication sharedApplication] mainMenu]);
 }
 - (void)outlineView:(NSOutlineView *)outlineView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn item:(id)item {
 	if ([[[item representedObject] menuItem] isAlternate]) {

@@ -7,18 +7,22 @@
 //
 
 #import "WCKeyBindingCommandPair.h"
+#import "WCKeyBindingCommandSet.h"
 #import "RSDefines.h"
+
+NSString *const WCKeyBindingCommandPairKeyCodeKey = @"keyCode";
+NSString *const WCKeyBindingCommandPairModifierFlagsKey = @"modifierFlags";
+NSString *const WCKeyBindingCommandPairTagsKey = @"tags";
+NSString *const WCKeyBindingCommandPairCommandModifierMaskKey = @"command";
+NSString *const WCKeyBindingCommandPairOptionModifierMaskKey = @"option";
+NSString *const WCKeyBindingCommandPairControlModifierMaskKey = @"control";
+NSString *const WCKeyBindingCommandPairShiftModifierMaskKey = @"shift";
 
 @interface WCKeyBindingCommandPair ()
 - (NSMenuItem *)_menuItemMatchingSelector:(SEL)action inMenu:(NSMenu *)menu;
 @end
 
 @implementation WCKeyBindingCommandPair
-
-- (void)dealloc {
-	[_menuItem release];
-	[super dealloc];
-}
 
 - (id)initWithRepresentedObject:(id)representedObject {
 	if (!(self = [super initWithRepresentedObject:representedObject]))
@@ -29,11 +33,54 @@
 	return self;
 }
 
+- (id)copyWithZone:(NSZone *)zone {
+	WCKeyBindingCommandPair *copy = [super copyWithZone:zone];
+	
+	copy->_action = _action;
+	copy->_keyCombo = _keyCombo;
+	
+	return copy;
+}
+
+- (id)mutableCopyWithZone:(NSZone *)zone {
+	WCKeyBindingCommandPair *copy = [super mutableCopyWithZone:zone];
+	
+	copy->_action = _action;
+	copy->_keyCombo = _keyCombo;
+	
+	return copy;
+}
+
+- (NSDictionary *)plistRepresentation {
+	NSMutableDictionary *plist = [NSMutableDictionary dictionaryWithCapacity:0];
+	
+	[plist setObject:[NSNumber numberWithInteger:_keyCombo.code] forKey:WCKeyBindingCommandPairKeyCodeKey];
+	
+	NSMutableDictionary *modifiers = [NSMutableDictionary dictionaryWithCapacity:0];
+	if (_keyCombo.flags & NSCommandKeyMask)
+		[modifiers setObject:[NSNumber numberWithBool:YES] forKey:WCKeyBindingCommandPairCommandModifierMaskKey];
+	if (_keyCombo.flags & NSAlternateKeyMask)
+		[modifiers setObject:[NSNumber numberWithBool:YES] forKey:WCKeyBindingCommandPairOptionModifierMaskKey];
+	if (_keyCombo.flags & NSControlKeyMask)
+		[modifiers setObject:[NSNumber numberWithBool:YES] forKey:WCKeyBindingCommandPairControlModifierMaskKey];
+	if (_keyCombo.flags & NSShiftKeyMask)
+		[modifiers setObject:[NSNumber numberWithBool:YES] forKey:WCKeyBindingCommandPairShiftModifierMaskKey];
+	
+	if ([modifiers count])
+		[plist setObject:modifiers forKey:WCKeyBindingCommandPairModifierFlagsKey];
+	
+	return [[plist copy] autorelease];
+}
+
+- (id)initWithPlistRepresentation:(NSDictionary *)plistRepresentation {
+	return nil;
+}
+
 + (WCKeyBindingCommandPair *)keyBindingCommandPairForAction:(SEL)action keyCombo:(KeyCombo)keyCombo; {
 	return [[[[self class] alloc] initWithAction:action keyCombo:keyCombo] autorelease];
 }
 - (id)initWithAction:(SEL)action keyCombo:(KeyCombo)keyCombo; {
-	if (!(self = [super init]))
+	if (![self initWithRepresentedObject:nil])
 		return nil;
 	
 	_action = action;
@@ -62,14 +109,24 @@
 
 @dynamic menuItem;
 - (NSMenuItem *)menuItem {
-	if ([self representedObject])
-		return [self representedObject];
-	else if (!_menuItem) {
-		_menuItem = [self _menuItemMatchingSelector:_action inMenu:[[NSApplication sharedApplication] mainMenu]];
+	if (![self representedObject]) {
+		[self setRepresentedObject:[self _menuItemMatchingSelector:_action inMenu:[[NSApplication sharedApplication] mainMenu]]];
 	}
-	return _menuItem;
+	return [self representedObject];
 }
-@synthesize keyCombo=_keyCombo;
+@dynamic keyCombo;
+- (KeyCombo)keyCombo {
+	return _keyCombo;
+}
+- (void)setKeyCombo:(KeyCombo)keyCombo {
+	if (_keyCombo.code == keyCombo.code && _keyCombo.flags == keyCombo.flags)
+		return;
+	
+	_keyCombo = keyCombo;
+	
+	[[self menuItem] setKeyEquivalent:SRStringForKeyCode(_keyCombo.code)];
+	[[self menuItem] setKeyEquivalentModifierMask:_keyCombo.flags];
+}
 
 - (NSMenuItem *)_menuItemMatchingSelector:(SEL)action inMenu:(NSMenu *)menu; {
 	NSMenuItem *retval = nil;

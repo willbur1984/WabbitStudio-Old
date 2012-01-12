@@ -16,10 +16,17 @@ static inline KeyCombo WCKeyBindingCommandPairEmptyKeyCombo() {
 	return combo;
 }
 
-@interface WCKeyBindingCommandPair : RSTreeNode {
+extern NSString *const WCKeyBindingCommandPairKeyCodeKey;
+extern NSString *const WCKeyBindingCommandPairModifierFlagsKey;
+extern NSString *const WCKeyBindingCommandPairTagsKey;
+extern NSString *const WCKeyBindingCommandPairCommandModifierMaskKey;
+extern NSString *const WCKeyBindingCommandPairOptionModifierMaskKey;
+extern NSString *const WCKeyBindingCommandPairControlModifierMaskKey;
+extern NSString *const WCKeyBindingCommandPairShiftModifierMaskKey;
+
+@interface WCKeyBindingCommandPair : RSTreeNode <RSPlistArchiving,NSCopying,NSMutableCopying> {
 	KeyCombo _keyCombo;
 	SEL _action;
-	NSMenuItem *_menuItem;
 }
 @property (readonly,nonatomic) NSMenuItem *menuItem;
 @property (readonly,nonatomic) NSString *name;

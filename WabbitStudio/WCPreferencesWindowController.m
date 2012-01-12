@@ -12,6 +12,7 @@
 #import "WCEditorViewController.h"
 #import "WCAdvancedViewController.h"
 #import "WCKeyBindingsViewController.h"
+#import "WCKeyBindingCommandSetManager.h"
 
 @implementation WCPreferencesWindowController
 - (void)windowDidLoad {
@@ -34,8 +35,10 @@
 
 - (void)_applicationWillTerminate:(NSNotification *)note {
 	[[WCFontAndColorThemeManager sharedManager] saveCurrentThemes:NULL];
+	[[WCKeyBindingCommandSetManager sharedManager] saveCurrentCommandSets:NULL];
 }
 - (void)_windowWillClose:(NSNotification *)note {
 	[[WCFontAndColorThemeManager sharedManager] saveCurrentThemes:NULL];
+	[[WCKeyBindingCommandSetManager sharedManager] saveCurrentCommandSets:NULL];
 }
 @end

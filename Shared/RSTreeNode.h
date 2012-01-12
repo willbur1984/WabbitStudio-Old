@@ -11,7 +11,7 @@
 
 extern NSString *const RSTreeNodeClassNameKey;
 
-@interface RSTreeNode : NSObject <RSPlistArchiving> {
+@interface RSTreeNode : NSObject <RSPlistArchiving,NSCopying,NSMutableCopying> {
 	__weak id _parentNode;
 	NSMutableArray *_childNodes;
 	id _representedObject;

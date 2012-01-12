@@ -12,9 +12,14 @@
 
 @interface WCKeyBindingCommandSetManager : NSObject {
 	NSMutableArray *_commandSets;
+	WCKeyBindingCommandSet *_currentCommandSet;
+	NSMutableSet *_userCommandSetIdentifiers;
+	NSHashTable *_unsavedCommandSets;
 }
 @property (readonly,nonatomic) NSArray *commandSets;
 @property (readonly,nonatomic) WCKeyBindingCommandSet *defaultCommandSet;
 
 + (WCKeyBindingCommandSetManager *)sharedManager;
+
+- (BOOL)saveCurrentCommandSets:(NSError **)outError;
 @end

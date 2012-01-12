@@ -8,10 +8,11 @@
 
 #import "WCKeyBindingCommandSet.h"
 #import "WCKeyBindingCommandPair.h"
+#import "RSDefines.h"
 
-static NSString *const WCKeyBindingCommandSetNameKey = @"name";
-static NSString *const WCKeyBindingCommandSetIdentifierKey = @"identifier";
-static NSString *const WCKeyBindingCommandSetKeyBindingsKey = @"keyBindings";
+NSString *const WCKeyBindingCommandSetNameKey = @"name";
+NSString *const WCKeyBindingCommandSetIdentifierKey = @"identifier";
+NSString *const WCKeyBindingCommandSetKeyBindingsKey = @"keyBindings";
 
 @interface WCKeyBindingCommandSet ()
 - (void)_addKeyBindingCommandPairsFromMenu:(NSMenu *)menu toCommandPair:(WCKeyBindingCommandPair *)commandPair keyBindings:(NSDictionary *)keyBindings;
@@ -24,8 +25,63 @@ static NSString *const WCKeyBindingCommandSetKeyBindingsKey = @"keyBindings";
 	[super dealloc];
 }
 
+- (id)copyWithZone:(NSZone *)zone {
+	WCKeyBindingCommandSet *copy = [super copyWithZone:zone];
+	
+	copy->_name = [_name copy];
+	copy->_identifier = [_name copy];
+	
+	return copy;
+}
+
+- (id)mutableCopyWithZone:(NSZone *)zone {
+	WCKeyBindingCommandSet *copy = [super mutableCopyWithZone:zone];
+	
+	copy->_name = [[NSString alloc] initWithFormat:@"Copy of \"%@\"",_name];
+	copy->_identifier = [[NSString alloc] initWithFormat:@"org.revsoft.wabbitstudio.keybindings.%@",_name];
+	
+	return copy;
+}
+
 - (NSDictionary *)plistRepresentation {
-	return nil;
+	NSArray *pairs = [self flattenedCommandPairs];
+	NSMutableDictionary *plist = [NSMutableDictionary dictionaryWithCapacity:0];
+	
+	[plist setObject:[self name] forKey:WCKeyBindingCommandSetNameKey];
+	[plist setObject:[self identifer] forKey:WCKeyBindingCommandSetIdentifierKey];
+	
+	NSMutableDictionary *keyBindings = [NSMutableDictionary dictionaryWithCapacity:[pairs count]];
+	
+	[pairs enumerateObjectsUsingBlock:^(id pair, NSUInteger idx, BOOL *stop) {
+		NSString *actionName = NSStringFromSelector([[pair menuItem] action]);
+		
+		// the actionName has already been used by another command pair, add a sub dictionary uses the menu item's tag
+		if ([keyBindings objectForKey:actionName]) {
+			NSMutableDictionary *tags = [[keyBindings objectForKey:actionName] objectForKey:@"tags"];
+			if (!tags) {
+				WCKeyBindingCommandPair *oldPair = nil;
+				for (WCKeyBindingCommandPair *rPair in [[pairs subarrayWithRange:NSMakeRange(0, idx)] reverseObjectEnumerator]) {
+					if ([actionName isEqualToString:NSStringFromSelector([[rPair menuItem] action])]) {
+						oldPair = rPair;
+						break;
+					}
+				}
+				
+				tags = [NSMutableDictionary dictionaryWithObjectsAndKeys:[oldPair plistRepresentation],[NSString stringWithFormat:@"%ld",[[oldPair menuItem] tag]], nil];
+				[keyBindings setObject:[NSDictionary dictionaryWithObjectsAndKeys:tags,@"tags", nil] forKey:actionName];
+			}
+			NSDictionary *pairPlist = [pair plistRepresentation];
+			[tags setObject:pairPlist forKey:[NSString stringWithFormat:@"%ld",[[pair menuItem] tag]]];
+		}
+		else {
+			NSDictionary *pairPlist = [pair plistRepresentation];
+			[keyBindings setObject:pairPlist forKey:actionName];
+		}
+	}];
+	
+	[plist setObject:keyBindings forKey:WCKeyBindingCommandSetKeyBindingsKey];
+	
+	return [[plist copy] autorelease];
 }
 
 - (id)initWithPlistRepresentation:(NSDictionary *)plistRepresentation {
@@ -49,6 +105,7 @@ static NSString *const WCKeyBindingCommandSetKeyBindingsKey = @"keyBindings";
 	return self;
 }
 
+@synthesize URL=_URL;
 @synthesize name=_name;
 @synthesize identifer=_identifier;
 @dynamic commandPairs;
@@ -67,17 +124,24 @@ static NSString *const WCKeyBindingCommandSetKeyBindingsKey = @"keyBindings";
 	for (NSMenuItem *item in [menu itemArray]) {
 		NSString *actionName = NSStringFromSelector([item action]);
 		NSDictionary *keyBindingDict = [keyBindings objectForKey:actionName];
+		
 		if (keyBindingDict) {
 			KeyCombo combo = WCKeyBindingCommandPairEmptyKeyCombo();
-			if ([keyBindingDict objectForKey:@"keyCode"])
-				combo.code = [[keyBindingDict objectForKey:@"keyCode"] unsignedIntegerValue];
-			if ([[[keyBindingDict objectForKey:@"modifierFlags"] objectForKey:@"command"] boolValue])
+			
+			if ([keyBindingDict objectForKey:WCKeyBindingCommandPairTagsKey]) {
+				if ([[keyBindingDict objectForKey:WCKeyBindingCommandPairTagsKey] objectForKey:[NSString stringWithFormat:@"%ld",[item tag]]])
+					keyBindingDict = [[keyBindingDict objectForKey:WCKeyBindingCommandPairTagsKey] objectForKey:[NSString stringWithFormat:@"%ld",[item tag]]];
+			}
+			
+			if ([keyBindingDict objectForKey:WCKeyBindingCommandPairKeyCodeKey])
+				combo.code = [[keyBindingDict objectForKey:WCKeyBindingCommandPairKeyCodeKey] unsignedIntegerValue];
+			if ([[[keyBindingDict objectForKey:WCKeyBindingCommandPairModifierFlagsKey] objectForKey:WCKeyBindingCommandPairCommandModifierMaskKey] boolValue])
 				combo.flags |= NSCommandKeyMask;
-			else if ([[[keyBindingDict objectForKey:@"modifierFlags"] objectForKey:@"option"] boolValue])
+			if ([[[keyBindingDict objectForKey:WCKeyBindingCommandPairModifierFlagsKey] objectForKey:WCKeyBindingCommandPairOptionModifierMaskKey] boolValue])
 				combo.flags |= NSAlternateKeyMask;
-			else if ([[[keyBindingDict objectForKey:@"modifierFlags"] objectForKey:@"shift"] boolValue])
+			if ([[[keyBindingDict objectForKey:WCKeyBindingCommandPairModifierFlagsKey] objectForKey:WCKeyBindingCommandPairShiftModifierMaskKey] boolValue])
 				combo.flags |= NSShiftKeyMask;
-			else if ([[[keyBindingDict objectForKey:@"modifierFlags"] objectForKey:@"control"] boolValue])
+			if ([[[keyBindingDict objectForKey:WCKeyBindingCommandPairModifierFlagsKey] objectForKey:WCKeyBindingCommandPairControlModifierMaskKey] boolValue])
 				combo.flags |= NSControlKeyMask;
 			
 			if ([item isAlternate])
@@ -88,13 +152,8 @@ static NSString *const WCKeyBindingCommandSetKeyBindingsKey = @"keyBindings";
 			
 			[[commandPair mutableChildNodes] addObject:pair];
 		}
-		else if ([item hasSubmenu]) {
-			WCKeyBindingCommandPair *pair = [WCKeyBindingCommandPair treeNodeWithRepresentedObject:item];
-			
-			[[commandPair mutableChildNodes] addObject:pair];
-			
-			[self _addKeyBindingCommandPairsFromMenu:[item submenu] toCommandPair:pair keyBindings:keyBindings];
-		}
+		else if ([item hasSubmenu])			
+			[self _addKeyBindingCommandPairsFromMenu:[item submenu] toCommandPair:commandPair keyBindings:keyBindings];
 	}
 }
 @end
