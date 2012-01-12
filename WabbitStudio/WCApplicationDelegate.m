@@ -12,6 +12,7 @@
 #import "WCEditorViewController.h"
 #import "WCAdvancedViewController.h"
 #import "WCKeyBindingCommandSetManager.h"
+#import "WCKeyBindingsViewController.h"
 
 @implementation WCApplicationDelegate
 - (void)applicationWillFinishLaunching:(NSNotification *)notification {
@@ -20,6 +21,7 @@
 	[userDefaults addEntriesFromDictionary:[WCFontsAndColorsViewController userDefaults]];
 	[userDefaults addEntriesFromDictionary:[WCEditorViewController userDefaults]];
 	[userDefaults addEntriesFromDictionary:[WCAdvancedViewController userDefaults]];
+	[userDefaults addEntriesFromDictionary:[WCKeyBindingsViewController userDefaults]];
 	
 	[[NSUserDefaults standardUserDefaults] registerDefaults:userDefaults];
 }

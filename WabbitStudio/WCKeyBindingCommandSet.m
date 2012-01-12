@@ -25,11 +25,15 @@ NSString *const WCKeyBindingCommandSetKeyBindingsKey = @"keyBindings";
 	[super dealloc];
 }
 
+- (NSString *)description {
+	return [NSString stringWithFormat:@"name: %@ identifier: %@",[self name],[self identifier]];
+}
+
 - (id)copyWithZone:(NSZone *)zone {
 	WCKeyBindingCommandSet *copy = [super copyWithZone:zone];
 	
-	copy->_name = [[NSString alloc] initWithFormat:@"Copy of \"%@\"",_name];
-	copy->_identifier = [[NSString alloc] initWithFormat:@"org.revsoft.wabbitstudio.keybindingcommandset.%@",_name];
+	copy->_name = [_name copy];
+	copy->_identifier = [_identifier copy];
 	
 	return copy;
 }
@@ -38,7 +42,7 @@ NSString *const WCKeyBindingCommandSetKeyBindingsKey = @"keyBindings";
 	WCKeyBindingCommandSet *copy = [super mutableCopyWithZone:zone];
 	
 	copy->_name = [[NSString alloc] initWithFormat:@"Copy of \"%@\"",_name];
-	copy->_identifier = [[NSString alloc] initWithFormat:@"org.revsoft.wabbitstudio.keybindingcommandset.%@",_name];
+	copy->_identifier = [[NSString alloc] initWithFormat:@"org.revsoft.wabbitstudio.keybindingcommandset.%@",copy->_name];
 	
 	return copy;
 }

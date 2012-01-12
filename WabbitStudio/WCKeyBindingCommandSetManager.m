@@ -12,6 +12,7 @@
 #import "WCMiscellaneousPerformer.h"
 #import "WCKeyBindingsViewController.h"
 #import "NSObject+WCExtensions.h"
+#import "RSDefines.h"
 
 @interface WCKeyBindingCommandSetManager ()
 @property (readonly,nonatomic) NSMutableArray *mutableCommandSets;
@@ -65,7 +66,8 @@
 	}
 	
 	// otherwise use the first command set
-	_currentCommandSet = [[[self commandSets] objectAtIndex:0] retain];
+	if (!_currentCommandSet)
+		_currentCommandSet = [[[self commandSets] objectAtIndex:0] retain];
 	
 	// start observing our current command set for changes
 	[self _setupObservingForCommandSet:_currentCommandSet];
@@ -86,6 +88,7 @@
 		[[NSUserDefaults standardUserDefaults] setObject:[object identifier] forKey:WCKeyBindingsCurrentCommandSetIdentifierKey];
 		
 		[_unsavedCommandSets addObject:_currentCommandSet];
+		[_userCommandSetIdentifiers setSet:[NSSet setWithArray:[[self commandSets] valueForKeyPath:@"identifier"]]];
 	}
 	else if ([keyPath isEqualToString:WCKeyBindingCommandPairKeyCodeKey])
 		[_unsavedCommandSets addObject:[object commandSet]];

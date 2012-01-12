@@ -90,7 +90,7 @@ NSString *const WCKeyBindingsUserCommandSetIdentifiersKey = @"WCKeyBindingsUserC
 }
 #pragma mark RSUserDefaultsProvider
 + (NSDictionary *)userDefaults {
-	return nil;
+	return [NSDictionary dictionaryWithObjectsAndKeys:@"org.revsoft.wabbitstudio.keybindingcommandset.default",WCKeyBindingsCurrentCommandSetIdentifierKey, nil];
 }
 #pragma mark MGScopeBarDelegate
 static const NSInteger kNumberOfScopeBarGroups = 1;
@@ -112,6 +112,15 @@ static const NSInteger kNumberOfScopeBarGroups = 1;
 - (NSView *)accessoryViewForScopeBar:(MGScopeBar *)theScopeBar {
 	return [self searchField];
 }
+#pragma mark NSMenuValidation
+- (BOOL)validateMenuItem:(NSMenuItem *)item {
+	if ([item action] == @selector(duplicateCommandSet:)) {
+		WCKeyBindingCommandSet *commandSet = [[[self arrayController] selectedObjects] lastObject];
+		
+		[item setTitle:[NSString stringWithFormat:NSLocalizedString(@"Duplicate \"%@\"", @"duplicate command set format string"),[commandSet name]]];
+	}
+	return YES;
+}
 #pragma mark NSMenuDelegate
 - (NSInteger)numberOfItemsInMenu:(NSMenu *)menu {
 	return [[[WCKeyBindingCommandSetManager sharedManager] defaultCommandSets] count];
@@ -126,6 +135,11 @@ static const NSInteger kNumberOfScopeBarGroups = 1;
 	
 	return YES;
 }
+#pragma mark NSControlTextEditingDelegate
+- (BOOL)control:(NSControl *)control textShouldEndEditing:(NSText *)fieldEditor {
+	return ([[fieldEditor string] length]);
+}
+
 #pragma mark NSOutlineViewDelegate
 - (BOOL)outlineView:(NSOutlineView *)outlineView isGroupItem:(id)item {	
 	return ([[[item representedObject] menuItem] menu] == [[NSApplication sharedApplication] mainMenu]);
@@ -241,7 +255,7 @@ static const NSInteger kNumberOfScopeBarGroups = 1;
 	[[WCKeyBindingCommandSetManager sharedManager] setCurrentCommandSet:[[[self arrayController] selectedObjects] lastObject]];
 	
 	[[self outlineView] expandItem:nil expandChildren:YES];
-	[[self treeController] setSelectionIndexPaths:[self previousSelectionIndexPaths]];
+	//[[self treeController] setSelectionIndexPaths:[self previousSelectionIndexPaths]];
 }
 - (void)_outlineViewSelectionDidChange:(NSNotification *)note {
 	WCKeyBindingCommandPair *pair = [[self treeController] selectedRepresentedObject];
