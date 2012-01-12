@@ -14,6 +14,9 @@
 #import "NSArray+WCExtensions.h"
 #import "WCFontAndColorTheme.h"
 #import "WCFontAndColorThemeManager.h"
+#import "RSDefines.h"
+
+static NSString *const WCSourceHighlighterCommentAttributeName = @"commentAttribute";
 
 @interface WCSourceHighlighter ()
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
@@ -95,8 +98,11 @@
 	
 	for (WCSourceToken *token in [[[self sourceScanner] tokens] sourceTokensForRange:range]) {
 		switch ([token type]) {
-			case WCSourceTokenTypeComment:
-				[[[self sourceScanner] textStorage] addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme commentFont],NSFontAttributeName,[currentTheme commentColor],NSForegroundColorAttributeName, nil] range:[token range]];
+			case WCSourceTokenTypeComment: {
+				NSRange intersectRange = NSIntersectionRange([token range], range);
+				if (intersectRange.length)
+					[[[self sourceScanner] textStorage] addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme commentFont],NSFontAttributeName,[currentTheme commentColor],NSForegroundColorAttributeName, nil] range:intersectRange];
+			}
 				break;
 			case WCSourceTokenTypeBinary:
 				[[[self sourceScanner] textStorage] addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme binaryFont],NSFontAttributeName,[currentTheme binaryColor],NSForegroundColorAttributeName, nil] range:[token range]];

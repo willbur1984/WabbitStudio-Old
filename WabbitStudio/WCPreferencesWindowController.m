@@ -11,6 +11,7 @@
 #import "WCFontAndColorThemeManager.h"
 #import "WCEditorViewController.h"
 #import "WCAdvancedViewController.h"
+#import "WCKeyBindingsViewController.h"
 
 @implementation WCPreferencesWindowController
 - (void)windowDidLoad {
@@ -27,6 +28,7 @@
 - (void)setupViewControllers {
 	[self addViewController:[[[WCEditorViewController alloc] init] autorelease]];
 	[self addViewController:[[[WCFontsAndColorsViewController alloc] init] autorelease]];
+	[self addViewController:[[[WCKeyBindingsViewController alloc] init] autorelease]];
 	[self addViewController:[[[WCAdvancedViewController alloc] init] autorelease]];
 }
 

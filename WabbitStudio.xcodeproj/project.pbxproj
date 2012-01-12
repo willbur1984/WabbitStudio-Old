@@ -131,6 +131,36 @@
 		078F041C14AD78640080ADBC /* RSFindBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 078F041A14AD78640080ADBC /* RSFindBarView.xib */; };
 		0791BE5214AD7F530004AC16 /* RSFindBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0791BE5114AD7F530004AC16 /* RSFindBarView.m */; };
 		07A7A0FE14B8C83900507FC7 /* WCCompletionWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A7A0FD14B8C83900507FC7 /* WCCompletionWindow.m */; };
+		07A8AF8214BDC7EC008CB9FF /* keyboard_settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 07A8AF8014BDC7EC008CB9FF /* keyboard_settings.png */; };
+		07A8AF8314BDC7EC008CB9FF /* PBXKeyBindingsPrefsModule.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 07A8AF8114BDC7EC008CB9FF /* PBXKeyBindingsPrefsModule.tiff */; };
+		07A8AF8914BDC82A008CB9FF /* WCKeyBindingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A8AF8714BDC82A008CB9FF /* WCKeyBindingsViewController.m */; };
+		07A8AF8D14BDC93C008CB9FF /* WCKeyBindingsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07A8AF8B14BDC93C008CB9FF /* WCKeyBindingsView.xib */; };
+		07A8AF9914BDCFE4008CB9FF /* MGRecessedPopUpButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A8AF9514BDCFE4008CB9FF /* MGRecessedPopUpButtonCell.m */; };
+		07A8AF9A14BDCFE4008CB9FF /* MGScopeBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A8AF9714BDCFE4008CB9FF /* MGScopeBar.m */; };
+		07A8AF9D14BDD8E4008CB9FF /* WCKeyBindingCommandSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A8AF9C14BDD8E4008CB9FF /* WCKeyBindingCommandSet.m */; };
+		07A8AFA014BDD9DF008CB9FF /* WCKeyBindingCommandPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A8AF9F14BDD9DF008CB9FF /* WCKeyBindingCommandPair.m */; };
+		07A8AFA314BDDFCD008CB9FF /* WCKeyBindingCommandSetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A8AFA214BDDFCD008CB9FF /* WCKeyBindingCommandSetManager.m */; };
+		07A8AFB114BDEA99008CB9FF /* SRCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A8AFA814BDEA98008CB9FF /* SRCommon.m */; };
+		07A8AFB214BDEA99008CB9FF /* SRKeyCodeTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A8AFAA14BDEA98008CB9FF /* SRKeyCodeTransformer.m */; };
+		07A8AFB314BDEA99008CB9FF /* SRRecorderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A8AFAC14BDEA99008CB9FF /* SRRecorderCell.m */; };
+		07A8AFB414BDEA99008CB9FF /* SRRecorderControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A8AFAE14BDEA99008CB9FF /* SRRecorderControl.m */; };
+		07A8AFB514BDEA99008CB9FF /* SRValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A8AFB014BDEA99008CB9FF /* SRValidator.m */; };
+		07A8AFB914BDEE9C008CB9FF /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07A8AFB814BDEE9B008CB9FF /* Carbon.framework */; };
+		07A8AFBC14BDF0D2008CB9FF /* WCKeyBindingsEditCommandPairWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A8AFBB14BDF0D2008CB9FF /* WCKeyBindingsEditCommandPairWindowController.m */; };
+		07A8AFC014BDF2E2008CB9FF /* NSAlert-OAExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A8AFBF14BDF2E2008CB9FF /* NSAlert-OAExtensions.m */; };
+		07A8AFC314BDF42D008CB9FF /* NSApplication+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A8AFC214BDF42D008CB9FF /* NSApplication+RSExtensions.m */; };
+		07A8AFC614BDF65C008CB9FF /* WCKeyBindingsEditCommandPairWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07A8AFC414BDF65C008CB9FF /* WCKeyBindingsEditCommandPairWindow.xib */; };
+		07A8AFCF14BDFCCE008CB9FF /* SRRemoveShortcut.tif in Resources */ = {isa = PBXBuildFile; fileRef = 07A8AFCB14BDFCCC008CB9FF /* SRRemoveShortcut.tif */; };
+		07A8AFD014BDFCCE008CB9FF /* SRRemoveShortcutPressed.tif in Resources */ = {isa = PBXBuildFile; fileRef = 07A8AFCC14BDFCCD008CB9FF /* SRRemoveShortcutPressed.tif */; };
+		07A8AFD114BDFCCE008CB9FF /* SRRemoveShortcutRollover.tif in Resources */ = {isa = PBXBuildFile; fileRef = 07A8AFCD14BDFCCD008CB9FF /* SRRemoveShortcutRollover.tif */; };
+		07A8AFD214BDFCCE008CB9FF /* SRSnapback.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 07A8AFCE14BDFCCD008CB9FF /* SRSnapback.tiff */; };
+		07A8AFD514BE033C008CB9FF /* RSMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A8AFD414BE033C008CB9FF /* RSMenuItem.m */; };
+		07A8AFD814BE2B40008CB9FF /* RSOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A8AFD714BE2B40008CB9FF /* RSOutlineView.m */; };
+		07A8AFDC14BE2C0A008CB9FF /* NSOutlineView+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A8AFDB14BE2C0A008CB9FF /* NSOutlineView+RSExtensions.m */; };
+		07A8AFDF14BE2C21008CB9FF /* NSTreeController+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A8AFDE14BE2C21008CB9FF /* NSTreeController+RSExtensions.m */; };
+		07A8AFE214BE2C2B008CB9FF /* NSTreeNode+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A8AFE114BE2C2B008CB9FF /* NSTreeNode+RSExtensions.m */; };
+		07A8AFE514BE2CE9008CB9FF /* WCKeyBindingsOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A8AFE414BE2CE9008CB9FF /* WCKeyBindingsOutlineView.m */; };
+		07A8AFF014BE5ED8008CB9FF /* DefaultKeyBindings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 07A8AFEF14BE5ED8008CB9FF /* DefaultKeyBindings.plist */; };
 		07B4740514AE3CAA00E3F9D0 /* RSNumberToBoolTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B4740414AE3CAA00E3F9D0 /* RSNumberToBoolTransformer.m */; };
 		07B4740814AE3E0A00E3F9D0 /* RSNegateNumberToBoolTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B4740714AE3E0A00E3F9D0 /* RSNegateNumberToBoolTransformer.m */; };
 		07B4740B14AE433300E3F9D0 /* RSFindSearchField.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B4740A14AE433300E3F9D0 /* RSFindSearchField.m */; };
@@ -401,6 +431,58 @@
 		0791BE5314ADA3B80004AC16 /* BGHUDAppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BGHUDAppKit.framework; sourceTree = "<group>"; };
 		07A7A0FC14B8C83900507FC7 /* WCCompletionWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCCompletionWindow.h; sourceTree = "<group>"; };
 		07A7A0FD14B8C83900507FC7 /* WCCompletionWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCCompletionWindow.m; sourceTree = "<group>"; };
+		07A8AF8014BDC7EC008CB9FF /* keyboard_settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = keyboard_settings.png; sourceTree = "<group>"; };
+		07A8AF8114BDC7EC008CB9FF /* PBXKeyBindingsPrefsModule.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = PBXKeyBindingsPrefsModule.tiff; sourceTree = "<group>"; };
+		07A8AF8614BDC82A008CB9FF /* WCKeyBindingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCKeyBindingsViewController.h; sourceTree = "<group>"; };
+		07A8AF8714BDC82A008CB9FF /* WCKeyBindingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCKeyBindingsViewController.m; sourceTree = "<group>"; };
+		07A8AF8C14BDC93C008CB9FF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCKeyBindingsView.xib; sourceTree = "<group>"; };
+		07A8AF9414BDCFE4008CB9FF /* MGRecessedPopUpButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGRecessedPopUpButtonCell.h; sourceTree = "<group>"; };
+		07A8AF9514BDCFE4008CB9FF /* MGRecessedPopUpButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MGRecessedPopUpButtonCell.m; sourceTree = "<group>"; };
+		07A8AF9614BDCFE4008CB9FF /* MGScopeBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGScopeBar.h; sourceTree = "<group>"; };
+		07A8AF9714BDCFE4008CB9FF /* MGScopeBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MGScopeBar.m; sourceTree = "<group>"; };
+		07A8AF9814BDCFE4008CB9FF /* MGScopeBarDelegateProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGScopeBarDelegateProtocol.h; sourceTree = "<group>"; };
+		07A8AF9B14BDD8E4008CB9FF /* WCKeyBindingCommandSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCKeyBindingCommandSet.h; sourceTree = "<group>"; };
+		07A8AF9C14BDD8E4008CB9FF /* WCKeyBindingCommandSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCKeyBindingCommandSet.m; sourceTree = "<group>"; };
+		07A8AF9E14BDD9DF008CB9FF /* WCKeyBindingCommandPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCKeyBindingCommandPair.h; sourceTree = "<group>"; };
+		07A8AF9F14BDD9DF008CB9FF /* WCKeyBindingCommandPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCKeyBindingCommandPair.m; sourceTree = "<group>"; };
+		07A8AFA114BDDFCC008CB9FF /* WCKeyBindingCommandSetManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCKeyBindingCommandSetManager.h; sourceTree = "<group>"; };
+		07A8AFA214BDDFCD008CB9FF /* WCKeyBindingCommandSetManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCKeyBindingCommandSetManager.m; sourceTree = "<group>"; };
+		07A8AFA714BDEA98008CB9FF /* SRCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRCommon.h; sourceTree = "<group>"; };
+		07A8AFA814BDEA98008CB9FF /* SRCommon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRCommon.m; sourceTree = "<group>"; };
+		07A8AFA914BDEA98008CB9FF /* SRKeyCodeTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRKeyCodeTransformer.h; sourceTree = "<group>"; };
+		07A8AFAA14BDEA98008CB9FF /* SRKeyCodeTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRKeyCodeTransformer.m; sourceTree = "<group>"; };
+		07A8AFAB14BDEA98008CB9FF /* SRRecorderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRRecorderCell.h; sourceTree = "<group>"; };
+		07A8AFAC14BDEA99008CB9FF /* SRRecorderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRRecorderCell.m; sourceTree = "<group>"; };
+		07A8AFAD14BDEA99008CB9FF /* SRRecorderControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRRecorderControl.h; sourceTree = "<group>"; };
+		07A8AFAE14BDEA99008CB9FF /* SRRecorderControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRRecorderControl.m; sourceTree = "<group>"; };
+		07A8AFAF14BDEA99008CB9FF /* SRValidator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRValidator.h; sourceTree = "<group>"; };
+		07A8AFB014BDEA99008CB9FF /* SRValidator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRValidator.m; sourceTree = "<group>"; };
+		07A8AFB814BDEE9B008CB9FF /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
+		07A8AFBA14BDF0D1008CB9FF /* WCKeyBindingsEditCommandPairWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCKeyBindingsEditCommandPairWindowController.h; sourceTree = "<group>"; };
+		07A8AFBB14BDF0D2008CB9FF /* WCKeyBindingsEditCommandPairWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCKeyBindingsEditCommandPairWindowController.m; sourceTree = "<group>"; };
+		07A8AFBE14BDF2E2008CB9FF /* NSAlert-OAExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAlert-OAExtensions.h"; sourceTree = "<group>"; };
+		07A8AFBF14BDF2E2008CB9FF /* NSAlert-OAExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAlert-OAExtensions.m"; sourceTree = "<group>"; };
+		07A8AFC114BDF42D008CB9FF /* NSApplication+RSExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSApplication+RSExtensions.h"; sourceTree = "<group>"; };
+		07A8AFC214BDF42D008CB9FF /* NSApplication+RSExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSApplication+RSExtensions.m"; sourceTree = "<group>"; };
+		07A8AFC514BDF65C008CB9FF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCKeyBindingsEditCommandPairWindow.xib; sourceTree = "<group>"; };
+		07A8AFCB14BDFCCC008CB9FF /* SRRemoveShortcut.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = SRRemoveShortcut.tif; sourceTree = "<group>"; };
+		07A8AFCC14BDFCCD008CB9FF /* SRRemoveShortcutPressed.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = SRRemoveShortcutPressed.tif; sourceTree = "<group>"; };
+		07A8AFCD14BDFCCD008CB9FF /* SRRemoveShortcutRollover.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = SRRemoveShortcutRollover.tif; sourceTree = "<group>"; };
+		07A8AFCE14BDFCCD008CB9FF /* SRSnapback.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = SRSnapback.tiff; sourceTree = "<group>"; };
+		07A8AFD314BE033C008CB9FF /* RSMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSMenuItem.h; sourceTree = "<group>"; };
+		07A8AFD414BE033C008CB9FF /* RSMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSMenuItem.m; sourceTree = "<group>"; };
+		07A8AFD614BE2B40008CB9FF /* RSOutlineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSOutlineView.h; sourceTree = "<group>"; };
+		07A8AFD714BE2B40008CB9FF /* RSOutlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSOutlineView.m; sourceTree = "<group>"; };
+		07A8AFD914BE2B59008CB9FF /* RSOutlineViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSOutlineViewDelegate.h; sourceTree = "<group>"; };
+		07A8AFDA14BE2C0A008CB9FF /* NSOutlineView+RSExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSOutlineView+RSExtensions.h"; sourceTree = "<group>"; };
+		07A8AFDB14BE2C0A008CB9FF /* NSOutlineView+RSExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSOutlineView+RSExtensions.m"; sourceTree = "<group>"; };
+		07A8AFDD14BE2C21008CB9FF /* NSTreeController+RSExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTreeController+RSExtensions.h"; sourceTree = "<group>"; };
+		07A8AFDE14BE2C21008CB9FF /* NSTreeController+RSExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTreeController+RSExtensions.m"; sourceTree = "<group>"; };
+		07A8AFE014BE2C2B008CB9FF /* NSTreeNode+RSExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTreeNode+RSExtensions.h"; sourceTree = "<group>"; };
+		07A8AFE114BE2C2B008CB9FF /* NSTreeNode+RSExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTreeNode+RSExtensions.m"; sourceTree = "<group>"; };
+		07A8AFE314BE2CE8008CB9FF /* WCKeyBindingsOutlineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCKeyBindingsOutlineView.h; sourceTree = "<group>"; };
+		07A8AFE414BE2CE9008CB9FF /* WCKeyBindingsOutlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCKeyBindingsOutlineView.m; sourceTree = "<group>"; };
+		07A8AFEF14BE5ED8008CB9FF /* DefaultKeyBindings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DefaultKeyBindings.plist; sourceTree = "<group>"; };
 		07B4740314AE3CAA00E3F9D0 /* RSNumberToBoolTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSNumberToBoolTransformer.h; sourceTree = "<group>"; };
 		07B4740414AE3CAA00E3F9D0 /* RSNumberToBoolTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSNumberToBoolTransformer.m; sourceTree = "<group>"; };
 		07B4740614AE3E0A00E3F9D0 /* RSNegateNumberToBoolTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSNegateNumberToBoolTransformer.h; sourceTree = "<group>"; };
@@ -446,6 +528,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07A8AFB914BDEE9C008CB9FF /* Carbon.framework in Frameworks */,
 				078F040714AD17AC0080ADBC /* QuartzCore.framework in Frameworks */,
 				071ECCC314A4233C002409F8 /* Cocoa.framework in Frameworks */,
 				07EB8E2214B63C4F00F8A8C6 /* BGHUDAppKit.framework in Frameworks */,
@@ -489,6 +572,8 @@
 				073B5AA514B6AA8A00FCDC0F /* WCJumpInWindow.xib */,
 				07BC6CB714B7E3DD007ECB3F /* WCJumpToLineWindow.xib */,
 				07862BC314BB6F850057EB89 /* WCSourceFileWindow.xib */,
+				07A8AF8B14BDC93C008CB9FF /* WCKeyBindingsView.xib */,
+				07A8AFC414BDF65C008CB9FF /* WCKeyBindingsEditCommandPairWindow.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -596,6 +681,25 @@
 		0708964614A6C9020017BBE4 /* External */ = {
 			isa = PBXGroup;
 			children = (
+				07A8AFA714BDEA98008CB9FF /* SRCommon.h */,
+				07A8AFA814BDEA98008CB9FF /* SRCommon.m */,
+				07A8AFA914BDEA98008CB9FF /* SRKeyCodeTransformer.h */,
+				07A8AFAA14BDEA98008CB9FF /* SRKeyCodeTransformer.m */,
+				07A8AFAB14BDEA98008CB9FF /* SRRecorderCell.h */,
+				07A8AFAC14BDEA99008CB9FF /* SRRecorderCell.m */,
+				07A8AFAD14BDEA99008CB9FF /* SRRecorderControl.h */,
+				07A8AFAE14BDEA99008CB9FF /* SRRecorderControl.m */,
+				07A8AFAF14BDEA99008CB9FF /* SRValidator.h */,
+				07A8AFB014BDEA99008CB9FF /* SRValidator.m */,
+				07A8AFCB14BDFCCC008CB9FF /* SRRemoveShortcut.tif */,
+				07A8AFCC14BDFCCD008CB9FF /* SRRemoveShortcutPressed.tif */,
+				07A8AFCD14BDFCCD008CB9FF /* SRRemoveShortcutRollover.tif */,
+				07A8AFCE14BDFCCD008CB9FF /* SRSnapback.tiff */,
+				07A8AF9414BDCFE4008CB9FF /* MGRecessedPopUpButtonCell.h */,
+				07A8AF9514BDCFE4008CB9FF /* MGRecessedPopUpButtonCell.m */,
+				07A8AF9614BDCFE4008CB9FF /* MGScopeBar.h */,
+				07A8AF9714BDCFE4008CB9FF /* MGScopeBar.m */,
+				07A8AF9814BDCFE4008CB9FF /* MGScopeBarDelegateProtocol.h */,
 				07862BBD14BA90210057EB89 /* NSObject+MCExtensions.h */,
 				07862BBE14BA90210057EB89 /* NSObject+MCExtensions.m */,
 				07862BBF14BA90210057EB89 /* NSView+MCExtensions.h */,
@@ -639,6 +743,7 @@
 		071ECCC114A4233C002409F8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				07A8AFB814BDEE9B008CB9FF /* Carbon.framework */,
 				0791BE5314ADA3B80004AC16 /* BGHUDAppKit.framework */,
 				071ECCC214A4233C002409F8 /* Cocoa.framework */,
 				078F040614AD17AC0080ADBC /* QuartzCore.framework */,
@@ -682,6 +787,8 @@
 		071ECCC914A4233C002409F8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				07A8AF8014BDC7EC008CB9FF /* keyboard_settings.png */,
+				07A8AF8114BDC7EC008CB9FF /* PBXKeyBindingsPrefsModule.tiff */,
 				07EB8E3814B64D9A00F8A8C6 /* Keyboard.tiff */,
 				07EB8E2914B644A600F8A8C6 /* ReallyAdvanced.png */,
 				07EB8E2714B641B900F8A8C6 /* SplitterHandle.pdf */,
@@ -705,6 +812,7 @@
 				0725432D14A70EF000C961B7 /* ConditionalCompletions.plist */,
 				0725432F14A7105500C961B7 /* DirectiveCompletions.plist */,
 				0745BE1F14ABD82F00F541DC /* FontAndColorThemeTypesToNames.plist */,
+				07A8AFEF14BE5ED8008CB9FF /* DefaultKeyBindings.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -713,6 +821,8 @@
 			isa = PBXGroup;
 			children = (
 				07F5F76E14A5A46900F1F326 /* RSDefines.h */,
+				07A8AFD314BE033C008CB9FF /* RSMenuItem.h */,
+				07A8AFD414BE033C008CB9FF /* RSMenuItem.m */,
 				072AF0F914BCB71100F2147E /* Model */,
 				072880C214B4F1780082DE4C /* Bezel Window */,
 				07B4740114AE3C7D00E3F9D0 /* Transformers */,
@@ -723,6 +833,7 @@
 				0791BE4F14AD7A370004AC16 /* Categories */,
 				0791BE4E14AD7A2D0004AC16 /* Protocols */,
 				078F041D14AD78890080ADBC /* Find Bar */,
+				07A8AFBD14BDF2E2008CB9FF /* External */,
 				078F040114AD0F7A0080ADBC /* Xibs */,
 				072880B914B4F1470082DE4C /* Supporting Files */,
 			);
@@ -787,6 +898,7 @@
 				072BBC4114AA66900044ECC2 /* WCPreferencesWindowController.m */,
 				0745BE2B14ABF81700F541DC /* Editor */,
 				0745BE2914ABF7F200F541DC /* Fonts & Colors */,
+				07A8AF8514BDC7F9008CB9FF /* Key Bindings */,
 				076966E214B6366C005448F7 /* Advanced */,
 			);
 			name = Preferences;
@@ -969,6 +1081,9 @@
 				0725434014A79A0000C961B7 /* RSTableView.h */,
 				0725434114A79A0000C961B7 /* RSTableView.m */,
 				0725434314A79A3600C961B7 /* RSTableViewDelegate.h */,
+				07A8AFD614BE2B40008CB9FF /* RSOutlineView.h */,
+				07A8AFD714BE2B40008CB9FF /* RSOutlineView.m */,
+				07A8AFD914BE2B59008CB9FF /* RSOutlineViewDelegate.h */,
 				072BBC5A14AA6D190044ECC2 /* RSGlassGradientView.h */,
 				072BBC5B14AA6D190044ECC2 /* RSGlassGradientView.m */,
 				072BBC5D14AA700B0044ECC2 /* RSBottomBorderedGlassGradientView.h */,
@@ -1001,6 +1116,12 @@
 		0791BE4F14AD7A370004AC16 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				07A8AFE014BE2C2B008CB9FF /* NSTreeNode+RSExtensions.h */,
+				07A8AFE114BE2C2B008CB9FF /* NSTreeNode+RSExtensions.m */,
+				07A8AFDD14BE2C21008CB9FF /* NSTreeController+RSExtensions.h */,
+				07A8AFDE14BE2C21008CB9FF /* NSTreeController+RSExtensions.m */,
+				07A8AFDA14BE2C0A008CB9FF /* NSOutlineView+RSExtensions.h */,
+				07A8AFDB14BE2C0A008CB9FF /* NSOutlineView+RSExtensions.m */,
 				073B5A8F14B67B7400FCDC0F /* NSImage+RSExtensions.h */,
 				073B5A9014B67B7400FCDC0F /* NSImage+RSExtensions.m */,
 				072BBC3C14AA65F80044ECC2 /* NSEvent+RSExtensions.h */,
@@ -1011,8 +1132,38 @@
 				07713F1814B9586400324F77 /* NSUserDefaults+RSExtensions.m */,
 				07862BC614BBA5B00057EB89 /* NSParagraphStyle+RSExtensions.h */,
 				07862BC714BBA5B00057EB89 /* NSParagraphStyle+RSExtensions.m */,
+				07A8AFC114BDF42D008CB9FF /* NSApplication+RSExtensions.h */,
+				07A8AFC214BDF42D008CB9FF /* NSApplication+RSExtensions.m */,
 			);
 			name = Categories;
+			sourceTree = "<group>";
+		};
+		07A8AF8514BDC7F9008CB9FF /* Key Bindings */ = {
+			isa = PBXGroup;
+			children = (
+				07A8AF8614BDC82A008CB9FF /* WCKeyBindingsViewController.h */,
+				07A8AF8714BDC82A008CB9FF /* WCKeyBindingsViewController.m */,
+				07A8AFBA14BDF0D1008CB9FF /* WCKeyBindingsEditCommandPairWindowController.h */,
+				07A8AFBB14BDF0D2008CB9FF /* WCKeyBindingsEditCommandPairWindowController.m */,
+				07A8AFE314BE2CE8008CB9FF /* WCKeyBindingsOutlineView.h */,
+				07A8AFE414BE2CE9008CB9FF /* WCKeyBindingsOutlineView.m */,
+				07A8AF9B14BDD8E4008CB9FF /* WCKeyBindingCommandSet.h */,
+				07A8AF9C14BDD8E4008CB9FF /* WCKeyBindingCommandSet.m */,
+				07A8AF9E14BDD9DF008CB9FF /* WCKeyBindingCommandPair.h */,
+				07A8AF9F14BDD9DF008CB9FF /* WCKeyBindingCommandPair.m */,
+				07A8AFA114BDDFCC008CB9FF /* WCKeyBindingCommandSetManager.h */,
+				07A8AFA214BDDFCD008CB9FF /* WCKeyBindingCommandSetManager.m */,
+			);
+			name = "Key Bindings";
+			sourceTree = "<group>";
+		};
+		07A8AFBD14BDF2E2008CB9FF /* External */ = {
+			isa = PBXGroup;
+			children = (
+				07A8AFBE14BDF2E2008CB9FF /* NSAlert-OAExtensions.h */,
+				07A8AFBF14BDF2E2008CB9FF /* NSAlert-OAExtensions.m */,
+			);
+			path = External;
 			sourceTree = "<group>";
 		};
 		07B4740114AE3C7D00E3F9D0 /* Transformers */ = {
@@ -1129,6 +1280,15 @@
 				07BC6CB914B7E3DD007ECB3F /* WCJumpToLineWindow.xib in Resources */,
 				07713F1314B954FC00324F77 /* SelectEncodingsPanel.nib in Resources */,
 				07862BC514BB6F850057EB89 /* WCSourceFileWindow.xib in Resources */,
+				07A8AF8214BDC7EC008CB9FF /* keyboard_settings.png in Resources */,
+				07A8AF8314BDC7EC008CB9FF /* PBXKeyBindingsPrefsModule.tiff in Resources */,
+				07A8AF8D14BDC93C008CB9FF /* WCKeyBindingsView.xib in Resources */,
+				07A8AFC614BDF65C008CB9FF /* WCKeyBindingsEditCommandPairWindow.xib in Resources */,
+				07A8AFCF14BDFCCE008CB9FF /* SRRemoveShortcut.tif in Resources */,
+				07A8AFD014BDFCCE008CB9FF /* SRRemoveShortcutPressed.tif in Resources */,
+				07A8AFD114BDFCCE008CB9FF /* SRRemoveShortcutRollover.tif in Resources */,
+				07A8AFD214BDFCCE008CB9FF /* SRSnapback.tiff in Resources */,
+				07A8AFF014BE5ED8008CB9FF /* DefaultKeyBindings.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1240,6 +1400,26 @@
 				07862BC814BBA5B00057EB89 /* NSParagraphStyle+RSExtensions.m in Sources */,
 				076B7F8814BC15B600CC10E3 /* WCStandardSourceTextViewController.m in Sources */,
 				072AF0FC14BCB72600F2147E /* RSTreeNode.m in Sources */,
+				07A8AF8914BDC82A008CB9FF /* WCKeyBindingsViewController.m in Sources */,
+				07A8AF9914BDCFE4008CB9FF /* MGRecessedPopUpButtonCell.m in Sources */,
+				07A8AF9A14BDCFE4008CB9FF /* MGScopeBar.m in Sources */,
+				07A8AF9D14BDD8E4008CB9FF /* WCKeyBindingCommandSet.m in Sources */,
+				07A8AFA014BDD9DF008CB9FF /* WCKeyBindingCommandPair.m in Sources */,
+				07A8AFA314BDDFCD008CB9FF /* WCKeyBindingCommandSetManager.m in Sources */,
+				07A8AFB114BDEA99008CB9FF /* SRCommon.m in Sources */,
+				07A8AFB214BDEA99008CB9FF /* SRKeyCodeTransformer.m in Sources */,
+				07A8AFB314BDEA99008CB9FF /* SRRecorderCell.m in Sources */,
+				07A8AFB414BDEA99008CB9FF /* SRRecorderControl.m in Sources */,
+				07A8AFB514BDEA99008CB9FF /* SRValidator.m in Sources */,
+				07A8AFBC14BDF0D2008CB9FF /* WCKeyBindingsEditCommandPairWindowController.m in Sources */,
+				07A8AFC014BDF2E2008CB9FF /* NSAlert-OAExtensions.m in Sources */,
+				07A8AFC314BDF42D008CB9FF /* NSApplication+RSExtensions.m in Sources */,
+				07A8AFD514BE033C008CB9FF /* RSMenuItem.m in Sources */,
+				07A8AFD814BE2B40008CB9FF /* RSOutlineView.m in Sources */,
+				07A8AFDC14BE2C0A008CB9FF /* NSOutlineView+RSExtensions.m in Sources */,
+				07A8AFDF14BE2C21008CB9FF /* NSTreeController+RSExtensions.m in Sources */,
+				07A8AFE214BE2C2B008CB9FF /* NSTreeNode+RSExtensions.m in Sources */,
+				07A8AFE514BE2CE9008CB9FF /* WCKeyBindingsOutlineView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1374,6 +1554,22 @@
 				078F041B14AD78640080ADBC /* en */,
 			);
 			name = RSFindBarView.xib;
+			sourceTree = "<group>";
+		};
+		07A8AF8B14BDC93C008CB9FF /* WCKeyBindingsView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				07A8AF8C14BDC93C008CB9FF /* en */,
+			);
+			name = WCKeyBindingsView.xib;
+			sourceTree = "<group>";
+		};
+		07A8AFC414BDF65C008CB9FF /* WCKeyBindingsEditCommandPairWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				07A8AFC514BDF65C008CB9FF /* en */,
+			);
+			name = WCKeyBindingsEditCommandPairWindow.xib;
 			sourceTree = "<group>";
 		};
 		07BC6CB714B7E3DD007ECB3F /* WCJumpToLineWindow.xib */ = {

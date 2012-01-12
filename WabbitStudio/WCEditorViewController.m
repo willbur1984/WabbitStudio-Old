@@ -36,7 +36,11 @@ NSString *const WCEditorDefaultTextEncodingKey = @"editorDefaultTextEncoding";
 }
 
 - (id)init {
-	return [self initWithNibName:@"WCEditorView" bundle:nil];
+	return [self initWithNibName:[self nibName] bundle:nil];
+}
+
+- (NSString *)nibName {
+	return @"WCEditorView";
 }
 
 - (void)loadView {

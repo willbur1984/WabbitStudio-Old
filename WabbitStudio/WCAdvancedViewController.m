@@ -23,13 +23,17 @@ static NSString *const WCAdvancedViewControllerLastSelectedTabViewItemIdentifier
 }
 
 - (id)init {
-	if (!(self = [super initWithNibName:@"WCAdvancedView" bundle:nil]))
+	if (!(self = [super initWithNibName:[self nibName] bundle:nil]))
 		return nil;
 	
 	_viewControllers = [[NSMutableArray alloc] initWithCapacity:0];
 	_identifiers = [[NSMutableSet alloc] initWithCapacity:0];
 	
 	return self;
+}
+
+- (NSString *)nibName {
+	return @"WCAdvancedView";
 }
 
 - (void)loadView {

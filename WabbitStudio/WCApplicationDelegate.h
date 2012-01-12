@@ -9,5 +9,6 @@
 #import <Foundation/NSObject.h>
 
 @interface WCApplicationDelegate : NSObject <NSApplicationDelegate>
+
 - (IBAction)preferences:(id)sender;
 @end

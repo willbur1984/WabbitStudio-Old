@@ -94,15 +94,15 @@
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSPopUpButtonCell" key="NSCell" id="215439247">
 							<int key="NSCellFlags">-2080244160</int>
-							<int key="NSCellFlags2">2048</int>
-							<object class="NSFont" key="NSSupport" id="240463697">
+							<int key="NSCellFlags2">134350848</int>
+							<object class="NSFont" key="NSSupport" id="26">
 								<string key="NSName">LucidaGrande</string>
-								<double key="NSSize">13</double>
-								<int key="NSfFlags">1044</int>
+								<double key="NSSize">11</double>
+								<int key="NSfFlags">3100</int>
 							</object>
 							<string key="NSCellIdentifier">_NS:868</string>
 							<reference key="NSControlView" ref="356406673"/>
-							<int key="NSButtonFlags">-2042478337</int>
+							<int key="NSButtonFlags">-2041429761</int>
 							<int key="NSButtonFlags2">134</int>
 							<string key="NSAlternateContents"/>
 							<string key="NSKeyEquivalent"/>
@@ -156,6 +156,8 @@
 													<int key="NSMnemonicLoc">2147483647</int>
 													<reference key="NSOnImage" ref="392399921"/>
 													<reference key="NSMixedImage" ref="75805860"/>
+													<string key="NSAction">_popUpItemAction:</string>
+													<reference key="NSTarget" ref="215439247"/>
 												</object>
 											</object>
 										</object>
@@ -179,6 +181,8 @@
 													<int key="NSMnemonicLoc">2147483647</int>
 													<reference key="NSOnImage" ref="392399921"/>
 													<reference key="NSMixedImage" ref="75805860"/>
+													<string key="NSAction">_popUpItemAction:</string>
+													<reference key="NSTarget" ref="215439247"/>
 												</object>
 											</object>
 										</object>
@@ -214,14 +218,19 @@
 													<int key="NSMnemonicLoc">2147483647</int>
 													<reference key="NSOnImage" ref="392399921"/>
 													<reference key="NSMixedImage" ref="75805860"/>
+													<string key="NSAction">_popUpItemAction:</string>
+													<reference key="NSTarget" ref="215439247"/>
 												</object>
 											</object>
 										</object>
 									</object>
 								</object>
-								<reference key="NSMenuFont" ref="240463697"/>
+								<object class="NSFont" key="NSMenuFont">
+									<string key="NSName">LucidaGrande</string>
+									<double key="NSSize">13</double>
+									<int key="NSfFlags">1044</int>
+								</object>
 							</object>
-							<int key="NSSelectedIndex">4</int>
 							<bool key="NSPullDown">YES</bool>
 							<int key="NSPreferredEdge">1</int>
 							<bool key="NSUsesItemFromMenu">YES</bool>
@@ -241,11 +250,7 @@
 							<int key="NSCellFlags">68288064</int>
 							<int key="NSCellFlags2">138544128</int>
 							<string key="NSContents">9999:9999</string>
-							<object class="NSFont" key="NSSupport" id="26">
-								<string key="NSName">LucidaGrande</string>
-								<double key="NSSize">11</double>
-								<int key="NSfFlags">3100</int>
-							</object>
+							<reference key="NSSupport" ref="26"/>
 							<string key="NSCellIdentifier">_NS:3944</string>
 							<reference key="NSControlView" ref="705187568"/>
 							<object class="NSColor" key="NSBackgroundColor">
@@ -313,7 +318,6 @@
 						<string key="NSFrame">{{105, 1}, {375, 20}}</string>
 						<reference key="NSSuperview" ref="1005"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:2102</string>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSPathCell" key="NSCell" id="250352619">

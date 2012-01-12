@@ -27,7 +27,11 @@ NSString *const WCFontsAndColorsUserThemeIdentifiersKey = @"WCFontsAndColorsUser
 }
 
 - (id)init {
-	return [self initWithNibName:@"WCFontsAndColorsView" bundle:nil];
+	return [self initWithNibName:[self nibName] bundle:nil];
+}
+
+- (NSString *)nibName {
+	return @"WCFontsAndColorsView";
 }
 
 - (void)loadView {
