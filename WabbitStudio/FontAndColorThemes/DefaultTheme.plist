@@ -5,7 +5,7 @@
 	<key>name</key>
 	<string>Default</string>
 	<key>identifier</key>
-	<string>org.revsoft.wabbitcode.fontandcolortheme.default</string>
+	<string>org.revsoft.wabbitstudio.fontandcolortheme.default</string>
 	<key>plainTextFont</key>
 	<string>Menlo - 11.0</string>
 	<key>plainTextColor</key>

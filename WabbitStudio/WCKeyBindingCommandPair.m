@@ -89,6 +89,11 @@ NSString *const WCKeyBindingCommandPairShiftModifierMaskKey = @"shift";
 	return self;
 }
 
+- (void)updateMenuItemWithCurrentKeyCode; {
+	[[self menuItem] setKeyEquivalent:SRCharacterForKeyCodeAndCocoaFlags(_keyCombo.code, _keyCombo.flags)];
+	[[self menuItem] setKeyEquivalentModifierMask:_keyCombo.flags];
+}
+
 @dynamic name;
 - (NSString *)name {
 	if ([[self menuItem] isAlternate])
@@ -124,8 +129,13 @@ NSString *const WCKeyBindingCommandPairShiftModifierMaskKey = @"shift";
 	
 	_keyCombo = keyCombo;
 	
-	[[self menuItem] setKeyEquivalent:SRStringForKeyCode(_keyCombo.code)];
-	[[self menuItem] setKeyEquivalentModifierMask:_keyCombo.flags];
+	[self updateMenuItemWithCurrentKeyCode];
+}
+@dynamic commandSet;
+- (WCKeyBindingCommandSet *)commandSet {
+	if ([[self parentNode] isKindOfClass:[WCKeyBindingCommandSet class]])
+		return [self parentNode];
+	return [[self parentNode] commandSet];
 }
 
 - (NSMenuItem *)_menuItemMatchingSelector:(SEL)action inMenu:(NSMenu *)menu; {

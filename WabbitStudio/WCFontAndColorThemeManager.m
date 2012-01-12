@@ -69,7 +69,7 @@ NSString *const WCFontAndColorThemeManagerFontDidChangeFontNameKey = @"fontName"
 	NSString *currentIdentifier = [[NSUserDefaults standardUserDefaults] objectForKey:WCFontsAndColorsCurrentThemeIdentifierKey];
 	
 	// look for a theme matching the current identifier
-	for (WCFontAndColorTheme *theme in _themes) {
+	for (WCFontAndColorTheme *theme in [self themes]) {
 		if ([[theme identifier] isEqualToString:currentIdentifier]) {
 			_currentTheme = [theme retain];
 			break;
@@ -104,7 +104,7 @@ NSString *const WCFontAndColorThemeManagerFontDidChangeFontNameKey = @"fontName"
 		if ([keyPath isEqualToString:@"name"]) {
 			WCFontAndColorTheme *theme = object;
 			
-			[theme setIdentifier:[NSString stringWithFormat:@"org.revsoft.wabbitcode.theme.%@",[theme name]]];
+			[theme setIdentifier:[NSString stringWithFormat:@"org.revsoft.wabbitstudio.fontandcolortheme.%@",[theme name]]];
 			
 			[[NSUserDefaults standardUserDefaults] setObject:[theme identifier] forKey:WCFontsAndColorsCurrentThemeIdentifierKey];
 		}
@@ -195,29 +195,7 @@ NSString *const WCFontAndColorThemeManagerFontDidChangeFontNameKey = @"fontName"
 	[_userThemeIdentifiers removeObject:[theme identifier]];
 	[_themes removeObjectAtIndex:index];
 }
-- (void)insertThemes:(NSArray *)array atIndexes:(NSIndexSet *)indexes {
-	for (WCFontAndColorTheme *theme in array) {
-		[_unsavedThemes addObject:theme];
-		[_userThemeIdentifiers addObject:[theme identifier]];
-	}
-	[_themes insertObjects:array atIndexes:indexes];
-}
-- (void)removeThemesAtIndexes:(NSIndexSet *)indexes {
-	NSArray *themes = [_themes objectsAtIndexes:indexes];
-	NSMutableArray *URLs = [NSMutableArray arrayWithCapacity:[themes count]];
-	for (WCFontAndColorTheme *theme in themes) {
-		[_unsavedThemes removeObject:theme];
-		[_userThemeIdentifiers removeObject:[theme identifier]];
-		
-		if ([theme URL])
-			[URLs addObject:[theme URL]];
-	}
-	
-	if ([URLs count])
-		[[NSWorkspace sharedWorkspace] recycleURLs:URLs completionHandler:NULL];
-	
-	[_themes removeObjectsAtIndexes:indexes];
-}
+
 @dynamic currentTheme;
 - (WCFontAndColorTheme *)currentTheme {
 	return _currentTheme;
@@ -255,10 +233,10 @@ NSString *const WCFontAndColorThemeManagerFontDidChangeFontNameKey = @"fontName"
 }
 
 - (void)_setupObservingForFontAndColorTheme:(WCFontAndColorTheme *)theme; {
-	[theme addObserver:self forKeyPaths:[NSArray arrayWithObjects:@"name",@"selectionColor",@"backgroundColor",@"cursorColor",@"currentLineColor",@"plainTextFont",@"plainTextColor",@"commentFont",@"commentColor",@"registerFont",@"registerColor",@"mneumonicFont",@"mneumonicColor",@"stringFont",@"stringColor",@"preProcessorFont",@"preProcessorColor",@"directiveFont",@"directiveColor",@"conditionalFont",@"conditionalColor",@"numberFont",@"numberColor",@"hexadecimalFont",@"hexadecimalColor",@"binaryFont",@"binaryColor",@"stringFont",@"stringColor",@"labelFont",@"labelColor",@"equateFont",@"equateColor",@"defineFont",@"defineColor",@"macroFont",@"macroColor", nil]];
+	[theme addObserver:self forKeyPaths:[NSSet setWithObjects:@"name",@"selectionColor",@"backgroundColor",@"cursorColor",@"currentLineColor",@"plainTextFont",@"plainTextColor",@"commentFont",@"commentColor",@"registerFont",@"registerColor",@"mneumonicFont",@"mneumonicColor",@"stringFont",@"stringColor",@"preProcessorFont",@"preProcessorColor",@"directiveFont",@"directiveColor",@"conditionalFont",@"conditionalColor",@"numberFont",@"numberColor",@"hexadecimalFont",@"hexadecimalColor",@"binaryFont",@"binaryColor",@"stringFont",@"stringColor",@"labelFont",@"labelColor",@"equateFont",@"equateColor",@"defineFont",@"defineColor",@"macroFont",@"macroColor", nil]];
 }
 - (void)_cleanupObservingForFontAndColorTheme:(WCFontAndColorTheme *)theme; {
-	[theme removeObserver:self forKeyPaths:[NSArray arrayWithObjects:@"name",@"selectionColor",@"backgroundColor",@"cursorColor",@"currentLineColor",@"plainTextFont",@"plainTextColor",@"commentFont",@"commentColor",@"registerFont",@"registerColor",@"mneumonicFont",@"mneumonicColor",@"stringFont",@"stringColor",@"preProcessorFont",@"preProcessorColor",@"directiveFont",@"directiveColor",@"conditionalFont",@"conditionalColor",@"numberFont",@"numberColor",@"hexadecimalFont",@"hexadecimalColor",@"binaryFont",@"binaryColor",@"stringFont",@"stringColor",@"labelFont",@"labelColor",@"equateFont",@"equateColor",@"defineFont",@"defineColor",@"macroFont",@"macroColor", nil]];
+	[theme removeObserver:self forKeyPaths:[NSSet setWithObjects:@"name",@"selectionColor",@"backgroundColor",@"cursorColor",@"currentLineColor",@"plainTextFont",@"plainTextColor",@"commentFont",@"commentColor",@"registerFont",@"registerColor",@"mneumonicFont",@"mneumonicColor",@"stringFont",@"stringColor",@"preProcessorFont",@"preProcessorColor",@"directiveFont",@"directiveColor",@"conditionalFont",@"conditionalColor",@"numberFont",@"numberColor",@"hexadecimalFont",@"hexadecimalColor",@"binaryFont",@"binaryColor",@"stringFont",@"stringColor",@"labelFont",@"labelColor",@"equateFont",@"equateColor",@"defineFont",@"defineColor",@"macroFont",@"macroColor", nil]];
 }
 
 @end

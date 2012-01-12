@@ -198,7 +198,7 @@ NSString *SRCharacterForKeyCodeAndCocoaFlags(NSInteger keyCode, NSUInteger cocoa
 	CFStringRef temp = CFStringCreateWithCharacters(kCFAllocatorDefault, unicodeString, 1);
 	CFMutableStringRef mutableTemp = CFStringCreateMutableCopy(kCFAllocatorDefault, 0, temp);
 
-	CFStringCapitalize(mutableTemp, locale);
+	//CFStringCapitalize(mutableTemp, locale);
 
 	NSString *resultString = [NSString stringWithString:(NSString *)mutableTemp];
 

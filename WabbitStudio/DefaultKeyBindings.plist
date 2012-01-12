@@ -496,6 +496,6 @@
 	<key>name</key>
 	<string>Default</string>
 	<key>identifier</key>
-	<string>org.revsoft.wabbitstudio.keybindings.default</string>
+	<string>org.revsoft.wabbitstudio.keybindingcommandset.default</string>
 </dict>
 </plist>

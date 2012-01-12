@@ -28,8 +28,8 @@ NSString *const WCKeyBindingCommandSetKeyBindingsKey = @"keyBindings";
 - (id)copyWithZone:(NSZone *)zone {
 	WCKeyBindingCommandSet *copy = [super copyWithZone:zone];
 	
-	copy->_name = [_name copy];
-	copy->_identifier = [_name copy];
+	copy->_name = [[NSString alloc] initWithFormat:@"Copy of \"%@\"",_name];
+	copy->_identifier = [[NSString alloc] initWithFormat:@"org.revsoft.wabbitstudio.keybindingcommandset.%@",_name];
 	
 	return copy;
 }
@@ -38,7 +38,7 @@ NSString *const WCKeyBindingCommandSetKeyBindingsKey = @"keyBindings";
 	WCKeyBindingCommandSet *copy = [super mutableCopyWithZone:zone];
 	
 	copy->_name = [[NSString alloc] initWithFormat:@"Copy of \"%@\"",_name];
-	copy->_identifier = [[NSString alloc] initWithFormat:@"org.revsoft.wabbitstudio.keybindings.%@",_name];
+	copy->_identifier = [[NSString alloc] initWithFormat:@"org.revsoft.wabbitstudio.keybindingcommandset.%@",_name];
 	
 	return copy;
 }
@@ -48,7 +48,7 @@ NSString *const WCKeyBindingCommandSetKeyBindingsKey = @"keyBindings";
 	NSMutableDictionary *plist = [NSMutableDictionary dictionaryWithCapacity:0];
 	
 	[plist setObject:[self name] forKey:WCKeyBindingCommandSetNameKey];
-	[plist setObject:[self identifer] forKey:WCKeyBindingCommandSetIdentifierKey];
+	[plist setObject:[self identifier] forKey:WCKeyBindingCommandSetIdentifierKey];
 	
 	NSMutableDictionary *keyBindings = [NSMutableDictionary dictionaryWithCapacity:[pairs count]];
 	
@@ -107,7 +107,7 @@ NSString *const WCKeyBindingCommandSetKeyBindingsKey = @"keyBindings";
 
 @synthesize URL=_URL;
 @synthesize name=_name;
-@synthesize identifer=_identifier;
+@synthesize identifier=_identifier;
 @dynamic commandPairs;
 - (NSArray *)commandPairs {
 	return [self childNodes];

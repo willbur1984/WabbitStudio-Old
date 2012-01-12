@@ -11,11 +11,11 @@
 NSString *const kUserDefaultsKeyPathPrefix = @"values.";
 
 @implementation NSObject (WCExtensions)
-- (void)addObserver:(NSObject *)observer forKeyPaths:(NSArray *)keyPaths; {
+- (void)addObserver:(NSObject *)observer forKeyPaths:(NSSet *)keyPaths; {
 	for (NSString *keyPath in keyPaths)
 		[self addObserver:observer forKeyPath:keyPath options:NSKeyValueObservingOptionNew context:observer];
 }
-- (void)removeObserver:(NSObject *)observer forKeyPaths:(NSArray *)keyPaths; {
+- (void)removeObserver:(NSObject *)observer forKeyPaths:(NSSet *)keyPaths; {
 	for (NSString *keyPath in keyPaths)
 		[self removeObserver:observer forKeyPath:keyPath context:observer];
 }

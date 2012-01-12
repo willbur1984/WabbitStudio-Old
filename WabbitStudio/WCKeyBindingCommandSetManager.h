@@ -17,9 +17,16 @@
 	NSHashTable *_unsavedCommandSets;
 }
 @property (readonly,nonatomic) NSArray *commandSets;
+@property (readonly,nonatomic) NSArray *defaultCommandSets;
+@property (readwrite,retain,nonatomic) WCKeyBindingCommandSet *currentCommandSet;
 @property (readonly,nonatomic) WCKeyBindingCommandSet *defaultCommandSet;
 
 + (WCKeyBindingCommandSetManager *)sharedManager;
 
+- (BOOL)containsCommandSet:(WCKeyBindingCommandSet *)commandSet;
 - (BOOL)saveCurrentCommandSets:(NSError **)outError;
+
+- (void)loadKeyBindingsFromCurrentCommandSet;
+
+- (NSString *)defaultKeyForMenuItem:(NSMenuItem *)menuItem;
 @end

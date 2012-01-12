@@ -11,7 +11,6 @@
 #import "WCPreferencesWindowController.h"
 #import "NSApplication+RSExtensions.h"
 #import "SRRecorderControl.h"
-#import "SRKeyCodeTransformer.h"
 
 @interface WCKeyBindingsEditCommandPairWindowController ()
 @property (readwrite,retain,nonatomic) WCKeyBindingCommandPair *commandPair;
@@ -21,8 +20,6 @@
 - (id)init {
 	if (!(self = [super initWithWindowNibName:[self windowNibName]]))
 		return nil;
-	
-	_transformer = [[SRKeyCodeTransformer alloc] init];
 	
 	return self;
 }

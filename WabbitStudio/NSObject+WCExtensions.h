@@ -11,8 +11,8 @@
 extern NSString *const kUserDefaultsKeyPathPrefix;
 
 @interface NSObject (WCExtensions)
-- (void)addObserver:(NSObject *)observer forKeyPaths:(NSArray *)keyPaths;
-- (void)removeObserver:(NSObject *)observer forKeyPaths:(NSArray *)keyPaths;
+- (void)addObserver:(NSObject *)observer forKeyPaths:(NSSet *)keyPaths;
+- (void)removeObserver:(NSObject *)observer forKeyPaths:(NSSet *)keyPaths;
 
 - (NSSet *)userDefaultsKeyPathsToObserve;
 - (void)setupUserDefaultsObserving;

@@ -11,9 +11,10 @@
 #import "WCPreferencesWindowController.h"
 #import "WCEditorViewController.h"
 #import "WCAdvancedViewController.h"
+#import "WCKeyBindingCommandSetManager.h"
 
 @implementation WCApplicationDelegate
-- (void)applicationDidFinishLaunching:(NSNotification *)notification {
+- (void)applicationWillFinishLaunching:(NSNotification *)notification {
 	NSMutableDictionary *userDefaults = [NSMutableDictionary dictionaryWithCapacity:0];
 	
 	[userDefaults addEntriesFromDictionary:[WCFontsAndColorsViewController userDefaults]];
@@ -21,6 +22,10 @@
 	[userDefaults addEntriesFromDictionary:[WCAdvancedViewController userDefaults]];
 	
 	[[NSUserDefaults standardUserDefaults] registerDefaults:userDefaults];
+}
+
+- (void)applicationDidFinishLaunching:(NSNotification *)notification {
+	[[WCKeyBindingCommandSetManager sharedManager] loadKeyBindingsFromCurrentCommandSet];
 }
 
 - (IBAction)preferences:(id)sender; {

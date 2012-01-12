@@ -18,10 +18,10 @@ extern NSString *const WCKeyBindingCommandSetKeyBindingsKey;
 	NSString *_name;
 	NSString *_identifier;
 }
-@property (readonly,nonatomic) NSString *name;
-@property (readonly,nonatomic) NSString *identifer;
+@property (readwrite,copy,nonatomic) NSURL *URL;
+@property (readwrite,copy,nonatomic) NSString *name;
+@property (readwrite,copy,nonatomic) NSString *identifier;
 @property (readonly,nonatomic) NSArray *commandPairs;
 @property (readonly,nonatomic) NSArray *flattenedCommandPairs;
-@property (readwrite,copy,nonatomic) NSURL *URL;
 
 @end

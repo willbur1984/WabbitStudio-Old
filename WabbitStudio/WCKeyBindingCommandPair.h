@@ -24,6 +24,8 @@ extern NSString *const WCKeyBindingCommandPairOptionModifierMaskKey;
 extern NSString *const WCKeyBindingCommandPairControlModifierMaskKey;
 extern NSString *const WCKeyBindingCommandPairShiftModifierMaskKey;
 
+@class WCKeyBindingCommandSet;
+
 @interface WCKeyBindingCommandPair : RSTreeNode <RSPlistArchiving,NSCopying,NSMutableCopying> {
 	KeyCombo _keyCombo;
 	SEL _action;
@@ -32,8 +34,10 @@ extern NSString *const WCKeyBindingCommandPairShiftModifierMaskKey;
 @property (readonly,nonatomic) NSString *name;
 @property (readonly,nonatomic) NSString *key;
 @property (readwrite,assign,nonatomic) KeyCombo keyCombo;
+@property (readonly,nonatomic) WCKeyBindingCommandSet *commandSet;
 
 + (WCKeyBindingCommandPair *)keyBindingCommandPairForAction:(SEL)action keyCombo:(KeyCombo)keyCombo;
 - (id)initWithAction:(SEL)action keyCombo:(KeyCombo)keyCombo;
 
+- (void)updateMenuItemWithCurrentKeyCode;
 @end

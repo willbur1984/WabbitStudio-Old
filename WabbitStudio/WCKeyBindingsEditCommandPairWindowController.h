@@ -8,11 +8,10 @@
 
 #import <AppKit/NSWindowController.h>
 
-@class WCKeyBindingCommandPair,SRRecorderControl,SRKeyCodeTransformer;
+@class WCKeyBindingCommandPair,SRRecorderControl;
 
 @interface WCKeyBindingsEditCommandPairWindowController : NSWindowController {
 	WCKeyBindingCommandPair *_commandPair;
-	SRKeyCodeTransformer *_transformer;
 }
 @property (readwrite,assign,nonatomic) IBOutlet SRRecorderControl *recorderControl;
 

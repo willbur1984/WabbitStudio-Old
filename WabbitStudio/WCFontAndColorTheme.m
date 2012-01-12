@@ -159,7 +159,7 @@ static WCFontToStringValueTransformer *fontToStringValueTransformer;
 	WCFontAndColorTheme *copy = [[[self class] alloc] init];
 	
 	copy->_name = [[NSString alloc] initWithFormat:@"Copy of \"%@\"",_name];
-	copy->_identifier = [[NSString alloc] initWithFormat:@"org.revsoft.wabbitcode.theme.%@",_name];
+	copy->_identifier = [[NSString alloc] initWithFormat:@"org.revsoft.wabbitstudio.fontandcolortheme.%@",_name];
 	
 	copy->_plainTextFont = [_plainTextFont retain];
 	copy->_plainTextColor = [_plainTextColor retain];

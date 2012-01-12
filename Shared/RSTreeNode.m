@@ -30,7 +30,14 @@ static NSString *const RSTreeNodeChildNodesKey = @"childNodes";
 	
 	copy->_parentNode = _parentNode;
 	
-	[[copy mutableChildNodes] addObjectsFromArray:[self childNodes]];
+	NSMutableArray *temp = [NSMutableArray arrayWithCapacity:[[self childNodes] count]];
+	for (id node in [self childNodes]) {
+		if ([node respondsToSelector:@selector(copyWithZone:)])
+			[temp addObject:[[node copy] autorelease]];
+		else
+			[temp addObject:node];
+	}
+	[[copy mutableChildNodes] addObjectsFromArray:temp];
 	
 	return copy;
 }
@@ -40,8 +47,14 @@ static NSString *const RSTreeNodeChildNodesKey = @"childNodes";
 	
 	copy->_parentNode = _parentNode;
 	
-	for (RSTreeNode *node in [self childNodes])
-		[[copy mutableChildNodes] addObject:[[node copy] autorelease]];
+	NSMutableArray *temp = [NSMutableArray arrayWithCapacity:[[self childNodes] count]];
+	for (id node in [self childNodes]) {
+		if ([node respondsToSelector:@selector(mutableCopyWithZone:)])
+			[temp addObject:[[node mutableCopy] autorelease]];
+		else
+			[temp addObject:node];
+	}
+	[[copy mutableChildNodes] addObjectsFromArray:temp];
 	
 	return copy;
 }
