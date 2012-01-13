@@ -23,5 +23,6 @@ extern NSString *const WCKeyBindingCommandSetKeyBindingsKey;
 @property (readwrite,copy,nonatomic) NSString *identifier;
 @property (readonly,nonatomic) NSArray *commandPairs;
 @property (readonly,nonatomic) NSArray *flattenedCommandPairs;
+@property (readonly,nonatomic) NSArray *customizedCommandPairs;
 
 @end

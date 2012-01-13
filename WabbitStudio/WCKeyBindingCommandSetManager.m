@@ -220,6 +220,24 @@
 	});
 	return retval;
 }
+@dynamic defaultKeys;
+- (NSSet *)defaultKeys {
+	static NSSet *retval;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		NSArray *pairs = [[self defaultCommandSet] flattenedCommandPairs];
+		NSMutableSet *temp = [NSMutableSet setWithCapacity:[pairs count]];
+		
+		for (WCKeyBindingCommandPair *pair in pairs) {
+			NSString *key = [pair key];
+			if ([key length])
+				[temp addObject:key];
+		}
+		
+		retval = [temp copy];
+	});
+	return retval;
+}
 @dynamic currentCommandSet;
 - (WCKeyBindingCommandSet *)currentCommandSet {
 	return _currentCommandSet;

@@ -20,6 +20,7 @@
 @property (readonly,nonatomic) NSArray *defaultCommandSets;
 @property (readwrite,retain,nonatomic) WCKeyBindingCommandSet *currentCommandSet;
 @property (readonly,nonatomic) WCKeyBindingCommandSet *defaultCommandSet;
+@property (readonly,nonatomic) NSSet *defaultKeys;
 
 + (WCKeyBindingCommandSetManager *)sharedManager;
 

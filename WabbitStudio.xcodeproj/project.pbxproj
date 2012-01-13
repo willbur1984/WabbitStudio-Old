@@ -27,6 +27,7 @@
 		0708965714A6F1360017BBE4 /* PreProcessorCompletions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0708965614A6F1360017BBE4 /* PreProcessorCompletions.plist */; };
 		071985DF14C010D800C8E91A /* WCGeneralViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 071985DD14C010D800C8E91A /* WCGeneralViewController.m */; };
 		071985E314C011A800C8E91A /* WCGeneralView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 071985E114C011A800C8E91A /* WCGeneralView.xib */; };
+		071985E614C01F5D00C8E91A /* NSURL+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 071985E514C01F5D00C8E91A /* NSURL+RSExtensions.m */; };
 		071ECCC314A4233C002409F8 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 071ECCC214A4233C002409F8 /* Cocoa.framework */; };
 		071ECCCD14A4233C002409F8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 071ECCCB14A4233C002409F8 /* InfoPlist.strings */; };
 		071ECCCF14A4233C002409F8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 071ECCCE14A4233C002409F8 /* main.m */; };
@@ -238,6 +239,8 @@
 		071985DC14C010D800C8E91A /* WCGeneralViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCGeneralViewController.h; sourceTree = "<group>"; };
 		071985DD14C010D800C8E91A /* WCGeneralViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCGeneralViewController.m; sourceTree = "<group>"; };
 		071985E214C011A800C8E91A /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCGeneralView.xib; sourceTree = "<group>"; };
+		071985E414C01F5D00C8E91A /* NSURL+RSExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+RSExtensions.h"; sourceTree = "<group>"; };
+		071985E514C01F5D00C8E91A /* NSURL+RSExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+RSExtensions.m"; sourceTree = "<group>"; };
 		071ECCBE14A4233C002409F8 /* WabbitStudio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WabbitStudio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		071ECCC214A4233C002409F8 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		071ECCC514A4233C002409F8 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -1150,6 +1153,8 @@
 				07862BC714BBA5B00057EB89 /* NSParagraphStyle+RSExtensions.m */,
 				07A8AFC114BDF42D008CB9FF /* NSApplication+RSExtensions.h */,
 				07A8AFC214BDF42D008CB9FF /* NSApplication+RSExtensions.m */,
+				071985E414C01F5D00C8E91A /* NSURL+RSExtensions.h */,
+				071985E514C01F5D00C8E91A /* NSURL+RSExtensions.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -1446,6 +1451,7 @@
 				07A8AFE214BE2C2B008CB9FF /* NSTreeNode+RSExtensions.m in Sources */,
 				07A8AFE514BE2CE9008CB9FF /* WCKeyBindingsOutlineView.m in Sources */,
 				071985DF14C010D800C8E91A /* WCGeneralViewController.m in Sources */,
+				071985E614C01F5D00C8E91A /* NSURL+RSExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

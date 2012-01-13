@@ -31,7 +31,6 @@
 			<string>NSBox</string>
 			<string>NSView</string>
 			<string>NSScrollView</string>
-			<string>NSProgressIndicator</string>
 			<string>NSPathControl</string>
 			<string>NSScroller</string>
 			<string>NSPathCell</string>
@@ -236,7 +235,7 @@
 							<string key="NSFrame">{{0, 57}, {350, 5}}</string>
 							<reference key="NSSuperview" ref="1006"/>
 							<reference key="NSWindow"/>
-							<reference key="NSNextKeyView" ref="782360131"/>
+							<reference key="NSNextKeyView" ref="929686453"/>
 							<string key="NSReuseIdentifierKey">_NS:2411</string>
 							<string key="NSOffsets">{0, 0}</string>
 							<object class="NSTextFieldCell" key="NSTitleCell">
@@ -389,7 +388,7 @@
 						<object class="NSTextField" id="929686453">
 							<reference key="NSNextResponder" ref="1006"/>
 							<int key="NSvFlags">290</int>
-							<string key="NSFrame">{{41, 23}, {141, 14}}</string>
+							<string key="NSFrame">{{5, 23}, {177, 14}}</string>
 							<reference key="NSSuperview" ref="1006"/>
 							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="840941151"/>
@@ -410,18 +409,6 @@
 								</object>
 								<reference key="NSTextColor" ref="611277380"/>
 							</object>
-						</object>
-						<object class="NSProgressIndicator" id="782360131">
-							<reference key="NSNextResponder" ref="1006"/>
-							<int key="NSvFlags">1316</int>
-							<object class="NSPSMatrix" key="NSDrawMatrix"/>
-							<string key="NSFrame">{{20, 21}, {16, 16}}</string>
-							<reference key="NSSuperview" ref="1006"/>
-							<reference key="NSWindow"/>
-							<reference key="NSNextKeyView" ref="929686453"/>
-							<string key="NSReuseIdentifierKey">_NS:3891</string>
-							<int key="NSpiFlags">28938</int>
-							<double key="NSMaxValue">100</double>
 						</object>
 					</object>
 					<string key="NSFrameSize">{350, 311}</string>
@@ -861,22 +848,6 @@
 					</object>
 					<int key="connectionID">57</int>
 				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">animate: isSearching</string>
-						<reference key="source" ref="782360131"/>
-						<reference key="destination" ref="1001"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="782360131"/>
-							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">animate: isSearching</string>
-							<string key="NSBinding">animate</string>
-							<string key="NSKeyPath">isSearching</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">68</int>
-				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -927,7 +898,6 @@
 							<reference ref="1059247124"/>
 							<reference ref="133034445"/>
 							<reference ref="929686453"/>
-							<reference ref="782360131"/>
 						</object>
 						<reference key="parent" ref="1005"/>
 					</object>
@@ -1118,11 +1088,6 @@
 						<reference key="parent" ref="292971847"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">67</int>
-						<reference key="object" ref="782360131"/>
-						<reference key="parent" ref="1006"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">69</int>
 						<reference key="object" ref="1028863909"/>
 						<object class="NSMutableArray" key="children">
@@ -1200,7 +1165,6 @@
 					<string>6.IBPluginDependency</string>
 					<string>66.IBPluginDependency</string>
 					<string>66.userInterfaceItemIdentifier</string>
-					<string>67.IBPluginDependency</string>
 					<string>69.IBPluginDependency</string>
 					<string>70.IBPluginDependency</string>
 					<string>71.IBPluginDependency</string>
@@ -1248,7 +1212,6 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>NSTableViewRowViewKey</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>

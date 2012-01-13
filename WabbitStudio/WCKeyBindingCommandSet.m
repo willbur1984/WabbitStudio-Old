@@ -9,6 +9,7 @@
 #import "WCKeyBindingCommandSet.h"
 #import "WCKeyBindingCommandPair.h"
 #import "RSDefines.h"
+#import "WCKeyBindingCommandSetManager.h"
 
 NSString *const WCKeyBindingCommandSetNameKey = @"name";
 NSString *const WCKeyBindingCommandSetIdentifierKey = @"identifier";
@@ -121,6 +122,19 @@ NSString *const WCKeyBindingCommandSetKeyBindingsKey = @"keyBindings";
 	NSMutableArray *retval = [NSMutableArray arrayWithCapacity:0];
 	for (WCKeyBindingCommandPair *pair in [self commandPairs])
 		[retval addObjectsFromArray:[pair childNodes]];
+	return [[retval copy] autorelease];
+}
+@dynamic customizedCommandPairs;
+- (NSArray *)customizedCommandPairs {
+	NSMutableArray *retval = [NSMutableArray arrayWithCapacity:0];
+	NSSet *defaultKeys = [[WCKeyBindingCommandSetManager sharedManager] defaultKeys];
+	
+	for (WCKeyBindingCommandPair *pair in [self flattenedCommandPairs]) {
+		NSString *key = [pair key];
+		if ([key length] && ![defaultKeys containsObject:key])
+			[retval addObject:pair];
+	}
+	
 	return [[retval copy] autorelease];
 }
 

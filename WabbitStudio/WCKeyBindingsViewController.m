@@ -112,6 +112,20 @@ static const NSInteger kNumberOfScopeBarGroups = 1;
 - (NSView *)accessoryViewForScopeBar:(MGScopeBar *)theScopeBar {
 	return [self searchField];
 }
+
+- (void)scopeBar:(MGScopeBar *)theScopeBar selectedStateChanged:(BOOL)selected forItem:(NSString *)identifier inGroup:(NSInteger)groupNumber {
+	if ([identifier isEqualToString:@"Customized"]) {
+		[[self treeController] bind:NSContentArrayBinding toObject:[self arrayController] withKeyPath:@"selection.customizedCommandPairs" options:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],NSRaisesForNotApplicableKeysBindingOption, nil]];
+		[[self searchArrayController] bind:NSContentArrayBinding toObject:[self arrayController] withKeyPath:@"selection.customizedCommandPairs" options:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],NSRaisesForNotApplicableKeysBindingOption, nil]];
+	}
+	else {
+		[[self treeController] bind:NSContentArrayBinding toObject:[self arrayController] withKeyPath:@"selection.commandPairs" options:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],NSRaisesForNotApplicableKeysBindingOption, nil]];
+		[[self searchArrayController] bind:NSContentArrayBinding toObject:[self arrayController] withKeyPath:@"selection.flattenedCommandPairs" options:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],NSRaisesForNotApplicableKeysBindingOption, nil]];
+		
+		[[self outlineView] expandItem:nil expandChildren:YES];
+		[[self outlineView] selectRowIndexes:[NSIndexSet indexSetWithIndex:1] byExtendingSelection:NO];
+	}
+}
 #pragma mark NSMenuValidation
 - (BOOL)validateMenuItem:(NSMenuItem *)item {
 	if ([item action] == @selector(duplicateCommandSet:)) {

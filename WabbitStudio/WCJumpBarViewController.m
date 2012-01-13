@@ -19,6 +19,9 @@
 #import "NSObject+WCExtensions.h"
 #import "NSImage+RSExtensions.h"
 #import "NSView+MCExtensions.h"
+#import "WCDocumentController.h"
+#import "NSURL+RSExtensions.h"
+#import "RSDefines.h"
 
 @interface WCJumpBarViewController ()
 @property (readwrite,copy,nonatomic) NSString *textViewSelectedLineAndColumn;
@@ -34,7 +37,7 @@
 @end
 
 @implementation WCJumpBarViewController
-
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
@@ -48,6 +51,76 @@
 	[super dealloc];
 }
 
+- (void)loadView {
+	[super loadView];
+	
+	[[self jumpBar] setTarget:self];
+	[[self jumpBar] setAction:@selector(_jumpBarClicked:)];
+	
+	[self _updatePathComponentCells];
+}
+
+- (NSSet *)userDefaultsKeyPathsToObserve {
+	return [NSSet setWithObjects:WCReallyAdvancedJumpBarShowFileAndLineNumberKey, nil];
+}
+#pragma mark NSKeyValueObserving
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+	if ([keyPath isEqualToString:[kUserDefaultsKeyPathPrefix stringByAppendingString:WCReallyAdvancedJumpBarShowFileAndLineNumberKey]]) {
+		[self _updateSymbolPathComponentCell];
+	}
+	else
+		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+}
+#pragma mark NSMenuDelegate
+- (NSInteger)numberOfItemsInMenu:(NSMenu *)menu {
+	if (menu == [self recentFilesMenu]) {
+		NSUInteger recentFilesCount = [[[WCDocumentController sharedDocumentController] recentDocumentURLs] count];
+		if (!recentFilesCount)
+			recentFilesCount++;
+		return recentFilesCount;
+	}
+	else if (menu == [self unsavedFilesMenu])
+		return 1;
+	else
+		return 1;
+}
+- (BOOL)menu:(NSMenu *)menu updateItem:(NSMenuItem *)item atIndex:(NSInteger)index shouldCancel:(BOOL)shouldCancel {
+	if (menu == [self recentFilesMenu]) {
+		NSArray *fileURLs = [[WCDocumentController sharedDocumentController] recentDocumentURLs];
+		
+		if ([fileURLs count]) {
+			NSURL *fileURL = [fileURLs objectAtIndex:index];
+			
+			[item setTitle:[fileURL fileName]];
+			[item setImage:[fileURL fileIcon]];
+			[[item image] setSize:NSSmallSize];
+			[item setRepresentedObject:fileURL];
+			[item setTarget:self];
+			[item setAction:@selector(_recentFilesMenuItemClicked:)];
+		}
+		else {
+			[item setTitle:NSLocalizedString(@"No Recent Files", @"No Recent Files")];
+			[item setTarget:nil];
+			[item setAction:NULL];
+			[item setRepresentedObject:nil];
+			[item setImage:nil];
+		}
+	}
+	else if (menu == [self unsavedFilesMenu]) {
+		[item setTitle:NSLocalizedString(@"No Unsaved Files", @"No Unsaved Files")];
+		[item setTarget:nil];
+		[item setAction:NULL];
+	}
+	else if (menu == [self includesMenu]) {
+		[item setTitle:NSLocalizedString(@"No Includes", @"No Includes")];
+		[item setTarget:nil];
+		[item setAction:NULL];
+	}
+	
+	return (!shouldCancel);
+}
+
+#pragma mark *** Public Methods ***
 - (id)initWithTextView:(NSTextView *)textView jumpBarDataSource:(id <WCJumpBarDataSource>)jumpBarDataSource; {
 	if (!(self = [super initWithNibName:@"WCJumpBarView" bundle:nil]))
 		return nil;
@@ -55,7 +128,6 @@
 	_textView = textView;
 	_jumpBarDataSource = jumpBarDataSource;
 	_symbolsMenu = [[NSMenu alloc] initWithTitle:@""];
-	[_symbolsMenu setDelegate:self];
 	[_symbolsMenu setFont:[NSFont menuFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]]];
 	
 	[self setTextViewSelectedLineAndColumn:NSLocalizedString(@"1:0", @"1:0")];
@@ -72,53 +144,16 @@
 	
 	return self;
 }
-
-- (void)loadView {
-	[super loadView];
-	
-	[[self jumpBar] setTarget:self];
-	[[self jumpBar] setAction:@selector(_jumpBarClicked:)];
-	
-	[self _updatePathComponentCells];
-}
-
-- (void)menu:(NSMenu *)menu willHighlightItem:(NSMenuItem *)item {
-	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCReallyAdvancedJumpBarShowFileAndLineNumberKey])
-		return;
-	else if (menu == [self symbolsMenu]) {
-		/*
-		if ([menu highlightedItem]) {
-			NSMenuItem *oldItem = [menu highlightedItem];
-			
-			[oldItem setTitle:[[oldItem representedObject] name]];
-		}
-		
-		if (item) {
-			WCSourceSymbol *symbol = [item representedObject];
-			
-			[item setTitle:[NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 (%@:%lu)", @"jump bar symbols menu format string"),[symbol name],[[self jumpBarDataSource] displayName],[[[self textView] textStorage] lineNumberForRange:[symbol range]]+1]];
-		}
-		 */
-	}
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-	if ([keyPath isEqualToString:[kUserDefaultsKeyPathPrefix stringByAppendingString:WCReallyAdvancedJumpBarShowFileAndLineNumberKey]]) {
-		[self _updateSymbolPathComponentCell];
-	}
-	else
-		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-}
-
-- (NSSet *)userDefaultsKeyPathsToObserve {
-	return [NSSet setWithObjects:WCReallyAdvancedJumpBarShowFileAndLineNumberKey, nil];
-}
-
+#pragma mark IBActions
 - (IBAction)showDocumentItems:(id)sender; {
 	[self _showMenuForPathComponentCell:[[[self jumpBar] pathComponentCells] lastObject]];
 }
-
+#pragma mark Properties
 @synthesize jumpBar=_jumpBar;
+@synthesize recentFilesMenu=_recentFilesMenu;
+@synthesize unsavedFilesMenu=_unsavedFilesMenu;
+@synthesize includesMenu=_includesMenu;
+
 @synthesize jumpBarDataSource=_jumpBarDataSource;
 @synthesize textView=_textView;
 @dynamic additionalEffectiveSplitViewRect;
@@ -131,7 +166,7 @@
 
 @synthesize textViewSelectedLineAndColumn=_textViewSelectedLineAndColumn;
 @synthesize symbolsMenu=_symbolsMenu;
-
+#pragma mark *** Private Methods ***
 - (void)_updatePathComponentCells; {
 	if (![self jumpBarDataSource])
 		return;
@@ -314,7 +349,7 @@
 		}
 	}
 }
-
+#pragma mark IBActions
 - (IBAction)_jumpBarClicked:(id)sender {
 	NSPathComponentCell *clickedCell = [[self jumpBar] clickedPathComponentCell];
 	
@@ -326,6 +361,12 @@
 	[[self textView] scrollRangeToVisible:[[self textView] selectedRange]];
 }
 
+- (IBAction)_recentFilesMenuItemClicked:(id)sender {
+	[[WCDocumentController sharedDocumentController] openDocumentWithContentsOfURL:[sender representedObject] display:YES completionHandler:^(NSDocument *document, BOOL documentWasAlreadyOpen, NSError *error) {
+		
+	}];
+}
+#pragma mark Notifications
 - (void)_textViewDidChangeSelection:(NSNotification *)note {
 	[self _updateSymbolPathComponentCell];
 	[self _updateTextViewSelectedLineAndColumn];

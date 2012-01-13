@@ -418,8 +418,10 @@
 						<int key="NSTitlePosition">0</int>
 						<bool key="NSTransparent">NO</bool>
 						<object class="NSColor" key="NSBorderColor2">
-							<int key="NSColorSpace">2</int>
-							<bytes key="NSRGB">MC42MDAwMDAwMjM4IDAuNjAwMDAwMDIzOCAwLjYwMDAwMDAyMzgAA</bytes>
+							<int key="NSColorSpace">6</int>
+							<string key="NSCatalogName">System</string>
+							<string key="NSColorName">headerColor</string>
+							<reference key="NSColor" ref="836799768"/>
 						</object>
 						<reference key="NSFillColor2" ref="78031548"/>
 					</object>
@@ -532,7 +534,6 @@
 										</object>
 										<reference key="NSMenuFont" ref="406226147"/>
 									</object>
-									<int key="NSSelectedIndex">3</int>
 									<bool key="NSPullDown">YES</bool>
 									<int key="NSPreferredEdge">1</int>
 									<bool key="NSUsesItemFromMenu">YES</bool>

@@ -18,6 +18,10 @@
 	NSMenu *_symbolsMenu;
 }
 @property (readwrite,assign,nonatomic) IBOutlet WCJumpBar *jumpBar;
+@property (readwrite,assign,nonatomic) IBOutlet NSMenu *recentFilesMenu;
+@property (readwrite,assign,nonatomic) IBOutlet NSMenu *unsavedFilesMenu;
+@property (readwrite,assign,nonatomic) IBOutlet NSMenu *includesMenu;
+
 @property (readonly,nonatomic) NSTextView *textView;
 @property (readonly,copy,nonatomic) NSString *textViewSelectedLineAndColumn;
 @property (readonly,nonatomic) NSRect additionalEffectiveSplitViewRect;
