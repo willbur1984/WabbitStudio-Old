@@ -628,7 +628,7 @@ static const CGFloat kReplaceControlsHeight = 22.0;
 	[self _removeFindTextAttributesInRange:NSMakeRange(0, [[[self textView] string] length])];
 }
 - (void)_addFindTextAttributesInRange:(NSRange)range; {
-	NSDictionary *attributes = WCFindTextAttributes();
+	NSDictionary *attributes = WCTransparentFindTextAttributes();
 	NSPointerArray *ranges = [_findRanges rangesForRange:range];
 	NSUInteger rangeIndex, rangeCount = [ranges count];
 	

@@ -18,6 +18,7 @@ extern NSString *const WCEditorAutomaticallyInsertMatchingBraceKey;
 extern NSString *const WCEditorSuggestCompletionsWhileTypingKey;
 extern NSString *const WCEditorSuggestCompletionsWhileTypingDelayKey;
 extern NSString *const WCEditorAutomaticallyIndentAfterNewlinesKey;
+extern NSString *const WCEditorAutomaticallyIndentAfterLabelsKey;
 extern NSString *const WCEditorWrapLinesToEditorWidthKey;
 typedef enum _WCEditorIndentUsing {
 	WCEditorIndentUsingSpaces = 0,

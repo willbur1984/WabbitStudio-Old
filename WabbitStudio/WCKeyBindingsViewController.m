@@ -86,7 +86,7 @@ NSString *const WCKeyBindingsUserCommandSetIdentifiersKey = @"WCKeyBindingsUserC
 }
 
 - (NSImage *)image {
-	return [NSImage imageNamed:@"keyboard_settings"];
+	return [NSImage imageNamed:@"KeyBindings"];
 }
 #pragma mark RSUserDefaultsProvider
 + (NSDictionary *)userDefaults {

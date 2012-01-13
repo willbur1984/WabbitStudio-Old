@@ -38,6 +38,7 @@
 - (void)_highlightMatchingTempLabel;
 - (void)_insertMatchingBraceWithString:(id)string;
 - (void)_handleAutoCompletionWithString:(id)string;
+- (BOOL)_handleAutoIndentAfterLabel;
 @end
 
 @implementation WCSourceTextView
@@ -220,6 +221,9 @@
 		default:
 			break;
 	}	
+	
+	if ([self _handleAutoIndentAfterLabel])
+		return;
 	
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorAutomaticallyIndentAfterNewlinesKey]) {
 		NSString *previousLineWhitespaceString;
@@ -948,6 +952,26 @@
 	else {
 		_completionTimer = [NSTimer scheduledTimerWithTimeInterval:completionDelay target:self selector:@selector(_completionTimerCallback:) userInfo:nil repeats:NO];
 	}
+}
+
+- (BOOL)_handleAutoIndentAfterLabel {
+	if (![[NSUserDefaults standardUserDefaults] boolForKey:WCEditorAutomaticallyIndentAfterLabelsKey])
+		return NO;
+	
+	NSRange lineRange = [[self string] lineRangeForRange:NSMakeRange([self selectedRange].location-1, 0)];
+	// is there an equate definition on our current line?
+	NSRange equateRange = [[WCSourceScanner equateRegularExpression] rangeOfFirstMatchInString:[self string] options:0 range:lineRange];
+	if (equateRange.location != NSNotFound)
+		return NO;
+	
+	// is there a label definition on our current line?
+	NSRange labelRange = [[WCSourceScanner labelRegularExpression] rangeOfFirstMatchInString:[self string] options:0 range:lineRange];
+	if (labelRange.location == NSNotFound)
+		return NO;
+	
+	[self insertTab:nil];
+	
+	return YES;
 }
 #pragma mark IBActions
 - (IBAction)_symbolMenuClicked:(id)sender {

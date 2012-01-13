@@ -25,6 +25,8 @@
 		0708965214A6CDEA0017BBE4 /* MneumonicCompletions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0708965114A6CDEA0017BBE4 /* MneumonicCompletions.plist */; };
 		0708965514A6CE900017BBE4 /* WCCompletionChoice.m in Sources */ = {isa = PBXBuildFile; fileRef = 0708965414A6CE900017BBE4 /* WCCompletionChoice.m */; };
 		0708965714A6F1360017BBE4 /* PreProcessorCompletions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0708965614A6F1360017BBE4 /* PreProcessorCompletions.plist */; };
+		071985DF14C010D800C8E91A /* WCGeneralViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 071985DD14C010D800C8E91A /* WCGeneralViewController.m */; };
+		071985E314C011A800C8E91A /* WCGeneralView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 071985E114C011A800C8E91A /* WCGeneralView.xib */; };
 		071ECCC314A4233C002409F8 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 071ECCC214A4233C002409F8 /* Cocoa.framework */; };
 		071ECCCD14A4233C002409F8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 071ECCCB14A4233C002409F8 /* InfoPlist.strings */; };
 		071ECCCF14A4233C002409F8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 071ECCCE14A4233C002409F8 /* main.m */; };
@@ -131,7 +133,7 @@
 		078F041C14AD78640080ADBC /* RSFindBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 078F041A14AD78640080ADBC /* RSFindBarView.xib */; };
 		0791BE5214AD7F530004AC16 /* RSFindBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0791BE5114AD7F530004AC16 /* RSFindBarView.m */; };
 		07A7A0FE14B8C83900507FC7 /* WCCompletionWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A7A0FD14B8C83900507FC7 /* WCCompletionWindow.m */; };
-		07A8AF8214BDC7EC008CB9FF /* keyboard_settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 07A8AF8014BDC7EC008CB9FF /* keyboard_settings.png */; };
+		07A8AF8214BDC7EC008CB9FF /* KeyBindings.png in Resources */ = {isa = PBXBuildFile; fileRef = 07A8AF8014BDC7EC008CB9FF /* KeyBindings.png */; };
 		07A8AF8314BDC7EC008CB9FF /* PBXKeyBindingsPrefsModule.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 07A8AF8114BDC7EC008CB9FF /* PBXKeyBindingsPrefsModule.tiff */; };
 		07A8AF8914BDC82A008CB9FF /* WCKeyBindingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A8AF8714BDC82A008CB9FF /* WCKeyBindingsViewController.m */; };
 		07A8AF8D14BDC93C008CB9FF /* WCKeyBindingsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07A8AF8B14BDC93C008CB9FF /* WCKeyBindingsView.xib */; };
@@ -233,6 +235,9 @@
 		0708965314A6CE900017BBE4 /* WCCompletionChoice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCCompletionChoice.h; sourceTree = "<group>"; };
 		0708965414A6CE900017BBE4 /* WCCompletionChoice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCCompletionChoice.m; sourceTree = "<group>"; };
 		0708965614A6F1360017BBE4 /* PreProcessorCompletions.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PreProcessorCompletions.plist; sourceTree = "<group>"; };
+		071985DC14C010D800C8E91A /* WCGeneralViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCGeneralViewController.h; sourceTree = "<group>"; };
+		071985DD14C010D800C8E91A /* WCGeneralViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCGeneralViewController.m; sourceTree = "<group>"; };
+		071985E214C011A800C8E91A /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCGeneralView.xib; sourceTree = "<group>"; };
 		071ECCBE14A4233C002409F8 /* WabbitStudio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WabbitStudio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		071ECCC214A4233C002409F8 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		071ECCC514A4233C002409F8 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -431,7 +436,7 @@
 		0791BE5314ADA3B80004AC16 /* BGHUDAppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BGHUDAppKit.framework; sourceTree = "<group>"; };
 		07A7A0FC14B8C83900507FC7 /* WCCompletionWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCCompletionWindow.h; sourceTree = "<group>"; };
 		07A7A0FD14B8C83900507FC7 /* WCCompletionWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCCompletionWindow.m; sourceTree = "<group>"; };
-		07A8AF8014BDC7EC008CB9FF /* keyboard_settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = keyboard_settings.png; sourceTree = "<group>"; };
+		07A8AF8014BDC7EC008CB9FF /* KeyBindings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = KeyBindings.png; sourceTree = "<group>"; };
 		07A8AF8114BDC7EC008CB9FF /* PBXKeyBindingsPrefsModule.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = PBXKeyBindingsPrefsModule.tiff; sourceTree = "<group>"; };
 		07A8AF8614BDC82A008CB9FF /* WCKeyBindingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCKeyBindingsViewController.h; sourceTree = "<group>"; };
 		07A8AF8714BDC82A008CB9FF /* WCKeyBindingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCKeyBindingsViewController.m; sourceTree = "<group>"; };
@@ -574,6 +579,7 @@
 				07862BC314BB6F850057EB89 /* WCSourceFileWindow.xib */,
 				07A8AF8B14BDC93C008CB9FF /* WCKeyBindingsView.xib */,
 				07A8AFC414BDF65C008CB9FF /* WCKeyBindingsEditCommandPairWindow.xib */,
+				071985E114C011A800C8E91A /* WCGeneralView.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -722,6 +728,15 @@
 			path = External;
 			sourceTree = "<group>";
 		};
+		071985DA14C010B900C8E91A /* General */ = {
+			isa = PBXGroup;
+			children = (
+				071985DC14C010D800C8E91A /* WCGeneralViewController.h */,
+				071985DD14C010D800C8E91A /* WCGeneralViewController.m */,
+			);
+			name = General;
+			sourceTree = "<group>";
+		};
 		071ECCB314A4233C002409F8 = {
 			isa = PBXGroup;
 			children = (
@@ -787,7 +802,7 @@
 		071ECCC914A4233C002409F8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				07A8AF8014BDC7EC008CB9FF /* keyboard_settings.png */,
+				07A8AF8014BDC7EC008CB9FF /* KeyBindings.png */,
 				07A8AF8114BDC7EC008CB9FF /* PBXKeyBindingsPrefsModule.tiff */,
 				07EB8E3814B64D9A00F8A8C6 /* Keyboard.tiff */,
 				07EB8E2914B644A600F8A8C6 /* ReallyAdvanced.png */,
@@ -896,6 +911,7 @@
 			children = (
 				072BBC4014AA66900044ECC2 /* WCPreferencesWindowController.h */,
 				072BBC4114AA66900044ECC2 /* WCPreferencesWindowController.m */,
+				071985DA14C010B900C8E91A /* General */,
 				0745BE2B14ABF81700F541DC /* Editor */,
 				0745BE2914ABF7F200F541DC /* Fonts & Colors */,
 				07A8AF8514BDC7F9008CB9FF /* Key Bindings */,
@@ -1288,7 +1304,7 @@
 				07BC6CB914B7E3DD007ECB3F /* WCJumpToLineWindow.xib in Resources */,
 				07713F1314B954FC00324F77 /* SelectEncodingsPanel.nib in Resources */,
 				07862BC514BB6F850057EB89 /* WCSourceFileWindow.xib in Resources */,
-				07A8AF8214BDC7EC008CB9FF /* keyboard_settings.png in Resources */,
+				07A8AF8214BDC7EC008CB9FF /* KeyBindings.png in Resources */,
 				07A8AF8314BDC7EC008CB9FF /* PBXKeyBindingsPrefsModule.tiff in Resources */,
 				07A8AF8D14BDC93C008CB9FF /* WCKeyBindingsView.xib in Resources */,
 				07A8AFC614BDF65C008CB9FF /* WCKeyBindingsEditCommandPairWindow.xib in Resources */,
@@ -1297,6 +1313,7 @@
 				07A8AFD114BDFCCE008CB9FF /* SRRemoveShortcutRollover.tif in Resources */,
 				07A8AFD214BDFCCE008CB9FF /* SRSnapback.tiff in Resources */,
 				07A8AFF014BE5ED8008CB9FF /* DefaultKeyBindings.plist in Resources */,
+				071985E314C011A800C8E91A /* WCGeneralView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1428,6 +1445,7 @@
 				07A8AFDF14BE2C21008CB9FF /* NSTreeController+RSExtensions.m in Sources */,
 				07A8AFE214BE2C2B008CB9FF /* NSTreeNode+RSExtensions.m in Sources */,
 				07A8AFE514BE2CE9008CB9FF /* WCKeyBindingsOutlineView.m in Sources */,
+				071985DF14C010D800C8E91A /* WCGeneralViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1449,6 +1467,14 @@
 			);
 			name = WCCompletionWindow.xib;
 			path = ..;
+			sourceTree = "<group>";
+		};
+		071985E114C011A800C8E91A /* WCGeneralView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				071985E214C011A800C8E91A /* en */,
+			);
+			name = WCGeneralView.xib;
 			sourceTree = "<group>";
 		};
 		071ECCCB14A4233C002409F8 /* InfoPlist.strings */ = {
