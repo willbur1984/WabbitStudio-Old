@@ -15,7 +15,11 @@ NSString *const WCKeyboardHomeAndEndKeysBehaviorKey = @"keyboardHomeAndEndKeysBe
 
 #pragma mark *** Subclass Overrides ***
 - (id)init {
-	return [super initWithNibName:@"WCKeyboardView" bundle:nil];
+	return [super initWithNibName:[self nibName] bundle:nil];
+}
+
+- (NSString *)nibName {
+	return @"WCKeyboardView";
 }
 #pragma mark RSPreferencesModule
 - (NSString *)identifier {

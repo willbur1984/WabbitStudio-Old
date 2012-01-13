@@ -51,6 +51,10 @@
 	[super dealloc];
 }
 
+- (NSString *)nibName {
+	return @"RSFindBarView";
+}
+
 - (void)loadView {
 	[super loadView];
 	
@@ -151,7 +155,7 @@
 }
 #pragma mark *** Public Methods ***
 - (id)initWithTextView:(NSTextView *)textView {
-	if (!(self = [super initWithNibName:@"RSFindBarView" bundle:nil]))
+	if (!(self = [super initWithNibName:[self nibName] bundle:nil]))
 		return nil;
 	
 	_textView = textView;

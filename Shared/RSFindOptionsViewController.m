@@ -15,8 +15,12 @@
 	[super dealloc];
 }
 
+- (NSString *)nibName {
+	return @"RSFindOptionsView";
+}
+
 - (id)init {
-	if (!(self = [super initWithNibName:@"RSFindOptionsView" bundle:nil]))
+	if (!(self = [super initWithNibName:[self nibName] bundle:nil]))
 		return nil;
 	
 	_popover = [[NSPopover alloc] init];

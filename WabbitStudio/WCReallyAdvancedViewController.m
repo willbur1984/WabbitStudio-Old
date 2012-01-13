@@ -16,7 +16,11 @@ NSString *const WCReallyAdvancedJumpInFileSearchUsingCurrentEditorSelectionKey =
 @implementation WCReallyAdvancedViewController
 #pragma mark *** Subclass Overrides ***
 - (id)init {
-	return [super initWithNibName:@"WCReallyAdvancedView" bundle:nil];
+	return [super initWithNibName:[self nibName] bundle:nil];
+}
+
+- (NSString *)nibName {
+	return @"WCReallyAdvancedView";
 }
 #pragma mark RSPreferencesModule
 - (NSString *)identifier {

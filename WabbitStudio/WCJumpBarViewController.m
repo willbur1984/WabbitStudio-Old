@@ -51,6 +51,10 @@
 	[super dealloc];
 }
 
+- (NSString *)nibName {
+	return @"WCJumpBarView";
+}
+
 - (void)loadView {
 	[super loadView];
 	
@@ -122,7 +126,7 @@
 
 #pragma mark *** Public Methods ***
 - (id)initWithTextView:(NSTextView *)textView jumpBarDataSource:(id <WCJumpBarDataSource>)jumpBarDataSource; {
-	if (!(self = [super initWithNibName:@"WCJumpBarView" bundle:nil]))
+	if (!(self = [super initWithNibName:[self nibName] bundle:nil]))
 		return nil;
 	
 	_textView = textView;
