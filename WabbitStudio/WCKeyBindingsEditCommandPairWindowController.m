@@ -32,6 +32,7 @@
 	[super windowDidLoad];
 	
 	[[self recorderControl] setAllowsKeyOnly:NO escapeKeysRecord:YES];
+	[[self recorderControl] setStyle:SRGreyStyle];
 }
 
 #pragma mark SRRecorderDelegate

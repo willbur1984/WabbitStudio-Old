@@ -185,7 +185,9 @@ static const NSInteger kNumberOfScopeBarGroups = 1;
 - (void)handleReturnPressedForOutlineView:(RSOutlineView *)outlineView {
 	[[WCKeyBindingsEditCommandPairWindowController sharedWindowController] showEditCommandPairSheetForCommandPair:[[[self outlineView] itemAtRow:[[self outlineView] selectedRow]] representedObject]];
 }
+#pragma mark *** Public Methods ***
 
+#pragma mark IBActions
 - (IBAction)search:(id)sender; {
 	if ([[self searchString] length]) {
 		[[self treeController] bind:NSContentArrayBinding toObject:[self searchArrayController] withKeyPath:@"arrangedObjects" options:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],NSRaisesForNotApplicableKeysBindingOption, nil]];
@@ -217,7 +219,7 @@ static const NSInteger kNumberOfScopeBarGroups = 1;
 	
 	[self performSelector:@selector(_editSelectedCommandSetsTableViewRow) withObject:nil afterDelay:0.0];
 }
-
+#pragma mark Properties
 @synthesize scopeBar=_scopeBar;
 @synthesize searchField=_searchField;
 @synthesize arrayController=_arrayController;
@@ -229,11 +231,11 @@ static const NSInteger kNumberOfScopeBarGroups = 1;
 @synthesize tableView=_tableView;
 @synthesize defaultShortcutString=_defaultShortcutString;
 @synthesize previousSelectionIndexPaths=_previousSelectionIndexPaths;
-
+#pragma mark *** Private Methods ***
 - (void)_editSelectedCommandSetsTableViewRow; {
 	[[self tableView] editColumn:0 row:[[self tableView] selectedRow] withEvent:nil select:YES];
 }
-
+#pragma mark IBActions
 - (IBAction)_outlineViewDoubleClick:(id)sender; {
 	NSInteger clickedRow = [[self outlineView] clickedRow];
 	if (clickedRow == -1) {
@@ -261,7 +263,7 @@ static const NSInteger kNumberOfScopeBarGroups = 1;
 	
 	[self performSelector:@selector(_editSelectedCommandSetsTableViewRow) withObject:nil afterDelay:0.0];
 }
-
+#pragma mark Notifications
 - (void)_tableViewSelectionIsChanging:(NSNotification *)note {
 	[self setPreviousSelectionIndexPaths:[[self treeController] selectionIndexPaths]];
 }
