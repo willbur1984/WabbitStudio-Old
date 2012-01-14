@@ -16,5 +16,15 @@ NSString *const WCProjectFileUTI = @"org.revsoft.wabbitstudio.project";
 NSString *const WCProjectDataFileName = @"project.plist";
 
 @implementation WCDocumentController
-
+@dynamic recentProjectURLs;
+- (NSArray *)recentProjectURLs {
+	NSMutableArray *retval = [NSMutableArray arrayWithCapacity:0];
+	
+	for (NSURL *documentURL in [self recentDocumentURLs]) {
+		if ([[self typeForContentsOfURL:documentURL error:NULL] isEqualToString:WCProjectFileUTI])
+			[retval addObject:documentURL];
+	}
+	
+	return [[retval copy] autorelease];
+}
 @end

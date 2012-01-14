@@ -8,10 +8,10 @@
 
 #import <AppKit/NSDocument.h>
 
-@class RSTreeNode;
+@class WCProjectContainer;
 
 @interface WCProjectDocument : NSDocument {
-	RSTreeNode *_projectNode;
+	WCProjectContainer *_projectContainer;
 }
-@property (readonly,retain) RSTreeNode *projectNode;
+@property (readonly,retain) WCProjectContainer *projectContainer;
 @end

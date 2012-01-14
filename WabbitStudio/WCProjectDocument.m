@@ -9,18 +9,18 @@
 #import "WCProjectDocument.h"
 #import "WCProjectWindowController.h"
 #import "WCDocumentController.h"
-#import "RSTreeNode.h"
-#import "WCFile.h"
+#import "WCProjectContainer.h"
+#import "WCProject.h"
 #import "RSDefines.h"
 
 @interface WCProjectDocument ()
-@property (readwrite,retain) RSTreeNode *projectNode;
+@property (readwrite,retain) WCProjectContainer *projectContainer;
 @end
 
 @implementation WCProjectDocument
 
 - (void)dealloc {
-	[_projectNode release];
+	[_projectContainer release];
 	[super dealloc];
 }
 
@@ -51,7 +51,7 @@
 }
 
 - (NSFileWrapper *)fileWrapperOfType:(NSString *)typeName error:(NSError **)outError {
-	NSDictionary *projectPlist = [_projectNode plistRepresentation];
+	NSDictionary *projectPlist = [[self projectContainer] plistRepresentation];
 	
 	[self unblockUserInteraction];
 	
@@ -73,24 +73,25 @@
 	if (!projectDataPlist || format != NSPropertyListXMLFormat_v1_0)
 		return NO;
 	
-	RSTreeNode *projectNode = [RSTreeNode treeNodeWithRepresentedObject:[WCFile fileWithFileURL:[self fileURL]]];
+	WCProjectContainer *projectContainer = [WCProjectContainer projectContainerWithProject:[WCProject projectWithDocument:self]];
+	
 	for (NSDictionary *childPlist in [projectDataPlist objectForKey:RSTreeNodeChildNodesKey]) {
 		RSTreeNode *childNode = [[NSClassFromString([childPlist objectForKey:RSObjectClassNameKey]) alloc] initWithPlistRepresentation:childPlist];
 		
 		if (childNode)
-			[[projectNode mutableChildNodes] addObject:childNode];
+			[[projectContainer mutableChildNodes] addObject:childNode];
 		
 		[childNode release];
 	}
 	
-	if (!projectNode)
+	if (!projectContainer)
 		return NO;
 	
-	[self setProjectNode:projectNode];
+	[self setProjectContainer:projectContainer];
 	
 	return YES;
 }
 
-@synthesize projectNode=_projectNode;
+@synthesize projectContainer=_projectContainer;
 
 @end

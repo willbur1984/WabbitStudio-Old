@@ -16,5 +16,5 @@ extern NSString *const WCProjectFileUTI;
 extern NSString *const WCProjectDataFileName;
 
 @interface WCDocumentController : NSDocumentController
-
+@property (readonly,nonatomic) NSArray *recentProjectURLs;
 @end

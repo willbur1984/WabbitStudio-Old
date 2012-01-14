@@ -127,6 +127,10 @@
 		077884EC14C0CE6A00605F5D /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 077884EB14C0CE6A00605F5D /* Sparkle.framework */; };
 		077884EF14C0CE9F00605F5D /* Sparkle.framework in Copy Private Frameworks */ = {isa = PBXBuildFile; fileRef = 077884EB14C0CE6A00605F5D /* Sparkle.framework */; };
 		077884F214C1019E00605F5D /* RSObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 077884F114C1019E00605F5D /* RSObject.m */; };
+		077884F514C10C9C00605F5D /* WCGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 077884F414C10C9C00605F5D /* WCGroup.m */; };
+		077884F714C10CB400605F5D /* Group.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 077884F614C10CB400605F5D /* Group.tiff */; };
+		077884FA14C10F0200605F5D /* WCProject.m in Sources */ = {isa = PBXBuildFile; fileRef = 077884F914C10F0100605F5D /* WCProject.m */; };
+		077884FD14C116F600605F5D /* WCProjectContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 077884FC14C116F600605F5D /* WCProjectContainer.m */; };
 		07862BA614BA33040057EB89 /* WCDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07862BA514BA33040057EB89 /* WCDocumentController.m */; };
 		07862BA914BA46720057EB89 /* WCSplitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07862BA814BA46720057EB89 /* WCSplitView.m */; };
 		07862BAD14BA78010057EB89 /* KBResponderNotifyingWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 07862BAC14BA78010057EB89 /* KBResponderNotifyingWindow.m */; };
@@ -432,6 +436,13 @@
 		077884EB14C0CE6A00605F5D /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		077884F014C1019E00605F5D /* RSObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSObject.h; sourceTree = "<group>"; };
 		077884F114C1019E00605F5D /* RSObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSObject.m; sourceTree = "<group>"; };
+		077884F314C10C9C00605F5D /* WCGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCGroup.h; sourceTree = "<group>"; };
+		077884F414C10C9C00605F5D /* WCGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCGroup.m; sourceTree = "<group>"; };
+		077884F614C10CB400605F5D /* Group.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Group.tiff; sourceTree = "<group>"; };
+		077884F814C10F0100605F5D /* WCProject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCProject.h; sourceTree = "<group>"; };
+		077884F914C10F0100605F5D /* WCProject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCProject.m; sourceTree = "<group>"; };
+		077884FB14C116F600605F5D /* WCProjectContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCProjectContainer.h; sourceTree = "<group>"; };
+		077884FC14C116F600605F5D /* WCProjectContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCProjectContainer.m; sourceTree = "<group>"; };
 		07862BA414BA33040057EB89 /* WCDocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCDocumentController.h; sourceTree = "<group>"; };
 		07862BA514BA33040057EB89 /* WCDocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCDocumentController.m; sourceTree = "<group>"; };
 		07862BA714BA46720057EB89 /* WCSplitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSplitView.h; sourceTree = "<group>"; };
@@ -794,6 +805,12 @@
 				0719860514C0BDC900C8E91A /* WCProjectWindowController.m */,
 				0719860A14C0C10700C8E91A /* WCFile.h */,
 				0719860B14C0C10700C8E91A /* WCFile.m */,
+				077884F314C10C9C00605F5D /* WCGroup.h */,
+				077884F414C10C9C00605F5D /* WCGroup.m */,
+				077884F814C10F0100605F5D /* WCProject.h */,
+				077884F914C10F0100605F5D /* WCProject.m */,
+				077884FB14C116F600605F5D /* WCProjectContainer.h */,
+				077884FC14C116F600605F5D /* WCProjectContainer.m */,
 				0719860D14C0C4B200C8E91A /* WCNewProjectWindowController.h */,
 				0719860E14C0C4B200C8E91A /* WCNewProjectWindowController.m */,
 			);
@@ -866,6 +883,7 @@
 		071ECCC914A4233C002409F8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				077884F614C10CB400605F5D /* Group.tiff */,
 				071985FD14C0BC9400C8E91A /* project.icns */,
 				07A8AF8014BDC7EC008CB9FF /* KeyBindings.png */,
 				07A8AF8114BDC7EC008CB9FF /* PBXKeyBindingsPrefsModule.tiff */,
@@ -1388,6 +1406,7 @@
 				071985FE14C0BC9400C8E91A /* project.icns in Resources */,
 				0719860914C0BE3500C8E91A /* WCProjectWindow.xib in Resources */,
 				0719861214C0C53600C8E91A /* WCNewProjectWindow.xib in Resources */,
+				077884F714C10CB400605F5D /* Group.tiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1528,6 +1547,9 @@
 				0719860C14C0C10700C8E91A /* WCFile.m in Sources */,
 				0719860F14C0C4B200C8E91A /* WCNewProjectWindowController.m in Sources */,
 				077884F214C1019E00605F5D /* RSObject.m in Sources */,
+				077884F514C10C9C00605F5D /* WCGroup.m in Sources */,
+				077884FA14C10F0200605F5D /* WCProject.m in Sources */,
+				077884FD14C116F600605F5D /* WCProjectContainer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

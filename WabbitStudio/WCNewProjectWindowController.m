@@ -9,7 +9,7 @@
 #import "WCNewProjectWindowController.h"
 #import "RSDefines.h"
 #import "WCDocumentController.h"
-#import "WCFile.h"
+#import "WCGroup.h"
 #import "RSTreeNode.h"
 #import "RSDefines.h"
 #import "NSURL+RSExtensions.h"
@@ -43,21 +43,37 @@
 	CFRelease(projectExtension);
 	
 	RSTreeNode *projectNode = [RSTreeNode treeNodeWithRepresentedObject:[WCFile fileWithFileURL:projectURL]];
-	NSDirectoryEnumerator *directoryEnumerator = [[NSFileManager defaultManager] enumeratorAtURL:directoryURL includingPropertiesForKeys:[NSArray arrayWithObjects:NSURLIsDirectoryKey,NSURLIsPackageKey, nil] options:NSDirectoryEnumerationSkipsHiddenFiles|NSDirectoryEnumerationSkipsPackageDescendants errorHandler:^BOOL(NSURL *url, NSError *error) {
+	
+	NSDirectoryEnumerator *directoryEnumerator = [[NSFileManager defaultManager] enumeratorAtURL:directoryURL includingPropertiesForKeys:[NSArray arrayWithObjects:NSURLIsDirectoryKey,NSURLIsPackageKey,NSURLParentDirectoryURLKey, nil] options:NSDirectoryEnumerationSkipsHiddenFiles|NSDirectoryEnumerationSkipsPackageDescendants errorHandler:^BOOL(NSURL *url, NSError *error) {
+		
 		return NO;
 	}];
 	
-	NSMutableArray *directoryNodes = [NSMutableArray arrayWithObjects:projectNode, nil];
+	NSMutableDictionary *directoryPathsToDirectoryNodes = [NSMutableDictionary dictionaryWithCapacity:0];
 	for (NSURL *fileURL in directoryEnumerator) {
 		if ([fileURL isDirectory]) {
-			RSTreeNode *childNode = [RSTreeNode treeNodeWithRepresentedObject:[WCFile fileWithFileURL:fileURL]];
-			[[[directoryNodes lastObject] mutableChildNodes] addObject:childNode];
-			[directoryNodes addObject:childNode];
+			RSTreeNode *directoryNode = [RSTreeNode treeNodeWithRepresentedObject:[WCGroup fileWithFileURL:fileURL]];
+			
+			[directoryPathsToDirectoryNodes setObject:directoryNode forKey:[fileURL path]];
+			
+			RSTreeNode *parentDirectoryNode = [directoryPathsToDirectoryNodes objectForKey:[[fileURL parentDirectoryURL] path]];
+			
+			if (parentDirectoryNode)
+				[[parentDirectoryNode mutableChildNodes] addObject:directoryNode];
+			else
+				[[projectNode mutableChildNodes] addObject:directoryNode];
 		}
 		else if ([fileURL isPackage])
 			continue;
-		else
-			[[[directoryNodes lastObject] mutableChildNodes] addObject:[RSTreeNode treeNodeWithRepresentedObject:[WCFile fileWithFileURL:fileURL]]];
+		else {
+			RSTreeNode *childNode = [RSTreeNode treeNodeWithRepresentedObject:[WCFile fileWithFileURL:fileURL]];
+			RSTreeNode *parentDirectoryNode = [directoryPathsToDirectoryNodes objectForKey:[[fileURL parentDirectoryURL] path]];
+			
+			if (parentDirectoryNode)
+				[[parentDirectoryNode mutableChildNodes] addObject:childNode];
+			else
+				[[projectNode mutableChildNodes] addObject:childNode];
+		}
 	}
 	
 	NSFileWrapper *projectWrapper = [[[NSFileWrapper alloc] initDirectoryWithFileWrappers:nil] autorelease];

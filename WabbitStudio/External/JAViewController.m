@@ -15,6 +15,11 @@
     return [[[self alloc] initWithNibName:NSStringFromClass([self class]) bundle:nil] autorelease];
 }
 
+- (void)dealloc {
+	self.view.viewController = nil;
+	[super dealloc];
+}
+
 - (void)loadView {
     [super loadView];
         
@@ -68,7 +73,7 @@
 }
 
 - (void)viewDidMoveToWindow {
-
+	
 }
 
 - (void)viewWillBeRemovedFromWindow {
@@ -76,7 +81,7 @@
 }
 
 - (void)viewWasRemovedFromWindow {
-    
+
 }
 
 @end

@@ -16,6 +16,7 @@
 @property (readonly,nonatomic) RSFileReference *fileReference;
 @property (readonly,nonatomic) NSString *fileName;
 @property (readonly,nonatomic) NSImage *fileIcon;
+@property (readonly,nonatomic) NSURL *fileURL;
 
 + (id)fileWithFileURL:(NSURL *)fileURL;
 - (id)initWithFileURL:(NSURL *)fileURL;

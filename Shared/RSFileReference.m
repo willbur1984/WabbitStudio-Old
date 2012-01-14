@@ -65,10 +65,6 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 	_UUID = [[NSString UUIDString] retain];
 	_fileReferenceURL = [[fileURL fileReferenceURL] retain];
 	
-#ifdef DEBUG
-    NSAssert(_fileReferenceURL, @"fileReferenceURL cannot be nil!");
-#endif
-	
 	return self;
 }
 

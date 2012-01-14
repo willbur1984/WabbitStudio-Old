@@ -39,6 +39,10 @@
 			[self newProject:nil];
 			break;
 		case WCGeneralOnStartupOpenMostRecentProject:
+			if ([[[WCDocumentController sharedDocumentController] recentProjectURLs] count])
+				[[WCDocumentController sharedDocumentController] openDocumentWithContentsOfURL:[[[WCDocumentController sharedDocumentController] recentProjectURLs] objectAtIndex:0] display:YES completionHandler:^(NSDocument *document, BOOL documentWasAlreadyOpen, NSError *error) {
+					
+				}];
 			break;
 		case WCGeneralOnStartupOpenUntitledDocument:
 			[[WCDocumentController sharedDocumentController] newDocument:nil];

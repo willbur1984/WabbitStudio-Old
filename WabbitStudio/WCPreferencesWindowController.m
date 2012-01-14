@@ -37,10 +37,10 @@
 
 - (void)_applicationWillTerminate:(NSNotification *)note {
 	[[WCFontAndColorThemeManager sharedManager] saveCurrentThemes:NULL];
-	[[WCKeyBindingCommandSetManager sharedManager] saveCurrentCommandSets:NULL];
+	//[[WCKeyBindingCommandSetManager sharedManager] saveCurrentCommandSets:NULL];
 }
 - (void)_windowWillClose:(NSNotification *)note {
 	[[WCFontAndColorThemeManager sharedManager] saveCurrentThemes:NULL];
-	[[WCKeyBindingCommandSetManager sharedManager] saveCurrentCommandSets:NULL];
+	//[[WCKeyBindingCommandSetManager sharedManager] saveCurrentCommandSets:NULL];
 }
 @end
