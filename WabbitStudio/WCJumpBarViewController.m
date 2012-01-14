@@ -18,7 +18,6 @@
 #import "WCReallyAdvancedViewController.h"
 #import "NSObject+WCExtensions.h"
 #import "NSImage+RSExtensions.h"
-#import "NSView+MCExtensions.h"
 #import "WCDocumentController.h"
 #import "NSURL+RSExtensions.h"
 #import "RSDefines.h"

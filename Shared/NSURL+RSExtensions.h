@@ -11,4 +11,7 @@
 @interface NSURL (RSExtensions)
 - (NSImage *)fileIcon;
 - (NSString *)fileName;
+- (BOOL)isDirectory;
+- (BOOL)isPackage;
+- (NSURL *)parentDirectoryURL;
 @end

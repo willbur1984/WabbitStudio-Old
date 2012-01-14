@@ -6,7 +6,7 @@
 //  Copyright (c) 2011 Revolution Software. All rights reserved.
 //
 
-#import <AppKit/NSViewController.h>
+#import "JAViewController.h"
 #import "RSPreferencesModule.h"
 #import "RSUserDefaultsProvider.h"
 #import "RSTableViewDelegate.h"
@@ -14,7 +14,7 @@
 extern NSString *const WCFontsAndColorsCurrentThemeIdentifierKey;
 extern NSString *const WCFontsAndColorsUserThemeIdentifiersKey;
 
-@interface WCFontsAndColorsViewController : NSViewController <RSPreferencesModule,RSUserDefaultsProvider,RSTableViewDelegate,NSWindowDelegate,NSMenuDelegate> {
+@interface WCFontsAndColorsViewController : JAViewController <RSPreferencesModule,RSUserDefaultsProvider,RSTableViewDelegate,NSWindowDelegate,NSMenuDelegate> {
 	id <NSWindowDelegate> _oldWindowDelegate;
 	id _fontPanelWillCloseObservingToken;
 }

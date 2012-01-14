@@ -47,14 +47,12 @@ NSString *const WCFontsAndColorsUserThemeIdentifiersKey = @"WCFontsAndColorsUser
 }
 
 - (IBAction)changeFont:(id)sender {
-	if (_fontPanelWillCloseObservingToken) {
-		WCFontAndColorThemePair *selectedPair = [[[self pairsArrayController] selectedObjects] lastObject];
-		NSFont *newFont = [sender convertFont:[selectedPair font]];
-		
-		[selectedPair setFont:newFont];
-		
-		[[self pairsTableView] noteHeightOfRowsWithIndexesChanged:[[self pairsArrayController] selectionIndexes]];
-	}
+	WCFontAndColorThemePair *selectedPair = [[[self pairsArrayController] selectedObjects] lastObject];
+	NSFont *newFont = [sender convertFont:[selectedPair font]];
+	
+	[selectedPair setFont:newFont];
+	
+	[[self pairsTableView] noteHeightOfRowsWithIndexesChanged:[[self pairsArrayController] selectionIndexes]];
 }
 #pragma mark NSControlTextEditingDelegate
 - (BOOL)control:(NSControl *)control textShouldEndEditing:(NSText *)fieldEditor {
@@ -121,21 +119,23 @@ NSString *const WCFontsAndColorsUserThemeIdentifiersKey = @"WCFontsAndColorsUser
 #pragma mark *** Public Methods ***
 #pragma mark IBActions
 - (IBAction)chooseFont:(id)sender; {
-	_oldWindowDelegate = [[[self view] window] delegate];
+	//_oldWindowDelegate = [[[self view] window] delegate];
 	
-	[[[self view] window] setDelegate:self];
+	//[[[self view] window] setDelegate:self];
 	
 	WCFontAndColorThemePair *selectedPair = [[[self pairsArrayController] selectedObjects] lastObject];
 	
 	[[NSFontPanel sharedFontPanel] setPanelFont:[selectedPair font] isMultiple:NO];
 	[[NSFontPanel sharedFontPanel] makeKeyAndOrderFront:nil];
 	
+	/*
 	_fontPanelWillCloseObservingToken = [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowWillCloseNotification object:[NSFontPanel sharedFontPanel] queue:nil usingBlock:^(NSNotification *note) {
 		[[[self view] window] setDelegate:_oldWindowDelegate];
 		
 		[[NSNotificationCenter defaultCenter] removeObserver:_fontPanelWillCloseObservingToken];
 		_fontPanelWillCloseObservingToken = nil;
 	}];
+	 */
 }
 - (IBAction)deleteTheme:(id)sender; {
 	if ([[[self themesArrayController] arrangedObjects] count] == 1) {

@@ -15,6 +15,7 @@
 #import "WCKeyBindingsViewController.h"
 #import "WCGeneralViewController.h"
 #import "WCDocumentController.h"
+#import "WCNewProjectWindowController.h"
 
 @implementation WCApplicationDelegate
 - (void)applicationWillFinishLaunching:(NSNotification *)notification {
@@ -35,6 +36,7 @@
 	WCGeneralOnStartup startupAction = [[[NSUserDefaults standardUserDefaults] objectForKey:WCGeneralOnStartupKey] unsignedIntValue];
 	switch (startupAction) {
 		case WCGeneralOnStartupShowNewProjectWindow:
+			[self newProject:nil];
 			break;
 		case WCGeneralOnStartupOpenMostRecentProject:
 			break;
@@ -49,5 +51,8 @@
 
 - (IBAction)preferences:(id)sender; {
 	[[WCPreferencesWindowController sharedWindowController] showWindow:nil];
+}
+- (IBAction)newProject:(id)sender; {
+	[[NSApplication sharedApplication] runModalForWindow:[[WCNewProjectWindowController sharedWindowController] window]];
 }
 @end

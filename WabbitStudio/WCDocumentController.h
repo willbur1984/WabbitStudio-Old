@@ -11,6 +11,9 @@
 extern NSString *const WCAssemblyFileUTI;
 extern NSString *const WCIncludeFileUTI;
 extern NSString *const WCActiveServerIncludeFileUTI;
+extern NSString *const WCProjectFileUTI;
+
+extern NSString *const WCProjectDataFileName;
 
 @interface WCDocumentController : NSDocumentController
 

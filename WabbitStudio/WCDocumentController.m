@@ -11,6 +11,9 @@
 NSString *const WCAssemblyFileUTI = @"org.revsoft.wabbitcode.assembly";
 NSString *const WCIncludeFileUTI = @"org.revsoft.wabbitcode.include";
 NSString *const WCActiveServerIncludeFileUTI = @"com.panic.coda.active-server-include-file";
+NSString *const WCProjectFileUTI = @"org.revsoft.wabbitstudio.project";
+
+NSString *const WCProjectDataFileName = @"project.plist";
 
 @implementation WCDocumentController
 

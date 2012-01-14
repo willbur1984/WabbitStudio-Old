@@ -11,5 +11,6 @@
 @protocol RSPlistArchiving <NSObject>
 @required
 - (NSDictionary *)plistRepresentation;
+@optional
 - (id)initWithPlistRepresentation:(NSDictionary *)plistRepresentation;
 @end

@@ -87,12 +87,12 @@
 }
 
 - (IBAction)jump:(id)sender; {
-	[[self window] close];
 	[[NSApplication sharedApplication] stopModalWithCode:NSOKButton];
+	[[self window] orderOut:nil];
 }
 - (IBAction)cancel:(id)sender; {
-	[[self window] close];
 	[[NSApplication sharedApplication] stopModalWithCode:NSCancelButton];
+	[[self window] orderOut:nil];
 }
 
 @synthesize jumpMode=_jumpMode;

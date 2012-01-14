@@ -13,17 +13,51 @@
 - (NSImage *)fileIcon; {
 	NSError *outError;
 	NSImage *retval = nil;
-	if (![self getResourceValue:&retval forKey:NSURLEffectiveIconKey error:&outError])
-		RSLogObject(outError);
-	
+	if (![self getResourceValue:&retval forKey:NSURLEffectiveIconKey error:&outError]) {
+#ifdef DEBUG
+		NSLogObject(outError);
+#endif
+	}
 	return retval;
 }
 - (NSString *)fileName {
 	NSError *outError;
 	NSString *retval = nil;
-	if (![self getResourceValue:&retval forKey:NSURLNameKey error:&outError])
-		RSLogObject(outError);
-	
+	if (![self getResourceValue:&retval forKey:NSURLNameKey error:&outError]) {
+#ifdef DEBUG
+		NSLogObject(outError);
+#endif
+	}
+	return retval;
+}
+- (BOOL)isDirectory; {
+	NSError *outError;
+	NSNumber *retval = nil;
+	if (![self getResourceValue:&retval forKey:NSURLIsDirectoryKey error:&outError]) {
+#ifdef DEBUG
+		NSLogObject(outError);
+#endif
+	}
+	return [retval boolValue];
+}
+- (BOOL)isPackage; {
+	NSError *outError;
+	NSNumber *retval = nil;
+	if (![self getResourceValue:&retval forKey:NSURLIsPackageKey error:&outError]) {
+#ifdef DEBUG
+		NSLogObject(outError);
+#endif
+	}
+	return [retval boolValue];
+}
+- (NSURL *)parentDirectoryURL; {
+	NSError *outError;
+	NSURL *retval = nil;
+	if (![self getResourceValue:&retval forKey:NSURLParentDirectoryURLKey error:&outError]) {
+#ifdef DEBUG
+		NSLogObject(outError);
+#endif
+	}
 	return retval;
 }
 @end

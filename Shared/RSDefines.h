@@ -30,6 +30,7 @@
 #define LOCALIZED_STRING_CHOOSE_WITH_ELLIPSIS NSLocalizedString(@"Choose\u2026",@"Choose with ellipsis")
 #define LOCALIZED_STRING_CLOSE NSLocalizedString(@"Close",@"Close")
 #define LOCALIZED_STRING_LOAD NSLocalizedString(@"Load",@"Load")
+#define LOCALIZED_STRING_CREATE NSLocalizedString(@"Create",@"Create")
 
 #define NSLogObject(objectToLog) NSLog(@"%@",(objectToLog))
 #define NSLogRange(rangeToLog) NSLog(@"%@",NSStringFromRange(rangeToLog))

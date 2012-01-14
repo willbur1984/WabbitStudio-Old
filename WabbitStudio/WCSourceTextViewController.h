@@ -6,12 +6,12 @@
 //  Copyright (c) 2011 Revolution Software. All rights reserved.
 //
 
-#import <AppKit/NSViewController.h>
+#import "JAViewController.h"
 #import "WCSourceTextViewDelegate.h"
 
 @class WCSourceTextView,WCSourceTextStorage,WCSourceHighlighter,WCJumpBarViewController,WCSourceFileDocument,WCStandardSourceTextViewController;
 
-@interface WCSourceTextViewController : NSViewController <WCSourceTextViewDelegate> {
+@interface WCSourceTextViewController : JAViewController <WCSourceTextViewDelegate> {
 	__weak WCStandardSourceTextViewController *_standardSourceTextViewController;
 	__weak WCSourceFileDocument *_sourceFileDocument;
 	NSTimer *_scrollingHighlightTimer;

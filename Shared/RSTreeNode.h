@@ -6,12 +6,11 @@
 //  Copyright (c) 2012 Revolution Software. All rights reserved.
 //
 
-#import <Foundation/NSObject.h>
-#import "RSPlistArchiving.h"
+#import "RSObject.h"
 
-extern NSString *const RSTreeNodeClassNameKey;
+extern NSString *const RSTreeNodeChildNodesKey;
 
-@interface RSTreeNode : NSObject <RSPlistArchiving,NSCopying,NSMutableCopying> {
+@interface RSTreeNode : RSObject <RSPlistArchiving,NSCopying,NSMutableCopying> {
 	__weak id _parentNode;
 	NSMutableArray *_childNodes;
 	id _representedObject;

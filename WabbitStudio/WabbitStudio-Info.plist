@@ -50,6 +50,7 @@
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>inc</string>
+				<string>INC</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string>include</string>
@@ -63,6 +64,26 @@
 			</array>
 			<key>NSDocumentClass</key>
 			<string>WCSourceFileDocument</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>wstudioproj</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>project</string>
+			<key>CFBundleTypeName</key>
+			<string>WabbitStudio Project File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.revsoft.wabbitstudio.project</string>
+			</array>
+			<key>LSTypeIsPackage</key>
+			<true/>
+			<key>NSDocumentClass</key>
+			<string>WCProjectDocument</string>
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
@@ -91,6 +112,32 @@
 	<string>WCMainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>com.apple.package</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>WabbitStudio Project File</string>
+			<key>UTTypeIconFile</key>
+			<string>project</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.revsoft.wabbitstudio.project</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>wstudioproj</string>
+				</array>
+			</dict>
+			<key>public.filename-extension</key>
+			<array>
+				<string>wstudioproj</string>
+			</array>
+		</dict>
+	</array>
 	<key>UTImportedTypeDeclarations</key>
 	<array>
 		<dict>
@@ -114,6 +161,13 @@
 					<string>ASM</string>
 				</array>
 			</dict>
+			<key>public.filename-extension</key>
+			<array>
+				<string>z80</string>
+				<string>Z80</string>
+				<string>asm</string>
+				<string>ASM</string>
+			</array>
 		</dict>
 		<dict>
 			<key>UTTypeConformsTo</key>
@@ -134,6 +188,11 @@
 					<string>INC</string>
 				</array>
 			</dict>
+			<key>public.filename-extension</key>
+			<array>
+				<string>inc</string>
+				<string>INC</string>
+			</array>
 		</dict>
 		<dict>
 			<key>UTTypeConformsTo</key>
@@ -142,6 +201,8 @@
 			</array>
 			<key>UTTypeDescription</key>
 			<string>Active Server Include file</string>
+			<key>UTTypeIconFile</key>
+			<string>include</string>
 			<key>UTTypeIdentifier</key>
 			<string>com.panic.coda.active-server-include-file</string>
 			<key>UTTypeTagSpecification</key>
@@ -149,8 +210,14 @@
 				<key>public.filename-extension</key>
 				<array>
 					<string>inc</string>
+					<string>INC</string>
 				</array>
 			</dict>
+			<key>public.filename-extension</key>
+			<array>
+				<string>inc</string>
+				<string>INC</string>
+			</array>
 		</dict>
 	</array>
 </dict>

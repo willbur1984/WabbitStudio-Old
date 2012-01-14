@@ -20,7 +20,6 @@
 #import "WCEditorViewController.h"
 #import "WCJumpBarViewController.h"
 #import "WCSourceFileDocument.h"
-#import "NSView+MCExtensions.h"
 #import "WCStandardSourceTextViewController.h"
 
 @interface WCSourceTextViewController ()
@@ -35,7 +34,6 @@
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[[self view] setViewController:nil];
 	[_scrollingHighlightTimer invalidate];
 	_scrollingHighlightTimer = nil;
 	_standardSourceTextViewController = nil;
@@ -50,8 +48,6 @@
 
 - (void)loadView {
 	[super loadView];
-	
-	[[self view] setViewController:self];
 	
 	NSRect scrollViewFrame = [[[self textView] enclosingScrollView] frame];
 	NSRect jumpBarFrame = [[[self jumpBarViewController] view] frame];

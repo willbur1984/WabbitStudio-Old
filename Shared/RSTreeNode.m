@@ -7,10 +7,11 @@
 //
 
 #import "RSTreeNode.h"
+#import "RSDefines.h"
 
-NSString *const RSTreeNodeClassNameKey = @"className";
+NSString *const RSTreeNodeChildNodesKey = @"childNodes";
 
-static NSString *const RSTreeNodeChildNodesKey = @"childNodes";
+static NSString *const RSTreeNodeRepresentedObjectKey = @"representedObject";
 
 @interface RSTreeNode ()
 @property (readwrite,assign,nonatomic) id parentNode;
@@ -24,6 +25,11 @@ static NSString *const RSTreeNodeChildNodesKey = @"childNodes";
 	[_childNodes release];
 	[super dealloc];
 }
+
+- (NSString *)description {
+	return [NSString stringWithFormat:@"parentNode: %@ representedObject: %@ childNodes: %@",[self parentNode],[self representedObject],[self childNodes]];
+}
+
 #pragma mark NSCopying
 - (id)copyWithZone:(NSZone *)zone {
 	RSTreeNode *copy = [[[self class] alloc] initWithRepresentedObject:[self representedObject]];
@@ -61,18 +67,32 @@ static NSString *const RSTreeNodeChildNodesKey = @"childNodes";
 
 #pragma mark RSPlistArchiving
 - (NSDictionary *)plistRepresentation {
+	NSMutableDictionary *retval = [NSMutableDictionary dictionaryWithDictionary:[super plistRepresentation]];
+	
 	NSMutableArray *childNodePlists = [NSMutableArray arrayWithCapacity:[[self childNodes] count]];
 	for (RSTreeNode *node in [self childNodes])
 		[childNodePlists addObject:[node plistRepresentation]];
-	return [NSDictionary dictionaryWithObjectsAndKeys:[self className],RSTreeNodeClassNameKey,childNodePlists,RSTreeNodeChildNodesKey, nil];
+	
+	[retval setObject:childNodePlists forKey:RSTreeNodeChildNodesKey];
+	
+	if ([[self representedObject] conformsToProtocol:@protocol(RSPlistArchiving)])
+		[retval setObject:[[self representedObject] plistRepresentation] forKey:RSTreeNodeRepresentedObjectKey];
+	
+	return retval;
 }
 - (id)initWithPlistRepresentation:(NSDictionary *)plistRepresentation {
-	if (![self initWithRepresentedObject:nil])
+	id representedObjectPlaceholder = nil;
+	NSDictionary *representedObjectPlist = [plistRepresentation objectForKey:RSTreeNodeRepresentedObjectKey];
+	if (representedObjectPlist)
+		representedObjectPlaceholder = [[NSClassFromString([representedObjectPlist objectForKey:RSObjectClassNameKey]) alloc] initWithPlistRepresentation:representedObjectPlist];
+	
+	if (![self initWithRepresentedObject:representedObjectPlaceholder])
 		return nil;
 	
+	[representedObjectPlaceholder release];
+	
 	for (NSDictionary *nodePlist in [plistRepresentation objectForKey:RSTreeNodeChildNodesKey]) {
-		Class nodeClass = NSClassFromString([nodePlist objectForKey:RSTreeNodeClassNameKey]);
-		id node = [[nodeClass alloc] initWithPlistRepresentation:nodePlist];
+		id node = [[NSClassFromString([nodePlist objectForKey:RSObjectClassNameKey]) alloc] initWithPlistRepresentation:nodePlist];
 		
 		if (node)
 			[[self mutableChildNodes] addObject:node];

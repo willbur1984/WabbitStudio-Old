@@ -57,23 +57,19 @@ NSString *const WCKeyBindingCommandPairShiftModifierMaskKey = @"shift";
 	[plist setObject:[NSNumber numberWithInteger:_keyCombo.code] forKey:WCKeyBindingCommandPairKeyCodeKey];
 	
 	NSMutableDictionary *modifiers = [NSMutableDictionary dictionaryWithCapacity:0];
-	if (_keyCombo.flags & NSCommandKeyMask)
+	if ((_keyCombo.flags & NSCommandKeyMask))
 		[modifiers setObject:[NSNumber numberWithBool:YES] forKey:WCKeyBindingCommandPairCommandModifierMaskKey];
-	if (_keyCombo.flags & NSAlternateKeyMask)
+	if ((_keyCombo.flags & NSAlternateKeyMask))
 		[modifiers setObject:[NSNumber numberWithBool:YES] forKey:WCKeyBindingCommandPairOptionModifierMaskKey];
-	if (_keyCombo.flags & NSControlKeyMask)
+	if ((_keyCombo.flags & NSControlKeyMask))
 		[modifiers setObject:[NSNumber numberWithBool:YES] forKey:WCKeyBindingCommandPairControlModifierMaskKey];
-	if (_keyCombo.flags & NSShiftKeyMask)
+	if ((_keyCombo.flags & NSShiftKeyMask))
 		[modifiers setObject:[NSNumber numberWithBool:YES] forKey:WCKeyBindingCommandPairShiftModifierMaskKey];
 	
 	if ([modifiers count])
 		[plist setObject:modifiers forKey:WCKeyBindingCommandPairModifierFlagsKey];
 	
 	return [[plist copy] autorelease];
-}
-
-- (id)initWithPlistRepresentation:(NSDictionary *)plistRepresentation {
-	return nil;
 }
 
 + (WCKeyBindingCommandPair *)keyBindingCommandPairForAction:(SEL)action keyCombo:(KeyCombo)keyCombo; {

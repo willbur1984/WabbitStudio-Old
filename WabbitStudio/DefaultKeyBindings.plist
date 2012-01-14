@@ -4,6 +4,18 @@
 <dict>
 	<key>keyBindings</key>
 	<dict>
+		<key>newProject:</key>
+		<dict>
+			<key>keyCode</key>
+			<integer>45</integer>
+			<key>modifierFlags</key>
+			<dict>
+				<key>command</key>
+				<true/>
+				<key>shift</key>
+				<true/>
+			</dict>
+		</dict>
 		<key>newDocument:</key>
 		<dict>
 			<key>keyCode</key>
