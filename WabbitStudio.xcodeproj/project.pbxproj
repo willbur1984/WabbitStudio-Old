@@ -131,6 +131,15 @@
 		077884F714C10CB400605F5D /* Group.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 077884F614C10CB400605F5D /* Group.tiff */; };
 		077884FA14C10F0200605F5D /* WCProject.m in Sources */ = {isa = PBXBuildFile; fileRef = 077884F914C10F0100605F5D /* WCProject.m */; };
 		077884FD14C116F600605F5D /* WCProjectContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 077884FC14C116F600605F5D /* WCProjectContainer.m */; };
+		0778850114C14EFA00605F5D /* RSNavigatorControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 0778850014C14EFA00605F5D /* RSNavigatorControl.m */; };
+		0778850414C14F3D00605F5D /* RSNavigatorControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0778850314C14F3D00605F5D /* RSNavigatorControlCell.m */; };
+		0778850814C20A7900605F5D /* Search.png in Resources */ = {isa = PBXBuildFile; fileRef = 0778850714C20A7900605F5D /* Search.png */; };
+		0778851114C2337700605F5D /* WCProjectNavigatorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0778851014C2337700605F5D /* WCProjectNavigatorViewController.m */; };
+		0778851414C2349B00605F5D /* WCProjectNavigatorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0778851214C2349B00605F5D /* WCProjectNavigatorView.xib */; };
+		0778851A14C2377C00605F5D /* FileNotFound.png in Resources */ = {isa = PBXBuildFile; fileRef = 0778851614C2377C00605F5D /* FileNotFound.png */; };
+		0778851C14C2377C00605F5D /* Filter.png in Resources */ = {isa = PBXBuildFile; fileRef = 0778851814C2377C00605F5D /* Filter.png */; };
+		0778851F14C23F9700605F5D /* RSTopBorderedGlassGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0778851E14C23F9700605F5D /* RSTopBorderedGlassGradientView.m */; };
+		0778852214C2402200605F5D /* WCProjectNavigatorOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0778852114C2402200605F5D /* WCProjectNavigatorOutlineView.m */; };
 		07862BA614BA33040057EB89 /* WCDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07862BA514BA33040057EB89 /* WCDocumentController.m */; };
 		07862BA914BA46720057EB89 /* WCSplitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07862BA814BA46720057EB89 /* WCSplitView.m */; };
 		07862BAD14BA78010057EB89 /* KBResponderNotifyingWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 07862BAC14BA78010057EB89 /* KBResponderNotifyingWindow.m */; };
@@ -443,6 +452,24 @@
 		077884F914C10F0100605F5D /* WCProject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCProject.m; sourceTree = "<group>"; };
 		077884FB14C116F600605F5D /* WCProjectContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCProjectContainer.h; sourceTree = "<group>"; };
 		077884FC14C116F600605F5D /* WCProjectContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCProjectContainer.m; sourceTree = "<group>"; };
+		077884FF14C14EFA00605F5D /* RSNavigatorControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSNavigatorControl.h; sourceTree = "<group>"; };
+		0778850014C14EFA00605F5D /* RSNavigatorControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSNavigatorControl.m; sourceTree = "<group>"; };
+		0778850214C14F3D00605F5D /* RSNavigatorControlCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSNavigatorControlCell.h; sourceTree = "<group>"; };
+		0778850314C14F3D00605F5D /* RSNavigatorControlCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSNavigatorControlCell.m; sourceTree = "<group>"; };
+		0778850514C14F5F00605F5D /* RSNavigatorControlDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSNavigatorControlDelegate.h; sourceTree = "<group>"; };
+		0778850614C14F7200605F5D /* RSNavigatorControlDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSNavigatorControlDataSource.h; sourceTree = "<group>"; };
+		0778850714C20A7900605F5D /* Search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Search.png; sourceTree = "<group>"; };
+		0778850F14C2337700605F5D /* WCProjectNavigatorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCProjectNavigatorViewController.h; sourceTree = "<group>"; };
+		0778851014C2337700605F5D /* WCProjectNavigatorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCProjectNavigatorViewController.m; sourceTree = "<group>"; };
+		0778851314C2349B00605F5D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCProjectNavigatorView.xib; sourceTree = "<group>"; };
+		0778851514C2377C00605F5D /* FileNotFound.acorn */ = {isa = PBXFileReference; lastKnownFileType = file; path = FileNotFound.acorn; sourceTree = "<group>"; };
+		0778851614C2377C00605F5D /* FileNotFound.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FileNotFound.png; sourceTree = "<group>"; };
+		0778851714C2377C00605F5D /* Filter.acorn */ = {isa = PBXFileReference; lastKnownFileType = file; path = Filter.acorn; sourceTree = "<group>"; };
+		0778851814C2377C00605F5D /* Filter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Filter.png; sourceTree = "<group>"; };
+		0778851D14C23F9700605F5D /* RSTopBorderedGlassGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSTopBorderedGlassGradientView.h; sourceTree = "<group>"; };
+		0778851E14C23F9700605F5D /* RSTopBorderedGlassGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSTopBorderedGlassGradientView.m; sourceTree = "<group>"; };
+		0778852014C2402200605F5D /* WCProjectNavigatorOutlineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCProjectNavigatorOutlineView.h; sourceTree = "<group>"; };
+		0778852114C2402200605F5D /* WCProjectNavigatorOutlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCProjectNavigatorOutlineView.m; sourceTree = "<group>"; };
 		07862BA414BA33040057EB89 /* WCDocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCDocumentController.h; sourceTree = "<group>"; };
 		07862BA514BA33040057EB89 /* WCDocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCDocumentController.m; sourceTree = "<group>"; };
 		07862BA714BA46720057EB89 /* WCSplitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSplitView.h; sourceTree = "<group>"; };
@@ -628,6 +655,7 @@
 				071985E114C011A800C8E91A /* WCGeneralView.xib */,
 				0719860714C0BE3500C8E91A /* WCProjectWindow.xib */,
 				0719861014C0C53600C8E91A /* WCNewProjectWindow.xib */,
+				0778851214C2349B00605F5D /* WCProjectNavigatorView.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -813,6 +841,7 @@
 				077884FC14C116F600605F5D /* WCProjectContainer.m */,
 				0719860D14C0C4B200C8E91A /* WCNewProjectWindowController.h */,
 				0719860E14C0C4B200C8E91A /* WCNewProjectWindowController.m */,
+				0778850E14C2331B00605F5D /* Navigators */,
 			);
 			name = Project;
 			sourceTree = "<group>";
@@ -883,6 +912,11 @@
 		071ECCC914A4233C002409F8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				0778851514C2377C00605F5D /* FileNotFound.acorn */,
+				0778851614C2377C00605F5D /* FileNotFound.png */,
+				0778851714C2377C00605F5D /* Filter.acorn */,
+				0778851814C2377C00605F5D /* Filter.png */,
+				0778850714C20A7900605F5D /* Search.png */,
 				077884F614C10CB400605F5D /* Group.tiff */,
 				071985FD14C0BC9400C8E91A /* project.icns */,
 				07A8AF8014BDC7EC008CB9FF /* KeyBindings.png */,
@@ -921,6 +955,7 @@
 				07F5F76E14A5A46900F1F326 /* RSDefines.h */,
 				07A8AFD314BE033C008CB9FF /* RSMenuItem.h */,
 				07A8AFD414BE033C008CB9FF /* RSMenuItem.m */,
+				077884FE14C14E5F00605F5D /* Navigator */,
 				072AF0F914BCB71100F2147E /* Model */,
 				072880C214B4F1780082DE4C /* Bezel Window */,
 				07B4740114AE3C7D00E3F9D0 /* Transformers */,
@@ -1099,6 +1134,30 @@
 			name = Advanced;
 			sourceTree = "<group>";
 		};
+		077884FE14C14E5F00605F5D /* Navigator */ = {
+			isa = PBXGroup;
+			children = (
+				077884FF14C14EFA00605F5D /* RSNavigatorControl.h */,
+				0778850014C14EFA00605F5D /* RSNavigatorControl.m */,
+				0778850214C14F3D00605F5D /* RSNavigatorControlCell.h */,
+				0778850314C14F3D00605F5D /* RSNavigatorControlCell.m */,
+				0778850514C14F5F00605F5D /* RSNavigatorControlDelegate.h */,
+				0778850614C14F7200605F5D /* RSNavigatorControlDataSource.h */,
+			);
+			name = Navigator;
+			sourceTree = "<group>";
+		};
+		0778850E14C2331B00605F5D /* Navigators */ = {
+			isa = PBXGroup;
+			children = (
+				0778850F14C2337700605F5D /* WCProjectNavigatorViewController.h */,
+				0778851014C2337700605F5D /* WCProjectNavigatorViewController.m */,
+				0778852014C2402200605F5D /* WCProjectNavigatorOutlineView.h */,
+				0778852114C2402200605F5D /* WCProjectNavigatorOutlineView.m */,
+			);
+			name = Navigators;
+			sourceTree = "<group>";
+		};
 		07862BAA14BA5E350057EB89 /* Window Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -1193,6 +1252,8 @@
 				072BBC5E14AA700B0044ECC2 /* RSBottomBorderedGlassGradientView.m */,
 				0745BE0A14AAD51D00F541DC /* RSBorderedGlassGradientView.h */,
 				0745BE0B14AAD51D00F541DC /* RSBorderedGlassGradientView.m */,
+				0778851D14C23F9700605F5D /* RSTopBorderedGlassGradientView.h */,
+				0778851E14C23F9700605F5D /* RSTopBorderedGlassGradientView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1407,6 +1468,10 @@
 				0719860914C0BE3500C8E91A /* WCProjectWindow.xib in Resources */,
 				0719861214C0C53600C8E91A /* WCNewProjectWindow.xib in Resources */,
 				077884F714C10CB400605F5D /* Group.tiff in Resources */,
+				0778850814C20A7900605F5D /* Search.png in Resources */,
+				0778851414C2349B00605F5D /* WCProjectNavigatorView.xib in Resources */,
+				0778851A14C2377C00605F5D /* FileNotFound.png in Resources */,
+				0778851C14C2377C00605F5D /* Filter.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1550,6 +1615,11 @@
 				077884F514C10C9C00605F5D /* WCGroup.m in Sources */,
 				077884FA14C10F0200605F5D /* WCProject.m in Sources */,
 				077884FD14C116F600605F5D /* WCProjectContainer.m in Sources */,
+				0778850114C14EFA00605F5D /* RSNavigatorControl.m in Sources */,
+				0778850414C14F3D00605F5D /* RSNavigatorControlCell.m in Sources */,
+				0778851114C2337700605F5D /* WCProjectNavigatorViewController.m in Sources */,
+				0778851F14C23F9700605F5D /* RSTopBorderedGlassGradientView.m in Sources */,
+				0778852214C2402200605F5D /* WCProjectNavigatorOutlineView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1676,6 +1746,14 @@
 				07713F1214B954FC00324F77 /* en */,
 			);
 			name = SelectEncodingsPanel.nib;
+			sourceTree = "<group>";
+		};
+		0778851214C2349B00605F5D /* WCProjectNavigatorView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0778851314C2349B00605F5D /* en */,
+			);
+			name = WCProjectNavigatorView.xib;
 			sourceTree = "<group>";
 		};
 		07862BC314BB6F850057EB89 /* WCSourceFileWindow.xib */ = {

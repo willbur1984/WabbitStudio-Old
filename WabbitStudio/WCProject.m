@@ -15,6 +15,10 @@
 	[super dealloc];
 }
 
+- (NSImage *)fileIcon {
+	return [NSImage imageNamed:@"project"];
+}
+
 + (id)projectWithDocument:(WCProjectDocument *)document; {
 	return [[[[self class] alloc] initWithDocument:document] autorelease];
 }

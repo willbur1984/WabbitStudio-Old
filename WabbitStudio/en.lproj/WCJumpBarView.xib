@@ -314,7 +314,6 @@
 						</object>
 						<string key="NSFrame">{{105, 1}, {375, 20}}</string>
 						<reference key="NSSuperview" ref="1005"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:2102</string>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSPathCell" key="NSCell" id="250352619">
