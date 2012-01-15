@@ -58,10 +58,33 @@
 	
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"representedObject.fileName contains[cd] %@",[self filterString]];
 	NSArray *filteredLeafNodes = [[[self projectContainer] descendantLeafNodes] filteredArrayUsingPredicate:predicate];
+	NSMapTable *parentNodesToFilteredParentNodes = [NSMapTable mapTableWithWeakToStrongObjects];
 	
+	[parentNodesToFilteredParentNodes setObject:[self filteredProjectContainer] forKey:[self projectContainer]];
+	
+	for (RSTreeNode *leafNode in filteredLeafNodes) {
+		if ([parentNodesToFilteredParentNodes objectForKey:[leafNode parentNode]])
+			[[[parentNodesToFilteredParentNodes objectForKey:[leafNode parentNode]] mutableChildNodes] addObject:[RSTreeNode treeNodeWithRepresentedObject:[leafNode representedObject]]];
+		else {
+			RSTreeNode *originalLeafNode = leafNode;
+			RSTreeNode *filteredLeafNode = [RSTreeNode treeNodeWithRepresentedObject:[leafNode representedObject]];
+			
+			while ([originalLeafNode parentNode] && ![parentNodesToFilteredParentNodes objectForKey:[originalLeafNode parentNode]]) {
+				RSTreeNode *filteredParentNode = [RSTreeNode treeNodeWithRepresentedObject:[[originalLeafNode parentNode] representedObject]];
+				
+				[parentNodesToFilteredParentNodes setObject:filteredParentNode forKey:[originalLeafNode parentNode]];
+				[[filteredParentNode mutableChildNodes] addObject:filteredLeafNode];
+				
+				originalLeafNode = [originalLeafNode parentNode];
+				filteredLeafNode = filteredParentNode;
+			}
+			
+			[[[self filteredProjectContainer] mutableChildNodes] addObject:filteredLeafNode];
+		}
+	}
 	
 	[[self treeController] bind:NSContentObjectBinding toObject:self withKeyPath:@"filteredProjectContainer" options:nil];
-	[[self outlineView] expandItem:[[self outlineView] itemAtRow:0] expandChildren:NO];
+	[[self outlineView] expandItem:[[self outlineView] itemAtRow:0] expandChildren:YES];
 }
 
 @synthesize outlineView=_outlineView;

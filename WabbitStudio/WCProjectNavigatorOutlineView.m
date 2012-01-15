@@ -12,4 +12,15 @@
 - (NSString *)emptyContentString {
 	return NSLocalizedString(@"No Filter Results", @"No Filter Results");
 }
+- (BOOL)shouldDrawEmptyContentString {
+	if ([self numberOfRows] == 1) {
+		if ([[self dataSource] isKindOfClass:[NSTreeController class]]) {
+			return (![[[self itemAtRow:0] childNodes] count]);
+		}
+		else {
+			return (![[self dataSource] outlineView:self numberOfChildrenOfItem:[self itemAtRow:0]]);
+		}
+	}
+	return NO;
+}
 @end

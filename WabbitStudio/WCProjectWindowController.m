@@ -16,6 +16,9 @@
 @implementation WCProjectWindowController
 
 - (void)dealloc {
+#ifdef DEBUG
+	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
+#endif
 	[_projectNavigatorViewController release];
 	[_navigatorItemDictionaries release];
 	[super dealloc];
