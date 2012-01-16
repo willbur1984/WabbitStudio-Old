@@ -69,7 +69,21 @@
 	
 	return self;
 }
+#pragma mark NSUserInterfaceValidations
+- (BOOL)validateUserInterfaceItem:(id<NSValidatedUserInterfaceItem>)anItem {
+	if ([anItem action] == @selector(delete:))
+		return [[self delegate] respondsToSelector:@selector(handleDeletePressedForTableView:)];
+	return [super validateUserInterfaceItem:anItem];
+}
 #pragma mark *** Public Methods ***
+- (IBAction)delete:(id)sender; {
+	if (![[self delegate] respondsToSelector:@selector(handleDeletePressedForTableView:)]) {
+		NSBeep();
+		return;
+	}
+	
+	[(id<RSTableViewDelegate>)[self delegate] handleDeletePressedForTableView:self];
+}
 #pragma mark Properties
 @dynamic emptyContentString;
 - (NSString *)emptyContentString {

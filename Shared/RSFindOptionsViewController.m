@@ -29,6 +29,7 @@
 	[_popover setAppearance:NSPopoverAppearanceHUD];
 	_findFlags.wrapAround = YES;
 	_findFlags.wrapAroundEnabled = YES;
+	_findFlags.regexOptionsEnabled = YES;
 	
 	return self;
 }
@@ -63,14 +64,16 @@
 	if ([[self delegate] respondsToSelector:@selector(findOptionsViewControllerDidChangeFindOptions:)])
 		[[self delegate] findOptionsViewControllerDidChangeFindOptions:self];
 	
-	NSSize contentSize = [_popover contentSize];
-	if (_findStyle == RSFindOptionsFindStyleTextual) {
-		contentSize.height -= 50.0;
+	if ([self regexOptionsEnabled]) {
+		NSSize contentSize = [_popover contentSize];
+		if ([self findStyle] == RSFindOptionsFindStyleTextual) {
+			contentSize.height -= 40.0;
+		}
+		else {
+			contentSize.height += 40.0;
+		}
+		[_popover setContentSize:contentSize];
 	}
-	else {
-		contentSize.height += 50.0;
-	}
-	[_popover setContentSize:contentSize];
 }
 @dynamic matchStyle;
 - (RSFindOptionsMatchStyle)matchStyle {
@@ -132,5 +135,12 @@
 @dynamic findOptionsVisible;
 - (BOOL)areFindOptionsVisible {
 	return ([_popover isShown]);
+}
+@dynamic regexOptionsEnabled;
+- (BOOL)regexOptionsEnabled {
+	return _findFlags.regexOptionsEnabled;
+}
+- (void)setRegexOptionsEnabled:(BOOL)regexOptionsEnabled {
+	_findFlags.regexOptionsEnabled = regexOptionsEnabled;
 }
 @end

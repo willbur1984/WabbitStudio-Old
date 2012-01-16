@@ -37,9 +37,9 @@ NSString *const WCFontsAndColorsUserThemeIdentifiersKey = @"WCFontsAndColorsUser
 - (void)loadView {
 	[super loadView];
 	
-	[[self themesArrayController] bind:NSContentArrayBinding toObject:[WCFontAndColorThemeManager sharedManager] withKeyPath:@"themes" options:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],NSRaisesForNotApplicableKeysBindingOption, nil]];
+	[[self themesArrayController] bind:NSContentArrayBinding toObject:[WCFontAndColorThemeManager sharedManager] withKeyPath:@"themes" options:nil];
 	
-	[[self pairsTableView] bind:@"backgroundColor" toObject:[self themesArrayController] withKeyPath:@"selection.backgroundColor" options:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],NSRaisesForNotApplicableKeysBindingOption, nil]];
+	[[self pairsTableView] bind:@"backgroundColor" toObject:[self themesArrayController] withKeyPath:@"selection.backgroundColor" options:nil];
 	
 	[[self themesArrayController] setSelectedObjects:[NSArray arrayWithObject:[[WCFontAndColorThemeManager sharedManager] currentTheme]]];
 	

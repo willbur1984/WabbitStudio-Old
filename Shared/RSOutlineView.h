@@ -10,7 +10,7 @@
 #import "RSEmptyContentCell.h"
 #import "RSOutlineViewDelegate.h"
 
-@interface RSOutlineView : NSOutlineView {
+@interface RSOutlineView : NSOutlineView <NSUserInterfaceValidations> {
 	RSEmptyContentCell *_emptyContentStringCell;
 }
 @property (readwrite,assign,nonatomic) IBOutlet id <NSOutlineViewDelegate> delegate;

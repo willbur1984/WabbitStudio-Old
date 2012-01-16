@@ -60,7 +60,7 @@ NSString *const WCKeyBindingsUserCommandSetIdentifiersKey = @"WCKeyBindingsUserC
 - (void)loadView {
 	[super loadView];
 	
-	[[self arrayController] bind:NSContentArrayBinding toObject:[WCKeyBindingCommandSetManager sharedManager] withKeyPath:@"commandSets" options:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],NSRaisesForNotApplicableKeysBindingOption, nil]];
+	[[self arrayController] bind:NSContentArrayBinding toObject:[WCKeyBindingCommandSetManager sharedManager] withKeyPath:@"commandSets" options:nil];
 	
 	[[self arrayController] setSelectedObjects:[NSArray arrayWithObject:[[WCKeyBindingCommandSetManager sharedManager] currentCommandSet]]];
 	
@@ -115,12 +115,12 @@ static const NSInteger kNumberOfScopeBarGroups = 1;
 
 - (void)scopeBar:(MGScopeBar *)theScopeBar selectedStateChanged:(BOOL)selected forItem:(NSString *)identifier inGroup:(NSInteger)groupNumber {
 	if ([identifier isEqualToString:@"Customized"]) {
-		[[self treeController] bind:NSContentArrayBinding toObject:[self arrayController] withKeyPath:@"selection.customizedCommandPairs" options:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],NSRaisesForNotApplicableKeysBindingOption, nil]];
-		[[self searchArrayController] bind:NSContentArrayBinding toObject:[self arrayController] withKeyPath:@"selection.customizedCommandPairs" options:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],NSRaisesForNotApplicableKeysBindingOption, nil]];
+		[[self treeController] bind:NSContentArrayBinding toObject:[self arrayController] withKeyPath:@"selection.customizedCommandPairs" options:nil];
+		[[self searchArrayController] bind:NSContentArrayBinding toObject:[self arrayController] withKeyPath:@"selection.customizedCommandPairs" options:nil];
 	}
 	else {
-		[[self treeController] bind:NSContentArrayBinding toObject:[self arrayController] withKeyPath:@"selection.commandPairs" options:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],NSRaisesForNotApplicableKeysBindingOption, nil]];
-		[[self searchArrayController] bind:NSContentArrayBinding toObject:[self arrayController] withKeyPath:@"selection.flattenedCommandPairs" options:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],NSRaisesForNotApplicableKeysBindingOption, nil]];
+		[[self treeController] bind:NSContentArrayBinding toObject:[self arrayController] withKeyPath:@"selection.commandPairs" options:nil];
+		[[self searchArrayController] bind:NSContentArrayBinding toObject:[self arrayController] withKeyPath:@"selection.flattenedCommandPairs" options:nil];
 		
 		[[self outlineView] expandItem:nil expandChildren:YES];
 		[[self outlineView] selectRowIndexes:[NSIndexSet indexSetWithIndex:1] byExtendingSelection:NO];
@@ -190,12 +190,11 @@ static const NSInteger kNumberOfScopeBarGroups = 1;
 #pragma mark IBActions
 - (IBAction)search:(id)sender; {
 	if ([[self searchString] length]) {
-		[[self treeController] bind:NSContentArrayBinding toObject:[self searchArrayController] withKeyPath:@"arrangedObjects" options:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],NSRaisesForNotApplicableKeysBindingOption, nil]];
+		[[self treeController] bind:NSContentArrayBinding toObject:[self searchArrayController] withKeyPath:@"arrangedObjects" options:nil];
 	}
 	else {
-		[[self treeController] bind:NSContentArrayBinding toObject:[self arrayController] withKeyPath:@"selection.commandPairs" options:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],NSRaisesForNotApplicableKeysBindingOption, nil]];
+		[[self treeController] bind:NSContentArrayBinding toObject:[self arrayController] withKeyPath:@"selection.commandPairs" options:nil];
 		[[self outlineView] expandItem:nil expandChildren:YES];
-		[[self outlineView] selectRowIndexes:[NSIndexSet indexSetWithIndex:1] byExtendingSelection:NO];
 	}
 }
 

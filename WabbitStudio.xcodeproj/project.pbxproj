@@ -687,15 +687,6 @@
 			name = Tokens/Symbols;
 			sourceTree = "<group>";
 		};
-		0708964114A6C81C0017BBE4 /* Documents */ = {
-			isa = PBXGroup;
-			children = (
-				071ECCD414A4233C002409F8 /* WCSourceFileDocument.h */,
-				071ECCD514A4233C002409F8 /* WCSourceFileDocument.m */,
-			);
-			name = Documents;
-			sourceTree = "<group>";
-		};
 		0708964214A6C8660017BBE4 /* Source Editor */ = {
 			isa = PBXGroup;
 			children = (
@@ -827,20 +818,10 @@
 		071985F914C0B3BA00C8E91A /* Project */ = {
 			isa = PBXGroup;
 			children = (
-				071985FF14C0BCC300C8E91A /* WCProjectDocument.h */,
-				0719860014C0BCC300C8E91A /* WCProjectDocument.m */,
-				0719860414C0BDC900C8E91A /* WCProjectWindowController.h */,
-				0719860514C0BDC900C8E91A /* WCProjectWindowController.m */,
-				0719860A14C0C10700C8E91A /* WCFile.h */,
-				0719860B14C0C10700C8E91A /* WCFile.m */,
-				077884F314C10C9C00605F5D /* WCGroup.h */,
-				077884F414C10C9C00605F5D /* WCGroup.m */,
-				077884F814C10F0100605F5D /* WCProject.h */,
-				077884F914C10F0100605F5D /* WCProject.m */,
-				077884FB14C116F600605F5D /* WCProjectContainer.h */,
-				077884FC14C116F600605F5D /* WCProjectContainer.m */,
-				0719860D14C0C4B200C8E91A /* WCNewProjectWindowController.h */,
-				0719860E14C0C4B200C8E91A /* WCNewProjectWindowController.m */,
+				0778853114C386BD00605F5D /* Documents */,
+				0778853314C386E000605F5D /* Window Controllers */,
+				0778852F14C3868200605F5D /* Model */,
+				0778853214C386CD00605F5D /* New Project */,
 				0778850E14C2331B00605F5D /* Navigators */,
 			);
 			name = Project;
@@ -898,7 +879,6 @@
 				071985F914C0B3BA00C8E91A /* Project */,
 				071985F814C0B36600C8E91A /* Performers */,
 				072BBC3F14AA66730044ECC2 /* Preferences */,
-				0708964114A6C81C0017BBE4 /* Documents */,
 				0708964214A6C8660017BBE4 /* Source Editor */,
 				0708964414A6C8A70017BBE4 /* Cells */,
 				0708964514A6C8EC0017BBE4 /* Categories */,
@@ -1156,6 +1136,50 @@
 				0778852114C2402200605F5D /* WCProjectNavigatorOutlineView.m */,
 			);
 			name = Navigators;
+			sourceTree = "<group>";
+		};
+		0778852F14C3868200605F5D /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				0719860A14C0C10700C8E91A /* WCFile.h */,
+				0719860B14C0C10700C8E91A /* WCFile.m */,
+				077884F314C10C9C00605F5D /* WCGroup.h */,
+				077884F414C10C9C00605F5D /* WCGroup.m */,
+				077884F814C10F0100605F5D /* WCProject.h */,
+				077884F914C10F0100605F5D /* WCProject.m */,
+				077884FB14C116F600605F5D /* WCProjectContainer.h */,
+				077884FC14C116F600605F5D /* WCProjectContainer.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		0778853114C386BD00605F5D /* Documents */ = {
+			isa = PBXGroup;
+			children = (
+				071ECCD414A4233C002409F8 /* WCSourceFileDocument.h */,
+				071ECCD514A4233C002409F8 /* WCSourceFileDocument.m */,
+				071985FF14C0BCC300C8E91A /* WCProjectDocument.h */,
+				0719860014C0BCC300C8E91A /* WCProjectDocument.m */,
+			);
+			name = Documents;
+			sourceTree = "<group>";
+		};
+		0778853214C386CD00605F5D /* New Project */ = {
+			isa = PBXGroup;
+			children = (
+				0719860D14C0C4B200C8E91A /* WCNewProjectWindowController.h */,
+				0719860E14C0C4B200C8E91A /* WCNewProjectWindowController.m */,
+			);
+			name = "New Project";
+			sourceTree = "<group>";
+		};
+		0778853314C386E000605F5D /* Window Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				0719860414C0BDC900C8E91A /* WCProjectWindowController.h */,
+				0719860514C0BDC900C8E91A /* WCProjectWindowController.m */,
+			);
+			name = "Window Controllers";
 			sourceTree = "<group>";
 		};
 		07862BAA14BA5E350057EB89 /* Window Controllers */ = {

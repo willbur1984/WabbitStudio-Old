@@ -12,7 +12,7 @@
 
 @protocol RSTableViewDelegate;
 
-@interface RSTableView : NSTableView {
+@interface RSTableView : NSTableView <NSUserInterfaceValidations> {
     RSEmptyContentCell *_emptyContentStringCell;
 }
 @property (readwrite,assign,nonatomic) IBOutlet id <RSTableViewDelegate> delegate;

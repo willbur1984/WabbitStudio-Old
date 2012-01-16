@@ -15,6 +15,9 @@
 	[super dealloc];
 }
 
+- (NSString *)fileName {
+	return [[[self document] displayName] stringByDeletingPathExtension];
+}
 - (NSImage *)fileIcon {
 	return [NSImage imageNamed:@"project"];
 }

@@ -7,13 +7,20 @@
 //
 
 #import "JAViewController.h"
+#import "RSOutlineView.h"
+#import "RSFindOptionsViewControllerDelegate.h"
 
-@class WCProjectContainer;
+@class WCProjectContainer,RSFindOptionsViewController;
 
-@interface WCProjectNavigatorViewController : JAViewController {
+@interface WCProjectNavigatorViewController : JAViewController <RSOutlineViewDelegate,RSFindOptionsViewControllerDelegate> {
 	WCProjectContainer *_projectContainer;
 	WCProjectContainer *_filteredProjectContainer;
 	NSString *_filterString;
+	RSFindOptionsViewController *_filterOptionsViewController;
+	struct {
+		unsigned int switchTreeControllerContentBinding:1;
+		unsigned int RESERVED:31;
+	} _projectNavigatorFlags;
 }
 @property (readwrite,assign,nonatomic) IBOutlet NSSearchField *searchField;
 @property (readwrite,assign,nonatomic) IBOutlet NSOutlineView *outlineView;
@@ -25,4 +32,7 @@
 - (id)initWithProjectContainer:(WCProjectContainer *)projectContainer;
 
 - (IBAction)filter:(id)sender;
+- (IBAction)toggleFilterOptions:(id)sender;
+- (IBAction)showFilterOptions:(id)sender;
+- (IBAction)hideFilterOptions:(id)sender;
 @end
