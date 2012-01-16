@@ -12,6 +12,7 @@
 #import "WCProjectNavigatorViewController.h"
 #import "WCProjectDocument.h"
 #import "WCProject.h"
+#import <Quartz/Quartz.h>
 
 @implementation WCProjectWindowController
 
@@ -62,7 +63,25 @@
 	return nil;
 }
 - (void)navigatorControlSelectedItemIdentifierDidChange:(RSNavigatorControl *)navigatorControl {
-	
+	if (![[[self navigatorControl] selectedItemIdentifier] isEqualToString:@"project"] &&
+		[QLPreviewPanel sharedPreviewPanelExists] &&
+		[[QLPreviewPanel sharedPreviewPanel] isVisible]) {
+		
+		[[QLPreviewPanel sharedPreviewPanel] orderOut:nil];
+	}
+}
+
+#pragma mark QLPreviewPanelController
+- (BOOL)acceptsPreviewPanelControl:(QLPreviewPanel *)panel; {
+	return YES;
+}
+- (void)beginPreviewPanelControl:(QLPreviewPanel *)panel; {
+	[panel setDataSource:[self projectNavigatorViewController]];
+	[panel setDelegate:[self projectNavigatorViewController]];
+}
+- (void)endPreviewPanelControl:(QLPreviewPanel *)panel {
+	[panel setDataSource:nil];
+	[panel setDelegate:nil];
 }
 
 @synthesize navigatorControl=_navigatorControl;

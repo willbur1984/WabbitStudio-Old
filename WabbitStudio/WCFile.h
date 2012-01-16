@@ -7,10 +7,11 @@
 //
 
 #import "RSObject.h"
+#import <Quartz/Quartz.h>
 
 @class RSFileReference;
 
-@interface WCFile : RSObject <RSPlistArchiving> {
+@interface WCFile : RSObject <RSPlistArchiving,QLPreviewItem> {
 	RSFileReference *_fileReference;
 }
 @property (readonly,nonatomic) RSFileReference *fileReference;

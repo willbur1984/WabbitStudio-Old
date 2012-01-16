@@ -14,6 +14,7 @@
 	__weak WCProjectDocument *_document;
 }
 @property (readonly,nonatomic) WCProjectDocument *document;
+@property (readonly,nonatomic) NSString *fileStatus;
 
 + (id)projectWithDocument:(WCProjectDocument *)document;
 - (id)initWithDocument:(WCProjectDocument *)document;

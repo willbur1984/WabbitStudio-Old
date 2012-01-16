@@ -8,10 +8,11 @@
 
 #import <AppKit/NSDocument.h>
 
-@class WCProjectContainer;
+@class WCProjectContainer,WCProjectWindowController;
 
 @interface WCProjectDocument : NSDocument {
 	WCProjectContainer *_projectContainer;
 }
 @property (readonly,retain) WCProjectContainer *projectContainer;
+@property (readonly,nonatomic) WCProjectWindowController *projectWindowController;
 @end

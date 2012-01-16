@@ -191,6 +191,10 @@
 				[[textContainer textView] setTextColor:[currentTheme plainTextColor]];
 		}
 	}
+	else if ([[[note userInfo] objectForKey:@"colorName"] isEqualToString:@"commentColor"]) {
+		[[[self delegate] sourceHighlighterForSourceTextStorage:self] performHighlightingInRange:NSMakeRange(0, [self length]) attributeName:WCSourceHighlighterCommentColorAttributeName];
+		return;
+	}
 	[[[self delegate] sourceHighlighterForSourceTextStorage:self] performHighlightingInVisibleRange];
 }
 - (void)_fontDidChange:(NSNotification *)note {

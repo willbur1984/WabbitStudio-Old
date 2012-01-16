@@ -16,7 +16,8 @@
 #import "WCFontAndColorThemeManager.h"
 #import "RSDefines.h"
 
-static NSString *const WCSourceHighlighterCommentAttributeName = @"commentAttribute";
+NSString *const WCSourceHighlighterCommentColorAttributeName = @"commentColor";
+NSString *const WCSourceHighlighterCommentFontAttributeName = @"commentFont";
 
 @interface WCSourceHighlighter ()
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
@@ -34,7 +35,7 @@ static NSString *const WCSourceHighlighterCommentAttributeName = @"commentAttrib
 	if (!(self = [super init]))
 		return nil;
 	
-	//_needsToPerformFullHighlight = YES;
+	_needsToPerformFullHighlight = YES;
 	_sourceScanner = sourceScanner;
 	
 	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageWillProcessEditing:) name:NSTextStorageWillProcessEditingNotification object:[sourceScanner textStorage]];
@@ -73,13 +74,20 @@ static NSString *const WCSourceHighlighterCommentAttributeName = @"commentAttrib
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
 	
 	[[[self sourceScanner] textStorage] addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName, nil] range:range];
+	[[[self sourceScanner] textStorage] removeAttribute:WCSourceHighlighterCommentFontAttributeName range:range];
+	[[[self sourceScanner] textStorage] removeAttribute:WCSourceHighlighterCommentColorAttributeName range:range];
 	
 	NSDictionary *labelNames = [[self sourceScanner] labelNamesToLabelSymbols];
 	NSDictionary *equateNames = [[self sourceScanner] equateNamesToEquateSymbols];
 	NSDictionary *defineNames = [[self sourceScanner] defineNamesToDefineSymbols];
 	NSDictionary *macroNames = [[self sourceScanner] macroNamesToMacroSymbols];
+	NSArray *tokens = [[self sourceScanner] tokens];
 	
 	[[WCSourceScanner symbolRegularExpression] enumerateMatchesInString:[[[self sourceScanner] textStorage] string] options:0 range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+		WCSourceToken *token = [tokens sourceTokenForRange:[result range]];
+		if (NSLocationInRange([result range].location, [token range]))
+			return;
+		
 		NSString *name = [[[[[self sourceScanner] textStorage] string] substringWithRange:[result range]] lowercaseString];
 		
 		if ([labelNames objectForKey:name]) {
@@ -96,12 +104,12 @@ static NSString *const WCSourceHighlighterCommentAttributeName = @"commentAttrib
 		}
 	}];
 	
-	for (WCSourceToken *token in [[[self sourceScanner] tokens] sourceTokensForRange:range]) {
+	for (WCSourceToken *token in [tokens sourceTokensForRange:range]) {
 		switch ([token type]) {
 			case WCSourceTokenTypeComment: {
 				NSRange intersectRange = NSIntersectionRange([token range], range);
 				if (intersectRange.length)
-					[[[self sourceScanner] textStorage] addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme commentFont],NSFontAttributeName,[currentTheme commentColor],NSForegroundColorAttributeName, nil] range:intersectRange];
+					[[[self sourceScanner] textStorage] addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme commentFont],NSFontAttributeName,[currentTheme commentColor],NSForegroundColorAttributeName,[NSNumber numberWithBool:YES],WCSourceHighlighterCommentColorAttributeName,[NSNumber numberWithBool:YES],WCSourceHighlighterCommentFontAttributeName, nil] range:intersectRange];
 			}
 				break;
 			case WCSourceTokenTypeBinary:
@@ -137,6 +145,20 @@ static NSString *const WCSourceHighlighterCommentAttributeName = @"commentAttrib
 	}
 	
 	[[[self sourceScanner] textStorage] endEditing];
+}
+
+- (void)performHighlightingInRange:(NSRange)range attributeName:(NSString *)attributeName; {
+	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
+	NSRange effectiveRange;
+	id attributeValue;
+	while (range.length > 0) {
+		if ((attributeValue = [[[self sourceScanner] textStorage] attribute:attributeName atIndex:range.location longestEffectiveRange:&effectiveRange inRange:range])) {
+			if ([attributeValue boolValue])
+				[[[self sourceScanner] textStorage] addAttribute:NSForegroundColorAttributeName value:[currentTheme commentColor] range:effectiveRange];
+		}
+		
+		range = NSMakeRange(NSMaxRange(effectiveRange),NSMaxRange(range)-NSMaxRange(effectiveRange));
+	}
 }
 
 @synthesize sourceScanner=_sourceScanner;

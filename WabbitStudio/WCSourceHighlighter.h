@@ -8,6 +8,9 @@
 
 #import <Foundation/NSObject.h>
 
+extern NSString *const WCSourceHighlighterCommentColorAttributeName;
+extern NSString *const WCSourceHighlighterCommentFontAttributeName;
+
 @class WCSourceScanner;
 
 @interface WCSourceHighlighter : NSObject {
@@ -18,4 +21,5 @@
 
 - (void)performHighlightingInVisibleRange;
 - (void)performHighlightingInRange:(NSRange)range;
+- (void)performHighlightingInRange:(NSRange)range attributeName:(NSString *)attributeName;
 @end

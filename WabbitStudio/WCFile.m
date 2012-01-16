@@ -37,6 +37,11 @@ static NSString *const WCFileReferenceKey = @"fileReference";
 	return self;
 }
 
+#pragma mark QLPreviewItem
+- (NSURL *)previewItemURL {
+	return [self fileURL];
+}
+
 + (id)fileWithFileURL:(NSURL *)fileURL; {
 	return [[[[self class] alloc] initWithFileURL:fileURL] autorelease];
 }

@@ -23,7 +23,7 @@
 }
 
 + (id)projectWithDocument:(WCProjectDocument *)document; {
-	return [[[[self class] alloc] initWithDocument:document] autorelease];
+	return [[(WCProject *)[[self class] alloc] initWithDocument:document] autorelease];
 }
 - (id)initWithDocument:(WCProjectDocument *)document; {
 	if (!(self = [super initWithFileURL:[document fileURL]]))
@@ -35,4 +35,8 @@
 }
 
 @synthesize document=_document;
+@dynamic fileStatus;
+- (NSString *)fileStatus {
+	return NSLocalizedString(@"This project is fantastic", @"This project is fantastic");
+}
 @end

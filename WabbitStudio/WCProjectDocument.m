@@ -96,5 +96,9 @@
 }
 
 @synthesize projectContainer=_projectContainer;
+@dynamic projectWindowController;
+- (WCProjectWindowController *)projectWindowController {
+	return [[self windowControllers] objectAtIndex:0];
+}
 
 @end

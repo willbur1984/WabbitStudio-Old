@@ -13,6 +13,9 @@
 #import "RSOutlineView.h"
 #import "RSFindOptionsViewController.h"
 #import "RSDefines.h"
+#import "NSTreeController+RSExtensions.h"
+#import "RSNavigatorControl.h"
+#import "WCProjectWindowController.h"
 
 @interface WCProjectNavigatorViewController ()
 @property (readwrite,retain,nonatomic) WCProjectContainer *filteredProjectContainer;
@@ -42,7 +45,7 @@
 	
 	[[self outlineView] expandItem:[[self outlineView] itemAtRow:0] expandChildren:NO];
 }
-
+#pragma mark NSMenuValidation
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
 	if ([menuItem action] == @selector(toggleFilterOptions:)) {
 		if ([[self filterOptionsViewController] areFindOptionsVisible])
@@ -51,6 +54,90 @@
 			[menuItem setTitle:NSLocalizedString(@"Show Filter Options\u2026", @"show filter options with ellipsis")];
 	}
 	return YES;
+}
+#pragma mark NSOutlineViewDelegate
+static NSString *const kProjectCellIdentifier = @"ProjectCell";
+static NSString *const kMainCellIdentifier = @"MainCell";
+- (NSView *)outlineView:(NSOutlineView *)outlineView viewForTableColumn:(NSTableColumn *)tableColumn item:(id)item {
+	id file = [[item representedObject] representedObject];
+	
+	if ([file isKindOfClass:[WCProject class]])
+		return [outlineView makeViewWithIdentifier:kProjectCellIdentifier owner:nil];
+	return [outlineView makeViewWithIdentifier:kMainCellIdentifier owner:nil];
+}
+
+static const CGFloat kProjectCellHeight = 30.0;
+static const CGFloat kMainCellHeight = 18.0;
+- (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
+	id file = [[item representedObject] representedObject];
+	
+	if ([file isKindOfClass:[WCProject class]])
+		return kProjectCellHeight;
+	return kMainCellHeight;
+}
+
+- (void)outlineViewSelectionDidChange:(NSNotification *)notification {
+	if ([QLPreviewPanel sharedPreviewPanelExists] &&
+		[[QLPreviewPanel sharedPreviewPanel] isVisible]) {
+		
+		[[QLPreviewPanel sharedPreviewPanel] reloadData];
+	}
+}
+#pragma mark RSOutlineViewDelegate
+- (void)handleSpacePressedForOutlineView:(RSOutlineView *)outlineView {
+	if ([QLPreviewPanel sharedPreviewPanelExists] && [[QLPreviewPanel sharedPreviewPanel] isVisible])
+		[[QLPreviewPanel sharedPreviewPanel] orderOut:nil];
+	else
+		[[QLPreviewPanel sharedPreviewPanel] makeKeyAndOrderFront:nil];
+}
+#pragma mark QLPreviewPanelDataSource
+- (NSInteger)numberOfPreviewItemsInPreviewPanel:(QLPreviewPanel *)panel; {
+	return [[self selectedObjects] count];
+}
+- (id<QLPreviewItem>)previewPanel:(QLPreviewPanel *)panel previewItemAtIndex:(NSInteger)index {
+	return [[self selectedObjects] objectAtIndex:index];
+}
+#pragma mark QLPreviewPanelDelegate
+- (NSRect)previewPanel:(QLPreviewPanel *)panel sourceFrameOnScreenForPreviewItem:(id <QLPreviewItem>)item; {
+	NSInteger row = [[self outlineView] rowForItem:[[self treeController] treeNodeForRepresentedObject:item]];
+	
+	if (!NSLocationInRange(row, [[self outlineView] rowsInRect:[[self outlineView] visibleRect]]))
+		return NSZeroRect;
+	else if (![[[[[[[self projectContainer] project] document] projectWindowController] navigatorControl] selectedItemIdentifier] isEqualToString:@"project"])
+		return NSZeroRect;
+	
+	NSTableRowView *rowView = [[self outlineView] rowViewAtRow:row makeIfNecessary:NO];
+	NSImageView *imageView = [(NSTableCellView *)[rowView viewAtColumn:0] imageView];
+	NSRect rect = [imageView frame];
+	rect = [imageView convertRectToBase:rect];
+	rect.origin = [[[self view] window] convertBaseToScreen:rect.origin];
+	return rect;
+}
+
+- (id)previewPanel:(QLPreviewPanel *)panel transitionImageForPreviewItem:(id <QLPreviewItem>)item contentRect:(NSRect *)contentRect; {
+	NSInteger row = [[self outlineView] rowForItem:[[self treeController] treeNodeForRepresentedObject:item]];
+	NSTableRowView *rowView = [[self outlineView] rowViewAtRow:row makeIfNecessary:NO];
+	NSImageView *imageView = [(NSTableCellView *)[rowView viewAtColumn:0] imageView];
+	
+	return [imageView image];
+}
+#pragma mark WCNavigatorModule
+- (NSArray *)selectedObjects {
+	NSInteger clickedRow = [[self outlineView] clickedRow];
+	NSMutableArray *retval = [NSMutableArray array];
+	if (clickedRow == -1 || [[[self outlineView] selectedRowIndexes] containsIndex:clickedRow]) {
+		for (id file in [[self treeController] selectedRepresentedObjects])
+			[retval addObject:[file representedObject]];
+	}
+	else {
+		id clickedFile = [[[self outlineView] itemAtRow:clickedRow] representedObject];
+		
+		[retval addObject:[clickedFile representedObject]];
+	}
+	return retval;
+}
+- (void)setSelectedObjects:(NSArray *)objects {
+	[[self treeController] setSelectedRepresentedObjects:objects];
 }
 
 - (id)initWithProjectContainer:(WCProjectContainer *)projectContainer; {

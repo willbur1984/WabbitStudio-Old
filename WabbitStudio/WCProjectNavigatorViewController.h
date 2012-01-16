@@ -9,10 +9,12 @@
 #import "JAViewController.h"
 #import "RSOutlineView.h"
 #import "RSFindOptionsViewControllerDelegate.h"
+#import "WCNavigatorModule.h"
+#import <Quartz/Quartz.h>
 
 @class WCProjectContainer,RSFindOptionsViewController;
 
-@interface WCProjectNavigatorViewController : JAViewController <RSOutlineViewDelegate,RSFindOptionsViewControllerDelegate> {
+@interface WCProjectNavigatorViewController : JAViewController <WCNavigatorModule,RSOutlineViewDelegate,RSFindOptionsViewControllerDelegate,QLPreviewPanelDataSource,QLPreviewPanelDelegate> {
 	WCProjectContainer *_projectContainer;
 	WCProjectContainer *_filteredProjectContainer;
 	NSString *_filterString;
