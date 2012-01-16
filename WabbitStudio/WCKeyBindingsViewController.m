@@ -11,7 +11,7 @@
 #import "WCKeyBindingCommandSetManager.h"
 #import "WCKeyBindingCommandPair.h"
 #import "WCKeyBindingsEditCommandPairWindowController.h"
-#import "WCKeyBindingCommandSetManager.h"
+#import "WCKeyBindingCommandSet.h"
 #import "RSDefines.h"
 #import "RSOutlineView.h"
 #import "RSTableView.h"

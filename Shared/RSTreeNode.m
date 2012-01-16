@@ -102,6 +102,11 @@ static NSString *const RSTreeNodeRepresentedObjectKey = @"representedObject";
 	
 	return self;
 }
+#pragma mark QLPreviewItem
+- (NSURL *)previewItemURL {
+	return [[self representedObject] previewItemURL];
+}
+
 #pragma mark *** Public Methods ***
 + (id)treeNodeWithRepresentedObject:(id)representedObject; {
 	return [[[[self class] alloc] initWithRepresentedObject:representedObject] autorelease];

@@ -126,13 +126,12 @@ static const CGFloat kMainCellHeight = 18.0;
 	NSInteger clickedRow = [[self outlineView] clickedRow];
 	NSMutableArray *retval = [NSMutableArray array];
 	if (clickedRow == -1 || [[[self outlineView] selectedRowIndexes] containsIndex:clickedRow]) {
-		for (id file in [[self treeController] selectedRepresentedObjects])
-			[retval addObject:[file representedObject]];
+		[retval addObjectsFromArray:[[self treeController] selectedRepresentedObjects]];
 	}
 	else {
 		id clickedFile = [[[self outlineView] itemAtRow:clickedRow] representedObject];
 		
-		[retval addObject:[clickedFile representedObject]];
+		[retval addObject:clickedFile];
 	}
 	return retval;
 }

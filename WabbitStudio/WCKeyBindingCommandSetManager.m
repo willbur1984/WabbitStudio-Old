@@ -83,7 +83,7 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if ([keyPath isEqualToString:WCKeyBindingCommandSetNameKey]) {
-		[(WCKeyBindingCommandSet *)object setIdentifier:[NSString stringWithFormat:@"org.revsoft.wabbitstudio.keybindingcommandset.%@",[object name]]];
+		[(WCKeyBindingCommandSet *)object setIdentifier:[NSString stringWithFormat:@"org.revsoft.wabbitstudio.keybindingcommandset.%@",[(WCKeyBindingCommandSet *)object name]]];
 		
 		[[NSUserDefaults standardUserDefaults] setObject:[object identifier] forKey:WCKeyBindingsCurrentCommandSetIdentifierKey];
 		
