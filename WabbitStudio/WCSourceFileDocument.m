@@ -101,6 +101,7 @@
 
 - (BOOL)writeToURL:(NSURL *)url ofType:(NSString *)typeName error:(NSError **)outError {
 	NSMutableString *string = [[[[self textStorage] string] mutableCopy] autorelease];
+	NSStringEncoding fileEncoding = _fileEncoding;
 	
 	[self unblockUserInteraction];
 	
@@ -129,7 +130,7 @@
 		}
 	}
 	
-	return [[string dataUsingEncoding:_fileEncoding] writeToURL:url options:NSDataWritingAtomic error:outError];
+	return [[string dataUsingEncoding:fileEncoding] writeToURL:url options:NSDataWritingAtomic error:outError];
 }
 
 - (BOOL)readFromURL:(NSURL *)url ofType:(NSString *)typeName error:(NSError **)outError {

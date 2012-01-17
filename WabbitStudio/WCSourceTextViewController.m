@@ -78,9 +78,9 @@
 	[[[self textView] enclosingScrollView] setHasVerticalRuler:YES];
 	[[[self textView] enclosingScrollView] setRulersVisible:YES];
 	
-	[[self textView] setSelectedRange:NSEmptyRange];
-	
 	[[self textView] setWrapLines:[[NSUserDefaults standardUserDefaults] boolForKey:WCEditorWrapLinesToEditorWidthKey]];
+	
+	[[self textView] setSelectedRange:NSEmptyRange];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewBoundsDidChange:) name:NSViewBoundsDidChangeNotification object:[[[self textView] enclosingScrollView] contentView]];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewBoundsDidChange:) name:NSViewFrameDidChangeNotification object:[self textView]];
