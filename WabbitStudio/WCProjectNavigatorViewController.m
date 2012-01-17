@@ -298,9 +298,7 @@ static const CGFloat kMainCellHeight = 18.0;
 			[[file fileUTI] isEqualToString:WCIncludeFileUTI] ||
 			[[file fileUTI] isEqualToString:WCActiveServerIncludeFileUTI]) {
 			
-			WCSourceFileDocument *document = [[[[[self projectContainer] project] document] filesToSourceFileDocuments] objectForKey:[selectedNode representedObject]];
-			
-			[[[[[[self projectContainer] project] document] projectWindowController] tabViewController] addTabForSourceFileDocument:document];
+			[[[[self projectContainer] project] document] openTabForFile:[selectedNode representedObject]];
 		}
 	}
 }

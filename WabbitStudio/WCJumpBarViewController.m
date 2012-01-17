@@ -21,6 +21,8 @@
 #import "WCDocumentController.h"
 #import "NSURL+RSExtensions.h"
 #import "RSDefines.h"
+#import "WCProject.h"
+#import "RSTreeNode.h"
 
 @interface WCJumpBarViewController ()
 @property (readwrite,copy,nonatomic) NSString *textViewSelectedLineAndColumn;
@@ -176,7 +178,16 @@
 	
 	NSMutableArray *pathCells = [NSMutableArray arrayWithCapacity:0];
 	
-	if ([[self jumpBarDataSource] fileURL]) {
+	if ([[self jumpBarDataSource] projectDocument]) {
+		for (RSTreeNode *treeNode in [[self jumpBarDataSource] jumpBarPathComponents]) {
+			WCJumpBarComponentCell *cell = [[[WCJumpBarComponentCell alloc] initTextCell:[[treeNode representedObject] fileName]] autorelease];
+			
+			[cell setImage:[[treeNode representedObject] fileIcon]];
+			
+			[pathCells addObject:cell];
+		}
+	}
+	else if ([[self jumpBarDataSource] fileURL]) {
 		WCJumpBarComponentCell *fileCell = [[[WCJumpBarComponentCell alloc] initTextCell:[[self jumpBarDataSource] displayName]] autorelease];
 		
 		[fileCell setImage:[[NSWorkspace sharedWorkspace] iconForFile:[[[self jumpBarDataSource] fileURL] path]]];

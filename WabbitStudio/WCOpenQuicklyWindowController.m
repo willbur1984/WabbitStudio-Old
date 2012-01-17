@@ -1,38 +1,36 @@
 //
-//  WCJumpInWindowController.m
+//  WCOpenQuicklyWindowController.m
 //  WabbitStudio
 //
-//  Created by William Towe on 1/5/12.
+//  Created by William Towe on 1/17/12.
 //  Copyright (c) 2012 Revolution Software. All rights reserved.
 //
 
-#import "WCJumpInWindowController.h"
-#import "WCJumpInMatch.h"
-#import "RSDefines.h"
-#import "NSString+WCExtensions.h"
-#import "WCJumpInSearchOperation.h"
-#import "WCReallyAdvancedViewController.h"
+#import "WCOpenQuicklyWindowController.h"
+#import "WCOpenQuicklyMatch.h"
+#import "WCSourceFileDocument.h"
+#import "WCProjectDocument.h"
+#import "WCSourceTextViewController.h"
+#import "WCOpenQuicklySearchOperation.h"
+#import "WCSourceTextView.h"
 
-@interface WCJumpInWindowController ()
+@interface WCOpenQuicklyWindowController ()
 @property (readwrite,copy,nonatomic) NSArray *items;
-@property (readwrite,assign,nonatomic) id <WCJumpInDataSource> dataSource;
+@property (readwrite,assign,nonatomic) id <WCOpenQuicklyDataSource> dataSource;
 @end
 
-@implementation WCJumpInWindowController
+@implementation WCOpenQuicklyWindowController
 
 - (id)init {
 	if (!(self = [super initWithWindowNibName:[self windowNibName]]))
 		return nil;
 	
-	_matches = [[NSMutableArray alloc] initWithCapacity:0];
-	_operationQueue = [[NSOperationQueue alloc] init];
-	[_operationQueue setMaxConcurrentOperationCount:1];
 	
 	return self;
 }
 
 - (NSString *)windowNibName {
-	return @"WCJumpInWindow";
+	return @"WCOpenQuicklyWindow";
 }
 
 - (void)windowDidLoad {
@@ -46,7 +44,7 @@
 
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector {
 	if (commandSelector == @selector(insertNewline:)) {
-		[[self jumpButton] performClick:nil];
+		[[self openButton] performClick:nil];
 		return YES;
 	}
 	else if (commandSelector == @selector(cancelOperation:)) {
@@ -76,7 +74,7 @@
 	return NO;
 }
 
-+ (WCJumpInWindowController *)sharedWindowController; {
++ (WCOpenQuicklyWindowController *)sharedWindowController; {
 	static id sharedInstance;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
@@ -85,35 +83,29 @@
 	return sharedInstance;
 }
 
-- (void)showJumpInWindowWithDataSource:(id <WCJumpInDataSource>)dataSource; {
+- (void)showOpenQuicklyWindowWithDataSource:(id <WCOpenQuicklyDataSource>)dataSource; {
 	[self setDataSource:dataSource];
 	
 	[[self window] makeFirstResponder:[self searchField]];
 	
-	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCReallyAdvancedJumpInFileSearchUsingCurrentEditorSelectionKey]) {
-		NSRange symbolRange = [[[[self dataSource] jumpInTextView] string] symbolRangeForRange:[[[self dataSource] jumpInTextView] selectedRange]];
-		if (symbolRange.location != NSNotFound) {
-			[self setSearchString:[[[[self dataSource] jumpInTextView] string] substringWithRange:symbolRange]];
-			[self search:nil];
-		}
-	}
-	
 	NSInteger result = [[NSApplication sharedApplication] runModalForWindow:[self window]];
 	
 	if (result == NSOKButton) {
-		WCJumpInMatch *match = [[[self arrayController] selectedObjects] lastObject];
+		WCOpenQuicklyMatch *match = [[[self arrayController] selectedObjects] lastObject];
+		WCSourceFileDocument *sfDocument = [[match item] openQuicklySourceFileDocument];
+		WCSourceTextViewController *stvController = [[sfDocument projectDocument] openTabForSourceFileDocument:sfDocument];
 		
-		[[[self dataSource] jumpInTextView] setSelectedRange:[[match item] jumpInRange]];
-		[[[self dataSource] jumpInTextView] scrollRangeToVisible:[[[self dataSource] jumpInTextView] selectedRange]];
+		[[stvController textView] setSelectedRange:[[match item] openQuicklyRange]];
+		[[stvController textView] scrollRangeToVisible:[[match item] openQuicklyRange]];
 	}
 	
 	[self setSearchString:nil];
 	[self setStatusString:nil];
-	[[self mutableMatches] removeAllObjects];
+	[[self mutableMatches] setArray:nil];
 	[self setDataSource:nil];
 }
 
-- (IBAction)jump:(id)sender; {
+- (IBAction)open:(id)sender; {
 	[[NSApplication sharedApplication] stopModalWithCode:NSOKButton];
 	[[self window] orderOut:nil];
 }
@@ -134,10 +126,18 @@
 	[self setSearching:YES];
 	
 	[_operationQueue cancelAllOperations];
-	[_operationQueue addOperation:[[[WCJumpInSearchOperation alloc] initWithJumpInWindowController:self] autorelease]];
+	[_operationQueue addOperation:[[[WCOpenQuicklySearchOperation alloc] initWithOpenQuicklyWindowController:self] autorelease]];
 }
 
+@synthesize arrayController=_arrayController;
+@synthesize openButton=_openButton;
+@synthesize cancelButton=_cancelButton;
+@synthesize searchField=_searchField;
+@synthesize tableView=_tableView;
+
 @synthesize searchString=_searchString;
+@synthesize statusString=_statusString;
+@synthesize items=_items;
 @synthesize matches=_matches;
 @dynamic mutableMatches;
 - (NSMutableArray *)mutableMatches {
@@ -158,39 +158,13 @@
 - (void)replaceMatchesAtIndexes:(NSIndexSet *)indexes withMatches:(NSArray *)array {
 	[_matches replaceObjectsAtIndexes:indexes withObjects:array];
 }
-@dynamic dataSource;
-- (id <WCJumpInDataSource>)dataSource {
-	return _dataSource;
-}
-- (void)setDataSource:(id <WCJumpInDataSource>)dataSource {
-	_dataSource = dataSource;
-	
-	[self setItems:[dataSource jumpInItems]];
-	
-	if (dataSource)
-		[[self window] setTitle:[NSString stringWithFormat:NSLocalizedString(@"Jump in \"%@\"", @"jump in window title format string"),[[self dataSource] jumpInFileName]]];
-}
-@synthesize statusString=_statusString;
-@synthesize items=_items;
-@synthesize arrayController=_arrayController;
-@synthesize jumpButton=_jumpButton;
-@synthesize cancelButton=_cancelButton;
-@synthesize searchField=_searchField;
-@synthesize tableView=_tableView;
 @dynamic searching;
 - (BOOL)isSearching {
-	return _jumpInFlags.searching;
+	return _openQuicklyFlags.searching;
 }
 - (void)setSearching:(BOOL)searching {
-	_jumpInFlags.searching = searching;
+	_openQuicklyFlags.searching = searching;
 }
+@synthesize dataSource=_dataSource;
 
-- (IBAction)_tableViewDoubleClick:(id)sender {
-	if (![[[self arrayController] selectedObjects] count]) {
-		NSBeep();
-		return;
-	}
-	
-	[self jump:nil];
-}
 @end

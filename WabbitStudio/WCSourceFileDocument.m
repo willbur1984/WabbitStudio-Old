@@ -21,13 +21,15 @@
 #import "WCSourceFileWindowController.h"
 #import "WCProjectDocument.h"
 #import "NDTrie.h"
+#import "WCProjectContainer.h"
+#import "WCProject.h"
 
 @interface WCSourceFileDocument ()
 
 @end
 
 @implementation WCSourceFileDocument
-
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
@@ -144,24 +146,37 @@
 	
 	return YES;
 }
-
+#pragma mark PSMTabBarControlCell
 - (BOOL)isEdited {
 	return [self isDocumentEdited];
 }
-
+#pragma mark WCJumpBarDataSource
 - (NSDocument *)document {
 	return self;
 }
-
-- (NSArray *)sourceTokensForSourceTextView:(WCSourceTextView *)textView {
-	return [[self sourceScanner] tokens];
+- (NSArray *)jumpBarPathComponents {
+	if ([self projectDocument]) {
+		WCFile *fileForDocument = [[[self projectDocument] sourceFileDocumentsToFiles] objectForKey:self];
+		RSTreeNode *treeNodeForDocument = nil;
+		for (RSTreeNode *treeNode in [[[self projectDocument] projectContainer] descendantLeafNodes]) {
+			if ([treeNode representedObject] == fileForDocument) {
+				treeNodeForDocument = treeNode;
+				break;
+			}
+		}
+		
+		NSMutableArray *retval = [NSMutableArray arrayWithObjects:treeNodeForDocument, nil];
+		while ([treeNodeForDocument parentNode]) {
+			
+			[retval insertObject:[treeNodeForDocument parentNode] atIndex:0];
+			
+			treeNodeForDocument = [treeNodeForDocument parentNode];
+		}
+		return [[retval copy] autorelease];
+	}
+	return nil;
 }
-- (NSArray *)sourceSymbolsForSourceTextView:(WCSourceTextView *)textView; {
-	return [[self sourceScanner] symbols];
-}
-- (WCSourceScanner *)sourceScannerForSourceTextView:(WCSourceTextView *)textView {
-	return [self sourceScanner];
-}
+#pragma mark WCSourceScannerDelegate
 - (NSArray *)sourceScanner:(WCSourceScanner *)scanner completionsForPrefix:(NSString *)prefix; {
 	NSMutableArray *retval = [NSMutableArray arrayWithCapacity:0];
 	
@@ -174,15 +189,29 @@
 	
 	return [[retval copy] autorelease];
 }
-
-- (WCSourceHighlighter *)sourceHighlighterForSourceTextStorage:(WCSourceTextStorage *)textStorage {
-	return [self sourceHighlighter];
-}
-
 - (NSString *)fileDisplayNameForSourceScanner:(WCSourceScanner *)scanner {
 	return [self displayName];
 }
-
+- (WCSourceFileDocument *)sourceFileDocumentForSourceScanner:(WCSourceScanner *)scanner {
+	return self;
+}
+- (NSURL *)fileURLForSourceScanner:(WCSourceScanner *)scanner {
+	return [self fileURL];
+}
+- (NSURL *)locationURLForSourceScanner:(WCSourceScanner *)scanner {
+	NSArray *jumpBarComponents = [self jumpBarPathComponents];
+	NSURL *retval = [NSURL URLWithString:[[[jumpBarComponents objectAtIndex:0] representedObject] fileName]];
+	
+	for (RSTreeNode *treeNode in [jumpBarComponents subarrayWithRange:NSMakeRange(1, [jumpBarComponents count]-1)]) {
+		retval = [retval URLByAppendingPathComponent:[[treeNode representedObject] fileName]];
+	}
+	return retval;
+}
+#pragma mark WCSourceTextStorageDelegate
+- (WCSourceHighlighter *)sourceHighlighterForSourceTextStorage:(WCSourceTextStorage *)textStorage {
+	return [self sourceHighlighter];
+}
+#pragma mark WCSourceHighlighterDelegate
 - (NSArray *)labelSymbolsForSourceHighlighter:(WCSourceHighlighter *)highlighter {
 	NSMutableArray *retval = [NSMutableArray arrayWithCapacity:0];
 	
@@ -231,7 +260,7 @@
 	
 	return [[retval copy] autorelease];
 }
-
+#pragma mark *** Public Methods ***
 - (id)initWithContentsOfURL:(NSURL *)url ofType:(NSString *)typeName forProjectDocument:(WCProjectDocument *)projectDocument error:(NSError **)outError; {
 	if (!(self = [super initWithContentsOfURL:url ofType:typeName error:outError]))
 		return nil;
@@ -240,7 +269,7 @@
 	
 	return self;
 }
-
+#pragma mark Properties
 @synthesize sourceScanner=_sourceScanner;
 @synthesize sourceHighlighter=_sourceHighlighter;
 @synthesize textStorage=_textStorage;

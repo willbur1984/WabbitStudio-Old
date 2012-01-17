@@ -14,7 +14,7 @@
 
 @class WCSourceScanner,WCSourceHighlighter,WCSourceTextStorage,WCProjectDocument;
 
-@interface WCSourceFileDocument : NSDocument <WCJumpBarDataSource,WCSourceTextStorageDelegate,WCSourceScannerDelegate,WCSourceHighlighterDelegate,NSWindowDelegate,NSSplitViewDelegate> {
+@interface WCSourceFileDocument : NSDocument <WCJumpBarDataSource,WCSourceTextStorageDelegate,WCSourceScannerDelegate,WCSourceHighlighterDelegate> {
 	__weak WCProjectDocument *_projectDocument;
 	
 	NSString *_fileContents;

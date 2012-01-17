@@ -14,11 +14,13 @@
 #import "RSDefines.h"
 #import "WCSourceFileDocument.h"
 #import "WCTabViewController.h"
+#import "WCOpenQuicklyWindowController.h"
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
 @interface WCProjectDocument ()
 @property (readwrite,retain) WCProjectContainer *projectContainer;
 @property (readwrite,retain) NSMapTable *filesToSourceFileDocuments;
+@property (readwrite,retain) NSMapTable *sourceFileDocumentsToFiles;
 @end
 
 @implementation WCProjectDocument
@@ -27,6 +29,7 @@
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
+	[_sourceFileDocumentsToFiles release];
 	[_filesToSourceFileDocuments release];
 	[_projectContainer release];
 	[super dealloc];
@@ -108,6 +111,7 @@
 	[self setProjectContainer:projectContainer];
 	
 	NSMapTable *filesToSourceFileDocuments = [NSMapTable mapTableWithWeakToStrongObjects];
+	NSMapTable *sourceFileDocumentsToFiles = [NSMapTable mapTableWithWeakToWeakObjects];
 	
 	for (RSTreeNode *leafNode in [projectContainer descendantLeafNodes]) {
 		NSString *UTI = [[leafNode representedObject] fileUTI];
@@ -118,12 +122,15 @@
 			NSError *outError;
 			WCSourceFileDocument *document = [[[WCSourceFileDocument alloc] initWithContentsOfURL:[[leafNode representedObject] fileURL] ofType:UTI forProjectDocument:self error:&outError] autorelease];
 			
-			if (document)
+			if (document) {
 				[filesToSourceFileDocuments setObject:document forKey:[leafNode representedObject]];
+				[sourceFileDocumentsToFiles setObject:[leafNode representedObject] forKey:document];
+			}
 		}
 	}
 	
 	[self setFilesToSourceFileDocuments:filesToSourceFileDocuments];
+	[self setSourceFileDocumentsToFiles:sourceFileDocumentsToFiles];
 	
 	return YES;
 }
@@ -136,6 +143,17 @@
 		[[selectedTabViewItem identifier] saveDocument:nil];
 }
 
+- (WCSourceTextViewController *)openTabForFile:(WCFile *)file; {
+	return [[[self projectWindowController] tabViewController] addTabForSourceFileDocument:[[self filesToSourceFileDocuments] objectForKey:file]];
+}
+- (WCSourceTextViewController *)openTabForSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument; {
+	return [[[self projectWindowController] tabViewController] addTabForSourceFileDocument:sourceFileDocument];
+}
+
+- (IBAction)openQuickly:(id)sender; {
+	[[WCOpenQuicklyWindowController sharedWindowController] showOpenQuicklyWindowWithDataSource:self];
+}
+
 @synthesize projectContainer=_projectContainer;
 @dynamic projectWindowController;
 - (WCProjectWindowController *)projectWindowController {
@@ -146,5 +164,6 @@
 - (NSArray *)sourceFileDocuments {
 	return [[[self filesToSourceFileDocuments] objectEnumerator] allObjects];
 }
+@synthesize sourceFileDocumentsToFiles=_sourceFileDocumentsToFiles;
 
 @end

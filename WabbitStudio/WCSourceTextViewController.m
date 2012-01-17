@@ -22,6 +22,7 @@
 #import "WCSourceFileDocument.h"
 #import "WCStandardSourceTextViewController.h"
 #import "WCSourceSymbol.h"
+#import "WCProjectDocument.h"
 
 @interface WCSourceTextViewController ()
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
@@ -166,8 +167,12 @@
 		[textView setSelectedRange:[symbol range]];
 		[textView scrollRangeToVisible:[symbol range]];
 	}
-	else
-		NSBeep();
+	else {
+		WCSourceTextViewController *stvController = [[[self sourceFileDocument] projectDocument] openTabForSourceFileDocument:[[[symbol sourceScanner] delegate] sourceFileDocumentForSourceScanner:[symbol sourceScanner]]];
+		
+		[[stvController textView] setSelectedRange:[symbol range]];
+		[[stvController textView] scrollRangeToVisible:[symbol range]];
+	}
 }
 #pragma mark *** Public Methods ***
 - (id)initWithSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument; {

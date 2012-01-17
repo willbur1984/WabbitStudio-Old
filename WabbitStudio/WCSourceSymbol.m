@@ -59,6 +59,25 @@
 	return [[NSURL URLWithString:[self jumpInName]] URLByAppendingPathComponent:[NSString stringWithFormat:NSLocalizedString(@"line %lu", @"jump in location url line format string"),[[[[self sourceScanner] textStorage] string] lineNumberForRange:[self range]]+1]];
 }
 
+- (NSString *)openQuicklyName {
+	return [self name];
+}
+- (NSImage *)openQuicklyImage {
+	return [self icon];
+}
+- (NSRange)openQuicklyRange {
+	return [self range];
+}
+- (NSURL *)openQuicklyFileURL {
+	return [[[self sourceScanner] delegate] fileURLForSourceScanner:[self sourceScanner]];
+}
+- (NSURL *)openQuicklyLocationURL {
+	return [[[[self sourceScanner] delegate] locationURLForSourceScanner:[self sourceScanner]] URLByAppendingPathComponent:[NSString stringWithFormat:NSLocalizedString(@"line %lu", @"jump in location url line format string"),[[[[self sourceScanner] textStorage] string] lineNumberForRange:[self range]]+1]];
+}
+- (WCSourceFileDocument *)openQuicklySourceFileDocument {
+	return [[[self sourceScanner] delegate] sourceFileDocumentForSourceScanner:[self sourceScanner]];
+}
+
 + (id)sourceSymbolOfType:(WCSourceSymbolType)type range:(NSRange)range name:(NSString *)name; {
 	return [[[[self class] alloc] initWithType:type range:range name:name] autorelease];
 }

@@ -80,6 +80,18 @@
 				<true/>
 			</dict>
 		</dict>
+		<key>openQuickly:</key>
+		<dict>
+			<key>keyCode</key>
+			<integer>31</integer>
+			<key>modifierFlags</key>
+			<dict>
+				<key>command</key>
+				<true/>
+				<key>shift</key>
+				<true/>
+			</dict>
+		</dict>
 		<key>performClose:</key>
 		<dict>
 			<key>keyCode</key>

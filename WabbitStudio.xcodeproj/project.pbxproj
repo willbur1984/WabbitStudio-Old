@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		07018B1114C600BB00C5A7AC /* WCOpenQuicklyWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07018B1014C600BB00C5A7AC /* WCOpenQuicklyWindowController.m */; };
+		07018B1414C6011E00C5A7AC /* WCOpenQuicklyWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07018B1214C6011E00C5A7AC /* WCOpenQuicklyWindow.xib */; };
+		07018B1814C6038F00C5A7AC /* WCOpenQuicklyMatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 07018B1714C6038F00C5A7AC /* WCOpenQuicklyMatch.m */; };
+		07018B1B14C6047600C5A7AC /* WCOpenQuicklySearchOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 07018B1A14C6047600C5A7AC /* WCOpenQuicklySearchOperation.m */; };
 		0706D65114A8F45B0092F880 /* WCSourceTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0706D64F14A8F45B0092F880 /* WCSourceTextViewController.m */; };
 		0706D65514A8F49D0092F880 /* WCSourceTextView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0706D65314A8F49D0092F880 /* WCSourceTextView.xib */; };
 		0706D65814A8F6D60092F880 /* WCSourceTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0706D65714A8F6D60092F880 /* WCSourceTextStorage.m */; };
@@ -238,6 +242,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		07018B0E14C5FD7000C5A7AC /* WCOpenQuicklyItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCOpenQuicklyItem.h; sourceTree = "<group>"; };
+		07018B0F14C600BB00C5A7AC /* WCOpenQuicklyWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCOpenQuicklyWindowController.h; sourceTree = "<group>"; };
+		07018B1014C600BB00C5A7AC /* WCOpenQuicklyWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCOpenQuicklyWindowController.m; sourceTree = "<group>"; };
+		07018B1314C6011E00C5A7AC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCOpenQuicklyWindow.xib; sourceTree = "<group>"; };
+		07018B1514C6032900C5A7AC /* WCOpenQuicklyDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCOpenQuicklyDataSource.h; sourceTree = "<group>"; };
+		07018B1614C6038F00C5A7AC /* WCOpenQuicklyMatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCOpenQuicklyMatch.h; sourceTree = "<group>"; };
+		07018B1714C6038F00C5A7AC /* WCOpenQuicklyMatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCOpenQuicklyMatch.m; sourceTree = "<group>"; };
+		07018B1914C6047600C5A7AC /* WCOpenQuicklySearchOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCOpenQuicklySearchOperation.h; sourceTree = "<group>"; };
+		07018B1A14C6047600C5A7AC /* WCOpenQuicklySearchOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCOpenQuicklySearchOperation.m; sourceTree = "<group>"; };
 		0706D64C14A8F1800092F880 /* WCJumpBarDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCJumpBarDataSource.h; sourceTree = "<group>"; };
 		0706D64E14A8F45B0092F880 /* WCSourceTextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSourceTextViewController.h; sourceTree = "<group>"; };
 		0706D64F14A8F45B0092F880 /* WCSourceTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSourceTextViewController.m; sourceTree = "<group>"; };
@@ -637,6 +650,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		07018B0C14C5FD4500C5A7AC /* Open Quickly */ = {
+			isa = PBXGroup;
+			children = (
+				07018B0E14C5FD7000C5A7AC /* WCOpenQuicklyItem.h */,
+				07018B0F14C600BB00C5A7AC /* WCOpenQuicklyWindowController.h */,
+				07018B1014C600BB00C5A7AC /* WCOpenQuicklyWindowController.m */,
+				07018B1514C6032900C5A7AC /* WCOpenQuicklyDataSource.h */,
+				07018B1614C6038F00C5A7AC /* WCOpenQuicklyMatch.h */,
+				07018B1714C6038F00C5A7AC /* WCOpenQuicklyMatch.m */,
+				07018B1914C6047600C5A7AC /* WCOpenQuicklySearchOperation.h */,
+				07018B1A14C6047600C5A7AC /* WCOpenQuicklySearchOperation.m */,
+			);
+			name = "Open Quickly";
+			sourceTree = "<group>";
+		};
 		0706D65F14A952F80092F880 /* Themes */ = {
 			isa = PBXGroup;
 			children = (
@@ -678,6 +706,7 @@
 				0719861014C0C53600C8E91A /* WCNewProjectWindow.xib */,
 				0778851214C2349B00605F5D /* WCProjectNavigatorView.xib */,
 				0797327014C5360A00A71F54 /* WCTabView.xib */,
+				07018B1214C6011E00C5A7AC /* WCOpenQuicklyWindow.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -840,6 +869,7 @@
 		071985F914C0B3BA00C8E91A /* Project */ = {
 			isa = PBXGroup;
 			children = (
+				07018B0C14C5FD4500C5A7AC /* Open Quickly */,
 				0797327614C536C800A71F54 /* Tabs */,
 				0778853114C386BD00605F5D /* Documents */,
 				0778853314C386E000605F5D /* Window Controllers */,
@@ -1537,6 +1567,7 @@
 				0778851A14C2377C00605F5D /* FileNotFound.png in Resources */,
 				0778851C14C2377C00605F5D /* Filter.png in Resources */,
 				0797327214C5360A00A71F54 /* WCTabView.xib in Resources */,
+				07018B1414C6011E00C5A7AC /* WCOpenQuicklyWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1688,12 +1719,23 @@
 				0797327514C5368200A71F54 /* RSTabView.m in Sources */,
 				0797327914C5372900A71F54 /* WCTabViewController.m in Sources */,
 				0797327C14C5374300A71F54 /* WCTabView.m in Sources */,
+				07018B1114C600BB00C5A7AC /* WCOpenQuicklyWindowController.m in Sources */,
+				07018B1814C6038F00C5A7AC /* WCOpenQuicklyMatch.m in Sources */,
+				07018B1B14C6047600C5A7AC /* WCOpenQuicklySearchOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		07018B1214C6011E00C5A7AC /* WCOpenQuicklyWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				07018B1314C6011E00C5A7AC /* en */,
+			);
+			name = WCOpenQuicklyWindow.xib;
+			sourceTree = "<group>";
+		};
 		0706D65314A8F49D0092F880 /* WCSourceTextView.xib */ = {
 			isa = PBXVariantGroup;
 			children = (

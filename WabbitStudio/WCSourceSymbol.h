@@ -10,6 +10,7 @@
 #import "WCCompletionItem.h"
 #import "RSToolTipProvider.h"
 #import "WCJumpInItem.h"
+#import "WCOpenQuicklyItem.h"
 
 typedef enum _WCSourceSymbolType {
 	WCSourceSymbolTypeLabel,
@@ -21,7 +22,7 @@ typedef enum _WCSourceSymbolType {
 
 @class WCSourceScanner;
 
-@interface WCSourceSymbol : NSObject <WCCompletionItem,RSToolTipProvider,WCJumpInItem> {
+@interface WCSourceSymbol : NSObject <WCCompletionItem,RSToolTipProvider,WCJumpInItem,WCOpenQuicklyItem> {
 	__weak WCSourceScanner *_sourceScanner;
 	WCSourceSymbolType _type;
 	NSRange _range;
