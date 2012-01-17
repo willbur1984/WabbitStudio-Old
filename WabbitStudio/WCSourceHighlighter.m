@@ -22,11 +22,16 @@ NSString *const WCSourceHighlighterCommentFontAttributeName = @"commentFont";
 @interface WCSourceHighlighter ()
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
 
+- (BOOL)_symbolName:(NSString *)symbolName existsInArrayOfSymbolNames:(NSArray *)arrayOfSymbolNames;
 @end
 
 @implementation WCSourceHighlighter
 - (void)dealloc {
+#ifdef DEBUG
+	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
+#endif
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	_delegate = nil;
 	_sourceScanner = nil;
 	[super dealloc];
 }
@@ -38,7 +43,6 @@ NSString *const WCSourceHighlighterCommentFontAttributeName = @"commentFont";
 	_needsToPerformFullHighlight = YES;
 	_sourceScanner = sourceScanner;
 	
-	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageWillProcessEditing:) name:NSTextStorageWillProcessEditingNotification object:[sourceScanner textStorage]];
 	if ([sourceScanner needsToScanSymbols]) {
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_sourceScannerDidFinishScanningSymbols:) name:WCSourceScannerDidFinishScanningSymbolsNotification object:sourceScanner];
 	}
@@ -77,30 +81,31 @@ NSString *const WCSourceHighlighterCommentFontAttributeName = @"commentFont";
 	[[[self sourceScanner] textStorage] removeAttribute:WCSourceHighlighterCommentFontAttributeName range:range];
 	[[[self sourceScanner] textStorage] removeAttribute:WCSourceHighlighterCommentColorAttributeName range:range];
 	
-	NSDictionary *labelNames = [[self sourceScanner] labelNamesToLabelSymbols];
-	NSDictionary *equateNames = [[self sourceScanner] equateNamesToEquateSymbols];
-	NSDictionary *defineNames = [[self sourceScanner] defineNamesToDefineSymbols];
-	NSDictionary *macroNames = [[self sourceScanner] macroNamesToMacroSymbols];
+	NSArray *labelNames = [[self delegate] labelSymbolsForSourceHighlighter:self];
+	NSArray *equateNames = [[self delegate] equateSymbolsForSourceHighlighter:self];
+	NSArray *defineNames = [[self delegate] defineSymbolsForSourceHighlighter:self];
+	NSArray *macroNames = [[self delegate] macroSymbolsForSourceHighlighter:self];
 	NSArray *tokens = [[self sourceScanner] tokens];
 	
 	[[WCSourceScanner symbolRegularExpression] enumerateMatchesInString:[[[self sourceScanner] textStorage] string] options:0 range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
 		WCSourceToken *token = [tokens sourceTokenForRange:[result range]];
-		if (NSLocationInRange([result range].location, [token range]))
+		if (NSLocationInRange([result range].location, [token range]) &&
+			([token type] == WCSourceTokenTypeComment || [token type] == WCSourceTokenTypeString))
 			return;
 		
 		NSString *name = [[[[[self sourceScanner] textStorage] string] substringWithRange:[result range]] lowercaseString];
 		
-		if ([labelNames objectForKey:name]) {
-			[[[self sourceScanner] textStorage] addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme labelFont],NSFontAttributeName,[currentTheme labelColor],NSForegroundColorAttributeName, nil] range:[result range]];
-		}
-		else if ([equateNames objectForKey:name]) {
+		if ([self _symbolName:name existsInArrayOfSymbolNames:equateNames]) {
 			[[[self sourceScanner] textStorage] addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme equateFont],NSFontAttributeName,[currentTheme equateColor],NSForegroundColorAttributeName, nil] range:[result range]];
 		}
-		else if ([defineNames objectForKey:name]) {
-			[[[self sourceScanner] textStorage] addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme defineFont],NSFontAttributeName,[currentTheme defineColor],NSForegroundColorAttributeName, nil] range:[result range]];
+		else if ([self _symbolName:name existsInArrayOfSymbolNames:labelNames]) {
+			[[[self sourceScanner] textStorage] addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme labelFont],NSFontAttributeName,[currentTheme labelColor],NSForegroundColorAttributeName, nil] range:[result range]];
 		}
-		else if ([macroNames objectForKey:name]) {
+		else if ([self _symbolName:name existsInArrayOfSymbolNames:macroNames]) {
 			[[[self sourceScanner] textStorage] addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme macroFont],NSFontAttributeName,[currentTheme macroColor],NSForegroundColorAttributeName, nil] range:[result range]];
+		}
+		else if ([self _symbolName:name existsInArrayOfSymbolNames:defineNames]) {
+			[[[self sourceScanner] textStorage] addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme defineFont],NSFontAttributeName,[currentTheme defineColor],NSForegroundColorAttributeName, nil] range:[result range]];
 		}
 	}];
 	
@@ -147,24 +152,15 @@ NSString *const WCSourceHighlighterCommentFontAttributeName = @"commentFont";
 	[[[self sourceScanner] textStorage] endEditing];
 }
 
-- (void)performHighlightingInRange:(NSRange)range attributeName:(NSString *)attributeName; {
-	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
-	NSRange effectiveRange;
-	id attributeValue;
-	while (range.length > 0) {
-		if ((attributeValue = [[[self sourceScanner] textStorage] attribute:attributeName atIndex:range.location longestEffectiveRange:&effectiveRange inRange:range])) {
-			if ([attributeValue boolValue])
-				[[[self sourceScanner] textStorage] addAttribute:NSForegroundColorAttributeName value:[currentTheme commentColor] range:effectiveRange];
-		}
-		
-		range = NSMakeRange(NSMaxRange(effectiveRange),NSMaxRange(range)-NSMaxRange(effectiveRange));
-	}
-}
-
 @synthesize sourceScanner=_sourceScanner;
+@synthesize delegate=_delegate;
 
-- (void)_textStorageWillProcessEditing:(NSNotification *)note {
-	
+- (BOOL)_symbolName:(NSString *)symbolName existsInArrayOfSymbolNames:(NSArray *)arrayOfSymbolNames; {
+	for (NSDictionary *symbolNames in arrayOfSymbolNames) {
+		if ([symbolNames objectForKey:symbolName])
+			return YES;
+	}
+	return NO;
 }
 
 - (void)_sourceScannerDidFinishScanning:(NSNotification *)note {

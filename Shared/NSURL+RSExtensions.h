@@ -14,4 +14,5 @@
 - (BOOL)isDirectory;
 - (BOOL)isPackage;
 - (NSURL *)parentDirectoryURL;
+- (NSString *)fileUTI;
 @end

@@ -86,4 +86,8 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 - (NSString *)fileName {
 	return [[self fileReferenceURL] fileName];
 }
+@dynamic fileUTI;
+- (NSString *)fileUTI {
+	return [[self fileReferenceURL] fileUTI];
+}
 @end

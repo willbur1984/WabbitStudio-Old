@@ -27,6 +27,7 @@ extern NSString *const WCSourceScannerDidFinishScanningSymbolsNotification;
 	NSDictionary *_defineNamesToDefineSymbols;
 	NSDictionary *_macroNamesToMacroSymbols;
 	NDTrie *_completions;
+	NSTimer *_scanTimer;
 }
 @property (readwrite,assign,nonatomic) id <WCSourceScannerDelegate> delegate;
 @property (readonly,nonatomic) NSTextStorage *textStorage;

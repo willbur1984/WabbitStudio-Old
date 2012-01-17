@@ -17,8 +17,11 @@ NSString *const WCSourceScannerDidFinishScanningSymbolsNotification = @"WCSource
 
 @implementation WCSourceScanner
 - (void)dealloc {
+#ifdef DEBUG
+	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
+#endif
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	[_scanTimer invalidate];
 	_textStorage = nil;
 	[_operationQueue release];
 	[_tokens release];
@@ -46,6 +49,9 @@ NSString *const WCSourceScannerDidFinishScanningSymbolsNotification = @"WCSource
 }
 
 - (void)scanTokens; {
+	[_scanTimer invalidate];
+	_scanTimer = nil;
+	
 	[_operationQueue cancelAllOperations];
 	
 	if ([self needsToScanSymbols]) {
@@ -209,8 +215,10 @@ NSString *const WCSourceScannerDidFinishScanningSymbolsNotification = @"WCSource
 	if (([[note object] editedMask] & NSTextStorageEditedCharacters) == 0)
 		return;
 	
-	[NSObject cancelPreviousPerformRequestsWithTarget:self];
-	[self performSelector:@selector(scanTokens) withObject:nil afterDelay:0.35];
+	if (_scanTimer)
+		[_scanTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:0.35]];
+	else
+		_scanTimer = [NSTimer scheduledTimerWithTimeInterval:0.35 target:self selector:@selector(scanTokens) userInfo:nil repeats:NO];
 }
 
 @end

@@ -16,6 +16,8 @@
 #import "NSTreeController+RSExtensions.h"
 #import "RSNavigatorControl.h"
 #import "WCProjectWindowController.h"
+#import "WCTabViewController.h"
+#import "WCDocumentController.h"
 
 @interface WCProjectNavigatorViewController ()
 @property (readwrite,retain,nonatomic) WCProjectContainer *filteredProjectContainer;
@@ -44,6 +46,9 @@
 	[[[[self searchField] cell] searchButtonCell] setAlternateImage:nil];
 	
 	[[self outlineView] expandItem:[[self outlineView] itemAtRow:0] expandChildren:NO];
+	
+	[[self outlineView] setTarget:self];
+	[[self outlineView] setDoubleAction:@selector(_outlineViewDoubleClick:)];
 }
 #pragma mark NSMenuValidation
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
@@ -138,7 +143,13 @@ static const CGFloat kMainCellHeight = 18.0;
 - (void)setSelectedObjects:(NSArray *)objects {
 	[[self treeController] setSelectedRepresentedObjects:objects];
 }
+#pragma mark RSFindOptionsViewControllerDelegate
+- (void)findOptionsViewControllerDidChangeFindOptions:(RSFindOptionsViewController *)viewController {
+	if ([[self filterString] length])
+		[self filter:nil];
+}
 
+#pragma mark *** Public Methods ***
 - (id)initWithProjectContainer:(WCProjectContainer *)projectContainer; {
 	if (!(self = [super initWithNibName:[self nibName] bundle:nil]))
 		return nil;
@@ -149,11 +160,7 @@ static const CGFloat kMainCellHeight = 18.0;
 	return self;
 }
 
-- (void)findOptionsViewControllerDidChangeFindOptions:(RSFindOptionsViewController *)viewController {
-	if ([[self filterString] length])
-		[self filter:nil];
-}
-
+#pragma mark IBActions
 - (IBAction)filter:(id)sender; {
 	if (![[self filterString] length]) {
 		[self setSwitchTreeControllerContentBinding:YES];
@@ -255,7 +262,7 @@ static const CGFloat kMainCellHeight = 18.0;
 - (IBAction)hideFilterOptions:(id)sender; {
 	[[self filterOptionsViewController] hideFindOptionsView];
 }
-
+#pragma mark Properties
 @synthesize outlineView=_outlineView;
 @synthesize searchField=_searchField;
 @synthesize treeController=_treeController;
@@ -281,5 +288,20 @@ static const CGFloat kMainCellHeight = 18.0;
 	}
 	return _filterOptionsViewController;
 }
+#pragma mark *** Private Methods ***
 
+#pragma mark IBActions
+- (IBAction)_outlineViewDoubleClick:(id)sender; {
+	for (RSTreeNode *selectedNode in [self selectedObjects]) {
+		id file = [selectedNode representedObject];
+		if ([[file fileUTI] isEqualToString:WCAssemblyFileUTI] ||
+			[[file fileUTI] isEqualToString:WCIncludeFileUTI] ||
+			[[file fileUTI] isEqualToString:WCActiveServerIncludeFileUTI]) {
+			
+			WCSourceFileDocument *document = [[[[[self projectContainer] project] document] filesToSourceFileDocuments] objectForKey:[selectedNode representedObject]];
+			
+			[[[[[[self projectContainer] project] document] projectWindowController] tabViewController] addTabForSourceFileDocument:document];
+		}
+	}
+}
 @end

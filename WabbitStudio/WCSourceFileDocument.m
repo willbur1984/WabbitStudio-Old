@@ -11,7 +11,7 @@
 #import "WCSourceHighlighter.h"
 #import "WCJumpBarViewController.h"
 #import "WCSourceTextStorage.h"
-#import "WCSourceTextViewController.h"
+#import "WCStandardSourceTextViewController.h"
 #import "WCSourceTextView.h"
 #import "RSFindBarViewController.h"
 #import "NSString+RSExtensions.h"
@@ -19,6 +19,8 @@
 #import "NSUserDefaults+RSExtensions.h"
 #import "WCDocumentController.h"
 #import "WCSourceFileWindowController.h"
+#import "WCProjectDocument.h"
+#import "NDTrie.h"
 
 @interface WCSourceFileDocument ()
 
@@ -30,6 +32,7 @@
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
+	_projectDocument = nil;
 	[_fileContents release];
 	[_sourceHighlighter release];
 	[_sourceScanner release];
@@ -49,6 +52,7 @@
 	[_sourceScanner setNeedsToScanSymbols:YES];
 	
 	_sourceHighlighter = [[WCSourceHighlighter alloc] initWithSourceScanner:[self sourceScanner]];
+	[_sourceHighlighter setDelegate:self];
 	
 	return self;
 }
@@ -81,6 +85,18 @@
 		[typeName isEqualToString:WCActiveServerIncludeFileUTI])
 		return YES;
 	return NO;
+}
+
+- (void)saveToURL:(NSURL *)url ofType:(NSString *)typeName forSaveOperation:(NSSaveOperationType)saveOperation completionHandler:(void (^)(NSError *))completionHandler {
+	if (saveOperation != NSAutosaveInPlaceOperation) {
+		if ([self projectDocument]) {
+			
+		}
+		else
+			[[[[self windowControllers] objectAtIndex:0] sourceTextViewController] breakUndoCoalescingForAllTextViews];
+	}
+	
+	[super saveToURL:url ofType:typeName forSaveOperation:saveOperation completionHandler:completionHandler];
 }
 
 - (BOOL)writeToURL:(NSURL *)url ofType:(NSString *)typeName error:(NSError **)outError {
@@ -123,12 +139,13 @@
 		return NO;
 	
 	[_textStorage replaceCharactersInRange:NSMakeRange(0, [_textStorage length]) withString:string];
-#ifdef DEBUG
-	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
-#endif
 	[_sourceScanner scanTokens];
 	
 	return YES;
+}
+
+- (BOOL)isEdited {
+	return [self isDocumentEdited];
 }
 
 - (NSDocument *)document {
@@ -144,6 +161,18 @@
 - (WCSourceScanner *)sourceScannerForSourceTextView:(WCSourceTextView *)textView {
 	return [self sourceScanner];
 }
+- (NSArray *)sourceScanner:(WCSourceScanner *)scanner completionsForPrefix:(NSString *)prefix; {
+	NSMutableArray *retval = [NSMutableArray arrayWithCapacity:0];
+	
+	if ([self projectDocument]) {
+		for (WCSourceFileDocument *document in [[self projectDocument] sourceFileDocuments])
+			[retval addObjectsFromArray:[[[document sourceScanner] completions] everyObjectForKeyWithPrefix:prefix]];
+	}
+	else
+		[retval addObjectsFromArray:[[scanner completions] everyObjectForKeyWithPrefix:prefix]];
+	
+	return [[retval copy] autorelease];
+}
 
 - (WCSourceHighlighter *)sourceHighlighterForSourceTextStorage:(WCSourceTextStorage *)textStorage {
 	return [self sourceHighlighter];
@@ -153,8 +182,67 @@
 	return [self displayName];
 }
 
+- (NSArray *)labelSymbolsForSourceHighlighter:(WCSourceHighlighter *)highlighter {
+	NSMutableArray *retval = [NSMutableArray arrayWithCapacity:0];
+	
+	if ([self projectDocument]) {
+		for (WCSourceFileDocument *document in [[self projectDocument] sourceFileDocuments])
+			[retval addObject:[[document sourceScanner] labelNamesToLabelSymbols]];
+	}
+	else
+		[retval addObject:[[self sourceScanner] labelNamesToLabelSymbols]];
+	
+	return [[retval copy] autorelease];
+}
+- (NSArray *)equateSymbolsForSourceHighlighter:(WCSourceHighlighter *)highlighter {
+	NSMutableArray *retval = [NSMutableArray arrayWithCapacity:0];
+	
+	if ([self projectDocument]) {
+		for (WCSourceFileDocument *document in [[self projectDocument] sourceFileDocuments])
+			[retval addObject:[[document sourceScanner] equateNamesToEquateSymbols]];
+	}
+	else
+		[retval addObject:[[self sourceScanner] equateNamesToEquateSymbols]];
+	
+	return [[retval copy] autorelease];
+}
+- (NSArray *)defineSymbolsForSourceHighlighter:(WCSourceHighlighter *)highlighter {
+	NSMutableArray *retval = [NSMutableArray arrayWithCapacity:0];
+	
+	if ([self projectDocument]) {
+		for (WCSourceFileDocument *document in [[self projectDocument] sourceFileDocuments])
+			[retval addObject:[[document sourceScanner] defineNamesToDefineSymbols]];
+	}
+	else
+		[retval addObject:[[self sourceScanner] defineNamesToDefineSymbols]];
+	
+	return [[retval copy] autorelease];
+}
+- (NSArray *)macroSymbolsForSourceHighlighter:(WCSourceHighlighter *)highlighter {
+	NSMutableArray *retval = [NSMutableArray arrayWithCapacity:0];
+	
+	if ([self projectDocument]) {
+		for (WCSourceFileDocument *document in [[self projectDocument] sourceFileDocuments])
+			[retval addObject:[[document sourceScanner] macroNamesToMacroSymbols]];
+	}
+	else
+		[retval addObject:[[self sourceScanner] macroNamesToMacroSymbols]];
+	
+	return [[retval copy] autorelease];
+}
+
+- (id)initWithContentsOfURL:(NSURL *)url ofType:(NSString *)typeName forProjectDocument:(WCProjectDocument *)projectDocument error:(NSError **)outError; {
+	if (!(self = [super initWithContentsOfURL:url ofType:typeName error:outError]))
+		return nil;
+	
+	_projectDocument = projectDocument;
+	
+	return self;
+}
+
 @synthesize sourceScanner=_sourceScanner;
 @synthesize sourceHighlighter=_sourceHighlighter;
 @synthesize textStorage=_textStorage;
+@synthesize projectDocument=_projectDocument;
 
 @end

@@ -67,5 +67,9 @@ static NSString *const WCFileReferenceKey = @"fileReference";
 - (NSURL *)fileURL {
 	return [[self fileReference] fileURL];
 }
+@dynamic fileUTI;
+- (NSString *)fileUTI {
+	return [[self fileReference] fileUTI];
+}
 
 @end

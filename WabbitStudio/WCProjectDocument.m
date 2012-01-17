@@ -12,9 +12,13 @@
 #import "WCProjectContainer.h"
 #import "WCProject.h"
 #import "RSDefines.h"
+#import "WCSourceFileDocument.h"
+#import "WCTabViewController.h"
+#import <PSMTabBarControl/PSMTabBarControl.h>
 
 @interface WCProjectDocument ()
 @property (readwrite,retain) WCProjectContainer *projectContainer;
+@property (readwrite,retain) NSMapTable *filesToSourceFileDocuments;
 @end
 
 @implementation WCProjectDocument
@@ -23,8 +27,19 @@
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
+	[_filesToSourceFileDocuments release];
 	[_projectContainer release];
 	[super dealloc];
+}
+
+- (id)init {
+	if (!(self = [super init]))
+		return nil;
+	
+	[self setHasUndoManager:NO];
+	[self setUndoManager:nil];
+	
+	return self;
 }
 
 - (void)makeWindowControllers {
@@ -92,13 +107,44 @@
 	
 	[self setProjectContainer:projectContainer];
 	
+	NSMapTable *filesToSourceFileDocuments = [NSMapTable mapTableWithWeakToStrongObjects];
+	
+	for (RSTreeNode *leafNode in [projectContainer descendantLeafNodes]) {
+		NSString *UTI = [[leafNode representedObject] fileUTI];
+		if ([UTI isEqualToString:WCIncludeFileUTI] ||
+			[UTI isEqualToString:WCAssemblyFileUTI] ||
+			[UTI isEqualToString:WCActiveServerIncludeFileUTI]) {
+			
+			NSError *outError;
+			WCSourceFileDocument *document = [[[WCSourceFileDocument alloc] initWithContentsOfURL:[[leafNode representedObject] fileURL] ofType:UTI forProjectDocument:self error:&outError] autorelease];
+			
+			if (document)
+				[filesToSourceFileDocuments setObject:document forKey:[leafNode representedObject]];
+		}
+	}
+	
+	[self setFilesToSourceFileDocuments:filesToSourceFileDocuments];
+	
 	return YES;
+}
+
+- (IBAction)saveDocument:(id)sender {
+	[super saveDocument:nil];
+	
+	NSTabViewItem *selectedTabViewItem = [[[[[self projectWindowController] tabViewController] tabBarControl] tabView] selectedTabViewItem];
+	if (selectedTabViewItem)
+		[[selectedTabViewItem identifier] saveDocument:nil];
 }
 
 @synthesize projectContainer=_projectContainer;
 @dynamic projectWindowController;
 - (WCProjectWindowController *)projectWindowController {
 	return [[self windowControllers] objectAtIndex:0];
+}
+@synthesize filesToSourceFileDocuments=_filesToSourceFileDocuments;
+@dynamic sourceFileDocuments;
+- (NSArray *)sourceFileDocuments {
+	return [[[self filesToSourceFileDocuments] objectEnumerator] allObjects];
 }
 
 @end

@@ -205,6 +205,16 @@
 	[[self textStorage] removeLayoutManager:[[sourceTextViewController textView] layoutManager]];
 	[_assistantSourceTextViewControllers removeObject:sourceTextViewController];
 }
+
+- (void)breakUndoCoalescingForAllTextViews; {
+	if ([[self textView] isCoalescingUndo])
+		[[self textView] breakUndoCoalescing];
+	
+	for (WCSourceTextViewController *stvController in _assistantSourceTextViewControllers) {
+		if ([[stvController textView] isCoalescingUndo])
+			[[stvController textView] breakUndoCoalescing];
+	}
+}
 #pragma mark Properties
 @dynamic firstSplitView;
 - (WCSplitView *)firstSplitView {

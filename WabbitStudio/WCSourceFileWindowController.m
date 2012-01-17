@@ -12,7 +12,7 @@
 #import "WCSourceHighlighter.h"
 
 @interface WCSourceFileWindowController ()
-@property (readonly,nonatomic) WCStandardSourceTextViewController *sourceTextViewController;
+
 @end
 
 @implementation WCSourceFileWindowController

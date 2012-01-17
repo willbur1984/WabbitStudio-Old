@@ -60,4 +60,14 @@
 	}
 	return retval;
 }
+- (NSString *)fileUTI; {
+	NSError *outError;
+	NSString *retval = nil;
+	if (![self getResourceValue:&retval forKey:NSURLTypeIdentifierKey error:&outError]) {
+#ifdef DEBUG
+		NSLogObject(outError);
+#endif
+	}
+	return retval;
+}
 @end

@@ -12,6 +12,7 @@
 #import "WCProjectNavigatorViewController.h"
 #import "WCProjectDocument.h"
 #import "WCProject.h"
+#import "WCTabViewController.h"
 #import <Quartz/Quartz.h>
 
 @implementation WCProjectWindowController
@@ -20,6 +21,7 @@
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
+	[_tabViewController release];
 	[_projectNavigatorViewController release];
 	[_navigatorItemDictionaries release];
 	[super dealloc];
@@ -30,6 +32,7 @@
 		return nil;
 	
 	_navigatorItemDictionaries = [[NSArray alloc] initWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"project",@"identifier",[NSImage imageNamed:@"project"],@"image",NSLocalizedString(@"Show the project navigator", @"Show the project navigator"),@"toolTip", nil],[NSDictionary dictionaryWithObjectsAndKeys:@"search",@"identifier",[NSImage imageNamed:@"Search"],@"image",NSLocalizedString(@"Show the search navigator", @"Show the search navigator"),@"toolTip", nil], nil];
+	_tabViewController = [[WCTabViewController alloc] init];
 	
 	return self;
 }
@@ -41,7 +44,16 @@
 - (void)windowDidLoad {
     [super windowDidLoad];
     
+	[[[self tabViewController] view] setFrameSize:[[[[self splitView] subviews] lastObject] frame].size];
+	[[self splitView] replaceSubview:[[[self splitView] subviews] lastObject] with:[[self tabViewController] view]];
+	
 	[[self navigatorControl] setSelectedItemIdentifier:@"project"];
+}
+
+- (BOOL)splitView:(NSSplitView *)splitView shouldAdjustSizeOfSubview:(NSView *)view {
+	if ([splitView isVertical] && view == [[splitView subviews] objectAtIndex:0])
+		return NO;
+	return YES;
 }
 
 - (NSArray *)itemIdentifiersForNavigatorControl:(RSNavigatorControl *)navigatorControl {
@@ -85,6 +97,7 @@
 }
 
 @synthesize navigatorControl=_navigatorControl;
+@synthesize splitView=_splitView;
 
 @dynamic projectNavigatorViewController;
 - (WCProjectNavigatorViewController *)projectNavigatorViewController {
@@ -93,4 +106,5 @@
 	}
 	return _projectNavigatorViewController;
 }
+@synthesize tabViewController=_tabViewController;
 @end

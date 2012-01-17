@@ -10,13 +10,16 @@
 #import "RSNavigatorControlDataSource.h"
 #import "RSNavigatorControlDelegate.h"
 
-@class WCProjectNavigatorViewController;
+@class WCProjectNavigatorViewController,WCTabViewController;
 
 @interface WCProjectWindowController : NSWindowController <RSNavigatorControlDataSource,RSNavigatorControlDelegate,NSSplitViewDelegate> {
 	NSArray *_navigatorItemDictionaries;
 	WCProjectNavigatorViewController *_projectNavigatorViewController;
+	WCTabViewController *_tabViewController;
 }
 @property (readwrite,assign,nonatomic) IBOutlet RSNavigatorControl *navigatorControl;
+@property (readwrite,assign,nonatomic) IBOutlet NSSplitView *splitView;
 
 @property (readonly,nonatomic) WCProjectNavigatorViewController *projectNavigatorViewController;
+@property (readonly,nonatomic) WCTabViewController *tabViewController;
 @end

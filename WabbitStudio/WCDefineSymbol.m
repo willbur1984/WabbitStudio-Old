@@ -23,11 +23,11 @@
 
 - (NSString *)completionName {
 	if ([self arguments])
-		return [NSString stringWithFormat:@"%@(%@) = %@",[self name],[[self arguments] componentsJoinedByString:@","],[self value]];
+		return [NSString stringWithFormat:@"%@(%@) = %@ \u2192 (%@:%lu)",[self name],[[self arguments] componentsJoinedByString:@","],[self value],[[[self sourceScanner] delegate] fileDisplayNameForSourceScanner:[self sourceScanner]],[[[[self sourceScanner] textStorage] string] lineNumberForRange:[self range]]+1];
 	else if ([self value])
-		return [NSString stringWithFormat:@"%@ = %@",[self name],[self value]];
+		return [NSString stringWithFormat:@"%@ = %@ \u2192 (%@:%lu)",[self name],[self value],[[[self sourceScanner] delegate] fileDisplayNameForSourceScanner:[self sourceScanner]],[[[[self sourceScanner] textStorage] string] lineNumberForRange:[self range]]+1];
 	else
-		return [self name];
+		return [NSString stringWithFormat:@"%@ \u2192 (%@:%lu)",[self name],[[[self sourceScanner] delegate] fileDisplayNameForSourceScanner:[self sourceScanner]],[[[[self sourceScanner] textStorage] string] lineNumberForRange:[self range]]+1];
 }
 - (NSArray *)completionArguments {
 	return [self arguments];

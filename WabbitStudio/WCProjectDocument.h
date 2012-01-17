@@ -12,7 +12,10 @@
 
 @interface WCProjectDocument : NSDocument {
 	WCProjectContainer *_projectContainer;
+	NSMapTable *_filesToSourceFileDocuments;
 }
 @property (readonly,retain) WCProjectContainer *projectContainer;
+@property (readonly,retain) NSMapTable *filesToSourceFileDocuments;
 @property (readonly,nonatomic) WCProjectWindowController *projectWindowController;
+@property (readonly,nonatomic) NSArray *sourceFileDocuments;
 @end

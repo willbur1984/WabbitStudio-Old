@@ -345,7 +345,7 @@
 		[self _addStaticCompletionsFromCompletionsTrie:_directiveCompletions toArray:staticCompletions forPrefix:completionString];
 		
 		[[self mutableCompletions] setArray:staticCompletions];
-		[[self mutableCompletions] addObjectsFromArray:[[sourceScanner completions] everyObjectForKeyWithPrefix:completionString]];
+		[[self mutableCompletions] addObjectsFromArray:[[sourceScanner delegate] sourceScanner:sourceScanner completionsForPrefix:completionString]];
 	}
 	
 	if (![[self completions] count])

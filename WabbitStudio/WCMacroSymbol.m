@@ -23,9 +23,9 @@
 
 - (NSString *)completionName {
 	if ([self arguments])
-		return [NSString stringWithFormat:@"%@(%@)",[self name],[[self arguments] componentsJoinedByString:@","]];
+		return [NSString stringWithFormat:@"%@(%@) \u2192 (%@:%lu)",[self name],[[self arguments] componentsJoinedByString:@","],[[[self sourceScanner] delegate] fileDisplayNameForSourceScanner:[self sourceScanner]],[[[[self sourceScanner] textStorage] string] lineNumberForRange:[self range]]+1];
 	else
-		return [self name];
+		return [NSString stringWithFormat:@"%@ \u2192 (%@:%lu)",[self name],[[[self sourceScanner] delegate] fileDisplayNameForSourceScanner:[self sourceScanner]],[[[[self sourceScanner] textStorage] string] lineNumberForRange:[self range]]+1];
 }
 - (NSArray *)completionArguments {
 	return [self arguments];

@@ -13,4 +13,5 @@
 @protocol WCSourceScannerDelegate <NSObject>
 @required
 - (NSString *)fileDisplayNameForSourceScanner:(WCSourceScanner *)scanner;
+- (NSArray *)sourceScanner:(WCSourceScanner *)scanner completionsForPrefix:(NSString *)prefix;
 @end

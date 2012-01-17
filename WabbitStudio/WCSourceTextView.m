@@ -286,7 +286,7 @@
 	
 	WCSourceToken *token = [[[self delegate] sourceTokensForSourceTextView:self] sourceTokenForRange:toolTipRange];
 	if (NSLocationInRange(toolTipRange.location, [token range]) &&
-		[token type] == WCSourceTokenTypeComment)
+		([token type] == WCSourceTokenTypeComment || [token type] == WCSourceTokenTypeString))
 		return nil;
 	
 	NSArray *symbols = [[self delegate] sourceTextView:self sourceSymbolsForSymbolName:[[self string] substringWithRange:toolTipRange]];
@@ -353,8 +353,7 @@
 	else if ([symbols count] == 1) {
 		WCSourceSymbol *symbol = [symbols lastObject];
 		
-		[self setSelectedRange:[symbol range]];
-		[self scrollRangeToVisible:[self selectedRange]];
+		[[self delegate] handleJumpToDefinitionForSourceTextView:self sourceSymbol:symbol];
 	}
 	else {
 		NSMenu *menu = [[[NSMenu alloc] initWithTitle:@""] autorelease];
@@ -974,9 +973,8 @@
 	return YES;
 }
 #pragma mark IBActions
-- (IBAction)_symbolMenuClicked:(id)sender {
-	[self setSelectedRange:[sender range]];
-	[self scrollRangeToVisible:[self selectedRange]];
+- (IBAction)_symbolMenuClicked:(NSMenuItem *)sender {
+	[[self delegate] handleJumpToDefinitionForSourceTextView:self sourceSymbol:[sender representedObject]];
 }
 
 #pragma mark Notifications

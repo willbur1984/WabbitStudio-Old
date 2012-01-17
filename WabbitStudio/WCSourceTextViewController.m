@@ -21,6 +21,7 @@
 #import "WCJumpBarViewController.h"
 #import "WCSourceFileDocument.h"
 #import "WCStandardSourceTextViewController.h"
+#import "WCSourceSymbol.h"
 
 @interface WCSourceTextViewController ()
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
@@ -33,6 +34,7 @@
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
+	[[self textStorage] removeLayoutManager:[[self textView] layoutManager]];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[_scrollingHighlightTimer invalidate];
 	_scrollingHighlightTimer = nil;
@@ -105,6 +107,9 @@
 	
 	return [NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName,[[self textStorage] paragraphStyle],NSParagraphStyleAttributeName, nil];
 }
+- (NSUndoManager *)undoManagerForTextView:(NSTextView *)view {
+	return [[self sourceFileDocument] undoManager];
+}
 
 #pragma mark WCSourceTextViewDelegate
 - (NSArray *)sourceSymbolsForSourceTextView:(WCSourceTextView *)textView {
@@ -118,22 +123,51 @@
 	
 	name = [name lowercaseString];
 	
-	if ([[[self sourceScanner] labelNamesToLabelSymbols] objectForKey:name])
-		[retval addObjectsFromArray:[[[[self sourceScanner] labelNamesToLabelSymbols] objectForKey:name] allObjects]];
-	if ([[[self sourceScanner] equateNamesToEquateSymbols] objectForKey:name])
-		[retval addObjectsFromArray:[[[[self sourceScanner] equateNamesToEquateSymbols] objectForKey:name] allObjects]];
-	if ([[[self sourceScanner] defineNamesToDefineSymbols] objectForKey:name])
-		[retval addObjectsFromArray:[[[[self sourceScanner] defineNamesToDefineSymbols] objectForKey:name] allObjects]];
-	if ([[[self sourceScanner] macroNamesToMacroSymbols] objectForKey:name])
-		[retval addObjectsFromArray:[[[[self sourceScanner] macroNamesToMacroSymbols] objectForKey:name] allObjects]];
+	NSArray *labelNamesArray = [[self sourceFileDocument] labelSymbolsForSourceHighlighter:[self sourceHighlighter]];
+	NSArray *equateNamesArray = [[self sourceFileDocument] equateSymbolsForSourceHighlighter:[self sourceHighlighter]];
+	NSArray *defineNamesArray = [[self sourceFileDocument] defineSymbolsForSourceHighlighter:[self sourceHighlighter]];
+	NSArray *macroNamesArray = [[self sourceFileDocument] macroSymbolsForSourceHighlighter:[self sourceHighlighter]];
 	
-	return retval;
+	for (NSDictionary *labelNames in labelNamesArray) {
+		if ([labelNames objectForKey:name]) {
+			[retval addObjectsFromArray:[[labelNames objectForKey:name] allObjects]];
+			break;
+		}
+	}
+	for (NSDictionary *equateNames in equateNamesArray) {
+		if ([equateNames objectForKey:name]) {
+			[retval addObjectsFromArray:[[equateNames objectForKey:name] allObjects]];
+			break;
+		}
+	}
+	for (NSDictionary *defineNames in defineNamesArray) {
+		if ([defineNames objectForKey:name]) {
+			[retval addObjectsFromArray:[[defineNames objectForKey:name] allObjects]];
+			break;
+		}
+	}
+	for (NSDictionary *macroNames in macroNamesArray) {
+		if ([macroNames objectForKey:name]) {
+			[retval addObjectsFromArray:[[macroNames objectForKey:name] allObjects]];
+			break;
+		}
+	}
+	
+	return [[retval copy] autorelease];
 }
 - (WCSourceScanner *)sourceScannerForSourceTextView:(WCSourceTextView *)textView {
 	return [self sourceScanner];
 }
 - (WCSourceHighlighter *)sourceHighlighterForSourceTextView:(WCSourceTextView *)textView; {
 	return [self sourceHighlighter];
+}
+- (void)handleJumpToDefinitionForSourceTextView:(WCSourceTextView *)textView sourceSymbol:(WCSourceSymbol *)symbol {
+	if ([symbol sourceScanner] == [self sourceScanner]) {
+		[textView setSelectedRange:[symbol range]];
+		[textView scrollRangeToVisible:[symbol range]];
+	}
+	else
+		NSBeep();
 }
 #pragma mark *** Public Methods ***
 - (id)initWithSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument; {

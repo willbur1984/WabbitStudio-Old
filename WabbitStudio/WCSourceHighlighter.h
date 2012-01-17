@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/NSObject.h>
+#import "WCSourceHighlighterDelegate.h"
 
 extern NSString *const WCSourceHighlighterCommentColorAttributeName;
 extern NSString *const WCSourceHighlighterCommentFontAttributeName;
@@ -16,10 +17,12 @@ extern NSString *const WCSourceHighlighterCommentFontAttributeName;
 @interface WCSourceHighlighter : NSObject {
 	__weak WCSourceScanner *_sourceScanner;
 	BOOL _needsToPerformFullHighlight;
+	__weak id <WCSourceHighlighterDelegate> _delegate;
 }
+@property (readwrite,assign) id <WCSourceHighlighterDelegate> delegate;
+
 - (id)initWithSourceScanner:(WCSourceScanner *)sourceScanner;
 
 - (void)performHighlightingInVisibleRange;
 - (void)performHighlightingInRange:(NSRange)range;
-- (void)performHighlightingInRange:(NSRange)range attributeName:(NSString *)attributeName;
 @end

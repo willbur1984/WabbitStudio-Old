@@ -13,4 +13,5 @@
 @interface WCSourceFileWindowController : NSWindowController {
 	WCStandardSourceTextViewController *_sourceTextViewController;
 }
+@property (readonly,nonatomic) WCStandardSourceTextViewController *sourceTextViewController;
 @end

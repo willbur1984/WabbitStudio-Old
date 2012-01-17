@@ -10,10 +10,13 @@
 #import "WCJumpBarDataSource.h"
 #import "WCSourceTextStorageDelegate.h"
 #import "WCSourceScannerDelegate.h"
+#import "WCSourceHighlighterDelegate.h"
 
-@class WCSourceScanner,WCSourceHighlighter,WCSourceTextStorage;
+@class WCSourceScanner,WCSourceHighlighter,WCSourceTextStorage,WCProjectDocument;
 
-@interface WCSourceFileDocument : NSDocument <WCJumpBarDataSource,WCSourceTextStorageDelegate,WCSourceScannerDelegate,NSWindowDelegate,NSSplitViewDelegate> {
+@interface WCSourceFileDocument : NSDocument <WCJumpBarDataSource,WCSourceTextStorageDelegate,WCSourceScannerDelegate,WCSourceHighlighterDelegate,NSWindowDelegate,NSSplitViewDelegate> {
+	__weak WCProjectDocument *_projectDocument;
+	
 	NSString *_fileContents;
 	NSStringEncoding _fileEncoding;
 	
@@ -25,5 +28,8 @@
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
 @property (readonly,nonatomic) WCSourceHighlighter *sourceHighlighter;
 @property (readonly,nonatomic) WCSourceTextStorage *textStorage;
+@property (readonly,nonatomic) WCProjectDocument *projectDocument;
+
+- (id)initWithContentsOfURL:(NSURL *)url ofType:(NSString *)typeName forProjectDocument:(WCProjectDocument *)projectDocument error:(NSError **)outError;
 
 @end

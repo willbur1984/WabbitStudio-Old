@@ -21,7 +21,7 @@
 }
 
 - (NSString *)completionName {
-	return [NSString stringWithFormat:@"%@ = %@",[self name],[self value]];
+	return [NSString stringWithFormat:@"%@ = %@ \u2192 (%@:%lu)",[self name],[self value],[[[self sourceScanner] delegate] fileDisplayNameForSourceScanner:[self sourceScanner]],[[[[self sourceScanner] textStorage] string] lineNumberForRange:[self range]]+1];
 }
 
 - (NSAttributedString *)attributedToolTip {

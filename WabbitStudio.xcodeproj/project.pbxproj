@@ -159,6 +159,12 @@
 		078F041814AD784E0080ADBC /* RSFindBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F041614AD784E0080ADBC /* RSFindBarViewController.m */; };
 		078F041C14AD78640080ADBC /* RSFindBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 078F041A14AD78640080ADBC /* RSFindBarView.xib */; };
 		0791BE5214AD7F530004AC16 /* RSFindBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0791BE5114AD7F530004AC16 /* RSFindBarView.m */; };
+		0797326514C52EBE00A71F54 /* PSMTabBarControl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0797326414C52EBE00A71F54 /* PSMTabBarControl.framework */; };
+		0797326614C52ED100A71F54 /* PSMTabBarControl.framework in Copy Private Frameworks */ = {isa = PBXBuildFile; fileRef = 0797326414C52EBE00A71F54 /* PSMTabBarControl.framework */; };
+		0797327214C5360A00A71F54 /* WCTabView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0797327014C5360A00A71F54 /* WCTabView.xib */; };
+		0797327514C5368200A71F54 /* RSTabView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0797327414C5368200A71F54 /* RSTabView.m */; };
+		0797327914C5372900A71F54 /* WCTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0797327814C5372900A71F54 /* WCTabViewController.m */; };
+		0797327C14C5374300A71F54 /* WCTabView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0797327B14C5374300A71F54 /* WCTabView.m */; };
 		07A7A0FE14B8C83900507FC7 /* WCCompletionWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A7A0FD14B8C83900507FC7 /* WCCompletionWindow.m */; };
 		07A8AF8214BDC7EC008CB9FF /* KeyBindings.png in Resources */ = {isa = PBXBuildFile; fileRef = 07A8AF8014BDC7EC008CB9FF /* KeyBindings.png */; };
 		07A8AF8314BDC7EC008CB9FF /* PBXKeyBindingsPrefsModule.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 07A8AF8114BDC7EC008CB9FF /* PBXKeyBindingsPrefsModule.tiff */; };
@@ -224,6 +230,7 @@
 			files = (
 				07EB8E2314B63C5600F8A8C6 /* BGHUDAppKit.framework in Copy Private Frameworks */,
 				077884EF14C0CE9F00605F5D /* Sparkle.framework in Copy Private Frameworks */,
+				0797326614C52ED100A71F54 /* PSMTabBarControl.framework in Copy Private Frameworks */,
 			);
 			name = "Copy Private Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -509,6 +516,15 @@
 		0791BE5014AD7F530004AC16 /* RSFindBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSFindBarView.h; sourceTree = "<group>"; };
 		0791BE5114AD7F530004AC16 /* RSFindBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSFindBarView.m; sourceTree = "<group>"; };
 		0791BE5314ADA3B80004AC16 /* BGHUDAppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BGHUDAppKit.framework; sourceTree = "<group>"; };
+		0797326214C5214C00A71F54 /* WCSourceHighlighterDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSourceHighlighterDelegate.h; sourceTree = "<group>"; };
+		0797326414C52EBE00A71F54 /* PSMTabBarControl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PSMTabBarControl.framework; sourceTree = "<group>"; };
+		0797327114C5360A00A71F54 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCTabView.xib; sourceTree = "<group>"; };
+		0797327314C5368200A71F54 /* RSTabView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSTabView.h; sourceTree = "<group>"; };
+		0797327414C5368200A71F54 /* RSTabView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSTabView.m; sourceTree = "<group>"; };
+		0797327714C5372900A71F54 /* WCTabViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTabViewController.h; sourceTree = "<group>"; };
+		0797327814C5372900A71F54 /* WCTabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCTabViewController.m; sourceTree = "<group>"; };
+		0797327A14C5374300A71F54 /* WCTabView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTabView.h; sourceTree = "<group>"; };
+		0797327B14C5374300A71F54 /* WCTabView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCTabView.m; sourceTree = "<group>"; };
 		07A7A0FC14B8C83900507FC7 /* WCCompletionWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCCompletionWindow.h; sourceTree = "<group>"; };
 		07A7A0FD14B8C83900507FC7 /* WCCompletionWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCCompletionWindow.m; sourceTree = "<group>"; };
 		07A8AF8014BDC7EC008CB9FF /* KeyBindings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = KeyBindings.png; sourceTree = "<group>"; };
@@ -614,6 +630,7 @@
 				071ECCC314A4233C002409F8 /* Cocoa.framework in Frameworks */,
 				07EB8E2214B63C4F00F8A8C6 /* BGHUDAppKit.framework in Frameworks */,
 				077884EC14C0CE6A00605F5D /* Sparkle.framework in Frameworks */,
+				0797326514C52EBE00A71F54 /* PSMTabBarControl.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -660,6 +677,7 @@
 				0719860714C0BE3500C8E91A /* WCProjectWindow.xib */,
 				0719861014C0C53600C8E91A /* WCNewProjectWindow.xib */,
 				0778851214C2349B00605F5D /* WCProjectNavigatorView.xib */,
+				0797327014C5360A00A71F54 /* WCTabView.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -822,6 +840,7 @@
 		071985F914C0B3BA00C8E91A /* Project */ = {
 			isa = PBXGroup;
 			children = (
+				0797327614C536C800A71F54 /* Tabs */,
 				0778853114C386BD00605F5D /* Documents */,
 				0778853314C386E000605F5D /* Window Controllers */,
 				0778852F14C3868200605F5D /* Model */,
@@ -852,6 +871,7 @@
 		071ECCC114A4233C002409F8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0797326414C52EBE00A71F54 /* PSMTabBarControl.framework */,
 				0778853514C49F0300605F5D /* Quartz.framework */,
 				077884EB14C0CE6A00605F5D /* Sparkle.framework */,
 				07A8AFB814BDEE9B008CB9FF /* Carbon.framework */,
@@ -1081,6 +1101,7 @@
 			children = (
 				07F5F75514A4F37200F1F326 /* WCSourceHighlighter.h */,
 				07F5F75614A4F37200F1F326 /* WCSourceHighlighter.m */,
+				0797326214C5214C00A71F54 /* WCSourceHighlighterDelegate.h */,
 			);
 			name = Highlighter;
 			sourceTree = "<group>";
@@ -1270,6 +1291,8 @@
 		0791BE4C14AD7A110004AC16 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				0797327314C5368200A71F54 /* RSTabView.h */,
+				0797327414C5368200A71F54 /* RSTabView.m */,
 				0725434014A79A0000C961B7 /* RSTableView.h */,
 				0725434114A79A0000C961B7 /* RSTableView.m */,
 				0725434314A79A3600C961B7 /* RSTableViewDelegate.h */,
@@ -1332,6 +1355,17 @@
 				071985E514C01F5D00C8E91A /* NSURL+RSExtensions.m */,
 			);
 			name = Categories;
+			sourceTree = "<group>";
+		};
+		0797327614C536C800A71F54 /* Tabs */ = {
+			isa = PBXGroup;
+			children = (
+				0797327714C5372900A71F54 /* WCTabViewController.h */,
+				0797327814C5372900A71F54 /* WCTabViewController.m */,
+				0797327A14C5374300A71F54 /* WCTabView.h */,
+				0797327B14C5374300A71F54 /* WCTabView.m */,
+			);
+			name = Tabs;
 			sourceTree = "<group>";
 		};
 		07A8AF8514BDC7F9008CB9FF /* Key Bindings */ = {
@@ -1502,6 +1536,7 @@
 				0778851414C2349B00605F5D /* WCProjectNavigatorView.xib in Resources */,
 				0778851A14C2377C00605F5D /* FileNotFound.png in Resources */,
 				0778851C14C2377C00605F5D /* Filter.png in Resources */,
+				0797327214C5360A00A71F54 /* WCTabView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1650,6 +1685,9 @@
 				0778853A14C4A3E100605F5D /* JAViewController.m in Sources */,
 				0778853B14C4A3E400605F5D /* NSObject+JAExtensions.m in Sources */,
 				0778853C14C4A3E700605F5D /* NSView+JAExtensions.m in Sources */,
+				0797327514C5368200A71F54 /* RSTabView.m in Sources */,
+				0797327914C5372900A71F54 /* WCTabViewController.m in Sources */,
+				0797327C14C5374300A71F54 /* WCTabView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1816,6 +1854,14 @@
 				078F041B14AD78640080ADBC /* en */,
 			);
 			name = RSFindBarView.xib;
+			sourceTree = "<group>";
+		};
+		0797327014C5360A00A71F54 /* WCTabView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0797327114C5360A00A71F54 /* en */,
+			);
+			name = WCTabView.xib;
 			sourceTree = "<group>";
 		};
 		07A8AF8B14BDC93C008CB9FF /* WCKeyBindingsView.xib */ = {
