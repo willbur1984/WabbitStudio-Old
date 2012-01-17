@@ -25,6 +25,9 @@
 	if (!(self = [super initWithWindowNibName:[self windowNibName]]))
 		return nil;
 	
+	_matches = [[NSMutableArray alloc] initWithCapacity:0];
+	_operationQueue = [[NSOperationQueue alloc] init];
+	[_operationQueue setMaxConcurrentOperationCount:1];
 	
 	return self;
 }
@@ -165,6 +168,25 @@
 - (void)setSearching:(BOOL)searching {
 	_openQuicklyFlags.searching = searching;
 }
-@synthesize dataSource=_dataSource;
+@dynamic dataSource;
+- (id <WCOpenQuicklyDataSource>)dataSource {
+	return _dataSource;
+}
+- (void)setDataSource:(id <WCOpenQuicklyDataSource>)dataSource {
+	_dataSource = dataSource;
+	
+	[self setItems:[dataSource openQuicklyItems]];
+	
+	if (dataSource)
+		[[self window] setTitle:[NSString stringWithFormat:NSLocalizedString(@"Open Quickly in \"%@\"", @"open quickly window title format string"),[[[self dataSource] openQuicklyProjectName] stringByDeletingPathExtension]]];
+}
 
+- (IBAction)_tableViewDoubleClick:(id)sender {
+	if (![[[self arrayController] selectedObjects] count]) {
+		NSBeep();
+		return;
+	}
+	
+	[self open:nil];
+}
 @end

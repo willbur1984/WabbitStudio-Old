@@ -738,19 +738,19 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: objectValue.jumpInImage</string>
+						<string key="label">value: objectValue.item.jumpInImage</string>
 						<reference key="source" ref="325515650"/>
 						<reference key="destination" ref="123251441"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="325515650"/>
 							<reference key="NSDestination" ref="123251441"/>
-							<string key="NSLabel">value: objectValue.jumpInImage</string>
+							<string key="NSLabel">value: objectValue.item.jumpInImage</string>
 							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">objectValue.jumpInImage</string>
+							<string key="NSKeyPath">objectValue.item.jumpInImage</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
-					<int key="connectionID">58</int>
+					<int key="connectionID">81</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -770,19 +770,19 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: objectValue.jumpInLocationURL</string>
+						<string key="label">value: objectValue.item.jumpInLocationURL</string>
 						<reference key="source" ref="146107776"/>
 						<reference key="destination" ref="123251441"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="146107776"/>
 							<reference key="NSDestination" ref="123251441"/>
-							<string key="NSLabel">value: objectValue.jumpInLocationURL</string>
+							<string key="NSLabel">value: objectValue.item.jumpInLocationURL</string>
 							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">objectValue.jumpInLocationURL</string>
+							<string key="NSKeyPath">objectValue.item.jumpInLocationURL</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
-					<int key="connectionID">60</int>
+					<int key="connectionID">79</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -1240,7 +1240,7 @@
 				<reference key="dict.values" ref="1002"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">77</int>
+			<int key="maxID">81</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1251,6 +1251,24 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/NSTableRowView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSView</string>
+					<object class="NSMutableDictionary" key="outlets">
+						<string key="NS.key.0">viewController</string>
+						<string key="NS.object.0">NSViewController</string>
+					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<string key="NS.key.0">viewController</string>
+						<object class="IBToOneOutletInfo" key="NS.object.0">
+							<string key="name">viewController</string>
+							<string key="candidateClassName">NSViewController</string>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/NSView.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

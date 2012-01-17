@@ -10,7 +10,7 @@
 #import "RSDefines.h"
 #import "WCDocumentController.h"
 #import "WCGroup.h"
-#import "RSTreeNode.h"
+#import "WCFileContainer.h"
 #import "RSDefines.h"
 #import "NSURL+RSExtensions.h"
 
@@ -42,7 +42,7 @@
 	NSURL *projectURL = [directoryURL URLByAppendingPathComponent:[[directoryURL lastPathComponent] stringByAppendingPathExtension:(NSString *)projectExtension] isDirectory:NO];
 	CFRelease(projectExtension);
 	
-	RSTreeNode *projectNode = [RSTreeNode treeNodeWithRepresentedObject:[WCFile fileWithFileURL:projectURL]];
+	WCFileContainer *projectNode = [WCFileContainer fileContainerWithFile:[WCFile fileWithFileURL:projectURL]];
 	
 	NSDirectoryEnumerator *directoryEnumerator = [[NSFileManager defaultManager] enumeratorAtURL:directoryURL includingPropertiesForKeys:[NSArray arrayWithObjects:NSURLIsDirectoryKey,NSURLIsPackageKey,NSURLParentDirectoryURLKey, nil] options:NSDirectoryEnumerationSkipsHiddenFiles|NSDirectoryEnumerationSkipsPackageDescendants errorHandler:^BOOL(NSURL *url, NSError *error) {
 		
@@ -52,11 +52,11 @@
 	NSMutableDictionary *directoryPathsToDirectoryNodes = [NSMutableDictionary dictionaryWithCapacity:0];
 	for (NSURL *fileURL in directoryEnumerator) {
 		if ([fileURL isDirectory]) {
-			RSTreeNode *directoryNode = [RSTreeNode treeNodeWithRepresentedObject:[WCGroup fileWithFileURL:fileURL]];
+			WCFileContainer *directoryNode = [WCFileContainer fileContainerWithFile:[WCGroup fileWithFileURL:fileURL]];
 			
 			[directoryPathsToDirectoryNodes setObject:directoryNode forKey:[fileURL path]];
 			
-			RSTreeNode *parentDirectoryNode = [directoryPathsToDirectoryNodes objectForKey:[[fileURL parentDirectoryURL] path]];
+			WCFileContainer *parentDirectoryNode = [directoryPathsToDirectoryNodes objectForKey:[[fileURL parentDirectoryURL] path]];
 			
 			if (parentDirectoryNode)
 				[[parentDirectoryNode mutableChildNodes] addObject:directoryNode];
@@ -66,8 +66,8 @@
 		else if ([fileURL isPackage])
 			continue;
 		else {
-			RSTreeNode *childNode = [RSTreeNode treeNodeWithRepresentedObject:[WCFile fileWithFileURL:fileURL]];
-			RSTreeNode *parentDirectoryNode = [directoryPathsToDirectoryNodes objectForKey:[[fileURL parentDirectoryURL] path]];
+			WCFileContainer *childNode = [WCFileContainer fileContainerWithFile:[WCFile fileWithFileURL:fileURL]];
+			WCFileContainer *parentDirectoryNode = [directoryPathsToDirectoryNodes objectForKey:[[fileURL parentDirectoryURL] path]];
 			
 			if (parentDirectoryNode)
 				[[parentDirectoryNode mutableChildNodes] addObject:childNode];

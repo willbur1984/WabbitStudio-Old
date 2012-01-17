@@ -18,6 +18,7 @@
 #import "WCProjectWindowController.h"
 #import "WCTabViewController.h"
 #import "WCDocumentController.h"
+#import "WCFileContainer.h"
 
 @interface WCProjectNavigatorViewController ()
 @property (readwrite,retain,nonatomic) WCProjectContainer *filteredProjectContainer;
@@ -221,11 +222,11 @@ static const CGFloat kMainCellHeight = 18.0;
 	
 	[filteredLeafNodes setArray:[leafNodes filteredArrayUsingPredicate:predicate]];
 	
-	for (RSTreeNode *leafNode in filteredLeafNodes) {
-		RSTreeNode *filteredLeafNode = [RSTreeNode treeNodeWithRepresentedObject:[leafNode representedObject]];
+	for (WCFileContainer *leafNode in filteredLeafNodes) {
+		WCFileContainer *filteredLeafNode = [WCFileContainer fileContainerWithFile:[leafNode representedObject]];
 		
 		while ([leafNode parentNode]) {
-			RSTreeNode *filteredParentNode = [parentNodesToFilteredParentNodes objectForKey:[leafNode parentNode]];
+			WCFileContainer *filteredParentNode = [parentNodesToFilteredParentNodes objectForKey:[leafNode parentNode]];
 			
 			if (filteredParentNode) {
 				[[filteredParentNode mutableChildNodes] addObject:filteredLeafNode];

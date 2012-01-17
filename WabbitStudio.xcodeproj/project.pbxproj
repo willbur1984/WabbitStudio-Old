@@ -11,6 +11,8 @@
 		07018B1414C6011E00C5A7AC /* WCOpenQuicklyWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07018B1214C6011E00C5A7AC /* WCOpenQuicklyWindow.xib */; };
 		07018B1814C6038F00C5A7AC /* WCOpenQuicklyMatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 07018B1714C6038F00C5A7AC /* WCOpenQuicklyMatch.m */; };
 		07018B1B14C6047600C5A7AC /* WCOpenQuicklySearchOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 07018B1A14C6047600C5A7AC /* WCOpenQuicklySearchOperation.m */; };
+		07018B1F14C6167E00C5A7AC /* WCFileContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 07018B1E14C6167E00C5A7AC /* WCFileContainer.m */; };
+		07018B2214C61F4500C5A7AC /* WCOpenQuicklyTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07018B2114C61F4400C5A7AC /* WCOpenQuicklyTableView.m */; };
 		0706D65114A8F45B0092F880 /* WCSourceTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0706D64F14A8F45B0092F880 /* WCSourceTextViewController.m */; };
 		0706D65514A8F49D0092F880 /* WCSourceTextView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0706D65314A8F49D0092F880 /* WCSourceTextView.xib */; };
 		0706D65814A8F6D60092F880 /* WCSourceTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0706D65714A8F6D60092F880 /* WCSourceTextStorage.m */; };
@@ -251,6 +253,11 @@
 		07018B1714C6038F00C5A7AC /* WCOpenQuicklyMatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCOpenQuicklyMatch.m; sourceTree = "<group>"; };
 		07018B1914C6047600C5A7AC /* WCOpenQuicklySearchOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCOpenQuicklySearchOperation.h; sourceTree = "<group>"; };
 		07018B1A14C6047600C5A7AC /* WCOpenQuicklySearchOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCOpenQuicklySearchOperation.m; sourceTree = "<group>"; };
+		07018B1C14C6158A00C5A7AC /* WCFileDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCFileDelegate.h; sourceTree = "<group>"; };
+		07018B1D14C6167E00C5A7AC /* WCFileContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCFileContainer.h; sourceTree = "<group>"; };
+		07018B1E14C6167E00C5A7AC /* WCFileContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCFileContainer.m; sourceTree = "<group>"; };
+		07018B2014C61F4400C5A7AC /* WCOpenQuicklyTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCOpenQuicklyTableView.h; sourceTree = "<group>"; };
+		07018B2114C61F4400C5A7AC /* WCOpenQuicklyTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCOpenQuicklyTableView.m; sourceTree = "<group>"; };
 		0706D64C14A8F1800092F880 /* WCJumpBarDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCJumpBarDataSource.h; sourceTree = "<group>"; };
 		0706D64E14A8F45B0092F880 /* WCSourceTextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSourceTextViewController.h; sourceTree = "<group>"; };
 		0706D64F14A8F45B0092F880 /* WCSourceTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSourceTextViewController.m; sourceTree = "<group>"; };
@@ -661,6 +668,8 @@
 				07018B1714C6038F00C5A7AC /* WCOpenQuicklyMatch.m */,
 				07018B1914C6047600C5A7AC /* WCOpenQuicklySearchOperation.h */,
 				07018B1A14C6047600C5A7AC /* WCOpenQuicklySearchOperation.m */,
+				07018B2014C61F4400C5A7AC /* WCOpenQuicklyTableView.h */,
+				07018B2114C61F4400C5A7AC /* WCOpenQuicklyTableView.m */,
 			);
 			name = "Open Quickly";
 			sourceTree = "<group>";
@@ -1200,6 +1209,9 @@
 			children = (
 				0719860A14C0C10700C8E91A /* WCFile.h */,
 				0719860B14C0C10700C8E91A /* WCFile.m */,
+				07018B1C14C6158A00C5A7AC /* WCFileDelegate.h */,
+				07018B1D14C6167E00C5A7AC /* WCFileContainer.h */,
+				07018B1E14C6167E00C5A7AC /* WCFileContainer.m */,
 				077884F314C10C9C00605F5D /* WCGroup.h */,
 				077884F414C10C9C00605F5D /* WCGroup.m */,
 				077884F814C10F0100605F5D /* WCProject.h */,
@@ -1722,6 +1734,8 @@
 				07018B1114C600BB00C5A7AC /* WCOpenQuicklyWindowController.m in Sources */,
 				07018B1814C6038F00C5A7AC /* WCOpenQuicklyMatch.m in Sources */,
 				07018B1B14C6047600C5A7AC /* WCOpenQuicklySearchOperation.m in Sources */,
+				07018B1F14C6167E00C5A7AC /* WCFileContainer.m in Sources */,
+				07018B2214C61F4500C5A7AC /* WCOpenQuicklyTableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

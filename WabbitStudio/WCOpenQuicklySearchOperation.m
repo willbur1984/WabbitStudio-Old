@@ -68,19 +68,19 @@
 			[ranges addObject:[NSValue valueWithRange:range]];
 		}];
 		
+		CGFloat contiguousRangeWeight = floor([indexes count]/(CGFloat)[ranges count]);
+		CGFloat lengthDifferenceWeight = [itemString length]-[indexes count];
+		CGFloat matchOffsetWeight = [indexes firstIndex];
+		
 		// create our new match
-		// the weight (at least for now) is the total number of matched characters in the itemString divided by the total number of ranges
-		// this ensures we favor contiguous ranges
-		[matches addObject:[WCOpenQuicklyMatch openQuicklyMatchWithItem:item ranges:ranges weight:floor([indexes count]/[ranges count])]];
+		[matches addObject:[WCOpenQuicklyMatch openQuicklyMatchWithItem:item ranges:ranges weights:[NSArray arrayWithObjects:[NSNumber numberWithFloat:contiguousRangeWeight],[NSNumber numberWithFloat:lengthDifferenceWeight],[NSNumber numberWithFloat:matchOffsetWeight], nil]]];
 	}
 	
 	if ([self isCancelled])
 		goto CLEANUP;
 	
 	// sort all the matches first by their weight, then alphabetically
-	[matches sortUsingDescriptors:[NSArray arrayWithObjects:[NSSortDescriptor sortDescriptorWithKey:@"weightNumber" ascending:NO selector:@selector(compare:)],[NSSortDescriptor sortDescriptorWithKey:@"self" ascending:YES comparator:^NSComparisonResult(id obj1, id obj2) {
-		return [[[obj1 item] openQuicklyName] localizedStandardCompare:[[obj2 item] openQuicklyName]];
-	}], nil]];
+	[matches sortUsingDescriptors:[NSArray arrayWithObjects:[NSSortDescriptor sortDescriptorWithKey:@"contiguousRangeWeight" ascending:NO],[NSSortDescriptor sortDescriptorWithKey:@"matchOffsetWeight" ascending:YES],[NSSortDescriptor sortDescriptorWithKey:@"lengthDifferenceWeight" ascending:YES],[NSSortDescriptor sortDescriptorWithKey:@"item.openQuicklyName" ascending:YES selector:@selector(localizedStandardCompare:)], nil]];
 	
 	if ([self isCancelled])
 		goto CLEANUP;

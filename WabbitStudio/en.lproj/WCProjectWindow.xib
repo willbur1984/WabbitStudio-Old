@@ -40,13 +40,13 @@
 			<object class="NSWindowTemplate" id="1005">
 				<int key="NSWindowStyleMask">15</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{196, 240}, {800, 600}}</string>
+				<string key="NSWindowRect">{{136, 121}, {1024, 768}}</string>
 				<int key="NSWTFlags">1886912512</int>
 				<string key="NSWindowTitle">Window</string>
 				<string key="NSWindowClass">KBResponderNotifyingWindow</string>
 				<nil key="NSViewClass"/>
 				<nil key="NSUserInterfaceItemIdentifier"/>
-				<string key="NSWindowContentMinSize">{800, 600}</string>
+				<string key="NSWindowContentMinSize">{1024, 768}</string>
 				<object class="NSView" key="NSWindowView" id="1006">
 					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
@@ -65,7 +65,7 @@
 										<object class="NSCustomView" id="154888713">
 											<reference key="NSNextResponder" ref="711450787"/>
 											<int key="NSvFlags">274</int>
-											<string key="NSFrameSize">{238, 578}</string>
+											<string key="NSFrameSize">{254, 746}</string>
 											<reference key="NSSuperview" ref="711450787"/>
 											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="7603604"/>
@@ -75,7 +75,7 @@
 										<object class="NSCustomView" id="370518031">
 											<reference key="NSNextResponder" ref="711450787"/>
 											<int key="NSvFlags">266</int>
-											<string key="NSFrame">{{0, 578}, {238, 22}}</string>
+											<string key="NSFrame">{{0, 746}, {254, 22}}</string>
 											<reference key="NSSuperview" ref="711450787"/>
 											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="154888713"/>
@@ -83,7 +83,7 @@
 											<string key="NSClassName">RSNavigatorControl</string>
 										</object>
 									</object>
-									<string key="NSFrameSize">{238, 600}</string>
+									<string key="NSFrameSize">{254, 768}</string>
 									<reference key="NSSuperview" ref="44759864"/>
 									<reference key="NSWindow"/>
 									<reference key="NSNextKeyView" ref="370518031"/>
@@ -93,7 +93,7 @@
 								<object class="NSCustomView" id="7603604">
 									<reference key="NSNextResponder" ref="44759864"/>
 									<int key="NSvFlags">256</int>
-									<string key="NSFrame">{{239, 0}, {561, 600}}</string>
+									<string key="NSFrame">{{255, 0}, {769, 768}}</string>
 									<reference key="NSSuperview" ref="44759864"/>
 									<reference key="NSWindow"/>
 									<reference key="NSNextKeyView"/>
@@ -101,7 +101,7 @@
 									<string key="NSClassName">NSView</string>
 								</object>
 							</object>
-							<string key="NSFrameSize">{800, 600}</string>
+							<string key="NSFrameSize">{1024, 768}</string>
 							<reference key="NSSuperview" ref="1006"/>
 							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="711450787"/>
@@ -110,13 +110,13 @@
 							<int key="NSDividerStyle">2</int>
 						</object>
 					</object>
-					<string key="NSFrameSize">{800, 600}</string>
+					<string key="NSFrameSize">{1024, 768}</string>
 					<reference key="NSSuperview"/>
 					<reference key="NSWindow"/>
 					<reference key="NSNextKeyView" ref="44759864"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1680, 1028}}</string>
-				<string key="NSMinSize">{800, 622}</string>
+				<string key="NSMinSize">{1024, 790}</string>
 				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
 				<int key="NSWindowAnimationBehavior">3</int>
 				<int key="NSWindowCollectionBehavior">128</int>

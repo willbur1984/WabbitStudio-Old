@@ -13,12 +13,14 @@
 	__weak id <WCOpenQuicklyItem> _item;
 	NSAttributedString *_name;
 	NSArray *_ranges;
-	CGFloat _weight;
+	NSArray *_weights;
 }
 @property (readonly,nonatomic) id <WCOpenQuicklyItem> item;
 @property (readonly,nonatomic) NSAttributedString *name;
-@property (readonly,nonatomic) CGFloat weight;
+@property (readonly,nonatomic) CGFloat contiguousRangeWeight;
+@property (readonly,nonatomic) CGFloat lengthDifferenceWeight;
+@property (readonly,nonatomic) CGFloat matchOffsetWeight;
 
-+ (WCOpenQuicklyMatch *)openQuicklyMatchWithItem:(id<WCOpenQuicklyItem>)item ranges:(NSArray *)ranges weight:(CGFloat)weight;
-- (id)initWithItem:(id<WCOpenQuicklyItem>)item ranges:(NSArray *)ranges weight:(CGFloat)weight;
++ (WCOpenQuicklyMatch *)openQuicklyMatchWithItem:(id<WCOpenQuicklyItem>)item ranges:(NSArray *)ranges weights:(NSArray *)weights;
+- (id)initWithItem:(id<WCOpenQuicklyItem>)item ranges:(NSArray *)ranges weights:(NSArray *)weights;
 @end

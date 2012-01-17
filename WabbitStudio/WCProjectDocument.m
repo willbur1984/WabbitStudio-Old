@@ -15,6 +15,8 @@
 #import "WCSourceFileDocument.h"
 #import "WCTabViewController.h"
 #import "WCOpenQuicklyWindowController.h"
+#import "WCFileContainer.h"
+#import "WCSourceScanner.h"
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
 @interface WCProjectDocument ()
@@ -141,6 +143,24 @@
 	NSTabViewItem *selectedTabViewItem = [[[[[self projectWindowController] tabViewController] tabBarControl] tabView] selectedTabViewItem];
 	if (selectedTabViewItem)
 		[[selectedTabViewItem identifier] saveDocument:nil];
+}
+
+- (NSArray *)openQuicklyItems {
+	NSMutableArray *retval = [NSMutableArray arrayWithCapacity:0];
+	
+	for (WCFileContainer *fContainer in [[self projectContainer] descendantLeafNodes]) {
+		[retval addObject:[fContainer representedObject]];
+		
+		WCSourceFileDocument *sfDocument = [[self filesToSourceFileDocuments] objectForKey:[fContainer representedObject]];
+		
+		if (sfDocument)
+			[retval addObjectsFromArray:[[sfDocument sourceScanner] symbols]];
+	}
+	
+	return [[retval copy] autorelease];
+}
+- (NSString *)openQuicklyProjectName {
+	return [self displayName];
 }
 
 - (WCSourceTextViewController *)openTabForFile:(WCFile *)file; {

@@ -7,13 +7,17 @@
 //
 
 #import "RSObject.h"
+#import "WCOpenQuicklyItem.h"
+#import "WCFileDelegate.h"
 #import <Quartz/Quartz.h>
 
-@class RSFileReference;
+@class RSFileReference,WCProject;
 
-@interface WCFile : RSObject <RSPlistArchiving,QLPreviewItem> {
+@interface WCFile : RSObject <RSPlistArchiving,WCOpenQuicklyItem,QLPreviewItem> {
+	__weak id <WCFileDelegate> _delegate;
 	RSFileReference *_fileReference;
 }
+@property (readwrite,assign,nonatomic) id <WCFileDelegate> delegate;
 @property (readonly,nonatomic) RSFileReference *fileReference;
 @property (readonly,nonatomic) NSString *fileName;
 @property (readonly,nonatomic) NSImage *fileIcon;

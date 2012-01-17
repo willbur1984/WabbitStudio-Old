@@ -55,6 +55,14 @@
 		return NO;
 	return YES;
 }
+static const CGFloat kLeftSubviewMinWidth = 200.0;
+static const CGFloat kRightSubviewMinWidth = 400.0;
+- (CGFloat)splitView:(NSSplitView *)splitView constrainMaxCoordinate:(CGFloat)proposedMaximumPosition ofSubviewAt:(NSInteger)dividerIndex {
+	return proposedMaximumPosition-kRightSubviewMinWidth;
+}
+- (CGFloat)splitView:(NSSplitView *)splitView constrainMinCoordinate:(CGFloat)proposedMinimumPosition ofSubviewAt:(NSInteger)dividerIndex {
+	return proposedMinimumPosition+kLeftSubviewMinWidth;
+}
 
 - (NSArray *)itemIdentifiersForNavigatorControl:(RSNavigatorControl *)navigatorControl {
 	return [_navigatorItemDictionaries valueForKey:@"identifier"];

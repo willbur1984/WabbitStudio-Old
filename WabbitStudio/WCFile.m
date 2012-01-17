@@ -8,11 +8,13 @@
 
 #import "WCFile.h"
 #import "RSFileReference.h"
+#import "RSDefines.h"
 
 static NSString *const WCFileReferenceKey = @"fileReference";
 
 @implementation WCFile
 - (void)dealloc {
+	_delegate = nil;
 	[_fileReference release];
 	[super dealloc];
 }
@@ -41,6 +43,25 @@ static NSString *const WCFileReferenceKey = @"fileReference";
 - (NSURL *)previewItemURL {
 	return [self fileURL];
 }
+#pragma mark WCOpenQuicklyItem
+- (NSRange)openQuicklyRange {
+	return NSEmptyRange;
+}
+- (NSURL *)openQuicklyFileURL {
+	return [self fileURL];
+}
+- (NSImage *)openQuicklyImage {
+	return [self fileIcon];
+}
+- (NSURL *)openQuicklyLocationURL {
+	return [[self delegate] locationURLForFile:self];
+}
+- (WCSourceFileDocument *)openQuicklySourceFileDocument {
+	return [[self delegate] sourceFileDocumentForFile:self];
+}
+- (NSString *)openQuicklyName {
+	return [self fileName];
+}
 
 + (id)fileWithFileURL:(NSURL *)fileURL; {
 	return [[[[self class] alloc] initWithFileURL:fileURL] autorelease];
@@ -54,6 +75,7 @@ static NSString *const WCFileReferenceKey = @"fileReference";
 	return self;
 }
 
+@synthesize delegate=_delegate;
 @synthesize fileReference=_fileReference;
 @dynamic fileName;
 - (NSString *)fileName {

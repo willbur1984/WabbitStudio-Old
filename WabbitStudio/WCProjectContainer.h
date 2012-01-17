@@ -11,6 +11,7 @@
 @class WCProject;
 
 @interface WCProjectContainer : RSTreeNode
+
 @property (readonly,nonatomic) WCProject *project;
 
 + (id)projectContainerWithProject:(WCProject *)project;
