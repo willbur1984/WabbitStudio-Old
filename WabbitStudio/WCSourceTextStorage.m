@@ -80,6 +80,12 @@
 	[self edited:NSTextStorageEditedAttributes range:range changeInLength:0];
 }
 
+- (void)fixParagraphStyleAttributeInRange:(NSRange)range {
+	NSRange paragraphRange = [[self string] paragraphRangeForRange:range];
+	
+	[self addAttribute:NSParagraphStyleAttributeName value:[self paragraphStyle] range:paragraphRange];
+}
+
 - (void)fixAttachmentAttributeInRange:(NSRange)range {
 	NSRange effectiveRange;
 	id attributeValue;
@@ -190,10 +196,6 @@
 			for (NSTextContainer *textContainer in [layoutManager textContainers])
 				[[textContainer textView] setTextColor:[currentTheme plainTextColor]];
 		}
-	}
-	else if ([[[note userInfo] objectForKey:@"colorName"] isEqualToString:@"commentColor"]) {
-		[[[self delegate] sourceHighlighterForSourceTextStorage:self] performHighlightingInRange:NSMakeRange(0, [self length]) attributeName:WCSourceHighlighterCommentColorAttributeName];
-		return;
 	}
 	[[[self delegate] sourceHighlighterForSourceTextStorage:self] performHighlightingInVisibleRange];
 }

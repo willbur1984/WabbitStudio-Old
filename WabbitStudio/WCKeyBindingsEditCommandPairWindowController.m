@@ -62,8 +62,6 @@
 }
 
 - (IBAction)ok:(id)sender; {
-	
-	
 	[[NSApplication sharedApplication] endSheet:[self window] returnCode:NSOKButton];
 	[[self window] orderOut:nil];
 }

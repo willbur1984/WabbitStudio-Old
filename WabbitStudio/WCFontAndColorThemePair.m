@@ -41,8 +41,8 @@ static NSDictionary *FontAndColorTypesToNames;
 	_name = [name copy];
 	_colorSelector = NSSelectorFromString([NSString stringWithFormat:@"%@Color",name]);
 	_fontSelector = NSSelectorFromString([NSString stringWithFormat:@"%@Font",name]);
-	_setColorSelector = NSSelectorFromString([NSString stringWithFormat:@"set%@Color:",[name camelCaseString]]);
-	_setFontSelector = NSSelectorFromString([NSString stringWithFormat:@"set%@Font:",[name camelCaseString]]);
+	_setColorSelector = NSSelectorFromString([NSString stringWithFormat:@"set%@Color:",[name stringByCapitalizingFirstLetter]]);
+	_setFontSelector = NSSelectorFromString([NSString stringWithFormat:@"set%@Font:",[name stringByCapitalizingFirstLetter]]);
 	
 	return self;
 }

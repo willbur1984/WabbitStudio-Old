@@ -57,10 +57,11 @@
 	[[[self textView] enclosingScrollView] setFrame:NSMakeRect(NSMinX(scrollViewFrame), NSMinY(scrollViewFrame), NSWidth(scrollViewFrame), NSHeight(scrollViewFrame)-NSHeight(jumpBarFrame))];
 	[[[self jumpBarViewController] view] setFrame:NSMakeRect(NSMinX(scrollViewFrame), NSMaxY(scrollViewFrame)-NSHeight(jumpBarFrame), NSWidth(scrollViewFrame), NSHeight(jumpBarFrame))];
 	
-	[[[self textView] layoutManager] replaceTextStorage:[self textStorage]];
-	
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
 	
+	[[[self textView] layoutManager] replaceTextStorage:[self textStorage]];
+	
+	[[self textView] setTypingAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName,[[self textStorage] paragraphStyle],NSParagraphStyleAttributeName, nil]];
 	[[self textView] setFont:[currentTheme plainTextFont]];
 	[[self textView] setTextColor:[currentTheme plainTextColor]];
 	[[self textView] setDefaultParagraphStyle:[[self textStorage] paragraphStyle]];
@@ -89,20 +90,17 @@
 
 #pragma mark NSTextViewDelegate
 - (void)textView:(NSTextView *)textView clickedOnCell:(id<NSTextAttachmentCell>)cell inRect:(NSRect)cellFrame atIndex:(NSUInteger)charIndex {
-	if (![cell isKindOfClass:[WCArgumentPlaceholderCell class]])
-		return;
-	
-	[textView setSelectedRange:NSMakeRange(charIndex, 1)];
+	if ([cell isKindOfClass:[WCArgumentPlaceholderCell class]]) {
+		[textView setSelectedRange:NSMakeRange(charIndex, 1)];
+	}
 }
 - (void)textView:(NSTextView *)textView doubleClickedOnCell:(id<NSTextAttachmentCell>)cell inRect:(NSRect)cellFrame atIndex:(NSUInteger)charIndex {
-	if (![cell isKindOfClass:[WCArgumentPlaceholderCell class]])
-		return;
-	
-	[textView insertText:[(WCArgumentPlaceholderCell *)cell stringValue] replacementRange:NSMakeRange(charIndex, 1)];
-	[textView setSelectedRange:NSMakeRange(charIndex, [[(WCArgumentPlaceholderCell *)cell stringValue] length])];
+	if ([cell isKindOfClass:[WCArgumentPlaceholderCell class]]) {
+		[textView insertText:[(WCArgumentPlaceholderCell *)cell stringValue] replacementRange:NSMakeRange(charIndex, 1)];
+		[textView setSelectedRange:NSMakeRange(charIndex, [[(WCArgumentPlaceholderCell *)cell stringValue] length])];
+	}
 }
 - (NSDictionary *)textView:(NSTextView *)textView shouldChangeTypingAttributes:(NSDictionary *)oldTypingAttributes toAttributes:(NSDictionary *)newTypingAttributes; {
-	
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
 	
 	return [NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName,[[self textStorage] paragraphStyle],NSParagraphStyleAttributeName, nil];

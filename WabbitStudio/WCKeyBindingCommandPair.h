@@ -15,6 +15,9 @@ static inline KeyCombo WCKeyBindingCommandPairEmptyKeyCombo() {
 	combo.flags = ShortcutRecorderEmptyFlags;
 	return combo;
 }
+static inline BOOL WCKeyBindingCommandPairIsEmptyKeyCombo(KeyCombo theKeyCombo) {
+	return (theKeyCombo.code == ShortcutRecorderEmptyCode && theKeyCombo.flags == ShortcutRecorderEmptyFlags);
+}
 
 extern NSString *const WCKeyBindingCommandPairKeyCodeKey;
 extern NSString *const WCKeyBindingCommandPairModifierFlagsKey;

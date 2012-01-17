@@ -86,6 +86,12 @@ NSString *const WCKeyBindingCommandPairShiftModifierMaskKey = @"shift";
 }
 
 - (void)updateMenuItemWithCurrentKeyCode; {
+	if (WCKeyBindingCommandPairIsEmptyKeyCombo(_keyCombo)) {
+		[[self menuItem] setKeyEquivalent:@""];
+		[[self menuItem] setKeyEquivalentModifierMask:0];
+		return;
+	}
+	
 	[[self menuItem] setKeyEquivalent:SRCharacterForKeyCodeAndCocoaFlags(_keyCombo.code, _keyCombo.flags)];
 	[[self menuItem] setKeyEquivalentModifierMask:_keyCombo.flags];
 }
@@ -103,7 +109,7 @@ NSString *const WCKeyBindingCommandPairShiftModifierMaskKey = @"shift";
 }
 @dynamic key;
 - (NSString *)key {
-	if (_keyCombo.code == ShortcutRecorderEmptyCode && _keyCombo.flags == ShortcutRecorderEmptyFlags)
+	if (WCKeyBindingCommandPairIsEmptyKeyCombo(_keyCombo))
 		return nil;
 	return SRStringForCocoaModifierFlagsAndKeyCode(_keyCombo.flags, _keyCombo.code);
 }

@@ -123,6 +123,9 @@
 		return NO;
 	
 	[_textStorage replaceCharactersInRange:NSMakeRange(0, [_textStorage length]) withString:string];
+#ifdef DEBUG
+	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
+#endif
 	[_sourceScanner scanTokens];
 	
 	return YES;

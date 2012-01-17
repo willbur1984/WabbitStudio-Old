@@ -14,7 +14,7 @@
 - (NSRange)lineNumberRangeForRange:(NSRange)range;
 - (NSUInteger)numberOfLines;
 
-- (NSString *)camelCaseString;
+- (NSString *)stringByCapitalizingFirstLetter;
 
 - (NSUInteger)valueFromHexadecimalString;
 - (NSUInteger)valueFromBinaryString;

@@ -71,7 +71,7 @@
 	return retval;
 }
 
-- (NSString *)camelCaseString; {
+- (NSString *)stringByCapitalizingFirstLetter; {
 	if ([self length] <= 1)
 		return [self capitalizedString];
 	return [[[self substringToIndex:1] capitalizedString] stringByAppendingString:[self substringFromIndex:1]];
