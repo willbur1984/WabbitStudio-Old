@@ -59,7 +59,7 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 	
 	_kqueue = [[UKKQueue alloc] init];
 	[_kqueue setDelegate:self];
-	[_kqueue addPath:[_fileURL path] notifyingAbout:UKKQueueNotifyAboutRename|UKKQueueNotifyAboutDelete];
+	[_kqueue addPath:[_fileURL path] notifyingAbout:UKKQueueNotifyAboutRename|UKKQueueNotifyAboutDelete|UKKQueueNotifyAboutWrite];
 	
 	return self;
 }
@@ -70,7 +70,18 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 		[[self delegate] fileReference:self wasMovedToURL:[[self fileReferenceURL] filePathURL]];
 	}
 	else if ([nm isEqualToString:UKFileWatcherDeleteNotification]) {
-		[[self delegate] fileReferenceWasDeleted:self];
+		[_kqueue removeAllPaths];
+		
+		if ([[self fileURL] checkResourceIsReachableAndReturnError:NULL]) {
+			[_kqueue addPath:[[self fileURL] path] notifyingAbout:UKKQueueNotifyAboutRename|UKKQueueNotifyAboutDelete|UKKQueueNotifyAboutWrite];
+			
+			[[self delegate] fileReferenceWasWrittenTo:self];
+		}
+		else
+			[[self delegate] fileReferenceWasDeleted:self];
+	}
+	else if ([nm isEqualToString:UKFileWatcherWriteNotification]) {
+		[[self delegate] fileReferenceWasWrittenTo:self];
 	}
 }
 

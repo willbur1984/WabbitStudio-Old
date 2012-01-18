@@ -50,7 +50,6 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
 	_projectDocument = nil;
-	[_fileContents release];
 	[_sourceHighlighter release];
 	[_sourceScanner release];
 	[_textStorage release];
@@ -364,6 +363,10 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 	_projectDocument = projectDocument;
 	
 	return self;
+}
+- (void)reloadDocumentFromDisk; {
+	[[self textStorage] replaceCharactersInRange:NSMakeRange(0, [[self textStorage] length]) withString:[NSString stringWithContentsOfURL:[self fileURL] encoding:_fileEncoding error:NULL]];
+	[self setFileModificationDate:[[[NSFileManager defaultManager] attributesOfItemAtPath:[[self fileURL] path] error:NULL] fileModificationDate]];
 }
 #pragma mark Properties
 @synthesize sourceScanner=_sourceScanner;

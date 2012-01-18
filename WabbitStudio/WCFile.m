@@ -78,6 +78,11 @@ static NSString *const WCFileReferenceKey = @"fileReference";
 	
 	[self didChangeValueForKey:@"fileIcon"];
 }
+- (void)fileReferenceWasWrittenTo:(RSFileReference *)fileReference; {
+	WCSourceFileDocument *sfDocument = [[self delegate] sourceFileDocumentForFile:self];
+	
+	[sfDocument reloadDocumentFromDisk];
+}
 #pragma mark *** Public Methods ***
 + (id)fileWithFileURL:(NSURL *)fileURL; {
 	return [[[[self class] alloc] initWithFileURL:fileURL] autorelease];

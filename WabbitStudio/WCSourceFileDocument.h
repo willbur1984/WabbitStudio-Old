@@ -22,7 +22,6 @@ extern NSString *const WCSourceFileDocumentVisibleRangeKey;
 @interface WCSourceFileDocument : NSDocument <WCJumpBarDataSource,WCSourceTextStorageDelegate,WCSourceScannerDelegate,WCSourceHighlighterDelegate> {
 	__weak WCProjectDocument *_projectDocument;
 	
-	NSString *_fileContents;
 	NSStringEncoding _fileEncoding;
 	
 	WCSourceTextStorage *_textStorage;
@@ -36,5 +35,7 @@ extern NSString *const WCSourceFileDocumentVisibleRangeKey;
 @property (readonly,nonatomic) WCProjectDocument *projectDocument;
 
 - (id)initWithContentsOfURL:(NSURL *)url ofType:(NSString *)typeName forProjectDocument:(WCProjectDocument *)projectDocument error:(NSError **)outError;
+
+- (void)reloadDocumentFromDisk;
 
 @end

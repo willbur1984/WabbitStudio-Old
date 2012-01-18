@@ -14,4 +14,5 @@
 @required
 - (void)fileReference:(RSFileReference *)fileReference wasMovedToURL:(NSURL *)url;
 - (void)fileReferenceWasDeleted:(RSFileReference *)fileReference;
+- (void)fileReferenceWasWrittenTo:(RSFileReference *)fileReference;
 @end
