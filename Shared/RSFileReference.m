@@ -10,6 +10,7 @@
 #import "NSString+RSExtensions.h"
 #import "NSURL+RSExtensions.h"
 #import "RSDefines.h"
+#import "UKKQueue.h"
 
 static NSString *const RSFileReferenceUUIDKey = @"UUID";
 static NSString *const RSFileReferenceFileReferenceURLKey = @"fileReferenceURL";
@@ -17,7 +18,9 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 
 @implementation RSFileReference
 - (void)dealloc {
+	[_kqueue release];
 	[_UUID release];
+	[_fileURL release];
 	[_fileReferenceURL release];
 	[super dealloc];
 }
@@ -29,7 +32,7 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 - (NSDictionary *)plistRepresentation {
 	NSMutableDictionary *retval = [NSMutableDictionary dictionaryWithDictionary:[super plistRepresentation]];
 	
-	[retval addEntriesFromDictionary:[NSDictionary dictionaryWithObjectsAndKeys:[self UUID],RSFileReferenceUUIDKey,[[self fileReferenceURL] bookmarkDataWithOptions:NSURLBookmarkCreationMinimalBookmark|NSURLBookmarkCreationPreferFileIDResolution includingResourceValuesForKeys:nil relativeToURL:nil error:NULL],RSFileReferenceFileReferenceURLKey,[[self fileReferenceURL] path],RSFileReferenceFilePathKey, nil]];
+	[retval addEntriesFromDictionary:[NSDictionary dictionaryWithObjectsAndKeys:[self UUID],RSFileReferenceUUIDKey,[[self fileReferenceURL] bookmarkDataWithOptions:NSURLBookmarkCreationMinimalBookmark|NSURLBookmarkCreationPreferFileIDResolution includingResourceValuesForKeys:nil relativeToURL:nil error:NULL],RSFileReferenceFileReferenceURLKey,[[self fileURL] path],RSFileReferenceFilePathKey, nil]];
 	
 	return retval;
 }
@@ -44,7 +47,7 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 	NSURL *fileReferenceURL = [[[NSURL alloc] initByResolvingBookmarkData:bookmarkData options:NSURLBookmarkResolutionWithoutUI relativeToURL:nil bookmarkDataIsStale:&bookmarkDataIsStale error:NULL] autorelease];
 	
 	if (!fileReferenceURL || bookmarkDataIsStale)
-		_fileReferenceURL = [[[NSURL fileURLWithPath:[plistRepresentation objectForKey:RSFileReferenceFilePathKey]] fileReferenceURL] retain];
+		_fileReferenceURL = [[[NSURL fileURLWithPath:[plistRepresentation objectForKey:RSFileReferenceFilePathKey]] fileReferenceURL] copy];
 	else
 		_fileReferenceURL = [fileReferenceURL retain];
 	
@@ -52,7 +55,23 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
     NSAssert(_fileReferenceURL, @"fileReferenceURL cannot be nil!");
 #endif
 	
+	_fileURL = [[_fileReferenceURL filePathURL] copy];
+	
+	_kqueue = [[UKKQueue alloc] init];
+	[_kqueue setDelegate:self];
+	[_kqueue addPath:[_fileURL path] notifyingAbout:UKKQueueNotifyAboutRename|UKKQueueNotifyAboutDelete];
+	
 	return self;
+}
+
+-(void) watcher: (id<UKFileWatcher>)kq receivedNotification: (NSString*)nm forPath: (NSString*)fpath; {
+	if ([nm isEqualToString:UKFileWatcherRenameNotification]) {
+		[self setFileURL:[[self fileReferenceURL] filePathURL]];
+		[[self delegate] fileReference:self wasMovedToURL:[[self fileReferenceURL] filePathURL]];
+	}
+	else if ([nm isEqualToString:UKFileWatcherDeleteNotification]) {
+		[[self delegate] fileReferenceWasDeleted:self];
+	}
 }
 
 + (RSFileReference *)fileReferenceWithFileURL:(NSURL *)fileURL; {
@@ -63,7 +82,8 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 		return nil;
 	
 	_UUID = [[NSString UUIDString] retain];
-	_fileReferenceURL = [[fileURL fileReferenceURL] retain];
+	_fileURL = [[fileURL filePathURL] copy];
+	_fileReferenceURL = [[fileURL fileReferenceURL] copy];
 	
 	return self;
 }
@@ -72,22 +92,33 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 @synthesize fileReferenceURL=_fileReferenceURL;
 @dynamic fileURL;
 - (NSURL *)fileURL {
-	return [[self fileReferenceURL] filePathURL];
+	return _fileURL;
 }
 - (void)setFileURL:(NSURL *)fileURL {
-	[_fileReferenceURL release];
-	_fileReferenceURL = [[fileURL fileReferenceURL] retain];
+	if (_fileURL == fileURL)
+		return;
+	
+	[_fileURL release];
+	_fileURL = [fileURL copy];
 }
 @dynamic fileIcon;
 - (NSImage *)fileIcon {
-	return [[self fileReferenceURL] fileIcon];
+	NSImage *retval = [[self fileURL] fileIcon];
+	if (retval)
+		return retval;
+	return [NSImage imageNamed:@"FileNotFound"];
 }
 @dynamic fileName;
 - (NSString *)fileName {
-	return [[self fileReferenceURL] fileName];
+	NSString *retval = [[self fileURL] fileName];
+	if (retval)
+		return retval;
+	return [[[self fileURL] path] lastPathComponent];
 }
 @dynamic fileUTI;
 - (NSString *)fileUTI {
-	return [[self fileReferenceURL] fileUTI];
+	return [[self fileURL] fileUTI];
 }
+@synthesize delegate=_delegate;
+
 @end

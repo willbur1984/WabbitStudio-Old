@@ -9,6 +9,8 @@
 #import "WCFile.h"
 #import "RSFileReference.h"
 #import "RSDefines.h"
+#import "NSImage+RSExtensions.h"
+#import "WCSourceFileDocument.h"
 
 static NSString *const WCFileReferenceKey = @"fileReference";
 
@@ -35,6 +37,7 @@ static NSString *const WCFileReferenceKey = @"fileReference";
 		return nil;
 	
 	_fileReference = [[RSFileReference alloc] initWithPlistRepresentation:[plistRepresentation objectForKey:WCFileReferenceKey]];
+	[_fileReference setDelegate:self];
 	
 	return self;
 }
@@ -62,7 +65,20 @@ static NSString *const WCFileReferenceKey = @"fileReference";
 - (NSString *)openQuicklyName {
 	return [self fileName];
 }
-
+#pragma mark RSFileReferenceDelegate
+- (void)fileReference:(RSFileReference *)fileReference wasMovedToURL:(NSURL *)url; {
+	WCSourceFileDocument *sfDocument = [[self delegate] sourceFileDocumentForFile:self];
+	
+	[self willChangeValueForKey:@"fileName"];
+	[sfDocument setFileURL:url];
+	[self didChangeValueForKey:@"fileName"];
+}
+- (void)fileReferenceWasDeleted:(RSFileReference *)fileReference {
+	[self willChangeValueForKey:@"fileIcon"];
+	
+	[self didChangeValueForKey:@"fileIcon"];
+}
+#pragma mark *** Public Methods ***
 + (id)fileWithFileURL:(NSURL *)fileURL; {
 	return [[[[self class] alloc] initWithFileURL:fileURL] autorelease];
 }
@@ -71,10 +87,11 @@ static NSString *const WCFileReferenceKey = @"fileReference";
 		return nil;
 	
 	_fileReference = [[RSFileReference alloc] initWithFileURL:fileURL];
+	[_fileReference setDelegate:self];
 	
 	return self;
 }
-
+#pragma mark Properties
 @synthesize delegate=_delegate;
 @synthesize fileReference=_fileReference;
 @dynamic fileName;
@@ -83,7 +100,12 @@ static NSString *const WCFileReferenceKey = @"fileReference";
 }
 @dynamic fileIcon;
 - (NSImage *)fileIcon {
+	if ([self isEdited])
+		return [[[self fileReference] fileIcon] unsavedImageFromImage];
 	return [[self fileReference] fileIcon];
+}
++ (NSSet *)keyPathsForValuesAffectingFileIcon {
+	return [NSSet setWithObjects:@"edited", nil];
 }
 @dynamic fileURL;
 - (NSURL *)fileURL {
@@ -92,6 +114,13 @@ static NSString *const WCFileReferenceKey = @"fileReference";
 @dynamic fileUTI;
 - (NSString *)fileUTI {
 	return [[self fileReference] fileUTI];
+}
+@dynamic edited;
+- (BOOL)isEdited {
+	return _fileFlags.edited;
+}
+- (void)setEdited:(BOOL)edited {
+	_fileFlags.edited = edited;
 }
 
 @end

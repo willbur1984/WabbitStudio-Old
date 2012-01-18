@@ -10,6 +10,7 @@
 #import "WCSourceFileDocument.h"
 #import "WCStandardSourceTextViewController.h"
 #import "NSURL+RSExtensions.h"
+#import "WCProjectDocument.h"
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
 NSString *const WCTabViewControllerDidSelectTabNotification = @"WCTabViewControllerDidSelectTabNotification";
@@ -61,7 +62,7 @@ NSString *const WCTabViewControllerDidCloseTabNotification = @"WCTabViewControll
 	return YES;
 }
 - (void)tabView:(NSTabView *)tabView didCloseTabViewItem:(NSTabViewItem *)tabViewItem; {
-	//[tabViewItem unbind:@"label"];
+	[tabViewItem unbind:@"label"];
 	[self removeTabForSourceFileDocument:[tabViewItem identifier]];
 	[[NSNotificationCenter defaultCenter] postNotificationName:WCTabViewControllerDidCloseTabNotification object:self];
 }
@@ -137,7 +138,7 @@ NSString *const WCTabViewControllerDidCloseTabNotification = @"WCTabViewControll
 	if (tabViewItemIndex == NSNotFound) {
 		tabViewItem = [[[NSTabViewItem alloc] initWithIdentifier:sourceFileDocument] autorelease];
 		
-		[tabViewItem setLabel:[sourceFileDocument displayName]];
+		[tabViewItem bind:@"label" toObject:[[[sourceFileDocument projectDocument] sourceFileDocumentsToFiles] objectForKey:sourceFileDocument] withKeyPath:@"fileName" options:nil];
 		
 		WCStandardSourceTextViewController *stvController = [[[WCStandardSourceTextViewController alloc] initWithSourceFileDocument:sourceFileDocument] autorelease];
 		NSView *containerView = [[[NSView alloc] initWithFrame:NSMakeRect(0, 0, 500, 500)] autorelease];

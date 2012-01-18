@@ -226,6 +226,9 @@
 		07F5F76D14A59BCD00F1F326 /* WCLineNumberRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F5F76C14A59BCC00F1F326 /* WCLineNumberRulerView.m */; };
 		07F5F77114A5A91800F1F326 /* NSString+WCExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F5F77014A5A91700F1F326 /* NSString+WCExtensions.m */; };
 		07F5F77414A5BC5700F1F326 /* NDTrie.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F5F77314A5BC5600F1F326 /* NDTrie.m */; };
+		07FF7B3F14C763EB000AE014 /* UKFileWatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 07FF7B3C14C763EB000AE014 /* UKFileWatcher.m */; };
+		07FF7B4014C763EB000AE014 /* UKKQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 07FF7B3E14C763EB000AE014 /* UKKQueue.m */; };
+		07FF7B4314C763FC000AE014 /* UKMainThreadProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 07FF7B4214C763FC000AE014 /* UKMainThreadProxy.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -640,6 +643,13 @@
 		07F5F77014A5A91700F1F326 /* NSString+WCExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+WCExtensions.m"; sourceTree = "<group>"; };
 		07F5F77214A5BC5600F1F326 /* NDTrie.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDTrie.h; sourceTree = "<group>"; };
 		07F5F77314A5BC5600F1F326 /* NDTrie.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NDTrie.m; sourceTree = "<group>"; };
+		07FF7B3B14C763EB000AE014 /* UKFileWatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UKFileWatcher.h; sourceTree = "<group>"; };
+		07FF7B3C14C763EB000AE014 /* UKFileWatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UKFileWatcher.m; sourceTree = "<group>"; };
+		07FF7B3D14C763EB000AE014 /* UKKQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UKKQueue.h; sourceTree = "<group>"; };
+		07FF7B3E14C763EB000AE014 /* UKKQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UKKQueue.m; sourceTree = "<group>"; };
+		07FF7B4114C763FC000AE014 /* UKMainThreadProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UKMainThreadProxy.h; sourceTree = "<group>"; };
+		07FF7B4214C763FC000AE014 /* UKMainThreadProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UKMainThreadProxy.m; sourceTree = "<group>"; };
+		07FF7B4414C76C71000AE014 /* RSFileReferenceDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSFileReferenceDelegate.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -817,6 +827,12 @@
 		0708964614A6C9020017BBE4 /* External */ = {
 			isa = PBXGroup;
 			children = (
+				07FF7B4114C763FC000AE014 /* UKMainThreadProxy.h */,
+				07FF7B4214C763FC000AE014 /* UKMainThreadProxy.m */,
+				07FF7B3B14C763EB000AE014 /* UKFileWatcher.h */,
+				07FF7B3C14C763EB000AE014 /* UKFileWatcher.m */,
+				07FF7B3D14C763EB000AE014 /* UKKQueue.h */,
+				07FF7B3E14C763EB000AE014 /* UKKQueue.m */,
 				071985EE14C0AEAC00C8E91A /* JAViewController.h */,
 				071985EF14C0AEAC00C8E91A /* JAViewController.m */,
 				071985F014C0AEAC00C8E91A /* NSObject+JAExtensions.h */,
@@ -1069,6 +1085,7 @@
 				072AF0FB14BCB72600F2147E /* RSTreeNode.m */,
 				071985FA14C0B3FA00C8E91A /* RSFileReference.h */,
 				071985FB14C0B3FA00C8E91A /* RSFileReference.m */,
+				07FF7B4414C76C71000AE014 /* RSFileReferenceDelegate.h */,
 				077884F014C1019E00605F5D /* RSObject.h */,
 				077884F114C1019E00605F5D /* RSObject.m */,
 			);
@@ -1742,6 +1759,9 @@
 				07018B1F14C6167E00C5A7AC /* WCFileContainer.m in Sources */,
 				07018B2214C61F4500C5A7AC /* WCOpenQuicklyTableView.m in Sources */,
 				07018B2D14C63C6600C5A7AC /* UKXattrMetadataStore.m in Sources */,
+				07FF7B3F14C763EB000AE014 /* UKFileWatcher.m in Sources */,
+				07FF7B4014C763EB000AE014 /* UKKQueue.m in Sources */,
+				07FF7B4314C763FC000AE014 /* UKMainThreadProxy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

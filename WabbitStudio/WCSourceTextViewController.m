@@ -154,6 +154,14 @@
 		}
 	}
 	
+	[retval sortUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"range" ascending:YES comparator:^NSComparisonResult(id obj1, id obj2) {
+		if ([obj1 rangeValue].location < [obj2 rangeValue].location)
+			return NSOrderedAscending;
+		else if ([obj1 rangeValue].location > [obj2 rangeValue].location)
+			return NSOrderedDescending;
+		return NSOrderedSame;
+	}]]];
+	
 	return [[retval copy] autorelease];
 }
 - (WCSourceScanner *)sourceScannerForSourceTextView:(WCSourceTextView *)textView {
