@@ -127,6 +127,10 @@ NSString *const WCTabViewControllerDidCloseTabNotification = @"WCTabViewControll
 }
 #pragma mark *** Public Methods ***
 - (WCSourceTextViewController *)addTabForSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument; {
+#ifdef DEBUG
+    NSAssert(sourceFileDocument, @"sourceFileDocument cannot be nil!");
+#endif
+	
 	NSUInteger tabViewItemIndex = [[[self tabBarControl] tabView] indexOfTabViewItemWithIdentifier:sourceFileDocument];
 	NSTabViewItem *tabViewItem;
 	

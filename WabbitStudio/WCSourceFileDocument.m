@@ -25,6 +25,10 @@
 #import "WCProject.h"
 #import "UKXattrMetadataStore.h"
 #import "NSTextView+WCExtensions.h"
+#import "WCJumpBarComponentCell.h"
+#import "NSURL+RSExtensions.h"
+#import "NSImage+RSExtensions.h"
+#import "RSDefines.h"
 
 NSString *const WCSourceFileDocumentWindowFrameKey = @"org.revsoft.wabbitstudio.windowframe";
 NSString *const WCSourceFileDocumentSelectedRangeKey = @"org.revsoft.wabbitstudio.selectedrange";
@@ -32,7 +36,8 @@ NSString *const WCSourceFileDocumentStringEncodingKey = @"org.revsoft.wabbitstud
 NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio.visiblerange";
 
 @interface WCSourceFileDocument ()
-
+@property (readonly,nonatomic) NSImage *icon;
+@property (readonly,nonatomic) BOOL isEdited;
 @end
 
 @implementation WCSourceFileDocument
@@ -172,15 +177,42 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 	
 	return YES;
 }
+
+- (void)updateChangeCount:(NSDocumentChangeType)change {
+	BOOL wasDocumentEdited = [self isDocumentEdited];
+	
+	[super updateChangeCount:change];
+	
+	if (wasDocumentEdited != [self isDocumentEdited]) {
+		[self willChangeValueForKey:@"icon"];
+		[self willChangeValueForKey:@"isEdited"];
+		[self didChangeValueForKey:@"icon"];
+		[self didChangeValueForKey:@"isEdited"];
+	}
+}
 #pragma mark PSMTabBarControlCell
+@dynamic icon;
+- (NSImage *)icon {
+	NSImage *retval;
+	
+	if ([self fileURL])
+		retval = [[self fileURL] fileIcon];
+	else
+		retval = [NSImage imageNamed:@"UntitledFile"];
+	
+	if ([self isDocumentEdited])
+		retval = [retval unsavedImageFromImage];
+	
+	[retval setSize:NSSmallSize];
+	
+	return retval;
+}
+@dynamic isEdited;
 - (BOOL)isEdited {
 	return [self isDocumentEdited];
 }
 #pragma mark WCJumpBarDataSource
-- (NSDocument *)document {
-	return self;
-}
-- (NSArray *)jumpBarPathComponents {
+- (NSArray *)jumpBarComponentCells {
 	if ([self projectDocument]) {
 		WCFile *fileForDocument = [[[self projectDocument] sourceFileDocumentsToFiles] objectForKey:self];
 		RSTreeNode *treeNodeForDocument = nil;
@@ -191,16 +223,49 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 			}
 		}
 		
-		NSMutableArray *retval = [NSMutableArray arrayWithObjects:treeNodeForDocument, nil];
+		WCJumpBarComponentCell *fileCell = [[[WCJumpBarComponentCell alloc] initTextCell:[fileForDocument fileName]] autorelease];
+		[fileCell setImage:[self icon]];
+		[fileCell setRepresentedObject:fileForDocument];
+		
+		NSMutableArray *retval = [NSMutableArray arrayWithObjects:fileCell, nil];
 		while ([treeNodeForDocument parentNode]) {
+			WCFile *file = [[treeNodeForDocument parentNode] representedObject];
+			WCJumpBarComponentCell *cell = [[[WCJumpBarComponentCell alloc] initTextCell:[file fileName]] autorelease];
+			[cell setImage:[file fileIcon]];
+			[cell setRepresentedObject:file];
 			
-			[retval insertObject:[treeNodeForDocument parentNode] atIndex:0];
+			[retval insertObject:cell atIndex:0];
 			
 			treeNodeForDocument = [treeNodeForDocument parentNode];
 		}
 		return [[retval copy] autorelease];
 	}
-	return nil;
+	return [NSArray arrayWithObjects:[self fileComponentCell], nil];
+}
+- (WCJumpBarComponentCell *)fileComponentCell {
+	if ([self projectDocument]) {
+		WCFile *fileForDocument = [[[self projectDocument] sourceFileDocumentsToFiles] objectForKey:self];
+		RSTreeNode *treeNodeForDocument = nil;
+		for (RSTreeNode *treeNode in [[[self projectDocument] projectContainer] descendantLeafNodes]) {
+			if ([treeNode representedObject] == fileForDocument) {
+				treeNodeForDocument = treeNode;
+				break;
+			}
+		}
+		
+		WCJumpBarComponentCell *cell = [[[WCJumpBarComponentCell alloc] initTextCell:[fileForDocument fileName]] autorelease];
+		[cell setImage:[self icon]];
+		[cell setRepresentedObject:fileForDocument];
+		
+		return cell;
+	}
+	else {
+		WCJumpBarComponentCell *cell = [[[WCJumpBarComponentCell alloc] initTextCell:[self displayName]] autorelease];
+		
+		[cell setImage:[self icon]];
+		
+		return cell;
+	}
 }
 #pragma mark WCSourceScannerDelegate
 - (NSArray *)sourceScanner:(WCSourceScanner *)scanner completionsForPrefix:(NSString *)prefix; {
@@ -225,7 +290,7 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 	return [self fileURL];
 }
 - (NSURL *)locationURLForSourceScanner:(WCSourceScanner *)scanner {
-	NSArray *jumpBarComponents = [self jumpBarPathComponents];
+	NSArray *jumpBarComponents = [self jumpBarComponentCells];
 	NSURL *retval = [NSURL URLWithString:[[[jumpBarComponents objectAtIndex:0] representedObject] fileName]];
 	
 	for (RSTreeNode *treeNode in [jumpBarComponents subarrayWithRange:NSMakeRange(1, [jumpBarComponents count]-1)]) {

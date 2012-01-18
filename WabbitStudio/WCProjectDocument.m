@@ -17,6 +17,7 @@
 #import "WCOpenQuicklyWindowController.h"
 #import "WCFileContainer.h"
 #import "WCSourceScanner.h"
+#import "WCProjectNavigatorViewController.h"
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
 @interface WCProjectDocument ()
@@ -164,10 +165,29 @@
 }
 
 - (WCSourceTextViewController *)openTabForFile:(WCFile *)file; {
-	return [[[self projectWindowController] tabViewController] addTabForSourceFileDocument:[[self filesToSourceFileDocuments] objectForKey:file]];
+	WCSourceFileDocument *sfDocument = [[self filesToSourceFileDocuments] objectForKey:file];
+	if (sfDocument)
+		return [self openTabForSourceFileDocument:sfDocument];
+	else {
+		WCFileContainer *fileContainer = [self fileContainerForFile:file];
+		
+		[[[self projectWindowController] projectNavigatorViewController] setSelectedObjects:[NSArray arrayWithObjects:fileContainer, nil]];
+	}
+	return nil;
 }
 - (WCSourceTextViewController *)openTabForSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument; {
 	return [[[self projectWindowController] tabViewController] addTabForSourceFileDocument:sourceFileDocument];
+}
+
+- (WCFileContainer *)fileContainerForFile:(WCFile *)file; {
+	WCFileContainer *retval = nil;
+	for (WCFileContainer *fileContainer in [[self projectContainer] descendantNodesInclusive]) {
+		if ([fileContainer representedObject] == file) {
+			retval = fileContainer;
+			break;
+		}
+	}
+	return retval;
 }
 
 - (IBAction)openQuickly:(id)sender; {

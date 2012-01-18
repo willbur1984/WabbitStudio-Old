@@ -191,6 +191,12 @@
 - (IBAction)showStandardEditor:(id)sender; {
 	[[self standardSourceTextViewController] showStandardEditor:nil];
 }
+- (IBAction)showTopLevelItems:(id)sender; {
+	[[self jumpBarViewController] showTopLevelItems:nil];
+}
+- (IBAction)showGroupItems:(id)sender; {
+	[[self jumpBarViewController] showGroupItems:nil];
+}
 - (IBAction)showDocumentItems:(id)sender; {
 	[[self jumpBarViewController] showDocumentItems:nil];
 }

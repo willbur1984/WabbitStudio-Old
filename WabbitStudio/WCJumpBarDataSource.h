@@ -8,14 +8,12 @@
 
 #import <Foundation/NSObject.h>
 
-@class WCSourceScanner,WCProjectDocument;
+@class WCSourceScanner,WCProjectDocument,WCJumpBarComponentCell;
 
 @protocol WCJumpBarDataSource <NSObject>
 @required
-- (NSURL *)fileURL;
-- (NSString *)displayName;
 - (WCSourceScanner *)sourceScanner;
-- (NSDocument *)document;
 - (WCProjectDocument *)projectDocument;
-- (NSArray *)jumpBarPathComponents;
+- (NSArray *)jumpBarComponentCells;
+- (WCJumpBarComponentCell *)fileComponentCell;
 @end

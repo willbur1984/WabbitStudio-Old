@@ -322,13 +322,39 @@
 				<true/>
 			</dict>
 		</dict>
-		<key>showDocumentItems:</key>
+		<key>showTopLevelItems:</key>
 		<dict>
 			<key>keyCode</key>
 			<integer>18</integer>
 			<key>modifierFlags</key>
 			<dict>
-				<key>control</key>
+				<key>shift</key>
+				<true/>
+				<key>command</key>
+				<true/>
+			</dict>
+		</dict>
+		<key>showGroupItems:</key>
+		<dict>
+			<key>keyCode</key>
+			<integer>19</integer>
+			<key>modifierFlags</key>
+			<dict>
+				<key>shift</key>
+				<true/>
+				<key>command</key>
+				<true/>
+			</dict>
+		</dict>
+		<key>showDocumentItems:</key>
+		<dict>
+			<key>keyCode</key>
+			<integer>20</integer>
+			<key>modifierFlags</key>
+			<dict>
+				<key>shift</key>
+				<true/>
+				<key>command</key>
 				<true/>
 			</dict>
 		</dict>

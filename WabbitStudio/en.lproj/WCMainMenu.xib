@@ -707,10 +707,28 @@
 												<reference key="NSOnImage" ref="1033313550"/>
 												<reference key="NSMixedImage" ref="310636482"/>
 											</object>
+											<object class="NSMenuItem" id="736431268">
+												<reference key="NSMenu" ref="1058866286"/>
+												<string key="NSTitle">Show Top Level Items</string>
+												<string key="NSKeyEquiv">1</string>
+												<int key="NSKeyEquivModMask">262144</int>
+												<int key="NSMnemonicLoc">2147483647</int>
+												<reference key="NSOnImage" ref="1033313550"/>
+												<reference key="NSMixedImage" ref="310636482"/>
+											</object>
+											<object class="NSMenuItem" id="369461189">
+												<reference key="NSMenu" ref="1058866286"/>
+												<string key="NSTitle">Show Group Items</string>
+												<string key="NSKeyEquiv">2</string>
+												<int key="NSKeyEquivModMask">262144</int>
+												<int key="NSMnemonicLoc">2147483647</int>
+												<reference key="NSOnImage" ref="1033313550"/>
+												<reference key="NSMixedImage" ref="310636482"/>
+											</object>
 											<object class="NSMenuItem" id="824819909">
 												<reference key="NSMenu" ref="1058866286"/>
 												<string key="NSTitle">Show Symbols</string>
-												<string key="NSKeyEquiv">1</string>
+												<string key="NSKeyEquiv">3</string>
 												<int key="NSKeyEquivModMask">262144</int>
 												<int key="NSMnemonicLoc">2147483647</int>
 												<reference key="NSOnImage" ref="1033313550"/>
@@ -1584,6 +1602,22 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
+						<string key="label">showTopLevelItems:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="736431268"/>
+					</object>
+					<int key="connectionID">621</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">showGroupItems:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="369461189"/>
+					</object>
+					<int key="connectionID">622</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
 						<string key="label">preferences:</string>
 						<reference key="source" ref="968104485"/>
 						<reference key="destination" ref="609285721"/>
@@ -2274,6 +2308,8 @@
 							<reference ref="1072533537"/>
 							<reference ref="194506807"/>
 							<reference ref="824819909"/>
+							<reference ref="736431268"/>
+							<reference ref="369461189"/>
 						</array>
 						<reference key="parent" ref="949485238"/>
 					</object>
@@ -2408,6 +2444,16 @@
 						<reference key="object" ref="872527377"/>
 						<reference key="parent" ref="720053764"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">619</int>
+						<reference key="object" ref="736431268"/>
+						<reference key="parent" ref="1058866286"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">620</int>
+						<reference key="object" ref="369461189"/>
+						<reference key="parent" ref="1058866286"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -2526,6 +2572,8 @@
 				<string key="611.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="615.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="617.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="619.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="620.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="72.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="73.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="74.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2542,7 +2590,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">618</int>
+			<int key="maxID">622</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -2736,17 +2784,25 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">WCJumpBarViewController</string>
 					<string key="superclassName">NSViewController</string>
-					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">showDocumentItems:</string>
-						<string key="NS.object.0">id</string>
-					</object>
-					<object class="NSMutableDictionary" key="actionInfosByName">
-						<string key="NS.key.0">showDocumentItems:</string>
-						<object class="IBActionInfo" key="NS.object.0">
+					<dictionary class="NSMutableDictionary" key="actions">
+						<string key="showDocumentItems:">id</string>
+						<string key="showGroupItems:">id</string>
+						<string key="showTopLevelItems:">id</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="showDocumentItems:">
 							<string key="name">showDocumentItems:</string>
 							<string key="candidateClassName">id</string>
 						</object>
-					</object>
+						<object class="IBActionInfo" key="showGroupItems:">
+							<string key="name">showGroupItems:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="showTopLevelItems:">
+							<string key="name">showTopLevelItems:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="includesMenu">NSMenu</string>
 						<string key="jumpBar">WCJumpBar</string>
@@ -2881,7 +2937,9 @@
 						<string key="removeAssistantEditor:">id</string>
 						<string key="showAssistantEditor:">id</string>
 						<string key="showDocumentItems:">id</string>
+						<string key="showGroupItems:">id</string>
 						<string key="showStandardEditor:">id</string>
+						<string key="showTopLevelItems:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
 						<object class="IBActionInfo" key="addAssistantEditor:">
@@ -2900,8 +2958,16 @@
 							<string key="name">showDocumentItems:</string>
 							<string key="candidateClassName">id</string>
 						</object>
+						<object class="IBActionInfo" key="showGroupItems:">
+							<string key="name">showGroupItems:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 						<object class="IBActionInfo" key="showStandardEditor:">
 							<string key="name">showStandardEditor:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="showTopLevelItems:">
+							<string key="name">showTopLevelItems:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 					</dictionary>

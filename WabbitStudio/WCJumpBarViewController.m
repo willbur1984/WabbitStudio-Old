@@ -23,13 +23,15 @@
 #import "RSDefines.h"
 #import "WCProject.h"
 #import "WCProjectDocument.h"
-#import "RSTreeNode.h"
+#import "WCFileContainer.h"
 
 @interface WCJumpBarViewController ()
 @property (readwrite,copy,nonatomic) NSString *textViewSelectedLineAndColumn;
 @property (readonly,nonatomic) NSMenu *symbolsMenu;
 @property (readonly,nonatomic) id <WCJumpBarDataSource> jumpBarDataSource;
 @property (readwrite,copy,nonatomic) NSArray *includesFiles;
+@property (readwrite,assign,nonatomic) NSMenu *filesMenu;
+@property (readonly,nonatomic) NSMapTable *fileSubmenusToFileContainers;
 
 - (void)_updatePathComponentCells;
 - (void)_updateFilePathComponentCell;
@@ -46,11 +48,14 @@
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[(id)[self jumpBarDataSource] removeObserver:self forKeyPath:@"icon" context:self];
 	[self cleanUpUserDefaultsObserving];
 	_textView = nil;
 	_jumpBarDataSource = nil;
 	[_includesFiles release];
 	[_symbolsMenu release];
+	[_filesMenu release];
+	[_fileSubmenusToFileContainers release];
 	[_textViewSelectedLineAndColumn release];
 	[super dealloc];
 }
@@ -66,6 +71,8 @@
 	[[self jumpBar] setAction:@selector(_jumpBarClicked:)];
 	
 	[self _updatePathComponentCells];
+	
+	[(id)[self jumpBarDataSource] addObserver:self forKeyPath:@"icon" options:NSKeyValueObservingOptionNew context:self];
 }
 
 - (NSSet *)userDefaultsKeyPathsToObserve {
@@ -75,6 +82,9 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if ([keyPath isEqualToString:[kUserDefaultsKeyPathPrefix stringByAppendingString:WCReallyAdvancedJumpBarShowFileAndLineNumberKey]]) {
 		[self _updateSymbolPathComponentCell];
+	}
+	else if ([keyPath isEqualToString:@"icon"]) {
+		[self _updateFilePathComponentCell];
 	}
 	else
 		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
@@ -111,7 +121,16 @@
 		}
 		return 1;
 	}
-	return 0;
+	else if (menu == [self filesMenu])
+		return [menu numberOfItems];
+	else {
+		WCFile *file = [[[menu supermenu] itemAtIndex:[[menu supermenu] indexOfItemWithSubmenu:menu]] representedObject];
+		WCFileContainer *fileContainer = [[[self jumpBarDataSource] projectDocument] fileContainerForFile:file];
+	
+		[[self fileSubmenusToFileContainers] setObject:fileContainer forKey:menu];
+		
+		return [[fileContainer childNodes] count];
+	}
 }
 - (BOOL)menu:(NSMenu *)menu updateItem:(NSMenuItem *)item atIndex:(NSInteger)index shouldCancel:(BOOL)shouldCancel {
 	if (menu == [self recentFilesMenu]) {
@@ -158,12 +177,41 @@
 			[item setRepresentedObject:nil];
 		}
 	}
+	else if (menu != [self filesMenu]) {
+		WCFileContainer *fileContainer = [[self fileSubmenusToFileContainers] objectForKey:menu];
+		WCFileContainer *childContainer = [[fileContainer childNodes] objectAtIndex:index];
+		WCFile *file = [childContainer representedObject];
+		
+		[item setTarget:self];
+		[item setAction:@selector(_filesMenuItemClicked:)];
+		[item setTitle:[file fileName]];
+		[item setImage:[file fileIcon]];
+		[[item image] setSize:NSSmallSize];
+		[item setRepresentedObject:file];
+		
+		if (![childContainer isLeafNode]) {
+			NSMenu *submenu = [[[NSMenu alloc] initWithTitle:[item title]] autorelease];
+			[submenu setFont:[NSFont menuFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]]];
+			[submenu setDelegate:self];
+			
+			[item setSubmenu:submenu];
+		}
+	}
 	
 	return (!shouldCancel);
 }
-
+- (void)menuWillOpen:(NSMenu *)menu {
+	if (menu == [self filesMenu])
+		_fileSubmenusToFileContainers = [[NSMapTable mapTableWithWeakToWeakObjects] retain];
+}
 - (void)menuDidClose:(NSMenu *)menu {
+	if (menu == [self filesMenu]) {
+		[_fileSubmenusToFileContainers release];
+		_fileSubmenusToFileContainers = nil;
+	}
+	
 	[self setIncludesFiles:nil];
+	[self setFilesMenu:nil];
 }
 
 #pragma mark *** Public Methods ***
@@ -184,13 +232,18 @@
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_sourceScannerDidFinishScanningSymbols:) name:WCSourceScannerDidFinishScanningSymbolsNotification object:[jumpBarDataSource sourceScanner]];
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_undoManagerDidRedo:) name:NSUndoManagerDidRedoChangeNotification object:[[jumpBarDataSource document] undoManager]];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_undoManagerDidUndo:) name:NSUndoManagerDidUndoChangeNotification object:[[jumpBarDataSource document] undoManager]];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_undoManagerDidCloseUndoGroup:) name:NSUndoManagerDidCloseUndoGroupNotification object:[[jumpBarDataSource document] undoManager]];
+	
 	
 	return self;
 }
 #pragma mark IBActions
+- (IBAction)showTopLevelItems:(id)sender; {
+	[self _showMenuForPathComponentCell:[[[self jumpBar] pathComponentCells] objectAtIndex:0]];
+}
+- (IBAction)showGroupItems:(id)sender; {
+	NSArray *pathCells = [[self jumpBar] pathComponentCells];
+	[self _showMenuForPathComponentCell:[pathCells objectAtIndex:[pathCells count]-2]];
+}
 - (IBAction)showDocumentItems:(id)sender; {
 	[self _showMenuForPathComponentCell:[[[self jumpBar] pathComponentCells] lastObject]];
 }
@@ -213,6 +266,8 @@
 @synthesize textViewSelectedLineAndColumn=_textViewSelectedLineAndColumn;
 @synthesize symbolsMenu=_symbolsMenu;
 @synthesize includesFiles=_includesFiles;
+@synthesize filesMenu=_filesMenu;
+@synthesize fileSubmenusToFileContainers=_fileSubmenusToFileContainers;
 #pragma mark *** Private Methods ***
 - (void)_updatePathComponentCells; {
 	if (![self jumpBarDataSource])
@@ -220,29 +275,7 @@
 	
 	NSMutableArray *pathCells = [NSMutableArray arrayWithCapacity:0];
 	
-	if ([[self jumpBarDataSource] projectDocument]) {
-		for (RSTreeNode *treeNode in [[self jumpBarDataSource] jumpBarPathComponents]) {
-			WCJumpBarComponentCell *cell = [[[WCJumpBarComponentCell alloc] initTextCell:[[treeNode representedObject] fileName]] autorelease];
-			
-			[cell setImage:[[treeNode representedObject] fileIcon]];
-			
-			[pathCells addObject:cell];
-		}
-	}
-	else if ([[self jumpBarDataSource] fileURL]) {
-		WCJumpBarComponentCell *fileCell = [[[WCJumpBarComponentCell alloc] initTextCell:[[self jumpBarDataSource] displayName]] autorelease];
-		
-		[fileCell setImage:[[NSWorkspace sharedWorkspace] iconForFile:[[[self jumpBarDataSource] fileURL] path]]];
-		
-		[pathCells addObject:fileCell];
-	}
-	else {
-		WCJumpBarComponentCell *fileCell = [[[WCJumpBarComponentCell alloc] initTextCell:[[self jumpBarDataSource] displayName]] autorelease];
-		
-		[fileCell setImage:[NSImage imageNamed:@"UntitledFile"]];
-		
-		[pathCells addObject:fileCell];
-	}
+	[pathCells addObjectsFromArray:[[self jumpBarDataSource] jumpBarComponentCells]];
 	
 	[pathCells addObject:[[[WCJumpBarComponentCell alloc] initTextCell:NSLocalizedString(@"No Symbols", @"No Symbols")] autorelease]];
 	
@@ -251,20 +284,8 @@
 
 - (void)_updateFilePathComponentCell; {
 	NSMutableArray *pathCells = [[[[self jumpBar] pathComponentCells] mutableCopy] autorelease];
-	NSImage *fileIcon;
 	
-	if ([[self jumpBarDataSource] fileURL])
-		fileIcon = [[NSWorkspace sharedWorkspace] iconForFile:[[[self jumpBarDataSource] fileURL] path]];
-	else
-		fileIcon = [NSImage imageNamed:@"UntitledFile"];
-	
-	if ([[[self jumpBarDataSource] document] isDocumentEdited])
-		fileIcon = [fileIcon unsavedImageFromImage];
-	
-	WCJumpBarComponentCell *fileCell = [[[WCJumpBarComponentCell alloc] initTextCell:[[self jumpBarDataSource] displayName]] autorelease];
-	[fileCell setImage:fileIcon];
-	
-	[pathCells replaceObjectAtIndex:[pathCells count]-2 withObject:fileCell];
+	[pathCells replaceObjectAtIndex:[pathCells count]-2 withObject:[[self jumpBarDataSource] fileComponentCell]];
 	
 	[[self jumpBar] setPathComponentCells:pathCells];
 }
@@ -278,7 +299,7 @@
 		WCSourceSymbol *symbol = [symbols sourceSymbolForRange:[[self textView] selectedRange]];
 		
 		if ([[NSUserDefaults standardUserDefaults] boolForKey:WCReallyAdvancedJumpBarShowFileAndLineNumberKey])
-			symbolCell = [[[WCJumpBarComponentCell alloc] initTextCell:[NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 (%@:%lu)", @"jump bar symbols menu format string"),[symbol name],[[self jumpBarDataSource] displayName],[[[self textView] textStorage] lineNumberForRange:[symbol range]]+1]] autorelease];
+			symbolCell = [[[WCJumpBarComponentCell alloc] initTextCell:[NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 (%@:%lu)", @"jump bar symbols menu format string"),[symbol name],[[[symbol sourceScanner] delegate] fileDisplayNameForSourceScanner:[symbol sourceScanner]],[[[self textView] textStorage] lineNumberForRange:[symbol range]]+1]] autorelease];
 		else
 			symbolCell = [[[WCJumpBarComponentCell alloc] initTextCell:[symbol name]] autorelease];
 		
@@ -307,59 +328,91 @@
 }
 
 - (void)_showMenuForPathComponentCell:(NSPathComponentCell *)clickedCell {
-	if (![[clickedCell representedObject] isKindOfClass:[WCSourceSymbol class]])
-		return;
-	
-	NSArray *symbols = [[[self jumpBarDataSource] sourceScanner] symbols];
-	
-	if (![symbols count])
-		return;
-	
-	NSUInteger numberOfSymbols = [symbols count];
-	NSUInteger numberOfItems = [[self symbolsMenu] numberOfItems];
-	// add items until we have the required amount
-	if (numberOfItems < numberOfSymbols) {
-		while (numberOfItems++ < numberOfSymbols)
-			[[self symbolsMenu] addItem:[[[NSMenuItem alloc] init] autorelease]];
-	}
-	// remove items until we have the required amount
-	else if (numberOfItems > numberOfSymbols) {
-		while (numberOfItems-- > numberOfSymbols)
-			[[self symbolsMenu] removeItemAtIndex:0];
-	}
-	
-	NSUInteger selectedSymbolIndex = [symbols sourceSymbolIndexForRange:[[self textView] selectedRange]];
-	WCSourceSymbol *selectedSymbol = [symbols objectAtIndex:selectedSymbolIndex];
-	
-	// show the symbols sorted by location
-	if ([[[NSUserDefaults standardUserDefaults] objectForKey:WCReallyAdvancedJumpBarSortItemsByKey] unsignedIntegerValue] == WCReallyAdvancedJumpBarSortItemsByLocation) {
-		// command key indicates we should sort using the opposite behavior, in this case, sort by name
-		if ([NSEvent isOnlyCommandKeyPressed]) {
-			symbols = [[[self jumpBarDataSource] sourceScanner] symbolsSortedByName];
-			[self _updateSymbolsMenuItemsWithSymbols:symbols selectedSymbol:selectedSymbol selectedSymbolIndex:&selectedSymbolIndex sortedByName:YES];
+	if ([[clickedCell representedObject] isKindOfClass:[WCSourceSymbol class]]) {
+		NSArray *symbols = [[[self jumpBarDataSource] sourceScanner] symbols];
+		
+		if (![symbols count])
+			return;
+		
+		NSUInteger numberOfSymbols = [symbols count];
+		NSUInteger numberOfItems = [[self symbolsMenu] numberOfItems];
+		// add items until we have the required amount
+		if (numberOfItems < numberOfSymbols) {
+			while (numberOfItems++ < numberOfSymbols)
+				[[self symbolsMenu] addItem:[[[NSMenuItem alloc] init] autorelease]];
 		}
-		// sort normally by location
+		// remove items until we have the required amount
+		else if (numberOfItems > numberOfSymbols) {
+			while (numberOfItems-- > numberOfSymbols)
+				[[self symbolsMenu] removeItemAtIndex:0];
+		}
+		
+		NSUInteger selectedSymbolIndex = [symbols sourceSymbolIndexForRange:[[self textView] selectedRange]];
+		WCSourceSymbol *selectedSymbol = [symbols objectAtIndex:selectedSymbolIndex];
+		
+		// show the symbols sorted by location
+		if ([[[NSUserDefaults standardUserDefaults] objectForKey:WCReallyAdvancedJumpBarSortItemsByKey] unsignedIntegerValue] == WCReallyAdvancedJumpBarSortItemsByLocation) {
+			// command key indicates we should sort using the opposite behavior, in this case, sort by name
+			if ([NSEvent isOnlyCommandKeyPressed]) {
+				symbols = [[[self jumpBarDataSource] sourceScanner] symbolsSortedByName];
+				[self _updateSymbolsMenuItemsWithSymbols:symbols selectedSymbol:selectedSymbol selectedSymbolIndex:&selectedSymbolIndex sortedByName:YES];
+			}
+			// sort normally by location
+			else {
+				[self _updateSymbolsMenuItemsWithSymbols:symbols selectedSymbol:selectedSymbol selectedSymbolIndex:&selectedSymbolIndex sortedByName:NO];
+			}
+		}
+		// otherwise show the symbols sorted by name
 		else {
-			[self _updateSymbolsMenuItemsWithSymbols:symbols selectedSymbol:selectedSymbol selectedSymbolIndex:&selectedSymbolIndex sortedByName:NO];
+			// command key indicates we should sort using the opposite behavior, in this case, sort by location
+			if ([NSEvent isOnlyCommandKeyPressed]) {
+				[self _updateSymbolsMenuItemsWithSymbols:symbols selectedSymbol:selectedSymbol selectedSymbolIndex:&selectedSymbolIndex sortedByName:NO];
+			}
+			// sort normally by name
+			else {
+				symbols = [[[self jumpBarDataSource] sourceScanner] symbolsSortedByName];
+				[self _updateSymbolsMenuItemsWithSymbols:symbols selectedSymbol:selectedSymbol selectedSymbolIndex:&selectedSymbolIndex sortedByName:YES];
+			}
 		}
+		
+		NSRect cellRect = [[[self jumpBar] cell] rectOfPathComponentCell:clickedCell withFrame:[[self jumpBar] bounds] inView:[self jumpBar]];
+		
+		if (![[self symbolsMenu] popUpMenuPositioningItem:[[self symbolsMenu] itemAtIndex:selectedSymbolIndex] atLocation:cellRect.origin inView:[self jumpBar]])
+			[[self jumpBar] setNeedsDisplay:YES];
 	}
-	// otherwise show the symbols sorted by name
-	else {
-		// command key indicates we should sort using the opposite behavior, in this case, sort by location
-		if ([NSEvent isOnlyCommandKeyPressed]) {
-			[self _updateSymbolsMenuItemsWithSymbols:symbols selectedSymbol:selectedSymbol selectedSymbolIndex:&selectedSymbolIndex sortedByName:NO];
+	else if ([[clickedCell representedObject] isKindOfClass:[WCFile class]]) {
+		NSMenu *menu = [[[NSMenu alloc] initWithTitle:@""] autorelease];
+		[menu setFont:[NSFont menuFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]]];
+		[menu setDelegate:self];
+		[self setFilesMenu:menu];
+		
+		WCFileContainer *fileContainer = [[[self jumpBarDataSource] projectDocument] fileContainerForFile:[clickedCell representedObject]];
+		NSArray *childNodes = ([fileContainer parentNode])?[[fileContainer parentNode] childNodes]:[NSArray arrayWithObject:fileContainer];
+		for (WCFileContainer *child in childNodes) {
+			NSMenuItem *item = [menu addItemWithTitle:[[child representedObject] fileName] action:@selector(_filesMenuItemClicked:) keyEquivalent:@""];
+			
+			[item setTarget:self];
+			[item setImage:[[child representedObject] fileIcon]];
+			[[item image] setSize:NSSmallSize];
+			[item setRepresentedObject:[child representedObject]];
+			
+			if (fileContainer == child)
+				[item setState:NSOnState];
+			
+			if (![child isLeafNode]) {
+				NSMenu *submenu = [[[NSMenu alloc] initWithTitle:[item title]] autorelease];
+				[submenu setFont:[NSFont menuFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]]];
+				[submenu setDelegate:self];
+				
+				[item setSubmenu:submenu];
+			}
 		}
-		// sort normally by name
-		else {
-			symbols = [[[self jumpBarDataSource] sourceScanner] symbolsSortedByName];
-			[self _updateSymbolsMenuItemsWithSymbols:symbols selectedSymbol:selectedSymbol selectedSymbolIndex:&selectedSymbolIndex sortedByName:YES];
-		}
+		
+		NSRect cellRect = [[[self jumpBar] cell] rectOfPathComponentCell:clickedCell withFrame:[[self jumpBar] bounds] inView:[self jumpBar]];
+		
+		if (![menu popUpMenuPositioningItem:[menu itemAtIndex:[menu indexOfItemWithRepresentedObject:[fileContainer representedObject]]] atLocation:cellRect.origin inView:[self jumpBar]])
+			[[self jumpBar] setNeedsDisplay:YES];
 	}
-	
-	NSRect cellRect = [[[self jumpBar] cell] rectOfPathComponentCell:clickedCell withFrame:[[self jumpBar] bounds] inView:[self jumpBar]];
-	
-	if (![[self symbolsMenu] popUpMenuPositioningItem:[[self symbolsMenu] itemAtIndex:selectedSymbolIndex] atLocation:cellRect.origin inView:[self jumpBar]])
-		[[self jumpBar] setNeedsDisplay:YES];
 }
 
 - (void)_updateSymbolsMenuItemsWithSymbols:(NSArray *)symbols selectedSymbol:(WCSourceSymbol *)selectedSymbol selectedSymbolIndex:(NSUInteger *)selectedSymbolIndex sortedByName:(BOOL)sortedByName; {
@@ -374,7 +427,7 @@
 			[item setTarget:self];
 			[item setAction:@selector(_symbolsMenuClick:)];
 			if (showFileAndLineNumber)
-				[item setTitle:[NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 (%@:%lu)", @"jump bar symbols menu format string"),[symbol name],[[self jumpBarDataSource] displayName],[[[self textView] textStorage] lineNumberForRange:[symbol range]]+1]];
+				[item setTitle:[NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 (%@:%lu)", @"jump bar symbols menu format string"),[symbol name],[[[symbol sourceScanner] delegate] fileDisplayNameForSourceScanner:[symbol sourceScanner]],[[[self textView] textStorage] lineNumberForRange:[symbol range]]+1]];
 			else
 				[item setTitle:[symbol name]];
 			[item setImage:[symbol icon]];
@@ -396,7 +449,7 @@
 			[item setTarget:self];
 			[item setAction:@selector(_symbolsMenuClick:)];
 			if (showFileAndLineNumber)
-				[item setTitle:[NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 (%@:%lu)", @"jump bar symbols menu format string"),[symbol name],[[self jumpBarDataSource] displayName],[[[self textView] textStorage] lineNumberForRange:[symbol range]]+1]];
+				[item setTitle:[NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 (%@:%lu)", @"jump bar symbols menu format string"),[symbol name],[[[symbol sourceScanner] delegate] fileDisplayNameForSourceScanner:[symbol sourceScanner]],[[[self textView] textStorage] lineNumberForRange:[symbol range]]+1]];
 			else
 				[item setTitle:[symbol name]];
 			[item setImage:[symbol icon]];
@@ -425,6 +478,9 @@
 - (IBAction)_includesMenuItemClicked:(id)sender {
 	[[[self jumpBarDataSource] projectDocument] openTabForFile:[sender representedObject]];
 }
+- (IBAction)_filesMenuItemClicked:(id)sender {
+	[[[self jumpBarDataSource] projectDocument] openTabForFile:[sender representedObject]];
+}
 #pragma mark Notifications
 - (void)_textViewDidChangeSelection:(NSNotification *)note {
 	[self _updateSymbolPathComponentCell];
@@ -433,14 +489,5 @@
 
 - (void)_sourceScannerDidFinishScanningSymbols:(NSNotification *)note {	
 	[self _updateSymbolPathComponentCell];
-}
-- (void)_undoManagerDidRedo:(NSNotification *)note {
-	[self _updateFilePathComponentCell];
-}
-- (void)_undoManagerDidUndo:(NSNotification *)note {
-	[self _updateFilePathComponentCell];
-}
-- (void)_undoManagerDidCloseUndoGroup:(NSNotification *)note {
-	[self _updateFilePathComponentCell];
 }
 @end

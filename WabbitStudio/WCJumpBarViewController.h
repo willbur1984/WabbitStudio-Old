@@ -17,6 +17,8 @@
 	NSString *_textViewSelectedLineAndColumn;
 	NSMenu *_symbolsMenu;
 	NSArray *_includesFiles;
+	NSMenu *_filesMenu;
+	NSMapTable *_fileSubmenusToFileContainers;
 }
 @property (readwrite,assign,nonatomic) IBOutlet WCJumpBar *jumpBar;
 @property (readwrite,assign,nonatomic) IBOutlet NSMenu *recentFilesMenu;
@@ -29,5 +31,7 @@
 
 - (id)initWithTextView:(NSTextView *)textView jumpBarDataSource:(id <WCJumpBarDataSource>)jumpBarDataSource;
 
+- (IBAction)showTopLevelItems:(id)sender;
+- (IBAction)showGroupItems:(id)sender;
 - (IBAction)showDocumentItems:(id)sender;
 @end

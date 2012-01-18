@@ -9,7 +9,7 @@
 #import <AppKit/NSDocument.h>
 #import "WCOpenQuicklyDataSource.h"
 
-@class WCProjectContainer,WCProjectWindowController,WCSourceTextViewController,WCFile,WCSourceFileDocument;
+@class WCProjectContainer,WCProjectWindowController,WCSourceTextViewController,WCFile,WCSourceFileDocument,WCFileContainer;
 
 @interface WCProjectDocument : NSDocument <WCOpenQuicklyDataSource> {
 	WCProjectContainer *_projectContainer;
@@ -22,8 +22,9 @@
 @property (readonly,retain) NSMapTable *sourceFileDocumentsToFiles;
 @property (readonly,nonatomic) NSArray *sourceFileDocuments;
 @property (readonly,nonatomic) NSDictionary *fileNamesToFiles;
-
 @property (readonly,nonatomic) WCProjectWindowController *projectWindowController;
+
+- (WCFileContainer *)fileContainerForFile:(WCFile *)file;
 
 - (WCSourceTextViewController *)openTabForFile:(WCFile *)file;
 - (WCSourceTextViewController *)openTabForSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument;

@@ -28,6 +28,8 @@
 - (id)initWithSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument standardSourceTextViewController:(WCStandardSourceTextViewController *)sourceTextViewController;
 
 - (IBAction)showStandardEditor:(id)sender;
+- (IBAction)showTopLevelItems:(id)sender;
+- (IBAction)showGroupItems:(id)sender;
 - (IBAction)showDocumentItems:(id)sender;
 
 - (IBAction)showAssistantEditor:(id)sender;
