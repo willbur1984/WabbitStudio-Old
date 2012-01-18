@@ -10,6 +10,9 @@
 #import "WCStandardSourceTextViewController.h"
 #import "WCSourceFileDocument.h"
 #import "WCSourceHighlighter.h"
+#import "UKXattrMetadataStore.h"
+#import "RSDefines.h"
+#import "WCSourceTextView.h"
 
 @interface WCSourceFileWindowController ()
 
@@ -41,10 +44,23 @@
 - (void)windowDidLoad {
 	[super windowDidLoad];
 	
+	NSString *windowFrame = [UKXattrMetadataStore stringForKey:WCSourceFileDocumentWindowFrameKey atPath:[[[self document] fileURL] path] traverseLink:NO];
+	if (windowFrame)
+		[[self window] setFrameFromString:windowFrame];
+	
 	NSView *contentView = [[self window] contentView];
 	
 	[[[self sourceTextViewController] view] setFrame:[contentView frame]];
 	[contentView addSubview:[[self sourceTextViewController] view]];
+	
+	NSRange selectedRange = NSRangeFromString([UKXattrMetadataStore stringForKey:WCSourceFileDocumentSelectedRangeKey atPath:[[[self document] fileURL] path] traverseLink:NO]);
+	
+	if (!NSEqualRanges(NSEmptyRange, selectedRange) &&
+		NSMaxRange(selectedRange) < [[[[self sourceTextViewController] textView] string] length]) {
+		
+		[[[self sourceTextViewController] textView] setSelectedRange:selectedRange];
+		[[[self sourceTextViewController] textView] scrollRangeToVisible:selectedRange];
+	}
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_windowDidResize:) name:NSWindowDidResizeNotification object:[self window]];
 }

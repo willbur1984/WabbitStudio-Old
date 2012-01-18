@@ -231,6 +231,17 @@
 	if ([self isCancelled])
 		goto CLEANUP;
 	
+	NSMutableSet *includes = [NSMutableSet setWithCapacity:0];
+	
+	[[WCSourceScanner includesRegularExpression] enumerateMatchesInString:[self string] options:0 range:searchRange usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+		NSString *includesName = [[self string] substringWithRange:[result rangeAtIndex:1]];
+		if ([includesName length])
+			[includes addObject:includesName];
+	}];
+	
+	if ([self isCancelled])
+		goto CLEANUP;
+	
 	[symbols sortUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"range" ascending:YES comparator:^NSComparisonResult(id obj1, id obj2) {
 		if ([obj1 rangeValue].location < [obj2 rangeValue].location)
 			return NSOrderedAscending;
@@ -250,6 +261,7 @@
 	[[self sourceScanner] setDefineNamesToDefineSymbols:defineNames];
 	[[self sourceScanner] setMacroNamesToMacroSymbols:macroNames];
 	[[self sourceScanner] setCompletions:completions];
+	[[self sourceScanner] setIncludes:includes];
 	
 	dispatch_async(dispatch_get_main_queue(), ^{
 		[[NSNotificationCenter defaultCenter] postNotificationName:WCSourceScannerDidFinishScanningSymbolsNotification object:[self sourceScanner]];

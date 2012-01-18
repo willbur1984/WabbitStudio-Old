@@ -12,6 +12,11 @@
 #import "WCSourceScannerDelegate.h"
 #import "WCSourceHighlighterDelegate.h"
 
+extern NSString *const WCSourceFileDocumentWindowFrameKey;
+extern NSString *const WCSourceFileDocumentSelectedRangeKey;
+extern NSString *const WCSourceFileDocumentStringEncodingKey;
+extern NSString *const WCSourceFileDocumentVisibleRangeKey;
+
 @class WCSourceScanner,WCSourceHighlighter,WCSourceTextStorage,WCProjectDocument;
 
 @interface WCSourceFileDocument : NSDocument <WCJumpBarDataSource,WCSourceTextStorageDelegate,WCSourceScannerDelegate,WCSourceHighlighterDelegate> {

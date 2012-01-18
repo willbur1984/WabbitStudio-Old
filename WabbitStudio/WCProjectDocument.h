@@ -15,11 +15,13 @@
 	WCProjectContainer *_projectContainer;
 	NSMapTable *_filesToSourceFileDocuments;
 	NSMapTable *_sourceFileDocumentsToFiles;
+	NSHashTable *_unsavedFiles;
 }
 @property (readonly,retain) WCProjectContainer *projectContainer;
 @property (readonly,retain) NSMapTable *filesToSourceFileDocuments;
 @property (readonly,retain) NSMapTable *sourceFileDocumentsToFiles;
 @property (readonly,nonatomic) NSArray *sourceFileDocuments;
+@property (readonly,nonatomic) NSDictionary *fileNamesToFiles;
 
 @property (readonly,nonatomic) WCProjectWindowController *projectWindowController;
 

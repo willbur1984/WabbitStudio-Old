@@ -32,6 +32,7 @@ NSString *const WCSourceScannerDidFinishScanningSymbolsNotification = @"WCSource
 	[_defineNamesToDefineSymbols release];
 	[_macroNamesToMacroSymbols release];
 	[_completions release];
+	[_includes release];
 	[super dealloc];
 }
 
@@ -196,20 +197,27 @@ NSString *const WCSourceScannerDidFinishScanningSymbolsNotification = @"WCSource
 	});
 	return retval;
 }
++ (NSRegularExpression *)includesRegularExpression; {
+	static NSRegularExpression *retval;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		retval = [[NSRegularExpression alloc] initWithPattern:@"(?:#include|#import)\\s+\"(.*?)\"" options:NSRegularExpressionCaseInsensitive error:NULL];
+	});
+	return retval;
+}
 
 @synthesize delegate=_delegate;
 @synthesize textStorage=_textStorage;
 @synthesize tokens=_tokens;
 @synthesize symbols=_symbols;
 @synthesize symbolsSortedByName=_symbolsSortedByName;
-
 @synthesize needsToScanSymbols=_needsToScanSymbols;
-
 @synthesize labelNamesToLabelSymbols=_labelNamesToLabelSymbols;
 @synthesize equateNamesToEquateSymbols=_equateNamesToEquateSymbols;
 @synthesize defineNamesToDefineSymbols=_defineNamesToDefineSymbols;
 @synthesize macroNamesToMacroSymbols=_macroNamesToMacroSymbols;
 @synthesize completions=_completions;
+@synthesize includes=_includes;
 
 - (void)_textStorageDidProcessEditing:(NSNotification *)note {
 	if (([[note object] editedMask] & NSTextStorageEditedCharacters) == 0)

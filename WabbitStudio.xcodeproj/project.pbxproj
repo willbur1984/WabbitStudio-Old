@@ -13,6 +13,7 @@
 		07018B1B14C6047600C5A7AC /* WCOpenQuicklySearchOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 07018B1A14C6047600C5A7AC /* WCOpenQuicklySearchOperation.m */; };
 		07018B1F14C6167E00C5A7AC /* WCFileContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 07018B1E14C6167E00C5A7AC /* WCFileContainer.m */; };
 		07018B2214C61F4500C5A7AC /* WCOpenQuicklyTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07018B2114C61F4400C5A7AC /* WCOpenQuicklyTableView.m */; };
+		07018B2D14C63C6600C5A7AC /* UKXattrMetadataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 07018B2C14C63C6600C5A7AC /* UKXattrMetadataStore.m */; };
 		0706D65114A8F45B0092F880 /* WCSourceTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0706D64F14A8F45B0092F880 /* WCSourceTextViewController.m */; };
 		0706D65514A8F49D0092F880 /* WCSourceTextView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0706D65314A8F49D0092F880 /* WCSourceTextView.xib */; };
 		0706D65814A8F6D60092F880 /* WCSourceTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0706D65714A8F6D60092F880 /* WCSourceTextStorage.m */; };
@@ -258,6 +259,8 @@
 		07018B1E14C6167E00C5A7AC /* WCFileContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCFileContainer.m; sourceTree = "<group>"; };
 		07018B2014C61F4400C5A7AC /* WCOpenQuicklyTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCOpenQuicklyTableView.h; sourceTree = "<group>"; };
 		07018B2114C61F4400C5A7AC /* WCOpenQuicklyTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCOpenQuicklyTableView.m; sourceTree = "<group>"; };
+		07018B2B14C63C6600C5A7AC /* UKXattrMetadataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UKXattrMetadataStore.h; sourceTree = "<group>"; };
+		07018B2C14C63C6600C5A7AC /* UKXattrMetadataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UKXattrMetadataStore.m; sourceTree = "<group>"; };
 		0706D64C14A8F1800092F880 /* WCJumpBarDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCJumpBarDataSource.h; sourceTree = "<group>"; };
 		0706D64E14A8F45B0092F880 /* WCSourceTextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSourceTextViewController.h; sourceTree = "<group>"; };
 		0706D64F14A8F45B0092F880 /* WCSourceTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSourceTextViewController.m; sourceTree = "<group>"; };
@@ -1427,6 +1430,8 @@
 		07A8AFBD14BDF2E2008CB9FF /* External */ = {
 			isa = PBXGroup;
 			children = (
+				07018B2B14C63C6600C5A7AC /* UKXattrMetadataStore.h */,
+				07018B2C14C63C6600C5A7AC /* UKXattrMetadataStore.m */,
 				07A8AFBE14BDF2E2008CB9FF /* NSAlert-OAExtensions.h */,
 				07A8AFBF14BDF2E2008CB9FF /* NSAlert-OAExtensions.m */,
 			);
@@ -1736,6 +1741,7 @@
 				07018B1B14C6047600C5A7AC /* WCOpenQuicklySearchOperation.m in Sources */,
 				07018B1F14C6167E00C5A7AC /* WCFileContainer.m in Sources */,
 				07018B2214C61F4500C5A7AC /* WCOpenQuicklyTableView.m in Sources */,
+				07018B2D14C63C6600C5A7AC /* UKXattrMetadataStore.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

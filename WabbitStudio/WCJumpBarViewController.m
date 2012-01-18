@@ -22,12 +22,14 @@
 #import "NSURL+RSExtensions.h"
 #import "RSDefines.h"
 #import "WCProject.h"
+#import "WCProjectDocument.h"
 #import "RSTreeNode.h"
 
 @interface WCJumpBarViewController ()
 @property (readwrite,copy,nonatomic) NSString *textViewSelectedLineAndColumn;
 @property (readonly,nonatomic) NSMenu *symbolsMenu;
 @property (readonly,nonatomic) id <WCJumpBarDataSource> jumpBarDataSource;
+@property (readwrite,copy,nonatomic) NSArray *includesFiles;
 
 - (void)_updatePathComponentCells;
 - (void)_updateFilePathComponentCell;
@@ -47,6 +49,7 @@
 	[self cleanUpUserDefaultsObserving];
 	_textView = nil;
 	_jumpBarDataSource = nil;
+	[_includesFiles release];
 	[_symbolsMenu release];
 	[_textViewSelectedLineAndColumn release];
 	[super dealloc];
@@ -86,8 +89,29 @@
 	}
 	else if (menu == [self unsavedFilesMenu])
 		return 1;
-	else
+	else if (menu == [self includesMenu]) {
+		if ([[self jumpBarDataSource] projectDocument]) {
+			NSSet *includes = [[[self jumpBarDataSource] sourceScanner] includes];
+			NSDictionary *fileNamesToFiles = [[[self jumpBarDataSource] projectDocument] fileNamesToFiles];
+			NSMutableArray *temp = [NSMutableArray arrayWithCapacity:0];
+			
+			for (NSString *fileName in includes) {
+				WCFile *file = [fileNamesToFiles objectForKey:fileName];
+				if (file)
+					[temp addObject:file];
+			}
+			
+			[temp sortUsingDescriptors:[NSArray arrayWithObjects:[NSSortDescriptor sortDescriptorWithKey:@"fileName" ascending:YES selector:@selector(localizedStandardCompare:)], nil]];
+			
+			[self setIncludesFiles:temp];
+			
+			if ([temp count])
+				return [temp count];
+			return 1;
+		}
 		return 1;
+	}
+	return 0;
 }
 - (BOOL)menu:(NSMenu *)menu updateItem:(NSMenuItem *)item atIndex:(NSInteger)index shouldCancel:(BOOL)shouldCancel {
 	if (menu == [self recentFilesMenu]) {
@@ -117,12 +141,29 @@
 		[item setAction:NULL];
 	}
 	else if (menu == [self includesMenu]) {
-		[item setTitle:NSLocalizedString(@"No Includes", @"No Includes")];
-		[item setTarget:nil];
-		[item setAction:NULL];
+		if ([[self includesFiles] count]) {
+			WCFile *file = [[self includesFiles] objectAtIndex:index];
+			
+			[item setTitle:[file fileName]];
+			[item setImage:[file fileIcon]];
+			[[item image] setSize:NSSmallSize];
+			[item setRepresentedObject:file];
+			[item setTarget:self];
+			[item setAction:@selector(_includesMenuItemClicked:)];
+		}
+		else {
+			[item setTitle:NSLocalizedString(@"No Includes", @"No Includes")];
+			[item setTarget:nil];
+			[item setAction:NULL];
+			[item setRepresentedObject:nil];
+		}
 	}
 	
 	return (!shouldCancel);
+}
+
+- (void)menuDidClose:(NSMenu *)menu {
+	[self setIncludesFiles:nil];
 }
 
 #pragma mark *** Public Methods ***
@@ -171,6 +212,7 @@
 
 @synthesize textViewSelectedLineAndColumn=_textViewSelectedLineAndColumn;
 @synthesize symbolsMenu=_symbolsMenu;
+@synthesize includesFiles=_includesFiles;
 #pragma mark *** Private Methods ***
 - (void)_updatePathComponentCells; {
 	if (![self jumpBarDataSource])
@@ -379,6 +421,9 @@
 	[[WCDocumentController sharedDocumentController] openDocumentWithContentsOfURL:[sender representedObject] display:YES completionHandler:^(NSDocument *document, BOOL documentWasAlreadyOpen, NSError *error) {
 		
 	}];
+}
+- (IBAction)_includesMenuItemClicked:(id)sender {
+	[[[self jumpBarDataSource] projectDocument] openTabForFile:[sender representedObject]];
 }
 #pragma mark Notifications
 - (void)_textViewDidChangeSelection:(NSNotification *)note {

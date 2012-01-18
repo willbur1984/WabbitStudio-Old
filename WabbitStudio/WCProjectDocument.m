@@ -185,5 +185,14 @@
 	return [[[self filesToSourceFileDocuments] objectEnumerator] allObjects];
 }
 @synthesize sourceFileDocumentsToFiles=_sourceFileDocumentsToFiles;
+@dynamic fileNamesToFiles;
+- (NSDictionary *)fileNamesToFiles {
+	NSMutableDictionary *retval = [NSMutableDictionary dictionaryWithCapacity:0];
+	
+	for (WCFile *file in [[self sourceFileDocumentsToFiles] objectEnumerator])
+		[retval setObject:file forKey:[file fileName]];
+	
+	return [[retval copy] autorelease];
+}
 
 @end

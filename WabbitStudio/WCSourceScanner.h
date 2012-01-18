@@ -18,6 +18,7 @@ extern NSString *const WCSourceScannerDidFinishScanningSymbolsNotification;
 	__weak NSTextStorage *_textStorage;
 	__weak id <WCSourceScannerDelegate> _delegate;
 	NSOperationQueue *_operationQueue;
+	NSTimer *_scanTimer;
 	NSArray *_tokens;
 	BOOL _needsToScanSymbols;
 	NSArray *_symbols;
@@ -27,12 +28,11 @@ extern NSString *const WCSourceScannerDidFinishScanningSymbolsNotification;
 	NSDictionary *_defineNamesToDefineSymbols;
 	NSDictionary *_macroNamesToMacroSymbols;
 	NDTrie *_completions;
-	NSTimer *_scanTimer;
+	NSSet *_includes;
 }
 @property (readwrite,assign,nonatomic) id <WCSourceScannerDelegate> delegate;
 @property (readonly,nonatomic) NSTextStorage *textStorage;
 @property (readwrite,copy) NSArray *tokens;
-
 @property (readwrite,assign,nonatomic) BOOL needsToScanSymbols;
 @property (readwrite,copy) NSArray *symbols;
 @property (readwrite,copy) NSArray *symbolsSortedByName; 
@@ -41,6 +41,7 @@ extern NSString *const WCSourceScannerDidFinishScanningSymbolsNotification;
 @property (readwrite,copy) NSDictionary *defineNamesToDefineSymbols;
 @property (readwrite,copy) NSDictionary *macroNamesToMacroSymbols;
 @property (readwrite,copy) NDTrie *completions;
+@property (readwrite,copy) NSSet *includes;
 
 - (id)initWithTextStorage:(NSTextStorage *)textStorage;
 
@@ -62,4 +63,5 @@ extern NSString *const WCSourceScannerDidFinishScanningSymbolsNotification;
 + (NSRegularExpression *)defineRegularExpression;
 + (NSRegularExpression *)macroRegularExpression;
 + (NSRegularExpression *)symbolRegularExpression;
++ (NSRegularExpression *)includesRegularExpression;
 @end

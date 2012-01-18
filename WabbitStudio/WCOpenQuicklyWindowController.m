@@ -96,10 +96,13 @@
 	if (result == NSOKButton) {
 		WCOpenQuicklyMatch *match = [[[self arrayController] selectedObjects] lastObject];
 		WCSourceFileDocument *sfDocument = [[match item] openQuicklySourceFileDocument];
-		WCSourceTextViewController *stvController = [[sfDocument projectDocument] openTabForSourceFileDocument:sfDocument];
 		
-		[[stvController textView] setSelectedRange:[[match item] openQuicklyRange]];
-		[[stvController textView] scrollRangeToVisible:[[match item] openQuicklyRange]];
+		if (sfDocument) {
+			WCSourceTextViewController *stvController = [[sfDocument projectDocument] openTabForSourceFileDocument:sfDocument];
+			
+			[[stvController textView] setSelectedRange:[[match item] openQuicklyRange]];
+			[[stvController textView] scrollRangeToVisible:[[match item] openQuicklyRange]];
+		}
 	}
 	
 	[self setSearchString:nil];

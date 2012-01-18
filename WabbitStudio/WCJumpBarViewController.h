@@ -16,6 +16,7 @@
 	__weak id <WCJumpBarDataSource> _jumpBarDataSource;
 	NSString *_textViewSelectedLineAndColumn;
 	NSMenu *_symbolsMenu;
+	NSArray *_includesFiles;
 }
 @property (readwrite,assign,nonatomic) IBOutlet WCJumpBar *jumpBar;
 @property (readwrite,assign,nonatomic) IBOutlet NSMenu *recentFilesMenu;

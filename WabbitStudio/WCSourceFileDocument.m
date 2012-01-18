@@ -23,6 +23,13 @@
 #import "NDTrie.h"
 #import "WCProjectContainer.h"
 #import "WCProject.h"
+#import "UKXattrMetadataStore.h"
+#import "NSTextView+WCExtensions.h"
+
+NSString *const WCSourceFileDocumentWindowFrameKey = @"org.revsoft.wabbitstudio.windowframe";
+NSString *const WCSourceFileDocumentSelectedRangeKey = @"org.revsoft.wabbitstudio.selectedrange";
+NSString *const WCSourceFileDocumentStringEncodingKey = @"org.revsoft.wabbitstudio.stringencoding";
+NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio.visiblerange";
 
 @interface WCSourceFileDocument ()
 
@@ -132,11 +139,30 @@
 		}
 	}
 	
-	return [[string dataUsingEncoding:fileEncoding] writeToURL:url options:NSDataWritingAtomic error:outError];
+	if (![[string dataUsingEncoding:fileEncoding] writeToURL:url options:NSDataWritingAtomic error:outError])
+		return NO;
+	
+	[UKXattrMetadataStore setObject:[NSNumber numberWithUnsignedInteger:fileEncoding] forKey:WCSourceFileDocumentStringEncodingKey atPath:[url path] traverseLink:NO];
+	
+	if ([[self windowControllers] count]) {
+		NSString *selectedRangeString = NSStringFromRange([[[[[self windowControllers] objectAtIndex:0] sourceTextViewController] textView] selectedRange]);
+		NSString *visibleRangeString = NSStringFromRange([[[[[self windowControllers] objectAtIndex:0] sourceTextViewController] textView] visibleRange]);
+		NSString *windowFrameString = [[[[self windowControllers] objectAtIndex:0] window] stringWithSavedFrame];
+		
+		[UKXattrMetadataStore setString:visibleRangeString forKey:WCSourceFileDocumentVisibleRangeKey atPath:[url path] traverseLink:NO];
+		[UKXattrMetadataStore setString:windowFrameString forKey:WCSourceFileDocumentWindowFrameKey atPath:[url path] traverseLink:NO];
+		[UKXattrMetadataStore setString:selectedRangeString forKey:WCSourceFileDocumentSelectedRangeKey atPath:[url path] traverseLink:NO];
+	}
+	
+	return YES;
 }
 
 - (BOOL)readFromURL:(NSURL *)url ofType:(NSString *)typeName error:(NSError **)outError {
-	NSString *string = [NSString stringWithContentsOfURL:url usedEncoding:&_fileEncoding error:outError];
+	NSStringEncoding stringEncoding = [[UKXattrMetadataStore objectForKey:WCSourceFileDocumentStringEncodingKey atPath:[url path] traverseLink:NO] unsignedIntegerValue];
+	if (!stringEncoding)
+		stringEncoding = _fileEncoding;
+	
+	NSString *string = [NSString stringWithContentsOfURL:url encoding:stringEncoding error:outError];
 	
 	if (!string)
 		return NO;
