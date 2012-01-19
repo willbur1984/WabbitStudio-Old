@@ -131,7 +131,8 @@ NSString *const WCProjectDataFileName = @"project.plist";
 			[UTI isEqualToString:WCActiveServerIncludeFileUTI]) {
 			
 			NSError *outError;
-			WCSourceFileDocument *document = [[[WCSourceFileDocument alloc] initWithContentsOfURL:[[leafNode representedObject] fileURL] ofType:UTI forProjectDocument:self error:&outError] autorelease];
+			WCSourceFileDocument *document = [[[WCSourceFileDocument alloc] initWithContentsOfURL:[[leafNode representedObject] fileURL] ofType:UTI error:&outError] autorelease];
+			[document setProjectDocument:self];
 			
 			if (document) {
 				[filesToSourceFileDocuments setObject:document forKey:[leafNode representedObject]];
@@ -213,12 +214,12 @@ NSString *const WCProjectDataFileName = @"project.plist";
 	return [[[self filesToSourceFileDocuments] objectEnumerator] allObjects];
 }
 @synthesize sourceFileDocumentsToFiles=_sourceFileDocumentsToFiles;
-@dynamic fileNamesToFiles;
-- (NSDictionary *)fileNamesToFiles {
+@dynamic filePathsToFiles;
+- (NSDictionary *)filePathsToFiles {
 	NSMutableDictionary *retval = [NSMutableDictionary dictionaryWithCapacity:0];
 	
 	for (WCFile *file in [[self sourceFileDocumentsToFiles] objectEnumerator])
-		[retval setObject:file forKey:[file fileName]];
+		[retval setObject:file forKey:[file filePath]];
 	
 	return [[retval copy] autorelease];
 }

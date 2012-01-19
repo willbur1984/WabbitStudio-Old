@@ -11,6 +11,7 @@
 #import "WCStandardSourceTextViewController.h"
 #import "NSURL+RSExtensions.h"
 #import "WCProjectDocument.h"
+#import "WCSourceTextView.h"
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
 NSString *const WCTabViewControllerDidSelectTabNotification = @"WCTabViewControllerDidSelectTabNotification";
@@ -148,14 +149,16 @@ NSString *const WCTabViewControllerDidCloseTabNotification = @"WCTabViewControll
 		[containerView addSubview:[stvController view]];
 		
 		[tabViewItem setView:containerView];
+		[tabViewItem setInitialFirstResponder:[stvController textView]];
 		
 		[_sourceFileDocumentsToSourceTextViewControllers setObject:stvController forKey:sourceFileDocument];
 		
 		[[[self tabBarControl] tabView] addTabViewItem:tabViewItem];
-		[[[self tabBarControl] tabView] selectTabViewItem:tabViewItem];
 	}
 	else
 		tabViewItem = [[[self tabBarControl] tabView] tabViewItemAtIndex:tabViewItemIndex];
+	
+	[[[self tabBarControl] tabView] selectTabViewItem:tabViewItem];
 	
 	return [_sourceFileDocumentsToSourceTextViewControllers objectForKey:[tabViewItem identifier]];
 }

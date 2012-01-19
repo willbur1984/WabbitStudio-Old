@@ -16,4 +16,5 @@
 - (void)removeAssistantEditorForSourceTextViewController:(WCSourceTextViewController *)sourceTextViewController;
 
 - (void)breakUndoCoalescingForAllTextViews;
+
 @end

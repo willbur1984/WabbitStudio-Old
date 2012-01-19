@@ -8,7 +8,7 @@
 
 #import <Foundation/NSObject.h>
 
-@class WCKeyBindingCommandSet;
+@class WCKeyBindingCommandSet,WCKeyBindingCommandPair;
 
 @interface WCKeyBindingCommandSetManager : NSObject {
 	NSMutableArray *_commandSets;
@@ -29,5 +29,6 @@
 
 - (void)loadKeyBindingsFromCurrentCommandSet;
 
+- (WCKeyBindingCommandPair *)defaultCommandPairForMenuItem:(NSMenuItem *)menuItem;
 - (NSString *)defaultKeyForMenuItem:(NSMenuItem *)menuItem;
 @end

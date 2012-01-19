@@ -52,7 +52,7 @@
 		[contentView addSubview:[self view]];
 		
 		for (WCSourceTextViewController *controller in _assistantSourceTextViewControllers)
-			[[self textStorage] removeLayoutManager:[[controller textView] layoutManager]];
+			[controller performCleanup];
 		
 		[_assistantSplitViews removeAllObjects];
 		[_assistantSourceTextViewControllers removeAllObjects];
@@ -202,7 +202,7 @@
 	[[parentView superview] replaceSubview:parentView with:replacementSubview];
 	
 	[_assistantSplitViews removeObject:parentView];
-	[[self textStorage] removeLayoutManager:[[sourceTextViewController textView] layoutManager]];
+	[sourceTextViewController performCleanup];
 	[_assistantSourceTextViewControllers removeObject:sourceTextViewController];
 }
 
@@ -214,6 +214,13 @@
 		if ([[stvController textView] isCoalescingUndo])
 			[[stvController textView] breakUndoCoalescing];
 	}
+}
+
+- (void)performCleanup; {
+	[super performCleanup];
+	
+	for (WCSourceTextViewController *stvController in _assistantSourceTextViewControllers)
+		[stvController performCleanup];
 }
 #pragma mark Properties
 @dynamic firstSplitView;

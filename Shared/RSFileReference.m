@@ -143,5 +143,9 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 - (void)setIgnoreNextFileWatcherNotification:(BOOL)ignoreNextFileWatcherNotification {
 	_fileReferenceFlags.ignoreNextFileWatcherNotification = ignoreNextFileWatcherNotification;
 }
+@dynamic filePath;
+- (NSString *)filePath {
+	return [[self fileURL] path];
+}
 
 @end

@@ -23,6 +23,7 @@
 #import "WCStandardSourceTextViewController.h"
 #import "WCSourceSymbol.h"
 #import "WCProjectDocument.h"
+#import "WCLayoutManager.h"
 
 @interface WCSourceTextViewController ()
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
@@ -35,7 +36,6 @@
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
-	[[self textStorage] removeLayoutManager:[[self textView] layoutManager]];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[_scrollingHighlightTimer invalidate];
 	_scrollingHighlightTimer = nil;
@@ -62,12 +62,18 @@
 	
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
 	
+	[[self textView] setTypingAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName,[[self textStorage] paragraphStyle],NSParagraphStyleAttributeName, nil]];
+	[[self textView] setDefaultParagraphStyle:[[self textStorage] paragraphStyle]];
+	
+	[[[self textView] textContainer] replaceLayoutManager:[[[WCLayoutManager alloc] init] autorelease]];
 	[[[self textView] layoutManager] replaceTextStorage:[self textStorage]];
 	
-	[[self textView] setTypingAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName,[[self textStorage] paragraphStyle],NSParagraphStyleAttributeName, nil]];
-	[[self textView] setFont:[currentTheme plainTextFont]];
-	[[self textView] setTextColor:[currentTheme plainTextColor]];
-	[[self textView] setDefaultParagraphStyle:[[self textStorage] paragraphStyle]];
+	/*
+	if (![self standardSourceTextViewController]) {
+		[[self textView] setFont:[currentTheme plainTextFont]];
+		[[self textView] setTextColor:[currentTheme plainTextColor]];
+	}
+	 */
 	
 	WCSourceRulerView *rulerView = [[[WCSourceRulerView alloc] initWithScrollView:[[self textView] enclosingScrollView] orientation:NSVerticalRuler] autorelease];
 	
@@ -194,6 +200,16 @@
 	_standardSourceTextViewController = sourceTextViewController;
 	
 	return self;
+}
+
+- (void)performCleanup; {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[_scrollingHighlightTimer invalidate];
+	_scrollingHighlightTimer = nil;
+	
+	[[self textStorage] removeLayoutManager:[[self textView] layoutManager]];
+	
+	[[self jumpBarViewController] performCleanup];
 }
 #pragma mark IBActions
 - (IBAction)showStandardEditor:(id)sender; {

@@ -29,6 +29,7 @@
 @property (readonly,nonatomic) NSURL *fileURL;
 @property (readonly,nonatomic) NSString *fileUTI;
 @property (readwrite,assign,nonatomic,getter = isEdited) BOOL edited;
+@property (readonly,nonatomic) NSString *filePath;
 
 + (id)fileWithFileURL:(NSURL *)fileURL;
 - (id)initWithFileURL:(NSURL *)fileURL;

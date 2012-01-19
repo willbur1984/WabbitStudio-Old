@@ -29,12 +29,10 @@ extern NSString *const WCSourceFileDocumentVisibleRangeKey;
 	WCSourceHighlighter *_sourceHighlighter;
 }
 
-@property (readonly,nonatomic) WCSourceScanner *sourceScanner;
-@property (readonly,nonatomic) WCSourceHighlighter *sourceHighlighter;
-@property (readonly,nonatomic) WCSourceTextStorage *textStorage;
-@property (readwrite,assign,nonatomic) WCProjectDocument *projectDocument;
-
-- (id)initWithContentsOfURL:(NSURL *)url ofType:(NSString *)typeName forProjectDocument:(WCProjectDocument *)projectDocument error:(NSError **)outError;
+@property (readonly,retain) WCSourceScanner *sourceScanner;
+@property (readonly,retain) WCSourceHighlighter *sourceHighlighter;
+@property (readonly,retain) WCSourceTextStorage *textStorage;
+@property (readwrite,assign) WCProjectDocument *projectDocument;
 
 - (void)reloadDocumentFromDisk;
 

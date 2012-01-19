@@ -35,4 +35,6 @@
 - (IBAction)showAssistantEditor:(id)sender;
 - (IBAction)addAssistantEditor:(id)sender;
 - (IBAction)removeAssistantEditor:(id)sender;
+
+- (void)performCleanup;
 @end

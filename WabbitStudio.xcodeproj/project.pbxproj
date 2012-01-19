@@ -209,6 +209,7 @@
 		07BC6CB614B7DE43007ECB3F /* WCJumpToLineWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07BC6CB514B7DE43007ECB3F /* WCJumpToLineWindowController.m */; };
 		07BC6CB914B7E3DD007ECB3F /* WCJumpToLineWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07BC6CB714B7E3DD007ECB3F /* WCJumpToLineWindow.xib */; };
 		07CC8F3F14B7DBDB0081EE69 /* WCJumpInCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CC8F3E14B7DBDB0081EE69 /* WCJumpInCellView.m */; };
+		07E91DF814C8020800B166E3 /* WCLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 07E91DF714C8020700B166E3 /* WCLayoutManager.m */; };
 		07EB8E2214B63C4F00F8A8C6 /* BGHUDAppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0791BE5314ADA3B80004AC16 /* BGHUDAppKit.framework */; };
 		07EB8E2314B63C5600F8A8C6 /* BGHUDAppKit.framework in Copy Private Frameworks */ = {isa = PBXBuildFile; fileRef = 0791BE5314ADA3B80004AC16 /* BGHUDAppKit.framework */; };
 		07EB8E2614B63EB800F8A8C6 /* WCAdvancedView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07EB8E2414B63EB800F8A8C6 /* WCAdvancedView.xib */; };
@@ -617,6 +618,8 @@
 		07BC6CB814B7E3DD007ECB3F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCJumpToLineWindow.xib; sourceTree = "<group>"; };
 		07CC8F3D14B7DBDB0081EE69 /* WCJumpInCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCJumpInCellView.h; sourceTree = "<group>"; };
 		07CC8F3E14B7DBDB0081EE69 /* WCJumpInCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCJumpInCellView.m; sourceTree = "<group>"; };
+		07E91DF614C8020600B166E3 /* WCLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCLayoutManager.h; sourceTree = "<group>"; };
+		07E91DF714C8020700B166E3 /* WCLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCLayoutManager.m; sourceTree = "<group>"; };
 		07EB8E2514B63EB800F8A8C6 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCAdvancedView.xib; sourceTree = "<group>"; };
 		07EB8E2714B641B900F8A8C6 /* SplitterHandle.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = SplitterHandle.pdf; sourceTree = "<group>"; };
 		07EB8E2914B644A600F8A8C6 /* ReallyAdvanced.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ReallyAdvanced.png; sourceTree = "<group>"; };
@@ -767,6 +770,8 @@
 				0706D64F14A8F45B0092F880 /* WCSourceTextViewController.m */,
 				076B7F8614BC15B600CC10E3 /* WCStandardSourceTextViewController.h */,
 				076B7F8714BC15B600CC10E3 /* WCStandardSourceTextViewController.m */,
+				07E91DF614C8020600B166E3 /* WCLayoutManager.h */,
+				07E91DF714C8020700B166E3 /* WCLayoutManager.m */,
 				07BC6CB314B7DDF2007ECB3F /* Jump to Line */,
 				073B5A9A14B6A43900FCDC0F /* Views */,
 				073B5A9C14B6A45D00FCDC0F /* Highlighter */,
@@ -1762,6 +1767,7 @@
 				07FF7B3F14C763EB000AE014 /* UKFileWatcher.m in Sources */,
 				07FF7B4014C763EB000AE014 /* UKKQueue.m in Sources */,
 				07FF7B4314C763FC000AE014 /* UKMainThreadProxy.m in Sources */,
+				07E91DF814C8020800B166E3 /* WCLayoutManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

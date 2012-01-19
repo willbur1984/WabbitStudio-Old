@@ -185,6 +185,21 @@ static const NSInteger kNumberOfScopeBarGroups = 1;
 - (void)handleReturnPressedForOutlineView:(RSOutlineView *)outlineView {
 	[[WCKeyBindingsEditCommandPairWindowController sharedWindowController] showEditCommandPairSheetForCommandPair:[[[self outlineView] itemAtRow:[[self outlineView] selectedRow]] representedObject]];
 }
+- (void)handleDeletePressedForOutlineView:(RSOutlineView *)outlineView {
+	WCKeyBindingCommandPair *pair = [[[self treeController] selectedRepresentedObjects] lastObject];
+	
+	if ([pair isLeafNode])
+		[pair setKeyCombo:WCKeyBindingCommandPairEmptyKeyCombo()];
+}
+- (void)handleSpacePressedForOutlineView:(RSOutlineView *)outlineView {
+	WCKeyBindingCommandPair *pair = [[[self treeController] selectedRepresentedObjects] lastObject];
+	
+	if ([pair isLeafNode]) {
+		WCKeyBindingCommandPair *defaultPair = [[WCKeyBindingCommandSetManager sharedManager] defaultCommandPairForMenuItem:[pair menuItem]];
+		
+		[pair setKeyCombo:[defaultPair keyCombo]];
+	}
+}
 #pragma mark *** Public Methods ***
 
 #pragma mark IBActions

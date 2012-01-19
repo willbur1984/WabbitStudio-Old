@@ -38,6 +38,10 @@ NSString *const WCSourceFileDocumentStringEncodingKey = @"org.revsoft.wabbitstud
 NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio.visiblerange";
 
 @interface WCSourceFileDocument ()
+@property (readwrite,retain) WCSourceTextStorage *textStorage;
+@property (readwrite,retain) WCSourceScanner *sourceScanner;
+@property (readwrite,retain) WCSourceHighlighter *sourceHighlighter;
+@property (readwrite,assign) NSStringEncoding fileEncoding;
 @property (readonly,nonatomic) NSImage *icon;
 @property (readonly,nonatomic) BOOL isEdited;
 
@@ -50,19 +54,34 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	_projectDocument = nil;
 	[_sourceHighlighter release];
 	[_sourceScanner release];
-	[_textStorage release];
+	//while ([_textStorage retainCount] >= 2)
+		[_textStorage release];
 	[super dealloc];
 }
 
 - (id)init {
 	if (!(self = [super init]))
 		return nil;
-	
+
 	_fileEncoding = [[NSUserDefaults standardUserDefaults] unsignedIntegerForKey:WCEditorDefaultTextEncodingKey];
-	_textStorage = [[WCSourceTextStorage alloc] initWithString:@""];
+	
+	return self;
+}
+
+// this only gets called when a new document is created
+- (id)initWithType:(NSString *)typeName error:(NSError **)outError {
+	if (!(self = [super initWithType:typeName error:outError]))
+		return nil;
+
+#ifdef DEBUG
+	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
+#endif
+	
+	[self setTextStorage:[[[WCSourceTextStorage alloc] initWithString:@""] autorelease]];
 	[_textStorage setDelegate:self];
 	_sourceScanner = [[WCSourceScanner alloc] initWithTextStorage:[self textStorage]];
 	[_sourceScanner setDelegate:self];
@@ -74,14 +93,21 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 	return self;
 }
 
-- (NSString *)windowNibName {
-	return @"WCSourceFileDocument";
-}
-
 - (void)makeWindowControllers {
 	WCSourceFileWindowController *windowController = [[[WCSourceFileWindowController alloc] init] autorelease];
 	
 	[self addWindowController:windowController];
+}
+
+- (void)windowControllerDidLoadNib:(NSWindowController *)windowController {
+	[super windowControllerDidLoadNib:windowController];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_windowWillClose:) name:NSWindowWillCloseNotification object:[windowController window]];
+}
+
+- (void)_windowWillClose:(NSNotification *)note {
+	for (NSLayoutManager *layoutManager in [[self textStorage] layoutManagers])
+		[[self textStorage] removeLayoutManager:layoutManager];
 }
 
 + (BOOL)autosavesInPlace {
@@ -122,8 +148,9 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 }
 
 - (BOOL)writeToURL:(NSURL *)url ofType:(NSString *)typeName error:(NSError **)outError {
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	NSMutableString *string = [[[[self textStorage] string] mutableCopy] autorelease];
-	NSStringEncoding fileEncoding = _fileEncoding;
+	NSStringEncoding fileEncoding = [self fileEncoding];
 	
 	[self unblockUserInteraction];
 	
@@ -152,8 +179,10 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 		}
 	}
 	
-	if (![[string dataUsingEncoding:fileEncoding] writeToURL:url options:NSDataWritingAtomic error:outError])
+	if (![[string dataUsingEncoding:fileEncoding] writeToURL:url options:NSDataWritingAtomic error:outError]) {
+		[pool release];
 		return NO;
+	}
 	
 	[UKXattrMetadataStore setObject:[NSNumber numberWithUnsignedInteger:fileEncoding] forKey:WCSourceFileDocumentStringEncodingKey atPath:[url path] traverseLink:NO];
 	
@@ -170,21 +199,37 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 		[UKXattrMetadataStore setString:selectedRangeString forKey:WCSourceFileDocumentSelectedRangeKey atPath:[url path] traverseLink:NO];
 	}
 	
+	[pool release];
+	
 	return YES;
 }
 
 - (BOOL)readFromURL:(NSURL *)url ofType:(NSString *)typeName error:(NSError **)outError {
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
 	NSStringEncoding stringEncoding = [[UKXattrMetadataStore objectForKey:WCSourceFileDocumentStringEncodingKey atPath:[url path] traverseLink:NO] unsignedIntegerValue];
 	if (!stringEncoding)
-		stringEncoding = _fileEncoding;
+		stringEncoding = [[NSUserDefaults standardUserDefaults] unsignedIntegerForKey:WCEditorDefaultTextEncodingKey];
 	
 	NSString *string = [NSString stringWithContentsOfURL:url encoding:stringEncoding error:outError];
 	
-	if (!string)
+	if (!string) {
+		[pool release];
 		return NO;
+	}
 	
-	[_textStorage replaceCharactersInRange:NSMakeRange(0, [_textStorage length]) withString:string];
-	[_sourceScanner scanTokens];
+	[self setFileEncoding:stringEncoding];
+	
+	[self setTextStorage:[[[WCSourceTextStorage alloc] initWithString:string] autorelease]];
+	[[self textStorage] setDelegate:self];
+	[self setSourceScanner:[[[WCSourceScanner alloc] initWithTextStorage:[self textStorage]] autorelease]];
+	[[self sourceScanner] setDelegate:self];
+	[[self sourceScanner] setNeedsToScanSymbols:YES];
+	[self setSourceHighlighter:[[[WCSourceHighlighter alloc] initWithSourceScanner:[self sourceScanner]] autorelease]];
+	[[self sourceHighlighter] setDelegate:self];
+	[[self sourceScanner] scanTokens];
+	
+	[pool release];
 	
 	return YES;
 }
@@ -335,8 +380,12 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 		for (WCSourceFileDocument *document in [[self projectDocument] sourceFileDocuments])
 			[retval addObject:[[document sourceScanner] labelNamesToLabelSymbols]];
 	}
-	else
-		[retval addObject:[[self sourceScanner] labelNamesToLabelSymbols]];
+	else {
+		NSDictionary *labelNamesToSymbols = [[self sourceScanner] labelNamesToLabelSymbols];
+		
+		if (labelNamesToSymbols)
+			[retval addObject:labelNamesToSymbols];
+	}
 	
 	return [[retval copy] autorelease];
 }
@@ -347,8 +396,12 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 		for (WCSourceFileDocument *document in [[self projectDocument] sourceFileDocuments])
 			[retval addObject:[[document sourceScanner] equateNamesToEquateSymbols]];
 	}
-	else
-		[retval addObject:[[self sourceScanner] equateNamesToEquateSymbols]];
+	else {
+		NSDictionary *equateNamesToEquateSymbols = [[self sourceScanner] equateNamesToEquateSymbols];
+		
+		if (equateNamesToEquateSymbols)
+			[retval addObject:equateNamesToEquateSymbols];
+	}
 	
 	return [[retval copy] autorelease];
 }
@@ -359,8 +412,12 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 		for (WCSourceFileDocument *document in [[self projectDocument] sourceFileDocuments])
 			[retval addObject:[[document sourceScanner] defineNamesToDefineSymbols]];
 	}
-	else
-		[retval addObject:[[self sourceScanner] defineNamesToDefineSymbols]];
+	else {
+		NSDictionary *defineNamesToDefineSymbols = [[self sourceScanner] defineNamesToDefineSymbols];
+		
+		if (defineNamesToDefineSymbols)
+			[retval addObject:defineNamesToDefineSymbols];
+	}
 	
 	return [[retval copy] autorelease];
 }
@@ -371,29 +428,47 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 		for (WCSourceFileDocument *document in [[self projectDocument] sourceFileDocuments])
 			[retval addObject:[[document sourceScanner] macroNamesToMacroSymbols]];
 	}
-	else
-		[retval addObject:[[self sourceScanner] macroNamesToMacroSymbols]];
+	else {
+		NSDictionary *macroNamesToMacroSymbols = [[self sourceScanner] macroNamesToMacroSymbols];
+		
+		if (macroNamesToMacroSymbols)
+			[retval addObject:macroNamesToMacroSymbols];
+	}
 	
 	return [[retval copy] autorelease];
 }
 #pragma mark *** Public Methods ***
-- (id)initWithContentsOfURL:(NSURL *)url ofType:(NSString *)typeName forProjectDocument:(WCProjectDocument *)projectDocument error:(NSError **)outError; {
-	if (!(self = [super initWithContentsOfURL:url ofType:typeName error:outError]))
-		return nil;
-	
-	_projectDocument = projectDocument;
-	
-	return self;
-}
+
 - (void)reloadDocumentFromDisk; {
-	[[self textStorage] replaceCharactersInRange:NSMakeRange(0, [[self textStorage] length]) withString:[NSString stringWithContentsOfURL:[self fileURL] encoding:_fileEncoding error:NULL]];
+	[[self textStorage] replaceCharactersInRange:NSMakeRange(0, [[self textStorage] length]) withString:[NSString stringWithContentsOfURL:[self fileURL] encoding:[self fileEncoding] error:NULL]];
 	[self setFileModificationDate:[[[NSFileManager defaultManager] attributesOfItemAtPath:[[self fileURL] path] error:NULL] fileModificationDate]];
 }
 #pragma mark Properties
 @synthesize sourceScanner=_sourceScanner;
 @synthesize sourceHighlighter=_sourceHighlighter;
-@synthesize textStorage=_textStorage;
+@dynamic textStorage;
+- (WCSourceTextStorage *)textStorage {
+	id retval;
+	@synchronized(self) {
+		retval = [[_textStorage retain] autorelease];
+	}
+	return retval;
+}
+- (void)setTextStorage:(WCSourceTextStorage *)textStorage {
+	@synchronized(self) {
+		if (_textStorage == textStorage)
+			return;
+		
+#ifdef DEBUG
+		NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
+#endif
+		
+		[_textStorage release];
+		_textStorage = [textStorage retain];
+	}
+}
 @synthesize projectDocument=_projectDocument;
+@synthesize fileEncoding=_fileEncoding;
 
 - (void)_updateFileEditedStatus {
 	[self willChangeValueForKey:@"icon"];

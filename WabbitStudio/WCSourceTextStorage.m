@@ -89,7 +89,7 @@
 - (void)fixAttachmentAttributeInRange:(NSRange)range {
 	NSRange effectiveRange;
 	id attributeValue;
-	while (range.length > 0) {
+	while (range.length) {
 		if ((attributeValue = [self attribute:NSAttachmentAttributeName atIndex:range.location longestEffectiveRange:&effectiveRange inRange:range])) {
 			NSUInteger charIndex;
 			for (charIndex=effectiveRange.location; charIndex<NSMaxRange(effectiveRange); charIndex++) {
@@ -183,31 +183,30 @@
 }
 
 - (void)_currentThemeDidChange:(NSNotification *)note {
-	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
-	
-	[self addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName, nil] range:NSMakeRange(0, [self length])];
-	[[[self delegate] sourceHighlighterForSourceTextStorage:self] performHighlightingInVisibleRange];
+	[[[self delegate] sourceHighlighterForSourceTextStorage:self] performHighlightingForAllAttributes];
 }
 - (void)_colorDidChange:(NSNotification *)note {
-	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
+	static NSDictionary *colorNamesToAttributeNames;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		colorNamesToAttributeNames = [[NSDictionary alloc] initWithObjectsAndKeys:WCSourceHighlighterBinaryAttributeName,@"binaryColor",WCSourceHighlighterCommentAttributeName,@"commentColor",WCSourceHighlighterConditionalAttributeName,@"conditionalColor",WCSourceHighlighterDefineAttributeName,@"defineColor",WCSourceHighlighterDirectiveAttributeName,@"directiveColor",WCSourceHighlighterEquateAttributeName,@"equateColor",WCSourceHighlighterHexadecimalAttributeName,@"hexadecimalColor",WCSourceHighlighterLabelAttributeName,@"labelColor",WCSourceHighlighterMacroAttributeName,@"macroColor",WCSourceHighlighterMneumonicAttributeName,@"mneumonicColor",WCSourceHighlighterNumberAttributeName,@"numberColor",WCSourceHighlighterPlainTextAttributeName,@"plainTextColor",WCSourceHighlighterPreProcessorAttributeName,@"preProcessorColor",WCSourceHighlighterRegisterAttributeName,@"registerColor",WCSourceHighlighterStringAttributeName,@"stringColor", nil];
+	});
 	
-	if ([[[note userInfo] objectForKey:@"colorName"] isEqualToString:@"plainTextColor"]) {
-		for (NSLayoutManager *layoutManager in [self layoutManagers]) {
-			for (NSTextContainer *textContainer in [layoutManager textContainers])
-				[[textContainer textView] setTextColor:[currentTheme plainTextColor]];
-		}
-	}
-	[[[self delegate] sourceHighlighterForSourceTextStorage:self] performHighlightingInVisibleRange];
+	NSString *colorName = [[note userInfo] objectForKey:@"colorName"];
+	NSString *attributeName = [colorNamesToAttributeNames objectForKey:colorName];
+	
+	[[[self delegate] sourceHighlighterForSourceTextStorage:self] performHighlightingForColorWithAttributeName:attributeName];
 }
 - (void)_fontDidChange:(NSNotification *)note {
-	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
+	static NSDictionary *fontNamesToAttributeNames;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		fontNamesToAttributeNames = [[NSDictionary alloc] initWithObjectsAndKeys:WCSourceHighlighterBinaryAttributeName,@"binaryFont",WCSourceHighlighterCommentAttributeName,@"commentFont",WCSourceHighlighterConditionalAttributeName,@"conditionalFont",WCSourceHighlighterDefineAttributeName,@"defineFont",WCSourceHighlighterDirectiveAttributeName,@"directiveFont",WCSourceHighlighterEquateAttributeName,@"equateFont",WCSourceHighlighterHexadecimalAttributeName,@"hexadecimalFont",WCSourceHighlighterLabelAttributeName,@"labelFont",WCSourceHighlighterMacroAttributeName,@"macroFont",WCSourceHighlighterMneumonicAttributeName,@"mneumonicFont",WCSourceHighlighterNumberAttributeName,@"numberFont",WCSourceHighlighterPlainTextAttributeName,@"plainTextFont",WCSourceHighlighterPreProcessorAttributeName,@"preProcessorColor",WCSourceHighlighterRegisterAttributeName,@"registerFont",WCSourceHighlighterStringAttributeName,@"stringFont", nil];
+	});
 	
-	if ([[[note userInfo] objectForKey:@"fontName"] isEqualToString:@"plainTextFont"]) {
-		for (NSLayoutManager *layoutManager in [self layoutManagers]) {
-			for (NSTextContainer *textContainer in [layoutManager textContainers])
-				[[textContainer textView] setFont:[currentTheme plainTextFont]];
-		}
-	}
-	[[[self delegate] sourceHighlighterForSourceTextStorage:self] performHighlightingInVisibleRange];
+	NSString *fontName = [[note userInfo] objectForKey:@"fontName"];
+	NSString *attributeName = [fontNamesToAttributeNames objectForKey:fontName];
+	
+	[[[self delegate] sourceHighlighterForSourceTextStorage:self] performHighlightingForFontWithAttributeName:attributeName];
 }
 @end

@@ -49,7 +49,6 @@
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[(id)[self jumpBarDataSource] removeObserver:self forKeyPath:@"icon" context:self];
 	[self cleanUpUserDefaultsObserving];
 	_textView = nil;
 	_jumpBarDataSource = nil;
@@ -111,14 +110,17 @@
 	else if (menu == [self includesMenu]) {
 		if ([[self jumpBarDataSource] projectDocument]) {
 			NSSet *includes = [[[self jumpBarDataSource] sourceScanner] includes];
-			NSDictionary *fileNamesToFiles = [[[self jumpBarDataSource] projectDocument] fileNamesToFiles];
+			NSDictionary *filePathsToFiles = [[[self jumpBarDataSource] projectDocument] filePathsToFiles];
 			NSMutableArray *temp = [NSMutableArray arrayWithCapacity:0];
 			
-			for (NSString *fileName in includes) {
-				WCFile *file = [fileNamesToFiles objectForKey:fileName];
-				if (file)
-					[temp addObject:file];
-			}
+			[filePathsToFiles enumerateKeysAndObjectsUsingBlock:^(NSString *filePath, WCFile *file, BOOL *stop) {
+				for (NSString *fileName in includes) {
+					if ([filePath hasSuffix:fileName]) {
+						[temp addObject:file];
+						break;
+					}
+				}
+			}];
 			
 			[temp sortUsingDescriptors:[NSArray arrayWithObjects:[NSSortDescriptor sortDescriptorWithKey:@"fileName" ascending:YES selector:@selector(localizedStandardCompare:)], nil]];
 			
@@ -257,6 +259,10 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_sourceScannerDidFinishScanningSymbols:) name:WCSourceScannerDidFinishScanningSymbolsNotification object:[jumpBarDataSource sourceScanner]];
 	
 	return self;
+}
+
+- (void)performCleanup; {
+	[(id)[self jumpBarDataSource] removeObserver:self forKeyPath:@"icon" context:self];
 }
 #pragma mark IBActions
 - (IBAction)showTopLevelItems:(id)sender; {

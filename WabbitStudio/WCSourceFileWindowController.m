@@ -65,6 +65,10 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_windowDidResize:) name:NSWindowDidResizeNotification object:[self window]];
 }
 
+- (void)windowWillClose:(NSNotification *)notification {
+	[[self sourceTextViewController] performCleanup];
+}
+
 @dynamic sourceTextViewController;
 - (WCStandardSourceTextViewController *)sourceTextViewController {
 	if (!_sourceTextViewController) {

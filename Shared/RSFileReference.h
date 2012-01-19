@@ -36,6 +36,7 @@
 @property (readonly,nonatomic) NSString *fileName;
 @property (readonly,nonatomic) NSString *fileUTI;
 @property (readwrite,assign,nonatomic) BOOL ignoreNextFileWatcherNotification;
+@property (readonly,nonatomic) NSString *filePath;
 
 + (RSFileReference *)fileReferenceWithFileURL:(NSURL *)fileURL;
 - (id)initWithFileURL:(NSURL *)fileURL;

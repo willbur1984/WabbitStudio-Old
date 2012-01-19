@@ -10,7 +10,7 @@
 
 @class WCStandardSourceTextViewController;
 
-@interface WCSourceFileWindowController : NSWindowController {
+@interface WCSourceFileWindowController : NSWindowController <NSWindowDelegate> {
 	WCStandardSourceTextViewController *_sourceTextViewController;
 }
 @property (readonly,nonatomic) WCStandardSourceTextViewController *sourceTextViewController;

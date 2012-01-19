@@ -127,5 +127,9 @@ static NSString *const WCFileReferenceKey = @"fileReference";
 - (void)setEdited:(BOOL)edited {
 	_fileFlags.edited = edited;
 }
+@dynamic filePath;
+- (NSString *)filePath {
+	return [[self fileReference] filePath];
+}
 
 @end

@@ -146,7 +146,7 @@
 	[self _loadKeyBindingsFromCommandSet:[self currentCommandSet]];
 }
 
-- (NSString *)defaultKeyForMenuItem:(NSMenuItem *)menuItem; {
+- (WCKeyBindingCommandPair *)defaultCommandPairForMenuItem:(NSMenuItem *)menuItem; {
 	static NSDictionary *actionNamesToCommandPairs;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
@@ -170,9 +170,13 @@
 	
 	NSString *actionName = NSStringFromSelector([menuItem action]);
 	id value = [actionNamesToCommandPairs objectForKey:actionName];
-	if ([value respondsToSelector:@selector(key)])
-		return [value key];
-	return [[actionNamesToCommandPairs objectForKey:[NSString stringWithFormat:@"%@%ld",actionName,[menuItem tag]]] key];
+	if ([value isKindOfClass:[WCKeyBindingCommandPair class]])
+		return value;
+	return [actionNamesToCommandPairs objectForKey:[NSString stringWithFormat:@"%@%ld",actionName,[menuItem tag]]];
+}
+
+- (NSString *)defaultKeyForMenuItem:(NSMenuItem *)menuItem; {
+	return [[self defaultCommandPairForMenuItem:menuItem] key];
 }
 
 @synthesize commandSets=_commandSets;

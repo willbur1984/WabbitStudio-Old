@@ -35,4 +35,6 @@
 - (IBAction)showTopLevelItems:(id)sender;
 - (IBAction)showGroupItems:(id)sender;
 - (IBAction)showDocumentItems:(id)sender;
+
+- (void)performCleanup;
 @end
