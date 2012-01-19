@@ -52,12 +52,14 @@
 - (void)loadView {
 	[super loadView];
 	
+	[[[self scrollView] contentView] setAutoresizesSubviews:YES];
+	
 	WCLayoutManager *layoutManager = [[[WCLayoutManager alloc] init] autorelease];
 	
 	[[self textStorage] addLayoutManager:layoutManager];
 	
-	NSTextContainer *textContainer = [[[NSTextContainer alloc] initWithContainerSize:NSMakeSize(CGFLOAT_MAX, CGFLOAT_MAX)] autorelease];
-	[textContainer setWidthTracksTextView:YES];
+	NSSize contentSize = [[self scrollView] contentSize];
+	NSTextContainer *textContainer = [[[NSTextContainer alloc] initWithContainerSize:contentSize] autorelease];
 	
 	[layoutManager addTextContainer:textContainer];
 	
@@ -66,6 +68,18 @@
 	[textView setDelegate:self];
 	
 	[self setTextView:textView];
+	
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorWrapLinesToEditorWidthKey]) {
+		[[self scrollView] setHasHorizontalScroller:NO];
+		[textView setHorizontallyResizable:YES];
+		[textContainer setWidthTracksTextView:YES];
+		[textContainer setContainerSize:NSMakeSize(contentSize.width, CGFLOAT_MAX)];
+	} else {
+		[[self scrollView] setHasHorizontalScroller:YES];
+		[textView setHorizontallyResizable:YES];
+		[textContainer setContainerSize:NSMakeSize(CGFLOAT_MAX, CGFLOAT_MAX)];
+		[textContainer setWidthTracksTextView:NO];
+	}
 	
 	[[self scrollView] setDocumentView:textView];
 	
@@ -87,7 +101,7 @@
 	[[self scrollView] setFrame:NSMakeRect(NSMinX(scrollViewFrame), NSMinY(scrollViewFrame), NSWidth(scrollViewFrame), NSHeight(scrollViewFrame)-NSHeight(jumpBarFrame))];
 	[[[self jumpBarViewController] view] setFrame:NSMakeRect(NSMinX(scrollViewFrame), NSMaxY(scrollViewFrame)-NSHeight(jumpBarFrame), NSWidth(scrollViewFrame), NSHeight(jumpBarFrame))];
 	
-	[[self textView] setWrapLines:[[NSUserDefaults standardUserDefaults] boolForKey:WCEditorWrapLinesToEditorWidthKey]];
+	//[[self textView] setWrapLines:[[NSUserDefaults standardUserDefaults] boolForKey:WCEditorWrapLinesToEditorWidthKey]];
 	
 	[[self textView] setSelectedRange:NSEmptyRange];
 	

@@ -76,11 +76,11 @@
 }
 
 - (void)fixParagraphStyleAttributeInRange:(NSRange)range {
-	[super fixParagraphStyleAttributeInRange:range];
+	//[super fixParagraphStyleAttributeInRange:range];
 	
-	//NSRange paragraphRange = [[self string] paragraphRangeForRange:range];
+	NSRange paragraphRange = [[self string] paragraphRangeForRange:range];
 	
-	//[self addAttribute:NSParagraphStyleAttributeName value:[self paragraphStyle] range:paragraphRange];
+	[self addAttribute:NSParagraphStyleAttributeName value:[self paragraphStyle] range:paragraphRange];
 }
 
 - (void)fixAttachmentAttributeInRange:(NSRange)range {

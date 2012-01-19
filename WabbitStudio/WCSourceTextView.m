@@ -612,22 +612,23 @@
 	if ([self wrapLines] == wrapLines)
 		return;
 	
-	NSScrollView *textScrollView = [self enclosingScrollView];
-	NSSize contentSize = [textScrollView contentSize];
-	[self setMinSize:contentSize];
-	NSTextContainer *textContainer = [self textContainer];
-	
 	if (wrapLines) {
-		[textScrollView setHasHorizontalScroller:NO];
-		[textContainer setContainerSize:NSMakeSize(contentSize.width, CGFLOAT_MAX)];
-		[textContainer setWidthTracksTextView: YES];
-		[self setHorizontallyResizable: NO];
+		NSRange selectedRange = [self selectedRange];
+		NSAttributedString *string = [[[self textStorage] copy] autorelease];
+		[[self enclosingScrollView] setHasHorizontalScroller:NO];
+		[[self textStorage] deleteCharactersInRange:NSMakeRange(0, [[self textStorage] length])];
+		[[self textContainer] setWidthTracksTextView:YES];
+		[[self textContainer] setContainerSize:NSMakeSize([[self enclosingScrollView] contentSize].width, CGFLOAT_MAX)];
+		[[self textStorage] replaceCharactersInRange:NSMakeRange(0, 0) withAttributedString:string];
+		[self setHorizontallyResizable:NO];
+		[self setSelectedRange:selectedRange];
+		[self scrollRangeToVisible:selectedRange];
 	}
 	else {
-		[textScrollView setHasHorizontalScroller:YES];
-		[textContainer setContainerSize:NSMakeSize(CGFLOAT_MAX, CGFLOAT_MAX)];
-		[textContainer setWidthTracksTextView: NO];
-		[self setHorizontallyResizable: YES];
+		[[self textContainer] setContainerSize:NSMakeSize(CGFLOAT_MAX, CGFLOAT_MAX)];
+		[[self textContainer] setWidthTracksTextView:NO];
+		[self setHorizontallyResizable:YES];
+		[[self enclosingScrollView] setHasHorizontalScroller:YES];
 	}
 }
 #pragma mark *** Private Methods ***
@@ -656,6 +657,8 @@
 	[self setRichText:NO];
 	[self setSmartInsertDeleteEnabled:NO];
 	[self setVerticallyResizable:YES];
+	[self setMinSize:[[self textContainer] containerSize]];
+	[[self textContainer] setWidthTracksTextView:YES];
 	[self setMaxSize:NSMakeSize(CGFLOAT_MAX, CGFLOAT_MAX)];
 	[self setUsesFindBar:NO];
 	[self setUsesFindPanel:NO];
