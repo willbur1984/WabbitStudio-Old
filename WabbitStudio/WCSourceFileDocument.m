@@ -58,8 +58,7 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 	_projectDocument = nil;
 	[_sourceHighlighter release];
 	[_sourceScanner release];
-	//while ([_textStorage retainCount] >= 2)
-		[_textStorage release];
+	[_textStorage release];
 	[super dealloc];
 }
 
@@ -446,27 +445,7 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 #pragma mark Properties
 @synthesize sourceScanner=_sourceScanner;
 @synthesize sourceHighlighter=_sourceHighlighter;
-@dynamic textStorage;
-- (WCSourceTextStorage *)textStorage {
-	id retval;
-	@synchronized(self) {
-		retval = [[_textStorage retain] autorelease];
-	}
-	return retval;
-}
-- (void)setTextStorage:(WCSourceTextStorage *)textStorage {
-	@synchronized(self) {
-		if (_textStorage == textStorage)
-			return;
-		
-#ifdef DEBUG
-		NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
-#endif
-		
-		[_textStorage release];
-		_textStorage = [textStorage retain];
-	}
-}
+@synthesize textStorage=_textStorage;
 @synthesize projectDocument=_projectDocument;
 @synthesize fileEncoding=_fileEncoding;
 

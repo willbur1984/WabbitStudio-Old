@@ -86,7 +86,7 @@ NSString *const RSPreferencesWindowControllerLastSelectedToolbarIdentifierKey = 
 }
 #pragma mark NSAnimationDelegate
 - (void)animationDidEnd:(NSAnimation *)animation {
-	NSView *viewToRemove;
+	NSView *viewToRemove = nil;
 	for (NSView *view in [[[self window] contentView] subviews]) {
 		if ([[self currentPreferenceModule] view] != view) {
 			viewToRemove = view;

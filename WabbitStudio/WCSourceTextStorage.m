@@ -19,6 +19,7 @@
 @interface WCSourceTextStorage ()
 - (void)_calculateLineStartIndexes;
 - (void)_updateParagraphStyle;
+- (void)_commonInit;
 @end
 
 @implementation WCSourceTextStorage
@@ -28,8 +29,9 @@
 #endif
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[self cleanUpUserDefaultsObserving];
-	[_attributedString release];
+	_delegate = nil;
 	[_lineStartIndexes release];
+	[_attributedString release];
 	[super dealloc];
 }
 
@@ -38,28 +40,21 @@
 		return nil;
 	
 	_attributedString = [[NSMutableAttributedString alloc] init];
-	_lineStartIndexes = [[NSMutableArray alloc] init];
 	
-	[self setupUserDefaultsObserving];
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_currentThemeDidChange:) name:WCFontAndColorThemeManagerCurrentThemeDidChangeNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_colorDidChange:) name:WCFontAndColorThemeManagerColorDidChangeNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_fontDidChange:) name:WCFontAndColorThemeManagerFontDidChangeNotification object:nil];
-	
-	[self _calculateLineStartIndexes];
+	[self _commonInit];
 	
 	return self;
 }
 
 - (id)initWithString:(NSString *)string {
-	[self init];
+	if (!(self = [super init]))
+		return nil;
 	
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
-	NSAttributedString *attributedString = [[[NSAttributedString alloc] initWithString:string attributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName,[self paragraphStyle],NSParagraphStyleAttributeName, nil]] autorelease];
+
+	_attributedString = [[NSMutableAttributedString alloc] initWithString:string attributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName,[self paragraphStyle],NSParagraphStyleAttributeName, nil]];
 	
-	[_attributedString replaceCharactersInRange:NSMakeRange(0, [_attributedString length]) withAttributedString:attributedString];
-	
-	[self _calculateLineStartIndexes];
+	[self _commonInit];
 	
 	return self;
 }
@@ -81,9 +76,11 @@
 }
 
 - (void)fixParagraphStyleAttributeInRange:(NSRange)range {
-	NSRange paragraphRange = [[self string] paragraphRangeForRange:range];
+	[super fixParagraphStyleAttributeInRange:range];
 	
-	[self addAttribute:NSParagraphStyleAttributeName value:[self paragraphStyle] range:paragraphRange];
+	//NSRange paragraphRange = [[self string] paragraphRangeForRange:range];
+	
+	//[self addAttribute:NSParagraphStyleAttributeName value:[self paragraphStyle] range:paragraphRange];
 }
 
 - (void)fixAttachmentAttributeInRange:(NSRange)range {
@@ -117,22 +114,7 @@
 		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
 
-@synthesize lineStartIndexes=_lineStartIndexes;
-@dynamic delegate;
-- (id<WCSourceTextStorageDelegate>)delegate {
-	return _delegate;
-}
-- (void)setDelegate:(id<WCSourceTextStorageDelegate>)delegate {
-	if (_delegate == delegate)
-		return;
-	
-	_delegate = delegate;
-	
-	[super setDelegate:delegate];
-}
-
-@dynamic paragraphStyle;
-- (NSParagraphStyle *)paragraphStyle {
++ (NSParagraphStyle *)defaultParagraphStyle; {
 	NSUInteger tabWidth = [[[NSUserDefaults standardUserDefaults] objectForKey:WCEditorTabWidthKey] unsignedIntegerValue];
 	NSMutableString *tabWidthString = [NSMutableString stringWithCapacity:tabWidth];
 	NSUInteger charIndex;
@@ -151,6 +133,37 @@
 	[style setDefaultTabInterval:width];
 	
 	return style;
+}
+
+@synthesize lineStartIndexes=_lineStartIndexes;
+@dynamic delegate;
+- (id<WCSourceTextStorageDelegate>)delegate {
+	return _delegate;
+}
+- (void)setDelegate:(id<WCSourceTextStorageDelegate>)delegate {
+	if (_delegate == delegate)
+		return;
+	
+	_delegate = delegate;
+	
+	[super setDelegate:delegate];
+}
+
+@dynamic paragraphStyle;
+- (NSParagraphStyle *)paragraphStyle {
+	return [[self class] defaultParagraphStyle];
+}
+
+- (void)_commonInit; {
+	_lineStartIndexes = [[NSMutableArray alloc] initWithCapacity:0];
+	
+	[self setupUserDefaultsObserving];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_currentThemeDidChange:) name:WCFontAndColorThemeManagerCurrentThemeDidChangeNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_colorDidChange:) name:WCFontAndColorThemeManagerColorDidChangeNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_fontDidChange:) name:WCFontAndColorThemeManagerFontDidChangeNotification object:nil];
+	
+	[self _calculateLineStartIndexes];
 }
 
 - (void)_calculateLineStartIndexes; {

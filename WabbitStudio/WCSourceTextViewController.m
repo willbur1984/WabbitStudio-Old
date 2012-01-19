@@ -52,28 +52,22 @@
 - (void)loadView {
 	[super loadView];
 	
-	NSRect scrollViewFrame = [[[self textView] enclosingScrollView] frame];
-	NSRect jumpBarFrame = [[[self jumpBarViewController] view] frame];
+	WCLayoutManager *layoutManager = [[[WCLayoutManager alloc] init] autorelease];
 	
-	[[self view] addSubview:[[self jumpBarViewController] view]];
+	[[self textStorage] addLayoutManager:layoutManager];
 	
-	[[[self textView] enclosingScrollView] setFrame:NSMakeRect(NSMinX(scrollViewFrame), NSMinY(scrollViewFrame), NSWidth(scrollViewFrame), NSHeight(scrollViewFrame)-NSHeight(jumpBarFrame))];
-	[[[self jumpBarViewController] view] setFrame:NSMakeRect(NSMinX(scrollViewFrame), NSMaxY(scrollViewFrame)-NSHeight(jumpBarFrame), NSWidth(scrollViewFrame), NSHeight(jumpBarFrame))];
+	NSTextContainer *textContainer = [[[NSTextContainer alloc] initWithContainerSize:NSMakeSize(CGFLOAT_MAX, CGFLOAT_MAX)] autorelease];
+	[textContainer setWidthTracksTextView:YES];
 	
-	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
+	[layoutManager addTextContainer:textContainer];
 	
-	[[self textView] setTypingAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName,[[self textStorage] paragraphStyle],NSParagraphStyleAttributeName, nil]];
-	[[self textView] setDefaultParagraphStyle:[[self textStorage] paragraphStyle]];
+	WCSourceTextView *textView = [[[WCSourceTextView alloc] initWithFrame:[[[self scrollView] contentView] frame] textContainer:textContainer] autorelease];
 	
-	[[[self textView] textContainer] replaceLayoutManager:[[[WCLayoutManager alloc] init] autorelease]];
-	[[[self textView] layoutManager] replaceTextStorage:[self textStorage]];
+	[textView setDelegate:self];
 	
-	/*
-	if (![self standardSourceTextViewController]) {
-		[[self textView] setFont:[currentTheme plainTextFont]];
-		[[self textView] setTextColor:[currentTheme plainTextColor]];
-	}
-	 */
+	[self setTextView:textView];
+	
+	[[self scrollView] setDocumentView:textView];
 	
 	WCSourceRulerView *rulerView = [[[WCSourceRulerView alloc] initWithScrollView:[[self textView] enclosingScrollView] orientation:NSVerticalRuler] autorelease];
 	
@@ -84,6 +78,14 @@
 	[[[self textView] enclosingScrollView] setHasHorizontalScroller:NO];
 	[[[self textView] enclosingScrollView] setHasVerticalRuler:YES];
 	[[[self textView] enclosingScrollView] setRulersVisible:YES];
+	
+	[[self view] addSubview:[[self jumpBarViewController] view]];
+	
+	NSRect scrollViewFrame = [[self scrollView] frame];
+	NSRect jumpBarFrame = [[[self jumpBarViewController] view] frame];
+	
+	[[self scrollView] setFrame:NSMakeRect(NSMinX(scrollViewFrame), NSMinY(scrollViewFrame), NSWidth(scrollViewFrame), NSHeight(scrollViewFrame)-NSHeight(jumpBarFrame))];
+	[[[self jumpBarViewController] view] setFrame:NSMakeRect(NSMinX(scrollViewFrame), NSMaxY(scrollViewFrame)-NSHeight(jumpBarFrame), NSWidth(scrollViewFrame), NSHeight(jumpBarFrame))];
 	
 	[[self textView] setWrapLines:[[NSUserDefaults standardUserDefaults] boolForKey:WCEditorWrapLinesToEditorWidthKey]];
 	
@@ -235,6 +237,7 @@
 }
 #pragma mark Properties
 @synthesize textView=_textView;
+@synthesize scrollView=_scrollView;
 @dynamic sourceScanner;
 - (WCSourceScanner *)sourceScanner {
 	return [_sourceFileDocument sourceScanner];

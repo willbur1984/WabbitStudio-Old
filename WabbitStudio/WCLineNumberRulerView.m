@@ -147,18 +147,18 @@
 		if (NSLocationInRange(lineStartIndex, range)) {
 			NSString *labelText = [NSString stringWithFormat:@"%lu", lineNumber + 1];
 			
-			NSRect labelRect;
-			NSUInteger numRects;
+			NSRect labelRect = NSZeroRect;
+			NSUInteger numRects = 0;
 			
 			if (lineStartIndex < stringLength)
 				labelRect = [layoutManager lineFragmentRectForGlyphAtIndex:[[(NSTextView *)[self clientView] layoutManager] glyphIndexForCharacterAtIndex:lineStartIndex] effectiveRange:NULL];
 			else {
 				NSRectArray rects = [layoutManager rectArrayForCharacterRange:NSMakeRange(lineStartIndex, 0) withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[view textContainer] rectCount:&numRects];
-				if (numRects > 0)
+				if (numRects)
 					labelRect = rects[0];
 			}
 			
-			if (lineStartIndex < stringLength || numRects > 0) {
+			if (lineStartIndex < stringLength || numRects) {
 				NSDictionary *textAttributes = [self textAttributesForLineNumber:lineNumber selectedLineNumber:selectedLineNumber];
 				
 				NSSize stringSize = [labelText sizeWithAttributes:textAttributes];

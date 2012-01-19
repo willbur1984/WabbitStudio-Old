@@ -28,6 +28,7 @@
 #import "WCJumpToLineWindowController.h"
 #import "NSString+WCExtensions.h"
 #import "NSString+RSExtensions.h"
+#import "WCSourceTextStorage.h"
 
 @interface WCSourceTextView ()
 
@@ -631,13 +632,49 @@
 }
 #pragma mark *** Private Methods ***
 - (void)_commonInit; {
+	[self setAllowsImageEditing:NO];
+	[self setAllowsUndo:YES];
+	[self setAllowsDocumentBackgroundColorChange:NO];
+	[self setAutomaticDashSubstitutionEnabled:NO];
+	[self setAutomaticDataDetectionEnabled:NO];
+	[self setAutomaticLinkDetectionEnabled:YES];
+	[self setAutomaticQuoteSubstitutionEnabled:NO];
+	[self setAutomaticSpellingCorrectionEnabled:NO];
+	[self setAutomaticTextReplacementEnabled:NO];
+	[self setAutoresizingMask:NSViewHeightSizable|NSViewWidthSizable];
+	[self setContinuousSpellCheckingEnabled:NO];
+	[self setDisplaysLinkToolTips:YES];
+	[self setDrawsBackground:YES];
+	[self setSelectable:YES];
+	[self setEditable:YES];
+	[self setFieldEditor:NO];
+	[self setFocusRingType:NSFocusRingTypeNone];
+	[self setGrammarCheckingEnabled:NO];
+	[self setHorizontallyResizable:NO];
+	[self setImportsGraphics:NO];
+	[self setIncrementalSearchingEnabled:NO];
+	[self setRichText:NO];
+	[self setSmartInsertDeleteEnabled:NO];
+	[self setVerticallyResizable:YES];
+	[self setMaxSize:NSMakeSize(CGFLOAT_MAX, CGFLOAT_MAX)];
+	[self setUsesFindBar:NO];
+	[self setUsesFindPanel:NO];
+	[self setUsesFontPanel:NO];
+	[self setUsesInspectorBar:NO];
+	[self setUsesRuler:NO];
+	
+	[self setupUserDefaultsObserving];
+	
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
 	
 	[self setSelectedTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme selectionColor],NSBackgroundColorAttributeName, nil]];
 	[self setBackgroundColor:[currentTheme backgroundColor]];
 	[self setInsertionPointColor:[currentTheme cursorColor]];
 	
-	[self setupUserDefaultsObserving];
+	NSParagraphStyle *paragraphStyle = [WCSourceTextStorage defaultParagraphStyle];
+	
+	[self setTypingAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName,paragraphStyle,NSParagraphStyleAttributeName, nil]];
+	[self setDefaultParagraphStyle:paragraphStyle];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textViewDidChangeSelection:) name:NSTextViewDidChangeSelectionNotification object:self];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_currentThemeDidChange:) name:WCFontAndColorThemeManagerCurrentThemeDidChangeNotification object:nil];

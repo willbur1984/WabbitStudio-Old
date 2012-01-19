@@ -18,6 +18,7 @@
 	WCJumpBarViewController *_jumpBarViewController;
 }
 @property (readwrite,assign,nonatomic) IBOutlet WCSourceTextView *textView;
+@property (readwrite,assign,nonatomic) IBOutlet NSScrollView *scrollView;
 
 @property (readonly,nonatomic) WCSourceHighlighter *sourceHighlighter;
 @property (readonly,nonatomic) WCJumpBarViewController *jumpBarViewController;

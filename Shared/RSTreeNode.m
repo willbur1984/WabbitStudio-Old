@@ -81,23 +81,21 @@ static NSString *const RSTreeNodeRepresentedObjectKey = @"representedObject";
 	return retval;
 }
 - (id)initWithPlistRepresentation:(NSDictionary *)plistRepresentation {
+	if (!(self = [super init]))
+		return nil;
+	
 	id representedObjectPlaceholder = nil;
 	NSDictionary *representedObjectPlist = [plistRepresentation objectForKey:RSTreeNodeRepresentedObjectKey];
 	if (representedObjectPlist)
-		representedObjectPlaceholder = [[NSClassFromString([representedObjectPlist objectForKey:RSObjectClassNameKey]) alloc] initWithPlistRepresentation:representedObjectPlist];
+		representedObjectPlaceholder = [[[NSClassFromString([representedObjectPlist objectForKey:RSObjectClassNameKey]) alloc] initWithPlistRepresentation:representedObjectPlist] autorelease];
 	
-	if (![self initWithRepresentedObject:representedObjectPlaceholder])
-		return nil;
-	
-	[representedObjectPlaceholder release];
+	[self setRepresentedObject:representedObjectPlaceholder];
 	
 	for (NSDictionary *nodePlist in [plistRepresentation objectForKey:RSTreeNodeChildNodesKey]) {
-		id node = [[NSClassFromString([nodePlist objectForKey:RSObjectClassNameKey]) alloc] initWithPlistRepresentation:nodePlist];
+		id node = [[[NSClassFromString([nodePlist objectForKey:RSObjectClassNameKey]) alloc] initWithPlistRepresentation:nodePlist] autorelease];
 		
 		if (node)
 			[[self mutableChildNodes] addObject:node];
-		
-		[node release];
 	}
 	
 	return self;

@@ -17,4 +17,6 @@
 @property (readonly,nonatomic) NSArray *lineStartIndexes;
 @property (readwrite,assign,nonatomic) id <WCSourceTextStorageDelegate> delegate;
 @property (readonly,nonatomic) NSParagraphStyle *paragraphStyle;
+
++ (NSParagraphStyle *)defaultParagraphStyle;
 @end

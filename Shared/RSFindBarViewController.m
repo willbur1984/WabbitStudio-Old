@@ -652,7 +652,7 @@ static const CGFloat kReplaceControlsHeight = 22.0;
 	NSString *string = [[self textView] string];
 	NSRange selectedRange = [[self textView] selectedRange];
 	NSRange searchRange = (includeSelectedRange)?NSMakeRange(selectedRange.location, [string length]-selectedRange.location):NSMakeRange(NSMaxRange(selectedRange), [string length]-NSMaxRange(selectedRange));
-	NSStringCompareOptions options;
+	NSStringCompareOptions options = NSLiteralSearch;
 	NSRange foundRange;
 	
 	if ([[self findOptionsViewController] findStyle] == RSFindOptionsFindStyleTextual) {
@@ -680,7 +680,7 @@ static const CGFloat kReplaceControlsHeight = 22.0;
 }
 - (NSRange)_previousRangeDidWrap:(BOOL *)didWrap; {
 	NSRange selectedRange = [[self textView] selectedRange];
-	NSStringCompareOptions options;
+	NSStringCompareOptions options = NSLiteralSearch;
 	NSRange foundRange;
 	
 	if ([[self findOptionsViewController] findStyle] == RSFindOptionsFindStyleTextual) {

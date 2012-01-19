@@ -76,7 +76,7 @@ NSString *const WCKeyBindingCommandPairShiftModifierMaskKey = @"shift";
 	return [[[[self class] alloc] initWithAction:action keyCombo:keyCombo] autorelease];
 }
 - (id)initWithAction:(SEL)action keyCombo:(KeyCombo)keyCombo; {
-	if (![self initWithRepresentedObject:nil])
+	if (!(self = [super initWithRepresentedObject:nil]))
 		return nil;
 	
 	_action = action;
