@@ -98,17 +98,6 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 	[self addWindowController:windowController];
 }
 
-- (void)windowControllerDidLoadNib:(NSWindowController *)windowController {
-	[super windowControllerDidLoadNib:windowController];
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_windowWillClose:) name:NSWindowWillCloseNotification object:[windowController window]];
-}
-
-- (void)_windowWillClose:(NSNotification *)note {
-	for (NSLayoutManager *layoutManager in [[self textStorage] layoutManagers])
-		[[self textStorage] removeLayoutManager:layoutManager];
-}
-
 + (BOOL)autosavesInPlace {
     return NO;
 }

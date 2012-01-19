@@ -228,4 +228,29 @@
 	});	
 	return retval;
 }
+
++ (NSString *)tabUnicodeCharacterString; {
+	static NSString *retval;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		retval = [[NSString alloc] initWithFormat:@"%C",0x21E5];
+	});	
+	return retval;
+}
++ (NSString *)returnUnicodeCharacterString; {
+	static NSString *retval;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		retval = [[NSString alloc] initWithFormat:@"%C",0x21B5];
+	});	
+	return retval;
+}
++ (NSString *)spaceUnicodeCharacterString; {
+	static NSString *retval;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		retval = [[NSString alloc] initWithFormat:@"%C",0x00B7];
+	});	
+	return retval;
+}
 @end

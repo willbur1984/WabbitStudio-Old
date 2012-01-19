@@ -31,6 +31,10 @@
 + (NSString *)windowsLineEndingString;
 
 + (NSString *)attachmentCharacterString;
+
++ (NSString *)tabUnicodeCharacterString;
++ (NSString *)returnUnicodeCharacterString;
++ (NSString *)spaceUnicodeCharacterString;
 @end
 
 static inline uint8_t RSHexValueForCharacter(unichar character) {
