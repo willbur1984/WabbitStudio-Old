@@ -13,6 +13,7 @@
 #import "WCFileContainer.h"
 #import "RSDefines.h"
 #import "NSURL+RSExtensions.h"
+#import "WCProjectDocument.h"
 
 @implementation WCNewProjectWindowController
 

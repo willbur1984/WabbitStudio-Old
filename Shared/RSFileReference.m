@@ -75,6 +75,11 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 		if ([[self fileURL] checkResourceIsReachableAndReturnError:NULL]) {
 			[_kqueue addPath:[[self fileURL] path] notifyingAbout:UKKQueueNotifyAboutRename|UKKQueueNotifyAboutDelete|UKKQueueNotifyAboutWrite];
 			
+			if ([self ignoreNextFileWatcherNotification]) {
+				[self setIgnoreNextFileWatcherNotification:NO];
+				return;
+			}
+			
 			[[self delegate] fileReferenceWasWrittenTo:self];
 		}
 		else
@@ -131,5 +136,12 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 	return [[self fileURL] fileUTI];
 }
 @synthesize delegate=_delegate;
+@dynamic ignoreNextFileWatcherNotification;
+- (BOOL)ignoreNextFileWatcherNotification {
+	return _fileReferenceFlags.ignoreNextFileWatcherNotification;
+}
+- (void)setIgnoreNextFileWatcherNotification:(BOOL)ignoreNextFileWatcherNotification {
+	_fileReferenceFlags.ignoreNextFileWatcherNotification = ignoreNextFileWatcherNotification;
+}
 
 @end

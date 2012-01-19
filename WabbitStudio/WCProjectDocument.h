@@ -9,6 +9,11 @@
 #import <AppKit/NSDocument.h>
 #import "WCOpenQuicklyDataSource.h"
 
+extern NSString *const WCProjectDocumentFileReferencesKey;
+extern NSString *const WCProjectDocumentProjectContainerKey;
+
+extern NSString *const WCProjectDataFileName;
+
 @class WCProjectContainer,WCProjectWindowController,WCSourceTextViewController,WCFile,WCSourceFileDocument,WCFileContainer;
 
 @interface WCProjectDocument : NSDocument <WCOpenQuicklyDataSource> {

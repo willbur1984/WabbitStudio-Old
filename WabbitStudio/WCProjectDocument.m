@@ -20,6 +20,11 @@
 #import "WCProjectNavigatorViewController.h"
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
+NSString *const WCProjectDocumentFileReferencesKey = @"fileReferences";
+NSString *const WCProjectDocumentProjectContainerKey = @"projectContainer";
+
+NSString *const WCProjectDataFileName = @"project.plist";
+
 @interface WCProjectDocument ()
 @property (readwrite,retain) WCProjectContainer *projectContainer;
 @property (readwrite,retain) NSMapTable *filesToSourceFileDocuments;
@@ -34,6 +39,7 @@
 #endif
 	[_sourceFileDocumentsToFiles release];
 	[_filesToSourceFileDocuments release];
+	[_UUIDsToFileReferences release];
 	[_projectContainer release];
 	[super dealloc];
 }

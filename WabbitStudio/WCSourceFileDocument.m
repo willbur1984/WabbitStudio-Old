@@ -30,6 +30,7 @@
 #import "NSURL+RSExtensions.h"
 #import "NSImage+RSExtensions.h"
 #import "RSDefines.h"
+#import "RSFileReference.h"
 
 NSString *const WCSourceFileDocumentWindowFrameKey = @"org.revsoft.wabbitstudio.windowframe";
 NSString *const WCSourceFileDocumentSelectedRangeKey = @"org.revsoft.wabbitstudio.selectedrange";
@@ -202,6 +203,16 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 	
 	if ([self projectDocument])
 		[self _updateFileEditedStatus];
+}
+
+- (void)saveDocument:(id)sender {
+	if ([self projectDocument]) {
+		WCFile *file = [[[self projectDocument] sourceFileDocumentsToFiles] objectForKey:self];
+		
+		[[file fileReference] setIgnoreNextFileWatcherNotification:YES];
+	}
+	
+	[super saveDocument:nil];
 }
 #pragma mark PSMTabBarControlCell
 @dynamic icon;
