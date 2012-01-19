@@ -32,6 +32,7 @@
 @property (readwrite,copy,nonatomic) NSArray *includesFiles;
 @property (readwrite,assign,nonatomic) NSMenu *filesMenu;
 @property (readonly,nonatomic) NSMapTable *fileSubmenusToFileContainers;
+@property (readwrite,copy,nonatomic) NSArray *unsavedFiles;
 
 - (void)_updatePathComponentCells;
 - (void)_updateFilePathComponentCell;
@@ -52,6 +53,7 @@
 	[self cleanUpUserDefaultsObserving];
 	_textView = nil;
 	_jumpBarDataSource = nil;
+	[_unsavedFiles release];
 	[_includesFiles release];
 	[_symbolsMenu release];
 	[_filesMenu release];
@@ -97,8 +99,15 @@
 			recentFilesCount++;
 		return recentFilesCount;
 	}
-	else if (menu == [self unsavedFilesMenu])
+	else if (menu == [self unsavedFilesMenu]) {
+		NSArray *temp = [[[[self jumpBarDataSource] projectDocument] unsavedFiles] allObjects];
+		
+		[self setUnsavedFiles:temp];
+		
+		if ([temp count])
+			return [temp count];
 		return 1;
+	}
 	else if (menu == [self includesMenu]) {
 		if ([[self jumpBarDataSource] projectDocument]) {
 			NSSet *includes = [[[self jumpBarDataSource] sourceScanner] includes];
@@ -155,9 +164,23 @@
 		}
 	}
 	else if (menu == [self unsavedFilesMenu]) {
-		[item setTitle:NSLocalizedString(@"No Unsaved Files", @"No Unsaved Files")];
-		[item setTarget:nil];
-		[item setAction:NULL];
+		if ([[self unsavedFiles] count]) {
+			WCFile *file = [[self unsavedFiles] objectAtIndex:index];
+			
+			[item setTitle:[file fileName]];
+			[item setImage:[file fileIcon]];
+			[[item image] setSize:NSSmallSize];
+			[item setRepresentedObject:file];
+			[item setTarget:self];
+			[item setAction:@selector(_unsavedFilesMenuItemClicked:)];
+		}
+		else {
+			[item setTitle:NSLocalizedString(@"No Unsaved Files", @"No Unsaved Files")];
+			[item setTarget:nil];
+			[item setAction:NULL];
+			[item setRepresentedObject:nil];
+			[item setImage:nil];
+		}
 	}
 	else if (menu == [self includesMenu]) {
 		if ([[self includesFiles] count]) {
@@ -212,6 +235,7 @@
 	
 	[self setIncludesFiles:nil];
 	[self setFilesMenu:nil];
+	[self setUnsavedFiles:nil];
 }
 
 #pragma mark *** Public Methods ***
@@ -231,8 +255,6 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textViewDidChangeSelection:) name:NSTextViewDidChangeSelectionNotification object:textView];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_sourceScannerDidFinishScanningSymbols:) name:WCSourceScannerDidFinishScanningSymbolsNotification object:[jumpBarDataSource sourceScanner]];
-	
-	
 	
 	return self;
 }
@@ -268,6 +290,7 @@
 @synthesize includesFiles=_includesFiles;
 @synthesize filesMenu=_filesMenu;
 @synthesize fileSubmenusToFileContainers=_fileSubmenusToFileContainers;
+@synthesize unsavedFiles=_unsavedFiles;
 #pragma mark *** Private Methods ***
 - (void)_updatePathComponentCells; {
 	if (![self jumpBarDataSource])
@@ -479,6 +502,9 @@
 	[[[self jumpBarDataSource] projectDocument] openTabForFile:[sender representedObject]];
 }
 - (IBAction)_filesMenuItemClicked:(id)sender {
+	[[[self jumpBarDataSource] projectDocument] openTabForFile:[sender representedObject]];
+}
+- (IBAction)_unsavedFilesMenuItemClicked:(id)sender {
 	[[[self jumpBarDataSource] projectDocument] openTabForFile:[sender representedObject]];
 }
 #pragma mark Notifications

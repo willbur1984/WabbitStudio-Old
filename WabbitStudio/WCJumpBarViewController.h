@@ -19,6 +19,7 @@
 	NSArray *_includesFiles;
 	NSMenu *_filesMenu;
 	NSMapTable *_fileSubmenusToFileContainers;
+	NSArray *_unsavedFiles;
 }
 @property (readwrite,assign,nonatomic) IBOutlet WCJumpBar *jumpBar;
 @property (readwrite,assign,nonatomic) IBOutlet NSMenu *recentFilesMenu;

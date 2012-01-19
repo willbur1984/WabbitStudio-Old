@@ -32,7 +32,7 @@ extern NSString *const WCSourceFileDocumentVisibleRangeKey;
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
 @property (readonly,nonatomic) WCSourceHighlighter *sourceHighlighter;
 @property (readonly,nonatomic) WCSourceTextStorage *textStorage;
-@property (readonly,nonatomic) WCProjectDocument *projectDocument;
+@property (readwrite,assign,nonatomic) WCProjectDocument *projectDocument;
 
 - (id)initWithContentsOfURL:(NSURL *)url ofType:(NSString *)typeName forProjectDocument:(WCProjectDocument *)projectDocument error:(NSError **)outError;
 

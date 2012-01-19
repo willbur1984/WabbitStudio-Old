@@ -28,6 +28,7 @@ extern NSString *const WCProjectDataFileName;
 @property (readonly,nonatomic) NSArray *sourceFileDocuments;
 @property (readonly,nonatomic) NSDictionary *fileNamesToFiles;
 @property (readonly,nonatomic) WCProjectWindowController *projectWindowController;
+@property (readonly,nonatomic) NSHashTable *unsavedFiles;
 
 - (WCFileContainer *)fileContainerForFile:(WCFile *)file;
 

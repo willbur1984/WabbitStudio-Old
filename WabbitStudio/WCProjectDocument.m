@@ -37,9 +37,9 @@ NSString *const WCProjectDataFileName = @"project.plist";
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
+	[_unsavedFiles release];
 	[_sourceFileDocumentsToFiles release];
 	[_filesToSourceFileDocuments release];
-	[_UUIDsToFileReferences release];
 	[_projectContainer release];
 	[super dealloc];
 }
@@ -50,6 +50,8 @@ NSString *const WCProjectDataFileName = @"project.plist";
 	
 	[self setHasUndoManager:NO];
 	[self setUndoManager:nil];
+	
+	_unsavedFiles = [[NSHashTable hashTableWithWeakObjects] retain];
 	
 	return self;
 }
@@ -220,5 +222,6 @@ NSString *const WCProjectDataFileName = @"project.plist";
 	
 	return [[retval copy] autorelease];
 }
+@synthesize unsavedFiles=_unsavedFiles;
 
 @end

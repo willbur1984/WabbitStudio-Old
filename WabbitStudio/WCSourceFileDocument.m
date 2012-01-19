@@ -194,8 +194,18 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 	
 	[super updateChangeCount:change];
 	
-	if (wasDocumentEdited != [self isDocumentEdited] && change != NSChangeCleared)
+	if (wasDocumentEdited != [self isDocumentEdited] && change != NSChangeCleared) {
 		[self _updateFileEditedStatus];
+		
+		if ([self projectDocument]) {
+			WCFile *file = [[[self projectDocument] sourceFileDocumentsToFiles] objectForKey:self];
+			
+			if ([self isDocumentEdited])
+				[[[self projectDocument] unsavedFiles] addObject:file];
+			else
+				[[[self projectDocument] unsavedFiles] removeObject:file];
+		}
+	}
 }
 
 - (void)setFileURL:(NSURL *)url {
