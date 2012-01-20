@@ -32,6 +32,9 @@
 		0708965214A6CDEA0017BBE4 /* MneumonicCompletions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0708965114A6CDEA0017BBE4 /* MneumonicCompletions.plist */; };
 		0708965514A6CE900017BBE4 /* WCCompletionChoice.m in Sources */ = {isa = PBXBuildFile; fileRef = 0708965414A6CE900017BBE4 /* WCCompletionChoice.m */; };
 		0708965714A6F1360017BBE4 /* PreProcessorCompletions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0708965614A6F1360017BBE4 /* PreProcessorCompletions.plist */; };
+		071306A414C8D0F800862E4D /* RSBookmark.m in Sources */ = {isa = PBXBuildFile; fileRef = 071306A314C8D0F800862E4D /* RSBookmark.m */; };
+		071306AB14C8F74000862E4D /* Bookmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 071306AA14C8F74000862E4D /* Bookmark.png */; };
+		071306AE14C91C4C00862E4D /* DDHotKeyCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 071306AD14C91C4C00862E4D /* DDHotKeyCenter.m */; };
 		071985DF14C010D800C8E91A /* WCGeneralViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 071985DD14C010D800C8E91A /* WCGeneralViewController.m */; };
 		071985E314C011A800C8E91A /* WCGeneralView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 071985E114C011A800C8E91A /* WCGeneralView.xib */; };
 		071985E614C01F5D00C8E91A /* NSURL+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 071985E514C01F5D00C8E91A /* NSURL+RSExtensions.m */; };
@@ -297,6 +300,11 @@
 		0708965314A6CE900017BBE4 /* WCCompletionChoice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCCompletionChoice.h; sourceTree = "<group>"; };
 		0708965414A6CE900017BBE4 /* WCCompletionChoice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCCompletionChoice.m; sourceTree = "<group>"; };
 		0708965614A6F1360017BBE4 /* PreProcessorCompletions.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PreProcessorCompletions.plist; sourceTree = "<group>"; };
+		071306A214C8D0F800862E4D /* RSBookmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSBookmark.h; sourceTree = "<group>"; };
+		071306A314C8D0F800862E4D /* RSBookmark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSBookmark.m; sourceTree = "<group>"; };
+		071306AA14C8F74000862E4D /* Bookmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Bookmark.png; sourceTree = "<group>"; };
+		071306AC14C91C4C00862E4D /* DDHotKeyCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDHotKeyCenter.h; sourceTree = "<group>"; };
+		071306AD14C91C4C00862E4D /* DDHotKeyCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDHotKeyCenter.m; sourceTree = "<group>"; };
 		071985DC14C010D800C8E91A /* WCGeneralViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCGeneralViewController.h; sourceTree = "<group>"; };
 		071985DD14C010D800C8E91A /* WCGeneralViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCGeneralViewController.m; sourceTree = "<group>"; };
 		071985E214C011A800C8E91A /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCGeneralView.xib; sourceTree = "<group>"; };
@@ -980,6 +988,7 @@
 		071ECCC914A4233C002409F8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				071306AA14C8F74000862E4D /* Bookmark.png */,
 				0778851514C2377C00605F5D /* FileNotFound.acorn */,
 				0778851614C2377C00605F5D /* FileNotFound.png */,
 				0778851714C2377C00605F5D /* Filter.acorn */,
@@ -1093,6 +1102,8 @@
 				07FF7B4414C76C71000AE014 /* RSFileReferenceDelegate.h */,
 				077884F014C1019E00605F5D /* RSObject.h */,
 				077884F114C1019E00605F5D /* RSObject.m */,
+				071306A214C8D0F800862E4D /* RSBookmark.h */,
+				071306A314C8D0F800862E4D /* RSBookmark.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -1452,6 +1463,8 @@
 		07A8AFBD14BDF2E2008CB9FF /* External */ = {
 			isa = PBXGroup;
 			children = (
+				071306AC14C91C4C00862E4D /* DDHotKeyCenter.h */,
+				071306AD14C91C4C00862E4D /* DDHotKeyCenter.m */,
 				07018B2B14C63C6600C5A7AC /* UKXattrMetadataStore.h */,
 				07018B2C14C63C6600C5A7AC /* UKXattrMetadataStore.m */,
 				07A8AFBE14BDF2E2008CB9FF /* NSAlert-OAExtensions.h */,
@@ -1607,6 +1620,7 @@
 				0778851C14C2377C00605F5D /* Filter.png in Resources */,
 				0797327214C5360A00A71F54 /* WCTabView.xib in Resources */,
 				07018B1414C6011E00C5A7AC /* WCOpenQuicklyWindow.xib in Resources */,
+				071306AB14C8F74000862E4D /* Bookmark.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1768,6 +1782,8 @@
 				07FF7B4014C763EB000AE014 /* UKKQueue.m in Sources */,
 				07FF7B4314C763FC000AE014 /* UKMainThreadProxy.m in Sources */,
 				07E91DF814C8020800B166E3 /* WCLayoutManager.m in Sources */,
+				071306A414C8D0F800862E4D /* RSBookmark.m in Sources */,
+				071306AE14C91C4C00862E4D /* DDHotKeyCenter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

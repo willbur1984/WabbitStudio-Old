@@ -8,6 +8,7 @@
 
 #import "WCLineNumberRulerView.h"
 
-@interface WCSourceRulerView : WCLineNumberRulerView
-
+@interface WCSourceRulerView : WCLineNumberRulerView {
+	NSUInteger _clickedLineNumber;
+}
 @end

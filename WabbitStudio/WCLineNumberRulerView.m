@@ -23,10 +23,10 @@
 @property (readwrite,assign,nonatomic) BOOL shouldRecalculateLineStartIndexes;
 @property (readonly,nonatomic) NSFont *textFont;
 @property (readonly,nonatomic) NSColor *textColor;
-@property (readonly,nonatomic) NSColor *backgroundColor;
 @property (readonly,nonatomic) NSDictionary *selectedTextAttributes;
 
 - (void)_calculateLineStartIndexes;
+
 @end
 
 @implementation WCLineNumberRulerView
@@ -59,6 +59,10 @@
 	return self;
 }
 
+- (BOOL)isOpaque {
+	return YES;
+}
+
 - (void)setClientView:(NSView *)client {
 	[super setClientView:client];
 	
@@ -83,23 +87,10 @@
 }
 
 - (void)drawHashMarksAndLabelsInRect:(NSRect)rect {
-	[[self backgroundColor] set];
-	NSRectFill([self bounds]);
-	
+	[self drawBackgroundInRect:rect];
 	[self drawCurrentLineHighlightInRect:rect];
 	[self drawLineNumbersInRect:rect];
-	
-	//[[NSColor colorWithCalibratedWhite:0.58 alpha:1.0] setStroke];
-	//[[NSBezierPath bezierPathWithRect:NSMakeRect(NSWidth([self bounds]), 0, 0, NSHeight([self bounds]))] stroke];
-	
-	//[[NSColor colorWithCalibratedWhite:0.58 alpha:1.0] setStroke];
-	[[NSColor darkGrayColor] setStroke];
-	NSBezierPath *dottedLine = [NSBezierPath bezierPathWithRect:NSMakeRect(NSWidth([self bounds]), 0, 0, NSHeight([self bounds]))];
-	CGFloat dash[2];
-	dash[0] = 1.0;
-	dash[1] = 2.0;
-	[dottedLine setLineDash:dash count:2 phase:1.0];
-	[dottedLine stroke];
+	[self drawRightMarginInRect:rect];
 }
 
 - (NSSet *)userDefaultsKeyPathsToObserve {
@@ -113,6 +104,20 @@
 		[self setNeedsDisplay:YES];
 	else
 		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+}
+
+- (void)drawBackgroundInRect:(NSRect)backgroundRect; {
+	[[self backgroundColor] set];
+	NSRectFill(backgroundRect);
+}
+- (void)drawRightMarginInRect:(NSRect)rightMarginRect; {
+	[[NSColor darkGrayColor] setStroke];
+	NSBezierPath *dottedLine = [NSBezierPath bezierPathWithRect:NSMakeRect(NSWidth(rightMarginRect), 0, 0, NSHeight(rightMarginRect))];
+	CGFloat dash[2];
+	dash[0] = 1.0;
+	dash[1] = 2.0;
+	[dottedLine setLineDash:dash count:2 phase:1.0];
+	[dottedLine stroke];
 }
 
 - (void)drawBackgroundAndDividerLineInRect:(NSRect)backgroundAndDividerLineRect; {

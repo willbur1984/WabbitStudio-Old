@@ -9,6 +9,7 @@
 #import "NSArray+WCExtensions.h"
 #import "WCSourceSymbol.h"
 #import "WCSourceToken.h"
+#import "RSBookmark.h"
 
 @implementation NSArray (WCExtensions)
 - (NSUInteger)sourceTokenIndexForRange:(NSRange)range; {
@@ -81,6 +82,49 @@
 		return nil;
 	else if ([self count] == 1)
 		return self;
+	else {
+		NSUInteger startIndex = [self sourceSymbolIndexForRange:range];
+		NSUInteger endIndex = [self sourceSymbolIndexForRange:NSMakeRange(NSMaxRange(range), 0)];
+		if (endIndex < [self count])
+			endIndex++;
+		
+		return [self subarrayWithRange:NSMakeRange(startIndex, endIndex-startIndex)];
+	}
+}
+
+- (NSUInteger)bookmarkIndexForRange:(NSRange)range; {
+	if (![self count])
+		return NSNotFound;
+	
+	NSUInteger left = 0, right = [self count], mid, searchLocation;
+	
+    while ((right - left) > 1) {
+        mid = (right + left) / 2;
+		searchLocation = [(RSBookmark *)[self objectAtIndex:mid] range].location;
+        
+        if (range.location < searchLocation)
+			right = mid;
+        else if (range.location > searchLocation)
+			left = mid;
+        else
+			return mid;
+    }
+    return left;
+}
+- (RSBookmark *)bookmarkForRange:(NSRange)range; {
+	if (![self count])
+		return nil;
+	
+	return [self objectAtIndex:[self bookmarkIndexForRange:range]];
+}
+- (NSArray *)bookmarksForRange:(NSRange)range; {
+	if (![self count])
+		return nil;
+	else if ([self count] == 1) {
+		if (NSLocationInRange([[self lastObject] range].location, range))
+			return self;
+		return nil;
+	}
 	else {
 		NSUInteger startIndex = [self sourceSymbolIndexForRange:range];
 		NSUInteger endIndex = [self sourceSymbolIndexForRange:NSMakeRange(NSMaxRange(range), 0)];

@@ -36,4 +36,10 @@
 - (IBAction)commentSelection:(id)sender;
 - (IBAction)uncommentSelection:(id)sender;
 
+- (IBAction)toggleBookmarkAtCurrentLine:(id)sender;
+- (IBAction)addBookmarkAtCurrentLine:(id)sender;
+- (IBAction)removeBookmarkAtCurrentLine:(id)sender;
+
+- (IBAction)jumpToNextBookmark:(id)sender;
+- (IBAction)jumpToPreviousBookmark:(id)sender;
 @end

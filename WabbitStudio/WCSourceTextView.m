@@ -29,6 +29,7 @@
 #import "NSString+WCExtensions.h"
 #import "NSString+RSExtensions.h"
 #import "WCSourceTextStorage.h"
+#import "RSBookmark.h"
 
 @interface WCSourceTextView ()
 
@@ -71,17 +72,13 @@
 	return self;
 }
 
-- (void)viewWillMoveToWindow:(NSWindow *)newWindow {
-	[super viewWillMoveToWindow:newWindow];
+- (void)viewDidMoveToWindow {
+	[super viewDidMoveToWindow];
 	
 	[[RSToolTipManager sharedManager] removeView:self];
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:_windowDidBecomeKeyObservingToken];
 	[[NSNotificationCenter defaultCenter] removeObserver:_windowDidResignKeyObservingToken];
-}
-
-- (void)viewDidMoveToWindow {
-	[super viewDidMoveToWindow];
 	
 	if ([self window]) {
 		[[RSToolTipManager sharedManager] addView:self];
@@ -590,6 +587,28 @@
 			[self setSelectedRange:oldRange];
 		}
 	}
+}
+
+- (IBAction)toggleBookmarkAtCurrentLine:(id)sender; {
+	if ([(WCSourceTextStorage *)[self textStorage] bookmarkAtLineNumber:[[self string] lineNumberForRange:[self selectedRange]]])
+		[self removeBookmarkAtCurrentLine:nil];
+	else
+		[self addBookmarkAtCurrentLine:nil];
+}
+- (IBAction)addBookmarkAtCurrentLine:(id)sender; {
+	RSBookmark *bookmark = [RSBookmark bookmarkWithRange:[self selectedRange] visibleRange:NSEmptyRange textStorage:[self textStorage]];
+	
+	[(WCSourceTextStorage *)[self textStorage] addBookmark:bookmark];
+}
+- (IBAction)removeBookmarkAtCurrentLine:(id)sender; {
+	
+}
+
+- (IBAction)jumpToNextBookmark:(id)sender; {
+	
+}
+- (IBAction)jumpToPreviousBookmark:(id)sender; {
+	
 }
 #pragma mark Properties
 @dynamic delegate;

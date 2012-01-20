@@ -17,8 +17,10 @@
 @property (readonly,nonatomic) NSTextView *textView;
 @property (readonly,nonatomic) CGFloat minimumThickness;
 @property (readonly,nonatomic) NSDictionary *textAttributes;
+@property (readonly,nonatomic) NSColor *backgroundColor;
 
-- (void)drawBackgroundAndDividerLineInRect:(NSRect)backgroundAndDividerLineRect;
+- (void)drawBackgroundInRect:(NSRect)backgroundRect;
+- (void)drawRightMarginInRect:(NSRect)rightMarginRect;
 - (void)drawCurrentLineHighlightInRect:(NSRect)rect;
 - (void)drawLineNumbersInRect:(NSRect)lineNumbersRect;
 

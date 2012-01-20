@@ -15,6 +15,9 @@
 #import "NSObject+WCExtensions.h"
 #import "RSDefines.h"
 #import "NSArray+WCExtensions.h"
+#import "RSBookmark.h"
+#import "NSString+RSExtensions.h"
+#import "NSArray+WCExtensions.h"
 
 @interface WCSourceTextStorage ()
 - (void)_calculateLineStartIndexes;
@@ -30,6 +33,7 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[self cleanUpUserDefaultsObserving];
 	_delegate = nil;
+	[_bookmarks release];
 	[_lineStartIndexes release];
 	[_attributedString release];
 	[super dealloc];
@@ -135,6 +139,40 @@
 	return style;
 }
 
+- (void)addBookmark:(RSBookmark *)bookmark; {
+	if ([self bookmarkAtLineNumber:[bookmark lineNumber]])
+		return;
+	
+	[_bookmarks addObject:bookmark];
+	[_bookmarks sortUsingDescriptors:[NSArray arrayWithObjects:[NSSortDescriptor sortDescriptorWithKey:@"lineNumber" ascending:YES], nil]];
+}
+- (void)removeBookmark:(RSBookmark *)bookmark; {
+	[_bookmarks removeObjectIdenticalTo:bookmark];
+}
+- (RSBookmark *)bookmarkAtLineNumber:(NSUInteger)lineNumber; {
+	if (![_bookmarks count])
+		return nil;
+	else if ([_bookmarks count] == 1) {
+		if ([[_bookmarks lastObject] lineNumber] == lineNumber)
+			return [_bookmarks lastObject];
+		return nil;
+	}
+	else {
+		NSUInteger startIndex = [_bookmarks bookmarkIndexForRange:[[self string] rangeForLineNumber:lineNumber]];
+		
+		for (RSBookmark *bookmark in [_bookmarks subarrayWithRange:NSMakeRange(startIndex, [_bookmarks count]-startIndex)]) {
+			if ([bookmark lineNumber] == lineNumber)
+				return bookmark;
+			else if ([bookmark lineNumber] > lineNumber)
+				break;
+		}
+		return nil;
+	}
+}
+- (NSArray *)bookmarksForRange:(NSRange)range; {
+	return [_bookmarks bookmarksForRange:range];
+}
+
 @synthesize lineStartIndexes=_lineStartIndexes;
 @dynamic delegate;
 - (id<WCSourceTextStorageDelegate>)delegate {
@@ -153,9 +191,11 @@
 - (NSParagraphStyle *)paragraphStyle {
 	return [[self class] defaultParagraphStyle];
 }
+@synthesize bookmarks=_bookmarks;
 
 - (void)_commonInit; {
 	_lineStartIndexes = [[NSMutableArray alloc] initWithCapacity:0];
+	_bookmarks = [[NSMutableArray alloc] initWithCapacity:0];
 	
 	[self setupUserDefaultsObserving];
 	

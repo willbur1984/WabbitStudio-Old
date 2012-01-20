@@ -21,7 +21,9 @@
 	});
 	
 	[borderGradient drawInRect:[self bounds] angle:270.0];
-	[fillGradient drawInRect:NSInsetRect([self bounds], 1.0, 1.0) angle:270.0];
+	//[fillGradient drawInRect:NSInsetRect([self bounds], 1.0, 1.0) angle:270.0];
+	[[NSColor colorWithCalibratedRed:250.0/255.0 green:247.0/255.0 blue:182.0/255.0 alpha:1.0] setFill];
+	NSRectFill(NSInsetRect([self bounds], 1.0, 1.0));
 }
 
 @end
