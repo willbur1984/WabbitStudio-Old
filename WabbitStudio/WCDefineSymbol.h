@@ -11,6 +11,7 @@
 @interface WCDefineSymbol : WCSourceSymbol <WCCompletionItem,RSToolTipProvider> {
 	NSString *_value;
 	NSArray *_arguments;
+	NSAttributedString *_attributedValueString;
 }
 @property (readonly,nonatomic) NSString *value;
 @property (readonly,nonatomic) NSArray *arguments;

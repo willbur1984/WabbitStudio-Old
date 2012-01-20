@@ -326,6 +326,10 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 	}
 }
 #pragma mark WCSourceScannerDelegate
+- (WCSourceHighlighter *)sourceHighlighterForSourceScanner:(WCSourceScanner *)scanner {
+	return [self sourceHighlighter];
+}
+
 - (NSArray *)sourceScanner:(WCSourceScanner *)scanner completionsForPrefix:(NSString *)prefix; {
 	NSMutableArray *retval = [NSMutableArray arrayWithCapacity:0];
 	
@@ -361,6 +365,7 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 	return [self sourceHighlighter];
 }
 #pragma mark WCSourceHighlighterDelegate
+
 - (NSArray *)labelSymbolsForSourceHighlighter:(WCSourceHighlighter *)highlighter {
 	NSMutableArray *retval = [NSMutableArray arrayWithCapacity:0];
 	

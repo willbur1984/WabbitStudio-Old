@@ -22,6 +22,7 @@
 @interface WCLineNumberRulerView ()
 @property (readwrite,assign,nonatomic) BOOL shouldRecalculateLineStartIndexes;
 @property (readonly,nonatomic) NSFont *textFont;
+@property (readonly,nonatomic) NSFont *selectedTextFont;
 @property (readonly,nonatomic) NSColor *textColor;
 @property (readonly,nonatomic) NSDictionary *selectedTextAttributes;
 
@@ -201,6 +202,10 @@
 - (NSFont *)textFont {
 	return [NSFont fontWithName:@"Menlo" size:[NSFont systemFontSizeForControlSize:NSMiniControlSize]];
 }
+@dynamic selectedTextFont;
+- (NSFont *)selectedTextFont {
+	return [NSFont fontWithName:@"Menlo-Bold" size:[NSFont systemFontSizeForControlSize:NSMiniControlSize]];
+}
 @dynamic textColor;
 - (NSColor *)textColor {
 	return [NSColor colorWithCalibratedWhite:0.5 alpha:1.0];
@@ -236,7 +241,7 @@
 
 @dynamic selectedTextAttributes;
 - (NSDictionary *)selectedTextAttributes {
-    return [NSDictionary dictionaryWithObjectsAndKeys:[self textFont],NSFontAttributeName,[NSColor textColor],NSForegroundColorAttributeName,[NSParagraphStyle rightAlignedParagraphStyle],NSParagraphStyleAttributeName,nil];
+    return [NSDictionary dictionaryWithObjectsAndKeys:[self textFont],NSFontAttributeName,[NSColor blackColor],NSForegroundColorAttributeName,[NSParagraphStyle rightAlignedParagraphStyle],NSParagraphStyleAttributeName,nil];
 }
 
 - (void)_calculateLineStartIndexes; {

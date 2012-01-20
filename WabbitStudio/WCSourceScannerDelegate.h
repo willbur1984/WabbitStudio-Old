@@ -8,10 +8,11 @@
 
 #import <Foundation/NSObject.h>
 
-@class WCSourceScanner,WCSourceFileDocument;
+@class WCSourceScanner,WCSourceFileDocument,WCSourceHighlighter;
 
 @protocol WCSourceScannerDelegate <NSObject>
 @required
+- (WCSourceHighlighter *)sourceHighlighterForSourceScanner:(WCSourceScanner *)scanner;
 - (NSString *)fileDisplayNameForSourceScanner:(WCSourceScanner *)scanner;
 - (WCSourceFileDocument *)sourceFileDocumentForSourceScanner:(WCSourceScanner *)scanner;
 - (NSURL *)fileURLForSourceScanner:(WCSourceScanner *)scanner;

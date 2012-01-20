@@ -187,6 +187,7 @@
 		
 		value = [value stringByReplacingOccurrencesOfString:@";+.*" withString:@"" options:NSRegularExpressionSearch range:NSMakeRange(0, [value length])];
 		value = [value stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+		value = [value stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
 		
 		if (![value length])
 			return;

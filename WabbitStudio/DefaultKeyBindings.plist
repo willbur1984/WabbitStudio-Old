@@ -492,7 +492,7 @@
 			<integer>49</integer>
 			<key>modifierFlags</key>
 			<dict>
-				<key>command</key>
+				<key>control</key>
 				<true/>
 			</dict>
 		</dict>

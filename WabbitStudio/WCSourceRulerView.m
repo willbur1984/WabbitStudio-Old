@@ -58,9 +58,10 @@
 	return [[self textStorage] lineStartIndexes];
 }
 
-static const CGFloat kBookmarkIconWidth = 10.0;
+static const CGFloat kIconWidthHeight = 11.0;
+static const CGFloat kIconPaddingLeft = 1.0;
 - (CGFloat)minimumThickness {
-	return [super minimumThickness]+kBookmarkIconWidth;
+	return [super minimumThickness]+kIconWidthHeight+kIconPaddingLeft;
 }
 
 - (void)drawHashMarksAndLabelsInRect:(NSRect)rect {
@@ -80,7 +81,7 @@ static const CGFloat kBookmarkIconWidth = 10.0;
 		
 		NSImage *breakpointImage = [NSImage imageNamed:@"Bookmark"];
 		
-		[breakpointImage drawInRect:NSMakeRect(NSMinX(breakpointRect)+1.0, NSMinY(breakpointRect)+1.0, kBookmarkIconWidth, kBookmarkIconWidth) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+		[breakpointImage drawInRect:NSMakeRect(NSMinX(breakpointRect)+kIconPaddingLeft, NSMinY(breakpointRect), kIconWidthHeight, kIconWidthHeight) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
 	}
 	
 	[super drawLineNumbersInRect:rect];

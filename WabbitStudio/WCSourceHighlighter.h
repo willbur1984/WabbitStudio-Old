@@ -41,4 +41,7 @@ extern NSString *const WCSourceHighlighterMacroAttributeName;
 - (void)performHighlightingForColorWithAttributeName:(NSString *)attributeName;
 - (void)performHighlightingForFontWithAttributeName:(NSString *)attributeName;
 - (void)performHighlightingForAllAttributes;
+
+- (void)highlightAttributeString:(NSMutableAttributedString *)attributedString;
+- (void)highlightAttributeString:(NSMutableAttributedString *)attributedString withArgumentNames:(NSSet *)argumentNames;
 @end

@@ -9,9 +9,15 @@
 #import "WCMacroSymbol.h"
 #import "WCSourceScanner.h"
 #import "NSString+RSExtensions.h"
+#import "WCSourceHighlighter.h"
+
+@interface WCMacroSymbol ()
+@property (readonly,nonatomic) NSAttributedString *attributedValueString;
+@end
 
 @implementation WCMacroSymbol
 - (void)dealloc {
+	[_attributedValueString release];
 	[_value release];
 	[_arguments release];
 	[super dealloc];
@@ -41,7 +47,7 @@
 	
 	[retval appendAttributedString:[[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" \u2192 %@:%lu\n",[[[self sourceScanner] delegate] fileDisplayNameForSourceScanner:[self sourceScanner]],[[[[self sourceScanner] textStorage] string] lineNumberForRange:[self range]]+1] attributes:[NSDictionary dictionaryWithObjectsAndKeys:RSToolTipProviderDefaultFont(),NSFontAttributeName,[NSColor darkGrayColor],NSForegroundColorAttributeName, nil]] autorelease]];
 	
-	[retval appendAttributedString:[[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" = %@",[self value]] attributes:RSToolTipProviderDefaultAttributes()] autorelease]];
+	[retval appendAttributedString:[self attributedValueString]];
 	
 	return retval;
 }
@@ -65,4 +71,17 @@
 
 @synthesize value=_value;
 @synthesize arguments=_arguments;
+@dynamic attributedValueString;
+- (NSAttributedString *)attributedValueString {
+	if (!_attributedValueString) {
+		NSMutableAttributedString *temp = [[[NSMutableAttributedString alloc] initWithString:[self value] attributes:RSToolTipProviderDefaultAttributes()] autorelease];
+		WCSourceHighlighter *highlighter = [[[self sourceScanner] delegate] sourceHighlighterForSourceScanner:[self sourceScanner]];
+		
+		[highlighter highlightAttributeString:temp withArgumentNames:[NSSet setWithArray:[[self arguments] valueForKey:@"lowercaseString"]]];
+		
+		_attributedValueString = [temp copy];
+	}
+	return _attributedValueString;
+}
+
 @end
