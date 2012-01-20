@@ -16,6 +16,7 @@
 	__weak WCSourceFileDocument *_sourceFileDocument;
 	NSTimer *_scrollingHighlightTimer;
 	WCJumpBarViewController *_jumpBarViewController;
+	NSRange _additionalRangeToSyntaxHighlight;
 }
 @property (readwrite,assign,nonatomic) IBOutlet WCSourceTextView *textView;
 @property (readwrite,assign,nonatomic) IBOutlet NSScrollView *scrollView;

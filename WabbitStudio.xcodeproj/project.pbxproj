@@ -28,7 +28,6 @@
 		0708963214A659300017BBE4 /* WCCompletionWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0708963014A659300017BBE4 /* WCCompletionWindow.xib */; };
 		0708963B14A67CDF0017BBE4 /* WCArgumentPlaceholderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0708963A14A67CDF0017BBE4 /* WCArgumentPlaceholderCell.m */; };
 		0708963E14A67D1A0017BBE4 /* NSBezierPath+StrokeExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0708963D14A67D1A0017BBE4 /* NSBezierPath+StrokeExtensions.m */; };
-		0708964E14A6C96B0017BBE4 /* Mneumonics.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0708964914A6C96B0017BBE4 /* Mneumonics.plist */; };
 		0708965214A6CDEA0017BBE4 /* MneumonicCompletions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0708965114A6CDEA0017BBE4 /* MneumonicCompletions.plist */; };
 		0708965514A6CE900017BBE4 /* WCCompletionChoice.m in Sources */ = {isa = PBXBuildFile; fileRef = 0708965414A6CE900017BBE4 /* WCCompletionChoice.m */; };
 		0708965714A6F1360017BBE4 /* PreProcessorCompletions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0708965614A6F1360017BBE4 /* PreProcessorCompletions.plist */; };
@@ -295,7 +294,6 @@
 		0708963A14A67CDF0017BBE4 /* WCArgumentPlaceholderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCArgumentPlaceholderCell.m; sourceTree = "<group>"; };
 		0708963C14A67D190017BBE4 /* NSBezierPath+StrokeExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBezierPath+StrokeExtensions.h"; sourceTree = "<group>"; };
 		0708963D14A67D1A0017BBE4 /* NSBezierPath+StrokeExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBezierPath+StrokeExtensions.m"; sourceTree = "<group>"; };
-		0708964914A6C96B0017BBE4 /* Mneumonics.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Mneumonics.plist; sourceTree = "<group>"; };
 		0708965114A6CDEA0017BBE4 /* MneumonicCompletions.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MneumonicCompletions.plist; sourceTree = "<group>"; };
 		0708965314A6CE900017BBE4 /* WCCompletionChoice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCCompletionChoice.h; sourceTree = "<group>"; };
 		0708965414A6CE900017BBE4 /* WCCompletionChoice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCCompletionChoice.m; sourceTree = "<group>"; };
@@ -1009,7 +1007,6 @@
 				0725435B14A7C3FB00C961B7 /* UntitledFile.tiff */,
 				0725435914A7AE1300C961B7 /* include.icns */,
 				0725434714A7A6DA00C961B7 /* assembly.icns */,
-				0708964914A6C96B0017BBE4 /* Mneumonics.plist */,
 				071ECCCA14A4233C002409F8 /* WabbitStudio-Info.plist */,
 				071ECCCB14A4233C002409F8 /* InfoPlist.strings */,
 				071ECCCE14A4233C002409F8 /* main.m */,
@@ -1562,7 +1559,6 @@
 				071ECCD314A4233C002409F8 /* Credits.rtf in Resources */,
 				071ECCDC14A4233D002409F8 /* WCMainMenu.xib in Resources */,
 				0708963214A659300017BBE4 /* WCCompletionWindow.xib in Resources */,
-				0708964E14A6C96B0017BBE4 /* Mneumonics.plist in Resources */,
 				0708965214A6CDEA0017BBE4 /* MneumonicCompletions.plist in Resources */,
 				0708965714A6F1360017BBE4 /* PreProcessorCompletions.plist in Resources */,
 				0725432C14A70B3B00C961B7 /* RegisterCompletions.plist in Resources */,

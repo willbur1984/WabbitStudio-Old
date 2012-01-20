@@ -11,6 +11,7 @@
 #import "NSColor+ContrastingLabelExtensions.h"
 #import "WCFontAndColorTheme.h"
 #import "WCFontAndColorThemeManager.h"
+#import "RSDefines.h"
 
 static NSTextStorage *_textStorage;
 static NSLayoutManager *_layoutManager;
@@ -21,8 +22,8 @@ static NSTextContainer *_textContainer;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
 		_textStorage = [[NSTextStorage alloc] init];
-		_layoutManager = [[NSLayoutManager alloc] init];
-		_textContainer = [[NSTextContainer alloc] initWithContainerSize:NSMakeSize(CGFLOAT_MAX, CGFLOAT_MAX)];
+		_layoutManager = [[[NSLayoutManager alloc] init] autorelease];
+		_textContainer = [[[NSTextContainer alloc] initWithContainerSize:NSMakeSize(CGFLOAT_MAX, CGFLOAT_MAX)] autorelease];
 		
 		[_textStorage addLayoutManager:_layoutManager];
 		[_layoutManager addTextContainer:_textContainer];
@@ -33,6 +34,7 @@ static NSTextContainer *_textContainer;
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
+	[_argumentChoices release];
 	[super dealloc];
 }
 
@@ -101,6 +103,12 @@ static NSTextContainer *_textContainer;
 		[path strokeInside];
 	}
 	
+	if ([[self argumentChoices] count]) {
+		NSImage *actionImage = [NSImage imageNamed:NSImageNameActionTemplate];
+		
+		[actionImage drawInRect:NSMakeRect(NSMaxX(cellFrame)-NSSmallSize.width+1.0, NSMinY(cellFrame)+1.0, NSSmallSize.width-2.0, NSHeight(cellFrame)-2.0) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+	}
+	
 	[NSGraphicsContext saveGraphicsState];
 	
 	NSRectClip(cellFrame);
@@ -134,6 +142,23 @@ static NSTextContainer *_textContainer;
 	cellFrame.size.height = NSHeight(textFrame);
 	cellFrame.origin.y -= [[_layoutManager typesetter] baselineOffsetInLayoutManager:_layoutManager glyphIndex:0];
 	
+	if ([[self argumentChoices] count])
+		cellFrame.size.width += 16.0;
+	
 	return cellFrame;
 }
+
+- (id)initTextCell:(NSString *)aString argumentChoices:(NSArray *)argumentChoices argumentChoicesType:(WCSourceTokenType)argumentChoicesType; {
+	if (!(self = [super initTextCell:aString]))
+		return nil;
+	
+	_argumentChoices = [[argumentChoices sortedArrayUsingSelector:@selector(localizedStandardCompare:)] retain];
+	_argumentChoicesType = argumentChoicesType;
+	
+	return self;
+}
+
+@synthesize argumentChoices=_argumentChoices;
+@synthesize argumentChoicesType=_argumentChoicesType;
+
 @end

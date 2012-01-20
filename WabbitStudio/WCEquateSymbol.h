@@ -10,6 +10,7 @@
 
 @interface WCEquateSymbol : WCSourceSymbol <WCCompletionItem,RSToolTipProvider> {
 	NSString *_value;
+	NSAttributedString *_attributedValueString;
 }
 @property (readonly,nonatomic) NSString *value;
 

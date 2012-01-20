@@ -45,15 +45,23 @@
 		NSRectFill(NSMakeRect(NSMinX([self bounds]), NSMinY([self bounds]), NSWidth([self bounds]), 1.0));
 	}
 	
-	if ([self shouldDrawLeftAndRightEdges]) {
+	if ([self shouldDrawLeftEdge]) {
 		[_bottomFillColor setFill];
 		NSRectFill(NSMakeRect(NSMinX([self bounds]), NSMinY([self bounds]), 1.0, NSHeight([self bounds])));
+	}
+	
+	if ([self shouldDrawRightEdge]) {
+		[_bottomFillColor setFill];
 		NSRectFill(NSMakeRect(NSMaxX([self bounds])-1, NSMinY([self bounds]), 1.0, NSHeight([self bounds])));
 	}
 }
 
-@dynamic shouldDrawLeftAndRightEdges;
-- (BOOL)shouldDrawLeftAndRightEdges {
+@dynamic shouldDrawLeftEdge;
+- (BOOL)shouldDrawLeftEdge {
+	return NO;
+}
+@dynamic shouldDrawRightEdge;
+- (BOOL)shouldDrawRightEdge {
 	return NO;
 }
 @dynamic shouldDrawTopEdge;

@@ -356,12 +356,14 @@
 	else {
 		NSMenu *menu = [[[NSMenu alloc] initWithTitle:@""] autorelease];
 		[menu setFont:[NSFont menuFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]]];
+		[menu setShowsStateColumn:NO];
 		
 		for (WCSourceSymbol *symbol in symbols) {
 			NSString *fileDisplayName = [[[symbol sourceScanner] delegate] fileDisplayNameForSourceScanner:[symbol sourceScanner]];
 			NSMenuItem *item = [menu addItemWithTitle:[NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 (%@:%lu)", @"jump to definition contextual menu format string"),[symbol name],fileDisplayName,[symbol lineNumber]+1] action:@selector(_symbolMenuClicked:) keyEquivalent:@""];
 			
 			[item setImage:[symbol icon]];
+			[[item image] setSize:NSMakeSize(14.0, 14.0)];
 			[item setTarget:self];
 			[item setRepresentedObject:symbol];
 		}
@@ -375,7 +377,7 @@
 		
 		NSCursor *currentCursor = [[self enclosingScrollView] documentCursor];
 		
-		if (![menu popUpMenuPositioningItem:nil atLocation:lineRect.origin inView:self])
+		if (![menu popUpMenuPositioningItem:[menu itemAtIndex:0] atLocation:lineRect.origin inView:self])
 			[currentCursor push];
 	}
 }
@@ -601,14 +603,44 @@
 	[(WCSourceTextStorage *)[self textStorage] addBookmark:bookmark];
 }
 - (IBAction)removeBookmarkAtCurrentLine:(id)sender; {
+	RSBookmark *bookmark = [(WCSourceTextStorage *)[self textStorage] bookmarkAtLineNumber:[[self string] lineNumberForRange:[self selectedRange]]];
 	
+	[(WCSourceTextStorage *)[self textStorage] removeBookmark:bookmark];
 }
 
 - (IBAction)jumpToNextBookmark:(id)sender; {
+	NSArray *bookmarks = [(WCSourceTextStorage *)[self textStorage] bookmarksForRange:NSMakeRange(0, [[self string] length])];
+	for (RSBookmark *bookmark in bookmarks) {
+		if ([bookmark range].location > [self selectedRange].location) {
+			[self setSelectedRange:[bookmark range]];
+			[self scrollRangeToVisible:[bookmark range]];
+			return;
+		}
+	}
 	
+	if ([bookmarks count] && !NSEqualRanges([[bookmarks firstObject] range], [self selectedRange])) {
+		[self setSelectedRange:[[bookmarks firstObject] range]];
+		[self scrollRangeToVisible:[[bookmarks firstObject] range]];
+	}
+	else
+		NSBeep();
 }
 - (IBAction)jumpToPreviousBookmark:(id)sender; {
+	NSArray *bookmarks = [(WCSourceTextStorage *)[self textStorage] bookmarksForRange:NSMakeRange(0, [[self string] length])];
+	for (RSBookmark *bookmark in [bookmarks reverseObjectEnumerator]) {
+		if ([bookmark range].location < [self selectedRange].location) {
+			[self setSelectedRange:[bookmark range]];
+			[self scrollRangeToVisible:[bookmark range]];
+			return;
+		}
+	}
 	
+	if ([bookmarks count] && !NSEqualRanges([[bookmarks lastObject] range], [self selectedRange])) {
+		[self setSelectedRange:[[bookmarks lastObject] range]];
+		[self scrollRangeToVisible:[[bookmarks lastObject] range]];
+	}
+	else
+		NSBeep();
 }
 #pragma mark Properties
 @dynamic delegate;

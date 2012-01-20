@@ -9,9 +9,17 @@
 #import "WCEquateSymbol.h"
 #import "WCSourceScanner.h"
 #import "NSString+RSExtensions.h"
+#import "WCSourceHighlighter.h"
+#import "WCFontAndColorThemeManager.h"
+
+@interface WCEquateSymbol ()
+@property (readwrite,copy,nonatomic) NSAttributedString *attributedValueString;
+@end
 
 @implementation WCEquateSymbol
 - (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[_attributedValueString release];
 	[_value release];
 	[super dealloc];
 }
@@ -29,7 +37,9 @@
 	
 	[retval applyFontTraits:NSBoldFontMask range:NSMakeRange(0, [retval length])];
 	
-	[retval appendAttributedString:[[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" = %@",[self value]] attributes:RSToolTipProviderDefaultAttributes()] autorelease]];
+	[retval appendAttributedString:[[[NSAttributedString alloc] initWithString:@" = " attributes:RSToolTipProviderDefaultAttributes()] autorelease]];
+	
+	[retval appendAttributedString:[self attributedValueString]];
 	
 	[retval appendAttributedString:[[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" \u2192 %@:%lu",[[[self sourceScanner] delegate] fileDisplayNameForSourceScanner:[self sourceScanner]],[[[[self sourceScanner] textStorage] string] lineNumberForRange:[self range]]+1] attributes:[NSDictionary dictionaryWithObjectsAndKeys:RSToolTipProviderDefaultFont(),NSFontAttributeName,[NSColor darkGrayColor],NSForegroundColorAttributeName, nil]] autorelease]];
 	
@@ -45,8 +55,31 @@
 	
 	_value = [value copy];
 	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_currentThemeDidChange:) name:WCFontAndColorThemeManagerCurrentThemeDidChangeNotification  object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_colorDidChange:) name:WCFontAndColorThemeManagerColorDidChangeNotification object:nil];
+	
 	return self;
 }
 
 @synthesize value=_value;
+@synthesize attributedValueString=_attributedValueString;
+- (NSAttributedString *)attributedValueString {
+	if (!_attributedValueString) {
+		NSMutableAttributedString *temp = [[[NSMutableAttributedString alloc] initWithString:[self value] attributes:RSToolTipProviderDefaultAttributes()] autorelease];
+		WCSourceHighlighter *highlighter = [[[self sourceScanner] delegate] sourceHighlighterForSourceScanner:[self sourceScanner]];
+		
+		[highlighter highlightAttributeString:temp];
+		
+		[self setAttributedValueString:temp];
+	}
+	return _attributedValueString;
+}
+
+- (void)_currentThemeDidChange:(NSNotification *)note {
+	[self setAttributedValueString:nil];
+}
+- (void)_colorDidChange:(NSNotification *)note {
+	[self setAttributedValueString:nil];
+}
+
 @end

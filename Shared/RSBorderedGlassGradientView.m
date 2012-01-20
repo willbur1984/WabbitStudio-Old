@@ -15,7 +15,10 @@
 - (BOOL)shouldDrawTopEdge {
 	return YES;
 }
-- (BOOL)shouldDrawLeftAndRightEdges {
+- (BOOL)shouldDrawLeftEdge {
+	return YES;
+}
+- (BOOL)shouldDrawRightEdge {
 	return YES;
 }
 @end

@@ -13,7 +13,8 @@
 	NSColor *_topFillColor;
 	NSColor *_bottomFillColor;
 }
-@property (readonly,nonatomic) BOOL shouldDrawLeftAndRightEdges;
+@property (readonly,nonatomic) BOOL shouldDrawLeftEdge;
+@property (readonly,nonatomic) BOOL shouldDrawRightEdge;
 @property (readonly,nonatomic) BOOL shouldDrawTopEdge;
 @property (readonly,nonatomic) BOOL shouldDrawBottomEdge;
 @end

@@ -9,8 +9,11 @@
 #import "RSBottomBorderedGlassGradientView.h"
 
 @implementation RSBottomBorderedGlassGradientView
-- (BOOL)shouldDrawLeftAndRightEdges {
+- (BOOL)shouldDrawLeftEdge {
 	return YES;
+}
+- (BOOL)shouldDrawRightEdge {
+	return NO;
 }
 - (BOOL)shouldDrawBottomEdge {
 	return YES;

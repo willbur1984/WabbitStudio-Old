@@ -208,6 +208,38 @@
 				<true/>
 			</dict>
 		</dict>
+		<key>toggleBookmarkAtCurrentLine:</key>
+		<dict>
+			<key>keyCode</key>
+			<integer>11</integer>
+			<key>modifierFlags</key>
+			<dict>
+				<key>control</key>
+				<true/>
+			</dict>
+		</dict>
+		<key>jumpToNextBookmark:</key>
+		<dict>
+			<key>keyCode</key>
+			<integer>41</integer>
+			<key>modifierFlags</key>
+			<dict>
+				<key>command</key>
+				<true/>
+			</dict>
+		</dict>
+		<key>jumpToPreviousBookmark:</key>
+		<dict>
+			<key>keyCode</key>
+			<integer>41</integer>
+			<key>modifierFlags</key>
+			<dict>
+				<key>command</key>
+				<true/>
+				<key>shift</key>
+				<true/>
+			</dict>
+		</dict>
 		<key>performTextFinderAction:</key>
 		<dict>
 			<key>tags</key>
@@ -275,27 +307,9 @@
 			</dict>
 		</dict>
 		<key>showGuessPanel:</key>
-		<dict>
-			<key>keyCode</key>
-			<integer>41</integer>
-			<key>modifierFlags</key>
-			<dict>
-				<key>command</key>
-				<true/>
-				<key>shift</key>
-				<true/>
-			</dict>
-		</dict>
+		<dict/>
 		<key>checkSpellingNow:</key>
-		<dict>
-			<key>keyCode</key>
-			<integer>41</integer>
-			<key>modifierFlags</key>
-			<dict>
-				<key>command</key>
-				<true/>
-			</dict>
-		</dict>
+		<dict/>
 		<key>toggleContinuousSpellChecking:</key>
 		<dict/>
 		<key>toggleGrammarChecking:</key>

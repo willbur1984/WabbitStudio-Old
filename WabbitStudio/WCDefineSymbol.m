@@ -10,13 +10,15 @@
 #import "WCSourceScanner.h"
 #import "NSString+RSExtensions.h"
 #import "WCSourceHighlighter.h"
+#import "WCFontAndColorThemeManager.h"
 
 @interface WCDefineSymbol ()
-@property (readonly,nonatomic) NSAttributedString *attributedValueString;
+@property (readwrite,copy,nonatomic) NSAttributedString *attributedValueString;
 @end
 
 @implementation WCDefineSymbol
 - (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[_attributedValueString release];
 	[_value release];
 	[_arguments release];
@@ -69,6 +71,9 @@
 	_value = [value copy];
 	_arguments = [arguments copy];
 	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_currentThemeDidChange:) name:WCFontAndColorThemeManagerCurrentThemeDidChangeNotification  object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_colorDidChange:) name:WCFontAndColorThemeManagerColorDidChangeNotification object:nil];
+	
 	return self;
 }
 
@@ -81,7 +86,7 @@
 
 @synthesize value=_value;
 @synthesize arguments=_arguments;
-@dynamic attributedValueString;
+@synthesize attributedValueString=_attributedValueString;
 - (NSAttributedString *)attributedValueString {
 	if (!_attributedValueString) {
 		NSMutableAttributedString *temp = [[[NSMutableAttributedString alloc] initWithString:[self value] attributes:RSToolTipProviderDefaultAttributes()] autorelease];
@@ -89,9 +94,16 @@
 		
 		[highlighter highlightAttributeString:temp withArgumentNames:[NSSet setWithArray:[[self arguments] valueForKey:@"lowercaseString"]]];
 		
-		_attributedValueString = [temp copy];
+		[self setAttributedValueString:temp];
 	}
 	return _attributedValueString;
+}
+
+- (void)_currentThemeDidChange:(NSNotification *)note {
+	[self setAttributedValueString:nil];
+}
+- (void)_colorDidChange:(NSNotification *)note {
+	[self setAttributedValueString:nil];
 }
 
 @end

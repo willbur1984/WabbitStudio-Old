@@ -244,7 +244,7 @@
 						for (NSDictionary *subArgumentDict in [argumentDict objectForKey:WCCompletionItemSubArgumentsKey]) {
 							if ([[subArgumentDict objectForKey:WCCompletionItemArgumentIsPlaceholderKey] boolValue]) {
 								NSTextAttachment *attachment = [[[NSTextAttachment alloc] initWithFileWrapper:nil] autorelease];
-								WCArgumentPlaceholderCell *cell = [[[WCArgumentPlaceholderCell alloc] initTextCell:[subArgumentDict objectForKey:WCCompletionItemArgumentNameKey]] autorelease];
+								WCArgumentPlaceholderCell *cell = [[[WCArgumentPlaceholderCell alloc] initTextCell:[subArgumentDict objectForKey:WCCompletionItemArgumentNameKey] argumentChoices:[subArgumentDict objectForKey:@"choices"] argumentChoicesType:[[argumentDict objectForKey:@"choicesType"] unsignedIntValue]] autorelease];
 								
 								[attachment setAttachmentCell:cell];
 								[attributedString appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachment]];
@@ -260,7 +260,7 @@
 					else {
 						if ([[argumentDict objectForKey:WCCompletionItemArgumentIsPlaceholderKey] boolValue]) {
 							NSTextAttachment *attachment = [[[NSTextAttachment alloc] initWithFileWrapper:nil] autorelease];
-							WCArgumentPlaceholderCell *cell = [[[WCArgumentPlaceholderCell alloc] initTextCell:[argumentDict objectForKey:WCCompletionItemArgumentNameKey]] autorelease];
+							WCArgumentPlaceholderCell *cell = [[[WCArgumentPlaceholderCell alloc] initTextCell:[argumentDict objectForKey:WCCompletionItemArgumentNameKey] argumentChoices:[argumentDict objectForKey:@"choices"] argumentChoicesType:[[argumentDict objectForKey:@"choicesType"] unsignedIntValue]] autorelease];
 							
 							[attachment setAttachmentCell:cell];
 							[attributedString appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachment]];

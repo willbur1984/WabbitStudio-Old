@@ -460,6 +460,7 @@
 			else
 				[item setTitle:[symbol name]];
 			[item setImage:[symbol icon]];
+			[[item image] setSize:NSSmallSize];
 			[item setRepresentedObject:symbol];
 			
 			if (symbol == selectedSymbol) {
@@ -482,6 +483,7 @@
 			else
 				[item setTitle:[symbol name]];
 			[item setImage:[symbol icon]];
+			[[item image] setSize:NSSmallSize];
 			[item setRepresentedObject:symbol];
 			[item setState:(symbolIndex == *selectedSymbolIndex)?NSOnState:NSOffState];
 		}

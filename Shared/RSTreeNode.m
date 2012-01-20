@@ -84,6 +84,8 @@ static NSString *const RSTreeNodeRepresentedObjectKey = @"representedObject";
 	if (!(self = [super init]))
 		return nil;
 	
+	_childNodes = [[NSMutableArray alloc] initWithCapacity:0];
+	
 	id representedObjectPlaceholder = nil;
 	NSDictionary *representedObjectPlist = [plistRepresentation objectForKey:RSTreeNodeRepresentedObjectKey];
 	if (representedObjectPlist)

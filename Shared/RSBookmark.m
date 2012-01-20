@@ -49,7 +49,16 @@
 	if (([[self textStorage] editedMask] & NSTextStorageEditedCharacters) == 0)
 		return;
 	
+	NSRange editedRange = [[self textStorage] editedRange];
+	NSInteger changeInLength = [[self textStorage] changeInLength];
+	NSRange oldRange = [self range];
 	
+	if (NSLocationInRange(editedRange.location, [self range])) {
+		[self setRange:NSMakeRange(oldRange.location, oldRange.length+changeInLength)];
+	}
+	else if ([self range].location >= editedRange.location) {
+		[self setRange:NSMakeRange(oldRange.location+changeInLength, oldRange.length)];
+	}
 }
 
 @end

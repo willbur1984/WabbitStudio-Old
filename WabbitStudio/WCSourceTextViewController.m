@@ -24,10 +24,12 @@
 #import "WCSourceSymbol.h"
 #import "WCProjectDocument.h"
 #import "WCLayoutManager.h"
+#import "WCSourceToken.h"
 
 @interface WCSourceTextViewController ()
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
 @property (readonly,nonatomic) WCStandardSourceTextViewController *standardSourceTextViewController;
+@property (readwrite,assign,nonatomic) NSRange additionalRangeToSyntaxHighlight;
 @end
 
 @implementation WCSourceTextViewController
@@ -101,12 +103,12 @@
 	[[self scrollView] setFrame:NSMakeRect(NSMinX(scrollViewFrame), NSMinY(scrollViewFrame), NSWidth(scrollViewFrame), NSHeight(scrollViewFrame)-NSHeight(jumpBarFrame))];
 	[[[self jumpBarViewController] view] setFrame:NSMakeRect(NSMinX(scrollViewFrame), NSMaxY(scrollViewFrame)-NSHeight(jumpBarFrame), NSWidth(scrollViewFrame), NSHeight(jumpBarFrame))];
 	
-	//[[self textView] setWrapLines:[[NSUserDefaults standardUserDefaults] boolForKey:WCEditorWrapLinesToEditorWidthKey]];
-	
 	[[self textView] setSelectedRange:NSEmptyRange];
 	
+	[[self sourceHighlighter] performHighlightingInVisibleRange];
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewBoundsDidChange:) name:NSViewBoundsDidChangeNotification object:[[[self textView] enclosingScrollView] contentView]];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewBoundsDidChange:) name:NSViewFrameDidChangeNotification object:[self textView]];
+	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewBoundsDidChange:) name:NSViewFrameDidChangeNotification object:[self textView]];
 }
 #pragma mark NSMenuValidation
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
@@ -114,6 +116,20 @@
 }
 
 #pragma mark NSTextViewDelegate
+- (BOOL)textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector {
+	if (commandSelector == @selector(insertNewline:)) {
+		if ([textView selectedRange].location >= [[textView string] length])
+			return NO;
+		
+		id attachment = [[textView textStorage] attribute:NSAttachmentAttributeName atIndex:[textView selectedRange].location effectiveRange:NULL];
+		if ([[attachment attachmentCell] isKindOfClass:[WCArgumentPlaceholderCell class]]) {			
+			[self textView:textView doubleClickedOnCell:[attachment attachmentCell] inRect:NSZeroRect atIndex:[textView selectedRange].location];
+			return YES;
+		}
+	}
+	return NO;
+}
+
 - (void)textView:(NSTextView *)textView clickedOnCell:(id<NSTextAttachmentCell>)cell inRect:(NSRect)cellFrame atIndex:(NSUInteger)charIndex {
 	if ([cell isKindOfClass:[WCArgumentPlaceholderCell class]]) {
 		[textView setSelectedRange:NSMakeRange(charIndex, 1)];
@@ -121,14 +137,55 @@
 }
 - (void)textView:(NSTextView *)textView doubleClickedOnCell:(id<NSTextAttachmentCell>)cell inRect:(NSRect)cellFrame atIndex:(NSUInteger)charIndex {
 	if ([cell isKindOfClass:[WCArgumentPlaceholderCell class]]) {
-		[textView insertText:[(WCArgumentPlaceholderCell *)cell stringValue] replacementRange:NSMakeRange(charIndex, 1)];
-		[textView setSelectedRange:NSMakeRange(charIndex, [[(WCArgumentPlaceholderCell *)cell stringValue] length])];
+		if ([[(WCArgumentPlaceholderCell *)cell argumentChoices] count]) {
+			NSMenu *menu = [[[NSMenu alloc] initWithTitle:@""] autorelease];
+			[menu setFont:[NSFont menuFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]]];
+			[menu setShowsStateColumn:NO];
+			NSImage *image = [WCSourceToken sourceTokenIconForSourceTokenType:[(WCArgumentPlaceholderCell *)cell argumentChoicesType]];
+			
+			for (NSString *choice in [(WCArgumentPlaceholderCell *)cell argumentChoices]) {
+				NSMenuItem *item = [menu addItemWithTitle:choice action:@selector(_argumentPlaceholderMenuItemClicked:) keyEquivalent:@""];
+				[item setTarget:self];
+				[item setImage:image];
+				[[item image] setSize:NSMakeSize(14.0, 14.0)];
+			}
+			
+			NSUInteger glyphIndex = [[textView layoutManager] glyphIndexForCharacterAtIndex:charIndex];
+			NSRect lineRect = [[textView layoutManager] lineFragmentRectForGlyphAtIndex:glyphIndex effectiveRange:NULL];
+			NSPoint selectedPoint = [[textView layoutManager] locationForGlyphAtIndex:glyphIndex];
+			
+			lineRect.origin.y += lineRect.size.height;
+			lineRect.origin.x += selectedPoint.x;
+			
+			NSCursor *currentCursor = [[textView enclosingScrollView] documentCursor];
+			
+			if ([menu popUpMenuPositioningItem:[menu itemAtIndex:0] atLocation:lineRect.origin inView:textView]) {
+				NSString *title = [[menu highlightedItem] title];
+				
+				[textView insertText:title replacementRange:NSMakeRange(charIndex, 1)];
+				[textView setSelectedRange:NSMakeRange(charIndex, [title length])];
+			}
+			else
+				[currentCursor push];
+		}
+		else {
+			[textView insertText:[(WCArgumentPlaceholderCell *)cell stringValue] replacementRange:NSMakeRange(charIndex, 1)];
+			[textView setSelectedRange:NSMakeRange(charIndex, [[(WCArgumentPlaceholderCell *)cell stringValue] length])];
+		}
 	}
 }
 - (NSDictionary *)textView:(NSTextView *)textView shouldChangeTypingAttributes:(NSDictionary *)oldTypingAttributes toAttributes:(NSDictionary *)newTypingAttributes; {
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
 	
 	return [NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName,[[self textStorage] paragraphStyle],NSParagraphStyleAttributeName, nil];
+}
+- (BOOL)textView:(NSTextView *)textView shouldChangeTextInRanges:(NSArray *)affectedRanges replacementStrings:(NSArray *)replacementStrings {
+	if ([affectedRanges count] == 1 &&
+		NSMaxRange([[affectedRanges lastObject] rangeValue]) > NSMaxRange([textView visibleRange])) {
+		
+		[self setAdditionalRangeToSyntaxHighlight:[[affectedRanges lastObject] rangeValue]];
+	}
+	return YES;
 }
 - (NSUndoManager *)undoManagerForTextView:(NSTextView *)view {
 	return [[self sourceFileDocument] undoManager];
@@ -214,6 +271,7 @@
 	
 	_sourceFileDocument = sourceFileDocument;
 	_standardSourceTextViewController = sourceTextViewController;
+	_additionalRangeToSyntaxHighlight = NSNotFoundRange;
 	
 	return self;
 }
@@ -273,7 +331,13 @@
 }
 @synthesize standardSourceTextViewController=_standardSourceTextViewController;
 @synthesize sourceFileDocument=_sourceFileDocument;
+@synthesize additionalRangeToSyntaxHighlight=_additionalRangeToSyntaxHighlight;
 #pragma mark *** Private Methods ***
+
+#pragma mark IBActions
+- (IBAction)_argumentPlaceholderMenuItemClicked:(id)sender {
+	
+}
 
 #pragma mark Notifications
 - (void)_viewBoundsDidChange:(NSNotification *)note {
@@ -290,7 +354,12 @@
 	[_scrollingHighlightTimer invalidate];
 	_scrollingHighlightTimer = nil;
 	
-	[[self sourceHighlighter] performHighlightingInRange:[[self textView] visibleRange]];
+	if (NSEqualRanges(NSNotFoundRange, [self additionalRangeToSyntaxHighlight]))
+		[[self sourceHighlighter] performHighlightingOfSymbolsInRange:[[self textView] visibleRange]];
+	else {
+		[self setAdditionalRangeToSyntaxHighlight:NSNotFoundRange];
+		[[self sourceHighlighter] performHighlightingInRange:NSUnionRange([[self textView] visibleRange], [self additionalRangeToSyntaxHighlight])];
+	}
 }
 
 @end
