@@ -240,6 +240,20 @@
 				<true/>
 			</dict>
 		</dict>
+		<key>newGroup:</key>
+		<dict>
+			<key>keyCode</key>
+			<integer>45</integer>
+			<key>modifierFlags</key>
+			<dict>
+				<key>option</key>
+				<true/>
+				<key>command</key>
+				<true/>
+			</dict>
+		</dict>
+		<key>newGroupFromSelection:</key>
+		<dict/>
 		<key>performTextFinderAction:</key>
 		<dict>
 			<key>tags</key>

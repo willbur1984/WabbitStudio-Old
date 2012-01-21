@@ -24,7 +24,7 @@
 }
 @property (readwrite,assign,nonatomic) id <WCFileDelegate> delegate;
 @property (readonly,nonatomic) RSFileReference *fileReference;
-@property (readonly,nonatomic) NSString *fileName;
+@property (readwrite,copy,nonatomic) NSString *fileName;
 @property (readonly,nonatomic) NSImage *fileIcon;
 @property (readonly,nonatomic) NSURL *fileURL;
 @property (readonly,nonatomic) NSString *fileUTI;

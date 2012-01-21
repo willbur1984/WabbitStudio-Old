@@ -9,6 +9,18 @@
 #import "WCProjectNavigatorOutlineView.h"
 
 @implementation WCProjectNavigatorOutlineView
++ (NSMenu *)defaultMenu {
+	static NSMenu *retval;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		retval = [[NSMenu alloc] initWithTitle:@""];
+		
+		[retval addItemWithTitle:NSLocalizedString(@"New Group", @"New Group") action:@selector(newGroup:) keyEquivalent:@""];
+		[retval addItemWithTitle:NSLocalizedString(@"New Group from Selection", @"New Group from Selection") action:@selector(newGroupFromSelection:) keyEquivalent:@""];
+	});
+	return retval;
+}
+
 - (NSString *)emptyContentString {
 	return NSLocalizedString(@"No Filter Results", @"No Filter Results");
 }

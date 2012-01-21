@@ -103,6 +103,9 @@ static NSString *const WCFileReferenceKey = @"fileReference";
 - (NSString *)fileName {
 	return [[self fileReference] fileName];
 }
+- (void)setFileName:(NSString *)fileName {
+	
+}
 @dynamic fileIcon;
 - (NSImage *)fileIcon {
 	if ([self isEdited])

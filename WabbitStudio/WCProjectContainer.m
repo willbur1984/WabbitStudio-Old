@@ -22,6 +22,6 @@
 
 @dynamic project;
 - (WCProject *)project {
-	return [self representedObject];
+	return (WCProject *)[self representedObject];
 }
 @end

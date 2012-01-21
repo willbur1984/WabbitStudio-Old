@@ -29,7 +29,7 @@
 	return self;
 }
 
-+ (WCFileContainer *)fileContainerWithFile:(WCFile *)file; {
++ (id)fileContainerWithFile:(WCFile *)file; {
 	return [[(WCFileContainer *)[[self class] alloc] initWithFile:file] autorelease];
 }
 - (id)initWithFile:(WCFile *)file; {

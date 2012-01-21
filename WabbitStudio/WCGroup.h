@@ -8,6 +8,11 @@
 
 #import "WCFile.h"
 
-@interface WCGroup : WCFile
+@interface WCGroup : WCFile <RSPlistArchiving> {
+	NSString *_name;
+}
+@property (readwrite,copy,nonatomic) NSString *name;
 
++ (id)groupWithFileURL:(NSURL *)fileURL name:(NSString *)name;
+- (id)initWithFileURL:(NSURL *)fileURL name:(NSString *)name;
 @end

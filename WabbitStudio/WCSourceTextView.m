@@ -30,6 +30,7 @@
 #import "NSString+RSExtensions.h"
 #import "WCSourceTextStorage.h"
 #import "RSBookmark.h"
+#import "NSEvent+RSExtensions.h"
 
 @interface WCSourceTextView ()
 
@@ -70,6 +71,24 @@
 	[self _commonInit];
 	
 	return self;
+}
+
+- (void)mouseDown:(NSEvent *)theEvent {
+	[super mouseDown:theEvent];
+	
+	if ([theEvent clickCount] == 2 &&
+		[theEvent type] == NSLeftMouseDown &&
+		[theEvent isOnlyCommandKeyPressed]) {
+		
+		NSRange symbolRange = [[self string] symbolRangeForRange:NSMakeRange([self characterIndexForInsertionAtPoint:[self convertPointFromBase:[theEvent locationInWindow]]], 0)];
+		if (symbolRange.location == NSNotFound) {
+			NSBeep();
+			return;
+		}
+		
+		[self setSelectedRange:symbolRange];
+		[self jumpToDefinition:nil];
+	}
 }
 
 - (void)viewDidMoveToWindow {
@@ -147,6 +166,8 @@
 		[retval addItemWithTitle:NSLocalizedString(@"Shift Right", @"Shift Right") action:@selector(shiftRight:) keyEquivalent:@""];
 		[retval addItem:[NSMenuItem separatorItem]];
 		[retval addItemWithTitle:NSLocalizedString(@"Comment/Uncomment Selection", @"Comment/Uncomment Selection") action:@selector(commentUncommentSelection:) keyEquivalent:@""];
+		[retval addItem:[NSMenuItem separatorItem]];
+		[retval addItemWithTitle:@"" action:@selector(toggleBookmarkAtCurrentLine:) keyEquivalent:@""];
 		
 	});
 	return retval;
@@ -262,6 +283,12 @@
 		WCSourceScanner *sourceScanner = [[self delegate] sourceScannerForSourceTextView:self];
 		
 		[menuItem setTitle:[NSString stringWithFormat:NSLocalizedString(@"Jump in \"%@\"", @"jump in file menu item title format string"),[[sourceScanner delegate] fileDisplayNameForSourceScanner:sourceScanner]]];
+	}
+	else if ([menuItem action] == @selector(toggleBookmarkAtCurrentLine:)) {
+		if ([(WCSourceTextStorage *)[self textStorage] bookmarkAtLineNumber:[[self string] lineNumberForRange:[self selectedRange]]])
+			[menuItem setTitle:NSLocalizedString(@"Remove Bookmark at Current Line", @"Remove Bookmark at Current Line")];
+		else
+			[menuItem setTitle:NSLocalizedString(@"Add Bookmark at Current Line", @"Add Bookmark at Current Line")];
 	}
 	return YES;
 }

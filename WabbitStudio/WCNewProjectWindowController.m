@@ -10,7 +10,7 @@
 #import "RSDefines.h"
 #import "WCDocumentController.h"
 #import "WCGroup.h"
-#import "WCFileContainer.h"
+#import "WCGroupContainer.h"
 #import "RSDefines.h"
 #import "NSURL+RSExtensions.h"
 #import "WCProjectDocument.h"
@@ -53,11 +53,11 @@
 	NSMutableDictionary *directoryPathsToDirectoryNodes = [NSMutableDictionary dictionaryWithCapacity:0];
 	for (NSURL *fileURL in directoryEnumerator) {
 		if ([fileURL isDirectory]) {
-			WCFileContainer *directoryNode = [WCFileContainer fileContainerWithFile:[WCGroup fileWithFileURL:fileURL]];
+			WCGroupContainer *directoryNode = [WCGroupContainer fileContainerWithFile:[WCGroup fileWithFileURL:fileURL]];
 			
 			[directoryPathsToDirectoryNodes setObject:directoryNode forKey:[fileURL path]];
 			
-			WCFileContainer *parentDirectoryNode = [directoryPathsToDirectoryNodes objectForKey:[[fileURL parentDirectoryURL] path]];
+			WCGroupContainer *parentDirectoryNode = [directoryPathsToDirectoryNodes objectForKey:[[fileURL parentDirectoryURL] path]];
 			
 			if (parentDirectoryNode)
 				[[parentDirectoryNode mutableChildNodes] addObject:directoryNode];

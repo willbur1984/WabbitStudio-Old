@@ -16,6 +16,6 @@
 @property (readonly,nonatomic) WCFile *file;
 @property (readonly,nonatomic) WCProject *project;
 
-+ (WCFileContainer *)fileContainerWithFile:(WCFile *)file;
++ (id)fileContainerWithFile:(WCFile *)file;
 - (id)initWithFile:(WCFile *)file;
 @end

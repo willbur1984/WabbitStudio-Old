@@ -113,6 +113,9 @@ NSString *const WCKeyBindingCommandPairShiftModifierMaskKey = @"shift";
 		return nil;
 	return SRStringForCocoaModifierFlagsAndKeyCode(_keyCombo.flags, _keyCombo.code);
 }
++ (NSSet *)keyPathsForValuesAffectingKey {
+	return [NSSet setWithObjects:@"keyCombo", nil];
+}
 
 @dynamic menuItem;
 - (NSMenuItem *)menuItem {

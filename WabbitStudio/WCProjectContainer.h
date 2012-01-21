@@ -6,11 +6,11 @@
 //  Copyright (c) 2012 Revolution Software. All rights reserved.
 //
 
-#import "RSTreeNode.h"
+#import "WCGroupContainer.h"
 
 @class WCProject;
 
-@interface WCProjectContainer : RSTreeNode
+@interface WCProjectContainer : WCGroupContainer
 
 @property (readonly,nonatomic) WCProject *project;
 

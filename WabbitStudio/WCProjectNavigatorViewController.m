@@ -18,7 +18,9 @@
 #import "WCProjectWindowController.h"
 #import "WCTabViewController.h"
 #import "WCDocumentController.h"
-#import "WCFileContainer.h"
+#import "NSArray+WCExtensions.h"
+
+NSString *const WCProjectNavigatorDidGroupNotification = @"WCProjectNavigatorDidGroupNotification";
 
 @interface WCProjectNavigatorViewController ()
 @property (readwrite,retain,nonatomic) WCProjectContainer *filteredProjectContainer;
@@ -262,6 +264,27 @@ static const CGFloat kMainCellHeight = 18.0;
 }
 - (IBAction)hideFilterOptions:(id)sender; {
 	[[self filterOptionsViewController] hideFindOptionsView];
+}
+
+- (IBAction)newGroup:(id)sender; {
+	WCFileContainer *selectedFileContainer = [[self selectedObjects] firstObject];
+	NSUInteger insertIndex = 0;
+	
+	if ([selectedFileContainer isLeafNode]) {
+		insertIndex = [[[selectedFileContainer parentNode] childNodes] indexOfObjectIdenticalTo:selectedFileContainer] + 1;
+		selectedFileContainer = [selectedFileContainer parentNode];
+	}
+	
+	WCGroupContainer *groupContainer = [WCGroupContainer fileContainerWithFile:[WCGroup groupWithFileURL:[[selectedFileContainer representedObject]	fileURL] name:NSLocalizedString(@"New Group", @"New Group")]];
+	
+	[[selectedFileContainer mutableChildNodes] insertObject:groupContainer atIndex:insertIndex];
+	
+	[self setSelectedObjects:[NSArray arrayWithObjects:groupContainer, nil]];
+	
+	[[self outlineView] editColumn:0 row:[[self outlineView] selectedRow] withEvent:nil select:YES];
+}
+- (IBAction)newGroupFromSelection:(id)sender; {
+	
 }
 #pragma mark Properties
 @synthesize outlineView=_outlineView;

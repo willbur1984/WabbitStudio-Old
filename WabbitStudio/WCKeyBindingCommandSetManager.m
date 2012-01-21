@@ -276,12 +276,7 @@
 }
 
 - (void)_loadKeyBindingsFromCommandSet:(WCKeyBindingCommandSet *)commandSet; {
-	for (WCKeyBindingCommandPair *pair in [commandSet flattenedCommandPairs]) {
-		KeyCombo combo = [pair keyCombo];
-		if (combo.code == ShortcutRecorderEmptyCode && combo.flags == ShortcutRecorderEmptyFlags)
-			continue;
-		
+	for (WCKeyBindingCommandPair *pair in [commandSet flattenedCommandPairs])
 		[pair updateMenuItemWithCurrentKeyCode];
-	}
 }
 @end

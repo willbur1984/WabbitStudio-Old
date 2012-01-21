@@ -169,6 +169,8 @@ NSString *const WCTabViewControllerDidCloseTabNotification = @"WCTabViewControll
     NSAssert(stvController, @"stvController cannot be nil!");
 #endif
 	
+	[stvController performCleanup];
+	
 	[_sourceFileDocumentsToSourceTextViewControllers removeObjectForKey:sourceFileDocument];
 }
 #pragma mark Properties

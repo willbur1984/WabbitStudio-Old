@@ -12,6 +12,8 @@
 #import "WCDefineSymbol.h"
 #import "WCMacroSymbol.h"
 #import "NDTrie.h"
+#import "WCSourceToken.h"
+#import "NSArray+WCExtensions.h"
 
 @interface WCScanSymbolsOperation ()
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
@@ -35,9 +37,14 @@
 	NSMutableDictionary *defineNames = [NSMutableDictionary dictionaryWithCapacity:0];
 	NSMutableDictionary *macroNames = [NSMutableDictionary dictionaryWithCapacity:0];
 	NDMutableTrie *completions = [NDMutableTrie trie];
+	NSArray *tokens = [[self sourceScanner] tokens];
 	
 	// equates
 	[[WCSourceScanner equateRegularExpression] enumerateMatchesInString:[self string] options:0 range:searchRange usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+		WCSourceToken *token = [tokens sourceTokenForRange:[result range]];
+		if (NSLocationInRange([result rangeAtIndex:1].location, [token range]))
+			return;
+		
 		NSRange lineRange = [[self string] lineRangeForRange:[result range]];
 		NSRange valueRange = NSMakeRange(NSMaxRange([result range]), NSMaxRange(lineRange)-NSMaxRange([result range]));
 		NSString *value = [[self string] substringWithRange:valueRange];
@@ -68,6 +75,10 @@
 	
 	// labels
 	[[WCSourceScanner labelRegularExpression] enumerateMatchesInString:[self string] options:0 range:searchRange usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+		WCSourceToken *token = [tokens sourceTokenForRange:[result range]];
+		if (NSLocationInRange([result range].location, [token range]))
+			return;
+		
 		NSString *name = [[self string] substringWithRange:[result range]];
 		
 		// make sure it isn't already an equate
@@ -99,6 +110,10 @@
 	
 	// defines
 	[[WCSourceScanner defineRegularExpression] enumerateMatchesInString:[self string] options:0 range:searchRange usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+		WCSourceToken *token = [tokens sourceTokenForRange:[result range]];
+		if (NSLocationInRange([result rangeAtIndex:1].location, [token range]))
+			return;
+		
 		// line range for our match
 		NSRange lineRange = [[self string] lineRangeForRange:[result range]];
 		// the rest of the line after the define name
@@ -162,6 +177,10 @@
 	
 	// macros
 	[[WCSourceScanner macroRegularExpression] enumerateMatchesInString:[self string] options:0 range:searchRange usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+		WCSourceToken *token = [tokens sourceTokenForRange:[result range]];
+		if (NSLocationInRange([result rangeAtIndex:1].location, [token range]))
+			return;
+		
 		NSRange lineRange = [[self string] lineRangeForRange:[result range]];
 		NSString *parens = [[self string] substringWithRange:NSMakeRange(NSMaxRange([result range]), NSMaxRange(lineRange)-NSMaxRange([result range]))];
 		NSRegularExpression *parensRegex = [NSRegularExpression regularExpressionWithPattern:@"^\\((.+?)\\)" options:0 error:NULL];

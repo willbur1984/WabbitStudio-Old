@@ -107,6 +107,9 @@
 	[[self textView] setSelectedRange:NSEmptyRange];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewBoundsDidChange:) name:NSViewFrameDidChangeNotification object:[self textView]];
+	
+	if ([[self sourceFileDocument] projectDocument])
+		[[self sourceHighlighter] performFullHighlightIfNeeded];
 }
 #pragma mark NSMenuValidation
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {

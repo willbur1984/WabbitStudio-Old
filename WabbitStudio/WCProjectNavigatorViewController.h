@@ -12,6 +12,8 @@
 #import "WCNavigatorModule.h"
 #import <Quartz/Quartz.h>
 
+extern NSString *const WCProjectNavigatorDidGroupNotification;
+
 @class WCProjectContainer,RSFindOptionsViewController;
 
 @interface WCProjectNavigatorViewController : JAViewController <WCNavigatorModule,RSOutlineViewDelegate,RSFindOptionsViewControllerDelegate,QLPreviewPanelDataSource,QLPreviewPanelDelegate> {
@@ -37,4 +39,7 @@
 - (IBAction)toggleFilterOptions:(id)sender;
 - (IBAction)showFilterOptions:(id)sender;
 - (IBAction)hideFilterOptions:(id)sender;
+
+- (IBAction)newGroup:(id)sender;
+- (IBAction)newGroupFromSelection:(id)sender;
 @end
