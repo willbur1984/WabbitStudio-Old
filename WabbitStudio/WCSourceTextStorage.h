@@ -9,6 +9,9 @@
 #import <AppKit/NSTextStorage.h>
 #import "WCSourceTextStorageDelegate.h"
 
+extern NSString *const WCSourceTextStorageDidAddBookmarkNotification;
+extern NSString *const WCSourceTextStorageDidRemoveBookmarkNotification;
+
 @class RSBookmark;
 
 @interface WCSourceTextStorage : NSTextStorage {

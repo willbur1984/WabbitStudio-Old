@@ -11,7 +11,6 @@
 @interface WCLineNumberRulerView : NSRulerView {
 	NSMutableArray *_lineStartIndexes;
 	BOOL _shouldRecalculateLineStartIndexes;
-	id _windowDidResizeObservingToken;
 }
 @property (readonly,nonatomic) NSArray *lineStartIndexes;
 @property (readonly,nonatomic) NSTextView *textView;

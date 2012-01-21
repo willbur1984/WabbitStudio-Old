@@ -51,6 +51,9 @@
 	
 	_clickedLineNumber = NSNotFound;
 	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidAddBookmark:) name:WCSourceTextStorageDidAddBookmarkNotification object:[self textStorage]];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidRemoveBookmark:) name:WCSourceTextStorageDidRemoveBookmarkNotification object:[self textStorage]];
+	
 	return self;
 }
 
@@ -60,6 +63,7 @@
 
 static const CGFloat kIconWidthHeight = 11.0;
 static const CGFloat kIconPaddingLeft = 1.0;
+static const CGFloat kIconPaddingTop = 1.0;
 - (CGFloat)minimumThickness {
 	return [super minimumThickness]+kIconWidthHeight+kIconPaddingLeft;
 }
@@ -70,7 +74,7 @@ static const CGFloat kIconPaddingLeft = 1.0;
 	
 	for (RSBookmark *bookmark in [[self textStorage] bookmarksForRange:[[self textView] visibleRange]]) {
 		NSUInteger numRects;
-		NSRectArray rects = [[[self textView] layoutManager] rectArrayForCharacterRange:NSMakeRange([bookmark range].location, 0) withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&numRects];
+		NSRectArray rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[[[self textView] string] lineRangeForRange:[bookmark range]] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&numRects];
 		
 		if (!numRects)
 			continue;
@@ -81,7 +85,7 @@ static const CGFloat kIconPaddingLeft = 1.0;
 		
 		NSImage *breakpointImage = [NSImage imageNamed:@"Bookmark"];
 		
-		[breakpointImage drawInRect:NSMakeRect(NSMinX(breakpointRect)+kIconPaddingLeft, NSMinY(breakpointRect), kIconWidthHeight, kIconWidthHeight) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+		[breakpointImage drawInRect:NSMakeRect(NSMinX(breakpointRect)+kIconPaddingLeft, NSMinY(breakpointRect)+kIconPaddingTop, kIconWidthHeight, kIconWidthHeight) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
 	}
 	
 	[super drawLineNumbersInRect:rect];
@@ -152,7 +156,12 @@ static const CGFloat kIconPaddingLeft = 1.0;
 		bookmark = [RSBookmark bookmarkWithRange:NSMakeRange([[[self textView] string] rangeForLineNumber:[self clickedLineNumber]].location, 0) visibleRange:NSEmptyRange textStorage:[self textStorage]];
 		[[self textStorage] addBookmark:bookmark];
 	}
-	
+}
+
+- (void)_textStorageDidAddBookmark:(NSNotification *)note {
+	[self setNeedsDisplay:YES];
+}
+- (void)_textStorageDidRemoveBookmark:(NSNotification *)note {
 	[self setNeedsDisplay:YES];
 }
 @end

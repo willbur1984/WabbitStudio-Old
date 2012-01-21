@@ -19,6 +19,9 @@
 #import "NSString+RSExtensions.h"
 #import "NSArray+WCExtensions.h"
 
+NSString *const WCSourceTextStorageDidAddBookmarkNotification = @"WCSourceTextStorageDidAddBookmarkNotification";
+NSString *const WCSourceTextStorageDidRemoveBookmarkNotification = @"WCSourceTextStorageDidRemoveBookmarkNotification";
+
 @interface WCSourceTextStorage ()
 - (void)_calculateLineStartIndexes;
 - (void)_updateParagraphStyle;
@@ -145,9 +148,13 @@
 	
 	[_bookmarks addObject:bookmark];
 	[_bookmarks sortUsingDescriptors:[NSArray arrayWithObjects:[NSSortDescriptor sortDescriptorWithKey:@"lineNumber" ascending:YES], nil]];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:WCSourceTextStorageDidAddBookmarkNotification object:self];
 }
 - (void)removeBookmark:(RSBookmark *)bookmark; {
 	[_bookmarks removeObjectIdenticalTo:bookmark];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:WCSourceTextStorageDidRemoveBookmarkNotification object:self];
 }
 - (RSBookmark *)bookmarkAtLineNumber:(NSUInteger)lineNumber; {
 	if (![_bookmarks count])

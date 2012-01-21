@@ -150,6 +150,15 @@
 	return symbolRange;
 }
 
+- (void)setSelectedRanges:(NSArray *)ranges affinity:(NSSelectionAffinity)affinity stillSelecting:(BOOL)stillSelectingFlag {
+	[super setSelectedRanges:ranges affinity:affinity stillSelecting:stillSelectingFlag];
+	
+	if (stillSelectingFlag) {
+		[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
+		[[[self enclosingScrollView] verticalRulerView] setNeedsDisplay:YES];
+	}
+}
+
 + (NSMenu *)defaultMenu; {
 	static NSMenu *retval;
 	static dispatch_once_t onceToken;

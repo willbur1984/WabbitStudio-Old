@@ -266,7 +266,6 @@
 	if (![[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCurrentLineHighlightKey])
 		return;
 	
-	/*
 	NSUInteger numRects;
 	NSRectArray rects;
 	
@@ -275,19 +274,21 @@
 	else
 		rects = [[[self textView] layoutManager] rectArrayForCharacterRange:NSMakeRange([[self textView] selectedRange].location, 0) withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&numRects];
 	
-	if (numRects > 0) {
+	if (numRects) {
 		NSRect lineRect = rects[0];
 		lineRect = NSMakeRect(NSMinX([self bounds]), [self convertPoint:lineRect.origin fromView:[self clientView]].y, NSWidth([self bounds]), NSHeight(lineRect));
 		
-		if (NSIntersectsRect(lineRect, rect)) {
+		if (NSIntersectsRect(lineRect, rect) && [self needsToDrawRect:lineRect]) {
 			
 			WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
 			
+			[[[currentTheme currentLineColor] colorWithAlphaComponent:0.75] setFill];
+			NSRectFillUsingOperation(lineRect, NSCompositeSourceOver);
 			[[currentTheme currentLineColor] setFill];
-			NSRectFill(lineRect);
+			NSRectFill(NSMakeRect(NSMinX(lineRect), NSMinY(lineRect), NSWidth(lineRect), 1.0));
+			NSRectFill(NSMakeRect(NSMinX(lineRect), NSMaxY(lineRect)-1, NSWidth(lineRect), 1.0));
 		}
 	}
-	 */
 }
 
 - (void)_textStorageDidProcessEditing:(NSNotification *)note {
