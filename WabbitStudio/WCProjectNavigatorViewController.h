@@ -12,6 +12,9 @@
 #import "WCNavigatorModule.h"
 #import <Quartz/Quartz.h>
 
+extern NSString *const WCProjectNavigatorNewGroupNotification;
+extern NSString *const WCProjectNavigatorNewGroupNotificationNewGroupUserInfoKey;
+
 extern NSString *const WCProjectNavigatorDidGroupNotification;
 
 @class WCProjectContainer,RSFindOptionsViewController;

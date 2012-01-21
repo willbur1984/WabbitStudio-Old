@@ -11,6 +11,7 @@
 #import "RSDefines.h"
 #import "NSImage+RSExtensions.h"
 #import "WCSourceFileDocument.h"
+#import "WCDocumentController.h"
 
 static NSString *const WCFileReferenceKey = @"fileReference";
 
@@ -133,6 +134,10 @@ static NSString *const WCFileReferenceKey = @"fileReference";
 @dynamic filePath;
 - (NSString *)filePath {
 	return [[self fileReference] filePath];
+}
+@dynamic sourceFile;
+- (BOOL)isSourceFile {
+	return [[[WCDocumentController sharedDocumentController] sourceFileDocumentUTIs] containsObject:[self fileUTI]];
 }
 
 @end

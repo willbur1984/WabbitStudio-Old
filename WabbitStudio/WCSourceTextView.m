@@ -729,7 +729,7 @@
 	[self setAutomaticQuoteSubstitutionEnabled:NO];
 	[self setAutomaticSpellingCorrectionEnabled:NO];
 	[self setAutomaticTextReplacementEnabled:NO];
-	[self setAutoresizingMask:NSViewHeightSizable|NSViewWidthSizable];
+	[self setAutoresizingMask:NSViewHeightSizable|NSViewWidthSizable|NSViewMinXMargin|NSViewMinYMargin];
 	[self setContinuousSpellCheckingEnabled:NO];
 	[self setDisplaysLinkToolTips:YES];
 	[self setDrawsBackground:YES];

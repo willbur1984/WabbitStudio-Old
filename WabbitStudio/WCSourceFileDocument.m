@@ -24,7 +24,6 @@
 #import "WCProjectContainer.h"
 #import "WCFileContainer.h"
 #import "WCProject.h"
-#import "UKXattrMetadataStore.h"
 #import "NSTextView+WCExtensions.h"
 #import "WCJumpBarComponentCell.h"
 #import "NSURL+RSExtensions.h"
@@ -75,12 +74,8 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 - (id)initWithType:(NSString *)typeName error:(NSError **)outError {
 	if (!(self = [super initWithType:typeName error:outError]))
 		return nil;
-
-#ifdef DEBUG
-	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
-#endif
 	
-	[self setTextStorage:[[[WCSourceTextStorage alloc] initWithString:@""] autorelease]];
+	_textStorage = [[WCSourceTextStorage alloc] initWithString:@""];
 	[_textStorage setDelegate:self];
 	_sourceScanner = [[WCSourceScanner alloc] initWithTextStorage:[self textStorage]];
 	[_sourceScanner setDelegate:self];
@@ -99,7 +94,7 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 }
 
 + (BOOL)autosavesInPlace {
-    return NO;
+    return YES;
 }
 
 + (BOOL)canConcurrentlyReadDocumentsOfType:(NSString *)typeName {
@@ -172,32 +167,13 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 		return NO;
 	}
 	
-	[UKXattrMetadataStore setObject:[NSNumber numberWithUnsignedInteger:fileEncoding] forKey:WCSourceFileDocumentStringEncodingKey atPath:[url path] traverseLink:NO];
-	
-	if ([self projectDocument]) {
-		
-	}
-	else if ([[self windowControllers] count]) {
-		NSString *selectedRangeString = NSStringFromRange([[[[[self windowControllers] objectAtIndex:0] sourceTextViewController] textView] selectedRange]);
-		NSString *visibleRangeString = NSStringFromRange([[[[[self windowControllers] objectAtIndex:0] sourceTextViewController] textView] visibleRange]);
-		NSString *windowFrameString = [[[[self windowControllers] objectAtIndex:0] window] stringWithSavedFrame];
-		
-		[UKXattrMetadataStore setString:visibleRangeString forKey:WCSourceFileDocumentVisibleRangeKey atPath:[url path] traverseLink:NO];
-		[UKXattrMetadataStore setString:windowFrameString forKey:WCSourceFileDocumentWindowFrameKey atPath:[url path] traverseLink:NO];
-		[UKXattrMetadataStore setString:selectedRangeString forKey:WCSourceFileDocumentSelectedRangeKey atPath:[url path] traverseLink:NO];
-	}
-	
 	[pool release];
-	
 	return YES;
 }
 
 - (BOOL)readFromURL:(NSURL *)url ofType:(NSString *)typeName error:(NSError **)outError {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
-	NSStringEncoding stringEncoding = [[UKXattrMetadataStore objectForKey:WCSourceFileDocumentStringEncodingKey atPath:[url path] traverseLink:NO] unsignedIntegerValue];
-	if (!stringEncoding)
-		stringEncoding = [[NSUserDefaults standardUserDefaults] unsignedIntegerForKey:WCEditorDefaultTextEncodingKey];
+	NSStringEncoding stringEncoding = [[NSUserDefaults standardUserDefaults] unsignedIntegerForKey:WCEditorDefaultTextEncodingKey];
 	
 	NSString *string = [NSString stringWithContentsOfURL:url encoding:stringEncoding error:outError];
 	

@@ -141,7 +141,7 @@
 	NSRange	glyphRange = [layoutManager glyphRangeForBoundingRect:[[self clientView] visibleRect] inTextContainer:container];
 	NSRange range = [layoutManager characterRangeForGlyphRange:glyphRange actualGlyphRange:NULL];
 	NSUInteger lineNumber, lineStartIndex, numberOfLines = [[self lineStartIndexes] count], stringLength = [[view string] length];
-	NSUInteger selectedLineNumber = [[[self textView] string] lineNumberForRange:[[self textView] selectedRange]];
+	NSIndexSet *lineNumbers = [[[self textView] string] lineNumbersForRange:[[self textView] selectedRange]];
 	
 	// Fudge the range a tad in case there is an extra new line at end.
 	// It doesn't show up in the glyphs so would not be accounted for.
@@ -165,7 +165,7 @@
 			}
 			
 			if (lineStartIndex < stringLength || numRects) {
-				NSDictionary *textAttributes = [self textAttributesForLineNumber:lineNumber selectedLineNumber:selectedLineNumber];
+				NSDictionary *textAttributes = [self textAttributesForLineNumber:lineNumber selectedLineNumbers:lineNumbers];
 				
 				NSSize stringSize = [labelText sizeWithAttributes:textAttributes];
 				
@@ -176,6 +176,15 @@
 		if (lineStartIndex > NSMaxRange(range))
 			break;
 	}
+}
+
+- (NSDictionary *)textAttributesForLineNumber:(NSUInteger)lineNumber selectedLineNumbers:(NSIndexSet *)selectedLineNumbers; {
+	NSDictionary *textAttributes;
+	if ([selectedLineNumbers containsIndex:lineNumber])
+		textAttributes = [self selectedTextAttributes];
+	else
+		textAttributes = [self textAttributes];
+	return textAttributes;
 }
 
 - (NSDictionary *)textAttributesForLineNumber:(NSUInteger)lineNumber selectedLineNumber:(NSUInteger)selectedLineNumber; {

@@ -37,30 +37,33 @@
 	return range;
 }
 
-- (NSRange)lineNumberRangeForRange:(NSRange)range; {
-	__block NSRange lineNumberRange = NSEmptyRange;
+- (NSIndexSet *)lineNumbersForRange:(NSRange)range; {
+	NSMutableIndexSet *lineNumbers = [NSMutableIndexSet indexSet];
 	__block NSUInteger lineNumber = 0;
-	__block BOOL hasSetRangeLocation = NO;
 	
-	[self enumerateSubstringsInRange:NSMakeRange(0, [self length]) options:NSStringEnumerationByLines|NSStringEnumerationSubstringNotRequired usingBlock:^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
-		if (!hasSetRangeLocation &&
-			NSLocationInRange(range.location, enclosingRange)) {
-			hasSetRangeLocation = YES;
-			lineNumberRange.location = lineNumber; 
-		}
-		else if (NSMaxRange(enclosingRange) > NSMaxRange(range)) {
-			if (lineNumberRange.length)
-				lineNumberRange.length++;
-			
-			*stop = YES;
-		}
-		else if (hasSetRangeLocation)
-			lineNumberRange.length++;
+	if (!range.length && NSMaxRange(range) == [self length]) {
+		NSUInteger numberOfLines = [self numberOfLines];
 		
-		lineNumber++;
-	}];
-	return lineNumberRange;
+		if (numberOfLines)
+			numberOfLines--;
+		
+		[lineNumbers addIndex:numberOfLines];
+	}
+	else {
+		[self enumerateSubstringsInRange:NSMakeRange(0, [self length]) options:NSStringEnumerationByLines|NSStringEnumerationSubstringNotRequired usingBlock:^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
+			if (NSLocationInRange(range.location, enclosingRange))
+				[lineNumbers addIndex:lineNumber];
+			else if (NSIntersectionRange(range, enclosingRange).length)
+				[lineNumbers addIndex:lineNumber];
+			else if (NSMaxRange(enclosingRange) > NSMaxRange(range))
+				*stop = YES;
+			
+			lineNumber++;
+		}];
+	}
+	return [[lineNumbers copy] autorelease];
 }
+
 - (NSUInteger)numberOfLines; {
 	__block NSUInteger retval = 0;
 	

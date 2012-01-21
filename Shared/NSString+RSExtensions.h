@@ -11,7 +11,7 @@
 @interface NSString (RSExtensions)
 - (NSUInteger)lineNumberForRange:(NSRange)range;
 - (NSRange)rangeForLineNumber:(NSUInteger)lineNumber;
-- (NSRange)lineNumberRangeForRange:(NSRange)range;
+- (NSIndexSet *)lineNumbersForRange:(NSRange)range;
 - (NSUInteger)numberOfLines;
 
 - (NSString *)stringByCapitalizingFirstLetter;

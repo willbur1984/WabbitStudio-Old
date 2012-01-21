@@ -29,6 +29,7 @@ NSString *const WCProjectDataFileName = @"project.plist";
 @property (readwrite,retain) WCProjectContainer *projectContainer;
 @property (readwrite,retain) NSMapTable *filesToSourceFileDocuments;
 @property (readwrite,retain) NSMapTable *sourceFileDocumentsToFiles;
+@property (readwrite,retain) NSMapTable *filesToFileContainers;
 @end
 
 @implementation WCProjectDocument
@@ -38,6 +39,7 @@ NSString *const WCProjectDataFileName = @"project.plist";
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
 	[_unsavedFiles release];
+	[_filesToFileContainers release];
 	[_sourceFileDocumentsToFiles release];
 	[_filesToSourceFileDocuments release];
 	[_projectContainer release];
@@ -121,25 +123,28 @@ NSString *const WCProjectDataFileName = @"project.plist";
 	
 	[self setProjectContainer:projectContainer];
 	
+	NSMapTable *filesToFileContainers = [NSMapTable mapTableWithWeakToWeakObjects];
 	NSMapTable *filesToSourceFileDocuments = [NSMapTable mapTableWithWeakToStrongObjects];
 	NSMapTable *sourceFileDocumentsToFiles = [NSMapTable mapTableWithWeakToWeakObjects];
 	
-	for (RSTreeNode *leafNode in [projectContainer descendantLeafNodes]) {
-		NSString *UTI = [[leafNode representedObject] fileUTI];
-		NSString *fileExtension = [[[[leafNode representedObject] fileName] pathExtension] lowercaseString];
-		if ([WCSourceFileExtensions containsObject:fileExtension]) {
+	for (WCFileContainer *fileContainer in [projectContainer descendantNodesInclusive]) {
+		[filesToFileContainers setObject:fileContainer forKey:[fileContainer representedObject]];
+		
+		if ([fileContainer isLeafNode] &&
+			[[fileContainer representedObject] isSourceFile]) {
 			
 			NSError *outError;
-			WCSourceFileDocument *document = [[[WCSourceFileDocument alloc] initWithContentsOfURL:[[leafNode representedObject] fileURL] ofType:UTI error:&outError] autorelease];
+			WCSourceFileDocument *document = [[[WCSourceFileDocument alloc] initWithContentsOfURL:[[fileContainer representedObject] fileURL] ofType:[[fileContainer representedObject] fileUTI] error:&outError] autorelease];
 			[document setProjectDocument:self];
 			
 			if (document) {
-				[filesToSourceFileDocuments setObject:document forKey:[leafNode representedObject]];
-				[sourceFileDocumentsToFiles setObject:[leafNode representedObject] forKey:document];
+				[filesToSourceFileDocuments setObject:document forKey:[fileContainer representedObject]];
+				[sourceFileDocumentsToFiles setObject:[fileContainer representedObject] forKey:document];
 			}
 		}
 	}
 	
+	[self setFilesToFileContainers:filesToFileContainers];
 	[self setFilesToSourceFileDocuments:filesToSourceFileDocuments];
 	[self setSourceFileDocumentsToFiles:sourceFileDocumentsToFiles];
 	
@@ -223,5 +228,6 @@ NSString *const WCProjectDataFileName = @"project.plist";
 	return [[retval copy] autorelease];
 }
 @synthesize unsavedFiles=_unsavedFiles;
+@synthesize filesToFileContainers=_filesToFileContainers;
 
 @end

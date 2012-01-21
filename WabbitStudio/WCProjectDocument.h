@@ -20,6 +20,7 @@ extern NSString *const WCProjectDataFileName;
 	WCProjectContainer *_projectContainer;
 	NSMapTable *_filesToSourceFileDocuments;
 	NSMapTable *_sourceFileDocumentsToFiles;
+	NSMapTable *_filesToFileContainers;
 	NSHashTable *_unsavedFiles;
 }
 @property (readonly,retain) WCProjectContainer *projectContainer;

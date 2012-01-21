@@ -20,6 +20,9 @@
 #import "WCDocumentController.h"
 #import "NSArray+WCExtensions.h"
 
+NSString *const WCProjectNavigatorNewGroupNotification = @"WCProjectNavigatorNewGroupNotification";
+NSString *const WCProjectNavigatorNewGroupNotificationNewGroupUserInfoKey = @"WCProjectNavigatorNewGroupNotificationNewGroupUserInfoKey";
+
 NSString *const WCProjectNavigatorDidGroupNotification = @"WCProjectNavigatorDidGroupNotification";
 
 @interface WCProjectNavigatorViewController ()
@@ -282,6 +285,8 @@ static const CGFloat kMainCellHeight = 18.0;
 	[self setSelectedObjects:[NSArray arrayWithObjects:groupContainer, nil]];
 	
 	[[self outlineView] editColumn:0 row:[[self outlineView] selectedRow] withEvent:nil select:YES];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:WCProjectNavigatorNewGroupNotification object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:groupContainer,WCProjectNavigatorNewGroupNotificationNewGroupUserInfoKey, nil]];
 }
 - (IBAction)newGroupFromSelection:(id)sender; {
 	
@@ -317,12 +322,8 @@ static const CGFloat kMainCellHeight = 18.0;
 #pragma mark IBActions
 - (IBAction)_outlineViewDoubleClick:(id)sender; {
 	for (RSTreeNode *selectedNode in [self selectedObjects]) {
-		NSString *fileExtension = [[[[selectedNode representedObject] fileName] pathExtension] lowercaseString];
-		
-		if ([WCSourceFileExtensions containsObject:fileExtension]) {
-			
+		if ([[selectedNode representedObject] isSourceFile])
 			[[[[self projectContainer] project] document] openTabForFile:[selectedNode representedObject]];
-		}
 	}
 }
 @end
