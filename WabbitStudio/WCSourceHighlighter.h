@@ -38,7 +38,7 @@ extern NSString *const WCSourceHighlighterMacroAttributeName;
 
 - (void)performHighlightingInVisibleRange;
 - (void)performHighlightingInRange:(NSRange)range;
-- (void)performHighlightingOfSymbolsInRange:(NSRange)range;
+- (void)performFullHighlightIfNeeded;
 
 - (void)performHighlightingForColorWithAttributeName:(NSString *)attributeName;
 - (void)performHighlightingForFontWithAttributeName:(NSString *)attributeName;

@@ -294,10 +294,9 @@ static const CGFloat kMainCellHeight = 18.0;
 #pragma mark IBActions
 - (IBAction)_outlineViewDoubleClick:(id)sender; {
 	for (RSTreeNode *selectedNode in [self selectedObjects]) {
-		id file = [selectedNode representedObject];
-		if ([[file fileUTI] isEqualToString:WCAssemblyFileUTI] ||
-			[[file fileUTI] isEqualToString:WCIncludeFileUTI] ||
-			[[file fileUTI] isEqualToString:WCActiveServerIncludeFileUTI]) {
+		NSString *fileExtension = [[[[selectedNode representedObject] fileName] pathExtension] lowercaseString];
+		
+		if ([WCSourceFileExtensions containsObject:fileExtension]) {
 			
 			[[[[self projectContainer] project] document] openTabForFile:[selectedNode representedObject]];
 		}

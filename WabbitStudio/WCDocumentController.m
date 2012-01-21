@@ -13,7 +13,16 @@ NSString *const WCIncludeFileUTI = @"org.revsoft.wabbitcode.include";
 NSString *const WCActiveServerIncludeFileUTI = @"com.panic.coda.active-server-include-file";
 NSString *const WCProjectFileUTI = @"org.revsoft.wabbitstudio.project";
 
+NSSet *WCSourceFileExtensions;
+
 @implementation WCDocumentController
++ (void)initialize {
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		WCSourceFileExtensions = [[NSSet alloc] initWithObjects:@"asm",@"z80",@"inc", nil];
+	});
+}
+
 @dynamic recentProjectURLs;
 - (NSArray *)recentProjectURLs {
 	NSMutableArray *retval = [NSMutableArray arrayWithCapacity:0];

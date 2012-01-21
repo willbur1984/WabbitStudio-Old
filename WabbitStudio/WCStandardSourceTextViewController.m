@@ -15,6 +15,8 @@
 #import "WCSourceTextStorage.h"
 #import "RSDefines.h"
 #import "WCJumpBarViewController.h"
+#import "WCSourceScanner.h"
+#import "WCSourceFileDocument.h"
 
 @interface WCStandardSourceTextViewController ()
 @property (readonly,nonatomic) WCSplitView *firstSplitView;
@@ -37,6 +39,8 @@
 	
 	_assistantSplitViews = [[NSMutableArray alloc] initWithCapacity:0];
 	_assistantSourceTextViewControllers = [[NSMutableArray alloc] initWithCapacity:0];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_sourceScannerDidFinishScanningSymbols:) name:WCSourceScannerDidFinishScanningSymbolsNotification object:[sourceFileDocument sourceScanner]];
 	
 	return self;
 }
@@ -249,5 +253,11 @@
 - (WCSourceTextViewController *)configuredSourceTextViewController {
 	WCSourceTextViewController *stvController = [[[WCSourceTextViewController alloc] initWithSourceFileDocument:[self sourceFileDocument] standardSourceTextViewController:self] autorelease];
 	return stvController;
+}
+
+- (void)_sourceScannerDidFinishScanningSymbols:(NSNotification *)note {
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:WCSourceScannerDidFinishScanningSymbolsNotification object:[[self sourceFileDocument] sourceScanner]];
+	
+	[[self sourceHighlighter] performFullHighlightIfNeeded];
 }
 @end

@@ -82,6 +82,7 @@
 		[textContainer setContainerSize:NSMakeSize(CGFLOAT_MAX, CGFLOAT_MAX)];
 		[textContainer setWidthTracksTextView:NO];
 	}
+	[textView setTextContainerInset:NSMakeSize(1.0, 0.0)];
 	
 	[[self scrollView] setDocumentView:textView];
 	
@@ -105,10 +106,7 @@
 	
 	[[self textView] setSelectedRange:NSEmptyRange];
 	
-	[[self sourceHighlighter] performHighlightingInVisibleRange];
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewBoundsDidChange:) name:NSViewBoundsDidChangeNotification object:[[[self textView] enclosingScrollView] contentView]];
-	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewBoundsDidChange:) name:NSViewFrameDidChangeNotification object:[self textView]];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewBoundsDidChange:) name:NSViewFrameDidChangeNotification object:[self textView]];
 }
 #pragma mark NSMenuValidation
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
@@ -355,10 +353,16 @@
 	_scrollingHighlightTimer = nil;
 	
 	if (NSEqualRanges(NSNotFoundRange, [self additionalRangeToSyntaxHighlight]))
-		[[self sourceHighlighter] performHighlightingOfSymbolsInRange:[[self textView] visibleRange]];
+		[[self sourceHighlighter] performHighlightingInRange:[[self textView] visibleRange]];
 	else {
 		[self setAdditionalRangeToSyntaxHighlight:NSNotFoundRange];
-		[[self sourceHighlighter] performHighlightingInRange:NSUnionRange([[self textView] visibleRange], [self additionalRangeToSyntaxHighlight])];
+		
+		NSRange visibleRange = [[self textView] visibleRange];
+		NSRange rangeToColor = NSUnionRange(visibleRange, [self additionalRangeToSyntaxHighlight]);
+		if (NSMaxRange(rangeToColor) > [[self textStorage] length])
+			rangeToColor = NSMakeRange(visibleRange.location, [[self textStorage] length]-visibleRange.location);
+		
+		[[self sourceHighlighter] performHighlightingInRange:rangeToColor];
 	}
 }
 

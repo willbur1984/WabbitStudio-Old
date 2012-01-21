@@ -43,6 +43,14 @@ NSString *const WCSourceScannerDidFinishScanningSymbolsNotification = @"WCSource
 	_textStorage = textStorage;
 	_operationQueue = [[NSOperationQueue alloc] init];
 	[_operationQueue setMaxConcurrentOperationCount:1];
+	_tokens = [[NSArray alloc] init];
+	_symbols = [[NSArray alloc] init];
+	_labelNamesToLabelSymbols = [[NSDictionary alloc] init];
+	_symbolsSortedByName = [[NSArray alloc] init];
+	_equateNamesToEquateSymbols = [[NSDictionary alloc] init];
+	_defineNamesToDefineSymbols = [[NSDictionary alloc] init];
+	_macroNamesToMacroSymbols = [[NSDictionary alloc] init];
+	_includes = [[NSSet alloc] init];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidProcessEditing:) name:NSTextStorageDidProcessEditingNotification object:textStorage];
 	
@@ -81,7 +89,8 @@ NSString *const WCSourceScannerDidFinishScanningSymbolsNotification = @"WCSource
 	static NSRegularExpression *retval;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		retval = [[NSRegularExpression alloc] initWithPattern:@"(?:#comment.*?#endcomment)|(?:#comment.*)" options:NSRegularExpressionDotMatchesLineSeparators error:NULL];
+		//retval = [[NSRegularExpression alloc] initWithPattern:@"(?:#comment.*?#endcomment)|(?:#comment.*)" options:NSRegularExpressionDotMatchesLineSeparators error:NULL];
+		retval = [[NSRegularExpression alloc] initWithPattern:@"(?:#comment.*?#endcomment)" options:NSRegularExpressionDotMatchesLineSeparators error:NULL];
 	});
 	return retval;
 }

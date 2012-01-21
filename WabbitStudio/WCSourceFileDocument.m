@@ -374,10 +374,7 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 			[retval addObject:[[document sourceScanner] labelNamesToLabelSymbols]];
 	}
 	else {
-		NSDictionary *labelNamesToSymbols = [[self sourceScanner] labelNamesToLabelSymbols];
-		
-		if (labelNamesToSymbols)
-			[retval addObject:labelNamesToSymbols];
+		[retval addObject:[[self sourceScanner] labelNamesToLabelSymbols]];
 	}
 	
 	return [[retval copy] autorelease];

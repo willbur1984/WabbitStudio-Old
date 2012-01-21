@@ -13,6 +13,8 @@ extern NSString *const WCIncludeFileUTI;
 extern NSString *const WCActiveServerIncludeFileUTI;
 extern NSString *const WCProjectFileUTI;
 
+extern NSSet *WCSourceFileExtensions;
+
 @interface WCDocumentController : NSDocumentController
 @property (readonly,nonatomic) NSArray *recentProjectURLs;
 @end

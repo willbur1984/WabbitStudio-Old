@@ -126,9 +126,8 @@ NSString *const WCProjectDataFileName = @"project.plist";
 	
 	for (RSTreeNode *leafNode in [projectContainer descendantLeafNodes]) {
 		NSString *UTI = [[leafNode representedObject] fileUTI];
-		if ([UTI isEqualToString:WCIncludeFileUTI] ||
-			[UTI isEqualToString:WCAssemblyFileUTI] ||
-			[UTI isEqualToString:WCActiveServerIncludeFileUTI]) {
+		NSString *fileExtension = [[[[leafNode representedObject] fileName] pathExtension] lowercaseString];
+		if ([WCSourceFileExtensions containsObject:fileExtension]) {
 			
 			NSError *outError;
 			WCSourceFileDocument *document = [[[WCSourceFileDocument alloc] initWithContentsOfURL:[[leafNode representedObject] fileURL] ofType:UTI error:&outError] autorelease];
