@@ -278,10 +278,15 @@
 	NSUInteger numRects;
 	NSRectArray rects;
 	
-	if ([[self textView] selectedRange].length)
-		rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[[[self textView] string] lineRangeForRange:[[self textView] selectedRange]] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&numRects];
+	if ([[self textView] selectedRange].length) {
+		NSRange selectedRange = [[self textView] selectedRange];
+		if (NSMaxRange(selectedRange) == [[[self textView] string] length])
+			selectedRange.length--;
+		
+		rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[[[self textView] string] lineRangeForRange:selectedRange] withinSelectedCharacterRange:selectedRange inTextContainer:[[self textView] textContainer] rectCount:&numRects];
+	}
 	else
-		rects = [[[self textView] layoutManager] rectArrayForCharacterRange:NSMakeRange([[self textView] selectedRange].location, 0) withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&numRects];
+		rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[[self textView] selectedRange] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&numRects];
 	
 	if (numRects) {
 		NSRect lineRect = rects[0];

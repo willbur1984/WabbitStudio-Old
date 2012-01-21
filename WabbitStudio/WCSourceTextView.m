@@ -781,10 +781,15 @@
 	NSUInteger numRects;
 	NSRectArray rects;
 	
-	if ([self selectedRange].length)
-		rects = [[self layoutManager] rectArrayForCharacterRange:[[self string] lineRangeForRange:[self selectedRange]] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[self textContainer] rectCount:&numRects];
+	if ([self selectedRange].length) {
+		NSRange selectedRange = [self selectedRange];
+		if (NSMaxRange(selectedRange) == [[self string] length])
+			selectedRange.length--;
+		
+		rects = [[self layoutManager] rectArrayForCharacterRange:[[self string] lineRangeForRange:selectedRange] withinSelectedCharacterRange:selectedRange inTextContainer:[self textContainer] rectCount:&numRects];
+	}
 	else
-		rects = [[self layoutManager] rectArrayForCharacterRange:NSMakeRange([self selectedRange].location, 0) withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[self textContainer] rectCount:&numRects];
+		rects = [[self layoutManager] rectArrayForCharacterRange:[self selectedRange] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[self textContainer] rectCount:&numRects];
 	
 	if (!numRects)
 		return;
@@ -793,8 +798,7 @@
 	lineRect.origin.x = NSMinX([self bounds]);
 	lineRect.size.width = NSWidth([self bounds]);
 	
-	if (!NSIntersectsRect(lineRect, rect) ||
-		![self needsToDrawRect:lineRect])
+	if (!NSIntersectsRect(lineRect, rect) || ![self needsToDrawRect:lineRect])
 		return;
 	
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
