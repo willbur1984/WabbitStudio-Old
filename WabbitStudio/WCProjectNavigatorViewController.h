@@ -10,6 +10,7 @@
 #import "RSOutlineView.h"
 #import "RSFindOptionsViewControllerDelegate.h"
 #import "WCNavigatorModule.h"
+#import "WCProjectDocumentSettingsProvider.h"
 #import <Quartz/Quartz.h>
 
 extern NSString *const WCProjectNavigatorDidAddNewGroupNotification;
@@ -29,7 +30,7 @@ extern NSString *const WCProjectNavigatorDidRenameNodeNotificationRenamedNodeUse
 
 @class WCProjectContainer,RSFindOptionsViewController;
 
-@interface WCProjectNavigatorViewController : JAViewController <WCNavigatorModule,RSOutlineViewDelegate,RSFindOptionsViewControllerDelegate,QLPreviewPanelDataSource,QLPreviewPanelDelegate> {
+@interface WCProjectNavigatorViewController : JAViewController <WCProjectDocumentSettingsProvider,WCNavigatorModule,RSOutlineViewDelegate,RSFindOptionsViewControllerDelegate,QLPreviewPanelDataSource,QLPreviewPanelDelegate> {
 	WCProjectContainer *_projectContainer;
 	WCProjectContainer *_filteredProjectContainer;
 	NSString *_filterString;

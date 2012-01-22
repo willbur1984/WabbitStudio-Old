@@ -21,6 +21,7 @@
 #import "NSArray+WCExtensions.h"
 #import "NSURL+RSExtensions.h"
 #import "NSAlert-OAExtensions.h"
+#import "NSOutlineView+RSExtensions.h"
 
 NSString *const WCProjectNavigatorDidAddNewGroupNotification = @"WCProjectNavigatorDidAddNewGroupNotification";
 NSString *const WCProjectNavigatorDidAddNewGroupNotificationNewGroupUserInfoKey = @"WCProjectNavigatorDidAddNewGroupNotificationNewGroupUserInfoKey";
@@ -67,10 +68,33 @@ NSString *const WCProjectNavigatorDidRenameNodeNotificationRenamedNodeUserInfoKe
 	[[[[self searchField] cell] searchButtonCell] setImage:[NSImage imageNamed:@"Filter"]];
 	[[[[self searchField] cell] searchButtonCell] setAlternateImage:nil];
 	
-	[[self outlineView] expandItem:[[self outlineView] itemAtRow:0] expandChildren:NO];
-	
 	[[self outlineView] setTarget:self];
 	[[self outlineView] setDoubleAction:@selector(_outlineViewDoubleClick:)];
+	
+	NSDictionary *settings = [[[[[self projectContainer] project] document] projectSettings] objectForKey:[self projectDocumentSettingsKey]];
+	
+	if ([[settings objectForKey:@"expandedItems"] count]) {
+		NSMutableArray *itemsToExpand = [NSMutableArray arrayWithCapacity:0];
+		
+		for (NSString *UUID in [settings objectForKey:@"expandedItems"]) {
+			NSLogObject(UUID);
+			
+			WCFile *file = [[[[[self projectContainer] project] document] UUIDsToObjects] objectForKey:UUID];
+			WCFileContainer *fileContainer = [[[[self projectContainer] project] document] fileContainerForFile:file];
+			
+			if (fileContainer)
+				[itemsToExpand addObject:fileContainer];
+		}
+		
+		if ([itemsToExpand count]) {
+			[itemsToExpand insertObject:[self projectContainer] atIndex:0];
+			[[self outlineView] expandItems:itemsToExpand];
+		}
+		else
+			[[self outlineView] expandItem:[[self outlineView] itemAtRow:0] expandChildren:NO];
+	}
+	else
+		[[self outlineView] expandItem:[[self outlineView] itemAtRow:0] expandChildren:NO];
 }
 #pragma mark NSMenuValidation
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
@@ -262,6 +286,17 @@ static const CGFloat kMainCellHeight = 18.0;
 - (void)setSelectedObjects:(NSArray *)objects {
 	[[self treeController] setSelectedRepresentedObjects:objects];
 }
+#pragma mark WCProjectDocumentSettingsProvider
+- (NSString *)projectDocumentSettingsKey {
+	return @"projectNavigatorKey";
+}
+- (NSDictionary *)projectDocumentSettings {
+	NSMutableDictionary *retval = [NSMutableDictionary dictionaryWithCapacity:0];
+	
+	[retval setObject:[[[self outlineView] expandedItems] valueForKeyPath:@"representedObject.UUID"] forKey:@"expandedItems"];
+	
+	return [[retval copy] autorelease];
+}
 #pragma mark RSFindOptionsViewControllerDelegate
 - (void)findOptionsViewControllerDidChangeFindOptions:(RSFindOptionsViewController *)viewController {
 	if ([[self filterString] length])
@@ -276,8 +311,7 @@ static const CGFloat kMainCellHeight = 18.0;
 	_projectContainer = [projectContainer retain];
 	_projectNavigatorFlags.switchTreeControllerContentBinding = YES;
 	
-	//for (WCFileContainer *fileContainer in [projectContainer descendantNodes])
-	//	[[fileContainer representedObject] addObserver:self forKeyPath:@"fileName" options:NSKeyValueObservingOptionNew context:self];
+	[[[[projectContainer project] document] projectSettingsProviders] addObject:self];
 	
 	return self;
 }

@@ -14,6 +14,7 @@
 #import "RSDefines.h"
 #import "NSURL+RSExtensions.h"
 #import "WCProjectDocument.h"
+#import "GTMNSData+zlib.h"
 
 @implementation WCNewProjectWindowController
 #pragma mark *** Subclass Overrides ***
@@ -81,6 +82,8 @@
 	NSData *projectData = [NSPropertyListSerialization dataWithPropertyList:[projectNode plistRepresentation] format:NSPropertyListXMLFormat_v1_0 options:0 error:outError];
 	if (!projectData)
 		return nil;
+	
+	projectData = [NSData gtm_dataByGzippingData:projectData];
 	
 	[projectWrapper addRegularFileWithContents:projectData preferredFilename:WCProjectDataFileName];
 	

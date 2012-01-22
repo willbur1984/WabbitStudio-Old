@@ -12,7 +12,6 @@
 #import "RSDefines.h"
 #import "UKKQueue.h"
 
-static NSString *const RSFileReferenceUUIDKey = @"UUID";
 static NSString *const RSFileReferenceFileReferenceURLKey = @"fileReferenceURL";
 static NSString *const RSFileReferenceFilePathKey = @"filePath";
 
@@ -20,7 +19,6 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 #pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 	[_kqueue release];
-	[_UUID release];
 	[_fileURL release];
 	[_fileReferenceURL release];
 	[super dealloc];
@@ -33,15 +31,13 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 - (NSDictionary *)plistRepresentation {
 	NSMutableDictionary *retval = [NSMutableDictionary dictionaryWithDictionary:[super plistRepresentation]];
 	
-	[retval addEntriesFromDictionary:[NSDictionary dictionaryWithObjectsAndKeys:[self UUID],RSFileReferenceUUIDKey,[[self fileReferenceURL] bookmarkDataWithOptions:NSURLBookmarkCreationMinimalBookmark|NSURLBookmarkCreationPreferFileIDResolution includingResourceValuesForKeys:nil relativeToURL:nil error:NULL],RSFileReferenceFileReferenceURLKey,[[self fileURL] path],RSFileReferenceFilePathKey, nil]];
+	[retval addEntriesFromDictionary:[NSDictionary dictionaryWithObjectsAndKeys:[[self fileReferenceURL] bookmarkDataWithOptions:NSURLBookmarkCreationMinimalBookmark|NSURLBookmarkCreationPreferFileIDResolution includingResourceValuesForKeys:nil relativeToURL:nil error:NULL],RSFileReferenceFileReferenceURLKey,[[self fileURL] path],RSFileReferenceFilePathKey, nil]];
 	
 	return retval;
 }
 - (id)initWithPlistRepresentation:(NSDictionary *)plistRepresentation {
 	if (!(self = [super init]))
 		return nil;
-	
-	_UUID = [[plistRepresentation objectForKey:RSFileReferenceUUIDKey] retain];
 	
 	BOOL bookmarkDataIsStale;
 	NSData *bookmarkData = [plistRepresentation objectForKey:RSFileReferenceFileReferenceURLKey];
@@ -98,14 +94,12 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 	if (!(self = [super init]))
 		return nil;
 	
-	_UUID = [[NSString UUIDString] retain];
 	_fileURL = [[fileURL filePathURL] copy];
 	_fileReferenceURL = [[fileURL fileReferenceURL] copy];
 	
 	return self;
 }
 #pragma mark Properties
-@synthesize UUID=_UUID;
 @synthesize fileReferenceURL=_fileReferenceURL;
 @dynamic fileURL;
 - (NSURL *)fileURL {

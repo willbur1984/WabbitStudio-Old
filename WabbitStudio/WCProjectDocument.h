@@ -13,6 +13,7 @@ extern NSString *const WCProjectDocumentFileReferencesKey;
 extern NSString *const WCProjectDocumentProjectContainerKey;
 
 extern NSString *const WCProjectDataFileName;
+extern NSString *const WCProjectSettingsFileExtension;
 
 @class WCProjectContainer,WCProjectWindowController,WCSourceTextViewController,WCFile,WCSourceFileDocument,WCFileContainer;
 
@@ -21,8 +22,11 @@ extern NSString *const WCProjectDataFileName;
 	NSMapTable *_filesToSourceFileDocuments;
 	NSMapTable *_sourceFileDocumentsToFiles;
 	NSMapTable *_filesToFileContainers;
+	NSMutableDictionary *_UUIDsToObjects;
 	NSHashTable *_unsavedFiles;
 	NSCountedSet *_openFiles;
+	NSHashTable *_projectSettingsProviders;
+	NSDictionary *_projectSettings;
 }
 @property (readonly,retain) WCProjectContainer *projectContainer;
 @property (readonly,retain) NSMapTable *filesToSourceFileDocuments;
@@ -32,6 +36,9 @@ extern NSString *const WCProjectDataFileName;
 @property (readonly,nonatomic) WCProjectWindowController *projectWindowController;
 @property (readonly,nonatomic) NSHashTable *unsavedFiles;
 @property (readonly,nonatomic) NSCountedSet *openFiles;
+@property (readonly,retain) NSMutableDictionary *UUIDsToObjects;
+@property (readonly,copy) NSDictionary *projectSettings;
+@property (readonly,retain) NSHashTable *projectSettingsProviders;
 
 - (WCFileContainer *)fileContainerForFile:(WCFile *)file;
 

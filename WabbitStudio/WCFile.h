@@ -16,6 +16,7 @@
 
 @interface WCFile : RSObject <RSPlistArchiving,WCOpenQuicklyItem,RSFileReferenceDelegate,QLPreviewItem> {
 	__weak id <WCFileDelegate> _delegate;
+	NSString *_UUID;
 	RSFileReference *_fileReference;
 	struct {
 		unsigned int edited:1;
@@ -32,6 +33,7 @@
 @property (readonly,nonatomic) NSString *filePath;
 @property (readonly,nonatomic,getter = isSourceFile) BOOL sourceFile;
 @property (readonly,nonatomic) NSURL *parentDirectoryURL;
+@property (readonly,nonatomic) NSString *UUID;
 
 + (id)fileWithFileURL:(NSURL *)fileURL;
 - (id)initWithFileURL:(NSURL *)fileURL;

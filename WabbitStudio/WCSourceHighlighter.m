@@ -397,7 +397,7 @@ static NSDictionary *attributeNamesToFontSelectors;
 }
 
 - (void)_sourceScannerDidFinishScanningSymbols:(NSNotification *)note {
-	[self performFullHighlightIfNeeded];
+	//[self performFullHighlightIfNeeded];
 	[self performHighlightingInVisibleRange];
 }
 @end

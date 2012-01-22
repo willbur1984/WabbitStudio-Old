@@ -18,18 +18,23 @@
 #import "WCFileContainer.h"
 #import "WCSourceScanner.h"
 #import "WCProjectNavigatorViewController.h"
+#import "GTMNSData+zlib.h"
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
 NSString *const WCProjectDocumentFileReferencesKey = @"fileReferences";
 NSString *const WCProjectDocumentProjectContainerKey = @"projectContainer";
 
-NSString *const WCProjectDataFileName = @"project.plist";
+NSString *const WCProjectDataFileName = @"project.wstudioprojdata";
+NSString *const WCProjectSettingsFileExtension = @"plist";
 
 @interface WCProjectDocument ()
 @property (readwrite,retain) WCProjectContainer *projectContainer;
 @property (readwrite,retain) NSMapTable *filesToSourceFileDocuments;
 @property (readwrite,retain) NSMapTable *sourceFileDocumentsToFiles;
 @property (readwrite,retain) NSMapTable *filesToFileContainers;
+@property (readwrite,retain) NSMutableDictionary *UUIDsToObjects;
+@property (readwrite,copy) NSDictionary *projectSettings;
+@property (readwrite,retain) NSHashTable *projectSettingsProviders;
 @end
 
 @implementation WCProjectDocument
@@ -40,6 +45,9 @@ NSString *const WCProjectDataFileName = @"project.plist";
 #endif
 	[_openFiles release];
 	[_unsavedFiles release];
+	[_projectSettingsProviders release];
+	[_projectSettings release];
+	[_UUIDsToObjects release];
 	[_filesToFileContainers release];
 	[_sourceFileDocumentsToFiles release];
 	[_filesToSourceFileDocuments release];
@@ -56,6 +64,7 @@ NSString *const WCProjectDataFileName = @"project.plist";
 	
 	_unsavedFiles = [[NSHashTable hashTableWithWeakObjects] retain];
 	_openFiles = [[NSCountedSet alloc] initWithCapacity:0];
+	_projectSettingsProviders = [[NSHashTable hashTableWithWeakObjects] retain];
 	
 	return self;
 }
@@ -90,6 +99,10 @@ NSString *const WCProjectDataFileName = @"project.plist";
 
 - (NSFileWrapper *)fileWrapperOfType:(NSString *)typeName error:(NSError **)outError {
 	NSDictionary *projectPlist = [[self projectContainer] plistRepresentation];
+	NSMutableDictionary *projectSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+	
+	for (id <WCProjectDocumentSettingsProvider> settingsProvider in [self projectSettingsProviders])
+		[projectSettings setObject:[settingsProvider projectDocumentSettings] forKey:[settingsProvider projectDocumentSettingsKey]];
 	
 	[self unblockUserInteraction];
 	
@@ -98,13 +111,22 @@ NSString *const WCProjectDataFileName = @"project.plist";
 	if (!projectData)
 		return nil;
 	
+	projectData = [NSData gtm_dataByGzippingData:projectData];
+	
 	[projectWrapper addRegularFileWithContents:projectData preferredFilename:WCProjectDataFileName];
+	
+	NSData *settingsData = [NSPropertyListSerialization dataWithPropertyList:projectSettings format:NSPropertyListXMLFormat_v1_0 options:0 error:outError];
+	
+	[projectWrapper addRegularFileWithContents:settingsData preferredFilename:[NSUserName() stringByAppendingPathExtension:WCProjectSettingsFileExtension]];
 	
 	return projectWrapper;
 }
 - (BOOL)readFromFileWrapper:(NSFileWrapper *)fileWrapper ofType:(NSString *)typeName error:(NSError **)outError {
 	NSFileWrapper *projectDataWrapper = [[fileWrapper fileWrappers] objectForKey:WCProjectDataFileName];
 	NSData *projectData = [projectDataWrapper regularFileContents];
+	
+	projectData = [NSData gtm_dataByInflatingData:projectData];
+	
 	NSPropertyListFormat format;
 	NSDictionary *projectDataPlist = [NSPropertyListSerialization propertyListWithData:projectData options:0 format:&format error:outError];
 	
@@ -130,6 +152,7 @@ NSString *const WCProjectDataFileName = @"project.plist";
 	NSMapTable *filesToFileContainers = [NSMapTable mapTableWithWeakToWeakObjects];
 	NSMapTable *filesToSourceFileDocuments = [NSMapTable mapTableWithWeakToStrongObjects];
 	NSMapTable *sourceFileDocumentsToFiles = [NSMapTable mapTableWithWeakToWeakObjects];
+	NSMutableDictionary *UUIDsToObjects = [NSMutableDictionary dictionaryWithCapacity:0];
 	
 	for (WCFileContainer *fileContainer in [projectContainer descendantNodesInclusive]) {
 		[filesToFileContainers setObject:fileContainer forKey:[fileContainer representedObject]];
@@ -146,11 +169,23 @@ NSString *const WCProjectDataFileName = @"project.plist";
 				[sourceFileDocumentsToFiles setObject:[fileContainer representedObject] forKey:document];
 			}
 		}
+		
+		[UUIDsToObjects setObject:[fileContainer representedObject] forKey:[[fileContainer representedObject] UUID]];
 	}
 	
 	[self setFilesToFileContainers:filesToFileContainers];
 	[self setFilesToSourceFileDocuments:filesToSourceFileDocuments];
 	[self setSourceFileDocumentsToFiles:sourceFileDocumentsToFiles];
+	[self setUUIDsToObjects:UUIDsToObjects];
+	
+	NSFileWrapper *settingsDataWrapper = [[fileWrapper fileWrappers] objectForKey:[NSUserName() stringByAppendingPathExtension:WCProjectSettingsFileExtension]];
+	if (!settingsDataWrapper)
+		return YES;
+	
+	NSData *settingsData = [settingsDataWrapper regularFileContents];
+	NSDictionary *settingsPlist = [NSPropertyListSerialization propertyListWithData:settingsData options:NSPropertyListImmutable format:&format error:outError];
+	
+	[self setProjectSettings:settingsPlist];
 	
 	return YES;
 }
@@ -227,6 +262,9 @@ NSString *const WCProjectDataFileName = @"project.plist";
 @synthesize unsavedFiles=_unsavedFiles;
 @synthesize filesToFileContainers=_filesToFileContainers;
 @synthesize openFiles=_openFiles;
+@synthesize UUIDsToObjects=_UUIDsToObjects;
+@synthesize projectSettingsProviders=_projectSettingsProviders;
+@synthesize projectSettings=_projectSettings;
 #pragma mark *** Private Methods ***
 
 #pragma mark Notifications

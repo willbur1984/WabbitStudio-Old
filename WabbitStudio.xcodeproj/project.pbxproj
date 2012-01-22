@@ -46,6 +46,8 @@
 		0719860C14C0C10700C8E91A /* WCFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 0719860B14C0C10700C8E91A /* WCFile.m */; };
 		0719860F14C0C4B200C8E91A /* WCNewProjectWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0719860E14C0C4B200C8E91A /* WCNewProjectWindowController.m */; };
 		0719861214C0C53600C8E91A /* WCNewProjectWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0719861014C0C53600C8E91A /* WCNewProjectWindow.xib */; };
+		071E6AC814CC079000F2888B /* GTMNSData+zlib.m in Sources */ = {isa = PBXBuildFile; fileRef = 071E6AC714CC079000F2888B /* GTMNSData+zlib.m */; };
+		071E6ACC14CC07C200F2888B /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 071E6ACB14CC07C200F2888B /* libz.dylib */; };
 		071ECCC314A4233C002409F8 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 071ECCC214A4233C002409F8 /* Cocoa.framework */; };
 		071ECCCD14A4233C002409F8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 071ECCCB14A4233C002409F8 /* InfoPlist.strings */; };
 		071ECCCF14A4233C002409F8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 071ECCCE14A4233C002409F8 /* main.m */; };
@@ -202,7 +204,6 @@
 		07A8AFD014BDFCCE008CB9FF /* SRRemoveShortcutPressed.tif in Resources */ = {isa = PBXBuildFile; fileRef = 07A8AFCC14BDFCCD008CB9FF /* SRRemoveShortcutPressed.tif */; };
 		07A8AFD114BDFCCE008CB9FF /* SRRemoveShortcutRollover.tif in Resources */ = {isa = PBXBuildFile; fileRef = 07A8AFCD14BDFCCD008CB9FF /* SRRemoveShortcutRollover.tif */; };
 		07A8AFD214BDFCCE008CB9FF /* SRSnapback.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 07A8AFCE14BDFCCD008CB9FF /* SRSnapback.tiff */; };
-		07A8AFD514BE033C008CB9FF /* RSMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A8AFD414BE033C008CB9FF /* RSMenuItem.m */; };
 		07A8AFD814BE2B40008CB9FF /* RSOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A8AFD714BE2B40008CB9FF /* RSOutlineView.m */; };
 		07A8AFDC14BE2C0A008CB9FF /* NSOutlineView+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A8AFDB14BE2C0A008CB9FF /* NSOutlineView+RSExtensions.m */; };
 		07A8AFDF14BE2C21008CB9FF /* NSTreeController+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A8AFDE14BE2C21008CB9FF /* NSTreeController+RSExtensions.m */; };
@@ -333,6 +334,11 @@
 		0719860D14C0C4B200C8E91A /* WCNewProjectWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCNewProjectWindowController.h; sourceTree = "<group>"; };
 		0719860E14C0C4B200C8E91A /* WCNewProjectWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCNewProjectWindowController.m; sourceTree = "<group>"; };
 		0719861114C0C53600C8E91A /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCNewProjectWindow.xib; sourceTree = "<group>"; };
+		071E6AC614CC079000F2888B /* GTMNSData+zlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSData+zlib.h"; sourceTree = "<group>"; };
+		071E6AC714CC079000F2888B /* GTMNSData+zlib.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSData+zlib.m"; sourceTree = "<group>"; };
+		071E6ACA14CC079B00F2888B /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
+		071E6ACB14CC07C200F2888B /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		071E6ACD14CC0CA500F2888B /* WCProjectDocumentSettingsProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCProjectDocumentSettingsProvider.h; sourceTree = "<group>"; };
 		071ECCBE14A4233C002409F8 /* WabbitStudio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WabbitStudio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		071ECCC214A4233C002409F8 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		071ECCC514A4233C002409F8 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -609,8 +615,6 @@
 		07A8AFCC14BDFCCD008CB9FF /* SRRemoveShortcutPressed.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = SRRemoveShortcutPressed.tif; sourceTree = "<group>"; };
 		07A8AFCD14BDFCCD008CB9FF /* SRRemoveShortcutRollover.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = SRRemoveShortcutRollover.tif; sourceTree = "<group>"; };
 		07A8AFCE14BDFCCD008CB9FF /* SRSnapback.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = SRSnapback.tiff; sourceTree = "<group>"; };
-		07A8AFD314BE033C008CB9FF /* RSMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSMenuItem.h; sourceTree = "<group>"; };
-		07A8AFD414BE033C008CB9FF /* RSMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSMenuItem.m; sourceTree = "<group>"; };
 		07A8AFD614BE2B40008CB9FF /* RSOutlineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSOutlineView.h; sourceTree = "<group>"; };
 		07A8AFD714BE2B40008CB9FF /* RSOutlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSOutlineView.m; sourceTree = "<group>"; };
 		07A8AFD914BE2B59008CB9FF /* RSOutlineViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSOutlineViewDelegate.h; sourceTree = "<group>"; };
@@ -677,6 +681,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				071E6ACC14CC07C200F2888B /* libz.dylib in Frameworks */,
 				0778853614C49F0300605F5D /* Quartz.framework in Frameworks */,
 				07A8AFB914BDEE9C008CB9FF /* Carbon.framework in Frameworks */,
 				078F040714AD17AC0080ADBC /* QuartzCore.framework in Frameworks */,
@@ -951,6 +956,7 @@
 		071ECCC114A4233C002409F8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				071E6ACB14CC07C200F2888B /* libz.dylib */,
 				0797326414C52EBE00A71F54 /* PSMTabBarControl.framework */,
 				0778853514C49F0300605F5D /* Quartz.framework */,
 				077884EB14C0CE6A00605F5D /* Sparkle.framework */,
@@ -1039,8 +1045,6 @@
 			isa = PBXGroup;
 			children = (
 				07F5F76E14A5A46900F1F326 /* RSDefines.h */,
-				07A8AFD314BE033C008CB9FF /* RSMenuItem.h */,
-				07A8AFD414BE033C008CB9FF /* RSMenuItem.m */,
 				077884FE14C14E5F00605F5D /* Navigator */,
 				072AF0F914BCB71100F2147E /* Model */,
 				072880C214B4F1780082DE4C /* Bezel Window */,
@@ -1278,6 +1282,7 @@
 				071ECCD514A4233C002409F8 /* WCSourceFileDocument.m */,
 				071985FF14C0BCC300C8E91A /* WCProjectDocument.h */,
 				0719860014C0BCC300C8E91A /* WCProjectDocument.m */,
+				071E6ACD14CC0CA500F2888B /* WCProjectDocumentSettingsProvider.h */,
 			);
 			name = Documents;
 			sourceTree = "<group>";
@@ -1476,6 +1481,9 @@
 		07A8AFBD14BDF2E2008CB9FF /* External */ = {
 			isa = PBXGroup;
 			children = (
+				071E6ACA14CC079B00F2888B /* GTMDefines.h */,
+				071E6AC614CC079000F2888B /* GTMNSData+zlib.h */,
+				071E6AC714CC079000F2888B /* GTMNSData+zlib.m */,
 				071306AC14C91C4C00862E4D /* DDHotKeyCenter.h */,
 				071306AD14C91C4C00862E4D /* DDHotKeyCenter.m */,
 				07018B2B14C63C6600C5A7AC /* UKXattrMetadataStore.h */,
@@ -1759,7 +1767,6 @@
 				07A8AFBC14BDF0D2008CB9FF /* WCKeyBindingsEditCommandPairWindowController.m in Sources */,
 				07A8AFC014BDF2E2008CB9FF /* NSAlert-OAExtensions.m in Sources */,
 				07A8AFC314BDF42D008CB9FF /* NSApplication+RSExtensions.m in Sources */,
-				07A8AFD514BE033C008CB9FF /* RSMenuItem.m in Sources */,
 				07A8AFD814BE2B40008CB9FF /* RSOutlineView.m in Sources */,
 				07A8AFDC14BE2C0A008CB9FF /* NSOutlineView+RSExtensions.m in Sources */,
 				07A8AFDF14BE2C21008CB9FF /* NSTreeController+RSExtensions.m in Sources */,
@@ -1802,6 +1809,7 @@
 				071306F114CA92EF00862E4D /* WCGroupContainer.m in Sources */,
 				072FCFB814CB972B00F76276 /* WCProjectNavigatorCellView.m in Sources */,
 				072FCFBD14CBCA6200F76276 /* RSStringToAbbreviatedStringTransformer.m in Sources */,
+				071E6AC814CC079000F2888B /* GTMNSData+zlib.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

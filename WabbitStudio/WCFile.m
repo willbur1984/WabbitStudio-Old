@@ -12,13 +12,16 @@
 #import "NSImage+RSExtensions.h"
 #import "WCSourceFileDocument.h"
 #import "WCDocumentController.h"
+#import "NSString+RSExtensions.h"
 
 static NSString *const WCFileReferenceKey = @"fileReference";
+static NSString *const WCFileUUIDKey = @"UUID";
 
 @implementation WCFile
 #pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 	_delegate = nil;
+	[_UUID release];
 	[_fileReference release];
 	[super dealloc];
 }
@@ -30,6 +33,7 @@ static NSString *const WCFileReferenceKey = @"fileReference";
 - (NSDictionary *)plistRepresentation {
 	NSMutableDictionary *retval = [NSMutableDictionary dictionaryWithDictionary:[super plistRepresentation]];
 	
+	[retval setObject:[self UUID] forKey:WCFileUUIDKey];
 	[retval setObject:[[self fileReference] plistRepresentation] forKey:WCFileReferenceKey];
 	
 	return retval;
@@ -38,6 +42,7 @@ static NSString *const WCFileReferenceKey = @"fileReference";
 	if (!(self = [super init]))
 		return nil;
 	
+	_UUID = [[plistRepresentation objectForKey:WCFileUUIDKey] copy];
 	_fileReference = [[RSFileReference alloc] initWithPlistRepresentation:[plistRepresentation objectForKey:WCFileReferenceKey]];
 	[_fileReference setDelegate:self];
 	
@@ -93,6 +98,7 @@ static NSString *const WCFileReferenceKey = @"fileReference";
 	if (!(self = [super init]))
 		return nil;
 	
+	_UUID = [[NSString UUIDString] copy];
 	_fileReference = [[RSFileReference alloc] initWithFileURL:fileURL];
 	[_fileReference setDelegate:self];
 	
@@ -144,5 +150,6 @@ static NSString *const WCFileReferenceKey = @"fileReference";
 - (NSURL *)parentDirectoryURL {
 	return [[self fileReference] parentDirectoryURL];
 }
+@synthesize UUID=_UUID;
 
 @end

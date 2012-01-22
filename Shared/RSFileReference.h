@@ -21,7 +21,6 @@
 	__weak id <RSFileReferenceDelegate> _delegate;
 	NSURL *_fileReferenceURL;
 	NSURL *_fileURL;
-	NSString *_UUID;
 	UKKQueue *_kqueue;
 	struct {
 		unsigned int ignoreNextFileWatcherNotification:1;
@@ -29,7 +28,6 @@
 	} _fileReferenceFlags;
 }
 @property (readwrite,assign,nonatomic) id <RSFileReferenceDelegate> delegate;
-@property (readonly,nonatomic) NSString *UUID;
 @property (readonly,nonatomic) NSURL *fileReferenceURL;
 @property (readwrite,copy,nonatomic) NSURL *fileURL;
 @property (readonly,nonatomic) NSImage *fileIcon;
