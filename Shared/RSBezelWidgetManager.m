@@ -31,7 +31,7 @@
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
 		CAAnimation *animation = [CABasicAnimation animation];
-		[animation setDuration:0.25];
+		[animation setDuration:0.35];
 		[animation setDelegate:self];
 		[[self window] setAnimations:[NSDictionary dictionaryWithObjectsAndKeys:animation,@"alphaValue", nil]];
 	});

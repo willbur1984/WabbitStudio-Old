@@ -9,6 +9,7 @@
 #import "WCProjectNavigatorOutlineView.h"
 
 @implementation WCProjectNavigatorOutlineView
+#pragma mark *** Subclass Overrides ***
 + (NSMenu *)defaultMenu {
 	static NSMenu *retval;
 	static dispatch_once_t onceToken;
@@ -23,7 +24,7 @@
 		[retval addItem:[NSMenuItem separatorItem]];
 		[retval addItemWithTitle:NSLocalizedString(@"Ungroup Selection", @"Ungroup Selection") action:@selector(ungroupSelection:) keyEquivalent:@""];
 		[retval addItem:[NSMenuItem separatorItem]];
-		[retval addItemWithTitle:NSLocalizedString(@"Add Files to Project", @"Add Files to Project") action:@selector(addFilesToProject:) keyEquivalent:@""];
+		[retval addItemWithTitle:NSLocalizedString(@"Add Files to Project\u2026", @"Add Files to Project with ellipsis") action:@selector(addFilesToProject:) keyEquivalent:@""];
 		[retval addItem:[NSMenuItem separatorItem]];
 		[retval addItemWithTitle:NSLocalizedString(@"Delete\u2026", @"Delete with ellipsis") action:@selector(delete:) keyEquivalent:@""];
 		[retval addItemWithTitle:NSLocalizedString(@"Rename", @"Rename") action:@selector(rename:) keyEquivalent:@""];

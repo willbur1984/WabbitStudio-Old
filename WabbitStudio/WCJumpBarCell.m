@@ -14,6 +14,7 @@
 @end
 
 @implementation WCJumpBarCell
+#pragma mark *** Subclass Overrides ***
 + (Class)pathComponentCellClass {
 	return [WCJumpBarComponentCell class];
 }
@@ -31,7 +32,7 @@
 	
 	return self;
 }
-
+#pragma mark NSCoding
 - (id)initWithCoder:(NSCoder *)coder {
 	if (!(self = [super initWithCoder:coder]))
 		return nil;
@@ -40,7 +41,7 @@
 	
 	return self;
 }
-
+#pragma mark *** Private Methods ***
 - (void)_commonInit; {	
 	[self setPlaceholderString:NSLocalizedString(@"No Document", @"No Document")];
 }

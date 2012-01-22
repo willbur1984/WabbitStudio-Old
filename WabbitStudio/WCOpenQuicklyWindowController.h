@@ -9,7 +9,7 @@
 #import <AppKit/NSWindowController.h>
 #import "WCOpenQuicklyDataSource.h"
 
-@interface WCOpenQuicklyWindowController : NSWindowController {
+@interface WCOpenQuicklyWindowController : NSWindowController <NSControlTextEditingDelegate> {
 	__weak id <WCOpenQuicklyDataSource> _dataSource;
 	NSArray *_items;
 	NSMutableArray *_matches;

@@ -9,12 +9,14 @@
 #import <Foundation/NSObject.h>
 
 @interface WCMiscellaneousPerformer : NSObject
+
+@property (readonly,nonatomic) NSURL *applicationSupportDirectoryURL;
+
+@property (readonly,nonatomic) NSURL *applicationFontAndColorThemesDirectoryURL;
+@property (readonly,nonatomic) NSURL *userFontAndColorThemesDirectoryURL;
+
+@property (readonly,nonatomic) NSURL *userKeyBindingCommandSetsDirectoryURL;
+
 + (WCMiscellaneousPerformer *)sharedPerformer;
 
-- (NSURL *)applicationSupportDirectoryURL;
-
-- (NSURL *)applicationFontAndColorThemesDirectoryURL;
-- (NSURL *)userFontAndColorThemesDirectoryURL;
-
-- (NSURL *)userKeyBindingCommandSetsDirectoryURL;
 @end

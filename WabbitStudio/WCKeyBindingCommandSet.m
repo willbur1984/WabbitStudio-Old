@@ -20,6 +20,7 @@ NSString *const WCKeyBindingCommandSetKeyBindingsKey = @"keyBindings";
 @end
 
 @implementation WCKeyBindingCommandSet
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 	[_name release];
 	[_identifier release];
@@ -29,7 +30,7 @@ NSString *const WCKeyBindingCommandSetKeyBindingsKey = @"keyBindings";
 - (NSString *)description {
 	return [NSString stringWithFormat:@"name: %@ identifier: %@",[self name],[self identifier]];
 }
-
+#pragma mark NSCopying
 - (id)copyWithZone:(NSZone *)zone {
 	WCKeyBindingCommandSet *copy = [super copyWithZone:zone];
 	
@@ -38,7 +39,7 @@ NSString *const WCKeyBindingCommandSetKeyBindingsKey = @"keyBindings";
 	
 	return copy;
 }
-
+#pragma mark NSMutableCopying
 - (id)mutableCopyWithZone:(NSZone *)zone {
 	WCKeyBindingCommandSet *copy = [super mutableCopyWithZone:zone];
 	
@@ -47,7 +48,7 @@ NSString *const WCKeyBindingCommandSetKeyBindingsKey = @"keyBindings";
 	
 	return copy;
 }
-
+#pragma mark RSPlistArchiving
 - (NSDictionary *)plistRepresentation {
 	NSArray *pairs = [self flattenedCommandPairs];
 	NSMutableDictionary *plist = [NSMutableDictionary dictionaryWithCapacity:0];
@@ -109,7 +110,9 @@ NSString *const WCKeyBindingCommandSetKeyBindingsKey = @"keyBindings";
 	
 	return self;
 }
+#pragma mark *** Public Methods ***
 
+#pragma mark Properties
 @synthesize URL=_URL;
 @synthesize name=_name;
 @synthesize identifier=_identifier;
@@ -137,7 +140,7 @@ NSString *const WCKeyBindingCommandSetKeyBindingsKey = @"keyBindings";
 	
 	return [[retval copy] autorelease];
 }
-
+#pragma mark *** Private Methods ***
 - (void)_addKeyBindingCommandPairsFromMenu:(NSMenu *)menu toCommandPair:(WCKeyBindingCommandPair *)commandPair keyBindings:(NSDictionary *)keyBindings; {
 	for (NSMenuItem *item in [menu itemArray]) {
 		NSString *actionName = NSStringFromSelector([item action]);

@@ -29,6 +29,7 @@ NSString *const WCSourceTextStorageDidRemoveBookmarkNotification = @"WCSourceTex
 @end
 
 @implementation WCSourceTextStorage
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
@@ -113,14 +114,14 @@ NSString *const WCSourceTextStorageDidRemoveBookmarkNotification = @"WCSourceTex
 - (NSSet *)userDefaultsKeyPathsToObserve {
 	return [NSSet setWithObjects:WCEditorTabWidthKey, nil];
 }
-
+#pragma mark NSKeyValueObserving
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if ([keyPath isEqualToString:[kUserDefaultsKeyPathPrefix stringByAppendingString:WCEditorTabWidthKey]])
 		[self _updateParagraphStyle];
 	else
 		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
-
+#pragma mark *** Public Methods ***
 + (NSParagraphStyle *)defaultParagraphStyle; {
 	NSUInteger tabWidth = [[[NSUserDefaults standardUserDefaults] objectForKey:WCEditorTabWidthKey] unsignedIntegerValue];
 	NSMutableString *tabWidthString = [NSMutableString stringWithCapacity:tabWidth];
@@ -179,7 +180,7 @@ NSString *const WCSourceTextStorageDidRemoveBookmarkNotification = @"WCSourceTex
 - (NSArray *)bookmarksForRange:(NSRange)range; {
 	return [_bookmarks bookmarksForRange:range];
 }
-
+#pragma mark Properties
 @synthesize lineStartIndexes=_lineStartIndexes;
 @dynamic delegate;
 - (id<WCSourceTextStorageDelegate>)delegate {
@@ -199,7 +200,7 @@ NSString *const WCSourceTextStorageDidRemoveBookmarkNotification = @"WCSourceTex
 	return [[self class] defaultParagraphStyle];
 }
 @synthesize bookmarks=_bookmarks;
-
+#pragma mark *** Private Methods ***
 - (void)_commonInit; {
 	_lineStartIndexes = [[NSMutableArray alloc] initWithCapacity:0];
 	_bookmarks = [[NSMutableArray alloc] initWithCapacity:0];
@@ -241,7 +242,7 @@ NSString *const WCSourceTextStorageDidRemoveBookmarkNotification = @"WCSourceTex
 	}
 	[self addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:style,NSParagraphStyleAttributeName, nil] range:NSMakeRange(0, [self length])];
 }
-
+#pragma mark Notifications
 - (void)_currentThemeDidChange:(NSNotification *)note {
 	[[[self delegate] sourceHighlighterForSourceTextStorage:self] performHighlightingForAllAttributes];
 }

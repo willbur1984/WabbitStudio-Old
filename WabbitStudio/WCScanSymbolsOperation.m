@@ -21,7 +21,7 @@
 @end
 
 @implementation WCScanSymbolsOperation
-
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 	[_sourceScanner release];
 	[_string release];
@@ -290,7 +290,7 @@
 CLEANUP:
 	[pool release];
 }
-
+#pragma mark Public Methods ***
 + (id)scanSymbolsOperationWithSourceScanner:(WCSourceScanner *)sourceScanner; {
 	return [[[[self class] alloc] initWithSourceScanner:sourceScanner] autorelease];
 }
@@ -303,7 +303,7 @@ CLEANUP:
 	
 	return self;
 }
-
+#pragma mark Properties
 @synthesize sourceScanner=_sourceScanner;
 @synthesize string=_string;
 @end

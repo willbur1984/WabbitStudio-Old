@@ -55,6 +55,7 @@ static WCColorToStringValueTransformer *colorToStringValueTransformer;
 static WCFontToStringValueTransformer *fontToStringValueTransformer;
 
 @implementation WCFontAndColorTheme
+#pragma mark *** Subclass Overrides ***
 + (void)initialize {
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
@@ -108,7 +109,7 @@ static WCFontToStringValueTransformer *fontToStringValueTransformer;
 	
 	[super dealloc];
 }
-
+#pragma mark NSCopying
 - (id)copyWithZone:(NSZone *)zone {
 	WCFontAndColorTheme *copy = [[[self class] alloc] init];
 	
@@ -154,7 +155,7 @@ static WCFontToStringValueTransformer *fontToStringValueTransformer;
 	
 	return copy;
 }
-
+#pragma mark NSMutableCopying
 - (id)mutableCopyWithZone:(NSZone *)zone {
 	WCFontAndColorTheme *copy = [[[self class] alloc] init];
 	
@@ -200,7 +201,7 @@ static WCFontToStringValueTransformer *fontToStringValueTransformer;
 	
 	return copy;
 }
-
+#pragma mark RSPlistArchiving
 - (NSDictionary *)plistRepresentation {
 	NSMutableDictionary *retval = [NSMutableDictionary dictionaryWithCapacity:0];
 	
@@ -292,7 +293,7 @@ static WCFontToStringValueTransformer *fontToStringValueTransformer;
 	
 	return self;
 }
-
+#pragma mark *** Public Methods ***
 + (WCFontAndColorTheme *)fontAndColorThemeWithContentsOfURL:(NSURL *)url; {
 	return [[[[self class] alloc] initWithContentsOfURL:url] autorelease];
 }
@@ -307,7 +308,7 @@ static WCFontToStringValueTransformer *fontToStringValueTransformer;
 	
 	return [self initWithPlistRepresentation:plist];
 }
-
+#pragma mark Properties
 @synthesize URL=_URL;
 @synthesize name=_name;
 @synthesize identifier=_identifier;

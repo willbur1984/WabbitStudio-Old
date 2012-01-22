@@ -14,7 +14,7 @@
 @end
 
 @implementation WCJumpBarView
-
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
@@ -32,15 +32,6 @@
 
 - (id)initWithFrame:(NSRect)frame {
     if (!(self = [super initWithFrame:frame]))
-		return nil;
-	
-	[self _commonInit];
-	
-	return self;
-}
-
-- (id)initWithCoder:(NSCoder *)coder {
-	if (!(self = [super initWithCoder:coder]))
 		return nil;
 	
 	[self _commonInit];
@@ -88,7 +79,16 @@
 		}
 	}
 }
-
+#pragma mark NSCoding
+- (id)initWithCoder:(NSCoder *)coder {
+	if (!(self = [super initWithCoder:coder]))
+		return nil;
+	
+	[self _commonInit];
+	
+	return self;
+}
+#pragma mark *** Private Methods ***
 - (void)_commonInit; {
 	_fillGradient = [[NSGradient alloc] initWithStartingColor:[NSColor colorWithCalibratedWhite:174.0/255.0 alpha:1.0] endingColor:[NSColor colorWithCalibratedWhite:211.0/255.0 alpha:1.0]];
 	_alternateFillGradient = [[NSGradient alloc] initWithStartingColor:[NSColor colorWithCalibratedWhite:209.0/255.0 alpha:1.0] endingColor:[NSColor colorWithCalibratedWhite:244.0/255.0 alpha:1.0]];

@@ -14,7 +14,7 @@
 @end
 
 @implementation WCJumpToLineWindowController
-
+#pragma mark *** Subclass Overrides ***
 - (id)init {
 	if (!(self = [super initWithWindowNibName:[self windowNibName]]))
 		return nil;
@@ -27,7 +27,7 @@
 - (NSString *)windowNibName {
 	return @"WCJumpToLineWindow";
 }
-
+#pragma mark *** Public Methods ***
 + (WCJumpToLineWindowController *)sharedWindowController; {
 	static id sharedInstance;
 	static dispatch_once_t onceToken;
@@ -85,7 +85,7 @@
 	
 	[self setTextView:nil];
 }
-
+#pragma mark IBActions
 - (IBAction)jump:(id)sender; {
 	[[NSApplication sharedApplication] stopModalWithCode:NSOKButton];
 	[[self window] orderOut:nil];
@@ -94,7 +94,7 @@
 	[[NSApplication sharedApplication] stopModalWithCode:NSCancelButton];
 	[[self window] orderOut:nil];
 }
-
+#pragma mark Properties
 @synthesize jumpMode=_jumpMode;
 @synthesize characterOrLineString=_characterOrLineString;
 @synthesize textView=_textView;

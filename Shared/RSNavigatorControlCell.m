@@ -13,7 +13,7 @@
 @end
 
 @implementation RSNavigatorControlCell
-
+#pragma mark *** Subclass Overrides ***
 - (id)initImageCell:(NSImage *)image {
 	if (!(self = [super initImageCell:image]))
 		return nil;
@@ -22,6 +22,7 @@
 	
 	return self;
 }
+#pragma mark NSCoding
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (!(self = [super initWithCoder:aDecoder]))
 		return nil;
@@ -30,7 +31,7 @@
 	
 	return self;
 }
-
+#pragma mark *** Private Methods ***
 - (void)_commonInit; {
 	[self setHighlightsBy:NSContentsCellMask];
 	[self setShowsStateBy:NSNoCellMask];

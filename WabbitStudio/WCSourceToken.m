@@ -16,7 +16,7 @@
 @end
 
 @implementation WCSourceToken
-
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 	[_name release];
 	[super dealloc];
@@ -25,7 +25,7 @@
 - (NSString *)description {
 	return [NSString stringWithFormat:@"type: %@\nrange: %@\nname: %@",[self typeDescription],NSStringFromRange([self range]),[self name]];
 }
-
+#pragma mark *** Public Methods ***
 + (id)sourceTokenOfType:(WCSourceTokenType)type range:(NSRange)range name:(NSString *)name; {
 	return [[[[self class] alloc] initWithType:type range:range name:name] autorelease];
 }
@@ -43,7 +43,7 @@
 + (NSImage *)sourceTokenIconForSourceTokenType:(WCSourceTokenType)sourceTokenType; {
 	return [self _sourceTokenIconForSourceTokenType:sourceTokenType];
 }
-
+#pragma mark Properties
 @synthesize type=_type;
 @synthesize range=_range;
 @synthesize name=_name;
@@ -76,7 +76,7 @@
 - (NSImage *)icon {
 	return [[self class] _sourceTokenIconForSourceTokenType:[self type]];
 }
-
+#pragma mark *** Private Methods ***
 + (NSImage *)_sourceTokenIconForSourceTokenType:(WCSourceTokenType)sourceTokenType; {
 	static NSMapTable *typesToIcons;
 	static dispatch_once_t onceToken;

@@ -13,18 +13,9 @@
 @end
 
 @implementation RSGlassGradientView
-
+#pragma mark *** Subclass Overrides ***
 - (id)initWithFrame:(NSRect)frame {
     if (!(self = [super initWithFrame:frame]))
-		return nil;
-	
-	[self _commonInit];
-	
-	return self;
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-	if (!(self = [super initWithCoder:aDecoder]))
 		return nil;
 	
 	[self _commonInit];
@@ -55,7 +46,18 @@
 		NSRectFill(NSMakeRect(NSMaxX([self bounds])-1, NSMinY([self bounds]), 1.0, NSHeight([self bounds])));
 	}
 }
+#pragma mark NSCoding
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (!(self = [super initWithCoder:aDecoder]))
+		return nil;
+	
+	[self _commonInit];
+	
+	return self;
+}
+#pragma mark *** Public Methods ***
 
+#pragma mark Properties
 @dynamic shouldDrawLeftEdge;
 - (BOOL)shouldDrawLeftEdge {
 	return NO;
@@ -72,7 +74,7 @@
 - (BOOL)shouldDrawBottomEdge {
 	return NO;
 }
-
+#pragma mark *** Private Methods ***
 - (void)_commonInit; {
 	_fillGradient = [[NSGradient alloc] initWithColorsAndLocations:[NSColor colorWithCalibratedWhite:(253.0f / 255.0f) alpha:1],0.0,[NSColor colorWithCalibratedWhite:(242.0f / 255.0f) alpha:1],0.45454,[NSColor colorWithCalibratedWhite:(230.0f / 255.0f) alpha:1],0.45454,[NSColor colorWithCalibratedWhite:(230.0f / 255.0f) alpha:1],1.0,nil];
 	_topFillColor = [[NSColor colorWithCalibratedWhite:(180.0/255.0) alpha:1.0] retain];

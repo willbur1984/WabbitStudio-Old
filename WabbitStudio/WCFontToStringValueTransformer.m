@@ -11,6 +11,7 @@
 static NSFont *defaultFont;
 
 @implementation WCFontToStringValueTransformer
+#pragma mark *** Subclass Overrides ***
 + (void)initialize {
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{

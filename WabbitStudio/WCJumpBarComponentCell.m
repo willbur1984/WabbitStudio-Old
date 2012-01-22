@@ -17,6 +17,7 @@
 @end
 
 @implementation WCJumpBarComponentCell
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 	[_titleCell release];
 	[super dealloc];
@@ -24,15 +25,6 @@
 
 - (id)initTextCell:(NSString *)aString {
 	if (!(self = [super initTextCell:aString]))
-		return nil;
-	
-	[self _commonInit];
-	
-	return self;
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-	if (!(self = [super initWithCoder:aDecoder]))
 		return nil;
 	
 	[self _commonInit];
@@ -79,6 +71,16 @@
 		[arrowSeparator drawInRect:NSCenteredRectWithSize([arrowSeparator size], NSMakeRect(NSMaxX(cellFrame)-[arrowSeparator size].width-kArrowSeparatorMarginRight, NSMinY(cellFrame), [arrowSeparator size].width, NSHeight(cellFrame))) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
 }
 
+#pragma mark NSCoding
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (!(self = [super initWithCoder:aDecoder]))
+		return nil;
+	
+	[self _commonInit];
+	
+	return self;
+}
+#pragma mark NSCopying
 - (id)copyWithZone:(NSZone *)zone {
 	WCJumpBarComponentCell *copy = [super copyWithZone:zone];
 	
@@ -86,12 +88,14 @@
 	
 	return copy;
 }
+#pragma mark *** Public Methods ***
 
+#pragma mark Properties
 @dynamic isLastPathComponentCell;
 - (BOOL)isLastPathComponentCell {
 	return ([[(NSPathControl *)[self controlView] pathComponentCells] lastObject] == self);
 }
-
+#pragma mark *** Private Methods ***
 - (void)_commonInit; {
 	[self setBackgroundStyle:NSBackgroundStyleRaised];
 	[self setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]]];

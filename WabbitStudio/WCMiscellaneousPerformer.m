@@ -9,6 +9,7 @@
 #import "WCMiscellaneousPerformer.h"
 
 @implementation WCMiscellaneousPerformer
+#pragma mark *** Public Methods ***
 + (WCMiscellaneousPerformer *)sharedPerformer; {
 	static id sharedInstance;
 	static dispatch_once_t onceToken;
@@ -17,7 +18,8 @@
 	});
 	return sharedInstance;
 }
-
+#pragma mark Properties
+@dynamic applicationSupportDirectoryURL;
 - (NSURL *)applicationSupportDirectoryURL; {
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
 	if (![paths count]) {
@@ -39,9 +41,11 @@
 	return directoryURL;
 }
 
+@dynamic applicationFontAndColorThemesDirectoryURL;
 - (NSURL *)applicationFontAndColorThemesDirectoryURL; {
 	return [[NSBundle mainBundle] URLForResource:@"FontAndColorThemes" withExtension:@""];
 }
+@dynamic userFontAndColorThemesDirectoryURL;
 - (NSURL *)userFontAndColorThemesDirectoryURL; {
 	NSURL *appSupportURL = [self applicationSupportDirectoryURL];
 	if (!appSupportURL)
@@ -58,7 +62,7 @@
 	}
 	return directoryURL;
 }
-
+@dynamic userKeyBindingCommandSetsDirectoryURL;
 - (NSURL *)userKeyBindingCommandSetsDirectoryURL; {
 	NSURL *appSupportURL = [self applicationSupportDirectoryURL];
 	if (!appSupportURL)

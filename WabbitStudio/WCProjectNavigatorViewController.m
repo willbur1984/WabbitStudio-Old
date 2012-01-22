@@ -128,7 +128,7 @@ NSString *const WCProjectNavigatorDidRenameNodeNotificationRenamedNodeUserInfoKe
 			[menuItem setTitle:LOCALIZED_STRING_DELETE];
 	}
 	else if ([menuItem action] == @selector(addFilesToProject:)) {
-		[menuItem setTitle:[NSString stringWithFormat:NSLocalizedString(@"Add Files to \"%@\"", @"add files to project format string"),[[[[self projectContainer] project] document] displayName]]];
+		[menuItem setTitle:[NSString stringWithFormat:NSLocalizedString(@"Add Files to \"%@\"\u2026", @"add files to project format string"),[[[[self projectContainer] project] document] displayName]]];
 	}
 	return YES;
 }

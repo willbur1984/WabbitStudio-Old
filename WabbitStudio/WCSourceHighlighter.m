@@ -42,6 +42,7 @@ static NSDictionary *attributeNamesToFontSelectors;
 @end
 
 @implementation WCSourceHighlighter
+#pragma mark *** Subclass Overrides ***
 + (void)initialize {
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
@@ -59,7 +60,7 @@ static NSDictionary *attributeNamesToFontSelectors;
 	_sourceScanner = nil;
 	[super dealloc];
 }
-
+#pragma mark *** Public Methods ***
 - (id)initWithSourceScanner:(WCSourceScanner *)sourceScanner; {
 	if (!(self = [super init]))
 		return nil;
@@ -373,10 +374,10 @@ static NSDictionary *attributeNamesToFontSelectors;
 			[attributedString addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithUnsignedInteger:NSUnderlineStyleSingle],NSUnderlineStyleAttributeName,[NSColor blackColor],NSForegroundColorAttributeName, nil] range:[result range]];
 	}];
 }
-
+#pragma mark Properties
 @synthesize sourceScanner=_sourceScanner;
 @synthesize delegate=_delegate;
-
+#pragma mark *** Private Methods ***
 - (BOOL)_symbolName:(NSString *)symbolName existsInArrayOfSymbolNames:(NSArray *)arrayOfSymbolNames; {
 	for (NSDictionary *symbolNames in arrayOfSymbolNames) {
 		if ([symbolNames objectForKey:symbolName])
@@ -384,7 +385,7 @@ static NSDictionary *attributeNamesToFontSelectors;
 	}
 	return NO;
 }
-
+#pragma mark Notifications
 - (void)_textStorageWillProcessEditing:(NSNotification *)note {
 	if (([[note object] editedMask] & NSTextStorageEditedCharacters) == 0)
 		return;

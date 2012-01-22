@@ -31,6 +31,7 @@
 @end
 
 @implementation WCLineNumberRulerView
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
@@ -97,7 +98,7 @@
 - (NSSet *)userDefaultsKeyPathsToObserve {
 	return [NSSet setWithObjects:WCEditorShowCurrentLineHighlightKey,WCEditorShowLineNumbersKey, nil];
 }
-
+#pragma mark NSKeyValueObserving
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if ([keyPath isEqualToString:[kUserDefaultsKeyPathPrefix stringByAppendingString:WCEditorShowLineNumbersKey]])
 		[self setNeedsDisplay:YES];
@@ -106,7 +107,7 @@
 	else
 		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
-
+#pragma mark *** Public Methods ***
 - (void)drawBackgroundInRect:(NSRect)backgroundRect; {
 	[[self backgroundColor] set];
 	NSRectFill(backgroundRect);
@@ -220,7 +221,7 @@
 		textAttributes = [self textAttributes];
 	return textAttributes;
 }
-
+#pragma mark Properties
 @dynamic lineStartIndexes;
 - (NSArray *)lineStartIndexes {
 	if ([self shouldRecalculateLineStartIndexes]) {
@@ -276,7 +277,7 @@
 - (NSDictionary *)selectedTextAttributes {
     return [NSDictionary dictionaryWithObjectsAndKeys:[self textFont],NSFontAttributeName,[NSColor blackColor],NSForegroundColorAttributeName,[NSParagraphStyle rightAlignedParagraphStyle],NSParagraphStyleAttributeName,nil];
 }
-
+#pragma mark *** Private Methods ***
 - (void)_calculateLineStartIndexes; {
 	NSUInteger characterIndex = 0, stringLength = [[[self textView] string] length], lineEnd, contentEnd;
 	
@@ -294,7 +295,7 @@
 	if (contentEnd < lineEnd)
 		[_lineStartIndexes addObject:[NSNumber numberWithUnsignedInteger:characterIndex]];
 }
-
+#pragma mark Notifications
 - (void)_textStorageDidProcessEditing:(NSNotification *)note {
 	[self setShouldRecalculateLineStartIndexes:YES];
     [self setNeedsDisplay:YES];

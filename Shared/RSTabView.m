@@ -16,15 +16,6 @@
     [super dealloc];
 }
 
-- (id)initWithCoder:(NSCoder *)decoder {
-	if (!(self = [super initWithCoder:decoder]))
-		return nil;
-	
-	_emptyContentStringCell = [[RSEmptyContentCell alloc] initTextCell:@""];
-	
-	return self;
-}
-
 - (void)drawRect:(NSRect)dirtyRect {
 	[super drawRect:dirtyRect];
 	
@@ -34,7 +25,18 @@
 		[_emptyContentStringCell drawWithFrame:[self bounds] inView:self];
 	}
 }
+#pragma mark NSCoding
+- (id)initWithCoder:(NSCoder *)decoder {
+	if (!(self = [super initWithCoder:decoder]))
+		return nil;
+	
+	_emptyContentStringCell = [[RSEmptyContentCell alloc] initTextCell:@""];
+	
+	return self;
+}
+#pragma mark *** Public Methods ***
 
+#pragma mark Properties
 @dynamic emptyContentString;
 - (NSString *)emptyContentString {
 	return NSLocalizedString(@"No Content", @"No Content");

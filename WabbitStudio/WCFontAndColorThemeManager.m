@@ -33,6 +33,7 @@ NSString *const WCFontAndColorThemeManagerFontDidChangeFontNameKey = @"fontName"
 @end
 
 @implementation WCFontAndColorThemeManager
+#pragma mark *** Subclass Overrides ***
 - (id)init {
 	if (!(self = [super init]))
 		return nil;
@@ -90,7 +91,7 @@ NSString *const WCFontAndColorThemeManagerFontDidChangeFontNameKey = @"fontName"
 	
 	return self;
 }
-
+#pragma mark NSKeyValueObserving
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if (context == self && [object isKindOfClass:[WCFontAndColorTheme class]]) {
 		static NSSet *fontKeyPaths;
@@ -126,7 +127,7 @@ NSString *const WCFontAndColorThemeManagerFontDidChangeFontNameKey = @"fontName"
 	else
 		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
-
+#pragma mark *** Public Methods ***
 + (WCFontAndColorThemeManager *)sharedManager; {
 	static id sharedInstance;
 	static dispatch_once_t onceToken;
@@ -168,7 +169,7 @@ NSString *const WCFontAndColorThemeManagerFontDidChangeFontNameKey = @"fontName"
 	
 	return YES;
 }
-
+#pragma mark Properties
 @synthesize themes=_themes;
 @dynamic mutableThemes;
 - (NSMutableArray *)mutableThemes {
@@ -231,7 +232,7 @@ NSString *const WCFontAndColorThemeManagerFontDidChangeFontNameKey = @"fontName"
 	});
 	return [[retval copy] autorelease];
 }
-
+#pragma mark *** Private Methods ***
 - (void)_setupObservingForFontAndColorTheme:(WCFontAndColorTheme *)theme; {
 	[theme addObserver:self forKeyPaths:[NSSet setWithObjects:@"name",@"selectionColor",@"backgroundColor",@"cursorColor",@"currentLineColor",@"plainTextFont",@"plainTextColor",@"commentFont",@"commentColor",@"registerFont",@"registerColor",@"mneumonicFont",@"mneumonicColor",@"stringFont",@"stringColor",@"preProcessorFont",@"preProcessorColor",@"directiveFont",@"directiveColor",@"conditionalFont",@"conditionalColor",@"numberFont",@"numberColor",@"hexadecimalFont",@"hexadecimalColor",@"binaryFont",@"binaryColor",@"stringFont",@"stringColor",@"labelFont",@"labelColor",@"equateFont",@"equateColor",@"defineFont",@"defineColor",@"macroFont",@"macroColor", nil]];
 }

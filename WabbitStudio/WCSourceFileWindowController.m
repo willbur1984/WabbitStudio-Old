@@ -18,7 +18,7 @@
 @end
 
 @implementation WCSourceFileWindowController
-
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
@@ -54,7 +54,9 @@
 - (void)windowWillClose:(NSNotification *)notification {
 	[[self sourceTextViewController] performCleanup];
 }
+#pragma mark *** Public Methods ***
 
+#pragma mark Properties
 @dynamic sourceTextViewController;
 - (WCStandardSourceTextViewController *)sourceTextViewController {
 	if (!_sourceTextViewController) {
@@ -62,7 +64,9 @@
 	}
 	return _sourceTextViewController;
 }
+#pragma mark *** Private Methods ***
 
+#pragma mark Notifications
 - (void)_windowDidResize:(NSNotification *)note {
 	//[[[self document] sourceHighlighter] performHighlightingInVisibleRange];
 }

@@ -9,12 +9,13 @@
 #import "WCCompletionChoice.h"
 
 @implementation WCCompletionChoice
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 	[_name release];
 	[_dictionary release];
 	[super dealloc];
 }
-
+#pragma mark WCCompletionItem
 - (NSString *)completionName {
 	return [[self completionDictionary] objectForKey:WCCompletionItemArgumentNameKey];
 }
@@ -24,7 +25,7 @@
 - (NSImage *)completionIcon {
 	return [WCSourceToken sourceTokenIconForSourceTokenType:_type];
 }
-
+#pragma mark *** Public Methods ***
 + (id)completionChoiceOfType:(WCSourceTokenType)type name:(NSString *)name dictionary:(NSDictionary *)dictionary; {
 	return [[[[self class] alloc] initWithType:type name:name dictionary:dictionary] autorelease];
 }
@@ -38,7 +39,7 @@
 	
 	return self;
 }
-
+#pragma mark Properties
 @synthesize completionDictionary=_dictionary;
 @synthesize name=_name;
 @end

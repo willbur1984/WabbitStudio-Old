@@ -18,6 +18,9 @@
 #import "WCNewProjectWindowController.h"
 
 @implementation WCApplicationDelegate
+#pragma mark *** Subclass Overrides ***
+
+#pragma mark NSApplicationDelegate
 - (void)applicationWillFinishLaunching:(NSNotification *)notification {
 	NSMutableDictionary *userDefaults = [NSMutableDictionary dictionaryWithCapacity:0];
 	
@@ -53,6 +56,12 @@
 	}
 }
 
+- (BOOL)applicationShouldOpenUntitledFile:(NSApplication *)sender {
+	return NO;
+}
+#pragma mark *** Public Methods ***
+
+#pragma mark IBActions
 - (IBAction)preferences:(id)sender; {
 	[[WCPreferencesWindowController sharedWindowController] showWindow:nil];
 }

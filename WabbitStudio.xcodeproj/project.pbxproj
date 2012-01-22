@@ -109,6 +109,7 @@
 		072BBC5F14AA700B0044ECC2 /* RSBottomBorderedGlassGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 072BBC5E14AA700B0044ECC2 /* RSBottomBorderedGlassGradientView.m */; };
 		072FCFB814CB972B00F76276 /* WCProjectNavigatorCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 072FCFB714CB972B00F76276 /* WCProjectNavigatorCellView.m */; };
 		072FCFBA14CBBD9700F76276 /* wabbitstudio.icns in Resources */ = {isa = PBXBuildFile; fileRef = 072FCFB914CBBD9700F76276 /* wabbitstudio.icns */; };
+		072FCFBD14CBCA6200F76276 /* RSStringToAbbreviatedStringTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 072FCFBC14CBCA6200F76276 /* RSStringToAbbreviatedStringTransformer.m */; };
 		073B5A9114B67B7400FCDC0F /* NSImage+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 073B5A9014B67B7400FCDC0F /* NSImage+RSExtensions.m */; };
 		073B5A9F14B6A4BF00FCDC0F /* WCJumpInWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 073B5A9E14B6A4BF00FCDC0F /* WCJumpInWindowController.m */; };
 		073B5AA414B6A92B00FCDC0F /* WCJumpInMatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 073B5AA314B6A92B00FCDC0F /* WCJumpInMatch.m */; };
@@ -444,6 +445,8 @@
 		072FCFB614CB972B00F76276 /* WCProjectNavigatorCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCProjectNavigatorCellView.h; sourceTree = "<group>"; };
 		072FCFB714CB972B00F76276 /* WCProjectNavigatorCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCProjectNavigatorCellView.m; sourceTree = "<group>"; };
 		072FCFB914CBBD9700F76276 /* wabbitstudio.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = wabbitstudio.icns; sourceTree = "<group>"; };
+		072FCFBB14CBCA6200F76276 /* RSStringToAbbreviatedStringTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSStringToAbbreviatedStringTransformer.h; sourceTree = "<group>"; };
+		072FCFBC14CBCA6200F76276 /* RSStringToAbbreviatedStringTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSStringToAbbreviatedStringTransformer.m; sourceTree = "<group>"; };
 		073B5A8F14B67B7400FCDC0F /* NSImage+RSExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+RSExtensions.h"; sourceTree = "<group>"; };
 		073B5A9014B67B7400FCDC0F /* NSImage+RSExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+RSExtensions.m"; sourceTree = "<group>"; };
 		073B5A9D14B6A4BF00FCDC0F /* WCJumpInWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCJumpInWindowController.h; sourceTree = "<group>"; };
@@ -1503,6 +1506,8 @@
 				07B4740414AE3CAA00E3F9D0 /* RSNumberToBoolTransformer.m */,
 				07B4740614AE3E0A00E3F9D0 /* RSNegateNumberToBoolTransformer.h */,
 				07B4740714AE3E0A00E3F9D0 /* RSNegateNumberToBoolTransformer.m */,
+				072FCFBB14CBCA6200F76276 /* RSStringToAbbreviatedStringTransformer.h */,
+				072FCFBC14CBCA6200F76276 /* RSStringToAbbreviatedStringTransformer.m */,
 			);
 			name = Transformers;
 			sourceTree = "<group>";
@@ -1796,6 +1801,7 @@
 				071306AE14C91C4C00862E4D /* DDHotKeyCenter.m in Sources */,
 				071306F114CA92EF00862E4D /* WCGroupContainer.m in Sources */,
 				072FCFB814CB972B00F76276 /* WCProjectNavigatorCellView.m in Sources */,
+				072FCFBD14CBCA6200F76276 /* RSStringToAbbreviatedStringTransformer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

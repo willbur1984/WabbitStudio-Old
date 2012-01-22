@@ -16,7 +16,7 @@
 #import <Quartz/Quartz.h>
 
 @implementation WCProjectWindowController
-
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
@@ -49,7 +49,7 @@
 	
 	[[self navigatorControl] setSelectedItemIdentifier:@"project"];
 }
-
+#pragma mark NSSplitViewDelegate
 - (BOOL)splitView:(NSSplitView *)splitView shouldAdjustSizeOfSubview:(NSView *)view {
 	if ([splitView isVertical] && view == [[splitView subviews] objectAtIndex:0])
 		return NO;
@@ -63,7 +63,7 @@ static const CGFloat kRightSubviewMinWidth = 400.0;
 - (CGFloat)splitView:(NSSplitView *)splitView constrainMinCoordinate:(CGFloat)proposedMinimumPosition ofSubviewAt:(NSInteger)dividerIndex {
 	return proposedMinimumPosition+kLeftSubviewMinWidth;
 }
-
+#pragma mark RSNavigatorControlDataSource
 - (NSArray *)itemIdentifiersForNavigatorControl:(RSNavigatorControl *)navigatorControl {
 	return [_navigatorItemDictionaries valueForKey:@"identifier"];
 }
@@ -76,12 +76,13 @@ static const CGFloat kRightSubviewMinWidth = 400.0;
 - (NSString *)navigatorControl:(RSNavigatorControl *)navigatorControl toopTipForItemIdentifier:(NSString *)itemIdentifier atIndex:(NSUInteger)index {
 	return [[_navigatorItemDictionaries objectAtIndex:index] objectForKey:@"toolTip"];
 }
-
+#pragma mark RSNavigatorControlDelegate
 - (NSView *)navigatorControl:(RSNavigatorControl *)navigatorControl contentViewForItemIdentifier:(NSString *)itemIdentifier atIndex:(NSUInteger)index {
 	if ([itemIdentifier isEqualToString:@"project"])
 		return [[self projectNavigatorViewController] view];
 	return nil;
 }
+
 - (void)navigatorControlSelectedItemIdentifierDidChange:(RSNavigatorControl *)navigatorControl {
 	if (![[[self navigatorControl] selectedItemIdentifier] isEqualToString:@"project"] &&
 		[QLPreviewPanel sharedPreviewPanelExists] &&
@@ -103,7 +104,9 @@ static const CGFloat kRightSubviewMinWidth = 400.0;
 	[panel setDataSource:nil];
 	[panel setDelegate:nil];
 }
+#pragma mark *** Public Methods ***
 
+#pragma mark Properties
 @synthesize navigatorControl=_navigatorControl;
 @synthesize splitView=_splitView;
 

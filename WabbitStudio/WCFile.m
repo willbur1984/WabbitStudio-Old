@@ -16,6 +16,7 @@
 static NSString *const WCFileReferenceKey = @"fileReference";
 
 @implementation WCFile
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 	_delegate = nil;
 	[_fileReference release];
@@ -25,7 +26,7 @@ static NSString *const WCFileReferenceKey = @"fileReference";
 //- (NSString *)description {
 //	return [NSString stringWithFormat:@"fileReference: %@",[[self fileReference] description]];
 //}
-
+#pragma mark RSPlistArchiving
 - (NSDictionary *)plistRepresentation {
 	NSMutableDictionary *retval = [NSMutableDictionary dictionaryWithDictionary:[super plistRepresentation]];
 	

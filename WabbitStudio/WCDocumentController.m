@@ -14,7 +14,9 @@ NSString *const WCActiveServerIncludeFileUTI = @"com.panic.coda.active-server-in
 NSString *const WCProjectFileUTI = @"org.revsoft.wabbitstudio.project";
 
 @implementation WCDocumentController
+#pragma mark *** Public Methods ***
 
+#pragma mark Properties
 @dynamic recentProjectURLs;
 - (NSArray *)recentProjectURLs {
 	NSMutableArray *retval = [NSMutableArray arrayWithCapacity:0];

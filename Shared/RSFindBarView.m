@@ -9,7 +9,7 @@
 #import "RSFindBarView.h"
 
 @implementation RSFindBarView
-
+#pragma mark *** Subclass Overrides ***
 - (void)drawRect:(NSRect)dirtyRect {
     static NSGradient *fillGradient;
 	static NSColor *bottomFillColor;

@@ -9,6 +9,7 @@
 #import "RSNegateNumberToBoolTransformer.h"
 
 @implementation RSNegateNumberToBoolTransformer
+#pragma mark *** Subclass Overrides ***
 + (Class)transformedValueClass {
 	return [NSNumber class];
 }

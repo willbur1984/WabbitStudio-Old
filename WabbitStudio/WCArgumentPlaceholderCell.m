@@ -18,6 +18,7 @@ static NSLayoutManager *_layoutManager;
 static NSTextContainer *_textContainer;
 
 @implementation WCArgumentPlaceholderCell
+#pragma mark *** Subclass Overrides ***
 + (void)initialize {
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
@@ -147,7 +148,7 @@ static NSTextContainer *_textContainer;
 	
 	return cellFrame;
 }
-
+#pragma mark *** Public Methods ***
 - (id)initTextCell:(NSString *)aString argumentChoices:(NSArray *)argumentChoices argumentChoicesType:(WCSourceTokenType)argumentChoicesType; {
 	if (!(self = [super initTextCell:aString]))
 		return nil;
@@ -157,7 +158,7 @@ static NSTextContainer *_textContainer;
 	
 	return self;
 }
-
+#pragma mark Properties
 @synthesize argumentChoices=_argumentChoices;
 @synthesize argumentChoicesType=_argumentChoicesType;
 

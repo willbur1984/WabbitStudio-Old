@@ -9,6 +9,7 @@
 #import "RSFindOptionsViewController.h"
 
 @implementation RSFindOptionsViewController
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 	_delegate = nil;
 	[_popover release];
@@ -33,14 +34,14 @@
 	
 	return self;
 }
-
+#pragma mark NSPopoverDelegate
 - (void)popoverDidClose:(NSNotification *)notification {
 	[_popover setContentViewController:nil];
 	
 	if ([[self delegate] respondsToSelector:@selector(findOptionsViewControllerDidClose:)])
 		[[self delegate] findOptionsViewControllerDidClose:self];
 }
-
+#pragma mark *** Public Methods ***
 - (void)showFindOptionsViewRelativeToRect:(NSRect)rect ofView:(NSView *)view preferredEdge:(NSRectEdge)preferredEdge {
 	[_popover setContentViewController:self];
 	[_popover showRelativeToRect:rect ofView:view preferredEdge:preferredEdge];
@@ -49,7 +50,7 @@
 - (void)hideFindOptionsView; {
 	[_popover performClose:nil];
 }
-
+#pragma mark Properties
 @synthesize delegate=_delegate;
 @dynamic findStyle;
 - (RSFindOptionsFindStyle)findStyle {

@@ -14,6 +14,7 @@
 #import "WCEditorViewController.h"
 
 @implementation WCLayoutManager
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
@@ -81,14 +82,15 @@
 	[super drawGlyphsForGlyphRange:glyphsToShow atPoint:origin];
 }
 
+- (NSSet *)userDefaultsKeyPathsToObserve {
+	return [NSSet setWithObjects:WCEditorShowInvisibleCharactersKey, nil];
+}
+
+#pragma mark NSKeyValueObserving
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if ([keyPath isEqualToString:[kUserDefaultsKeyPathPrefix stringByAppendingString:WCEditorShowInvisibleCharactersKey]])
 		[self setShowsInvisibleCharacters:[[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowInvisibleCharactersKey]];
 	else
 		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-}
-
-- (NSSet *)userDefaultsKeyPathsToObserve {
-	return [NSSet setWithObjects:WCEditorShowInvisibleCharactersKey, nil];
 }
 @end

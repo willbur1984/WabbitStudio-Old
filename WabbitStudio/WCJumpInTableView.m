@@ -9,6 +9,7 @@
 #import "WCJumpInTableView.h"
 
 @implementation WCJumpInTableView
+#pragma mark *** Subclass Overrides ***
 - (NSString *)emptyContentString {
 	return NSLocalizedString(@"Type a symbol name to jump to", @"Type a symbol name to jump to");
 }

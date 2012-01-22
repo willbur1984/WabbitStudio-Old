@@ -14,6 +14,7 @@
 @end
 
 @implementation WCJumpBar
+#pragma mark *** Subclass Overrides ***
 + (Class)cellClass {
 	return [WCJumpBarCell class];
 }
@@ -26,7 +27,7 @@
 	
 	return self;
 }
-
+#pragma mark NSCoding
 - (id)initWithCoder:(NSCoder *)coder {
 	if (!(self = [super initWithCoder:coder]))
 		return nil;
@@ -35,7 +36,7 @@
 	
 	return self;
 }
-
+#pragma mark *** Private Methods ***
 - (void)_commonInit; {
 	[self setRefusesFirstResponder:YES];
 	[self setBackgroundColor:[NSColor clearColor]];

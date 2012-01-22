@@ -84,6 +84,10 @@ NSString *const WCProjectDataFileName = @"project.plist";
     return YES;
 }
 
++ (BOOL)preservesVersions {
+	return NO;
+}
+
 - (NSFileWrapper *)fileWrapperOfType:(NSString *)typeName error:(NSError **)outError {
 	NSDictionary *projectPlist = [[self projectContainer] plistRepresentation];
 	
@@ -199,7 +203,7 @@ NSString *const WCProjectDataFileName = @"project.plist";
 - (IBAction)openQuickly:(id)sender; {
 	[[WCOpenQuicklyWindowController sharedWindowController] showOpenQuicklyWindowWithDataSource:self];
 }
-
+#pragma mark Properties
 @synthesize projectContainer=_projectContainer;
 @dynamic projectWindowController;
 - (WCProjectWindowController *)projectWindowController {
@@ -223,7 +227,9 @@ NSString *const WCProjectDataFileName = @"project.plist";
 @synthesize unsavedFiles=_unsavedFiles;
 @synthesize filesToFileContainers=_filesToFileContainers;
 @synthesize openFiles=_openFiles;
+#pragma mark *** Private Methods ***
 
+#pragma mark Notifications
 - (void)_projectNavigatorDidAddNewGroup:(NSNotification *)note {
 	WCGroupContainer *newGroupContainer = [[note userInfo] objectForKey:WCProjectNavigatorDidAddNewGroupNotificationNewGroupUserInfoKey];
 	

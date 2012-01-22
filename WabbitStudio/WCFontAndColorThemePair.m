@@ -13,6 +13,7 @@
 static NSDictionary *FontAndColorTypesToNames;
 
 @implementation WCFontAndColorThemePair
+#pragma mark *** Subclass Overrides ***
 + (void)initialize {
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
@@ -29,7 +30,7 @@ static NSDictionary *FontAndColorTypesToNames;
 	[_name release];
 	[super dealloc];
 }
-
+#pragma mark *** Public Methods ***
 + (WCFontAndColorThemePair *)fontAndColorThemePairForTheme:(WCFontAndColorTheme *)theme name:(NSString *)name; {
 	return [[[[self class] alloc] initWithTheme:theme name:name] autorelease];
 }
@@ -46,7 +47,7 @@ static NSDictionary *FontAndColorTypesToNames;
 	
 	return self;
 }
-
+#pragma mark Properties
 @dynamic name;
 - (NSString *)name {
 	return [FontAndColorTypesToNames objectForKey:_name];

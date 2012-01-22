@@ -11,6 +11,7 @@
 static NSColor *defaultColor;
 
 @implementation WCColorToStringValueTransformer
+#pragma mark *** Subclass Overrides ***
 + (void)initialize {
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{

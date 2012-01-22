@@ -17,6 +17,7 @@
 @end
 
 @implementation WCEquateSymbol
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[_attributedValueString release];
@@ -27,11 +28,11 @@
 - (NSString *)description {
 	return [NSString stringWithFormat:@"type: %@\nrange: %@\nname: %@\nvalue: %@",[self typeDescription],NSStringFromRange([self range]),[self name],[self value]];
 }
-
+#pragma mark WCCompletionItem
 - (NSString *)completionName {
 	return [NSString stringWithFormat:@"%@ = %@ \u2192 (%@:%lu)",[self name],[self value],[[[self sourceScanner] delegate] fileDisplayNameForSourceScanner:[self sourceScanner]],[[[[self sourceScanner] textStorage] string] lineNumberForRange:[self range]]+1];
 }
-
+#pragma mark RSToolTipProvider
 - (NSAttributedString *)attributedToolTip {
 	NSMutableAttributedString *retval = [[[NSMutableAttributedString alloc] initWithString:[self name] attributes:RSToolTipProviderDefaultAttributes()] autorelease];
 	
@@ -45,7 +46,7 @@
 	
 	return retval;
 }
-
+#pragma mark *** Public Methods ***
 + (id)equateSymbolWithRange:(NSRange)range name:(NSString *)name value:(NSString *)value; {
 	return [[[[self class] alloc] initWithRange:range name:name value:value] autorelease];
 }
@@ -60,7 +61,7 @@
 	
 	return self;
 }
-
+#pragma mark Properties
 @synthesize value=_value;
 @synthesize attributedValueString=_attributedValueString;
 - (NSAttributedString *)attributedValueString {
@@ -74,7 +75,9 @@
 	}
 	return _attributedValueString;
 }
+#pragma mark *** Private Methods ***
 
+#pragma mark Notifications
 - (void)_currentThemeDidChange:(NSNotification *)note {
 	[self setAttributedValueString:nil];
 }

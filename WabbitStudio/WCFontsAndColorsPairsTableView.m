@@ -13,6 +13,7 @@
 @end
 
 @implementation WCFontsAndColorsPairsTableView
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 	[_selectionColor release];
 	[super dealloc];
@@ -39,7 +40,9 @@
 		}
 	}
 }
+#pragma mark *** Public Methods ***
 
+#pragma mark Properties
 @synthesize themesArrayController=_themesArrayController;
 @dynamic selectionColor;
 - (NSColor *)selectionColor {

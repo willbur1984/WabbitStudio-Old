@@ -9,7 +9,7 @@
 #import "WCSplitView.h"
 
 @implementation WCSplitView
-
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
@@ -26,7 +26,7 @@
 	
 	return self;
 }
-
+#pragma mark *** Public Methods ***
 @dynamic dividerColor;
 - (NSColor *)dividerColor {
 	if ([self dividerStyle] == NSSplitViewDividerStyleThin)

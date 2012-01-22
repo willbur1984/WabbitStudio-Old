@@ -16,7 +16,7 @@
 #import "WCProjectDocument.h"
 
 @implementation WCNewProjectWindowController
-
+#pragma mark *** Subclass Overrides ***
 - (id)init {
 	if (!(self = [super initWithWindowNibName:[self windowNibName]]))
 		return nil;
@@ -28,7 +28,7 @@
 - (NSString *)windowNibName {
 	return @"WCNewProjectWindow";
 }
-
+#pragma mark *** Public Methods ***
 + (WCNewProjectWindowController *)sharedWindowController; {
 	static id sharedInstance;
 	static dispatch_once_t onceToken;
@@ -89,7 +89,7 @@
 	
 	return [[WCDocumentController sharedDocumentController] openDocumentWithContentsOfURL:projectURL display:YES error:outError];
 }
-
+#pragma mark IBActions
 - (IBAction)cancel:(id)sender; {
 	[[NSApplication sharedApplication] stopModalWithCode:NSCancelButton];
 	[[self window] orderOut:nil];

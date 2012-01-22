@@ -9,6 +9,7 @@
 #import "WCNumberToken.h"
 
 @implementation WCNumberToken
+#pragma mark *** Public Methods ***
 - (id)initWithType:(WCSourceTokenType)type range:(NSRange)range name:(NSString *)name {
 	if (!(self = [super initWithType:type range:range name:name]))
 		return nil;
@@ -17,7 +18,7 @@
 	
 	return self;
 }
-
+#pragma mark Properties
 @dynamic value;
 - (NSInteger)value {
 	if (_value == NSIntegerMax) {

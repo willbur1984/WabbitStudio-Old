@@ -19,7 +19,7 @@
 @end
 
 @implementation WCJumpInWindowController
-
+#pragma mark *** Subclass Overrides ***
 - (id)init {
 	if (!(self = [super initWithWindowNibName:[self windowNibName]]))
 		return nil;
@@ -43,7 +43,7 @@
 	[[self tableView] setTarget:self];
 	[[self tableView] setDoubleAction:@selector(_tableViewDoubleClick:)];
 }
-
+#pragma mark NSControlTextEditingDelegate
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector {
 	if (commandSelector == @selector(insertNewline:)) {
 		[[self jumpButton] performClick:nil];
@@ -75,7 +75,7 @@
 	}
 	return NO;
 }
-
+#pragma mark *** Public Methods ***
 + (WCJumpInWindowController *)sharedWindowController; {
 	static id sharedInstance;
 	static dispatch_once_t onceToken;
@@ -113,7 +113,7 @@
 	[[self mutableMatches] removeAllObjects];
 	[self setDataSource:nil];
 }
-
+#pragma mark IBActions
 - (IBAction)jump:(id)sender; {
 	[[NSApplication sharedApplication] stopModalWithCode:NSOKButton];
 	[[self window] orderOut:nil];
@@ -137,7 +137,7 @@
 	[_operationQueue cancelAllOperations];
 	[_operationQueue addOperation:[[[WCJumpInSearchOperation alloc] initWithJumpInWindowController:self] autorelease]];
 }
-
+#pragma mark Properties
 @synthesize searchString=_searchString;
 @synthesize matches=_matches;
 @dynamic mutableMatches;
@@ -185,7 +185,9 @@
 - (void)setSearching:(BOOL)searching {
 	_jumpInFlags.searching = searching;
 }
+#pragma mark *** Private Methods ***
 
+#pragma mark IBActions
 - (IBAction)_tableViewDoubleClick:(id)sender {
 	if (![[[self arrayController] selectedObjects] count]) {
 		NSBeep();

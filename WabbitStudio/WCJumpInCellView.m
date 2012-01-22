@@ -9,6 +9,7 @@
 #import "WCJumpInCellView.h"
 
 @implementation WCJumpInCellView
+#pragma mark *** Subclass Overrides ***
 - (NSView *)hitTest:(NSPoint)aPoint {
 	return self;
 }

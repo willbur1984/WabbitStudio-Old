@@ -11,6 +11,9 @@
 NSString *const RSObjectClassNameKey = @"className";
 
 @implementation RSObject
+#pragma mark *** Subclass Overrides ***
+
+#pragma mark RSPlistArchiving
 - (NSDictionary *)plistRepresentation {
 	return [NSDictionary dictionaryWithObjectsAndKeys:[self className],RSObjectClassNameKey, nil];
 }

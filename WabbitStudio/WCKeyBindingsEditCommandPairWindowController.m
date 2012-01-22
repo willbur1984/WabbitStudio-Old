@@ -17,6 +17,7 @@
 @end
 
 @implementation WCKeyBindingsEditCommandPairWindowController
+#pragma mark *** Subclass Overrides ***
 - (id)init {
 	if (!(self = [super initWithWindowNibName:[self windowNibName]]))
 		return nil;
@@ -40,7 +41,7 @@
 	
 }
 
-
+#pragma mark *** Public Methods ***
 + (WCKeyBindingsEditCommandPairWindowController *)sharedWindowController {
 	static id sharedInstance;
 	static dispatch_once_t onceToken;
@@ -60,7 +61,7 @@
 		[self setCommandPair:nil];
 	}];
 }
-
+#pragma mark IBActions
 - (IBAction)ok:(id)sender; {
 	[[NSApplication sharedApplication] endSheet:[self window] returnCode:NSOKButton];
 	[[self window] orderOut:nil];
@@ -69,7 +70,7 @@
 	[[NSApplication sharedApplication] endSheet:[self window] returnCode:NSCancelButton];
 	[[self window] orderOut:nil];
 }
-
+#pragma mark Properties
 @synthesize commandPair=_commandPair;
 @synthesize recorderControl=_recorderControl;
 

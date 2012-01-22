@@ -9,6 +9,7 @@
 #import "WCJumpInRowView.h"
 
 @implementation WCJumpInRowView
+#pragma mark *** Subclass Overrides ***
 - (void)drawSelectionInRect:(NSRect)dirtyRect {
 	//[super drawSelectionInRect:dirtyRect];
 	

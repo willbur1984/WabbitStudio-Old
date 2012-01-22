@@ -9,6 +9,7 @@
 #import "WCOpenQuicklyTableView.h"
 
 @implementation WCOpenQuicklyTableView
+#pragma mark *** Subclass Overrides ***
 - (NSString *)emptyContentString {
 	return NSLocalizedString(@"Type a file or symbol name to open", @"Type a file or symbol name to open");
 }

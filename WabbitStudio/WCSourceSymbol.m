@@ -18,7 +18,7 @@
 @end
 
 @implementation WCSourceSymbol
-
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 	[_name release];
 	[super dealloc];
@@ -27,7 +27,7 @@
 - (NSString *)description {
 	return [NSString stringWithFormat:@"type: %@\nrange: %@\nname: %@",[self typeDescription],NSStringFromRange([self range]),[self name]];
 }
-
+#pragma mark WCCompletionItem
 - (NSString *)completionName {
 	return [NSString stringWithFormat:@"%@ \u2192 (%@:%lu)",[self name],[[[self sourceScanner] delegate] fileDisplayNameForSourceScanner:[self sourceScanner]],[[[[self sourceScanner] textStorage] string] lineNumberForRange:[self range]]+1];
 }
@@ -37,7 +37,7 @@
 - (NSImage *)completionIcon {
 	return [self icon];
 }
-
+#pragma mark RSToolTipProvider
 - (NSAttributedString *)attributedToolTip {
 	NSMutableAttributedString *retval = [[[NSMutableAttributedString alloc] initWithString:[self name] attributes:RSToolTipProviderDefaultAttributes()] autorelease];
 	
@@ -45,7 +45,7 @@
 	
 	return retval;
 }
-
+#pragma mark WCJumpInItem
 - (NSRange)jumpInRange {
 	return [self range];
 }
@@ -58,7 +58,7 @@
 - (NSURL *)jumpInLocationURL {
 	return [[NSURL URLWithString:[self jumpInName]] URLByAppendingPathComponent:[NSString stringWithFormat:NSLocalizedString(@"line %lu", @"jump in location url line format string"),[[[[self sourceScanner] textStorage] string] lineNumberForRange:[self range]]+1]];
 }
-
+#pragma mark WCOpenQuicklyItem
 - (NSString *)openQuicklyName {
 	return [self name];
 }
@@ -77,7 +77,7 @@
 - (WCSourceFileDocument *)openQuicklySourceFileDocument {
 	return [[[self sourceScanner] delegate] sourceFileDocumentForSourceScanner:[self sourceScanner]];
 }
-
+#pragma mark *** Public Methods ***
 + (id)sourceSymbolOfType:(WCSourceSymbolType)type range:(NSRange)range name:(NSString *)name; {
 	return [[[[self class] alloc] initWithType:type range:range name:name] autorelease];
 }
@@ -91,7 +91,7 @@
 	
 	return self;
 }
-
+#pragma mark Properties
 @synthesize sourceScanner=_sourceScanner;
 @synthesize type=_type;
 @synthesize range=_range;

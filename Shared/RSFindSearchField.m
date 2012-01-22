@@ -10,9 +10,12 @@
 #import "RSFindSearchFieldCell.h"
 
 @implementation RSFindSearchField
+#pragma mark *** Subclass Overrides ***
 + (Class)cellClass {
 	return [RSFindSearchFieldCell class];
 }
+#pragma mark *** Public Methods ***
 
+#pragma mark Properties
 @synthesize findBarViewController=_findBarViewController;
 @end

@@ -104,6 +104,11 @@
 	}
 }
 
+- (void)drawGridInClipRect:(NSRect)clipRect {
+	if (![self shouldDrawEmptyContentString])
+		[super drawGridInClipRect:clipRect];
+}
+
 #pragma mark NSCoding
 - (id)initWithCoder:(NSCoder *)decoder {
 	if (!(self = [super initWithCoder:decoder]))

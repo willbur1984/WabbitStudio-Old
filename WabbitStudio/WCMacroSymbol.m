@@ -17,6 +17,7 @@
 @end
 
 @implementation WCMacroSymbol
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[_attributedValueString release];
@@ -28,7 +29,7 @@
 - (NSString *)description {
 	return [NSString stringWithFormat:@"type: %@\nrange: %@\nname: %@\nvalue: %@\narguments: %@",[self typeDescription],NSStringFromRange([self range]),[self name],[self value],[self arguments]];
 }
-
+#pragma mark WCCompletionName
 - (NSString *)completionName {
 	if ([self arguments])
 		return [NSString stringWithFormat:@"%@(%@) \u2192 (%@:%lu)",[self name],[[self arguments] componentsJoinedByString:@","],[[[self sourceScanner] delegate] fileDisplayNameForSourceScanner:[self sourceScanner]],[[[[self sourceScanner] textStorage] string] lineNumberForRange:[self range]]+1];
@@ -38,7 +39,7 @@
 - (NSArray *)completionArguments {
 	return [self arguments];
 }
-
+#pragma mark RSToolTipProvider
 - (NSAttributedString *)attributedToolTip {
 	NSMutableAttributedString *retval = [[[NSMutableAttributedString alloc] initWithString:[self name] attributes:RSToolTipProviderDefaultAttributes()] autorelease];
 	
@@ -53,7 +54,7 @@
 	
 	return retval;
 }
-
+#pragma mark *** Public Methods ***
 + (id)macroSymbolWithRange:(NSRange)range name:(NSString *)name value:(NSString *)value arguments:(NSArray *)arguments; {
 	return [[[[self class] alloc] initWithRange:range name:name value:value arguments:arguments] autorelease];
 }
@@ -73,7 +74,7 @@
 + (id)macroSymbolWithRange:(NSRange)range name:(NSString *)name value:(NSString *)value; {
 	return [self macroSymbolWithRange:range name:name value:value arguments:nil];
 }
-
+#pragma mark Properties
 @synthesize value=_value;
 @synthesize arguments=_arguments;
 @synthesize attributedValueString=_attributedValueString;
@@ -88,7 +89,9 @@
 	}
 	return _attributedValueString;
 }
+#pragma mark *** Private Methods ***
 
+#pragma mark Notifications
 - (void)_currentThemeDidChange:(NSNotification *)note {
 	[self setAttributedValueString:nil];
 }

@@ -13,6 +13,7 @@
 #import "RSDefines.h"
 
 @implementation WCFindableTextView
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[_findBarViewController release];
@@ -138,6 +139,7 @@
 	return [NSArray arrayWithObject:[NSValue valueWithRange:[self visibleRange]]];
 }
 */
+#pragma mark NSUserInterfaceValidations
 - (BOOL)validateUserInterfaceItem:(id<NSValidatedUserInterfaceItem>)anItem {
 	if ([anItem action] == @selector(performTextFinderAction:)) {
 		switch ([anItem tag]) {
@@ -162,11 +164,11 @@
 	}
 	return [super validateUserInterfaceItem:anItem];
 }
-
+#pragma mark *** Public Methods ***
 - (void)performCleanup; {
 	[_findBarViewController performCleanup];
 }
-
+#pragma mark Properties
 @dynamic findBarViewController;
 - (RSFindBarViewController *)findBarViewController {
 	if (!_findBarViewController) {

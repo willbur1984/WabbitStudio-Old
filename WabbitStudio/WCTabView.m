@@ -9,6 +9,7 @@
 #import "WCTabView.h"
 
 @implementation WCTabView
+#pragma mark *** Subclass Overrides ***
 - (NSString *)emptyContentString {
 	return NSLocalizedString(@"No Open Files", @"No Open Files");
 }

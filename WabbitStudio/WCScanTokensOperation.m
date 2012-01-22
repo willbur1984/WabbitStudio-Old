@@ -18,6 +18,7 @@
 @end
 
 @implementation WCScanTokensOperation
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 	[_scanner release];
 	[_string release];
@@ -182,7 +183,7 @@
 CLEANUP:
 	[pool release];
 }
-
+#pragma mark *** Public Methods ***
 + (id)scanTokensOperationWithScanner:(WCSourceScanner *)scanner; {
 	return [[[[self class] alloc] initWithScanner:scanner] autorelease];
 }
@@ -195,7 +196,7 @@ CLEANUP:
 	
 	return self;
 }
-
+#pragma mark Properties
 @synthesize scanner=_scanner;
 @synthesize string=_string;
 @end

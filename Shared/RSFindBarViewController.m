@@ -715,7 +715,7 @@ static const CGFloat kReplaceControlsHeight = 22.0;
 	}
 	return foundRange;
 }
-
+#pragma mark Callbacks
 - (void)_textStorageDidProcessEditingTimerCallback:(NSTimer *)timer {
 	[_textStorageDidProcessEditingTimer invalidate];
 	_textStorageDidProcessEditingTimer = nil;

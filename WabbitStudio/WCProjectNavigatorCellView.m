@@ -13,7 +13,9 @@
 #import "WCProjectDocument.h"
 
 @implementation WCProjectNavigatorCellView
+#pragma mark *** Subclass Overrides ***
 
+#pragma mark NSControlTextEditingDelegate
 - (void)controlTextDidBeginEditing:(NSNotification *)note {
 	_didBeginEditingNotificationReceived = YES;
 }
@@ -28,7 +30,9 @@
 		[[[[[self projectNavigatorViewController] projectContainer] project] document] updateChangeCount:NSChangeDone];
 	}
 }
+#pragma mark *** Public Methods ***
 
+#pragma mark Properties
 @synthesize projectNavigatorViewController=_projectNavigatorViewController;
 
 @end

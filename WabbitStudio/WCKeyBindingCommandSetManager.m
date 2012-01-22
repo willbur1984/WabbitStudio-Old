@@ -24,6 +24,7 @@
 @end
 
 @implementation WCKeyBindingCommandSetManager
+#pragma mark *** Subclass Overrides ***
 - (id)init {
 	if (!(self = [super init]))
 		return nil;
@@ -80,7 +81,7 @@
 	
 	return self;
 }
-
+#pragma mark NSKeyValueObserving
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if ([keyPath isEqualToString:WCKeyBindingCommandSetNameKey]) {
 		[(WCKeyBindingCommandSet *)object setIdentifier:[NSString stringWithFormat:@"org.revsoft.wabbitstudio.keybindingcommandset.%@",[(WCKeyBindingCommandSet *)object name]]];
@@ -95,7 +96,7 @@
 	else
 		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
-
+#pragma mark *** Public Methods ***
 + (WCKeyBindingCommandSetManager *)sharedManager; {
 	static id sharedInstance;
 	static dispatch_once_t onceToken;
@@ -178,7 +179,7 @@
 - (NSString *)defaultKeyForMenuItem:(NSMenuItem *)menuItem; {
 	return [[self defaultCommandPairForMenuItem:menuItem] key];
 }
-
+#pragma mark Properties
 @synthesize commandSets=_commandSets;
 @dynamic mutableCommandSets;
 - (NSMutableArray *)mutableCommandSets {
@@ -261,7 +262,7 @@
 	
 	[self _loadKeyBindingsFromCommandSet:_currentCommandSet];
 }
-
+#pragma mark *** Private Methods ***
 - (void)_setupObservingForCommandSet:(WCKeyBindingCommandSet *)commandSet; {
 	[commandSet addObserver:self forKeyPaths:[NSSet setWithObjects:@"name", nil]];
 	

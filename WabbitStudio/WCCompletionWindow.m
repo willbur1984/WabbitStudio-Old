@@ -9,6 +9,7 @@
 #import "WCCompletionWindow.h"
 
 @implementation WCCompletionWindow
+#pragma mark *** Subclass Overrides ***
 // so our table view will draw with the correct gradient highlight
 - (BOOL)isKeyWindow {
 	return YES;

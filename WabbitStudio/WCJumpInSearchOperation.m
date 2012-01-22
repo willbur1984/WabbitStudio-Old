@@ -13,6 +13,7 @@
 #import "RSDefines.h"
 
 @implementation WCJumpInSearchOperation
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 	_windowController = nil;
 	[_searchString release];
@@ -109,7 +110,7 @@
 CLEANUP:
 	[pool release];
 }
-
+#pragma mark *** Public Methods ***
 - (id)initWithJumpInWindowController:(WCJumpInWindowController *)windowController; {
 	if (!(self = [super init]))
 		return nil;

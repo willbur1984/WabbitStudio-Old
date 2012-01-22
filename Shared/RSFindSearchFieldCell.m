@@ -11,25 +11,12 @@
 #import "RSFindBarViewController.h"
 #import "RSFindSearchField.h"
 
-@interface RSFindSearchFieldCell ()
-+ (RSFindBarFieldEditor *)fieldEditor;
-@end
-
 @implementation RSFindSearchFieldCell
+#pragma mark *** Subclass Overrides ***
 - (NSTextView *)fieldEditorForView:(NSView *)aControlView {
 	if ([aControlView isKindOfClass:[RSFindSearchField class]])
-		[[[self class] fieldEditor] setFindTextView:[[(RSFindSearchField *)aControlView findBarViewController] textView]];
+		[[RSFindBarFieldEditor sharedInstance] setFindTextView:[[(RSFindSearchField *)aControlView findBarViewController] textView]];
 	
-	return [[self class] fieldEditor];
-}
-
-+ (RSFindBarFieldEditor *)fieldEditor; {
-	static RSFindBarFieldEditor *retval;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		retval = [[RSFindBarFieldEditor alloc] initWithFrame:NSMakeRect(0, 0, 100, 100)];
-		[retval setFieldEditor:YES];
-	});
-	return retval;
+	return [RSFindBarFieldEditor sharedInstance];
 }
 @end

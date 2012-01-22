@@ -9,6 +9,7 @@
 #import "WCKeyBindingsOutlineView.h"
 
 @implementation WCKeyBindingsOutlineView
+#pragma mark *** Subclass Overrides ***
 - (NSString *)emptyContentString {
 	return NSLocalizedString(@"No Filter Results", @"No Filter Results");
 }

@@ -15,6 +15,7 @@
 @end
 
 @implementation WCJumpInMatch
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 	_item = nil;
 	[_weights release];
@@ -26,7 +27,7 @@
 - (NSString *)description {
 	return [NSString stringWithFormat:@"item: %@ weight: %@",[self item],[self weights]];
 }
-
+#pragma mark *** Public Methods ***
 + (WCJumpInMatch *)jumpInMatchWithItem:(id<WCJumpInItem>)item ranges:(NSArray *)ranges weights:(NSArray *)weights; {
 	return [[[[self class] alloc] initWithItem:item ranges:ranges weights:weights] autorelease];
 }
@@ -40,7 +41,7 @@
 	
 	return self;
 }
-
+#pragma mark Properties
 @synthesize item=_item;
 @dynamic name;
 - (NSAttributedString *)name {

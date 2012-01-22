@@ -15,12 +15,13 @@
 @end
 
 @implementation RSBookmark
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	_textStorage = nil;
 	[super dealloc];
 }
-
+#pragma mark *** Public Methods ***
 + (RSBookmark *)bookmarkWithRange:(NSRange)range visibleRange:(NSRange)visibleRange textStorage:(NSTextStorage *)textStorage; {
 	return [[[[self class] alloc] initWithRange:range visibleRange:visibleRange textStorage:textStorage] autorelease];
 }
@@ -36,7 +37,7 @@
 	
 	return self;
 }
-
+#pragma mark Properties
 @synthesize textStorage=_textStorage;
 @synthesize range=_range;
 @synthesize visibleRange=_visibleRange;
@@ -44,7 +45,9 @@
 - (NSUInteger)lineNumber {
 	return [[[self textStorage] string] lineNumberForRange:[self range]];
 }
+#pragma mark *** Private Methods ***
 
+#pragma mark Notifications
 - (void)_textStorageDidProcessEditing:(NSNotification *)note {
 	if (([[self textStorage] editedMask] & NSTextStorageEditedCharacters) == 0)
 		return;

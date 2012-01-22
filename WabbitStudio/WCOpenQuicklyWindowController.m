@@ -20,7 +20,7 @@
 @end
 
 @implementation WCOpenQuicklyWindowController
-
+#pragma mark *** Subclass Overrides ***
 - (id)init {
 	if (!(self = [super initWithWindowNibName:[self windowNibName]]))
 		return nil;
@@ -44,7 +44,7 @@
 	[[self tableView] setTarget:self];
 	[[self tableView] setDoubleAction:@selector(_tableViewDoubleClick:)];
 }
-
+#pragma mark NSControlTextEditingDelegate
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector {
 	if (commandSelector == @selector(insertNewline:)) {
 		[[self openButton] performClick:nil];
@@ -76,7 +76,7 @@
 	}
 	return NO;
 }
-
+#pragma mark *** Public Methods ***
 + (WCOpenQuicklyWindowController *)sharedWindowController; {
 	static id sharedInstance;
 	static dispatch_once_t onceToken;
@@ -110,7 +110,7 @@
 	[[self mutableMatches] setArray:nil];
 	[self setDataSource:nil];
 }
-
+#pragma mark IBActions
 - (IBAction)open:(id)sender; {
 	[[NSApplication sharedApplication] stopModalWithCode:NSOKButton];
 	[[self window] orderOut:nil];
@@ -134,7 +134,7 @@
 	[_operationQueue cancelAllOperations];
 	[_operationQueue addOperation:[[[WCOpenQuicklySearchOperation alloc] initWithOpenQuicklyWindowController:self] autorelease]];
 }
-
+#pragma mark Properties
 @synthesize arrayController=_arrayController;
 @synthesize openButton=_openButton;
 @synthesize cancelButton=_cancelButton;
@@ -183,7 +183,7 @@
 	if (dataSource)
 		[[self window] setTitle:[NSString stringWithFormat:NSLocalizedString(@"Open Quickly in \"%@\"", @"open quickly window title format string"),[[[self dataSource] openQuicklyProjectName] stringByDeletingPathExtension]]];
 }
-
+#pragma mark *** Private Methods ***
 - (IBAction)_tableViewDoubleClick:(id)sender {
 	if (![[[self arrayController] selectedObjects] count]) {
 		NSBeep();

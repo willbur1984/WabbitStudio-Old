@@ -16,6 +16,7 @@ NSString *const WCSourceScannerDidFinishScanningNotification = @"WCSourceScanner
 NSString *const WCSourceScannerDidFinishScanningSymbolsNotification = @"WCSourceScannerDidFinishScanningSymbolsNotification";
 
 @implementation WCSourceScanner
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
@@ -35,7 +36,7 @@ NSString *const WCSourceScannerDidFinishScanningSymbolsNotification = @"WCSource
 	[_includes release];
 	[super dealloc];
 }
-
+#pragma mark *** Public Methods ***
 - (id)initWithTextStorage:(NSTextStorage *)textStorage; {
 	if (!(self = [super init]))
 		return nil;
@@ -214,7 +215,7 @@ NSString *const WCSourceScannerDidFinishScanningSymbolsNotification = @"WCSource
 	});
 	return retval;
 }
-
+#pragma mark Properties
 @synthesize delegate=_delegate;
 @synthesize textStorage=_textStorage;
 @synthesize tokens=_tokens;
@@ -227,7 +228,9 @@ NSString *const WCSourceScannerDidFinishScanningSymbolsNotification = @"WCSource
 @synthesize macroNamesToMacroSymbols=_macroNamesToMacroSymbols;
 @synthesize completions=_completions;
 @synthesize includes=_includes;
+#pragma mark *** Private Methods ***
 
+#pragma mark Notifications
 - (void)_textStorageDidProcessEditing:(NSNotification *)note {
 	if (([[note object] editedMask] & NSTextStorageEditedCharacters) == 0)
 		return;

@@ -9,6 +9,7 @@
 #import "RSBottomBorderedGlassGradientView.h"
 
 @implementation RSBottomBorderedGlassGradientView
+#pragma mark *** Subclass Overrides ***
 - (BOOL)shouldDrawLeftEdge {
 	return YES;
 }

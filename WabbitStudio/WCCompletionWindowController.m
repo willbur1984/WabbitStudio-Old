@@ -29,7 +29,7 @@
 @end
 
 @implementation WCCompletionWindowController
-
+#pragma mark *** Subclass Overrides ***
 - (id)init {
 	if (!(self = [super initWithWindowNibName:[self windowNibName]]))
 		return nil;
@@ -59,12 +59,12 @@
 	[[self tableView] setTarget:self];
 	[[self tableView] setDoubleAction:@selector(_tableViewDoubleClick:)];
 }
-
+#pragma mark RSTableViewDelegate
 - (void)handleReturnPressedForTableView:(RSTableView *)tableView {
 	if ([[[self arrayController] selectedObjects] count])
 		[self _closeCompletionWindowControllerAndInsertCompletion:YES];
 }
-
+#pragma mark *** Public Methods ***
 + (WCCompletionWindowController *)sharedWindowController; {
 	static id sharedInstance;
 	static dispatch_once_t onceToken;
@@ -156,7 +156,7 @@
 	else
 		[self _closeCompletionWindowControllerAndInsertCompletion:NO];
 }
-
+#pragma mark Properties
 @synthesize tableView=_tableView;
 @synthesize arrayController=_arrayController;
 @synthesize textView=_textView;
@@ -189,7 +189,7 @@
 - (void)replaceCompletionsAtIndexes:(NSIndexSet *)indexes withCompletions:(NSArray *)completions {
 	[_completions replaceObjectsAtIndexes:indexes withObjects:completions];
 }
-
+#pragma mark *** Private Methods ***
 - (void)_closeCompletionWindowControllerAndInsertCompletion:(BOOL)insertCompletion; {
 	[[self window] orderOut:nil];
 	
@@ -434,7 +434,7 @@
 	
 	[[self textView] setSelectedRange:placeholderRange];
 }
-
+#pragma mark IBActions
 - (void)_tableViewDoubleClick:(id)sender {
 	if ([[[self arrayController] selectedObjects] count])
 		[self _closeCompletionWindowControllerAndInsertCompletion:YES];

@@ -13,7 +13,7 @@
 @end
 
 @implementation RSBezelView
-
+#pragma mark *** Subclass Overrides ***
 - (id)initWithFrame:(NSRect)frameRect {
 	if (!(self = [super initWithFrame:frameRect]))
 		return nil;
@@ -22,16 +22,6 @@
 	
 	return self;
 }
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-	if (!(self = [super initWithCoder:aDecoder]))
-		return nil;
-	
-	[self _commonInit];
-	
-	return self;
-}
-
 - (void)drawRect:(NSRect)dirtyRect {
     if ([self image])
 		[[self image] drawInRect:[self bounds] fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
@@ -43,6 +33,19 @@
 	}
 }
 
+#pragma mark NSCoding
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (!(self = [super initWithCoder:aDecoder]))
+		return nil;
+	
+	[self _commonInit];
+	
+	return self;
+}
+
+#pragma mark *** Public Methods ***
+
+#pragma mark Properties
 @dynamic image;
 - (NSImage *)image {
 	return _image;
@@ -83,7 +86,7 @@
 		[self setNeedsDisplay:YES];
 	}
 }
-
+#pragma mark *** Private Methods ***
 - (void)_commonInit; {
 	_stringCell = [[NSTextFieldCell alloc] initTextCell:@""];
 	[_stringCell setFont:[NSFont controlContentFontOfSize:18.0]];

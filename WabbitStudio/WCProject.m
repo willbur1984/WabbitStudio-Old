@@ -10,6 +10,7 @@
 #import "WCProjectDocument.h"
 
 @implementation WCProject
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 	_document = nil;
 	[super dealloc];
@@ -21,7 +22,7 @@
 - (NSImage *)fileIcon {
 	return [NSImage imageNamed:@"project"];
 }
-
+#pragma mark *** Public Methods ***
 + (id)projectWithDocument:(WCProjectDocument *)document; {
 	return [[(WCProject *)[[self class] alloc] initWithDocument:document] autorelease];
 }
@@ -33,7 +34,7 @@
 	
 	return self;
 }
-
+#pragma mark Properties
 @synthesize document=_document;
 @dynamic fileStatus;
 - (NSString *)fileStatus {

@@ -23,6 +23,7 @@ NSString *const WCKeyBindingCommandPairShiftModifierMaskKey = @"shift";
 @end
 
 @implementation WCKeyBindingCommandPair
+#pragma mark *** Subclass Overrides ***
 
 - (id)initWithRepresentedObject:(id)representedObject {
 	if (!(self = [super initWithRepresentedObject:representedObject]))
@@ -32,6 +33,7 @@ NSString *const WCKeyBindingCommandPairShiftModifierMaskKey = @"shift";
 	
 	return self;
 }
+#pragma mark NSCopying
 
 - (id)copyWithZone:(NSZone *)zone {
 	WCKeyBindingCommandPair *copy = [super copyWithZone:zone];
@@ -41,7 +43,7 @@ NSString *const WCKeyBindingCommandPairShiftModifierMaskKey = @"shift";
 	
 	return copy;
 }
-
+#pragma mark NSMutableCopying
 - (id)mutableCopyWithZone:(NSZone *)zone {
 	WCKeyBindingCommandPair *copy = [super mutableCopyWithZone:zone];
 	
@@ -50,7 +52,7 @@ NSString *const WCKeyBindingCommandPairShiftModifierMaskKey = @"shift";
 	
 	return copy;
 }
-
+#pragma mark RSPlistArchiving
 - (NSDictionary *)plistRepresentation {
 	NSMutableDictionary *plist = [NSMutableDictionary dictionaryWithCapacity:0];
 	
@@ -71,7 +73,7 @@ NSString *const WCKeyBindingCommandPairShiftModifierMaskKey = @"shift";
 	
 	return [[plist copy] autorelease];
 }
-
+#pragma mark *** Public Methods ***
 + (WCKeyBindingCommandPair *)keyBindingCommandPairForAction:(SEL)action keyCombo:(KeyCombo)keyCombo; {
 	return [[[[self class] alloc] initWithAction:action keyCombo:keyCombo] autorelease];
 }
@@ -95,7 +97,7 @@ NSString *const WCKeyBindingCommandPairShiftModifierMaskKey = @"shift";
 	[[self menuItem] setKeyEquivalent:SRCharacterForKeyCodeAndCocoaFlags(_keyCombo.code, _keyCombo.flags)];
 	[[self menuItem] setKeyEquivalentModifierMask:_keyCombo.flags];
 }
-
+#pragma mark Properties
 @dynamic name;
 - (NSString *)name {
 	if ([[self menuItem] isAlternate])
@@ -142,7 +144,7 @@ NSString *const WCKeyBindingCommandPairShiftModifierMaskKey = @"shift";
 		return [self parentNode];
 	return [[self parentNode] commandSet];
 }
-
+#pragma mark *** Private Methods ***
 - (NSMenuItem *)_menuItemMatchingSelector:(SEL)action inMenu:(NSMenu *)menu; {
 	NSMenuItem *retval = nil;
 	for (NSMenuItem *item in [menu itemArray]) {

@@ -9,6 +9,7 @@
 #import "WCCompletionTableView.h"
 
 @implementation WCCompletionTableView
+#pragma mark *** Subclass Overrides ***
 - (NSString *)emptyContentString {
 	return NSLocalizedString(@"No Completions", @"No Completions");
 }

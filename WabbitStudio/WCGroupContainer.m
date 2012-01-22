@@ -9,7 +9,7 @@
 #import "WCGroupContainer.h"
 
 @implementation WCGroupContainer
-
+#pragma mark *** Subclass Overrides ***
 - (BOOL)isLeafNode {
 	return NO;
 }

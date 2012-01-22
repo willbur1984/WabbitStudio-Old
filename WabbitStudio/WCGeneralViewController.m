@@ -11,7 +11,7 @@
 NSString *const WCGeneralOnStartupKey = @"generalOnStartup";
 
 @implementation WCGeneralViewController
-
+#pragma mark *** Subclass Overrides ***
 - (id)init {
 	if (!(self = [super initWithNibName:[self nibName] bundle:nil]))
 		return nil;

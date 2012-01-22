@@ -13,13 +13,9 @@
 #import "WCSourceFileDocument.h"
 
 @implementation WCFileContainer
-- (NSURL *)locationURLForFile:(WCFile *)file {
-	return [[self sourceFileDocumentForFile:file] locationURLForSourceScanner:[[self sourceFileDocumentForFile:file] sourceScanner]];
-}
-- (WCSourceFileDocument *)sourceFileDocumentForFile:(WCFile *)file {
-	return [[[[self project] document] filesToSourceFileDocuments] objectForKey:file];
-}
+#pragma mark *** Subclass Overrides ***
 
+#pragma mark RSPlistArchiving
 - (id)initWithPlistRepresentation:(NSDictionary *)plistRepresentation {
 	if (!(self = [super initWithPlistRepresentation:plistRepresentation]))
 		return nil;
@@ -29,6 +25,14 @@
 	return self;
 }
 
+#pragma mark WCFileDelegate
+- (NSURL *)locationURLForFile:(WCFile *)file {
+	return [[self sourceFileDocumentForFile:file] locationURLForSourceScanner:[[self sourceFileDocumentForFile:file] sourceScanner]];
+}
+- (WCSourceFileDocument *)sourceFileDocumentForFile:(WCFile *)file {
+	return [[[[self project] document] filesToSourceFileDocuments] objectForKey:file];
+}
+#pragma mark *** Public Methods ***
 + (id)fileContainerWithFile:(WCFile *)file; {
 	return [[(WCFileContainer *)[[self class] alloc] initWithFile:file] autorelease];
 }
@@ -40,7 +44,7 @@
 	
 	return self;
 }
-
+#pragma mark Properties
 @dynamic file;
 - (WCFile *)file {
 	return [self representedObject];

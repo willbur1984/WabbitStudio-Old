@@ -9,6 +9,7 @@
 #import "RSNumberToBoolTransformer.h"
 
 @implementation RSNumberToBoolTransformer
+#pragma mark *** Subclass Overrides ***
 + (Class)transformedValueClass {
 	return [NSNumber class];
 }

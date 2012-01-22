@@ -13,6 +13,7 @@
 #import "WCOpenQuicklyMatch.h"
 
 @implementation WCOpenQuicklySearchOperation
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 	_windowController = nil;
 	[_searchString release];
@@ -110,7 +111,7 @@
 CLEANUP:
 	[pool release];
 }
-
+#pragma mark *** Public Methods ***
 - (id)initWithOpenQuicklyWindowController:(WCOpenQuicklyWindowController *)windowController; {
 	if (!(self = [super init]))
 		return nil;

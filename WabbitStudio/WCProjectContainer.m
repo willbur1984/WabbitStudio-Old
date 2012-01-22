@@ -9,6 +9,7 @@
 #import "WCProjectContainer.h"
 
 @implementation WCProjectContainer
+#pragma mark *** Public Methods ***
 + (id)projectContainerWithProject:(WCProject *)project; {
 	return [[[[self class] alloc] initWithProject:project] autorelease];
 }
@@ -19,7 +20,7 @@
 	
 	return self;
 }
-
+#pragma mark Properties
 @dynamic project;
 - (WCProject *)project {
 	return (WCProject *)[self representedObject];

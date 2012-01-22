@@ -22,6 +22,7 @@
 @end
 
 @implementation WCSourceRulerView
+#pragma mark *** Subclass Overrides ***
 + (NSMenu *)defaultMenu {
 	static NSMenu *retval;
 	static dispatch_once_t onceToken;
@@ -91,7 +92,7 @@ static const CGFloat kIconPaddingTop = 1.0;
 	[super drawLineNumbersInRect:rect];
 	[super drawRightMarginInRect:rect];
 }
-
+#pragma mark NSMenuValidation
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
 	if ([menuItem action] == @selector(_toggleBookmark:)) {
 		if ([[self textStorage] bookmarkAtLineNumber:[self clickedLineNumber]])
@@ -104,14 +105,14 @@ static const CGFloat kIconPaddingTop = 1.0;
 	}
 	return YES;
 }
-
+#pragma mark *** Public Methods ***
 @dynamic textStorage;
 - (WCSourceTextStorage *)textStorage {
 	return (WCSourceTextStorage *)[[self textView] textStorage];
 }
 
 @synthesize clickedLineNumber=_clickedLineNumber;
-
+#pragma mark *** Private Methods ***
 - (NSUInteger)_lineNumberForPoint:(NSPoint)point {
 	NSLayoutManager *layoutManager = [[self textView] layoutManager];
 	NSTextContainer	*container = [[self textView] textContainer];
@@ -146,7 +147,7 @@ static const CGFloat kIconPaddingTop = 1.0;
 	}
 	return NSNotFound;
 }
-
+#pragma mark IBActions
 - (IBAction)_toggleBookmark:(id)sender; {
 	RSBookmark *bookmark = [[self textStorage] bookmarkAtLineNumber:[self clickedLineNumber]];
 	
@@ -157,7 +158,7 @@ static const CGFloat kIconPaddingTop = 1.0;
 		[[self textStorage] addBookmark:bookmark];
 	}
 }
-
+#pragma mark Notifications
 - (void)_textStorageDidAddBookmark:(NSNotification *)note {
 	[self setNeedsDisplay:YES];
 }

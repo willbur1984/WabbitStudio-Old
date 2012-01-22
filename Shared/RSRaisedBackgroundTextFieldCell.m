@@ -13,6 +13,7 @@
 @end
 
 @implementation RSRaisedBackgroundTextFieldCell
+#pragma mark *** Subclass Overrides ***
 - (void)setBackgroundStyle:(NSBackgroundStyle)style {
 	if (style == NSBackgroundStyleDark)
 		[super setBackgroundStyle:style];
@@ -28,7 +29,7 @@
 	
 	return self;
 }
-
+#pragma mark NSCoding
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (!(self = [super initWithCoder:aDecoder]))
 		return nil;
@@ -37,7 +38,7 @@
 	
 	return self;
 }
-
+#pragma mark *** Private Methods ***
 - (void)_commonInit; {
 	[self setBackgroundStyle:NSBackgroundStyleRaised];
 }

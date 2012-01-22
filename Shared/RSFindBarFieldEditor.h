@@ -8,8 +8,10 @@
 
 #import <AppKit/NSTextView.h>
 
-@interface RSFindBarFieldEditor : NSTextView {
+@interface RSFindBarFieldEditor : NSTextView <NSUserInterfaceValidations> {
 	__weak NSTextView *_findTextView;
 }
 @property (readwrite,assign,nonatomic) NSTextView *findTextView;
+
++ (RSFindBarFieldEditor *)sharedInstance;
 @end

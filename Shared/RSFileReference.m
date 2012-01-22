@@ -17,6 +17,7 @@ static NSString *const RSFileReferenceFileReferenceURLKey = @"fileReferenceURL";
 static NSString *const RSFileReferenceFilePathKey = @"filePath";
 
 @implementation RSFileReference
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 	[_kqueue release];
 	[_UUID release];
@@ -28,7 +29,7 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 - (NSString *)description {
 	return [NSString stringWithFormat:@"path: %@",[[self fileURL] path]];
 }
-
+#pragma mark RSPlistArchiving
 - (NSDictionary *)plistRepresentation {
 	NSMutableDictionary *retval = [NSMutableDictionary dictionaryWithDictionary:[super plistRepresentation]];
 	
@@ -63,7 +64,7 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 	
 	return self;
 }
-
+#pragma mark UKFileWatcherDelegate
 -(void) watcher: (id<UKFileWatcher>)kq receivedNotification: (NSString*)nm forPath: (NSString*)fpath; {
 	if ([nm isEqualToString:UKFileWatcherRenameNotification]) {
 		[self setFileURL:[[self fileReferenceURL] filePathURL]];
@@ -89,7 +90,7 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 		[[self delegate] fileReferenceWasWrittenTo:self];
 	}
 }
-
+#pragma mark *** Public Methods ***
 + (RSFileReference *)fileReferenceWithFileURL:(NSURL *)fileURL; {
 	return [[[[self class] alloc] initWithFileURL:fileURL] autorelease];
 }
@@ -103,7 +104,7 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 	
 	return self;
 }
-
+#pragma mark Properties
 @synthesize UUID=_UUID;
 @synthesize fileReferenceURL=_fileReferenceURL;
 @dynamic fileURL;

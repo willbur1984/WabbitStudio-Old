@@ -16,6 +16,7 @@
 #import "WCGeneralViewController.h"
 
 @implementation WCPreferencesWindowController
+#pragma mark *** Subclass Overrides ***
 - (void)windowDidLoad {
 	[super windowDidLoad];
 	
@@ -34,7 +35,9 @@
 	[self addViewController:[[[WCKeyBindingsViewController alloc] init] autorelease]];
 	[self addViewController:[[[WCAdvancedViewController alloc] init] autorelease]];
 }
+#pragma mark *** Private Methods ***
 
+#pragma mark Notifications
 - (void)_applicationWillTerminate:(NSNotification *)note {
 	[[WCFontAndColorThemeManager sharedManager] saveCurrentThemes:NULL];
 	//[[WCKeyBindingCommandSetManager sharedManager] saveCurrentCommandSets:NULL];
