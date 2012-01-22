@@ -26,9 +26,9 @@ static NSString *const RSTreeNodeRepresentedObjectKey = @"representedObject";
 	[super dealloc];
 }
 
-- (NSString *)description {
-	return [NSString stringWithFormat:@"parentNode: %@ representedObject: %@ childNodes: %@",[self parentNode],[self representedObject],[self childNodes]];
-}
+//- (NSString *)description {
+//	return [NSString stringWithFormat:@"parentNode: %@ representedObject: %@ childNodes: %@",[self parentNode],[self representedObject],[self childNodes]];
+//}
 
 #pragma mark NSCopying
 - (id)copyWithZone:(NSZone *)zone {

@@ -28,10 +28,10 @@
 @optional
 /** @name Optional methods */
 
-/** Initializes the receiver with `plistRepresentation`.
+/** Initializes the receiver with _plistRepresentation_.
  
  @param plistRepresentation The plist the receiver should use to initialize itself.
- @return Returns an initialized instance of the receiver, using the values provided in `plistRepresentation`.
+ @return Returns an initialized instance of the receiver, using the values provided in _plistRepresentation_.
  
  */
 - (id)initWithPlistRepresentation:(NSDictionary *)plistRepresentation;

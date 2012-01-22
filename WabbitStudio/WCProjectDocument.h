@@ -22,6 +22,7 @@ extern NSString *const WCProjectDataFileName;
 	NSMapTable *_sourceFileDocumentsToFiles;
 	NSMapTable *_filesToFileContainers;
 	NSHashTable *_unsavedFiles;
+	NSCountedSet *_openFiles;
 }
 @property (readonly,retain) WCProjectContainer *projectContainer;
 @property (readonly,retain) NSMapTable *filesToSourceFileDocuments;
@@ -30,6 +31,7 @@ extern NSString *const WCProjectDataFileName;
 @property (readonly,nonatomic) NSDictionary *filePathsToFiles;
 @property (readonly,nonatomic) WCProjectWindowController *projectWindowController;
 @property (readonly,nonatomic) NSHashTable *unsavedFiles;
+@property (readonly,nonatomic) NSCountedSet *openFiles;
 
 - (WCFileContainer *)fileContainerForFile:(WCFile *)file;
 

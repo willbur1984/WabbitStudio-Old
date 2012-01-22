@@ -291,7 +291,7 @@
 							<object class="NSSearchField" id="738087164">
 								<reference key="NSNextResponder" ref="699294097"/>
 								<int key="NSvFlags">258</int>
-								<string key="NSFrame">{{90, 2}, {382, 19}}</string>
+								<string key="NSFrame">{{90, 1}, {382, 19}}</string>
 								<reference key="NSSuperview" ref="699294097"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView"/>
@@ -473,7 +473,7 @@
 											</object>
 										</object>
 										<double key="NSRowHeight">30</double>
-										<int key="NSTvFlags">1514143744</int>
+										<int key="NSTvFlags">1245708288</int>
 										<reference key="NSDelegate"/>
 										<reference key="NSDataSource"/>
 										<int key="NSColumnAutoresizingStyle">4</int>
@@ -747,6 +747,14 @@
 					<int key="connectionID">21</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">projectNavigatorViewController</string>
+						<reference key="source" ref="747169050"/>
+						<reference key="destination" ref="1001"/>
+					</object>
+					<int key="connectionID">78</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
 						<string key="label">value: objectValue.representedObject.fileIcon</string>
 						<reference key="source" ref="919102118"/>
@@ -777,6 +785,14 @@
 						</object>
 					</object>
 					<int key="connectionID">53</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">delegate</string>
+						<reference key="source" ref="350007641"/>
+						<reference key="destination" ref="747169050"/>
+					</object>
+					<int key="connectionID">77</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -1319,6 +1335,7 @@
 					<string>-3.IBPluginDependency</string>
 					<string>1.IBPluginDependency</string>
 					<string>10.IBPluginDependency</string>
+					<string>15.CustomClassName</string>
 					<string>15.IBPluginDependency</string>
 					<string>15.userInterfaceItemIdentifier</string>
 					<string>16.IBPluginDependency</string>
@@ -1376,6 +1393,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>WCProjectNavigatorCellView</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>MainCell</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -1443,7 +1461,7 @@
 				<reference key="dict.values" ref="1002"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">75</int>
+			<int key="maxID">78</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1534,6 +1552,25 @@
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
+					<string key="className">WCProjectNavigatorCellView</string>
+					<string key="superclassName">NSTableCellView</string>
+					<object class="NSMutableDictionary" key="outlets">
+						<string key="NS.key.0">projectNavigatorViewController</string>
+						<string key="NS.object.0">WCProjectNavigatorViewController</string>
+					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<string key="NS.key.0">projectNavigatorViewController</string>
+						<object class="IBToOneOutletInfo" key="NS.object.0">
+							<string key="name">projectNavigatorViewController</string>
+							<string key="candidateClassName">WCProjectNavigatorViewController</string>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/WCProjectNavigatorCellView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
 					<string key="className">WCProjectNavigatorOutlineView</string>
 					<string key="superclassName">RSOutlineView</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
@@ -1548,13 +1585,31 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>addFilesToProject:</string>
+							<string>delete:</string>
 							<string>filter:</string>
 							<string>hideFilterOptions:</string>
+							<string>newGroup:</string>
+							<string>newGroupFromSelection:</string>
+							<string>openInSeparateEditor:</string>
+							<string>openWithExternalEditor:</string>
+							<string>rename:</string>
 							<string>showFilterOptions:</string>
+							<string>showInFinder:</string>
 							<string>toggleFilterOptions:</string>
+							<string>ungroupSelection:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -1565,13 +1620,30 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>addFilesToProject:</string>
+							<string>delete:</string>
 							<string>filter:</string>
 							<string>hideFilterOptions:</string>
+							<string>newGroup:</string>
+							<string>newGroupFromSelection:</string>
+							<string>openInSeparateEditor:</string>
+							<string>openWithExternalEditor:</string>
+							<string>rename:</string>
 							<string>showFilterOptions:</string>
+							<string>showInFinder:</string>
 							<string>toggleFilterOptions:</string>
+							<string>ungroupSelection:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBActionInfo">
+								<string key="name">addFilesToProject:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">delete:</string>
+								<string key="candidateClassName">id</string>
+							</object>
 							<object class="IBActionInfo">
 								<string key="name">filter:</string>
 								<string key="candidateClassName">id</string>
@@ -1581,11 +1653,39 @@
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
+								<string key="name">newGroup:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">newGroupFromSelection:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">openInSeparateEditor:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">openWithExternalEditor:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">rename:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
 								<string key="name">showFilterOptions:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
+								<string key="name">showInFinder:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
 								<string key="name">toggleFilterOptions:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">ungroupSelection:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 						</object>

@@ -153,6 +153,10 @@ NSString *const WCTabViewControllerDidCloseTabNotification = @"WCTabViewControll
 		
 		[_sourceFileDocumentsToSourceTextViewControllers setObject:stvController forKey:sourceFileDocument];
 		
+		WCFile *file = [[[sourceFileDocument projectDocument] sourceFileDocumentsToFiles] objectForKey:sourceFileDocument];
+		
+		[[[sourceFileDocument projectDocument] openFiles] removeObject:file];
+		
 		[[[self tabBarControl] tabView] addTabViewItem:tabViewItem];
 	}
 	else
@@ -163,6 +167,7 @@ NSString *const WCTabViewControllerDidCloseTabNotification = @"WCTabViewControll
 	return [_sourceFileDocumentsToSourceTextViewControllers objectForKey:[tabViewItem identifier]];
 }
 - (void)removeTabForSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument; {
+	WCFile *file = [[[sourceFileDocument projectDocument] sourceFileDocumentsToFiles] objectForKey:sourceFileDocument];
 	WCSourceTextViewController *stvController = [_sourceFileDocumentsToSourceTextViewControllers objectForKey:sourceFileDocument];
 	
 #ifdef DEBUG
@@ -172,6 +177,8 @@ NSString *const WCTabViewControllerDidCloseTabNotification = @"WCTabViewControll
 	[stvController performCleanup];
 	
 	[_sourceFileDocumentsToSourceTextViewControllers removeObjectForKey:sourceFileDocument];
+	
+	[[[sourceFileDocument projectDocument] openFiles] removeObject:file];
 }
 #pragma mark Properties
 @synthesize tabBarControl=_tabBarControl;

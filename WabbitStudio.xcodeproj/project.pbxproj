@@ -107,6 +107,8 @@
 		072BBC5914AA69EF0044ECC2 /* WCPreferencesWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 072BBC5714AA69EF0044ECC2 /* WCPreferencesWindow.xib */; };
 		072BBC5C14AA6D190044ECC2 /* RSGlassGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 072BBC5B14AA6D190044ECC2 /* RSGlassGradientView.m */; };
 		072BBC5F14AA700B0044ECC2 /* RSBottomBorderedGlassGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 072BBC5E14AA700B0044ECC2 /* RSBottomBorderedGlassGradientView.m */; };
+		072FCFB814CB972B00F76276 /* WCProjectNavigatorCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 072FCFB714CB972B00F76276 /* WCProjectNavigatorCellView.m */; };
+		072FCFBA14CBBD9700F76276 /* wabbitstudio.icns in Resources */ = {isa = PBXBuildFile; fileRef = 072FCFB914CBBD9700F76276 /* wabbitstudio.icns */; };
 		073B5A9114B67B7400FCDC0F /* NSImage+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 073B5A9014B67B7400FCDC0F /* NSImage+RSExtensions.m */; };
 		073B5A9F14B6A4BF00FCDC0F /* WCJumpInWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 073B5A9E14B6A4BF00FCDC0F /* WCJumpInWindowController.m */; };
 		073B5AA414B6A92B00FCDC0F /* WCJumpInMatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 073B5AA314B6A92B00FCDC0F /* WCJumpInMatch.m */; };
@@ -439,6 +441,9 @@
 		072BBC5B14AA6D190044ECC2 /* RSGlassGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSGlassGradientView.m; sourceTree = "<group>"; };
 		072BBC5D14AA700B0044ECC2 /* RSBottomBorderedGlassGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSBottomBorderedGlassGradientView.h; sourceTree = "<group>"; };
 		072BBC5E14AA700B0044ECC2 /* RSBottomBorderedGlassGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSBottomBorderedGlassGradientView.m; sourceTree = "<group>"; };
+		072FCFB614CB972B00F76276 /* WCProjectNavigatorCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCProjectNavigatorCellView.h; sourceTree = "<group>"; };
+		072FCFB714CB972B00F76276 /* WCProjectNavigatorCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCProjectNavigatorCellView.m; sourceTree = "<group>"; };
+		072FCFB914CBBD9700F76276 /* wabbitstudio.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = wabbitstudio.icns; sourceTree = "<group>"; };
 		073B5A8F14B67B7400FCDC0F /* NSImage+RSExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+RSExtensions.h"; sourceTree = "<group>"; };
 		073B5A9014B67B7400FCDC0F /* NSImage+RSExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+RSExtensions.m"; sourceTree = "<group>"; };
 		073B5A9D14B6A4BF00FCDC0F /* WCJumpInWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCJumpInWindowController.h; sourceTree = "<group>"; };
@@ -989,6 +994,7 @@
 		071ECCC914A4233C002409F8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				072FCFB914CBBD9700F76276 /* wabbitstudio.icns */,
 				071306AA14C8F74000862E4D /* Bookmark.png */,
 				0778851514C2377C00605F5D /* FileNotFound.acorn */,
 				0778851614C2377C00605F5D /* FileNotFound.png */,
@@ -1235,6 +1241,8 @@
 				0778851014C2337700605F5D /* WCProjectNavigatorViewController.m */,
 				0778852014C2402200605F5D /* WCProjectNavigatorOutlineView.h */,
 				0778852114C2402200605F5D /* WCProjectNavigatorOutlineView.m */,
+				072FCFB614CB972B00F76276 /* WCProjectNavigatorCellView.h */,
+				072FCFB714CB972B00F76276 /* WCProjectNavigatorCellView.m */,
 				0778853414C49ABB00605F5D /* WCNavigatorModule.h */,
 			);
 			name = Navigators;
@@ -1622,6 +1630,7 @@
 				0797327214C5360A00A71F54 /* WCTabView.xib in Resources */,
 				07018B1414C6011E00C5A7AC /* WCOpenQuicklyWindow.xib in Resources */,
 				071306AB14C8F74000862E4D /* Bookmark.png in Resources */,
+				072FCFBA14CBBD9700F76276 /* wabbitstudio.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1786,6 +1795,7 @@
 				071306A414C8D0F800862E4D /* RSBookmark.m in Sources */,
 				071306AE14C91C4C00862E4D /* DDHotKeyCenter.m in Sources */,
 				071306F114CA92EF00862E4D /* WCGroupContainer.m in Sources */,
+				072FCFB814CB972B00F76276 /* WCProjectNavigatorCellView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

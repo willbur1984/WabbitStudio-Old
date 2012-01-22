@@ -301,6 +301,9 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 		return cell;
 	}
 }
+- (WCSourceFileDocument *)sourceFileDocument {
+	return self;
+}
 #pragma mark WCSourceScannerDelegate
 - (WCSourceHighlighter *)sourceHighlighterForSourceScanner:(WCSourceScanner *)scanner {
 	return [self sourceHighlighter];

@@ -11,6 +11,12 @@
 
 extern NSString *const RSTreeNodeChildNodesKey;
 
+/** Base class for tree objects. Modeled after NSTreeNode.
+ 
+ Meant to be used as a container for model objects that should have no knowledge of their place in the corresponding tree structure.
+ 
+ */
+
 @interface RSTreeNode : RSObject <RSPlistArchiving,NSCopying,NSMutableCopying,QLPreviewItem> {
 	__weak id _parentNode;
 	NSMutableArray *_childNodes;

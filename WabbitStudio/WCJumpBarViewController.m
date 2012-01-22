@@ -24,6 +24,9 @@
 #import "WCProject.h"
 #import "WCProjectDocument.h"
 #import "WCFileContainer.h"
+#import "WCProjectNavigatorViewController.h"
+#import "WCProjectWindowController.h"
+#import "WCSourceFileDocument.h"
 
 @interface WCJumpBarViewController ()
 @property (readwrite,copy,nonatomic) NSString *textViewSelectedLineAndColumn;
@@ -72,8 +75,6 @@
 	[[self jumpBar] setAction:@selector(_jumpBarClicked:)];
 	
 	[self _updatePathComponentCells];
-	
-	[(id)[self jumpBarDataSource] addObserver:self forKeyPath:@"icon" options:NSKeyValueObservingOptionNew context:self];
 }
 
 - (NSSet *)userDefaultsKeyPathsToObserve {
@@ -250,13 +251,23 @@
 	_symbolsMenu = [[NSMenu alloc] initWithTitle:@""];
 	[_symbolsMenu setFont:[NSFont menuFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]]];
 	
-	[self setTextViewSelectedLineAndColumn:NSLocalizedString(@"1:0", @"1:0")];
+	_textViewSelectedLineAndColumn = [NSLocalizedString(@"1:0", @"1:0") copy];
 	
 	[self setupUserDefaultsObserving];
+	
+	[(NSObject *)jumpBarDataSource addObserver:self forKeyPath:@"icon" options:NSKeyValueObservingOptionNew context:self];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textViewDidChangeSelection:) name:NSTextViewDidChangeSelectionNotification object:textView];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_sourceScannerDidFinishScanningSymbols:) name:WCSourceScannerDidFinishScanningSymbolsNotification object:[jumpBarDataSource sourceScanner]];
+	
+	if ([jumpBarDataSource projectDocument]) {
+		WCProjectNavigatorViewController *viewController = [[[jumpBarDataSource projectDocument] projectWindowController] projectNavigatorViewController];
+		
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_projectNavigatorDidGroupNodes:) name:WCProjectNavigatorDidGroupNodesNotification object:viewController];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_projectNavigatorDidUngroupNodes:) name:WCProjectNavigatorDidUngroupNodesNotification object:viewController];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_projectNavigatorDidRenameNode:) name:WCProjectNavigatorDidRenameNodeNotification object:viewController];
+	}
 	
 	return self;
 }
@@ -523,5 +534,27 @@
 
 - (void)_sourceScannerDidFinishScanningSymbols:(NSNotification *)note {	
 	[self _updateSymbolPathComponentCell];
+}
+- (void)_projectNavigatorDidGroupNodes:(NSNotification *)note {	
+	WCFile *file = [[[[self jumpBarDataSource] projectDocument] sourceFileDocumentsToFiles] objectForKey:[[self jumpBarDataSource] sourceFileDocument]];
+	WCFileContainer *fileContainer = [[[self jumpBarDataSource] projectDocument] fileContainerForFile:file];
+	NSSet *groupedNodes = [[note userInfo] objectForKey:WCProjectNavigatorDidGroupNodesNotificationGroupedNodesUserInfoKey];
+	
+	if ([groupedNodes containsObject:fileContainer])
+		[self _updatePathComponentCells];
+}
+- (void)_projectNavigatorDidUngroupNodes:(NSNotification *)note {
+	WCFile *file = [[[[self jumpBarDataSource] projectDocument] sourceFileDocumentsToFiles] objectForKey:[[self jumpBarDataSource] sourceFileDocument]];
+	WCFileContainer *fileContainer = [[[self jumpBarDataSource] projectDocument] fileContainerForFile:file];
+	NSSet *ungroupedNodes = [[note userInfo] objectForKey:WCProjectNavigatorDidUngroupNodesNotificationUngroupedNodesUserInfoKey];
+	
+	if ([ungroupedNodes containsObject:fileContainer])
+		[self _updatePathComponentCells];
+}
+- (void)_projectNavigatorDidRenameNode:(NSNotification *)note {
+	WCFileContainer *fileContainer = [[note userInfo] objectForKey:WCProjectNavigatorDidRenameNodeNotificationRenamedNodeUserInfoKey];
+	
+	if ([[[[self jumpBar] pathComponentCells] valueForKey:@"representedObject"] containsObject:[fileContainer representedObject]])
+		[self _updatePathComponentCells];
 }
 @end

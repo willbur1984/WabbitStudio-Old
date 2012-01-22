@@ -147,5 +147,9 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 - (NSString *)filePath {
 	return [[self fileURL] path];
 }
+@dynamic parentDirectoryURL;
+- (NSURL *)parentDirectoryURL {
+	return [[self fileURL] parentDirectoryURL];
+}
 
 @end

@@ -33,11 +33,12 @@ NSString *const WCProjectDataFileName = @"project.plist";
 @end
 
 @implementation WCProjectDocument
-
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
+	[_openFiles release];
 	[_unsavedFiles release];
 	[_filesToFileContainers release];
 	[_sourceFileDocumentsToFiles release];
@@ -54,6 +55,7 @@ NSString *const WCProjectDataFileName = @"project.plist";
 	[self setUndoManager:nil];
 	
 	_unsavedFiles = [[NSHashTable hashTableWithWeakObjects] retain];
+	_openFiles = [[NSCountedSet alloc] initWithCapacity:0];
 	
 	return self;
 }
@@ -62,11 +64,9 @@ NSString *const WCProjectDataFileName = @"project.plist";
 	WCProjectWindowController *windowController = [[[WCProjectWindowController alloc] init] autorelease];
 	
 	[self addWindowController:windowController];
-}
-
-- (void)windowControllerDidLoadNib:(NSWindowController *)windowController {
-    [super windowControllerDidLoadNib:windowController];
-
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_projectNavigatorDidAddNewGroup:) name:WCProjectNavigatorDidAddNewGroupNotification object:[windowController projectNavigatorViewController]];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_projectNavigatorDidRemoveNodes:) name:WCProjectNavigatorDidRemoveNodesNotification object:[windowController projectNavigatorViewController]];
 }
 
 + (BOOL)canConcurrentlyReadDocumentsOfType:(NSString *)typeName {
@@ -81,7 +81,7 @@ NSString *const WCProjectDataFileName = @"project.plist";
 }
 
 + (BOOL)autosavesInPlace {
-    return NO;
+    return YES;
 }
 
 - (NSFileWrapper *)fileWrapperOfType:(NSString *)typeName error:(NSError **)outError {
@@ -158,7 +158,7 @@ NSString *const WCProjectDataFileName = @"project.plist";
 	if (selectedTabViewItem)
 		[[selectedTabViewItem identifier] saveDocument:nil];
 }
-
+#pragma mark WCOpenQuicklyDataSource
 - (NSArray *)openQuicklyItems {
 	NSMutableArray *retval = [NSMutableArray arrayWithCapacity:0];
 	
@@ -176,7 +176,7 @@ NSString *const WCProjectDataFileName = @"project.plist";
 - (NSString *)openQuicklyProjectName {
 	return [self displayName];
 }
-
+#pragma mark *** Public Methods ***
 - (WCSourceTextViewController *)openTabForFile:(WCFile *)file; {
 	WCSourceFileDocument *sfDocument = [[self filesToSourceFileDocuments] objectForKey:file];
 	if (sfDocument)
@@ -193,16 +193,9 @@ NSString *const WCProjectDataFileName = @"project.plist";
 }
 
 - (WCFileContainer *)fileContainerForFile:(WCFile *)file; {
-	WCFileContainer *retval = nil;
-	for (WCFileContainer *fileContainer in [[self projectContainer] descendantNodesInclusive]) {
-		if ([fileContainer representedObject] == file) {
-			retval = fileContainer;
-			break;
-		}
-	}
-	return retval;
+	return [[self filesToFileContainers] objectForKey:file];
 }
-
+#pragma mark IBActions
 - (IBAction)openQuickly:(id)sender; {
 	[[WCOpenQuicklyWindowController sharedWindowController] showOpenQuicklyWindowWithDataSource:self];
 }
@@ -229,5 +222,18 @@ NSString *const WCProjectDataFileName = @"project.plist";
 }
 @synthesize unsavedFiles=_unsavedFiles;
 @synthesize filesToFileContainers=_filesToFileContainers;
+@synthesize openFiles=_openFiles;
+
+- (void)_projectNavigatorDidAddNewGroup:(NSNotification *)note {
+	WCGroupContainer *newGroupContainer = [[note userInfo] objectForKey:WCProjectNavigatorDidAddNewGroupNotificationNewGroupUserInfoKey];
+	
+	[[self filesToFileContainers] setObject:newGroupContainer forKey:[newGroupContainer representedObject]];
+}
+- (void)_projectNavigatorDidRemoveNodes:(NSNotification *)note {
+	NSSet *removedFileContainers = [[note userInfo] objectForKey:WCProjectNavigatorDidRemoveNodesNotificationRemovedNodesUserInfoKey];
+	
+	for (WCFileContainer *fileContainer in removedFileContainers)
+		[[self filesToFileContainers] removeObjectForKey:[fileContainer representedObject]];
+}
 
 @end

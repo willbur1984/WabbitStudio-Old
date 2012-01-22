@@ -12,10 +12,20 @@
 #import "WCNavigatorModule.h"
 #import <Quartz/Quartz.h>
 
-extern NSString *const WCProjectNavigatorNewGroupNotification;
-extern NSString *const WCProjectNavigatorNewGroupNotificationNewGroupUserInfoKey;
+extern NSString *const WCProjectNavigatorDidAddNewGroupNotification;
+extern NSString *const WCProjectNavigatorDidAddNewGroupNotificationNewGroupUserInfoKey;
 
-extern NSString *const WCProjectNavigatorDidGroupNotification;
+extern NSString *const WCProjectNavigatorDidGroupNodesNotification;
+extern NSString *const WCProjectNavigatorDidGroupNodesNotificationGroupedNodesUserInfoKey;
+
+extern NSString *const WCProjectNavigatorDidRemoveNodesNotification;
+extern NSString *const WCProjectNavigatorDidRemoveNodesNotificationRemovedNodesUserInfoKey;
+
+extern NSString *const WCProjectNavigatorDidUngroupNodesNotification;
+extern NSString *const WCProjectNavigatorDidUngroupNodesNotificationUngroupedNodesUserInfoKey;
+
+extern NSString *const WCProjectNavigatorDidRenameNodeNotification;
+extern NSString *const WCProjectNavigatorDidRenameNodeNotificationRenamedNodeUserInfoKey;
 
 @class WCProjectContainer,RSFindOptionsViewController;
 
@@ -43,6 +53,17 @@ extern NSString *const WCProjectNavigatorDidGroupNotification;
 - (IBAction)showFilterOptions:(id)sender;
 - (IBAction)hideFilterOptions:(id)sender;
 
+- (IBAction)addFilesToProject:(id)sender;
+
+- (IBAction)showInFinder:(id)sender;
+- (IBAction)openWithExternalEditor:(id)sender;
+
 - (IBAction)newGroup:(id)sender;
 - (IBAction)newGroupFromSelection:(id)sender;
+- (IBAction)ungroupSelection:(id)sender;
+
+- (IBAction)delete:(id)sender;
+- (IBAction)rename:(id)sender;
+
+- (IBAction)openInSeparateEditor:(id)sender;
 @end

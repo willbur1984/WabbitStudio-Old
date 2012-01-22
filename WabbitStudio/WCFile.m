@@ -22,9 +22,9 @@ static NSString *const WCFileReferenceKey = @"fileReference";
 	[super dealloc];
 }
 
-- (NSString *)description {
-	return [NSString stringWithFormat:@"fileReference: %@",[self fileReference]];
-}
+//- (NSString *)description {
+//	return [NSString stringWithFormat:@"fileReference: %@",[[self fileReference] description]];
+//}
 
 - (NSDictionary *)plistRepresentation {
 	NSMutableDictionary *retval = [NSMutableDictionary dictionaryWithDictionary:[super plistRepresentation]];
@@ -138,6 +138,10 @@ static NSString *const WCFileReferenceKey = @"fileReference";
 @dynamic sourceFile;
 - (BOOL)isSourceFile {
 	return [[[WCDocumentController sharedDocumentController] sourceFileDocumentUTIs] containsObject:[self fileUTI]];
+}
+@dynamic parentDirectoryURL;
+- (NSURL *)parentDirectoryURL {
+	return [[self fileReference] parentDirectoryURL];
 }
 
 @end
