@@ -39,6 +39,9 @@ static NSTextContainer *_textContainer;
 	[super dealloc];
 }
 
+static const CGFloat kIconPaddingRight = 4.0;
+static const CGFloat kIconPaddingTopBottom = 2.0;
+static const NSSize kIconSize = (NSSize){8.0,6.0};
 - (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView characterIndex:(NSUInteger)charIndex layoutManager:(NSLayoutManager *)layoutManager {
 	static NSColor *lightSelectedFillColor;
 	static NSColor *lightNotSelectedKeyFillColor;
@@ -104,17 +107,16 @@ static NSTextContainer *_textContainer;
 		[path strokeInside];
 	}
 	
-	if ([[self argumentChoices] count]) {
-		NSImage *actionImage = [NSImage imageNamed:NSImageNameActionTemplate];
-		
-		[actionImage drawInRect:NSMakeRect(NSMaxX(cellFrame)-NSSmallSize.width+1.0, NSMinY(cellFrame)+1.0, NSSmallSize.width-2.0, NSHeight(cellFrame)-2.0) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
-	}
-	
 	[NSGraphicsContext saveGraphicsState];
 	
 	NSRectClip(cellFrame);
 	
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
+	NSMutableString *string = [NSMutableString stringWithString:[self stringValue]];
+	
+	if ([[self argumentChoices] count])
+		[string appendFormat:@" %C",0x25BC];
+	
 	NSColor *textColor = [NSColor blackColor];
 	if (isSelected && [[controlView window] isKeyWindow]) {
 		if (backgroundColorIsLight)
@@ -123,7 +125,7 @@ static NSTextContainer *_textContainer;
 	else if (!backgroundColorIsLight)
 		textColor = [NSColor whiteColor];
 	
-	[_textStorage replaceCharactersInRange:NSMakeRange(0, [_textStorage length]) withAttributedString:[[[NSAttributedString alloc] initWithString:[self stringValue] attributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,textColor,NSForegroundColorAttributeName, nil]] autorelease]];
+	[_textStorage replaceCharactersInRange:NSMakeRange(0, [_textStorage length]) withAttributedString:[[[NSAttributedString alloc] initWithString:string attributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,textColor,NSForegroundColorAttributeName, nil]] autorelease]];
 	[_layoutManager ensureLayoutForCharacterRange:NSMakeRange(0, [_textStorage length])];
 	
 	[_layoutManager drawGlyphsForGlyphRange:[_layoutManager glyphRangeForCharacterRange:NSMakeRange(0, [_textStorage length]) actualCharacterRange:NULL] atPoint:cellFrame.origin];
@@ -132,9 +134,14 @@ static NSTextContainer *_textContainer;
 }
 
 - (NSRect)cellFrameForTextContainer:(NSTextContainer *)textContainer proposedLineFragment:(NSRect)lineFrag glyphPosition:(NSPoint)position characterIndex:(NSUInteger)charIndex {
-	
+
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
-	[_textStorage replaceCharactersInRange:NSMakeRange(0, [_textStorage length]) withAttributedString:[[[NSAttributedString alloc] initWithString:[self stringValue] attributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName, nil]] autorelease]];
+	NSMutableString *string = [NSMutableString stringWithString:[self stringValue]];
+	
+	if ([[self argumentChoices] count])
+		[string appendFormat:@" %C",0x25BC];
+	
+	[_textStorage replaceCharactersInRange:NSMakeRange(0, [_textStorage length]) withAttributedString:[[[NSAttributedString alloc] initWithString:string attributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName, nil]] autorelease]];
 	[_layoutManager ensureLayoutForCharacterRange:NSMakeRange(0, [_textStorage length])];
 	
 	NSRect cellFrame = [super cellFrameForTextContainer:textContainer proposedLineFragment:lineFrag glyphPosition:position characterIndex:charIndex];
@@ -142,9 +149,6 @@ static NSTextContainer *_textContainer;
 	cellFrame.size.width = NSWidth(textFrame);
 	cellFrame.size.height = NSHeight(textFrame);
 	cellFrame.origin.y -= [[_layoutManager typesetter] baselineOffsetInLayoutManager:_layoutManager glyphIndex:0];
-	
-	if ([[self argumentChoices] count])
-		cellFrame.size.width += 16.0;
 	
 	return cellFrame;
 }
