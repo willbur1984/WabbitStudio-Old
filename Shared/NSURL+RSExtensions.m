@@ -70,4 +70,7 @@
 	}
 	return retval;
 }
+- (NSString *)filePath; {
+	return [self path];
+}
 @end

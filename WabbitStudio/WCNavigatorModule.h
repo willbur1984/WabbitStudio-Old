@@ -12,4 +12,7 @@
 @required
 - (NSArray *)selectedObjects;
 - (void)setSelectedObjects:(NSArray *)objects;
+
+- (NSArray *)selectedModelObjects;
+- (void)setSelectedModelObjects:(NSArray *)modelObjects;
 @end

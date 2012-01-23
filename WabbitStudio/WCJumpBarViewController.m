@@ -267,6 +267,7 @@
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_projectNavigatorDidGroupNodes:) name:WCProjectNavigatorDidGroupNodesNotification object:viewController];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_projectNavigatorDidUngroupNodes:) name:WCProjectNavigatorDidUngroupNodesNotification object:viewController];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_projectNavigatorDidRenameNode:) name:WCProjectNavigatorDidRenameNodeNotification object:viewController];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_projectNavigatorDidMoveNodes:) name:WCProjectNavigatorDidMoveNodesNotification object:viewController];
 	}
 	
 	return self;
@@ -339,7 +340,7 @@
 		WCSourceSymbol *symbol = [symbols sourceSymbolForRange:[[self textView] selectedRange]];
 		
 		if ([[NSUserDefaults standardUserDefaults] boolForKey:WCReallyAdvancedJumpBarShowFileAndLineNumberKey])
-			symbolCell = [[[WCJumpBarComponentCell alloc] initTextCell:[NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 (%@:%lu)", @"jump bar symbols menu format string"),[symbol name],[[[symbol sourceScanner] delegate] fileDisplayNameForSourceScanner:[symbol sourceScanner]],[[[self textView] textStorage] lineNumberForRange:[symbol range]]+1]] autorelease];
+			symbolCell = [[[WCJumpBarComponentCell alloc] initTextCell:[NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 (line %lu)", @"jump bar symbols menu format string"),[symbol name],[[[self textView] textStorage] lineNumberForRange:[symbol range]]+1]] autorelease];
 		else
 			symbolCell = [[[WCJumpBarComponentCell alloc] initTextCell:[symbol name]] autorelease];
 		
@@ -467,7 +468,7 @@
 			[item setTarget:self];
 			[item setAction:@selector(_symbolsMenuClick:)];
 			if (showFileAndLineNumber)
-				[item setTitle:[NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 (%@:%lu)", @"jump bar symbols menu format string"),[symbol name],[[[symbol sourceScanner] delegate] fileDisplayNameForSourceScanner:[symbol sourceScanner]],[[[self textView] textStorage] lineNumberForRange:[symbol range]]+1]];
+				[item setTitle:[NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 (line %lu)", @"jump bar symbols menu format string"),[symbol name],[[[self textView] textStorage] lineNumberForRange:[symbol range]]+1]];
 			else
 				[item setTitle:[symbol name]];
 			[item setImage:[symbol icon]];
@@ -490,7 +491,7 @@
 			[item setTarget:self];
 			[item setAction:@selector(_symbolsMenuClick:)];
 			if (showFileAndLineNumber)
-				[item setTitle:[NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 (%@:%lu)", @"jump bar symbols menu format string"),[symbol name],[[[symbol sourceScanner] delegate] fileDisplayNameForSourceScanner:[symbol sourceScanner]],[[[self textView] textStorage] lineNumberForRange:[symbol range]]+1]];
+				[item setTitle:[NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 (line %lu)", @"jump bar symbols menu format string"),[symbol name],[[[self textView] textStorage] lineNumberForRange:[symbol range]]+1]];
 			else
 				[item setTitle:[symbol name]];
 			[item setImage:[symbol icon]];
@@ -540,21 +541,37 @@
 	WCFileContainer *fileContainer = [[[self jumpBarDataSource] projectDocument] fileContainerForFile:file];
 	NSSet *groupedNodes = [[note userInfo] objectForKey:WCProjectNavigatorDidGroupNodesNotificationGroupedNodesUserInfoKey];
 	
-	if ([groupedNodes containsObject:fileContainer])
+	if ([groupedNodes containsObject:fileContainer]) {
 		[self _updatePathComponentCells];
+		[self _updateSymbolPathComponentCell];
+	}
 }
 - (void)_projectNavigatorDidUngroupNodes:(NSNotification *)note {
 	WCFile *file = [[[[self jumpBarDataSource] projectDocument] sourceFileDocumentsToFiles] objectForKey:[[self jumpBarDataSource] sourceFileDocument]];
 	WCFileContainer *fileContainer = [[[self jumpBarDataSource] projectDocument] fileContainerForFile:file];
 	NSSet *ungroupedNodes = [[note userInfo] objectForKey:WCProjectNavigatorDidUngroupNodesNotificationUngroupedNodesUserInfoKey];
 	
-	if ([ungroupedNodes containsObject:fileContainer])
+	if ([ungroupedNodes containsObject:fileContainer]) {
 		[self _updatePathComponentCells];
+		[self _updateSymbolPathComponentCell];
+	}
 }
 - (void)_projectNavigatorDidRenameNode:(NSNotification *)note {
 	WCFileContainer *fileContainer = [[note userInfo] objectForKey:WCProjectNavigatorDidRenameNodeNotificationRenamedNodeUserInfoKey];
 	
-	if ([[[[self jumpBar] pathComponentCells] valueForKey:@"representedObject"] containsObject:[fileContainer representedObject]])
+	if ([[[[self jumpBar] pathComponentCells] valueForKey:@"representedObject"] containsObject:[fileContainer representedObject]]) {
 		[self _updatePathComponentCells];
+		[self _updateSymbolPathComponentCell];
+	}
+}
+- (void)_projectNavigatorDidMoveNodes:(NSNotification *)note {
+	WCFile *file = [[[[self jumpBarDataSource] projectDocument] sourceFileDocumentsToFiles] objectForKey:[[self jumpBarDataSource] sourceFileDocument]];
+	WCFileContainer *fileContainer = [[[self jumpBarDataSource] projectDocument] fileContainerForFile:file];
+	NSSet *movedNodes = [[note userInfo] objectForKey:WCProjectNavigatorDidMoveNodesNotificationMovedNodesUserInfoKey];
+	
+	if ([movedNodes containsObject:fileContainer]) {
+		[self _updatePathComponentCells];
+		[self _updateSymbolPathComponentCell];
+	}
 }
 @end

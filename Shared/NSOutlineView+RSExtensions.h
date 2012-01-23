@@ -17,5 +17,8 @@
 - (NSArray *)expandedItems;
 - (void)expandItems:(NSArray *)items;
 
+- (NSArray *)expandedModelObjects;
+- (void)expandModelObjects:(NSArray *)modelObjects;
+
 - (NSArray *)rootItems;
 @end

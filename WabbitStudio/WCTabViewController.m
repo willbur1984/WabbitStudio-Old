@@ -14,6 +14,8 @@
 #import "WCSourceTextView.h"
 #import "WCFileContainer.h"
 #import "WCFile.h"
+#import "WCProjectWindowController.h"
+#import "WCProjectNavigatorViewController.h"
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
 NSString *const WCTabViewControllerDidSelectTabNotification = @"WCTabViewControllerDidSelectTabNotification";
@@ -69,7 +71,7 @@ static NSString *const WCTabViewControllerSelectedTabKey = @"selectedTab";
 	
 	if ([[settings objectForKey:WCTabViewControllerOpenTabsKey] count]) {
 		WCProjectDocument *projectDocument = [[self delegate] projectDocumentForTabViewController:self];
-		NSDictionary *UUIDsToObjects = [projectDocument UUIDsToObjects];
+		NSDictionary *UUIDsToObjects = [projectDocument UUIDsToFiles];
 		NSMapTable *filesToDocuments = [projectDocument filesToSourceFileDocuments];
 		
 		for (NSString *UUID in [settings objectForKey:WCTabViewControllerOpenTabsKey]) {
@@ -269,15 +271,22 @@ static NSString *const WCTabViewControllerSelectedTabKey = @"selectedTab";
 
 #pragma mark IBActions
 - (IBAction)_closeTab:(id)sender {
-	
+	[[[self tabBarControl] tabView] removeTabViewItem:[self clickedTabViewItem]];
 }
 - (IBAction)_closeAllExceptTab:(id)sender {
-	
+	for (NSTabViewItem *tabViewItem in [[[[[self tabBarControl] tabView] tabViewItems] copy] autorelease]) {
+		if (tabViewItem == [self clickedTabViewItem])
+			continue;
+		
+		[[[self tabBarControl] tabView] removeTabViewItem:tabViewItem];
+	}
 }
 - (IBAction)_showInFinder:(id)sender {
-	
+	[[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:[NSArray arrayWithObjects:[[[self clickedTabViewItem] identifier] fileURL], nil]];
 }
 - (IBAction)_revealInProjectNavigator:(id)sender {
+	WCFile *file = [[[[self delegate] projectDocumentForTabViewController:self] sourceFileDocumentsToFiles] objectForKey:[[self clickedTabViewItem] identifier]];
 	
+	[[[[[self delegate] projectDocumentForTabViewController:self] projectWindowController] projectNavigatorViewController] setSelectedModelObjects:[NSArray arrayWithObjects:file, nil]];
 }
 @end

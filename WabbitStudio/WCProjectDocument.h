@@ -22,7 +22,7 @@ extern NSString *const WCProjectSettingsFileExtension;
 	NSMapTable *_filesToSourceFileDocuments;
 	NSMapTable *_sourceFileDocumentsToFiles;
 	NSMapTable *_filesToFileContainers;
-	NSMutableDictionary *_UUIDsToObjects;
+	NSMutableDictionary *_UUIDsToFiles;
 	NSHashTable *_unsavedFiles;
 	NSCountedSet *_openFiles;
 	NSHashTable *_projectSettingsProviders;
@@ -37,7 +37,7 @@ extern NSString *const WCProjectSettingsFileExtension;
 @property (readonly,nonatomic) WCProjectWindowController *projectWindowController;
 @property (readonly,nonatomic) NSHashTable *unsavedFiles;
 @property (readonly,nonatomic) NSCountedSet *openFiles;
-@property (readonly,retain) NSMutableDictionary *UUIDsToObjects;
+@property (readonly,retain) NSMutableDictionary *UUIDsToFiles;
 @property (readonly,copy) NSDictionary *projectSettings;
 @property (readonly,retain) NSHashTable *projectSettingsProviders;
 

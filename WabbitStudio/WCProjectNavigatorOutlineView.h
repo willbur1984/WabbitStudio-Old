@@ -8,6 +8,6 @@
 
 #import "RSOutlineView.h"
 
-@interface WCProjectNavigatorOutlineView : RSOutlineView
+@interface WCProjectNavigatorOutlineView : RSOutlineView <NSDraggingSource>
 
 @end

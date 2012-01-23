@@ -12,11 +12,13 @@
 #import "RSFileReferenceDelegate.h"
 #import <Quartz/Quartz.h>
 
+extern NSString *const WCPasteboardTypeFileUUID;
+
 extern NSString *const WCFileUUIDKey;
 
 @class RSFileReference,WCProject;
 
-@interface WCFile : RSObject <RSPlistArchiving,WCOpenQuicklyItem,RSFileReferenceDelegate,QLPreviewItem> {
+@interface WCFile : RSObject <RSPlistArchiving,WCOpenQuicklyItem,RSFileReferenceDelegate,QLPreviewItem,NSPasteboardWriting> {
 	__weak id <WCFileDelegate> _delegate;
 	NSString *_UUID;
 	RSFileReference *_fileReference;

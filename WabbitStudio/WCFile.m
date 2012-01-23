@@ -14,6 +14,8 @@
 #import "WCDocumentController.h"
 #import "NSString+RSExtensions.h"
 
+NSString *const WCPasteboardTypeFileUUID = @"org.revsoft.wabbitstudio.uuid";
+
 NSString *const WCFileUUIDKey = @"UUID";
 
 static NSString *const WCFileReferenceKey = @"fileReference";
@@ -54,6 +56,25 @@ static NSString *const WCFileReferenceKey = @"fileReference";
 #pragma mark QLPreviewItem
 - (NSURL *)previewItemURL {
 	return [self fileURL];
+}
+#pragma mark NSPasteboardReading
+
+#pragma mark NSPasteboardWriting
+- (NSArray *)writableTypesForPasteboard:(NSPasteboard *)pasteboard {
+	NSMutableArray *types = [[[[self fileURL] writableTypesForPasteboard:pasteboard] mutableCopy] autorelease];
+	
+	//if (![types containsObject:NSPasteboardTypeString])
+	//	[types insertObject:NSPasteboardTypeString atIndex:0];
+	
+	[types insertObject:WCPasteboardTypeFileUUID atIndex:0];
+	
+	return types;
+}
+- (id)pasteboardPropertyListForType:(NSString *)type {	
+	if ([type isEqualToString:WCPasteboardTypeFileUUID]) {
+		return [self UUID];
+	}
+	return [[self fileURL] pasteboardPropertyListForType:type];
 }
 #pragma mark WCOpenQuicklyItem
 - (NSRange)openQuicklyRange {

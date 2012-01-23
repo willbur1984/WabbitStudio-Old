@@ -32,7 +32,7 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 @property (readwrite,retain) NSMapTable *filesToSourceFileDocuments;
 @property (readwrite,retain) NSMapTable *sourceFileDocumentsToFiles;
 @property (readwrite,retain) NSMapTable *filesToFileContainers;
-@property (readwrite,retain) NSMutableDictionary *UUIDsToObjects;
+@property (readwrite,retain) NSMutableDictionary *UUIDsToFiles;
 @property (readwrite,copy) NSDictionary *projectSettings;
 @property (readwrite,retain) NSHashTable *projectSettingsProviders;
 @end
@@ -47,7 +47,7 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	[_unsavedFiles release];
 	[_projectSettingsProviders release];
 	[_projectSettings release];
-	[_UUIDsToObjects release];
+	[_UUIDsToFiles release];
 	[_filesToFileContainers release];
 	[_sourceFileDocumentsToFiles release];
 	[_filesToSourceFileDocuments release];
@@ -176,7 +176,7 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	[self setFilesToFileContainers:filesToFileContainers];
 	[self setFilesToSourceFileDocuments:filesToSourceFileDocuments];
 	[self setSourceFileDocumentsToFiles:sourceFileDocumentsToFiles];
-	[self setUUIDsToObjects:UUIDsToObjects];
+	[self setUUIDsToFiles:UUIDsToObjects];
 	
 	NSFileWrapper *settingsDataWrapper = [[fileWrapper fileWrappers] objectForKey:[NSUserName() stringByAppendingPathExtension:WCProjectSettingsFileExtension]];
 	if (!settingsDataWrapper)
@@ -221,9 +221,7 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	if (sfDocument)
 		return [self openTabForSourceFileDocument:sfDocument];
 	else {
-		WCFileContainer *fileContainer = [self fileContainerForFile:file];
-		
-		[[[self projectWindowController] projectNavigatorViewController] setSelectedObjects:[NSArray arrayWithObjects:fileContainer, nil]];
+		[[[self projectWindowController] projectNavigatorViewController] setSelectedModelObjects:[NSArray arrayWithObjects:file, nil]];
 	}
 	return nil;
 }
@@ -262,7 +260,7 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 @synthesize unsavedFiles=_unsavedFiles;
 @synthesize filesToFileContainers=_filesToFileContainers;
 @synthesize openFiles=_openFiles;
-@synthesize UUIDsToObjects=_UUIDsToObjects;
+@synthesize UUIDsToFiles=_UUIDsToFiles;
 @synthesize projectSettingsProviders=_projectSettingsProviders;
 @synthesize projectSettings=_projectSettings;
 #pragma mark *** Private Methods ***

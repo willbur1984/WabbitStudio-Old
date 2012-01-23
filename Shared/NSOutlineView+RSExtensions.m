@@ -79,6 +79,39 @@
 	}
 }
 
+- (NSArray *)expandedModelObjects; {
+	NSMutableArray *retval = [NSMutableArray arrayWithCapacity:0];
+	NSUInteger rowIndex, numberOfRows = [self numberOfRows];
+	
+	if ([[self dataSource] isKindOfClass:[NSTreeController class]]) {
+		for (rowIndex=0; rowIndex<numberOfRows; rowIndex++) {
+			id item = [self itemAtRow:rowIndex];
+			
+			if ([self isItemExpanded:item])
+				[retval addObject:[[item representedObject] representedObject]];
+		}
+	}
+	else {
+		for (rowIndex=0; rowIndex<numberOfRows; rowIndex++) {
+			id item = [self itemAtRow:rowIndex];
+			
+			if ([self isItemExpanded:item])
+				[retval addObject:[item representedObject]];
+		}
+	}
+	
+	return [[retval copy] autorelease];
+}
+- (void)expandModelObjects:(NSArray *)modelObjects; {
+	if ([[self dataSource] isKindOfClass:[NSTreeController class]]) {
+		for (NSTreeNode *treeNode in [(NSTreeController *)[self dataSource] treeNodesForModelObjects:modelObjects])
+			[self expandItem:treeNode];
+	}
+	else {
+		// TODO: implement expansion of model objects without an NSTreeController populating the outline view
+	}
+}
+
 - (NSArray *)rootItems; {
 	NSMutableArray *retval = [NSMutableArray array];
 	NSUInteger rowIndex, numberOfRows = [self numberOfRows];

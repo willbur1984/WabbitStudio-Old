@@ -31,10 +31,11 @@
 - (void)setSelectedTreeNodes:(NSArray *)treeNodes;
 - (void)setSelectedRepresentedObject:(id)representedObject;
 - (void)setSelectedRepresentedObjects:(NSArray *)representedObjects;
-/*
-- (void)removeSelectedNodes;
-- (void)removeTreeNodes:(NSArray *)treeNodes;
-- (void)removeRepresentedObject:(id)representedObject;
-- (void)removeRepresentedObjects:(NSArray *)representedObjects;
-*/
+
+- (NSArray *)selectedModelObjects;
+- (void)setSelectedModelObjects:(NSArray *)modelObjects;
+
+- (NSArray *)treeNodesForModelObjects:(NSArray *)modelObjects;
+- (NSArray *)representedObjectsForModelObjects:(NSArray *)modelObjects;
+
 @end

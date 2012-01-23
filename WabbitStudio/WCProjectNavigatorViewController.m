@@ -38,6 +38,9 @@ NSString *const WCProjectNavigatorDidUngroupNodesNotificationUngroupedNodesUserI
 NSString *const WCProjectNavigatorDidRenameNodeNotification = @"WCProjectNavigatorDidRenameNodeNotification";
 NSString *const WCProjectNavigatorDidRenameNodeNotificationRenamedNodeUserInfoKey = @"WCProjectNavigatorDidRenameNodeNotificationRenamedNodeUserInfoKey";
 
+NSString *const WCProjectNavigatorDidMoveNodesNotification = @"WCProjectNavigatorDidMoveNodesNotification";
+NSString *const WCProjectNavigatorDidMoveNodesNotificationMovedNodesUserInfoKey = @"WCProjectNavigatorDidMoveNodesNotificationMovedNodesUserInfoKey";
+
 static NSString *const WCProjectNavigatorExpandedItemsKey = @"expandedItems";
 static NSString *const WCProjectNavigatorSelectedItemsKey = @"selectedItems";
 
@@ -46,12 +49,19 @@ static NSString *const WCProjectNavigatorSelectedItemsKey = @"selectedItems";
 @property (readwrite,assign,nonatomic) BOOL switchTreeControllerContentBinding;
 @property (readonly,nonatomic) RSFindOptionsViewController *filterOptionsViewController;
 @property (readwrite,assign,nonatomic) BOOL ignoreChangesToProjectDocumentSettings;
+@property (readwrite,copy,nonatomic) NSArray *expandedItemsBeforeFilterOperation;
+@property (readwrite,copy,nonatomic) NSArray *selectedItemsBeforeFilterOperation;
+@property (readwrite,copy,nonatomic) NSArray *selectedItemsAfterFilterOperation;
+@property (readwrite,assign,nonatomic) BOOL ignoreOutlineViewSelectionChangeForSelectedItemsAfterFilterOperation;
 
 - (BOOL)_deleteRequiresUserConfirmation:(BOOL *)projectContainerIsSelected;
 @end
 
 @implementation WCProjectNavigatorViewController
 - (void)dealloc {
+	[_selectedItemsAfterFilterOperation release];
+	[_expandedItemsBeforeFilterOperation release];
+	[_selectedItemsBeforeFilterOperation release];
 	[_filterOptionsViewController release];
 	[_filterString release];
 	[_filteredProjectContainer release];
@@ -75,23 +85,21 @@ static NSString *const WCProjectNavigatorSelectedItemsKey = @"selectedItems";
 	
 	NSDictionary *settings = [[[[[self projectContainer] project] document] projectSettings] objectForKey:[self projectDocumentSettingsKey]];
 	WCProjectDocument *projectDocument = [[[self projectContainer] project] document];
-	NSDictionary *UUIDsToObjects = [projectDocument UUIDsToObjects];
-	NSMapTable *filesToFileContainers = [projectDocument filesToFileContainers];
+	NSDictionary *UUIDsToObjects = [projectDocument UUIDsToFiles];
 	
 	if ([[settings objectForKey:WCProjectNavigatorExpandedItemsKey] count]) {
 		NSMutableArray *itemsToExpand = [NSMutableArray arrayWithCapacity:0];
 		
 		for (NSString *UUID in [settings objectForKey:WCProjectNavigatorExpandedItemsKey]) {
 			WCFile *file = [UUIDsToObjects objectForKey:UUID];
-			WCFileContainer *fileContainer = [filesToFileContainers objectForKey:file];
 			
-			if (fileContainer)
-				[itemsToExpand addObject:fileContainer];
+			if (file)
+				[itemsToExpand addObject:file];
 		}
 		
 		if ([itemsToExpand count]) {
-			[itemsToExpand insertObject:[self projectContainer] atIndex:0];
-			[[self outlineView] expandItems:itemsToExpand];
+			[itemsToExpand insertObject:[[self projectContainer] project] atIndex:0];
+			[[self outlineView] expandModelObjects:itemsToExpand];
 		}
 		else
 			[[self outlineView] expandItem:[[self outlineView] itemAtRow:0] expandChildren:NO];
@@ -104,14 +112,13 @@ static NSString *const WCProjectNavigatorSelectedItemsKey = @"selectedItems";
 		
 		for (NSString *UUID in [settings objectForKey:WCProjectNavigatorSelectedItemsKey]) {
 			WCFile *file = [UUIDsToObjects objectForKey:UUID];
-			WCFileContainer *fileContainer = [filesToFileContainers objectForKey:file];
 			
-			if (fileContainer)
-				[itemsToSelect addObject:fileContainer];
+			if (file)
+				[itemsToSelect addObject:file];
 		}
 		
 		if ([itemsToSelect count])
-			[self setSelectedObjects:itemsToSelect];
+			[[self treeController] setSelectedModelObjects:itemsToSelect];
 	}
 	
 	[self setIgnoreChangesToProjectDocumentSettings:NO];
@@ -201,7 +208,7 @@ static const CGFloat kMainCellHeight = 18.0;
 	if (![self ignoreChangesToProjectDocumentSettings])
 		[[[[self projectContainer] project] document] updateChangeCount:NSChangeDone|NSChangeDiscardable];
 }
-- (void)outlineViewItemWillExpand:(NSNotification *)notification {
+- (void)outlineViewItemDidExpand:(NSNotification *)notification {
 	if (![self ignoreChangesToProjectDocumentSettings])
 		[[[[self projectContainer] project] document] updateChangeCount:NSChangeDone|NSChangeDiscardable];
 }
@@ -211,6 +218,9 @@ static const CGFloat kMainCellHeight = 18.0;
 		
 		[[QLPreviewPanel sharedPreviewPanel] reloadData];
 	}
+	
+	if ([[self filterString] length] && ![self ignoreOutlineViewSelectionChangeForSelectedItemsAfterFilterOperation])
+		[self setSelectedItemsAfterFilterOperation:[[self treeController] selectedModelObjects]];
 	
 	if (![self ignoreChangesToProjectDocumentSettings])
 		[[[[self projectContainer] project] document] updateChangeCount:NSChangeDone|NSChangeDiscardable];
@@ -316,6 +326,24 @@ static const CGFloat kMainCellHeight = 18.0;
 - (void)setSelectedObjects:(NSArray *)objects {
 	[[self treeController] setSelectedRepresentedObjects:objects];
 }
+- (NSArray *)selectedModelObjects; {
+	NSInteger clickedRow = [[self outlineView] clickedRow];
+	NSMutableArray *retval = [NSMutableArray arrayWithCapacity:[[[self outlineView] selectedRowIndexes] count]];
+	
+	if (clickedRow == -1 || [[[self outlineView] selectedRowIndexes] containsIndex:clickedRow]) {
+		[retval addObjectsFromArray:[[self treeController] selectedModelObjects]];
+	}
+	else {
+		id clickedModelObject = [[[[self outlineView] itemAtRow:clickedRow] representedObject] representedObject];
+		
+		[retval addObject:clickedModelObject];
+	}
+	
+	return [[retval copy] autorelease];
+}
+- (void)setSelectedModelObjects:(NSArray *)modelObjects; {
+	[[self treeController] setSelectedModelObjects:modelObjects];
+}
 #pragma mark WCProjectDocumentSettingsProvider
 - (NSString *)projectDocumentSettingsKey {
 	return [self className];
@@ -323,8 +351,8 @@ static const CGFloat kMainCellHeight = 18.0;
 - (NSDictionary *)projectDocumentSettings {
 	NSMutableDictionary *retval = [NSMutableDictionary dictionaryWithCapacity:0];
 	
-	[retval setObject:[[[self outlineView] expandedItems] valueForKeyPath:@"representedObject.UUID"] forKey:WCProjectNavigatorExpandedItemsKey];
-	[retval setObject:[[[self outlineView] selectedItems] valueForKeyPath:@"representedObject.UUID"] forKey:WCProjectNavigatorSelectedItemsKey];
+	[retval setObject:[[[self outlineView] expandedModelObjects] valueForKey:@"UUID"] forKey:WCProjectNavigatorExpandedItemsKey];
+	[retval setObject:[[self selectedObjects] valueForKeyPath:@"representedObject.UUID"] forKey:WCProjectNavigatorSelectedItemsKey];
 	
 	return [[retval copy] autorelease];
 }
@@ -355,10 +383,16 @@ static const CGFloat kMainCellHeight = 18.0;
 		[[self treeController] bind:NSContentObjectBinding toObject:self withKeyPath:@"projectContainer" options:nil];
 		[[self outlineView] expandItem:[[self outlineView] itemAtRow:0] expandChildren:NO];
 		[self setFilteredProjectContainer:nil];
+		[self setExpandedItemsBeforeFilterOperation:nil];
+		[self setSelectedItemsBeforeFilterOperation:nil];
 		return;
 	}
 	else if ([self switchTreeControllerContentBinding]) {
 		[self setSwitchTreeControllerContentBinding:NO];
+		
+		[self setExpandedItemsBeforeFilterOperation:[[self outlineView] expandedItems]];
+		[self setSelectedItemsBeforeFilterOperation:[[self treeController] selectedModelObjects]];
+		
 		[[self treeController] bind:NSContentObjectBinding toObject:self withKeyPath:@"filteredProjectContainer" options:nil];
 	}
 	
@@ -433,8 +467,20 @@ static const CGFloat kMainCellHeight = 18.0;
 			[[filteredProjectContainer mutableChildNodes] addObject:filteredLeafNode];
 	}
 	
+	[self setIgnoreOutlineViewSelectionChangeForSelectedItemsAfterFilterOperation:YES];
 	[self setFilteredProjectContainer:filteredProjectContainer];
+	
 	[[self outlineView] expandItem:[[self outlineView] itemAtRow:0] expandChildren:YES];
+	
+	if ([[self selectedItemsAfterFilterOperation] count]) {		
+		[[self treeController] setSelectedModelObjects:[self selectedItemsAfterFilterOperation]];
+	}
+	else if ([[self selectedItemsBeforeFilterOperation] count]) {
+		[[self treeController] setSelectedModelObjects:[self selectedItemsBeforeFilterOperation]];
+	}
+	
+	[self setSelectedItemsAfterFilterOperation:[[self treeController] selectedModelObjects]];
+	[self setIgnoreOutlineViewSelectionChangeForSelectedItemsAfterFilterOperation:NO];
 }
 
 - (IBAction)toggleFilterOptions:(id)sender; {
@@ -527,11 +573,11 @@ static const CGFloat kMainCellHeight = 18.0;
 	[[self outlineView] editColumn:0 row:[[self outlineView] selectedRow] withEvent:nil select:YES];
 	
 	// the set of grouped nodes is the union of all the leaf nodes of the originally selected containers
-	NSSet *groupedNodes = [NSSet setWithArray:[selectedFileContainers valueForKeyPath:@"@unionOfArrays.descendantLeafNodesInclusive"]];
+	NSSet *groupedContainers = [NSSet setWithArray:[selectedFileContainers valueForKeyPath:@"@unionOfArrays.descendantLeafNodesInclusive"]];
 	
 	// post the appropriate notifications
 	[[NSNotificationCenter defaultCenter] postNotificationName:WCProjectNavigatorDidAddNewGroupNotification object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:groupContainer,WCProjectNavigatorDidAddNewGroupNotificationNewGroupUserInfoKey, nil]];
-	[[NSNotificationCenter defaultCenter] postNotificationName:WCProjectNavigatorDidGroupNodesNotification object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:groupedNodes,WCProjectNavigatorDidGroupNodesNotificationGroupedNodesUserInfoKey, nil]];
+	[[NSNotificationCenter defaultCenter] postNotificationName:WCProjectNavigatorDidGroupNodesNotification object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:groupedContainers,WCProjectNavigatorDidGroupNodesNotificationGroupedNodesUserInfoKey, nil]];
 	
 	// let the document know there was a change
 	[[[[self projectContainer] project] document] updateChangeCount:NSChangeDone];
@@ -613,6 +659,20 @@ static const CGFloat kMainCellHeight = 18.0;
 }
 - (void)setIgnoreChangesToProjectDocumentSettings:(BOOL)ignoreChangesToProjectDocumentSettings {
 	_projectNavigatorFlags.ignoreChangesToProjectDocumentSettings = ignoreChangesToProjectDocumentSettings;
+}
+@synthesize expandedItemsBeforeFilterOperation=_expandedItemsBeforeFilterOperation;
+@synthesize selectedItemsBeforeFilterOperation=_selectedItemsBeforeFilterOperation;
+@synthesize selectedItemsAfterFilterOperation=_selectedItemsAfterFilterOperation;
+@dynamic ignoreOutlineViewSelectionChangeForSelectedItemsAfterFilterOperation;
+- (BOOL)ignoreOutlineViewSelectionChangeForSelectedItemsAfterFilterOperation {
+	return _projectNavigatorFlags.ignoreOutlineViewSelectionChangeForSelectedItemsAfterFilterOperation;
+}
+- (void)setIgnoreOutlineViewSelectionChangeForSelectedItemsAfterFilterOperation:(BOOL)ignoreOutlineViewSelectionChangeForSelectedItemsAfterFilterOperation {
+	_projectNavigatorFlags.ignoreOutlineViewSelectionChangeForSelectedItemsAfterFilterOperation = ignoreOutlineViewSelectionChangeForSelectedItemsAfterFilterOperation;
+}
+@dynamic projectDocument;
+- (WCProjectDocument *)projectDocument {
+	return [[[self projectContainer] project] document];
 }
 #pragma mark *** Private Methods ***
 - (BOOL)_deleteRequiresUserConfirmation:(BOOL *)projectContainerIsSelected; {

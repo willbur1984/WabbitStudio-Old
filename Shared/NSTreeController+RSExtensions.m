@@ -25,7 +25,7 @@
 - (NSArray *)treeNodes; {
 	NSMutableArray *nodes = [NSMutableArray array];
 	
-	for (NSTreeNode *node in [[self arrangedObjects] childNodes]) {
+	for (NSTreeNode *node in [self rootNodes]) {
 		[nodes addObject:node];
 		if (![node isLeaf])
 			[nodes addObjectsFromArray:[node descendantNodes]];
@@ -131,31 +131,42 @@
 	}
 	[self setSelectionIndexPaths:indexPaths];
 }
-/*
-- (void)removeSelectedNodes; {
-	[self removeObjectsAtArrangedObjectIndexPaths:[self selectionIndexPaths]];
-}
 
-- (void)removeTreeNodes:(NSArray *)treeNodes; {
-	[self removeObjectsAtArrangedObjectIndexPaths:[treeNodes valueForKey:@"indexPath"]];
+- (NSArray *)selectedModelObjects; {
+	return [[self selectedNodes] valueForKeyPath:@"representedObject.representedObject"];
 }
-
-- (void)removeRepresentedObject:(id)representedObject; {
-	[self removeRepresentedObjects:[NSArray arrayWithObject:representedObject]];
-}
-
-- (void)removeRepresentedObjects:(NSArray *)representedObjects; {
-	NSMutableArray *indexPaths = [NSMutableArray array];
-	NSArray *nodes = [self treeNodes];
-	for (id object in representedObjects) {
-		for (NSTreeNode *node in nodes) {
-			if ([[node representedObject] isEqual:object]) {
-				[indexPaths addObject:[node indexPath]];
+- (void)setSelectedModelObjects:(NSArray *)modelObjects; {
+	NSMutableArray *indexPaths = [NSMutableArray arrayWithCapacity:[modelObjects count]];
+	NSArray *treeNodes = [self treeNodes];
+	
+	for (id modelObject in modelObjects) {
+		for (NSTreeNode *treeNode in treeNodes) {
+			if ([[treeNode representedObject] representedObject] == modelObject) {
+				[indexPaths addObject:[treeNode indexPath]];
 				break;
 			}
 		}
 	}
-	[self removeObjectsAtArrangedObjectIndexPaths:indexPaths];
+	
+	[self setSelectionIndexPaths:indexPaths];
 }
- */
+
+- (NSArray *)treeNodesForModelObjects:(NSArray *)modelObjects; {
+	NSMutableArray *retval = [NSMutableArray arrayWithCapacity:[modelObjects count]];
+	NSArray *treeNodes = [self treeNodes];
+	
+	for (id modelObject in modelObjects) {
+		for (NSTreeNode *treeNode in treeNodes) {
+			if ([[treeNode representedObject] representedObject] == modelObject) {
+				[retval addObject:treeNode];
+				break;
+			}
+		}
+	}
+	
+	return [[retval copy] autorelease];
+}
+- (NSArray *)representedObjectsForModelObjects:(NSArray *)modelObjects; {
+	return [[self treeNodesForModelObjects:modelObjects] valueForKey:@"representedObject"];
+}
 @end

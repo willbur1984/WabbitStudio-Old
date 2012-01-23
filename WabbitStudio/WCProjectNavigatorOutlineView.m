@@ -7,6 +7,7 @@
 //
 
 #import "WCProjectNavigatorOutlineView.h"
+#import "WCFile.h"
 
 @implementation WCProjectNavigatorOutlineView
 #pragma mark *** Subclass Overrides ***
@@ -32,6 +33,31 @@
 		[retval addItemWithTitle:NSLocalizedString(@"Open in Separate Editor", @"Open in Separate Editor") action:@selector(openInSeparateEditor:) keyEquivalent:@""];
 	});
 	return retval;
+}
+
+- (void)awakeFromNib {
+	[super awakeFromNib];
+	
+	[self registerForDraggedTypes:[NSArray arrayWithObjects:WCPasteboardTypeFileUUID,kUTTypeFileURL,kUTTypeDirectory, nil]];
+}
+
+- (NSDragOperation)draggingSession:(NSDraggingSession *)session sourceOperationMaskForDraggingContext:(NSDraggingContext)context {
+	if (context == NSDraggingContextWithinApplication)
+		return NSDragOperationMove;
+	return NSDragOperationCopy;
+}
+
+- (BOOL)ignoreModifierKeysForDraggingSession:(NSDraggingSession *)session {
+	return YES;
+}
+
+- (BOOL)verticalMotionCanBeginDrag {
+	return YES;
+}
+- (BOOL)canDragRowsWithIndexes:(NSIndexSet *)rowIndexes atPoint:(NSPoint)mouseDownPoint {
+	if ([rowIndexes containsIndex:0])
+		return NO;
+	return YES;
 }
 
 - (NSString *)emptyContentString {

@@ -28,17 +28,24 @@ extern NSString *const WCProjectNavigatorDidUngroupNodesNotificationUngroupedNod
 extern NSString *const WCProjectNavigatorDidRenameNodeNotification;
 extern NSString *const WCProjectNavigatorDidRenameNodeNotificationRenamedNodeUserInfoKey;
 
-@class WCProjectContainer,RSFindOptionsViewController;
+extern NSString *const WCProjectNavigatorDidMoveNodesNotification;
+extern NSString *const WCProjectNavigatorDidMoveNodesNotificationMovedNodesUserInfoKey;
+
+@class WCProjectContainer,RSFindOptionsViewController,WCProjectDocument;
 
 @interface WCProjectNavigatorViewController : JAViewController <WCProjectDocumentSettingsProvider,WCNavigatorModule,RSOutlineViewDelegate,RSFindOptionsViewControllerDelegate,QLPreviewPanelDataSource,QLPreviewPanelDelegate> {
 	WCProjectContainer *_projectContainer;
 	WCProjectContainer *_filteredProjectContainer;
 	NSString *_filterString;
 	RSFindOptionsViewController *_filterOptionsViewController;
+	NSArray *_expandedItemsBeforeFilterOperation;
+	NSArray *_selectedItemsBeforeFilterOperation;
+	NSArray *_selectedItemsAfterFilterOperation;
 	struct {
 		unsigned int switchTreeControllerContentBinding:1;
 		unsigned int ignoreChangesToProjectDocumentSettings:1;
-		unsigned int RESERVED:30;
+		unsigned int ignoreOutlineViewSelectionChangeForSelectedItemsAfterFilterOperation:1;
+		unsigned int RESERVED:29;
 	} _projectNavigatorFlags;
 }
 @property (readwrite,assign,nonatomic) IBOutlet NSSearchField *searchField;
@@ -47,6 +54,7 @@ extern NSString *const WCProjectNavigatorDidRenameNodeNotificationRenamedNodeUse
 
 @property (readonly,nonatomic) WCProjectContainer *projectContainer;
 @property (readwrite,copy,nonatomic) NSString *filterString;
+@property (readonly,nonatomic) WCProjectDocument *projectDocument;
 
 - (id)initWithProjectContainer:(WCProjectContainer *)projectContainer;
 
