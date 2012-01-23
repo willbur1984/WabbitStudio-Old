@@ -54,10 +54,6 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 	
 	_fileURL = [[_fileReferenceURL filePathURL] copy];
 	
-	_kqueue = [[UKKQueue alloc] init];
-	[_kqueue setDelegate:self];
-	[_kqueue addPath:[_fileURL path] notifyingAbout:UKKQueueNotifyAboutRename|UKKQueueNotifyAboutDelete|UKKQueueNotifyAboutWrite];
-	
 	return self;
 }
 #pragma mark UKFileWatcherDelegate
@@ -145,6 +141,30 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 @dynamic parentDirectoryURL;
 - (NSURL *)parentDirectoryURL {
 	return [[self fileURL] parentDirectoryURL];
+}
+@dynamic shouldMonitorFile;
+- (BOOL)shouldMonitorFile {
+	return _fileReferenceFlags.shouldMonitorFile;
+}
+- (void)setShouldMonitorFile:(BOOL)shouldMonitorFile {
+	_fileReferenceFlags.shouldMonitorFile = shouldMonitorFile;
+	
+	if (shouldMonitorFile) {		
+		[_kqueue removeAllPaths];
+		[_kqueue setDelegate:nil];
+		[_kqueue release];
+		_kqueue = nil;
+		
+		_kqueue = [[UKKQueue alloc] init];
+		[_kqueue setDelegate:self];
+		[_kqueue addPath:[self filePath] notifyingAbout:UKKQueueNotifyAboutRename|UKKQueueNotifyAboutDelete|UKKQueueNotifyAboutWrite];
+	}
+	else {		
+		[_kqueue removeAllPaths];
+		[_kqueue setDelegate:nil];
+		[_kqueue release];
+		_kqueue = nil;
+	}
 }
 
 @end

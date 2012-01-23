@@ -33,6 +33,7 @@ extern NSString *const WCProjectSettingsFileExtension;
 @property (readonly,retain) NSMapTable *sourceFileDocumentsToFiles;
 @property (readonly,nonatomic) NSArray *sourceFileDocuments;
 @property (readonly,nonatomic) NSDictionary *filePathsToFiles;
+@property (readonly,retain) NSMapTable *filesToFileContainers; 
 @property (readonly,nonatomic) WCProjectWindowController *projectWindowController;
 @property (readonly,nonatomic) NSHashTable *unsavedFiles;
 @property (readonly,nonatomic) NSCountedSet *openFiles;

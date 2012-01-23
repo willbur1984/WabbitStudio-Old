@@ -9,6 +9,20 @@
 #import "WCProjectContainer.h"
 
 @implementation WCProjectContainer
+#pragma mark *** Subclass Overrides ***
+
+- (NSDictionary *)plistRepresentation {
+	NSMutableDictionary *retval = [NSMutableDictionary dictionaryWithCapacity:0];
+	
+	NSMutableArray *childNodePlists = [NSMutableArray arrayWithCapacity:[[self childNodes] count]];
+	for (RSTreeNode *node in [self childNodes])
+		[childNodePlists addObject:[node plistRepresentation]];
+	
+	[retval setObject:childNodePlists forKey:RSTreeNodeChildNodesKey];
+	
+	return [[retval copy] autorelease];
+}
+
 #pragma mark *** Public Methods ***
 + (id)projectContainerWithProject:(WCProject *)project; {
 	return [[[[self class] alloc] initWithProject:project] autorelease];

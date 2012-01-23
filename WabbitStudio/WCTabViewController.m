@@ -12,18 +12,27 @@
 #import "NSURL+RSExtensions.h"
 #import "WCProjectDocument.h"
 #import "WCSourceTextView.h"
+#import "WCFileContainer.h"
+#import "WCFile.h"
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
 NSString *const WCTabViewControllerDidSelectTabNotification = @"WCTabViewControllerDidSelectTabNotification";
 NSString *const WCTabViewControllerDidCloseTabNotification = @"WCTabViewControllerDidCloseTabNotification";
 
+static NSString *const WCTabViewControllerOpenTabsKey = @"openTabs";
+static NSString *const WCTabViewControllerSelectedTabKey = @"selectedTab";
+
 @interface WCTabViewController ()
 @property (readwrite,assign,nonatomic) NSTabViewItem *clickedTabViewItem;
+@property (readwrite,assign,nonatomic) BOOL ignoreChangesToProjectDocumentSettings;
 @end
 
 @implementation WCTabViewController
 #pragma mark *** Subclass Overrides ***
 - (void)dealloc {
+#ifdef DEBUG
+	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
+#endif
 	_clickedTabViewItem = nil;
 	[_sourceFileDocumentsToSourceTextViewControllers release];
 	[super dealloc];
@@ -34,6 +43,7 @@ NSString *const WCTabViewControllerDidCloseTabNotification = @"WCTabViewControll
 		return nil;
 	
 	_sourceFileDocumentsToSourceTextViewControllers = [[NSMapTable mapTableWithWeakToStrongObjects] retain];
+	_tabViewControllerFlags.ignoreChangesToProjectDocumentSettings = YES;
 	
 	return self;
 }
@@ -54,10 +64,41 @@ NSString *const WCTabViewControllerDidCloseTabNotification = @"WCTabViewControll
 	[[self tabBarControl] setCanCloseOnlyTab:YES];
 	[[self tabBarControl] setTearOffStyle:PSMTabBarTearOffMiniwindow];
 	[[self tabBarControl] setUseOverflowMenu:YES];
+	
+	NSDictionary *settings = [[self delegate] projectDocumentSettingsForTabViewController:self];
+	
+	if ([[settings objectForKey:WCTabViewControllerOpenTabsKey] count]) {
+		WCProjectDocument *projectDocument = [[self delegate] projectDocumentForTabViewController:self];
+		NSDictionary *UUIDsToObjects = [projectDocument UUIDsToObjects];
+		NSMapTable *filesToDocuments = [projectDocument filesToSourceFileDocuments];
+		
+		for (NSString *UUID in [settings objectForKey:WCTabViewControllerOpenTabsKey]) {
+			WCFile *file = [UUIDsToObjects objectForKey:UUID];
+			WCSourceFileDocument *document = [filesToDocuments objectForKey:file];
+			
+			if (document)
+				[self addTabForSourceFileDocument:document];
+		}
+		
+		if ([settings objectForKey:WCTabViewControllerSelectedTabKey]) {
+			NSString *UUID = [settings objectForKey:WCTabViewControllerSelectedTabKey];
+			WCFile *file = [UUIDsToObjects objectForKey:UUID];
+			WCSourceFileDocument *document = [filesToDocuments objectForKey:file];
+			NSUInteger itemIndex = [[[self tabBarControl] tabView] indexOfTabViewItemWithIdentifier:document];
+			
+			if (itemIndex != NSNotFound)
+				[[[self tabBarControl] tabView] selectTabViewItemAtIndex:itemIndex];
+		}
+	}
+	
+	[self setIgnoreChangesToProjectDocumentSettings:NO];
 }
 #pragma mark NSTabViewDelegate
 - (void)tabView:(NSTabView *)tabView didSelectTabViewItem:(NSTabViewItem *)tabViewItem; {
 	[[NSNotificationCenter defaultCenter] postNotificationName:WCTabViewControllerDidSelectTabNotification object:self];
+	
+	if (![self ignoreChangesToProjectDocumentSettings])
+		[[[self delegate] projectDocumentForTabViewController:self] updateChangeCount:(NSChangeDone|NSChangeDiscardable)];
 }
 - (BOOL)tabView:(NSTabView *)tabView shouldCloseTabViewItem:(NSTabViewItem *)tabViewItem; {
 	return YES;
@@ -66,6 +107,9 @@ NSString *const WCTabViewControllerDidCloseTabNotification = @"WCTabViewControll
 	[tabViewItem unbind:@"label"];
 	[self removeTabForSourceFileDocument:[tabViewItem identifier]];
 	[[NSNotificationCenter defaultCenter] postNotificationName:WCTabViewControllerDidCloseTabNotification object:self];
+	
+	if (![self ignoreChangesToProjectDocumentSettings])
+		[[[self delegate] projectDocumentForTabViewController:self] updateChangeCount:(NSChangeDone|NSChangeDiscardable)];
 }
 #pragma mark PSMTabBarControlDelegate
 - (NSString *)tabView:(NSTabView *)tabView toolTipForTabViewItem:(NSTabViewItem *)tabViewItem; {
@@ -127,6 +171,36 @@ NSString *const WCTabViewControllerDidCloseTabNotification = @"WCTabViewControll
 	}
 	return YES;
 }
+#pragma mark WCProjectDocumentSettingsProvider
+- (NSDictionary *)projectDocumentSettings {
+	NSMutableDictionary *retval = [NSMutableDictionary dictionaryWithCapacity:0];
+	
+	if ([[[self tabBarControl] tabView] numberOfTabViewItems]) {
+		NSArray *documents = [[[self tabBarControl] representedTabViewItems] valueForKey:@"identifier"];
+		NSMutableArray *UUIDs = [NSMutableArray arrayWithCapacity:[documents count]];
+		
+		for (WCSourceFileDocument *sfDocument in documents) {
+			WCFile *file = [[[sfDocument projectDocument] sourceFileDocumentsToFiles] objectForKey:sfDocument];
+			
+			[UUIDs addObject:[file UUID]];
+		}
+		
+		if ([UUIDs count])
+			[retval setObject:UUIDs forKey:WCTabViewControllerOpenTabsKey];
+		
+		WCSourceFileDocument *sfDocument = [[[[self tabBarControl] tabView] selectedTabViewItem] identifier];
+		WCFile *file = [[[sfDocument projectDocument] sourceFileDocumentsToFiles] objectForKey:sfDocument];
+		
+		if (file)
+			[retval setObject:[file UUID] forKey:WCTabViewControllerSelectedTabKey];
+	}
+	
+	return [[retval copy] autorelease];
+}
+- (NSString *)projectDocumentSettingsKey {
+	return [self className];
+}
+
 #pragma mark *** Public Methods ***
 - (WCSourceTextViewController *)addTabForSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument; {
 #ifdef DEBUG
@@ -183,6 +257,14 @@ NSString *const WCTabViewControllerDidCloseTabNotification = @"WCTabViewControll
 #pragma mark Properties
 @synthesize tabBarControl=_tabBarControl;
 @synthesize clickedTabViewItem=_clickedTabViewItem;
+@synthesize delegate=_delegate;
+@dynamic ignoreChangesToProjectDocumentSettings;
+- (BOOL)ignoreChangesToProjectDocumentSettings {
+	return _tabViewControllerFlags.ignoreChangesToProjectDocumentSettings;
+}
+- (void)setIgnoreChangesToProjectDocumentSettings:(BOOL)ignoreChangesToProjectDocumentSettings {
+	_tabViewControllerFlags.ignoreChangesToProjectDocumentSettings = ignoreChangesToProjectDocumentSettings;
+}
 #pragma mark *** Private Methods ***
 
 #pragma mark IBActions

@@ -37,7 +37,8 @@ extern NSString *const WCProjectNavigatorDidRenameNodeNotificationRenamedNodeUse
 	RSFindOptionsViewController *_filterOptionsViewController;
 	struct {
 		unsigned int switchTreeControllerContentBinding:1;
-		unsigned int RESERVED:31;
+		unsigned int ignoreChangesToProjectDocumentSettings:1;
+		unsigned int RESERVED:30;
 	} _projectNavigatorFlags;
 }
 @property (readwrite,assign,nonatomic) IBOutlet NSSearchField *searchField;

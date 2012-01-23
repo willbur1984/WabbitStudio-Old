@@ -10,7 +10,7 @@
 #import "RSDefines.h"
 #import "WCDocumentController.h"
 #import "WCGroup.h"
-#import "WCGroupContainer.h"
+#import "WCProjectContainer.h"
 #import "RSDefines.h"
 #import "NSURL+RSExtensions.h"
 #import "WCProjectDocument.h"
@@ -44,7 +44,7 @@
 	NSURL *projectURL = [directoryURL URLByAppendingPathComponent:[[directoryURL lastPathComponent] stringByAppendingPathExtension:(NSString *)projectExtension] isDirectory:NO];
 	CFRelease(projectExtension);
 	
-	WCFileContainer *projectNode = [WCFileContainer fileContainerWithFile:[WCFile fileWithFileURL:projectURL]];
+	WCProjectContainer *projectNode = [WCProjectContainer projectContainerWithProject:nil];
 	
 	NSDirectoryEnumerator *directoryEnumerator = [[NSFileManager defaultManager] enumeratorAtURL:directoryURL includingPropertiesForKeys:[NSArray arrayWithObjects:NSURLIsDirectoryKey,NSURLIsPackageKey,NSURLParentDirectoryURLKey, nil] options:NSDirectoryEnumerationSkipsHiddenFiles|NSDirectoryEnumerationSkipsPackageDescendants errorHandler:^BOOL(NSURL *url, NSError *error) {
 		
@@ -53,7 +53,9 @@
 	
 	NSMutableDictionary *directoryPathsToDirectoryNodes = [NSMutableDictionary dictionaryWithCapacity:0];
 	for (NSURL *fileURL in directoryEnumerator) {
-		if ([fileURL isDirectory]) {
+		if ([fileURL isPackage] && [[fileURL fileUTI] isEqualToString:WCProjectFileUTI])
+			continue;
+		else if ([fileURL isDirectory]) {
 			WCGroupContainer *directoryNode = [WCGroupContainer fileContainerWithFile:[WCGroup fileWithFileURL:fileURL]];
 			
 			[directoryPathsToDirectoryNodes setObject:directoryNode forKey:[fileURL path]];
@@ -65,8 +67,6 @@
 			else
 				[[projectNode mutableChildNodes] addObject:directoryNode];
 		}
-		else if ([fileURL isPackage])
-			continue;
 		else {
 			WCFileContainer *childNode = [WCFileContainer fileContainerWithFile:[WCFile fileWithFileURL:fileURL]];
 			WCFileContainer *parentDirectoryNode = [directoryPathsToDirectoryNodes objectForKey:[[fileURL parentDirectoryURL] path]];

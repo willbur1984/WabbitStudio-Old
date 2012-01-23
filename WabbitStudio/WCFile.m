@@ -14,8 +14,9 @@
 #import "WCDocumentController.h"
 #import "NSString+RSExtensions.h"
 
+NSString *const WCFileUUIDKey = @"UUID";
+
 static NSString *const WCFileReferenceKey = @"fileReference";
-static NSString *const WCFileUUIDKey = @"UUID";
 
 @implementation WCFile
 #pragma mark *** Subclass Overrides ***
@@ -45,6 +46,7 @@ static NSString *const WCFileUUIDKey = @"UUID";
 	_UUID = [[plistRepresentation objectForKey:WCFileUUIDKey] copy];
 	_fileReference = [[RSFileReference alloc] initWithPlistRepresentation:[plistRepresentation objectForKey:WCFileReferenceKey]];
 	[_fileReference setDelegate:self];
+	[_fileReference setShouldMonitorFile:YES];
 	
 	return self;
 }
@@ -101,6 +103,7 @@ static NSString *const WCFileUUIDKey = @"UUID";
 	_UUID = [[NSString UUIDString] copy];
 	_fileReference = [[RSFileReference alloc] initWithFileURL:fileURL];
 	[_fileReference setDelegate:self];
+	[_fileReference setShouldMonitorFile:YES];
 	
 	return self;
 }

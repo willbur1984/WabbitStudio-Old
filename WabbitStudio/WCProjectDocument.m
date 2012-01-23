@@ -99,7 +99,7 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 
 - (NSFileWrapper *)fileWrapperOfType:(NSString *)typeName error:(NSError **)outError {
 	NSDictionary *projectPlist = [[self projectContainer] plistRepresentation];
-	NSMutableDictionary *projectSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+	NSMutableDictionary *projectSettings = [NSMutableDictionary dictionaryWithDictionary:[self projectSettings]];
 	
 	for (id <WCProjectDocumentSettingsProvider> settingsProvider in [self projectSettingsProviders])
 		[projectSettings setObject:[settingsProvider projectDocumentSettings] forKey:[settingsProvider projectDocumentSettingsKey]];
@@ -194,7 +194,7 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	[super saveDocument:nil];
 	
 	NSTabViewItem *selectedTabViewItem = [[[[[self projectWindowController] tabViewController] tabBarControl] tabView] selectedTabViewItem];
-	if (selectedTabViewItem)
+	if (selectedTabViewItem && [[selectedTabViewItem identifier] isDocumentEdited])
 		[[selectedTabViewItem identifier] saveDocument:nil];
 }
 #pragma mark WCOpenQuicklyDataSource

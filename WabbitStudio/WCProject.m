@@ -8,6 +8,8 @@
 
 #import "WCProject.h"
 #import "WCProjectDocument.h"
+#import "NSURL+RSExtensions.h"
+#import "NSString+RSExtensions.h"
 
 @implementation WCProject
 #pragma mark *** Subclass Overrides ***
@@ -17,19 +19,44 @@
 }
 
 - (NSString *)fileName {
-	return [[[self document] displayName] stringByDeletingPathExtension];
+	return [[self document] displayName];
 }
 - (NSImage *)fileIcon {
 	return [NSImage imageNamed:@"project"];
 }
+- (NSURL *)fileURL {
+	return [[self document] fileURL];
+}
+- (NSString *)filePath {
+	return [[self fileURL] path];
+}
+- (BOOL)isSourceFile {
+	return NO;
+}
+- (BOOL)isEdited {
+	return NO;
+}
+- (NSString *)fileUTI {
+	return [[self fileURL] fileUTI];
+}
+
+- (NSDictionary *)plistRepresentation {
+	NSMutableDictionary *retval = [NSMutableDictionary dictionaryWithDictionary:[super plistRepresentation]];
+	
+	[retval setObject:[self UUID] forKey:WCFileUUIDKey];
+	
+	return [[retval copy] autorelease];
+}
+
 #pragma mark *** Public Methods ***
 + (id)projectWithDocument:(WCProjectDocument *)document; {
 	return [[(WCProject *)[[self class] alloc] initWithDocument:document] autorelease];
 }
 - (id)initWithDocument:(WCProjectDocument *)document; {
-	if (!(self = [super initWithFileURL:[document fileURL]]))
+	if (!(self = [super init]))
 		return nil;
 	
+	_UUID = [[NSString UUIDString] copy];
 	_document = document;
 	
 	return self;

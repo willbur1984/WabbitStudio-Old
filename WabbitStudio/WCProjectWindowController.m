@@ -13,6 +13,7 @@
 #import "WCProjectDocument.h"
 #import "WCProject.h"
 #import "WCTabViewController.h"
+#import <PSMTabBarControl/PSMTabBarControl.h>
 #import <Quartz/Quartz.h>
 
 @implementation WCProjectWindowController
@@ -21,6 +22,7 @@
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[_tabViewController release];
 	[_projectNavigatorViewController release];
 	[_navigatorItemDictionaries release];
@@ -33,6 +35,10 @@
 	
 	_navigatorItemDictionaries = [[NSArray alloc] initWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"project",@"identifier",[NSImage imageNamed:@"project"],@"image",NSLocalizedString(@"Show the project navigator", @"Show the project navigator"),@"toolTip", nil],[NSDictionary dictionaryWithObjectsAndKeys:@"search",@"identifier",[NSImage imageNamed:@"Search"],@"image",NSLocalizedString(@"Show the search navigator", @"Show the search navigator"),@"toolTip", nil], nil];
 	_tabViewController = [[WCTabViewController alloc] init];
+	[_tabViewController setDelegate:self];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_tabViewControllerDidCloseTab:) name:WCTabViewControllerDidCloseTabNotification object:_tabViewController];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_tabViewControllerDidSelectTab:) name:WCTabViewControllerDidSelectTabNotification object:_tabViewController];
 	
 	return self;
 }
@@ -43,11 +49,23 @@
 
 - (void)windowDidLoad {
     [super windowDidLoad];
-    
+	
 	[[[self tabViewController] view] setFrameSize:[[[[self splitView] subviews] lastObject] frame].size];
 	[[self splitView] replaceSubview:[[[self splitView] subviews] lastObject] with:[[self tabViewController] view]];
 	
 	[[self navigatorControl] setSelectedItemIdentifier:@"project"];
+}
+
+- (void)setDocument:(NSDocument *)document {
+	[super setDocument:document];
+	
+	[[[self document] projectSettingsProviders] addObject:self];
+}
+
+- (NSString *)windowTitleForDocumentDisplayName:(NSString *)displayName {
+	if ([[[[self tabViewController] tabBarControl] tabView] numberOfTabViewItems])
+		return [NSString stringWithFormat:NSLocalizedString(@"%@ - %@",@"project window controller window title format string"),displayName,[[[[[[self tabViewController] tabBarControl] tabView] selectedTabViewItem] identifier] displayName]];
+	return displayName;
 }
 #pragma mark NSSplitViewDelegate
 - (BOOL)splitView:(NSSplitView *)splitView shouldAdjustSizeOfSubview:(NSView *)view {
@@ -63,6 +81,14 @@ static const CGFloat kRightSubviewMinWidth = 400.0;
 - (CGFloat)splitView:(NSSplitView *)splitView constrainMinCoordinate:(CGFloat)proposedMinimumPosition ofSubviewAt:(NSInteger)dividerIndex {
 	return proposedMinimumPosition+kLeftSubviewMinWidth;
 }
+#pragma mark WCTabViewControllerDelegate
+- (WCProjectDocument *)projectDocumentForTabViewController:(WCTabViewController *)tabViewController {
+	return [self document];
+}
+- (NSDictionary *)projectDocumentSettingsForTabViewController:(WCTabViewController *)tabViewController; {
+	return [[[[self document] projectSettings] objectForKey:[self projectDocumentSettingsKey]] objectForKey:[tabViewController projectDocumentSettingsKey]];
+}
+
 #pragma mark RSNavigatorControlDataSource
 - (NSArray *)itemIdentifiersForNavigatorControl:(RSNavigatorControl *)navigatorControl {
 	return [_navigatorItemDictionaries valueForKey:@"identifier"];
@@ -91,6 +117,17 @@ static const CGFloat kRightSubviewMinWidth = 400.0;
 		[[QLPreviewPanel sharedPreviewPanel] orderOut:nil];
 	}
 }
+#pragma mark WCProjectDocumentSettingsProvider
+- (NSDictionary *)projectDocumentSettings {
+	NSMutableDictionary *retval = [NSMutableDictionary dictionaryWithCapacity:0];
+	
+	[retval setObject:[[self tabViewController] projectDocumentSettings] forKey:[[self tabViewController] projectDocumentSettingsKey]];	
+	
+	return [[retval copy] autorelease];
+}
+- (NSString *)projectDocumentSettingsKey {
+	return [self className];
+}
 
 #pragma mark QLPreviewPanelController
 - (BOOL)acceptsPreviewPanelControl:(QLPreviewPanel *)panel; {
@@ -118,4 +155,11 @@ static const CGFloat kRightSubviewMinWidth = 400.0;
 	return _projectNavigatorViewController;
 }
 @synthesize tabViewController=_tabViewController;
+
+- (void)_tabViewControllerDidCloseTab:(NSNotification *)note {
+	[self synchronizeWindowTitleWithDocumentName];
+}
+- (void)_tabViewControllerDidSelectTab:(NSNotification *)note {
+	[self synchronizeWindowTitleWithDocumentName];
+}
 @end

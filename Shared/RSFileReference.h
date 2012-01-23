@@ -24,7 +24,8 @@
 	UKKQueue *_kqueue;
 	struct {
 		unsigned int ignoreNextFileWatcherNotification:1;
-		unsigned int RESERVED:31;
+		unsigned int shouldMonitorFile:1;
+		unsigned int RESERVED:30;
 	} _fileReferenceFlags;
 }
 @property (readwrite,assign,nonatomic) id <RSFileReferenceDelegate> delegate;
@@ -36,6 +37,7 @@
 @property (readwrite,assign,nonatomic) BOOL ignoreNextFileWatcherNotification;
 @property (readonly,nonatomic) NSString *filePath;
 @property (readonly,nonatomic) NSURL *parentDirectoryURL;
+@property (readwrite,assign,nonatomic) BOOL shouldMonitorFile;
 
 + (RSFileReference *)fileReferenceWithFileURL:(NSURL *)fileURL;
 - (id)initWithFileURL:(NSURL *)fileURL;

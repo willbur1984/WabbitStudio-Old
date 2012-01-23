@@ -38,18 +38,20 @@ NSString *const WCProjectNavigatorDidUngroupNodesNotificationUngroupedNodesUserI
 NSString *const WCProjectNavigatorDidRenameNodeNotification = @"WCProjectNavigatorDidRenameNodeNotification";
 NSString *const WCProjectNavigatorDidRenameNodeNotificationRenamedNodeUserInfoKey = @"WCProjectNavigatorDidRenameNodeNotificationRenamedNodeUserInfoKey";
 
+static NSString *const WCProjectNavigatorExpandedItemsKey = @"expandedItems";
+static NSString *const WCProjectNavigatorSelectedItemsKey = @"selectedItems";
+
 @interface WCProjectNavigatorViewController ()
 @property (readwrite,retain,nonatomic) WCProjectContainer *filteredProjectContainer;
 @property (readwrite,assign,nonatomic) BOOL switchTreeControllerContentBinding;
 @property (readonly,nonatomic) RSFindOptionsViewController *filterOptionsViewController;
+@property (readwrite,assign,nonatomic) BOOL ignoreChangesToProjectDocumentSettings;
 
 - (BOOL)_deleteRequiresUserConfirmation:(BOOL *)projectContainerIsSelected;
 @end
 
 @implementation WCProjectNavigatorViewController
 - (void)dealloc {
-	//for (WCFileContainer *fileContainer in [_projectContainer descendantNodes])
-	//	[[fileContainer representedObject] removeObserver:self forKeyPath:@"fileName" context:self];
 	[_filterOptionsViewController release];
 	[_filterString release];
 	[_filteredProjectContainer release];
@@ -72,15 +74,16 @@ NSString *const WCProjectNavigatorDidRenameNodeNotificationRenamedNodeUserInfoKe
 	[[self outlineView] setDoubleAction:@selector(_outlineViewDoubleClick:)];
 	
 	NSDictionary *settings = [[[[[self projectContainer] project] document] projectSettings] objectForKey:[self projectDocumentSettingsKey]];
+	WCProjectDocument *projectDocument = [[[self projectContainer] project] document];
+	NSDictionary *UUIDsToObjects = [projectDocument UUIDsToObjects];
+	NSMapTable *filesToFileContainers = [projectDocument filesToFileContainers];
 	
-	if ([[settings objectForKey:@"expandedItems"] count]) {
+	if ([[settings objectForKey:WCProjectNavigatorExpandedItemsKey] count]) {
 		NSMutableArray *itemsToExpand = [NSMutableArray arrayWithCapacity:0];
 		
-		for (NSString *UUID in [settings objectForKey:@"expandedItems"]) {
-			NSLogObject(UUID);
-			
-			WCFile *file = [[[[[self projectContainer] project] document] UUIDsToObjects] objectForKey:UUID];
-			WCFileContainer *fileContainer = [[[[self projectContainer] project] document] fileContainerForFile:file];
+		for (NSString *UUID in [settings objectForKey:WCProjectNavigatorExpandedItemsKey]) {
+			WCFile *file = [UUIDsToObjects objectForKey:UUID];
+			WCFileContainer *fileContainer = [filesToFileContainers objectForKey:file];
 			
 			if (fileContainer)
 				[itemsToExpand addObject:fileContainer];
@@ -95,6 +98,23 @@ NSString *const WCProjectNavigatorDidRenameNodeNotificationRenamedNodeUserInfoKe
 	}
 	else
 		[[self outlineView] expandItem:[[self outlineView] itemAtRow:0] expandChildren:NO];
+	
+	if ([[settings objectForKey:WCProjectNavigatorSelectedItemsKey] count]) {
+		NSMutableArray *itemsToSelect = [NSMutableArray arrayWithCapacity:0];
+		
+		for (NSString *UUID in [settings objectForKey:WCProjectNavigatorSelectedItemsKey]) {
+			WCFile *file = [UUIDsToObjects objectForKey:UUID];
+			WCFileContainer *fileContainer = [filesToFileContainers objectForKey:file];
+			
+			if (fileContainer)
+				[itemsToSelect addObject:fileContainer];
+		}
+		
+		if ([itemsToSelect count])
+			[self setSelectedObjects:itemsToSelect];
+	}
+	
+	[self setIgnoreChangesToProjectDocumentSettings:NO];
 }
 #pragma mark NSMenuValidation
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
@@ -177,13 +197,23 @@ static const CGFloat kMainCellHeight = 18.0;
 		return kProjectCellHeight;
 	return kMainCellHeight;
 }
-
+- (void)outlineViewItemDidCollapse:(NSNotification *)notification {
+	if (![self ignoreChangesToProjectDocumentSettings])
+		[[[[self projectContainer] project] document] updateChangeCount:NSChangeDone|NSChangeDiscardable];
+}
+- (void)outlineViewItemWillExpand:(NSNotification *)notification {
+	if (![self ignoreChangesToProjectDocumentSettings])
+		[[[[self projectContainer] project] document] updateChangeCount:NSChangeDone|NSChangeDiscardable];
+}
 - (void)outlineViewSelectionDidChange:(NSNotification *)notification {
 	if ([QLPreviewPanel sharedPreviewPanelExists] &&
 		[[QLPreviewPanel sharedPreviewPanel] isVisible]) {
 		
 		[[QLPreviewPanel sharedPreviewPanel] reloadData];
 	}
+	
+	if (![self ignoreChangesToProjectDocumentSettings])
+		[[[[self projectContainer] project] document] updateChangeCount:NSChangeDone|NSChangeDiscardable];
 }
 #pragma mark RSOutlineViewDelegate
 - (void)handleSpacePressedForOutlineView:(RSOutlineView *)outlineView {
@@ -288,12 +318,13 @@ static const CGFloat kMainCellHeight = 18.0;
 }
 #pragma mark WCProjectDocumentSettingsProvider
 - (NSString *)projectDocumentSettingsKey {
-	return @"projectNavigatorKey";
+	return [self className];
 }
 - (NSDictionary *)projectDocumentSettings {
 	NSMutableDictionary *retval = [NSMutableDictionary dictionaryWithCapacity:0];
 	
-	[retval setObject:[[[self outlineView] expandedItems] valueForKeyPath:@"representedObject.UUID"] forKey:@"expandedItems"];
+	[retval setObject:[[[self outlineView] expandedItems] valueForKeyPath:@"representedObject.UUID"] forKey:WCProjectNavigatorExpandedItemsKey];
+	[retval setObject:[[[self outlineView] selectedItems] valueForKeyPath:@"representedObject.UUID"] forKey:WCProjectNavigatorSelectedItemsKey];
 	
 	return [[retval copy] autorelease];
 }
@@ -310,6 +341,7 @@ static const CGFloat kMainCellHeight = 18.0;
 	
 	_projectContainer = [projectContainer retain];
 	_projectNavigatorFlags.switchTreeControllerContentBinding = YES;
+	_projectNavigatorFlags.ignoreChangesToProjectDocumentSettings = YES;
 	
 	[[[[projectContainer project] document] projectSettingsProviders] addObject:self];
 	
@@ -574,6 +606,13 @@ static const CGFloat kMainCellHeight = 18.0;
 		[_filterOptionsViewController setDelegate:self];
 	}
 	return _filterOptionsViewController;
+}
+@dynamic ignoreChangesToProjectDocumentSettings;
+- (BOOL)ignoreChangesToProjectDocumentSettings {
+	return _projectNavigatorFlags.ignoreChangesToProjectDocumentSettings;
+}
+- (void)setIgnoreChangesToProjectDocumentSettings:(BOOL)ignoreChangesToProjectDocumentSettings {
+	_projectNavigatorFlags.ignoreChangesToProjectDocumentSettings = ignoreChangesToProjectDocumentSettings;
 }
 #pragma mark *** Private Methods ***
 - (BOOL)_deleteRequiresUserConfirmation:(BOOL *)projectContainerIsSelected; {

@@ -491,6 +491,7 @@
 		0745BE2D14ABF83400F541DC /* WCEditorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCEditorViewController.m; sourceTree = "<group>"; };
 		0745BE3214ABF86700F541DC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCEditorView.xib; sourceTree = "<group>"; };
 		0745BE3414ABFB0D00F541DC /* Editor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Editor.png; sourceTree = "<group>"; };
+		0765361014CCB91C004D72D1 /* WCTabViewControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTabViewControllerDelegate.h; sourceTree = "<group>"; };
 		076966E314B636CD005448F7 /* WCAdvancedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCAdvancedViewController.h; sourceTree = "<group>"; };
 		076966E414B636CD005448F7 /* WCAdvancedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCAdvancedViewController.m; sourceTree = "<group>"; };
 		076B7F8614BC15B600CC10E3 /* WCStandardSourceTextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCStandardSourceTextViewController.h; sourceTree = "<group>"; };
@@ -1458,6 +1459,7 @@
 			children = (
 				0797327714C5372900A71F54 /* WCTabViewController.h */,
 				0797327814C5372900A71F54 /* WCTabViewController.m */,
+				0765361014CCB91C004D72D1 /* WCTabViewControllerDelegate.h */,
 				0797327A14C5374300A71F54 /* WCTabView.h */,
 				0797327B14C5374300A71F54 /* WCTabView.m */,
 			);
