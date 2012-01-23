@@ -257,6 +257,16 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	
 	return [[retval copy] autorelease];
 }
+@dynamic filePaths;
+- (NSSet *)filePaths {
+	NSArray *files = [[[self UUIDsToFiles] objectEnumerator] allObjects];
+	NSMutableSet *retval = [NSMutableSet setWithCapacity:[files count]];
+	
+	for (WCFile *file in files)
+		[retval addObject:[file filePath]];
+	
+	return [[retval copy] autorelease];
+}
 @synthesize unsavedFiles=_unsavedFiles;
 @synthesize filesToFileContainers=_filesToFileContainers;
 @synthesize openFiles=_openFiles;

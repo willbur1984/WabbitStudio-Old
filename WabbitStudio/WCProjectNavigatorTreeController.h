@@ -8,8 +8,11 @@
 
 #import <AppKit/NSTreeController.h>
 
-@class WCProjectNavigatorViewController;
+@class WCProjectNavigatorViewController,WCAddToProjectAccessoryViewController;
 
-@interface WCProjectNavigatorTreeController : NSTreeController <NSOutlineViewDataSource>
+@interface WCProjectNavigatorTreeController : NSTreeController <NSOutlineViewDataSource> {
+	WCAddToProjectAccessoryViewController *_addToProjectAccessoryViewController;
+	NSSet *_projectFilePaths;
+}
 @property (readwrite,assign,nonatomic) IBOutlet WCProjectNavigatorViewController *projectNavigatorViewController;
 @end

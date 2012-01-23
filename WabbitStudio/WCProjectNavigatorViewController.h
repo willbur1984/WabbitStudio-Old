@@ -31,9 +31,9 @@ extern NSString *const WCProjectNavigatorDidRenameNodeNotificationRenamedNodeUse
 extern NSString *const WCProjectNavigatorDidMoveNodesNotification;
 extern NSString *const WCProjectNavigatorDidMoveNodesNotificationMovedNodesUserInfoKey;
 
-@class WCProjectContainer,RSFindOptionsViewController,WCProjectDocument;
+@class WCProjectContainer,RSFindOptionsViewController,WCProjectDocument,WCAddToProjectAccessoryViewController;
 
-@interface WCProjectNavigatorViewController : JAViewController <WCProjectDocumentSettingsProvider,WCNavigatorModule,RSOutlineViewDelegate,RSFindOptionsViewControllerDelegate,QLPreviewPanelDataSource,QLPreviewPanelDelegate> {
+@interface WCProjectNavigatorViewController : JAViewController <WCProjectDocumentSettingsProvider,WCNavigatorModule,RSOutlineViewDelegate,RSFindOptionsViewControllerDelegate,QLPreviewPanelDataSource,QLPreviewPanelDelegate,NSOpenSavePanelDelegate> {
 	WCProjectContainer *_projectContainer;
 	WCProjectContainer *_filteredProjectContainer;
 	NSString *_filterString;
@@ -41,6 +41,8 @@ extern NSString *const WCProjectNavigatorDidMoveNodesNotificationMovedNodesUserI
 	NSArray *_expandedItemsBeforeFilterOperation;
 	NSArray *_selectedItemsBeforeFilterOperation;
 	NSArray *_selectedItemsAfterFilterOperation;
+	WCAddToProjectAccessoryViewController *_addToProjectAccessoryViewController;
+	NSSet *_projectFilePaths;
 	struct {
 		unsigned int switchTreeControllerContentBinding:1;
 		unsigned int ignoreChangesToProjectDocumentSettings:1;

@@ -99,8 +99,8 @@ static NSString *const WCTabViewControllerSelectedTabKey = @"selectedTab";
 - (void)tabView:(NSTabView *)tabView didSelectTabViewItem:(NSTabViewItem *)tabViewItem; {
 	[[NSNotificationCenter defaultCenter] postNotificationName:WCTabViewControllerDidSelectTabNotification object:self];
 	
-	if (![self ignoreChangesToProjectDocumentSettings])
-		[[[self delegate] projectDocumentForTabViewController:self] updateChangeCount:(NSChangeDone|NSChangeDiscardable)];
+	//if (![self ignoreChangesToProjectDocumentSettings])
+	//	[[[self delegate] projectDocumentForTabViewController:self] updateChangeCount:(NSChangeDone|NSChangeDiscardable)];
 }
 - (BOOL)tabView:(NSTabView *)tabView shouldCloseTabViewItem:(NSTabViewItem *)tabViewItem; {
 	return YES;
@@ -110,8 +110,8 @@ static NSString *const WCTabViewControllerSelectedTabKey = @"selectedTab";
 	[self removeTabForSourceFileDocument:[tabViewItem identifier]];
 	[[NSNotificationCenter defaultCenter] postNotificationName:WCTabViewControllerDidCloseTabNotification object:self];
 	
-	if (![self ignoreChangesToProjectDocumentSettings])
-		[[[self delegate] projectDocumentForTabViewController:self] updateChangeCount:(NSChangeDone|NSChangeDiscardable)];
+	//if (![self ignoreChangesToProjectDocumentSettings])
+	//	[[[self delegate] projectDocumentForTabViewController:self] updateChangeCount:(NSChangeDone|NSChangeDiscardable)];
 }
 #pragma mark PSMTabBarControlDelegate
 - (NSString *)tabView:(NSTabView *)tabView toolTipForTabViewItem:(NSTabViewItem *)tabViewItem; {

@@ -22,6 +22,7 @@
 #import "NSURL+RSExtensions.h"
 #import "NSAlert-OAExtensions.h"
 #import "NSOutlineView+RSExtensions.h"
+#import "WCAddToProjectAccessoryViewController.h"
 
 NSString *const WCProjectNavigatorDidAddNewGroupNotification = @"WCProjectNavigatorDidAddNewGroupNotification";
 NSString *const WCProjectNavigatorDidAddNewGroupNotificationNewGroupUserInfoKey = @"WCProjectNavigatorDidAddNewGroupNotificationNewGroupUserInfoKey";
@@ -53,12 +54,16 @@ static NSString *const WCProjectNavigatorSelectedItemsKey = @"selectedItems";
 @property (readwrite,copy,nonatomic) NSArray *selectedItemsBeforeFilterOperation;
 @property (readwrite,copy,nonatomic) NSArray *selectedItemsAfterFilterOperation;
 @property (readwrite,assign,nonatomic) BOOL ignoreOutlineViewSelectionChangeForSelectedItemsAfterFilterOperation;
+@property (readwrite,retain,nonatomic) WCAddToProjectAccessoryViewController *addToProjectAccessoryViewController;
+@property (readwrite,copy,nonatomic) NSSet *projectFilePaths;
 
 - (BOOL)_deleteRequiresUserConfirmation:(BOOL *)projectContainerIsSelected;
 @end
 
 @implementation WCProjectNavigatorViewController
 - (void)dealloc {
+	[_projectFilePaths release];
+	[_addToProjectAccessoryViewController release];
 	[_selectedItemsAfterFilterOperation release];
 	[_expandedItemsBeforeFilterOperation release];
 	[_selectedItemsBeforeFilterOperation release];
@@ -205,12 +210,12 @@ static const CGFloat kMainCellHeight = 18.0;
 	return kMainCellHeight;
 }
 - (void)outlineViewItemDidCollapse:(NSNotification *)notification {
-	if (![self ignoreChangesToProjectDocumentSettings])
-		[[[[self projectContainer] project] document] updateChangeCount:NSChangeDone|NSChangeDiscardable];
+	//if (![self ignoreChangesToProjectDocumentSettings])
+	//	[[[[self projectContainer] project] document] updateChangeCount:NSChangeDone|NSChangeDiscardable];
 }
 - (void)outlineViewItemDidExpand:(NSNotification *)notification {
-	if (![self ignoreChangesToProjectDocumentSettings])
-		[[[[self projectContainer] project] document] updateChangeCount:NSChangeDone|NSChangeDiscardable];
+	//if (![self ignoreChangesToProjectDocumentSettings])
+	//	[[[[self projectContainer] project] document] updateChangeCount:NSChangeDone|NSChangeDiscardable];
 }
 - (void)outlineViewSelectionDidChange:(NSNotification *)notification {
 	if ([QLPreviewPanel sharedPreviewPanelExists] &&
@@ -222,8 +227,8 @@ static const CGFloat kMainCellHeight = 18.0;
 	if ([[self filterString] length] && ![self ignoreOutlineViewSelectionChangeForSelectedItemsAfterFilterOperation])
 		[self setSelectedItemsAfterFilterOperation:[[self treeController] selectedModelObjects]];
 	
-	if (![self ignoreChangesToProjectDocumentSettings])
-		[[[[self projectContainer] project] document] updateChangeCount:NSChangeDone|NSChangeDiscardable];
+	//if (![self ignoreChangesToProjectDocumentSettings])
+	//	[[[[self projectContainer] project] document] updateChangeCount:NSChangeDone|NSChangeDiscardable];
 }
 #pragma mark RSOutlineViewDelegate
 - (void)handleSpacePressedForOutlineView:(RSOutlineView *)outlineView {
@@ -360,6 +365,28 @@ static const CGFloat kMainCellHeight = 18.0;
 - (void)findOptionsViewControllerDidChangeFindOptions:(RSFindOptionsViewController *)viewController {
 	if ([[self filterString] length])
 		[self filter:nil];
+}
+#pragma mark NSOpenSavePanelDelegate
+- (BOOL)panel:(id)sender shouldEnableURL:(NSURL *)url {
+	if ([[url filePathURL] isDirectory])
+		return YES;
+	return (![[self projectFilePaths] containsObject:[[url filePathURL] path]]);
+}
+
+static NSString *const WCProjectNavigatorErrorDomain = @"org.revsoft.wabbitstudio.navigator.project";
+static const NSInteger WCProjectNavigatorFileAlreadyExistsInProjectErrorCode = 1001;
+- (BOOL)panel:(id)sender validateURL:(NSURL *)url error:(NSError **)outError {
+	if ([[self projectFilePaths] containsObject:[[url filePathURL] path]]) {
+		if (outError) {
+			NSString *description = [NSString stringWithFormat:NSLocalizedString(@"\"%@\" Already Exists in Project", @"add files to project description format string"),[[[url filePathURL] path] lastPathComponent]];
+			NSString *recoverySuggestion = [NSString stringWithFormat:NSLocalizedString(@"The %@ \"%@\" already exists in the project \"%@\". Please choose %@ that haven't already been added to the project.", @"add files to project recovery suggestion format string"),([[url filePathURL] isDirectory])?NSLocalizedString(@"folder", @"folder"):NSLocalizedString(@"file", @"file"),[[[url filePathURL] path] lastPathComponent],[[self projectDocument] displayName],([[url filePathURL] isDirectory])?NSLocalizedString(@"folders", @"folders"):NSLocalizedString(@"files", @"files"),nil];
+			NSError *error = [NSError errorWithDomain:WCProjectNavigatorErrorDomain code:WCProjectNavigatorFileAlreadyExistsInProjectErrorCode userInfo:[NSDictionary dictionaryWithObjectsAndKeys:description,NSLocalizedDescriptionKey,recoverySuggestion,NSLocalizedRecoverySuggestionErrorKey, nil]];
+			
+			*outError = error;
+		}
+		return NO;
+	}
+	return YES;
 }
 
 #pragma mark *** Public Methods ***
@@ -498,7 +525,27 @@ static const CGFloat kMainCellHeight = 18.0;
 }
 
 - (IBAction)addFilesToProject:(id)sender; {
+	NSOpenPanel *openPanel = [NSOpenPanel openPanel];
 	
+	[openPanel setCanChooseFiles:YES];
+	[openPanel setCanChooseDirectories:YES];
+	[openPanel setAllowsMultipleSelection:YES];
+	[openPanel setAccessoryView:[[self addToProjectAccessoryViewController] view]];
+	[openPanel setDelegate:self];
+	[openPanel setPrompt:NSLocalizedString(@"Add to Project", @"Add to Project")];
+	[openPanel setMessage:NSLocalizedString(@"Choose the files/folders you want to add to the project", @"Choose the files/folders you want to add to the project")];
+	
+	[self setProjectFilePaths:[[self projectDocument] filePaths]];
+	
+	[openPanel beginSheetModalForWindow:[[self view] window] completionHandler:^(NSInteger result) {
+		[openPanel orderOut:nil];
+		[self setAddToProjectAccessoryViewController:nil];
+		[self setProjectFilePaths:nil];
+		if (result == NSFileHandlingPanelCancelButton)
+			return;
+		
+		// TODO: add the files to the project
+	}];
 }
 
 - (IBAction)showInFinder:(id)sender; {
@@ -674,6 +721,14 @@ static const CGFloat kMainCellHeight = 18.0;
 - (WCProjectDocument *)projectDocument {
 	return [[[self projectContainer] project] document];
 }
+@synthesize addToProjectAccessoryViewController;
+- (WCAddToProjectAccessoryViewController *)addToProjectAccessoryViewController {
+	if (!_addToProjectAccessoryViewController) {
+		_addToProjectAccessoryViewController = [[WCAddToProjectAccessoryViewController alloc] init];
+	}
+	return _addToProjectAccessoryViewController;
+}
+@synthesize projectFilePaths=_projectFilePaths;
 #pragma mark *** Private Methods ***
 - (BOOL)_deleteRequiresUserConfirmation:(BOOL *)projectContainerIsSelected; {
 	BOOL deleteRequiresConfirmation = NO;
