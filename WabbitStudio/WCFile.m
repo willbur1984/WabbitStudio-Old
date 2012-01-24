@@ -57,14 +57,9 @@ static NSString *const WCFileReferenceKey = @"fileReference";
 - (NSURL *)previewItemURL {
 	return [self fileURL];
 }
-#pragma mark NSPasteboardReading
-
 #pragma mark NSPasteboardWriting
 - (NSArray *)writableTypesForPasteboard:(NSPasteboard *)pasteboard {
 	NSMutableArray *types = [[[[self fileURL] writableTypesForPasteboard:pasteboard] mutableCopy] autorelease];
-	
-	//if (![types containsObject:NSPasteboardTypeString])
-	//	[types insertObject:NSPasteboardTypeString atIndex:0];
 	
 	[types insertObject:WCPasteboardTypeFileUUID atIndex:0];
 	

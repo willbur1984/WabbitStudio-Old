@@ -13,9 +13,19 @@
 #import "WCFontAndColorThemeManager.h"
 #import "RSDefines.h"
 
+NSString *const WCPasteboardTypeArgumentPlaceholderCell = @"org.revsoft.wabbitstudio.argumentplaceholder";
+
+static NSString *const WCArgumentPlaceholderCellStringValueKey = @"stringValue";
+static NSString *const WCArgumentPlaceholderCellArgumentChoicesKey = @"argumentChoices";
+static NSString *const WCArgumentPlaceholderCellArgumentChoicesTypeKey = @"argumentChoicesType";
+
 static NSTextStorage *_textStorage;
 static NSLayoutManager *_layoutManager;
 static NSTextContainer *_textContainer;
+
+@interface WCArgumentPlaceholderCell ()
+@property (readonly,nonatomic) WCSourceTokenType argumentChoicesType;
+@end
 
 @implementation WCArgumentPlaceholderCell
 #pragma mark *** Subclass Overrides ***
@@ -125,7 +135,9 @@ static const NSSize kIconSize = (NSSize){8.0,6.0};
 	else if (!backgroundColorIsLight)
 		textColor = [NSColor whiteColor];
 	
-	[_textStorage replaceCharactersInRange:NSMakeRange(0, [_textStorage length]) withAttributedString:[[[NSAttributedString alloc] initWithString:string attributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,textColor,NSForegroundColorAttributeName, nil]] autorelease]];
+	NSAttributedString *attributedString = [[[NSAttributedString alloc] initWithString:string attributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,textColor,NSForegroundColorAttributeName, nil]] autorelease];
+	
+	[_textStorage replaceCharactersInRange:NSMakeRange(0, [_textStorage length]) withAttributedString:attributedString];
 	[_layoutManager ensureLayoutForCharacterRange:NSMakeRange(0, [_textStorage length])];
 	
 	[_layoutManager drawGlyphsForGlyphRange:[_layoutManager glyphRangeForCharacterRange:NSMakeRange(0, [_textStorage length]) actualCharacterRange:NULL] atPoint:cellFrame.origin];
@@ -146,18 +158,45 @@ static const NSSize kIconSize = (NSSize){8.0,6.0};
 	
 	NSRect cellFrame = [super cellFrameForTextContainer:textContainer proposedLineFragment:lineFrag glyphPosition:position characterIndex:charIndex];
 	NSRect textFrame = [_layoutManager usedRectForTextContainer:_textContainer];
+	
 	cellFrame.size.width = NSWidth(textFrame);
 	cellFrame.size.height = NSHeight(textFrame);
 	cellFrame.origin.y -= [[_layoutManager typesetter] baselineOffsetInLayoutManager:_layoutManager glyphIndex:0];
 	
 	return cellFrame;
 }
+#pragma mark RSPlistArchiving
+- (NSDictionary *)plistRepresentation {
+	return [NSDictionary dictionaryWithObjectsAndKeys:[self stringValue],WCArgumentPlaceholderCellStringValueKey,[self argumentChoices],WCArgumentPlaceholderCellArgumentChoicesKey,[NSNumber numberWithUnsignedInt:[self argumentChoicesType]],WCArgumentPlaceholderCellArgumentChoicesTypeKey, nil];
+}
+- (id)initWithPlistRepresentation:(NSDictionary *)plistRepresentation {
+	return [self initTextCell:[plistRepresentation objectForKey:WCArgumentPlaceholderCellStringValueKey] argumentChoices:[plistRepresentation objectForKey:WCArgumentPlaceholderCellArgumentChoicesKey] argumentChoicesType:[[plistRepresentation objectForKey:WCArgumentPlaceholderCellArgumentChoicesTypeKey] unsignedIntValue]];
+}
+
+#pragma mark NSPasteboardWriting
+- (NSArray *)writableTypesForPasteboard:(NSPasteboard *)pasteboard; {
+	return [NSArray arrayWithObjects:WCPasteboardTypeArgumentPlaceholderCell,NSPasteboardTypeString, nil];
+}
+- (id)pasteboardPropertyListForType:(NSString *)type; {
+	if ([type isEqualToString:WCPasteboardTypeArgumentPlaceholderCell])
+		return [self plistRepresentation];
+	return [self stringValue];
+}
+ 
+#pragma mark NSPasteboardItemDataProvider
+- (void)pasteboard:(NSPasteboard *)pasteboard item:(NSPasteboardItem *)item provideDataForType:(NSString *)type; {
+	if ([type isEqualToString:WCPasteboardTypeArgumentPlaceholderCell])
+		[item setPropertyList:[self pasteboardPropertyListForType:type] forType:type];
+	else
+		[item setString:[self stringValue] forType:NSPasteboardTypeString];
+}
+
 #pragma mark *** Public Methods ***
 - (id)initTextCell:(NSString *)aString argumentChoices:(NSArray *)argumentChoices argumentChoicesType:(WCSourceTokenType)argumentChoicesType; {
 	if (!(self = [super initTextCell:aString]))
 		return nil;
 	
-	_argumentChoices = [[argumentChoices sortedArrayUsingSelector:@selector(localizedStandardCompare:)] retain];
+	_argumentChoices = [[argumentChoices sortedArrayUsingSelector:@selector(localizedStandardCompare:)] copy];
 	_argumentChoicesType = argumentChoicesType;
 	
 	return self;
@@ -165,5 +204,9 @@ static const NSSize kIconSize = (NSSize){8.0,6.0};
 #pragma mark Properties
 @synthesize argumentChoices=_argumentChoices;
 @synthesize argumentChoicesType=_argumentChoicesType;
+@dynamic icon;
+- (NSImage *)icon {
+	return [WCSourceToken sourceTokenIconForSourceTokenType:[self argumentChoicesType]];
+}
 
 @end

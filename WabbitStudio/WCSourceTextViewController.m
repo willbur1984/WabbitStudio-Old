@@ -25,6 +25,7 @@
 #import "WCProjectDocument.h"
 #import "WCLayoutManager.h"
 #import "WCSourceToken.h"
+#import "WCArgumentPlaceholderWindowController.h"
 
 @interface WCSourceTextViewController ()
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
@@ -139,35 +140,9 @@
 - (void)textView:(NSTextView *)textView doubleClickedOnCell:(id<NSTextAttachmentCell>)cell inRect:(NSRect)cellFrame atIndex:(NSUInteger)charIndex {
 	if ([cell isKindOfClass:[WCArgumentPlaceholderCell class]]) {
 		if ([[(WCArgumentPlaceholderCell *)cell argumentChoices] count]) {
-			NSMenu *menu = [[[NSMenu alloc] initWithTitle:@""] autorelease];
-			[menu setFont:[NSFont menuFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]]];
-			[menu setShowsStateColumn:NO];
-			NSImage *image = [WCSourceToken sourceTokenIconForSourceTokenType:[(WCArgumentPlaceholderCell *)cell argumentChoicesType]];
+			WCArgumentPlaceholderWindowController *windowController = [[WCArgumentPlaceholderWindowController alloc] initWithArgumentPlaceholderCell:(WCArgumentPlaceholderCell *)cell characterIndex:charIndex textView:[self textView]];
 			
-			for (NSString *choice in [(WCArgumentPlaceholderCell *)cell argumentChoices]) {
-				NSMenuItem *item = [menu addItemWithTitle:choice action:@selector(_argumentPlaceholderMenuItemClicked:) keyEquivalent:@""];
-				[item setTarget:self];
-				[item setImage:image];
-				[[item image] setSize:NSMakeSize(14.0, 14.0)];
-			}
-			
-			NSUInteger glyphIndex = [[textView layoutManager] glyphIndexForCharacterAtIndex:charIndex];
-			NSRect lineRect = [[textView layoutManager] lineFragmentRectForGlyphAtIndex:glyphIndex effectiveRange:NULL];
-			NSPoint selectedPoint = [[textView layoutManager] locationForGlyphAtIndex:glyphIndex];
-			
-			lineRect.origin.y += lineRect.size.height;
-			lineRect.origin.x += selectedPoint.x;
-			
-			NSCursor *currentCursor = [[textView enclosingScrollView] documentCursor];
-			
-			if ([menu popUpMenuPositioningItem:[menu itemAtIndex:0] atLocation:lineRect.origin inView:textView]) {
-				NSString *title = [[menu highlightedItem] title];
-				
-				[textView insertText:title replacementRange:NSMakeRange(charIndex, 1)];
-				[textView setSelectedRange:NSMakeRange(charIndex, [title length])];
-			}
-			else
-				[currentCursor push];
+			[windowController showWindow:nil];
 		}
 		else {
 			[textView insertText:[(WCArgumentPlaceholderCell *)cell stringValue] replacementRange:NSMakeRange(charIndex, 1)];
@@ -175,6 +150,7 @@
 		}
 	}
 }
+
 - (NSDictionary *)textView:(NSTextView *)textView shouldChangeTypingAttributes:(NSDictionary *)oldTypingAttributes toAttributes:(NSDictionary *)newTypingAttributes; {
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
 	

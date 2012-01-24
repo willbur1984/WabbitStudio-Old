@@ -10,6 +10,13 @@
 
 @implementation WCCompletionWindow
 #pragma mark *** Subclass Overrides ***
+- (void)dealloc {
+#ifdef DEBUG
+	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
+#endif
+	[super dealloc];
+}
+
 // so our table view will draw with the correct gradient highlight
 - (BOOL)isKeyWindow {
 	return YES;

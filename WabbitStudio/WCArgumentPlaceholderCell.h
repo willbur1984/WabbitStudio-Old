@@ -8,13 +8,16 @@
 
 #import <AppKit/NSTextAttachment.h>
 #import "WCSourceToken.h"
+#import "RSPlistArchiving.h"
 
-@interface WCArgumentPlaceholderCell : NSTextAttachmentCell {
+extern NSString *const WCPasteboardTypeArgumentPlaceholderCell;
+
+@interface WCArgumentPlaceholderCell : NSTextAttachmentCell <RSPlistArchiving,NSPasteboardItemDataProvider,NSPasteboardWriting> {
 	NSArray *_argumentChoices;
 	WCSourceTokenType _argumentChoicesType;
 }
 @property (readonly,nonatomic) NSArray *argumentChoices;
-@property (readonly,nonatomic) WCSourceTokenType argumentChoicesType;
+@property (readonly,nonatomic) NSImage *icon;
 
 - (id)initTextCell:(NSString *)aString argumentChoices:(NSArray *)argumentChoices argumentChoicesType:(WCSourceTokenType)argumentChoicesType;
 @end

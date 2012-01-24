@@ -31,6 +31,7 @@
 #import "WCSourceTextStorage.h"
 #import "RSBookmark.h"
 #import "NSEvent+RSExtensions.h"
+#import "WCArgumentPlaceholderCell.h"
 
 @interface WCSourceTextView ()
 
@@ -157,6 +158,72 @@
 		[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
 		[[[self enclosingScrollView] verticalRulerView] setNeedsDisplay:YES];
 	}
+}
+
+- (NSString *)preferredPasteboardTypeFromArray:(NSArray *)availableTypes restrictedToTypesFromArray:(NSArray *)allowedTypes {
+	if ([availableTypes containsObject:WCPasteboardTypeArgumentPlaceholderCell])
+		return WCPasteboardTypeArgumentPlaceholderCell;
+	return [super preferredPasteboardTypeFromArray:availableTypes restrictedToTypesFromArray:allowedTypes];
+}
+
+- (NSArray *)acceptableDragTypes; {
+	NSMutableArray *types = [[[super acceptableDragTypes] mutableCopy] autorelease];
+	
+	[types insertObject:WCPasteboardTypeArgumentPlaceholderCell atIndex:0];
+	
+	return types;
+}
+- (NSArray *)readablePasteboardTypes {
+	NSMutableArray *types = [[[super readablePasteboardTypes] mutableCopy] autorelease];
+	
+	[types insertObject:WCPasteboardTypeArgumentPlaceholderCell atIndex:0];
+	
+	return types;
+}
+
+- (NSArray *)writablePasteboardTypes {
+	NSMutableArray *types = [[[super writablePasteboardTypes] mutableCopy] autorelease];
+	
+	[types insertObject:WCPasteboardTypeArgumentPlaceholderCell atIndex:0];
+	
+	return types;
+}
+ 
+- (BOOL)readSelectionFromPasteboard:(NSPasteboard *)pboard type:(NSString *)type {
+	if ([type isEqualToString:WCPasteboardTypeArgumentPlaceholderCell]) {
+		NSDictionary *plist = [pboard propertyListForType:WCPasteboardTypeArgumentPlaceholderCell];
+		NSTextAttachment *attachment = [[[NSTextAttachment alloc] initWithFileWrapper:nil] autorelease];
+		WCArgumentPlaceholderCell *cell = [[[WCArgumentPlaceholderCell alloc] initWithPlistRepresentation:plist] autorelease];
+		
+		[attachment setAttachmentCell:cell];
+		
+		NSAttributedString *attributedString = [NSAttributedString attributedStringWithAttachment:attachment];
+		
+		if ([self shouldChangeTextInRange:[self rangeForUserTextChange] replacementString:[attributedString string]]) {
+			[[self textStorage] replaceCharactersInRange:[self rangeForUserTextChange] withAttributedString:attributedString];
+			[self didChangeText];
+			
+			return YES;
+		}
+		return NO;
+	}
+	return [super readSelectionFromPasteboard:pboard type:type];
+}
+
+- (BOOL)writeSelectionToPasteboard:(NSPasteboard *)pboard types:(NSArray *)types {
+	if ([types containsObject:WCPasteboardTypeArgumentPlaceholderCell]) {
+		id attributeValue = [[self textStorage] attribute:NSAttachmentAttributeName atIndex:[self selectedRange].location effectiveRange:NULL];
+		if (attributeValue && [[attributeValue attachmentCell] isKindOfClass:[WCArgumentPlaceholderCell class]]) {
+			[pboard clearContents];
+			
+			NSPasteboardItem *item = [[[NSPasteboardItem alloc] init] autorelease];
+			
+			[item setDataProvider:(WCArgumentPlaceholderCell *)[attributeValue attachmentCell] forTypes:[(WCArgumentPlaceholderCell *)[attributeValue attachmentCell] writableTypesForPasteboard:pboard]];
+			
+			return [pboard writeObjects:[NSArray arrayWithObjects:item, nil]];
+		}
+	}
+	return [super writeSelectionToPasteboard:pboard types:types];
 }
 
 + (NSMenu *)defaultMenu; {

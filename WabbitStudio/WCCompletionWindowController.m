@@ -168,23 +168,14 @@
 - (NSUInteger)countOfCompletions {
 	return [_completions count];
 }
-- (id)objectInCompletionsAtIndex:(NSUInteger)index {
-	return [_completions objectAtIndex:index];
-}
-- (void)insertObject:(id <WCCompletionItem>)object inCompletionsAtIndex:(NSUInteger)index {
-	[_completions insertObject:object atIndex:index];
+- (NSArray *)completionsAtIndexes:(NSIndexSet *)indexes {
+	return [_completions objectsAtIndexes:indexes];
 }
 - (void)insertCompletions:(NSArray *)completions atIndexes:(NSIndexSet *)indexes {
 	[_completions insertObjects:completions atIndexes:indexes];
 }
-- (void)removeObjectFromCompletionsAtIndex:(NSUInteger)index {
-	[_completions removeObjectAtIndex:index];
-}
 - (void)removeCompletionsAtIndexes:(NSIndexSet *)indexes {
 	[_completions removeObjectsAtIndexes:indexes];
-}
-- (void)replaceObjectInCompletionsAtIndex:(NSUInteger)index withObject:(id)object {
-	[_completions replaceObjectAtIndex:index withObject:object];
 }
 - (void)replaceCompletionsAtIndexes:(NSIndexSet *)indexes withCompletions:(NSArray *)completions {
 	[_completions replaceObjectsAtIndexes:indexes withObjects:completions];
@@ -356,9 +347,9 @@
 	dispatch_once(&onceToken, ^{
 		stringSizeCell = [[NSTextFieldCell alloc] initTextCell:@""];
 		[stringSizeCell setAlignment:NSLeftTextAlignment];
-		[stringSizeCell setBackgroundStyle:NSBackgroundStyleLowered];
+		//[stringSizeCell setBackgroundStyle:NSBackgroundStyleLowered];
 		[stringSizeCell setControlSize:NSSmallControlSize];
-		[stringSizeCell setFont:[NSFont boldSystemFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]]];
+		//[stringSizeCell setFont:[NSFont boldSystemFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]]];
 	});
 	
 	CGFloat requiredWidth = ([[self completions] count])?0.0:125.0;

@@ -213,6 +213,8 @@
 		07A8AFE214BE2C2B008CB9FF /* NSTreeNode+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A8AFE114BE2C2B008CB9FF /* NSTreeNode+RSExtensions.m */; };
 		07A8AFE514BE2CE9008CB9FF /* WCKeyBindingsOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A8AFE414BE2CE9008CB9FF /* WCKeyBindingsOutlineView.m */; };
 		07A8AFF014BE5ED8008CB9FF /* DefaultKeyBindings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 07A8AFEF14BE5ED8008CB9FF /* DefaultKeyBindings.plist */; };
+		07AEB77E14CE037000A0BA1C /* WCArgumentPlaceholderWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07AEB77D14CE037000A0BA1C /* WCArgumentPlaceholderWindowController.m */; };
+		07AEB78214CE03C300A0BA1C /* WCArgumentPlaceholderWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07AEB78014CE03C300A0BA1C /* WCArgumentPlaceholderWindow.xib */; };
 		07B4740514AE3CAA00E3F9D0 /* RSNumberToBoolTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B4740414AE3CAA00E3F9D0 /* RSNumberToBoolTransformer.m */; };
 		07B4740814AE3E0A00E3F9D0 /* RSNegateNumberToBoolTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B4740714AE3E0A00E3F9D0 /* RSNegateNumberToBoolTransformer.m */; };
 		07B4740B14AE433300E3F9D0 /* RSFindSearchField.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B4740A14AE433300E3F9D0 /* RSFindSearchField.m */; };
@@ -636,6 +638,9 @@
 		07A8AFE314BE2CE8008CB9FF /* WCKeyBindingsOutlineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCKeyBindingsOutlineView.h; sourceTree = "<group>"; };
 		07A8AFE414BE2CE9008CB9FF /* WCKeyBindingsOutlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCKeyBindingsOutlineView.m; sourceTree = "<group>"; };
 		07A8AFEF14BE5ED8008CB9FF /* DefaultKeyBindings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DefaultKeyBindings.plist; sourceTree = "<group>"; };
+		07AEB77C14CE037000A0BA1C /* WCArgumentPlaceholderWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCArgumentPlaceholderWindowController.h; sourceTree = "<group>"; };
+		07AEB77D14CE037000A0BA1C /* WCArgumentPlaceholderWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCArgumentPlaceholderWindowController.m; sourceTree = "<group>"; };
+		07AEB78114CE03C300A0BA1C /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCArgumentPlaceholderWindow.xib; sourceTree = "<group>"; };
 		07B4740314AE3CAA00E3F9D0 /* RSNumberToBoolTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSNumberToBoolTransformer.h; sourceTree = "<group>"; };
 		07B4740414AE3CAA00E3F9D0 /* RSNumberToBoolTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSNumberToBoolTransformer.m; sourceTree = "<group>"; };
 		07B4740614AE3E0A00E3F9D0 /* RSNegateNumberToBoolTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSNegateNumberToBoolTransformer.h; sourceTree = "<group>"; };
@@ -764,6 +769,7 @@
 				0797327014C5360A00A71F54 /* WCTabView.xib */,
 				07018B1214C6011E00C5A7AC /* WCOpenQuicklyWindow.xib */,
 				0765361D14CD459E004D72D1 /* WCAddToProjectAccessoryView.xib */,
+				07AEB78014CE03C300A0BA1C /* WCArgumentPlaceholderWindow.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -838,6 +844,8 @@
 			children = (
 				0708963914A67CDE0017BBE4 /* WCArgumentPlaceholderCell.h */,
 				0708963A14A67CDF0017BBE4 /* WCArgumentPlaceholderCell.m */,
+				07AEB77C14CE037000A0BA1C /* WCArgumentPlaceholderWindowController.h */,
+				07AEB77D14CE037000A0BA1C /* WCArgumentPlaceholderWindowController.m */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -1676,6 +1684,7 @@
 				071306AB14C8F74000862E4D /* Bookmark.png in Resources */,
 				072FCFBA14CBBD9700F76276 /* wabbitstudio.icns in Resources */,
 				0765361F14CD459E004D72D1 /* WCAddToProjectAccessoryView.xib in Resources */,
+				07AEB78214CE03C300A0BA1C /* WCArgumentPlaceholderWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1844,6 +1853,7 @@
 				071E6AC814CC079000F2888B /* GTMNSData+zlib.m in Sources */,
 				0765361514CD10DF004D72D1 /* WCProjectNavigatorTreeController.m in Sources */,
 				0765361B14CD4525004D72D1 /* WCAddToProjectAccessoryViewController.m in Sources */,
+				07AEB77E14CE037000A0BA1C /* WCArgumentPlaceholderWindowController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2050,6 +2060,14 @@
 				07A8AFC514BDF65C008CB9FF /* en */,
 			);
 			name = WCKeyBindingsEditCommandPairWindow.xib;
+			sourceTree = "<group>";
+		};
+		07AEB78014CE03C300A0BA1C /* WCArgumentPlaceholderWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				07AEB78114CE03C300A0BA1C /* en */,
+			);
+			name = WCArgumentPlaceholderWindow.xib;
 			sourceTree = "<group>";
 		};
 		07BC6CB714B7E3DD007ECB3F /* WCJumpToLineWindow.xib */ = {
