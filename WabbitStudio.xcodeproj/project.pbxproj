@@ -14,6 +14,13 @@
 		07018B1F14C6167E00C5A7AC /* WCFileContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 07018B1E14C6167E00C5A7AC /* WCFileContainer.m */; };
 		07018B2214C61F4500C5A7AC /* WCOpenQuicklyTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07018B2114C61F4400C5A7AC /* WCOpenQuicklyTableView.m */; };
 		07018B2D14C63C6600C5A7AC /* UKXattrMetadataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 07018B2C14C63C6600C5A7AC /* UKXattrMetadataStore.m */; };
+		0706AFC114CF2DC600A0F93C /* WCScanFoldsOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0706AFC014CF2DC600A0F93C /* WCScanFoldsOperation.m */; };
+		0706AFC414CF2F0500A0F93C /* AIColorAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0706AFC314CF2F0500A0F93C /* AIColorAdditions.m */; };
+		0706AFC714CF302800A0F93C /* WCFold.m in Sources */ = {isa = PBXBuildFile; fileRef = 0706AFC614CF302800A0F93C /* WCFold.m */; };
+		0706AFCA14CF34E600A0F93C /* AIStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0706AFC914CF34E600A0F93C /* AIStringAdditions.m */; };
+		0706AFCD14CF350400A0F93C /* AIScannerAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0706AFCC14CF350400A0F93C /* AIScannerAdditions.m */; };
+		0706AFD014CF351600A0F93C /* AIFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0706AFCF14CF351600A0F93C /* AIFunctions.m */; };
+		0706AFD314CF353600A0F93C /* AIApplicationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0706AFD214CF353600A0F93C /* AIApplicationAdditions.m */; };
 		0706D65114A8F45B0092F880 /* WCSourceTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0706D64F14A8F45B0092F880 /* WCSourceTextViewController.m */; };
 		0706D65514A8F49D0092F880 /* WCSourceTextView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0706D65314A8F49D0092F880 /* WCSourceTextView.xib */; };
 		0706D65814A8F6D60092F880 /* WCSourceTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0706D65714A8F6D60092F880 /* WCSourceTextStorage.m */; };
@@ -279,6 +286,22 @@
 		07018B2114C61F4400C5A7AC /* WCOpenQuicklyTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCOpenQuicklyTableView.m; sourceTree = "<group>"; };
 		07018B2B14C63C6600C5A7AC /* UKXattrMetadataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UKXattrMetadataStore.h; sourceTree = "<group>"; };
 		07018B2C14C63C6600C5A7AC /* UKXattrMetadataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UKXattrMetadataStore.m; sourceTree = "<group>"; };
+		0706AFBF14CF2DC600A0F93C /* WCScanFoldsOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCScanFoldsOperation.h; sourceTree = "<group>"; };
+		0706AFC014CF2DC600A0F93C /* WCScanFoldsOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCScanFoldsOperation.m; sourceTree = "<group>"; };
+		0706AFC214CF2F0500A0F93C /* AIColorAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIColorAdditions.h; sourceTree = "<group>"; };
+		0706AFC314CF2F0500A0F93C /* AIColorAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AIColorAdditions.m; sourceTree = "<group>"; };
+		0706AFC514CF302800A0F93C /* WCFold.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCFold.h; sourceTree = "<group>"; };
+		0706AFC614CF302800A0F93C /* WCFold.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCFold.m; sourceTree = "<group>"; };
+		0706AFC814CF34E600A0F93C /* AIStringAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIStringAdditions.h; sourceTree = "<group>"; };
+		0706AFC914CF34E600A0F93C /* AIStringAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AIStringAdditions.m; sourceTree = "<group>"; };
+		0706AFCB14CF350400A0F93C /* AIScannerAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIScannerAdditions.h; sourceTree = "<group>"; };
+		0706AFCC14CF350400A0F93C /* AIScannerAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AIScannerAdditions.m; sourceTree = "<group>"; };
+		0706AFCE14CF351600A0F93C /* AIFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIFunctions.h; sourceTree = "<group>"; };
+		0706AFCF14CF351600A0F93C /* AIFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AIFunctions.m; sourceTree = "<group>"; };
+		0706AFD114CF353600A0F93C /* AIApplicationAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIApplicationAdditions.h; sourceTree = "<group>"; };
+		0706AFD214CF353600A0F93C /* AIApplicationAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AIApplicationAdditions.m; sourceTree = "<group>"; };
+		0706AFD414CF357300A0F93C /* AIMathCompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIMathCompatibility.h; sourceTree = "<group>"; };
+		0706AFD514CF362100A0F93C /* WCSourceRulerViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSourceRulerViewDelegate.h; sourceTree = "<group>"; };
 		0706D64C14A8F1800092F880 /* WCJumpBarDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCJumpBarDataSource.h; sourceTree = "<group>"; };
 		0706D64E14A8F45B0092F880 /* WCSourceTextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSourceTextViewController.h; sourceTree = "<group>"; };
 		0706D64F14A8F45B0092F880 /* WCSourceTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSourceTextViewController.m; sourceTree = "<group>"; };
@@ -731,6 +754,17 @@
 			name = "Open Quickly";
 			sourceTree = "<group>";
 		};
+		0706AFBD14CF2D9A00A0F93C /* Folding */ = {
+			isa = PBXGroup;
+			children = (
+				0706AFBF14CF2DC600A0F93C /* WCScanFoldsOperation.h */,
+				0706AFC014CF2DC600A0F93C /* WCScanFoldsOperation.m */,
+				0706AFC514CF302800A0F93C /* WCFold.h */,
+				0706AFC614CF302800A0F93C /* WCFold.m */,
+			);
+			name = Folding;
+			sourceTree = "<group>";
+		};
 		0706D65F14A952F80092F880 /* Themes */ = {
 			isa = PBXGroup;
 			children = (
@@ -816,6 +850,7 @@
 				076B7F8714BC15B600CC10E3 /* WCStandardSourceTextViewController.m */,
 				07E91DF614C8020600B166E3 /* WCLayoutManager.h */,
 				07E91DF714C8020700B166E3 /* WCLayoutManager.m */,
+				0706AFBD14CF2D9A00A0F93C /* Folding */,
 				07BC6CB314B7DDF2007ECB3F /* Jump to Line */,
 				073B5A9A14B6A43900FCDC0F /* Views */,
 				073B5A9C14B6A45D00FCDC0F /* Highlighter */,
@@ -1193,6 +1228,7 @@
 				07F5F76C14A59BCC00F1F326 /* WCLineNumberRulerView.m */,
 				0706D65914A8F8680092F880 /* WCSourceRulerView.h */,
 				0706D65A14A8F8690092F880 /* WCSourceRulerView.m */,
+				0706AFD514CF362100A0F93C /* WCSourceRulerViewDelegate.h */,
 				07862BA714BA46720057EB89 /* WCSplitView.h */,
 				07862BA814BA46720057EB89 /* WCSplitView.m */,
 			);
@@ -1528,6 +1564,17 @@
 		07A8AFBD14BDF2E2008CB9FF /* External */ = {
 			isa = PBXGroup;
 			children = (
+				0706AFD414CF357300A0F93C /* AIMathCompatibility.h */,
+				0706AFD114CF353600A0F93C /* AIApplicationAdditions.h */,
+				0706AFD214CF353600A0F93C /* AIApplicationAdditions.m */,
+				0706AFCE14CF351600A0F93C /* AIFunctions.h */,
+				0706AFCF14CF351600A0F93C /* AIFunctions.m */,
+				0706AFCB14CF350400A0F93C /* AIScannerAdditions.h */,
+				0706AFCC14CF350400A0F93C /* AIScannerAdditions.m */,
+				0706AFC814CF34E600A0F93C /* AIStringAdditions.h */,
+				0706AFC914CF34E600A0F93C /* AIStringAdditions.m */,
+				0706AFC214CF2F0500A0F93C /* AIColorAdditions.h */,
+				0706AFC314CF2F0500A0F93C /* AIColorAdditions.m */,
 				071E6ACA14CC079B00F2888B /* GTMDefines.h */,
 				071E6AC614CC079000F2888B /* GTMNSData+zlib.h */,
 				071E6AC714CC079000F2888B /* GTMNSData+zlib.m */,
@@ -1864,6 +1911,13 @@
 				0765361B14CD4525004D72D1 /* WCAddToProjectAccessoryViewController.m in Sources */,
 				07AEB77E14CE037000A0BA1C /* WCArgumentPlaceholderWindowController.m in Sources */,
 				072BDC2B14CE622B00F3F555 /* WCAlertsViewController.m in Sources */,
+				0706AFC114CF2DC600A0F93C /* WCScanFoldsOperation.m in Sources */,
+				0706AFC414CF2F0500A0F93C /* AIColorAdditions.m in Sources */,
+				0706AFC714CF302800A0F93C /* WCFold.m in Sources */,
+				0706AFCA14CF34E600A0F93C /* AIStringAdditions.m in Sources */,
+				0706AFCD14CF350400A0F93C /* AIScannerAdditions.m in Sources */,
+				0706AFD014CF351600A0F93C /* AIFunctions.m in Sources */,
+				0706AFD314CF353600A0F93C /* AIApplicationAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,8 +7,13 @@
 //
 
 #import "WCLineNumberRulerView.h"
+#import "WCSourceRulerViewDelegate.h"
 
 @interface WCSourceRulerView : WCLineNumberRulerView {
+	__weak id <WCSourceRulerViewDelegate> _delegate;
 	NSUInteger _clickedLineNumber;
 }
+@property (readwrite,assign,nonatomic) id <WCSourceRulerViewDelegate> delegate;
+
+- (void)drawCodeFoldingRibbonInRect:(NSRect)ribbonRect;
 @end

@@ -8,10 +8,11 @@
 
 #import "JAViewController.h"
 #import "WCSourceTextViewDelegate.h"
+#import "WCSourceRulerViewDelegate.h"
 
 @class WCSourceTextView,WCSourceTextStorage,WCSourceHighlighter,WCJumpBarViewController,WCSourceFileDocument,WCStandardSourceTextViewController;
 
-@interface WCSourceTextViewController : JAViewController <WCSourceTextViewDelegate> {
+@interface WCSourceTextViewController : JAViewController <WCSourceTextViewDelegate,WCSourceRulerViewDelegate> {
 	__weak WCStandardSourceTextViewController *_standardSourceTextViewController;
 	__weak WCSourceFileDocument *_sourceFileDocument;
 	WCJumpBarViewController *_jumpBarViewController;

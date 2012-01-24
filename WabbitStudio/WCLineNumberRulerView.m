@@ -113,6 +113,7 @@
 	NSRectFill(backgroundRect);
 }
 - (void)drawRightMarginInRect:(NSRect)rightMarginRect; {
+	/*
 	[[NSColor darkGrayColor] setStroke];
 	NSBezierPath *dottedLine = [NSBezierPath bezierPathWithRect:NSMakeRect(NSWidth(rightMarginRect), 0, 0, NSHeight(rightMarginRect))];
 	CGFloat dash[2];
@@ -120,6 +121,9 @@
 	dash[1] = 2.0;
 	[dottedLine setLineDash:dash count:2 phase:1.0];
 	[dottedLine stroke];
+	 */
+	[[NSColor colorWithCalibratedWhite:164.0/255.0 alpha:1.0] setFill];
+	NSRectFill(NSMakeRect(NSMaxX(rightMarginRect)-1, NSMinY(rightMarginRect), 1.0, NSHeight(rightMarginRect)));
 }
 
 - (void)drawBackgroundAndDividerLineInRect:(NSRect)backgroundAndDividerLineRect; {

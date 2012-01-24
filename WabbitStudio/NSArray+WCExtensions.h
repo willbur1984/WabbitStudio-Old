@@ -8,7 +8,7 @@
 
 #import <Foundation/NSArray.h>
 
-@class WCSourceToken,WCSourceSymbol,RSBookmark;
+@class WCSourceToken,WCSourceSymbol,RSBookmark,WCFold;
 
 @interface NSArray (WCExtensions)
 - (NSUInteger)sourceTokenIndexForRange:(NSRange)range;
@@ -22,6 +22,10 @@
 - (NSUInteger)bookmarkIndexForRange:(NSRange)range;
 - (RSBookmark *)bookmarkForRange:(NSRange)range;
 - (NSArray *)bookmarksForRange:(NSRange)range;
+
+- (NSUInteger)foldIndexForRange:(NSRange)range;
+- (WCFold *)foldForRange:(NSRange)range;
+- (NSArray *)foldsForRange:(NSRange)range;
 
 - (NSUInteger)lineNumberForRange:(NSRange)range;
 

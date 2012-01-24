@@ -10,6 +10,7 @@
 #import "WCSourceSymbol.h"
 #import "WCSourceToken.h"
 #import "RSBookmark.h"
+#import "WCFold.h"
 
 @implementation NSArray (WCExtensions)
 - (NSUInteger)sourceTokenIndexForRange:(NSRange)range; {
@@ -128,6 +129,49 @@
 	else {
 		NSUInteger startIndex = [self sourceSymbolIndexForRange:range];
 		NSUInteger endIndex = [self sourceSymbolIndexForRange:NSMakeRange(NSMaxRange(range), 0)];
+		if (endIndex < [self count])
+			endIndex++;
+		
+		return [self subarrayWithRange:NSMakeRange(startIndex, endIndex-startIndex)];
+	}
+}
+
+- (NSUInteger)foldIndexForRange:(NSRange)range; {
+	if (![self count])
+		return NSNotFound;
+	
+	NSUInteger left = 0, right = [self count], mid, searchLocation;
+	
+    while ((right - left) > 1) {
+        mid = (right + left) / 2;
+		searchLocation = [(WCFold *)[self objectAtIndex:mid] range].location;
+        
+        if (range.location < searchLocation)
+			right = mid;
+        else if (range.location > searchLocation)
+			left = mid;
+        else
+			return mid;
+    }
+    return left;
+}
+- (WCFold *)foldForRange:(NSRange)range; {
+	if (![self count])
+		return nil;
+	
+	return [self objectAtIndex:[self foldIndexForRange:range]];
+}
+- (NSArray *)foldsForRange:(NSRange)range; {
+	if (![self count])
+		return nil;
+	else if ([self count] == 1) {
+		if (NSLocationInRange([[self lastObject] range].location, range))
+			return self;
+		return nil;
+	}
+	else {
+		NSUInteger startIndex = [self foldIndexForRange:range];
+		NSUInteger endIndex = [self foldIndexForRange:NSMakeRange(NSMaxRange(range), 0)];
 		if (endIndex < [self count])
 			endIndex++;
 		

@@ -11,6 +11,7 @@
 
 extern NSString *const WCSourceScannerDidFinishScanningNotification;
 extern NSString *const WCSourceScannerDidFinishScanningSymbolsNotification;
+extern NSString *const WCSourceScannerDidFinishScanningFoldsNotification;
 
 @class NDTrie;
 
@@ -30,6 +31,7 @@ extern NSString *const WCSourceScannerDidFinishScanningSymbolsNotification;
 	NSDictionary *_macroNamesToMacroSymbols;
 	NDTrie *_completions;
 	NSSet *_includes;
+	NSArray *_folds;
 }
 @property (readwrite,assign,nonatomic) id <WCSourceScannerDelegate> delegate;
 @property (readonly,nonatomic) NSTextStorage *textStorage;
@@ -44,6 +46,7 @@ extern NSString *const WCSourceScannerDidFinishScanningSymbolsNotification;
 @property (readwrite,copy) NSDictionary *macroNamesToMacroSymbols;
 @property (readwrite,copy) NDTrie *completions;
 @property (readwrite,copy) NSSet *includes;
+@property (readwrite,copy) NSArray *folds;
 
 - (id)initWithTextStorage:(NSTextStorage *)textStorage;
 

@@ -10,10 +10,12 @@
 #import "WCScanTokensOperation.h"
 #import "WCScanSymbolsOperation.h"
 #import "WCSourceSymbol.h"
+#import "WCScanFoldsOperation.h"
 #import "NDTrie.h"
 
 NSString *const WCSourceScannerDidFinishScanningNotification = @"WCSourceScannerDidFinishScanningNotification";
 NSString *const WCSourceScannerDidFinishScanningSymbolsNotification = @"WCSourceScannerDidFinishScanningSymbolsNotification";
+NSString *const WCSourceScannerDidFinishScanningFoldsNotification = @"WCSourceScannerDidFinishScanningFoldsNotification";
 
 @implementation WCSourceScanner
 #pragma mark *** Subclass Overrides ***
@@ -35,6 +37,7 @@ NSString *const WCSourceScannerDidFinishScanningSymbolsNotification = @"WCSource
 	[_macroNamesToMacroSymbols release];
 	[_completions release];
 	[_includes release];
+	[_folds release];
 	[super dealloc];
 }
 #pragma mark *** Public Methods ***
@@ -44,7 +47,7 @@ NSString *const WCSourceScannerDidFinishScanningSymbolsNotification = @"WCSource
 	
 	_textStorage = textStorage;
 	_operationQueue = [[NSOperationQueue alloc] init];
-	[_operationQueue setMaxConcurrentOperationCount:1];
+	[_operationQueue setMaxConcurrentOperationCount:2];
 	_tokens = [[NSArray alloc] init];
 	_symbols = [[NSArray alloc] init];
 	_labelNamesToLabelSymbols = [[NSDictionary alloc] init];
@@ -53,6 +56,7 @@ NSString *const WCSourceScannerDidFinishScanningSymbolsNotification = @"WCSource
 	_defineNamesToDefineSymbols = [[NSDictionary alloc] init];
 	_macroNamesToMacroSymbols = [[NSDictionary alloc] init];
 	_includes = [[NSSet alloc] init];
+	_folds = [[NSArray alloc] init];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidProcessEditing:) name:NSTextStorageDidProcessEditingNotification object:textStorage];
 	
@@ -68,11 +72,15 @@ NSString *const WCSourceScannerDidFinishScanningSymbolsNotification = @"WCSource
 	if ([self needsToScanSymbols]) {
 		NSOperation *scanTokensOperation = [WCScanTokensOperation scanTokensOperationWithScanner:self];
 		NSOperation *scanSymbolsOperation = [WCScanSymbolsOperation scanSymbolsOperationWithSourceScanner:self];
+		NSOperation *scanFoldsOperation = [WCScanFoldsOperation scanFoldsOperationWithSourceScanner:self];
 		
 		[scanSymbolsOperation addDependency:scanTokensOperation];
 		
+		[_operationQueue setSuspended:YES];
+		[_operationQueue addOperation:scanFoldsOperation];
 		[_operationQueue addOperation:scanTokensOperation];
 		[_operationQueue addOperation:scanSymbolsOperation];
+		[_operationQueue setSuspended:NO];
 	}
 	else {
 		[_operationQueue addOperation:[WCScanTokensOperation scanTokensOperationWithScanner:self]];
@@ -230,6 +238,7 @@ NSString *const WCSourceScannerDidFinishScanningSymbolsNotification = @"WCSource
 @synthesize macroNamesToMacroSymbols=_macroNamesToMacroSymbols;
 @synthesize completions=_completions;
 @synthesize includes=_includes;
+@synthesize folds=_folds;
 #pragma mark *** Private Methods ***
 
 #pragma mark Notifications

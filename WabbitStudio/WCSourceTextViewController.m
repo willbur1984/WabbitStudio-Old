@@ -91,6 +91,7 @@
 	WCSourceRulerView *rulerView = [[[WCSourceRulerView alloc] initWithScrollView:[[self textView] enclosingScrollView] orientation:NSVerticalRuler] autorelease];
 	
 	[rulerView setClientView:[self textView]];
+	[rulerView setDelegate:self];
 	
 	[[[self textView] enclosingScrollView] setVerticalRulerView:rulerView];
 	
@@ -251,6 +252,10 @@
 }
 - (void)handleJumpToDefinitionForSourceTextView:(WCSourceTextView *)textView file:(WCFile *)file; {
 	[[[self sourceFileDocument] projectDocument] openTabForFile:file];
+}
+#pragma mark WCSourceRulerViewDelegate
+- (WCSourceScanner *)sourceScannerForSourceRulerView:(WCSourceRulerView *)rulerView {
+	return [self sourceScanner];
 }
 #pragma mark *** Public Methods ***
 - (id)initWithSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument; {

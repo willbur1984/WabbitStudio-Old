@@ -11,6 +11,7 @@
 #import "NSUserDefaults+RSExtensions.h"
 
 NSString *const WCEditorShowCurrentLineHighlightKey = @"editorShowCurrentLineHighlight";
+NSString *const WCEditorShowCodeFoldingRibbonKey = @"editorShowCodeFoldingRibbon";
 NSString *const WCEditorShowInvisibleCharactersKey = @"editorShowInvisibleCharacters";
 NSString *const WCEditorShowLineNumbersKey = @"editorShowLineNumbers";
 NSString *const WCEditorShowMatchingBraceHighlightKey = @"editorShowMatchingBraceHighlight";
@@ -67,7 +68,7 @@ NSString *const WCEditorDefaultTextEncodingKey = @"editorDefaultTextEncoding";
 }
 #pragma mark RSUserDefaultsProvider
 + (NSDictionary *)userDefaults {
-	return [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],WCEditorShowCurrentLineHighlightKey,[NSNumber numberWithBool:YES],WCEditorShowLineNumbersKey,[NSNumber numberWithBool:YES],WCEditorShowMatchingBraceHighlightKey,[NSNumber numberWithBool:YES],WCEditorShowMatchingTemporaryLabelHighlightKey,[NSNumber numberWithBool:YES],WCEditorAutomaticallyInsertMatchingBraceKey,[NSNumber numberWithBool:YES],WCEditorSuggestCompletionsWhileTypingKey,[NSNumber numberWithFloat:0.35],WCEditorSuggestCompletionsWhileTypingDelayKey,[NSNumber numberWithBool:YES],WCEditorAutomaticallyIndentAfterNewlinesKey,[NSNumber numberWithBool:YES],WCEditorWrapLinesToEditorWidthKey,[NSNumber numberWithUnsignedInteger:WCEditorIndentUsingTabs],WCEditorIndentUsingKey,[NSNumber numberWithUnsignedInteger:4],WCEditorTabWidthKey,[NSNumber numberWithUnsignedInteger:100],WCEditorPageGuideColumnNumberKey,[NSNumber numberWithUnsignedInteger:NSUTF8StringEncoding],WCEditorDefaultTextEncodingKey,[NSNumber numberWithBool:YES],WCEditorAutomaticallyIndentAfterLabelsKey,[NSNumber numberWithBool:NO],WCEditorShowInvisibleCharactersKey,[NSNumber numberWithBool:NO],WCEditorShowHighlightEnclosedMacroArgumentsKey,[NSNumber numberWithFloat:0.25],WCEditorShowHighlightEnclosedMacroArgumentsDelayKey, nil];
+	return [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],WCEditorShowCurrentLineHighlightKey,[NSNumber numberWithBool:YES],WCEditorShowLineNumbersKey,[NSNumber numberWithBool:YES],WCEditorShowMatchingBraceHighlightKey,[NSNumber numberWithBool:YES],WCEditorShowMatchingTemporaryLabelHighlightKey,[NSNumber numberWithBool:YES],WCEditorAutomaticallyInsertMatchingBraceKey,[NSNumber numberWithBool:YES],WCEditorSuggestCompletionsWhileTypingKey,[NSNumber numberWithFloat:0.35],WCEditorSuggestCompletionsWhileTypingDelayKey,[NSNumber numberWithBool:YES],WCEditorAutomaticallyIndentAfterNewlinesKey,[NSNumber numberWithBool:YES],WCEditorWrapLinesToEditorWidthKey,[NSNumber numberWithUnsignedInteger:WCEditorIndentUsingTabs],WCEditorIndentUsingKey,[NSNumber numberWithUnsignedInteger:4],WCEditorTabWidthKey,[NSNumber numberWithUnsignedInteger:100],WCEditorPageGuideColumnNumberKey,[NSNumber numberWithUnsignedInteger:NSUTF8StringEncoding],WCEditorDefaultTextEncodingKey,[NSNumber numberWithBool:YES],WCEditorAutomaticallyIndentAfterLabelsKey,[NSNumber numberWithBool:NO],WCEditorShowInvisibleCharactersKey,[NSNumber numberWithBool:NO],WCEditorShowHighlightEnclosedMacroArgumentsKey,[NSNumber numberWithFloat:0.25],WCEditorShowHighlightEnclosedMacroArgumentsDelayKey,[NSNumber numberWithBool:YES],WCEditorShowCodeFoldingRibbonKey, nil];
 }
 #pragma mark *** Public Methods ***
 #pragma mark IBActions
