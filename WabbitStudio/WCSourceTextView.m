@@ -33,6 +33,8 @@
 #import "NSEvent+RSExtensions.h"
 #import "WCArgumentPlaceholderCell.h"
 #import "NSTextView+WCExtensions.h"
+#import "WCProjectDocument.h"
+#import "WCFile.h"
 
 @interface WCSourceTextView ()
 
@@ -484,6 +486,27 @@
 	[self scrollRangeToVisible:[self selectedRange]];
 }
 - (IBAction)jumpToDefinition:(id)sender; {
+	if ([[self delegate] projectDocumentForSourceTextView:self]) {
+		NSDictionary *filePathsToFiles = [[[self delegate] projectDocumentForSourceTextView:self] filePathsToFiles];
+		__block WCFile *includedFile = nil;
+		
+		[[WCSourceScanner includesRegularExpression] enumerateMatchesInString:[self string] options:0 range:[[self string] lineRangeForRange:[self selectedRange]] usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+			NSString *fileName = [[[self string] substringWithRange:[result rangeAtIndex:1]] lowercaseString];
+			
+			[filePathsToFiles enumerateKeysAndObjectsUsingBlock:^(NSString *filePath, WCFile *file, BOOL *stop) {
+				if ([filePath hasSuffix:fileName]) {
+					includedFile = file;
+					*stop = YES;
+				}
+			}];
+		}];
+		
+		if (includedFile) {
+			[[self delegate] handleJumpToDefinitionForSourceTextView:self file:includedFile];
+			return;
+		}
+	}
+	
 	NSRange symbolRange = [[self string] symbolRangeForRange:[self selectedRange]];
 	if (symbolRange.location == NSNotFound) {
 		NSBeep();

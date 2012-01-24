@@ -234,6 +234,9 @@
 - (WCSourceHighlighter *)sourceHighlighterForSourceTextView:(WCSourceTextView *)textView; {
 	return [self sourceHighlighter];
 }
+- (WCProjectDocument *)projectDocumentForSourceTextView:(WCSourceTextView *)textView; {
+	return [[self sourceFileDocument] projectDocument];
+}
 - (void)handleJumpToDefinitionForSourceTextView:(WCSourceTextView *)textView sourceSymbol:(WCSourceSymbol *)symbol {
 	if ([symbol sourceScanner] == [self sourceScanner]) {
 		[textView setSelectedRange:[symbol range]];
@@ -245,6 +248,9 @@
 		[[stvController textView] setSelectedRange:[symbol range]];
 		[[stvController textView] scrollRangeToVisible:[symbol range]];
 	}
+}
+- (void)handleJumpToDefinitionForSourceTextView:(WCSourceTextView *)textView file:(WCFile *)file; {
+	[[[self sourceFileDocument] projectDocument] openTabForFile:file];
 }
 #pragma mark *** Public Methods ***
 - (id)initWithSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument; {
