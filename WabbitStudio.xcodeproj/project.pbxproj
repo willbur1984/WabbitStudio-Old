@@ -109,6 +109,8 @@
 		072BBC5914AA69EF0044ECC2 /* WCPreferencesWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 072BBC5714AA69EF0044ECC2 /* WCPreferencesWindow.xib */; };
 		072BBC5C14AA6D190044ECC2 /* RSGlassGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 072BBC5B14AA6D190044ECC2 /* RSGlassGradientView.m */; };
 		072BBC5F14AA700B0044ECC2 /* RSBottomBorderedGlassGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 072BBC5E14AA700B0044ECC2 /* RSBottomBorderedGlassGradientView.m */; };
+		072BDC2B14CE622B00F3F555 /* WCAlertsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 072BDC2914CE622B00F3F555 /* WCAlertsViewController.m */; };
+		072BDC3014CE623D00F3F555 /* WCAlertsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 072BDC2E14CE623D00F3F555 /* WCAlertsView.xib */; };
 		072FCFB814CB972B00F76276 /* WCProjectNavigatorCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 072FCFB714CB972B00F76276 /* WCProjectNavigatorCellView.m */; };
 		072FCFBA14CBBD9700F76276 /* wabbitstudio.icns in Resources */ = {isa = PBXBuildFile; fileRef = 072FCFB914CBBD9700F76276 /* wabbitstudio.icns */; };
 		072FCFBD14CBCA6200F76276 /* RSStringToAbbreviatedStringTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 072FCFBC14CBCA6200F76276 /* RSStringToAbbreviatedStringTransformer.m */; };
@@ -453,6 +455,9 @@
 		072BBC5B14AA6D190044ECC2 /* RSGlassGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSGlassGradientView.m; sourceTree = "<group>"; };
 		072BBC5D14AA700B0044ECC2 /* RSBottomBorderedGlassGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSBottomBorderedGlassGradientView.h; sourceTree = "<group>"; };
 		072BBC5E14AA700B0044ECC2 /* RSBottomBorderedGlassGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSBottomBorderedGlassGradientView.m; sourceTree = "<group>"; };
+		072BDC2814CE622B00F3F555 /* WCAlertsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCAlertsViewController.h; sourceTree = "<group>"; };
+		072BDC2914CE622B00F3F555 /* WCAlertsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCAlertsViewController.m; sourceTree = "<group>"; };
+		072BDC2F14CE623D00F3F555 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCAlertsView.xib; sourceTree = "<group>"; };
 		072FCFB614CB972B00F76276 /* WCProjectNavigatorCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCProjectNavigatorCellView.h; sourceTree = "<group>"; };
 		072FCFB714CB972B00F76276 /* WCProjectNavigatorCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCProjectNavigatorCellView.m; sourceTree = "<group>"; };
 		072FCFB914CBBD9700F76276 /* wabbitstudio.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = wabbitstudio.icns; sourceTree = "<group>"; };
@@ -770,6 +775,7 @@
 				07018B1214C6011E00C5A7AC /* WCOpenQuicklyWindow.xib */,
 				0765361D14CD459E004D72D1 /* WCAddToProjectAccessoryView.xib */,
 				07AEB78014CE03C300A0BA1C /* WCArgumentPlaceholderWindow.xib */,
+				072BDC2E14CE623D00F3F555 /* WCAlertsView.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -1267,6 +1273,8 @@
 				07EB8E2C14B644C900F8A8C6 /* WCReallyAdvancedViewController.m */,
 				07EB8E3314B64D2400F8A8C6 /* WCKeyboardViewController.h */,
 				07EB8E3414B64D2500F8A8C6 /* WCKeyboardViewController.m */,
+				072BDC2814CE622B00F3F555 /* WCAlertsViewController.h */,
+				072BDC2914CE622B00F3F555 /* WCAlertsViewController.m */,
 			);
 			name = Advanced;
 			sourceTree = "<group>";
@@ -1685,6 +1693,7 @@
 				072FCFBA14CBBD9700F76276 /* wabbitstudio.icns in Resources */,
 				0765361F14CD459E004D72D1 /* WCAddToProjectAccessoryView.xib in Resources */,
 				07AEB78214CE03C300A0BA1C /* WCArgumentPlaceholderWindow.xib in Resources */,
+				072BDC3014CE623D00F3F555 /* WCAlertsView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1854,6 +1863,7 @@
 				0765361514CD10DF004D72D1 /* WCProjectNavigatorTreeController.m in Sources */,
 				0765361B14CD4525004D72D1 /* WCAddToProjectAccessoryViewController.m in Sources */,
 				07AEB77E14CE037000A0BA1C /* WCArgumentPlaceholderWindowController.m in Sources */,
+				072BDC2B14CE622B00F3F555 /* WCAlertsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1964,6 +1974,14 @@
 				072BBC5814AA69EF0044ECC2 /* en */,
 			);
 			name = WCPreferencesWindow.xib;
+			sourceTree = "<group>";
+		};
+		072BDC2E14CE623D00F3F555 /* WCAlertsView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				072BDC2F14CE623D00F3F555 /* en */,
+			);
+			name = WCAlertsView.xib;
 			sourceTree = "<group>";
 		};
 		073B5AA514B6AA8A00FCDC0F /* WCJumpInWindow.xib */ = {

@@ -14,10 +14,7 @@
 extern NSString *const WCFontsAndColorsCurrentThemeIdentifierKey;
 extern NSString *const WCFontsAndColorsUserThemeIdentifiersKey;
 
-@interface WCFontsAndColorsViewController : JAViewController <RSPreferencesModule,RSUserDefaultsProvider,RSTableViewDelegate,NSWindowDelegate,NSMenuDelegate> {
-	id <NSWindowDelegate> _oldWindowDelegate;
-	id _fontPanelWillCloseObservingToken;
-}
+@interface WCFontsAndColorsViewController : JAViewController <RSPreferencesModule,RSUserDefaultsProvider,RSTableViewDelegate,NSWindowDelegate,NSMenuDelegate>
 @property (readwrite,assign,nonatomic) IBOutlet NSView *initialFirstResponder;
 @property (readwrite,assign,nonatomic) IBOutlet NSArrayController *themesArrayController;
 @property (readwrite,assign,nonatomic) IBOutlet NSArrayController *pairsArrayController;

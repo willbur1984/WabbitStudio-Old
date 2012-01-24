@@ -69,7 +69,7 @@
 									<object class="NSTableView" id="817645237">
 										<reference key="NSNextResponder" ref="878786340"/>
 										<int key="NSvFlags">4352</int>
-										<string key="NSFrameSize">{400, 294}</string>
+										<string key="NSFrameSize">{400, 295}</string>
 										<reference key="NSSuperview" ref="878786340"/>
 										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="441687481"/>
@@ -176,7 +176,7 @@
 										<int key="NSTableViewGroupRowStyle">1</int>
 									</object>
 								</object>
-								<string key="NSFrame">{{1, 17}, {400, 294}}</string>
+								<string key="NSFrame">{{1, 17}, {400, 295}}</string>
 								<reference key="NSSuperview" ref="415800035"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="817645237"/>
@@ -227,7 +227,7 @@
 							</object>
 							<reference ref="94520280"/>
 						</object>
-						<string key="NSFrame">{{178, 118}, {402, 312}}</string>
+						<string key="NSFrame">{{178, 117}, {402, 313}}</string>
 						<reference key="NSSuperview" ref="1005"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="245182740"/>
@@ -514,7 +514,7 @@
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="573769975"/>
 						<string key="NSReuseIdentifierKey">_NS:1192</string>
-						<string key="NSClassName">RSBottomBorderedGlassGradientView</string>
+						<string key="NSClassName">RSBorderedGlassGradientView</string>
 					</object>
 					<object class="NSCustomView" id="166143743">
 						<reference key="NSNextResponder" ref="1005"/>
@@ -699,7 +699,7 @@
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="485292040"/>
 						<string key="NSReuseIdentifierKey">_NS:1192</string>
-						<string key="NSClassName">RSBottomBorderedGlassGradientView</string>
+						<string key="NSClassName">RSBorderedGlassGradientView</string>
 					</object>
 					<object class="NSScrollView" id="839438947">
 						<reference key="NSNextResponder" ref="1005"/>
@@ -714,7 +714,7 @@
 									<object class="NSTableView" id="931728459">
 										<reference key="NSNextResponder" ref="336006499"/>
 										<int key="NSvFlags">4352</int>
-										<string key="NSFrameSize">{148, 368}</string>
+										<string key="NSFrameSize">{148, 369}</string>
 										<reference key="NSSuperview" ref="336006499"/>
 										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="300670609"/>
@@ -788,7 +788,7 @@
 										<int key="NSTableViewGroupRowStyle">1</int>
 									</object>
 								</object>
-								<string key="NSFrame">{{1, 17}, {148, 368}}</string>
+								<string key="NSFrame">{{1, 17}, {148, 369}}</string>
 								<reference key="NSSuperview" ref="839438947"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="931728459"/>
@@ -841,7 +841,7 @@
 							</object>
 							<reference ref="731105230"/>
 						</object>
-						<string key="NSFrame">{{20, 44}, {150, 386}}</string>
+						<string key="NSFrame">{{20, 43}, {150, 387}}</string>
 						<reference key="NSSuperview" ref="1005"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="94448375"/>
@@ -1731,6 +1731,14 @@
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
 				<bool key="EncodedWithXMLCoder">YES</bool>
 				<object class="IBPartialClassDescription">
+					<string key="className">JAViewController</string>
+					<string key="superclassName">NSViewController</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/JAViewController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
 					<string key="className">NSView</string>
 					<object class="NSMutableDictionary" key="outlets">
 						<string key="NS.key.0">viewController</string>
@@ -1770,14 +1778,6 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/RSBorderlessPopUpButtonCell.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">RSBottomBorderedGlassGradientView</string>
-					<string key="superclassName">RSGlassGradientView</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/RSBottomBorderedGlassGradientView.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -1844,7 +1844,7 @@
 				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">WCFontsAndColorsViewController</string>
-					<string key="superclassName">NSViewController</string>
+					<string key="superclassName">JAViewController</string>
 					<object class="NSMutableDictionary" key="actions">
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">

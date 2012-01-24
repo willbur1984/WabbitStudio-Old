@@ -608,7 +608,7 @@
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="151185677"/>
 						<string key="NSReuseIdentifierKey">_NS:1192</string>
-						<string key="NSClassName">RSBottomBorderedGlassGradientView</string>
+						<string key="NSClassName">RSBorderedGlassGradientView</string>
 					</object>
 					<object class="NSScrollView" id="499249942">
 						<reference key="NSNextResponder" ref="1005"/>
@@ -750,7 +750,7 @@
 							</object>
 							<reference ref="1057076668"/>
 						</object>
-						<string key="NSFrame">{{20, 44}, {150, 436}}</string>
+						<string key="NSFrame">{{20, 43}, {150, 436}}</string>
 						<reference key="NSSuperview" ref="1005"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="253558025"/>
@@ -1632,6 +1632,32 @@
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
+					<string key="className">NSView</string>
+					<object class="NSMutableDictionary" key="outlets">
+						<string key="NS.key.0">viewController</string>
+						<string key="NS.object.0">NSViewController</string>
+					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<string key="NS.key.0">viewController</string>
+						<object class="IBToOneOutletInfo" key="NS.object.0">
+							<string key="name">viewController</string>
+							<string key="candidateClassName">NSViewController</string>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/NSView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">RSBorderedGlassGradientView</string>
+					<string key="superclassName">RSGlassGradientView</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/RSBorderedGlassGradientView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
 					<string key="className">RSBorderlessButtonCell</string>
 					<string key="superclassName">NSButtonCell</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
@@ -1645,14 +1671,6 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/RSBorderlessPopUpButtonCell.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">RSBottomBorderedGlassGradientView</string>
-					<string key="superclassName">RSGlassGradientView</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/RSBottomBorderedGlassGradientView.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

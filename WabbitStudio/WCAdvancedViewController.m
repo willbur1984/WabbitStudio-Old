@@ -9,6 +9,7 @@
 #import "WCAdvancedViewController.h"
 #import "WCReallyAdvancedViewController.h"
 #import "WCKeyboardViewController.h"
+#import "WCAlertsViewController.h"
 
 static NSString *const WCAdvancedViewControllerLastSelectedTabViewItemIdentifierKey = @"WCAdvancedViewControllerLastSelectedTabViewItemIdentifierKey";
 
@@ -39,6 +40,7 @@ static NSString *const WCAdvancedViewControllerLastSelectedTabViewItemIdentifier
 - (void)loadView {
 	[super loadView];
 	
+	[self addViewController:[[[WCAlertsViewController alloc] init] autorelease]];
 	[self addViewController:[[[WCKeyboardViewController alloc] init] autorelease]];
 	[self addViewController:[[[WCReallyAdvancedViewController alloc] init] autorelease]];
 	
@@ -90,6 +92,7 @@ static const CGFloat kMaxLeftSubviewWidth = 250.0;
 	
 	[retval addEntriesFromDictionary:[WCKeyboardViewController userDefaults]];
 	[retval addEntriesFromDictionary:[WCReallyAdvancedViewController userDefaults]];
+	[retval addEntriesFromDictionary:[WCAlertsViewController userDefaults]];
 	
 	return [[retval copy] autorelease];
 }

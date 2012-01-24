@@ -16,6 +16,8 @@
 #import "RSOutlineView.h"
 #import "RSTableView.h"
 #import "NSTreeController+RSExtensions.h"
+#import "WCAlertsViewController.h"
+#import "NSAlert-OAExtensions.h"
 
 NSString *const WCKeyBindingsCurrentCommandSetIdentifierKey = @"WCKeyBindingsCurrentCommandSetIdentifierKey";
 NSString *const WCKeyBindingsUserCommandSetIdentifiersKey = @"WCKeyBindingsUserCommandSetIdentifiersKey";
@@ -70,7 +72,6 @@ NSString *const WCKeyBindingsUserCommandSetIdentifiersKey = @"WCKeyBindingsUserC
 	[[self outlineView] setTarget:self];
 	[[self outlineView] setDoubleAction:@selector(_outlineViewDoubleClick:)];
 	
-	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_outlineViewSelectionIsChanging:) name:NSOutlineViewSelectionIsChangingNotification object:[self outlineView]];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_outlineViewSelectionDidChange:) name:NSOutlineViewSelectionDidChangeNotification object:[self outlineView]];
 	
 	[[self outlineView] expandItem:nil expandChildren:YES];
@@ -219,7 +220,25 @@ static const NSInteger kNumberOfScopeBarGroups = 1;
 		return;
 	}
 	
-	[[self arrayController] removeObjectsAtArrangedObjectIndexes:[[self arrayController] selectionIndexes]];
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCAlertsWarnBeforeDeletingKeyBindingCommandSetsKey]) {
+		NSString *message = [NSString stringWithFormat:NSLocalizedString(@"Delete the Command Set \"%@\"?", @"delete key binding command set alert message format string"),[(WCKeyBindingCommandSet *)[[[self arrayController] selectedObjects] lastObject] name]];
+		NSAlert *alert = [NSAlert alertWithMessageText:message defaultButton:LOCALIZED_STRING_DELETE alternateButton:LOCALIZED_STRING_CANCEL otherButton:nil informativeTextWithFormat:NSLocalizedString(@"This operation cannot be undone.", @"This operation cannot be undone.")];
+		
+		[alert setShowsSuppressionButton:YES];
+		
+		[[alert suppressionButton] bind:NSValueBinding toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:@"values.alertsWarnBeforeDeletingKeyBindingCommandSets" options:nil];
+		
+		[alert beginSheetModalForWindow:[[self view] window] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
+			[[alert suppressionButton] unbind:NSValueBinding];
+			[[alert window] orderOut:nil];
+			if (returnCode == NSAlertAlternateReturn)
+				return;
+			
+			[[self arrayController] removeObjectsAtArrangedObjectIndexes:[[self arrayController] selectionIndexes]];
+		}];
+	}
+	else
+		[[self arrayController] removeObjectsAtArrangedObjectIndexes:[[self arrayController] selectionIndexes]];
 }
 - (IBAction)duplicateCommandSet:(id)sender; {
 	WCKeyBindingCommandSet *newCommandSet = [[[[[self arrayController] selectedObjects] lastObject] mutableCopy] autorelease];

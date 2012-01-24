@@ -1220,6 +1220,7 @@
 - (void)_currentThemeDidChange:(NSNotification *)note {
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
 	
+	[self setTypingAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName, nil]];
 	[self setSelectedTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme selectionColor],NSBackgroundColorAttributeName, nil]];
 	[self setBackgroundColor:[currentTheme backgroundColor]];
 	[self setInsertionPointColor:[currentTheme cursorColor]];

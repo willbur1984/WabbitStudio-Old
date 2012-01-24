@@ -11,6 +11,9 @@
 #import "WCFontAndColorThemeManager.h"
 #import "WCFontAndColorThemePair.h"
 #import "RSTableView.h"
+#import "WCAlertsViewController.h"
+#import "NSAlert-OAExtensions.h"
+#import "RSDefines.h"
 
 NSString *const WCFontsAndColorsCurrentThemeIdentifierKey = @"WCFontsAndColorsCurrentThemeIdentifierKey";
 NSString *const WCFontsAndColorsUserThemeIdentifiersKey = @"WCFontsAndColorsUserThemeIdentifiersKey";
@@ -119,23 +122,10 @@ NSString *const WCFontsAndColorsUserThemeIdentifiersKey = @"WCFontsAndColorsUser
 #pragma mark *** Public Methods ***
 #pragma mark IBActions
 - (IBAction)chooseFont:(id)sender; {
-	//_oldWindowDelegate = [[[self view] window] delegate];
-	
-	//[[[self view] window] setDelegate:self];
-	
 	WCFontAndColorThemePair *selectedPair = [[[self pairsArrayController] selectedObjects] lastObject];
 	
 	[[NSFontPanel sharedFontPanel] setPanelFont:[selectedPair font] isMultiple:NO];
 	[[NSFontPanel sharedFontPanel] makeKeyAndOrderFront:nil];
-	
-	/*
-	_fontPanelWillCloseObservingToken = [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowWillCloseNotification object:[NSFontPanel sharedFontPanel] queue:nil usingBlock:^(NSNotification *note) {
-		[[[self view] window] setDelegate:_oldWindowDelegate];
-		
-		[[NSNotificationCenter defaultCenter] removeObserver:_fontPanelWillCloseObservingToken];
-		_fontPanelWillCloseObservingToken = nil;
-	}];
-	 */
 }
 - (IBAction)deleteTheme:(id)sender; {
 	if ([[[self themesArrayController] arrangedObjects] count] == 1) {
@@ -143,7 +133,25 @@ NSString *const WCFontsAndColorsUserThemeIdentifiersKey = @"WCFontsAndColorsUser
 		return;
 	}
 	
-	[[self themesArrayController] removeObjectsAtArrangedObjectIndexes:[[self themesArrayController] selectionIndexes]];
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCAlertsWarnBeforeDeletingFontAndColorThemesKey]) {
+		NSString *message = [NSString stringWithFormat:NSLocalizedString(@"Delete the Theme \"%@\"?", @"delete font and color theme alert message format string"),[[[[self themesArrayController] selectedObjects] lastObject] name]];
+		NSAlert *alert = [NSAlert alertWithMessageText:message defaultButton:LOCALIZED_STRING_DELETE alternateButton:LOCALIZED_STRING_CANCEL otherButton:nil informativeTextWithFormat:NSLocalizedString(@"This operation cannot be undone.", @"This operation cannot be undone.")];
+		
+		[alert setShowsSuppressionButton:YES];
+		
+		[[alert suppressionButton] bind:NSValueBinding toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:@"values.alertsWarnBeforeDeletingFontAndColorThemes" options:nil];
+		
+		[alert beginSheetModalForWindow:[[self view] window] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
+			[[alert suppressionButton] unbind:NSValueBinding];
+			[[alert window] orderOut:nil];
+			if (returnCode == NSAlertAlternateReturn)
+				return;
+			
+			[[self themesArrayController] removeObjectsAtArrangedObjectIndexes:[[self themesArrayController] selectionIndexes]];
+		}];
+	}
+	else
+		[[self themesArrayController] removeObjectsAtArrangedObjectIndexes:[[self themesArrayController] selectionIndexes]];
 }
 - (IBAction)duplicateTheme:(id)sender; {
 	WCFontAndColorTheme *newTheme = [[[[[self themesArrayController] selectedObjects] lastObject] mutableCopy] autorelease];
