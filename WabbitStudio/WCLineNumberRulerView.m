@@ -51,7 +51,7 @@
 	[self setupUserDefaultsObserving];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewFrameDidChange:) name:NSViewFrameDidChangeNotification object:[scrollView contentView]];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewFrameDidChange:) name:NSViewBoundsDidChangeNotification object:[scrollView contentView]];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewBoundsDidChange:) name:NSViewBoundsDidChangeNotification object:[scrollView contentView]];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_currentThemeDidChange:) name:WCFontAndColorThemeManagerCurrentThemeDidChangeNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_currentLineColorDidChange:) name:WCFontAndColorThemeManagerCurrentLineColorDidChangeNotification object:nil];
@@ -304,6 +304,13 @@
 }
 #pragma mark Notifications
 - (void)_textStorageDidProcessEditing:(NSNotification *)note {
+	if (([[note object] editedMask] & NSTextStorageEditedCharacters) == 0)
+		return;
+	
+#ifdef DEBUG
+	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
+#endif
+	
 	[self setShouldRecalculateLineStartIndexes:YES];
     [self setNeedsDisplay:YES];
 }
@@ -317,6 +324,12 @@
 	[self setNeedsDisplay:YES];
 }
 - (void)_viewFrameDidChange:(NSNotification *)note {
+#ifdef DEBUG
+	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
+#endif
+	[self setNeedsDisplay:YES];
+}
+- (void)_viewBoundsDidChange:(NSNotification *)note {
 	[self setNeedsDisplay:YES];
 }
 @end

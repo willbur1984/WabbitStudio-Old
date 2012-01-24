@@ -149,8 +149,8 @@ static const CGFloat kCodeFoldingRibbonWidth = 6.0;
 	
 	for (WCFold *fold in folds) {
 		NSRange foldRange = [fold range];
-		if (NSMaxRange(foldRange) == [[[self textView] string] length])
-			foldRange.length--;
+		if (NSMaxRange(foldRange) >= [[[self textView] string] length])
+			foldRange.length -= (NSMaxRange(foldRange) - [[[self textView] string] length]);
 		
 		NSUInteger rectCount;
 		NSRectArray rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[[[self textView] string] lineRangeForRange:foldRange] withinSelectedCharacterRange:foldRange inTextContainer:[[self textView] textContainer] rectCount:&rectCount];
