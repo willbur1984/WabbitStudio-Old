@@ -191,16 +191,26 @@
  
 - (BOOL)readSelectionFromPasteboard:(NSPasteboard *)pboard type:(NSString *)type {
 	if ([type isEqualToString:WCPasteboardTypeArgumentPlaceholderCell]) {
-		NSDictionary *plist = [pboard propertyListForType:WCPasteboardTypeArgumentPlaceholderCell];
-		NSTextAttachment *attachment = [[[NSTextAttachment alloc] initWithFileWrapper:nil] autorelease];
-		WCArgumentPlaceholderCell *cell = [[[WCArgumentPlaceholderCell alloc] initWithPlistRepresentation:plist] autorelease];
+		WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
+		NSArray *plistArray = [pboard propertyListForType:WCPasteboardTypeArgumentPlaceholderCell];
+		NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName,[WCSourceTextStorage defaultParagraphStyle],NSParagraphStyleAttributeName, nil];
+		NSMutableAttributedString *string = [[[NSMutableAttributedString alloc] initWithString:@"" attributes:attributes] autorelease];
 		
-		[attachment setAttachmentCell:cell];
+		for (id plist in plistArray) {
+			if ([plist isKindOfClass:[NSString class]])
+				[string appendAttributedString:[[[NSAttributedString alloc] initWithString:plist attributes:attributes] autorelease]];
+			else {
+				NSTextAttachment *attachment = [[[NSTextAttachment alloc] initWithFileWrapper:nil] autorelease];
+				WCArgumentPlaceholderCell *cell = [[[WCArgumentPlaceholderCell alloc] initWithPlistRepresentation:plist] autorelease];
+				
+				[attachment setAttachmentCell:cell];
+				
+				[string appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachment]];
+			}
+		}
 		
-		NSAttributedString *attributedString = [NSAttributedString attributedStringWithAttachment:attachment];
-		
-		if ([self shouldChangeTextInRange:[self rangeForUserTextChange] replacementString:[attributedString string]]) {
-			[[self textStorage] replaceCharactersInRange:[self rangeForUserTextChange] withAttributedString:attributedString];
+		if ([self shouldChangeTextInRange:[self rangeForUserTextChange] replacementString:[string string]]) {
+			[[self textStorage] replaceCharactersInRange:[self rangeForUserTextChange] withAttributedString:string];
 			[self didChangeText];
 			
 			return YES;
@@ -212,16 +222,34 @@
 
 - (BOOL)writeSelectionToPasteboard:(NSPasteboard *)pboard types:(NSArray *)types {
 	if ([types containsObject:WCPasteboardTypeArgumentPlaceholderCell]) {
-		id attributeValue = [[self textStorage] attribute:NSAttachmentAttributeName atIndex:[self selectedRange].location effectiveRange:NULL];
-		if (attributeValue && [[attributeValue attachmentCell] isKindOfClass:[WCArgumentPlaceholderCell class]]) {
-			[pboard clearContents];
+		NSMutableArray *plistArray = [NSMutableArray arrayWithCapacity:0];
+		NSMutableString *string = [NSMutableString stringWithCapacity:0];
+		
+		[[self textStorage] enumerateAttributesInRange:[self selectedRange] options:0 usingBlock:^(NSDictionary *attrs, NSRange range, BOOL *stop) {
+			NSString *substring;
+			id plist;
 			
-			NSPasteboardItem *item = [[[NSPasteboardItem alloc] init] autorelease];
+			if ([[[attrs objectForKey:NSAttachmentAttributeName] attachmentCell] isKindOfClass:[WCArgumentPlaceholderCell class]]) {
+				plist = [(WCArgumentPlaceholderCell *)[[attrs objectForKey:NSAttachmentAttributeName] attachmentCell] plistRepresentation];
+				substring = [plist objectForKey:@"stringValue"];
+			}
+			else {
+				substring = [[self string] substringWithRange:range];
+				plist = substring;
+			}
 			
-			[item setDataProvider:(WCArgumentPlaceholderCell *)[attributeValue attachmentCell] forTypes:[(WCArgumentPlaceholderCell *)[attributeValue attachmentCell] writableTypesForPasteboard:pboard]];
-			
-			return [pboard writeObjects:[NSArray arrayWithObjects:item, nil]];
-		}
+			[plistArray addObject:plist];
+			[string appendString:substring];
+		}];
+		
+		NSPasteboardItem *item = [[[NSPasteboardItem alloc] init] autorelease];
+		
+		[item setPropertyList:plistArray forType:WCPasteboardTypeArgumentPlaceholderCell];
+		[item setString:string forType:NSPasteboardTypeString];
+		
+		[pboard clearContents];
+		
+		return [pboard writeObjects:[NSArray arrayWithObjects:item, nil]];
 	}
 	return [super writeSelectionToPasteboard:pboard types:types];
 }
