@@ -9,8 +9,12 @@
 #import "WCScanFoldsOperation.h"
 #import "WCSourceScanner.h"
 #import "WCFold.h"
+#import "WCFoldMarker.h"
 #import "RSDefines.h"
+#import "NSArray+WCExtensions.h"
 
+static NSRegularExpression *startMarkersRegex;
+static NSRegularExpression *endMarkersRegex;
 static NSRegularExpression *regex;
 static NSRegularExpression *childRegex;
 
@@ -18,15 +22,17 @@ static NSRegularExpression *childRegex;
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
 @property (readonly,nonatomic) NSString *string;
 
-- (void)_scanFoldsWithinFold:(WCFold *)fold;
+- (void)_scanFoldsWithFold:(WCFold *)parentFold;
 @end
 
 @implementation WCScanFoldsOperation
 + (void)initialize {
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		regex = [[NSRegularExpression alloc] initWithPattern:@"(?:#macro(.+?)#endmacro)" options:NSRegularExpressionDotMatchesLineSeparators error:NULL];
-		childRegex = [[NSRegularExpression alloc] initWithPattern:@"(?:#if|#else)(.+?)(?:#else|#endif)" options:NSRegularExpressionDotMatchesLineSeparators error:NULL];
+		startMarkersRegex = [[NSRegularExpression alloc] initWithPattern:@"#(?:macro|ifndef|ifdef|if)" options:NSRegularExpressionCaseInsensitive error:NULL];
+		endMarkersRegex = [[NSRegularExpression alloc] initWithPattern:@"#(?:endmacro|endif)" options:NSRegularExpressionCaseInsensitive error:NULL];
+		regex = [[NSRegularExpression alloc] initWithPattern:@"(?:#macro.*?#endmacro)|(?:(?:#ifndef|#ifdef|#if).*?#endif)" options:NSRegularExpressionDotMatchesLineSeparators error:NULL];
+		childRegex = [[NSRegularExpression alloc] initWithPattern:@"(?:(?:#ifndef|#ifdef|#if).*?#endif)" options:NSRegularExpressionDotMatchesLineSeparators error:NULL];
 	});
 }
 
@@ -54,11 +60,8 @@ static NSRegularExpression *childRegex;
 		
 		[folds addObject:[WCFold foldWithRange:range level:0]];
 		
-		[self _scanFoldsWithinFold:[folds lastObject]];
+		[self _scanFoldsWithFold:[folds lastObject]];
 	}];
-	
-	for (WCFold *fold in folds)
-		[self _scanFoldsWithinFold:fold];
 	
 	[[self sourceScanner] setFolds:folds];
 	
@@ -86,16 +89,23 @@ CLEANUP:
 @synthesize sourceScanner=_sourceScanner;
 @synthesize string=_string;
 
-- (void)_scanFoldsWithinFold:(WCFold *)fold; {
-	[childRegex enumerateMatchesInString:[self string] options:0 range:[fold range] usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-		NSRange range = [result rangeAtIndex:1];
+- (void)_scanFoldsWithFold:(WCFold *)parentFold; {
+	[childRegex enumerateMatchesInString:[self string] options:0 range:[parentFold range] usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+		NSRange range = [result range];
 		
-		if (NSEqualRanges(range, [fold range]))
+		if (NSEqualRanges(range, [parentFold range])) {
 			return;
+		}
 		
-		[[fold mutableChildNodes] addObject:[WCFold foldWithRange:range level:[fold level]+1]];
+		for (WCFold *fold in [parentFold childNodes]) {
+			if (NSLocationInRange(range.location, [fold range])) {
+				return;
+			}
+		}
 		
-		[self _scanFoldsWithinFold:[[fold childNodes] lastObject]];
+		[[parentFold mutableChildNodes] addObject:[WCFold foldWithRange:range level:[parentFold level]+1]];
+		
+		[self _scanFoldsWithFold:[[parentFold childNodes] lastObject]];
 	}];
 }
 

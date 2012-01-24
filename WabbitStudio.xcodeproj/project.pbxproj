@@ -21,6 +21,7 @@
 		0706AFCD14CF350400A0F93C /* AIScannerAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0706AFCC14CF350400A0F93C /* AIScannerAdditions.m */; };
 		0706AFD014CF351600A0F93C /* AIFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0706AFCF14CF351600A0F93C /* AIFunctions.m */; };
 		0706AFD314CF353600A0F93C /* AIApplicationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0706AFD214CF353600A0F93C /* AIApplicationAdditions.m */; };
+		0706AFD814CF5B7600A0F93C /* WCFoldMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = 0706AFD714CF5B7600A0F93C /* WCFoldMarker.m */; };
 		0706D65114A8F45B0092F880 /* WCSourceTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0706D64F14A8F45B0092F880 /* WCSourceTextViewController.m */; };
 		0706D65514A8F49D0092F880 /* WCSourceTextView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0706D65314A8F49D0092F880 /* WCSourceTextView.xib */; };
 		0706D65814A8F6D60092F880 /* WCSourceTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0706D65714A8F6D60092F880 /* WCSourceTextStorage.m */; };
@@ -302,6 +303,8 @@
 		0706AFD214CF353600A0F93C /* AIApplicationAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AIApplicationAdditions.m; sourceTree = "<group>"; };
 		0706AFD414CF357300A0F93C /* AIMathCompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIMathCompatibility.h; sourceTree = "<group>"; };
 		0706AFD514CF362100A0F93C /* WCSourceRulerViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSourceRulerViewDelegate.h; sourceTree = "<group>"; };
+		0706AFD614CF5B7600A0F93C /* WCFoldMarker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCFoldMarker.h; sourceTree = "<group>"; };
+		0706AFD714CF5B7600A0F93C /* WCFoldMarker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCFoldMarker.m; sourceTree = "<group>"; };
 		0706D64C14A8F1800092F880 /* WCJumpBarDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCJumpBarDataSource.h; sourceTree = "<group>"; };
 		0706D64E14A8F45B0092F880 /* WCSourceTextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSourceTextViewController.h; sourceTree = "<group>"; };
 		0706D64F14A8F45B0092F880 /* WCSourceTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSourceTextViewController.m; sourceTree = "<group>"; };
@@ -761,6 +764,8 @@
 				0706AFC014CF2DC600A0F93C /* WCScanFoldsOperation.m */,
 				0706AFC514CF302800A0F93C /* WCFold.h */,
 				0706AFC614CF302800A0F93C /* WCFold.m */,
+				0706AFD614CF5B7600A0F93C /* WCFoldMarker.h */,
+				0706AFD714CF5B7600A0F93C /* WCFoldMarker.m */,
 			);
 			name = Folding;
 			sourceTree = "<group>";
@@ -1918,6 +1923,7 @@
 				0706AFCD14CF350400A0F93C /* AIScannerAdditions.m in Sources */,
 				0706AFD014CF351600A0F93C /* AIFunctions.m in Sources */,
 				0706AFD314CF353600A0F93C /* AIApplicationAdditions.m in Sources */,
+				0706AFD814CF5B7600A0F93C /* WCFoldMarker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

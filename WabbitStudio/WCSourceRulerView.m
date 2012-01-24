@@ -148,8 +148,12 @@ static const CGFloat kCodeFoldingRibbonWidth = 6.0;
 	NSColor *topLevelFoldColor = [NSColor colorWithCalibratedWhite:212.0/255.0 alpha:1.0];
 	
 	for (WCFold *fold in folds) {
+		NSRange foldRange = [fold range];
+		if (NSMaxRange(foldRange) == [[[self textView] string] length])
+			foldRange.length--;
+		
 		NSUInteger rectCount;
-		NSRectArray rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[[[self textView] string] lineRangeForRange:[fold range]] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&rectCount];
+		NSRectArray rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[[[self textView] string] lineRangeForRange:foldRange] withinSelectedCharacterRange:foldRange inTextContainer:[[self textView] textContainer] rectCount:&rectCount];
 		
 		if (!rectCount)
 			continue;
@@ -162,6 +166,8 @@ static const CGFloat kCodeFoldingRibbonWidth = 6.0;
 		
 		[self _drawFoldsForFold:fold inRect:ribbonRect topLevelFoldColor:topLevelFoldColor];
 	}
+	
+	[super drawRightMarginInRect:ribbonRect];
 }
 #pragma mark Properties
 @dynamic textStorage;
@@ -229,8 +235,12 @@ static const CGFloat kCodeFoldingRibbonWidth = 6.0;
 	NSColor *colorForThisFoldLevel = [topLevelFoldColor darkenBy:stepAmount*((CGFloat)[fold level]+1)];
 	
 	for (WCFold *childFold in [fold childNodes]) {
+		NSRange foldRange = [childFold range];
+		if (NSMaxRange(foldRange) == [[[self textView] string] length])
+			foldRange.length--;
+		
 		NSUInteger rectCount;
-		NSRectArray rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[[[self textView] string] lineRangeForRange:[childFold range]] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&rectCount];
+		NSRectArray rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[[[self textView] string] lineRangeForRange:foldRange] withinSelectedCharacterRange:foldRange inTextContainer:[[self textView] textContainer] rectCount:&rectCount];
 		
 		if (!rectCount)
 			continue;
