@@ -258,6 +258,7 @@ static NSString *const WCTabViewControllerSelectedTabKey = @"selectedTab";
 }
 #pragma mark Properties
 @synthesize tabBarControl=_tabBarControl;
+@synthesize tabView=_tabView;
 @synthesize clickedTabViewItem=_clickedTabViewItem;
 @synthesize delegate=_delegate;
 @dynamic ignoreChangesToProjectDocumentSettings;
@@ -267,6 +268,7 @@ static NSString *const WCTabViewControllerSelectedTabKey = @"selectedTab";
 - (void)setIgnoreChangesToProjectDocumentSettings:(BOOL)ignoreChangesToProjectDocumentSettings {
 	_tabViewControllerFlags.ignoreChangesToProjectDocumentSettings = ignoreChangesToProjectDocumentSettings;
 }
+@synthesize sourceFileDocumentsToSourceTextViewControllers=_sourceFileDocumentsToSourceTextViewControllers;
 #pragma mark *** Private Methods ***
 
 #pragma mark IBActions

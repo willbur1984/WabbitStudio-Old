@@ -23,6 +23,10 @@
 #import "NSAlert-OAExtensions.h"
 #import "NSOutlineView+RSExtensions.h"
 #import "WCAddToProjectAccessoryViewController.h"
+#import "WCTabViewController.h"
+#import "WCSourceTextViewController.h"
+#import "WCSourceTextView.h"
+#import <PSMTabBarControl/PSMTabBarControl.h>
 
 NSString *const WCProjectNavigatorDidAddNewGroupNotification = @"WCProjectNavigatorDidAddNewGroupNotification";
 NSString *const WCProjectNavigatorDidAddNewGroupNotificationNewGroupUserInfoKey = @"WCProjectNavigatorDidAddNewGroupNotificationNewGroupUserInfoKey";
@@ -672,6 +676,31 @@ static const NSInteger WCProjectNavigatorFileAlreadyExistsInProjectErrorCode = 1
 }
 
 - (IBAction)openInSeparateEditor:(id)sender; {
+	
+}
+
+- (IBAction)moveFocusToNextArea:(id)sender; {
+	NSResponder *firstResponder = [[[self view] window] firstResponder];
+	
+	if (firstResponder == [self outlineView])
+		[[[self view] window] makeFirstResponder:[self searchField]];
+	else {
+		// are there any tabs open? if so, move focus to the first text view
+		WCTabViewController *tabViewController = [[[self projectDocument] projectWindowController] tabViewController];
+		if ([[tabViewController tabView] numberOfTabViewItems]) {
+			NSTabViewItem *tabViewItem = [[tabViewController tabView] selectedTabViewItem];
+			
+			WCSourceTextViewController *stvController = [[tabViewController sourceFileDocumentsToSourceTextViewControllers] objectForKey:[tabViewItem identifier]];
+			
+			[[[self view] window] makeFirstResponder:[stvController textView]];
+		}
+		// otherwise move focus back to the outline view
+		else {
+			[[[self view] window] makeFirstResponder:[self outlineView]];
+		}
+	}
+}
+- (IBAction)moveFocusToPreviousArea:(id)sender; {
 	
 }
 #pragma mark Properties

@@ -78,4 +78,7 @@ extern NSString *const WCProjectNavigatorDidMoveNodesNotificationMovedNodesUserI
 - (IBAction)rename:(id)sender;
 
 - (IBAction)openInSeparateEditor:(id)sender;
+
+- (IBAction)moveFocusToNextArea:(id)sender;
+- (IBAction)moveFocusToPreviousArea:(id)sender;
 @end

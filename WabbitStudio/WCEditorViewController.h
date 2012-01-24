@@ -15,6 +15,8 @@ extern NSString *const WCEditorShowInvisibleCharactersKey;
 extern NSString *const WCEditorShowLineNumbersKey;
 extern NSString *const WCEditorShowMatchingBraceHighlightKey;
 extern NSString *const WCEditorShowMatchingTemporaryLabelHighlightKey;
+extern NSString *const WCEditorShowHighlightEnclosedMacroArgumentsKey;
+extern NSString *const WCEditorShowHighlightEnclosedMacroArgumentsDelayKey;
 extern NSString *const WCEditorAutomaticallyInsertMatchingBraceKey;
 extern NSString *const WCEditorSuggestCompletionsWhileTypingKey;
 extern NSString *const WCEditorSuggestCompletionsWhileTypingDelayKey;

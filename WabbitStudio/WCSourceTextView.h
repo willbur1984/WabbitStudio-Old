@@ -16,6 +16,8 @@
 	id _windowDidResignKeyObservingToken;
 	id _windowDidBecomeKeyObservingToken;
 	NSTimer *_completionTimer;
+	NSTimer *_autoHighlightArgumentsTimer;
+	NSRange _lastAutoHighlightArgumentsRange;
 }
 @property (readwrite,assign,nonatomic) IBOutlet id <WCSourceTextViewDelegate> delegate;
 @property (readwrite,assign,nonatomic) BOOL wrapLines;

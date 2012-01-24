@@ -26,11 +26,14 @@
 #import "WCLayoutManager.h"
 #import "WCSourceToken.h"
 #import "WCArgumentPlaceholderWindowController.h"
+#import "WCProjectNavigatorViewController.h"
+#import "WCProjectWindowController.h"
 
 @interface WCSourceTextViewController ()
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
 @property (readonly,nonatomic) WCStandardSourceTextViewController *standardSourceTextViewController;
-@property (readwrite,assign,nonatomic) NSRange additionalRangeToSyntaxHighlight;
+
+- (void)_delayedHighlightVisibleRange;
 @end
 
 @implementation WCSourceTextViewController
@@ -40,8 +43,6 @@
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[_scrollingHighlightTimer invalidate];
-	_scrollingHighlightTimer = nil;
 	_standardSourceTextViewController = nil;
 	[_jumpBarViewController release];
 	_sourceFileDocument = nil;
@@ -107,13 +108,21 @@
 	
 	[[self textView] setSelectedRange:NSEmptyRange];
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewBoundsDidChange:) name:NSViewFrameDidChangeNotification object:[self textView]];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewBoundsDidChange:) name:NSViewBoundsDidChangeNotification object:[[self scrollView] contentView]];
 	
 	if ([[self sourceFileDocument] projectDocument])
-		[[self sourceHighlighter] performFullHighlightIfNeeded];
+		[self performSelector:@selector(_delayedHighlightVisibleRange) withObject:nil afterDelay:0.0];
 }
 #pragma mark NSMenuValidation
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
+	if ([menuItem action] == @selector(revealInProjectNavigator:)) {
+		if (![[self sourceFileDocument] projectDocument])
+			return NO;
+	}
+	else if ([menuItem action] == @selector(showInFinder:)) {
+		if (![[self sourceFileDocument] fileURL])
+			return NO;
+	}
 	return [[self standardSourceTextViewController] validateMenuItem:menuItem];
 }
 
@@ -157,11 +166,7 @@
 	return [NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName,[[self textStorage] paragraphStyle],NSParagraphStyleAttributeName, nil];
 }
 - (BOOL)textView:(NSTextView *)textView shouldChangeTextInRanges:(NSArray *)affectedRanges replacementStrings:(NSArray *)replacementStrings {
-	if ([affectedRanges count] == 1 &&
-		NSMaxRange([[affectedRanges lastObject] rangeValue]) > NSMaxRange([textView visibleRange])) {
-		
-		[self setAdditionalRangeToSyntaxHighlight:[[affectedRanges lastObject] rangeValue]];
-	}
+	
 	return YES;
 }
 - (NSUndoManager *)undoManagerForTextView:(NSTextView *)view {
@@ -174,6 +179,9 @@
 }
 - (NSArray *)sourceTokensForSourceTextView:(WCSourceTextView *)textView {
 	return [[self sourceScanner] tokens];
+}
+- (NSArray *)macrosForSourceTextView:(WCSourceTextView *)textView; {
+	return [[self sourceScanner] macros];
 }
 - (NSArray *)sourceTextView:(WCSourceTextView *)textView sourceSymbolsForSymbolName:(NSString *)name {
 	NSMutableArray *retval = [NSMutableArray arrayWithCapacity:0];
@@ -248,15 +256,12 @@
 	
 	_sourceFileDocument = sourceFileDocument;
 	_standardSourceTextViewController = sourceTextViewController;
-	_additionalRangeToSyntaxHighlight = NSNotFoundRange;
 	
 	return self;
 }
 
 - (void)performCleanup; {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[_scrollingHighlightTimer invalidate];
-	_scrollingHighlightTimer = nil;
 	
 	[[self textStorage] removeLayoutManager:[[self textView] layoutManager]];
 	
@@ -284,6 +289,27 @@
 - (IBAction)removeAssistantEditor:(id)sender; {
 	[[self standardSourceTextViewController] removeAssistantEditorForSourceTextViewController:self];
 }
+
+- (IBAction)revealInProjectNavigator:(id)sender; {
+	WCFile *file = [[[[self sourceFileDocument] projectDocument] sourceFileDocumentsToFiles] objectForKey:[self sourceFileDocument]];
+	
+	[[[[[self sourceFileDocument] projectDocument] projectWindowController] projectNavigatorViewController] setSelectedModelObjects:[NSArray arrayWithObjects:file, nil]];
+}
+- (IBAction)showInFinder:(id)sender; {
+	if (![[self sourceFileDocument] fileURL]) {
+		NSBeep();
+		return;
+	}
+	
+	[[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:[NSArray arrayWithObjects:[[self sourceFileDocument] fileURL], nil]];
+}
+
+- (IBAction)moveFocusToNextArea:(id)sender; {
+	[[self standardSourceTextViewController] moveFocusToNextArea:nil];
+}
+- (IBAction)moveFocusToPreviousArea:(id)sender; {
+	[[self standardSourceTextViewController] moveFocusToPreviousArea:nil];
+}
 #pragma mark Properties
 @synthesize textView=_textView;
 @synthesize scrollView=_scrollView;
@@ -308,9 +334,10 @@
 }
 @synthesize standardSourceTextViewController=_standardSourceTextViewController;
 @synthesize sourceFileDocument=_sourceFileDocument;
-@synthesize additionalRangeToSyntaxHighlight=_additionalRangeToSyntaxHighlight;
 #pragma mark *** Private Methods ***
-
+- (void)_delayedHighlightVisibleRange; {
+	[[self sourceHighlighter] performHighlightingInRange:[[self textView] visibleRange]];
+}
 #pragma mark IBActions
 - (IBAction)_argumentPlaceholderMenuItemClicked:(id)sender {
 	
@@ -318,31 +345,8 @@
 
 #pragma mark Notifications
 - (void)_viewBoundsDidChange:(NSNotification *)note {
-	static const NSTimeInterval kScrollingHighlightTimerDelay = 0.1;
-	if (_scrollingHighlightTimer)
-		[_scrollingHighlightTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:kScrollingHighlightTimerDelay]];
-	else {
-		_scrollingHighlightTimer = [NSTimer timerWithTimeInterval:kScrollingHighlightTimerDelay target:self selector:@selector(_scrollingHighlightTimerCallback:) userInfo:nil repeats:NO];
-		[[NSRunLoop mainRunLoop] addTimer:_scrollingHighlightTimer forMode:NSRunLoopCommonModes];
-	}
+	[[self sourceHighlighter] performHighlightingInRange:[[self textView] visibleRange]];
 }
 #pragma mark Callbacks
-- (void)_scrollingHighlightTimerCallback:(NSTimer *)timer {
-	[_scrollingHighlightTimer invalidate];
-	_scrollingHighlightTimer = nil;
-	
-	if (NSEqualRanges(NSNotFoundRange, [self additionalRangeToSyntaxHighlight]))
-		[[self sourceHighlighter] performHighlightingInRange:[[self textView] visibleRange]];
-	else {
-		[self setAdditionalRangeToSyntaxHighlight:NSNotFoundRange];
-		
-		NSRange visibleRange = [[self textView] visibleRange];
-		NSRange rangeToColor = NSUnionRange(visibleRange, [self additionalRangeToSyntaxHighlight]);
-		if (NSMaxRange(rangeToColor) > [[self textStorage] length])
-			rangeToColor = NSMakeRange(visibleRange.location, [[self textStorage] length]-visibleRange.location);
-		
-		[[self sourceHighlighter] performHighlightingInRange:rangeToColor];
-	}
-}
 
 @end

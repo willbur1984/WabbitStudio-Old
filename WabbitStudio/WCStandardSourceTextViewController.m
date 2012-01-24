@@ -17,6 +17,8 @@
 #import "WCJumpBarViewController.h"
 #import "WCSourceScanner.h"
 #import "WCSourceFileDocument.h"
+#import "RSFindBarFieldEditor.h"
+#import "RSFindBarViewController.h"
 
 @interface WCStandardSourceTextViewController ()
 @property (readonly,nonatomic) WCSplitView *firstSplitView;
@@ -39,8 +41,6 @@
 	
 	_assistantSplitViews = [[NSMutableArray alloc] initWithCapacity:0];
 	_assistantSourceTextViewControllers = [[NSMutableArray alloc] initWithCapacity:0];
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_sourceScannerDidFinishScanningSymbols:) name:WCSourceScannerDidFinishScanningSymbolsNotification object:[sourceFileDocument sourceScanner]];
 	
 	return self;
 }
@@ -115,6 +115,38 @@
 	[self removeAssistantEditorForSourceTextViewController:[_assistantSourceTextViewControllers lastObject]];
 }
 
+- (IBAction)moveFocusToNextArea:(id)sender; {
+	NSResponder *firstResponder = [[[self view] window] firstResponder];
+	// make the first assistant editor first responder
+	if (firstResponder == [self textView]) {
+		[[[self view] window] makeFirstResponder:[[self firstTextViewController] textView]];
+	}
+	else {
+		__block NSUInteger controllerIndex = NSNotFound;
+		
+		[_assistantSourceTextViewControllers enumerateObjectsUsingBlock:^(WCSourceTextViewController *stvController, NSUInteger index, BOOL *stop) {
+			if (firstResponder == [stvController textView]) {
+				controllerIndex = index;
+				*stop = YES;
+			}
+		}];
+		
+		if (controllerIndex == NSNotFound)
+			return;
+		else if (controllerIndex < [_assistantSourceTextViewControllers count])
+			controllerIndex++;
+		
+		if (controllerIndex == [_assistantSourceTextViewControllers count])
+			controllerIndex = 0;
+		
+		WCSourceTextViewController *stvController = [_assistantSourceTextViewControllers objectAtIndex:controllerIndex];
+		
+		[[[self view] window] makeFirstResponder:[stvController textView]];
+	}
+}
+- (IBAction)moveFocusToPreviousArea:(id)sender; {
+	
+}
 #pragma mark NSMenuValidation
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
 	if ([menuItem action] == @selector(addAssistantEditor:)) {
@@ -146,7 +178,7 @@
 	WCSourceTextViewController *secondSourceTextViewController = [self configuredSourceTextViewController];
 	
 	[_assistantSplitViews addObject:splitView];
-	[_assistantSourceTextViewControllers addObject:secondSourceTextViewController];
+	[_assistantSourceTextViewControllers insertObject:secondSourceTextViewController atIndex:[_assistantSourceTextViewControllers indexOfObjectIdenticalTo:firstSourceTextViewController]];
 	
 	BOOL verticalSplitView = [NSEvent isOptionKeyPressed];
 	if (verticalSplitView) {
@@ -253,11 +285,5 @@
 - (WCSourceTextViewController *)configuredSourceTextViewController {
 	WCSourceTextViewController *stvController = [[[WCSourceTextViewController alloc] initWithSourceFileDocument:[self sourceFileDocument] standardSourceTextViewController:self] autorelease];
 	return stvController;
-}
-
-- (void)_sourceScannerDidFinishScanningSymbols:(NSNotification *)note {
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:WCSourceScannerDidFinishScanningSymbolsNotification object:[[self sourceFileDocument] sourceScanner]];
-	
-	[[self sourceHighlighter] performFullHighlightIfNeeded];
 }
 @end

@@ -19,7 +19,7 @@
 #import "WCEditorViewController.h"
 #import "WCSourceToken.h"
 #import "RSToolTipManager.h"
-#import "WCSourceSymbol.h"
+#import "WCMacroSymbol.h"
 #import "RSFindBarViewController.h"
 #import "RSBezelWidgetManager.h"
 #import "WCSourceHighlighter.h"
@@ -43,6 +43,7 @@
 - (void)_insertMatchingBraceWithString:(id)string;
 - (void)_handleAutoCompletionWithString:(id)string;
 - (BOOL)_handleAutoIndentAfterLabel;
+- (void)_highlightEnclosedMacroArguments;
 @end
 
 @implementation WCSourceTextView
@@ -52,6 +53,10 @@
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[_completionTimer invalidate];
+	_completionTimer = nil;
+	[_autoHighlightArgumentsTimer invalidate];
+	_autoHighlightArgumentsTimer = nil;
 	[self cleanUpUserDefaultsObserving];
 	[super dealloc];
 }
@@ -105,9 +110,16 @@
 		
 		_windowDidBecomeKeyObservingToken = [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidBecomeKeyNotification object:[self window] queue:nil usingBlock:^(NSNotification *note) {
 			[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
+			
+			[self _highlightEnclosedMacroArguments];
 		}];
 		_windowDidResignKeyObservingToken = [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidResignKeyNotification object:[self window] queue:nil usingBlock:^(NSNotification *note) {
 			[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
+			
+			if (_lastAutoHighlightArgumentsRange.length && NSMaxRange(_lastAutoHighlightArgumentsRange) < [[self string] length]) {
+				[[self layoutManager] removeTemporaryAttribute:NSUnderlineStyleAttributeName forCharacterRange:_lastAutoHighlightArgumentsRange];
+				_lastAutoHighlightArgumentsRange = NSEmptyRange;
+			}
 		}];
 	}
 }
@@ -272,6 +284,9 @@
 		[retval addItemWithTitle:NSLocalizedString(@"Comment/Uncomment Selection", @"Comment/Uncomment Selection") action:@selector(commentUncommentSelection:) keyEquivalent:@""];
 		[retval addItem:[NSMenuItem separatorItem]];
 		[retval addItemWithTitle:@"" action:@selector(toggleBookmarkAtCurrentLine:) keyEquivalent:@""];
+		[retval addItem:[NSMenuItem separatorItem]];
+		[retval addItemWithTitle:NSLocalizedString(@"Reveal in Project Navigator", @"Reveal in Project Navigator") action:@selector(revealInProjectNavigator:) keyEquivalent:@""];
+		[retval addItemWithTitle:NSLocalizedString(@"Show in Finder", @"Show in Finder") action:@selector(showInFinder:) keyEquivalent:@""];
 		
 	});
 	return retval;
@@ -364,6 +379,11 @@
 	[self _insertMatchingBraceWithString:insertString];
 	
 	[self _handleAutoCompletionWithString:insertString];
+	
+	if (_lastAutoHighlightArgumentsRange.length && NSMaxRange(_lastAutoHighlightArgumentsRange) < [[self string] length]) {
+		[[self layoutManager] removeTemporaryAttribute:NSUnderlineStyleAttributeName forCharacterRange:_lastAutoHighlightArgumentsRange];
+		_lastAutoHighlightArgumentsRange = NSEmptyRange;
+	}
 }
  
 #pragma mark NSObject+WCExtensions
@@ -1198,6 +1218,63 @@
 	
 	return YES;
 }
+
+- (void)_highlightEnclosedMacroArguments; {
+	if (![[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowHighlightEnclosedMacroArgumentsKey]) {
+		if (_lastAutoHighlightArgumentsRange.length && NSMaxRange(_lastAutoHighlightArgumentsRange) < [[self string] length]) {
+			[[self layoutManager] removeTemporaryAttribute:NSUnderlineStyleAttributeName forCharacterRange:_lastAutoHighlightArgumentsRange];
+			_lastAutoHighlightArgumentsRange = NSEmptyRange;
+		}
+		return;
+	}
+	
+	NSArray *macros = [[self delegate] macrosForSourceTextView:self];
+	WCMacroSymbol *macro = (WCMacroSymbol *)[macros sourceSymbolForRange:[self selectedRange]];
+	
+	if (!macro || !NSLocationInRange([self selectedRange].location, [macro valueRange])) {
+		if (_lastAutoHighlightArgumentsRange.length && NSMaxRange(_lastAutoHighlightArgumentsRange) < [[self string] length]) {
+			[[self layoutManager] removeTemporaryAttribute:NSUnderlineStyleAttributeName forCharacterRange:_lastAutoHighlightArgumentsRange];
+			_lastAutoHighlightArgumentsRange = NSEmptyRange;
+		}
+		return;
+	}
+	else if (![[macro arguments] count]) {
+		if (_lastAutoHighlightArgumentsRange.length && NSMaxRange(_lastAutoHighlightArgumentsRange) < [[self string] length]) {
+			[[self layoutManager] removeTemporaryAttribute:NSUnderlineStyleAttributeName forCharacterRange:_lastAutoHighlightArgumentsRange];
+			_lastAutoHighlightArgumentsRange = NSEmptyRange;
+		}
+		return;
+	}
+	
+	NSRange symbolRange = [[self string] symbolRangeForRange:[self selectedRange]];
+	if (symbolRange.location == NSNotFound) {
+		if (_lastAutoHighlightArgumentsRange.length && NSMaxRange(_lastAutoHighlightArgumentsRange) < [[self string] length]) {
+			[[self layoutManager] removeTemporaryAttribute:NSUnderlineStyleAttributeName forCharacterRange:_lastAutoHighlightArgumentsRange];
+			_lastAutoHighlightArgumentsRange = NSEmptyRange;
+		}
+		return;
+	}
+	
+	NSString *symbolString = [[self string] substringWithRange:symbolRange];
+	if (![[macro argumentsSet] containsObject:[symbolString lowercaseString]]) {
+		if (_lastAutoHighlightArgumentsRange.length && NSMaxRange(_lastAutoHighlightArgumentsRange) < [[self string] length]) {
+			[[self layoutManager] removeTemporaryAttribute:NSUnderlineStyleAttributeName forCharacterRange:_lastAutoHighlightArgumentsRange];
+			_lastAutoHighlightArgumentsRange = NSEmptyRange;
+		}
+		return;
+	}
+	else if (_lastAutoHighlightArgumentsRange.length && NSMaxRange(_lastAutoHighlightArgumentsRange) < [[self string] length]) {
+		[[self layoutManager] removeTemporaryAttribute:NSUnderlineStyleAttributeName forCharacterRange:_lastAutoHighlightArgumentsRange];
+		_lastAutoHighlightArgumentsRange = NSEmptyRange;
+	}
+	
+	NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:[NSString stringWithFormat:@"\\b%@\\b",symbolString] options:NSRegularExpressionCaseInsensitive error:NULL];
+	[regex enumerateMatchesInString:[self string] options:0 range:[macro valueRange] usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+		[[self layoutManager] addTemporaryAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithUnsignedInteger:NSUnderlineStyleSingle|NSUnderlinePatternDot] forCharacterRange:[result range]];
+	}];
+	
+	_lastAutoHighlightArgumentsRange = [macro valueRange];
+}
 #pragma mark IBActions
 - (IBAction)_symbolMenuClicked:(NSMenuItem *)sender {
 	[[self delegate] handleJumpToDefinitionForSourceTextView:self sourceSymbol:[sender representedObject]];
@@ -1216,6 +1293,12 @@
 	}
 	
 	[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
+	
+	CGFloat autoHighlightArgumentsDelay = [[NSUserDefaults standardUserDefaults] floatForKey:WCEditorShowHighlightEnclosedMacroArgumentsDelayKey];
+	if (_autoHighlightArgumentsTimer)
+		[_autoHighlightArgumentsTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:autoHighlightArgumentsDelay]];
+	else
+		_autoHighlightArgumentsTimer = [NSTimer scheduledTimerWithTimeInterval:autoHighlightArgumentsDelay target:self selector:@selector(_autoHighlightArgumentsTimerCallback:) userInfo:nil repeats:NO];
 }
 - (void)_currentThemeDidChange:(NSNotification *)note {
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
@@ -1249,5 +1332,12 @@
 	_completionTimer = nil;
 	
 	[self complete:nil];
+}
+
+- (void)_autoHighlightArgumentsTimerCallback:(NSTimer *)timer {
+	[_autoHighlightArgumentsTimer invalidate];
+	_autoHighlightArgumentsTimer = nil;
+	
+	[self _highlightEnclosedMacroArguments];
 }
 @end

@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>name</key>
-	<string>Default</string>
+	<string>The Default</string>
 	<key>identifier</key>
 	<string>org.revsoft.wabbitstudio.fontandcolortheme.default</string>
 	<key>plainTextFont</key>

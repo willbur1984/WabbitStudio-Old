@@ -893,6 +893,53 @@
 						<object class="NSMenu" key="NSSubmenu" id="287866681">
 							<string key="NSTitle">Navigate</string>
 							<array class="NSMutableArray" key="NSMenuItems">
+								<object class="NSMenuItem" id="552138885">
+									<reference key="NSMenu" ref="287866681"/>
+									<string key="NSTitle">Reveal in Project Navigator</string>
+									<string key="NSKeyEquiv">j</string>
+									<int key="NSKeyEquivModMask">1310720</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="1033313550"/>
+									<reference key="NSMixedImage" ref="310636482"/>
+								</object>
+								<object class="NSMenuItem" id="286904248">
+									<reference key="NSMenu" ref="287866681"/>
+									<bool key="NSIsDisabled">YES</bool>
+									<bool key="NSIsSeparator">YES</bool>
+									<string key="NSTitle"/>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="1033313550"/>
+									<reference key="NSMixedImage" ref="310636482"/>
+								</object>
+								<object class="NSMenuItem" id="392085205">
+									<reference key="NSMenu" ref="287866681"/>
+									<string key="NSTitle">Move Focus to Next Area</string>
+									<string key="NSKeyEquiv">.</string>
+									<int key="NSKeyEquivModMask">1572864</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="1033313550"/>
+									<reference key="NSMixedImage" ref="310636482"/>
+								</object>
+								<object class="NSMenuItem" id="796373508">
+									<reference key="NSMenu" ref="287866681"/>
+									<string key="NSTitle">Move Focus to Previous Area</string>
+									<string key="NSKeyEquiv">.</string>
+									<int key="NSKeyEquivModMask">1703936</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="1033313550"/>
+									<reference key="NSMixedImage" ref="310636482"/>
+								</object>
+								<object class="NSMenuItem" id="268251296">
+									<reference key="NSMenu" ref="287866681"/>
+									<bool key="NSIsDisabled">YES</bool>
+									<bool key="NSIsSeparator">YES</bool>
+									<string key="NSTitle"/>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="1033313550"/>
+									<reference key="NSMixedImage" ref="310636482"/>
+								</object>
 								<object class="NSMenuItem" id="746437658">
 									<reference key="NSMenu" ref="287866681"/>
 									<string key="NSTitle">Jump to Line</string>
@@ -1831,6 +1878,30 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
+						<string key="label">revealInProjectNavigator:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="552138885"/>
+					</object>
+					<int key="connectionID">656</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">moveFocusToNextArea:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="392085205"/>
+					</object>
+					<int key="connectionID">657</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">moveFocusToPreviousArea:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="796373508"/>
+					</object>
+					<int key="connectionID">658</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
 						<string key="label">preferences:</string>
 						<reference key="source" ref="968104485"/>
 						<reference key="destination" ref="609285721"/>
@@ -2380,6 +2451,11 @@
 							<reference ref="1020001332"/>
 							<reference ref="60080058"/>
 							<reference ref="174276547"/>
+							<reference ref="552138885"/>
+							<reference ref="286904248"/>
+							<reference ref="392085205"/>
+							<reference ref="796373508"/>
+							<reference ref="268251296"/>
 						</array>
 						<reference key="parent" ref="1059282136"/>
 					</object>
@@ -2773,6 +2849,31 @@
 						<reference key="object" ref="688952637"/>
 						<reference key="parent" ref="720053764"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">651</int>
+						<reference key="object" ref="552138885"/>
+						<reference key="parent" ref="287866681"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">652</int>
+						<reference key="object" ref="286904248"/>
+						<reference key="parent" ref="287866681"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">653</int>
+						<reference key="object" ref="392085205"/>
+						<reference key="parent" ref="287866681"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">654</int>
+						<reference key="object" ref="796373508"/>
+						<reference key="parent" ref="287866681"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">655</int>
+						<reference key="object" ref="268251296"/>
+						<reference key="parent" ref="287866681"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -2906,6 +3007,11 @@
 				<string key="646.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="647.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="648.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="651.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="652.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="653.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="654.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="655.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="72.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="73.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="74.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2922,7 +3028,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">650</int>
+			<int key="maxID">658</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -3183,6 +3289,8 @@
 						<string key="delete:">id</string>
 						<string key="filter:">id</string>
 						<string key="hideFilterOptions:">id</string>
+						<string key="moveFocusToNextArea:">id</string>
+						<string key="moveFocusToPreviousArea:">id</string>
 						<string key="newGroup:">id</string>
 						<string key="newGroupFromSelection:">id</string>
 						<string key="openInSeparateEditor:">id</string>
@@ -3208,6 +3316,14 @@
 						</object>
 						<object class="IBActionInfo" key="hideFilterOptions:">
 							<string key="name">hideFilterOptions:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="moveFocusToNextArea:">
+							<string key="name">moveFocusToNextArea:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="moveFocusToPreviousArea:">
+							<string key="name">moveFocusToPreviousArea:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="newGroup:">
@@ -3379,10 +3495,14 @@
 					<string key="superclassName">JAViewController</string>
 					<dictionary class="NSMutableDictionary" key="actions">
 						<string key="addAssistantEditor:">id</string>
+						<string key="moveFocusToNextArea:">id</string>
+						<string key="moveFocusToPreviousArea:">id</string>
 						<string key="removeAssistantEditor:">id</string>
+						<string key="revealInProjectNavigator:">id</string>
 						<string key="showAssistantEditor:">id</string>
 						<string key="showDocumentItems:">id</string>
 						<string key="showGroupItems:">id</string>
+						<string key="showInFinder:">id</string>
 						<string key="showStandardEditor:">id</string>
 						<string key="showTopLevelItems:">id</string>
 					</dictionary>
@@ -3391,8 +3511,20 @@
 							<string key="name">addAssistantEditor:</string>
 							<string key="candidateClassName">id</string>
 						</object>
+						<object class="IBActionInfo" key="moveFocusToNextArea:">
+							<string key="name">moveFocusToNextArea:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="moveFocusToPreviousArea:">
+							<string key="name">moveFocusToPreviousArea:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 						<object class="IBActionInfo" key="removeAssistantEditor:">
 							<string key="name">removeAssistantEditor:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="revealInProjectNavigator:">
+							<string key="name">revealInProjectNavigator:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="showAssistantEditor:">
@@ -3405,6 +3537,10 @@
 						</object>
 						<object class="IBActionInfo" key="showGroupItems:">
 							<string key="name">showGroupItems:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="showInFinder:">
+							<string key="name">showInFinder:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="showStandardEditor:">

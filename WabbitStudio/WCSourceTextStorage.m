@@ -244,30 +244,12 @@ NSString *const WCSourceTextStorageDidRemoveBookmarkNotification = @"WCSourceTex
 }
 #pragma mark Notifications
 - (void)_currentThemeDidChange:(NSNotification *)note {
-	[[[self delegate] sourceHighlighterForSourceTextStorage:self] performHighlightingForAllAttributes];
+	[[[self delegate] sourceHighlighterForSourceTextStorage:self] performHighlightingInVisibleRange];
 }
 - (void)_colorDidChange:(NSNotification *)note {
-	static NSDictionary *colorNamesToAttributeNames;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		colorNamesToAttributeNames = [[NSDictionary alloc] initWithObjectsAndKeys:WCSourceHighlighterBinaryAttributeName,@"binaryColor",WCSourceHighlighterCommentAttributeName,@"commentColor",WCSourceHighlighterConditionalAttributeName,@"conditionalColor",WCSourceHighlighterDefineAttributeName,@"defineColor",WCSourceHighlighterDirectiveAttributeName,@"directiveColor",WCSourceHighlighterEquateAttributeName,@"equateColor",WCSourceHighlighterHexadecimalAttributeName,@"hexadecimalColor",WCSourceHighlighterLabelAttributeName,@"labelColor",WCSourceHighlighterMacroAttributeName,@"macroColor",WCSourceHighlighterMneumonicAttributeName,@"mneumonicColor",WCSourceHighlighterNumberAttributeName,@"numberColor",WCSourceHighlighterPlainTextAttributeName,@"plainTextColor",WCSourceHighlighterPreProcessorAttributeName,@"preProcessorColor",WCSourceHighlighterRegisterAttributeName,@"registerColor",WCSourceHighlighterStringAttributeName,@"stringColor", nil];
-	});
-	
-	NSString *colorName = [[note userInfo] objectForKey:@"colorName"];
-	NSString *attributeName = [colorNamesToAttributeNames objectForKey:colorName];
-	
-	[[[self delegate] sourceHighlighterForSourceTextStorage:self] performHighlightingForColorWithAttributeName:attributeName];
+	[[[self delegate] sourceHighlighterForSourceTextStorage:self] performHighlightingInVisibleRange];
 }
 - (void)_fontDidChange:(NSNotification *)note {
-	static NSDictionary *fontNamesToAttributeNames;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		fontNamesToAttributeNames = [[NSDictionary alloc] initWithObjectsAndKeys:WCSourceHighlighterBinaryAttributeName,@"binaryFont",WCSourceHighlighterCommentAttributeName,@"commentFont",WCSourceHighlighterConditionalAttributeName,@"conditionalFont",WCSourceHighlighterDefineAttributeName,@"defineFont",WCSourceHighlighterDirectiveAttributeName,@"directiveFont",WCSourceHighlighterEquateAttributeName,@"equateFont",WCSourceHighlighterHexadecimalAttributeName,@"hexadecimalFont",WCSourceHighlighterLabelAttributeName,@"labelFont",WCSourceHighlighterMacroAttributeName,@"macroFont",WCSourceHighlighterMneumonicAttributeName,@"mneumonicFont",WCSourceHighlighterNumberAttributeName,@"numberFont",WCSourceHighlighterPlainTextAttributeName,@"plainTextFont",WCSourceHighlighterPreProcessorAttributeName,@"preProcessorColor",WCSourceHighlighterRegisterAttributeName,@"registerFont",WCSourceHighlighterStringAttributeName,@"stringFont", nil];
-	});
-	
-	NSString *fontName = [[note userInfo] objectForKey:@"fontName"];
-	NSString *attributeName = [fontNamesToAttributeNames objectForKey:fontName];
-	
-	[[[self delegate] sourceHighlighterForSourceTextStorage:self] performHighlightingForFontWithAttributeName:attributeName];
+	[[[self delegate] sourceHighlighterForSourceTextStorage:self] performHighlightingInVisibleRange];
 }
 @end

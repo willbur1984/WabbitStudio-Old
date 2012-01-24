@@ -14,6 +14,7 @@
 @required
 - (NSArray *)sourceTokensForSourceTextView:(WCSourceTextView *)textView;
 - (NSArray *)sourceSymbolsForSourceTextView:(WCSourceTextView *)textView;
+- (NSArray *)macrosForSourceTextView:(WCSourceTextView *)textView;
 
 - (NSArray *)sourceTextView:(WCSourceTextView *)textView sourceSymbolsForSymbolName:(NSString *)name;
 

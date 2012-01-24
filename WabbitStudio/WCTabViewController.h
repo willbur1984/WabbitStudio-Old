@@ -25,8 +25,11 @@ extern NSString *const WCTabViewControllerDidCloseTabNotification;
 	} _tabViewControllerFlags;
 }
 @property (readwrite,assign,nonatomic) IBOutlet PSMTabBarControl *tabBarControl;
+@property (readwrite,assign,nonatomic) IBOutlet NSTabView *tabView;
 
 @property (readwrite,assign,nonatomic) id <WCTabViewControllerDelegate> delegate;
+
+@property (readonly,nonatomic) NSMapTable *sourceFileDocumentsToSourceTextViewControllers;
 
 - (WCSourceTextViewController *)addTabForSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument;
 - (void)removeTabForSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument;

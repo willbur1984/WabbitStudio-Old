@@ -14,9 +14,7 @@
 @interface WCSourceTextViewController : JAViewController <WCSourceTextViewDelegate> {
 	__weak WCStandardSourceTextViewController *_standardSourceTextViewController;
 	__weak WCSourceFileDocument *_sourceFileDocument;
-	NSTimer *_scrollingHighlightTimer;
 	WCJumpBarViewController *_jumpBarViewController;
-	NSRange _additionalRangeToSyntaxHighlight;
 }
 @property (readwrite,assign,nonatomic) IBOutlet WCSourceTextView *textView;
 @property (readwrite,assign,nonatomic) IBOutlet NSScrollView *scrollView;
@@ -37,6 +35,12 @@
 - (IBAction)showAssistantEditor:(id)sender;
 - (IBAction)addAssistantEditor:(id)sender;
 - (IBAction)removeAssistantEditor:(id)sender;
+
+- (IBAction)revealInProjectNavigator:(id)sender;
+- (IBAction)showInFinder:(id)sender;
+
+- (IBAction)moveFocusToNextArea:(id)sender;
+- (IBAction)moveFocusToPreviousArea:(id)sender;
 
 - (void)performCleanup;
 @end

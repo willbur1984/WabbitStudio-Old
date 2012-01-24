@@ -9,22 +9,6 @@
 #import <Foundation/NSObject.h>
 #import "WCSourceHighlighterDelegate.h"
 
-extern NSString *const WCSourceHighlighterPlainTextAttributeName;
-extern NSString *const WCSourceHighlighterCommentAttributeName;
-extern NSString *const WCSourceHighlighterBinaryAttributeName;
-extern NSString *const WCSourceHighlighterNumberAttributeName;
-extern NSString *const WCSourceHighlighterStringAttributeName;
-extern NSString *const WCSourceHighlighterRegisterAttributeName;
-extern NSString *const WCSourceHighlighterDirectiveAttributeName;
-extern NSString *const WCSourceHighlighterMneumonicAttributeName;
-extern NSString *const WCSourceHighlighterHexadecimalAttributeName;
-extern NSString *const WCSourceHighlighterPreProcessorAttributeName;
-extern NSString *const WCSourceHighlighterConditionalAttributeName;
-extern NSString *const WCSourceHighlighterLabelAttributeName;
-extern NSString *const WCSourceHighlighterEquateAttributeName;
-extern NSString *const WCSourceHighlighterDefineAttributeName;
-extern NSString *const WCSourceHighlighterMacroAttributeName;
-
 @class WCSourceScanner;
 
 @interface WCSourceHighlighter : NSObject {
@@ -38,11 +22,6 @@ extern NSString *const WCSourceHighlighterMacroAttributeName;
 
 - (void)performHighlightingInVisibleRange;
 - (void)performHighlightingInRange:(NSRange)range;
-- (void)performFullHighlightIfNeeded;
-
-- (void)performHighlightingForColorWithAttributeName:(NSString *)attributeName;
-- (void)performHighlightingForFontWithAttributeName:(NSString *)attributeName;
-- (void)performHighlightingForAllAttributes;
 
 - (void)highlightAttributeString:(NSMutableAttributedString *)attributedString;
 - (void)highlightAttributeString:(NSMutableAttributedString *)attributedString withArgumentNames:(NSSet *)argumentNames;

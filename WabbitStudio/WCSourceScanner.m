@@ -28,6 +28,7 @@ NSString *const WCSourceScannerDidFinishScanningSymbolsNotification = @"WCSource
 	[_tokens release];
 	[_symbols release];
 	[_symbolsSortedByName release];
+	[_macros release];
 	[_labelNamesToLabelSymbols release];
 	[_equateNamesToEquateSymbols release];
 	[_defineNamesToDefineSymbols release];
@@ -221,6 +222,7 @@ NSString *const WCSourceScannerDidFinishScanningSymbolsNotification = @"WCSource
 @synthesize tokens=_tokens;
 @synthesize symbols=_symbols;
 @synthesize symbolsSortedByName=_symbolsSortedByName;
+@synthesize macros=_macros;
 @synthesize needsToScanSymbols=_needsToScanSymbols;
 @synthesize labelNamesToLabelSymbols=_labelNamesToLabelSymbols;
 @synthesize equateNamesToEquateSymbols=_equateNamesToEquateSymbols;

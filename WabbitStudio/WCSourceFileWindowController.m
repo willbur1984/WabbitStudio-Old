@@ -48,7 +48,8 @@
 	[[[self sourceTextViewController] view] setFrame:[contentView frame]];
 	[contentView addSubview:[[self sourceTextViewController] view]];
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_windowDidResize:) name:NSWindowDidResizeNotification object:[self window]];
+	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_windowDidResize:) name:NSWindowDidResizeNotification object:[self window]];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_windowDidResize:) name:NSWindowDidEndLiveResizeNotification object:[self window]];
 }
 
 - (void)windowWillClose:(NSNotification *)notification {
@@ -68,7 +69,7 @@
 
 #pragma mark Notifications
 - (void)_windowDidResize:(NSNotification *)note {
-	//[[[self document] sourceHighlighter] performHighlightingInVisibleRange];
+	[[[self document] sourceHighlighter] performHighlightingInVisibleRange];
 }
 
 @end

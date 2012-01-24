@@ -175,6 +175,8 @@
 	if ([self isCancelled])
 		goto CLEANUP;
 	
+	NSMutableArray *macrosArray = [NSMutableArray arrayWithCapacity:0];
+	
 	// macros
 	[[WCSourceScanner macroRegularExpression] enumerateMatchesInString:[self string] options:0 range:searchRange usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
 		WCSourceToken *token = [tokens sourceTokenForRange:[result range]];
@@ -182,10 +184,12 @@
 			return;
 		
 		NSRange lineRange = [[self string] lineRangeForRange:[result range]];
-		NSString *parens = [[self string] substringWithRange:NSMakeRange(NSMaxRange([result range]), NSMaxRange(lineRange)-NSMaxRange([result range]))];
+		NSRange parensRange = NSMakeRange(NSMaxRange([result range]), NSMaxRange(lineRange)-NSMaxRange([result range]));
+		NSString *parens = [[self string] substringWithRange:parensRange];
 		NSRegularExpression *parensRegex = [NSRegularExpression regularExpressionWithPattern:@"^\\((.+?)\\)" options:0 error:NULL];
 		NSTextCheckingResult *parensResult = [parensRegex firstMatchInString:parens options:0 range:NSMakeRange(0, [parens length])];
 		NSString *value;
+		NSRange valueRange;
 		
 		if (parensResult) {
 			NSTextCheckingResult *valueResult = [[NSRegularExpression regularExpressionWithPattern:@"(.+?)#endmacro" options:NSRegularExpressionDotMatchesLineSeparators error:NULL] firstMatchInString:[self string] options:0 range:NSMakeRange(NSMaxRange([result range])+NSMaxRange([parensResult range]), [[self string] length]-(NSMaxRange([result range])+NSMaxRange([parensResult range])))];
@@ -194,6 +198,8 @@
 				return;
 			
 			value = [[self string] substringWithRange:[valueResult rangeAtIndex:1]];
+			valueRange = NSUnionRange(parensRange, [valueResult rangeAtIndex:1]);
+			//valueRange = [valueResult rangeAtIndex:1];
 		}
 		else {
 			NSTextCheckingResult *valueResult = [[NSRegularExpression regularExpressionWithPattern:@"(.+?)#endmacro" options:NSRegularExpressionDotMatchesLineSeparators error:NULL] firstMatchInString:[self string] options:NSRegularExpressionDotMatchesLineSeparators range:NSMakeRange(NSMaxRange([result range]), [[self string] length]-NSMaxRange([result range]))];
@@ -202,6 +208,7 @@
 				return;
 			
 			value = [[self string] substringWithRange:[valueResult rangeAtIndex:1]];
+			valueRange = [valueResult rangeAtIndex:1];
 		}
 		
 		value = [value stringByReplacingOccurrencesOfString:@";+.*" withString:@"" options:NSRegularExpressionSearch range:NSMakeRange(0, [value length])];
@@ -229,10 +236,10 @@
 			if (![arguments count])
 				arguments = nil;
 			
-			macro = [WCMacroSymbol macroSymbolWithRange:[result rangeAtIndex:1] name:[[self string] substringWithRange:[result rangeAtIndex:1]] value:value arguments:arguments];
+			macro = [WCMacroSymbol macroSymbolWithRange:[result rangeAtIndex:1] name:[[self string] substringWithRange:[result rangeAtIndex:1]] value:value valueRange:valueRange arguments:arguments];
 		}
 		else {
-			macro = [WCMacroSymbol macroSymbolWithRange:[result rangeAtIndex:1] name:[[self string] substringWithRange:[result rangeAtIndex:1]] value:value];
+			macro = [WCMacroSymbol macroSymbolWithRange:[result rangeAtIndex:1] name:[[self string] substringWithRange:[result rangeAtIndex:1]] value:value valueRange:valueRange];
 		}
 		
 		NSMutableSet *macros = [macroNames objectForKey:[name lowercaseString]];
@@ -246,6 +253,7 @@
 		[macros addObject:macro];
 		[completions setObject:macro forKey:[name lowercaseString]];
 		[symbols addObject:macro];
+		[macrosArray addObject:macro];
 	}];
 	
 	if ([self isCancelled])
@@ -275,6 +283,7 @@
 	[symbols sortUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedStandardCompare:)]]];
 	
 	[[self sourceScanner] setSymbolsSortedByName:symbols];
+	[[self sourceScanner] setMacros:macrosArray];
 	
 	[[self sourceScanner] setLabelNamesToLabelSymbols:labelNames];
 	[[self sourceScanner] setEquateNamesToEquateSymbols:equateNames];

@@ -55,14 +55,16 @@
 	return retval;
 }
 #pragma mark *** Public Methods ***
-+ (id)macroSymbolWithRange:(NSRange)range name:(NSString *)name value:(NSString *)value arguments:(NSArray *)arguments; {
-	return [[[[self class] alloc] initWithRange:range name:name value:value arguments:arguments] autorelease];
++ (id)macroSymbolWithRange:(NSRange)range name:(NSString *)name value:(NSString *)value valueRange:(NSRange)valueRange arguments:(NSArray *)arguments; {
+	return [[[[self class] alloc] initWithRange:range name:name value:value valueRange:valueRange arguments:arguments] autorelease];
 }
-- (id)initWithRange:(NSRange)range name:(NSString *)name value:(NSString *)value arguments:(NSArray *)arguments; {
+// designated initializer
+- (id)initWithRange:(NSRange)range name:(NSString *)name value:(NSString *)value valueRange:(NSRange)valueRange arguments:(NSArray *)arguments; {
 	if (!(self = [super initWithType:WCSourceSymbolTypeMacro range:range name:name]))
 		return nil;
 	
 	_value = [value copy];
+	_valueRange = valueRange;
 	_arguments = [arguments copy];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_currentThemeDidChange:) name:WCFontAndColorThemeManagerCurrentThemeDidChangeNotification  object:nil];
@@ -71,19 +73,31 @@
 	return self;
 }
 
-+ (id)macroSymbolWithRange:(NSRange)range name:(NSString *)name value:(NSString *)value; {
-	return [self macroSymbolWithRange:range name:name value:value arguments:nil];
++ (id)macroSymbolWithRange:(NSRange)range name:(NSString *)name value:(NSString *)value valueRange:(NSRange)valueRange; {
+	return [self macroSymbolWithRange:range name:name value:value valueRange:valueRange arguments:nil];
 }
+
 #pragma mark Properties
 @synthesize value=_value;
+@synthesize valueRange=_valueRange;
 @synthesize arguments=_arguments;
+@dynamic argumentsSet;
+- (NSSet *)argumentsSet {
+	NSMutableSet *retval = [NSMutableSet setWithCapacity:[[self arguments] count]];
+	
+	for (NSString *argument in [self arguments])
+		[retval addObject:[argument lowercaseString]];
+	
+	return [[retval copy] autorelease];
+}
 @synthesize attributedValueString=_attributedValueString;
 - (NSAttributedString *)attributedValueString {
 	if (!_attributedValueString) {
 		NSMutableAttributedString *temp = [[[NSMutableAttributedString alloc] initWithString:[self value] attributes:RSToolTipProviderDefaultAttributes()] autorelease];
 		WCSourceHighlighter *highlighter = [[[self sourceScanner] delegate] sourceHighlighterForSourceScanner:[self sourceScanner]];
 		
-		[highlighter highlightAttributeString:temp withArgumentNames:[NSSet setWithArray:[[self arguments] valueForKey:@"lowercaseString"]]];
+		//[highlighter highlightAttributeString:temp withArgumentNames:[NSSet setWithArray:[[self arguments] valueForKey:@"lowercaseString"]]];
+		[highlighter highlightAttributeString:temp];
 		
 		[self setAttributedValueString:temp];
 	}

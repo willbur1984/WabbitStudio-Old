@@ -10,15 +10,18 @@
 
 @interface WCMacroSymbol : WCSourceSymbol <WCCompletionItem> {
 	NSString *_value;
+	NSRange _valueRange;
 	NSArray *_arguments;
 	NSAttributedString *_attributedValueString;
 }
 @property (readonly,nonatomic) NSString *value;
+@property (readonly,nonatomic) NSRange valueRange;
 @property (readonly,nonatomic) NSArray *arguments;
+@property (readonly,nonatomic) NSSet *argumentsSet;
 
-+ (id)macroSymbolWithRange:(NSRange)range name:(NSString *)name value:(NSString *)value arguments:(NSArray *)arguments;
++ (id)macroSymbolWithRange:(NSRange)range name:(NSString *)name value:(NSString *)value valueRange:(NSRange)valueRange arguments:(NSArray *)arguments;
 // designated initializer
-- (id)initWithRange:(NSRange)range name:(NSString *)name value:(NSString *)value arguments:(NSArray *)arguments;
+- (id)initWithRange:(NSRange)range name:(NSString *)name value:(NSString *)value valueRange:(NSRange)valueRange arguments:(NSArray *)arguments;
 
-+ (id)macroSymbolWithRange:(NSRange)range name:(NSString *)name value:(NSString *)value;
++ (id)macroSymbolWithRange:(NSRange)range name:(NSString *)name value:(NSString *)value valueRange:(NSRange)valueRange;
 @end
