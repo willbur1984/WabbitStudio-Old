@@ -32,6 +32,7 @@
 #import "RSBookmark.h"
 #import "NSEvent+RSExtensions.h"
 #import "WCArgumentPlaceholderCell.h"
+#import "NSTextView+WCExtensions.h"
 
 @interface WCSourceTextView ()
 
@@ -975,9 +976,10 @@
 	unichar closingBraceCharacter = [[self string] characterAtIndex:[self selectedRange].location-1];
 	NSUInteger numberOfClosingBraces = 0, numberOfOpeningBraces = 0;
 	NSInteger characterIndex;
+	NSRange visibleRange = [self visibleRange];
 	
 	// scan backwards starting at the selected character index
-	for (characterIndex = [self selectedRange].location-1; characterIndex > 0; characterIndex--) {
+	for (characterIndex = [self selectedRange].location-1; characterIndex > visibleRange.location; characterIndex--) {
 		unichar charAtIndex = [[self string] characterAtIndex:characterIndex];
 		
 		// increment the number of opening braces
@@ -1221,6 +1223,13 @@
 
 - (void)_highlightEnclosedMacroArguments; {
 	if (![[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowHighlightEnclosedMacroArgumentsKey]) {
+		if (_lastAutoHighlightArgumentsRange.length && NSMaxRange(_lastAutoHighlightArgumentsRange) < [[self string] length]) {
+			[[self layoutManager] removeTemporaryAttribute:NSUnderlineStyleAttributeName forCharacterRange:_lastAutoHighlightArgumentsRange];
+			_lastAutoHighlightArgumentsRange = NSEmptyRange;
+		}
+		return;
+	}
+	else if ([self selectedRange].length) {
 		if (_lastAutoHighlightArgumentsRange.length && NSMaxRange(_lastAutoHighlightArgumentsRange) < [[self string] length]) {
 			[[self layoutManager] removeTemporaryAttribute:NSUnderlineStyleAttributeName forCharacterRange:_lastAutoHighlightArgumentsRange];
 			_lastAutoHighlightArgumentsRange = NSEmptyRange;

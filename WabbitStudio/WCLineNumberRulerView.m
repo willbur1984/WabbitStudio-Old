@@ -254,6 +254,9 @@
 }
 @dynamic minimumThickness;
 - (CGFloat)minimumThickness {
+	if (![[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowLineNumbersKey])
+		return RULER_MARGIN;
+	
 	NSUInteger			lineCount = [[self lineStartIndexes] count];
     NSMutableString     *sampleString = [NSMutableString string];
     NSUInteger digits = (NSUInteger)log10(lineCount) + 1;
