@@ -124,6 +124,18 @@ static NSString *const RSTreeNodeRepresentedObjectKey = @"representedObject";
 - (BOOL)isDescendantOfNode:(RSTreeNode *)node; {
 	return [[node descendantNodes] containsObject:self];
 }
+
+- (void)sortWithSortDescriptors:(NSArray *)sortDescriptors recursively:(BOOL)recursively; {
+	if (recursively) {
+		for (RSTreeNode *treeNode in [self childNodes]) {
+			if (![treeNode isLeafNode])
+				[treeNode sortWithSortDescriptors:sortDescriptors recursively:recursively];
+		}
+	}
+	
+	[[self mutableChildNodes] sortUsingDescriptors:sortDescriptors];
+}
+
 #pragma mark Properties
 @synthesize parentNode=_parentNode;
 @synthesize childNodes=_childNodes;
@@ -172,7 +184,7 @@ static NSString *const RSTreeNodeRepresentedObjectKey = @"representedObject";
 
 @dynamic descendantNodes;
 - (NSArray *)descendantNodes {
-	NSMutableArray *retval = [NSMutableArray arrayWithCapacity:[[self childNodes] count]];
+	NSMutableArray *retval = [NSMutableArray arrayWithCapacity:0];
 	for (RSTreeNode *node in [self childNodes]) {
 		[retval addObject:node];
 		
@@ -183,7 +195,11 @@ static NSString *const RSTreeNodeRepresentedObjectKey = @"representedObject";
 }
 @dynamic descendantNodesInclusive;
 - (NSArray *)descendantNodesInclusive {
-	return [[self descendantNodes] arrayByAddingObject:self];
+	NSMutableArray *retval = [NSMutableArray arrayWithObject:self];
+	
+	[retval addObjectsFromArray:[self descendantNodes]];
+	
+	return [[retval copy] autorelease];
 }
 @dynamic descendantGroupNodes;
 - (NSArray *)descendantGroupNodes {

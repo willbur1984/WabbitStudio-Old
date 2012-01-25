@@ -934,6 +934,7 @@
 		return;
 	
 	NSRect lineRect = rects[0];
+	
 	lineRect.origin.x = NSMinX([self bounds]);
 	lineRect.size.width = NSWidth([self bounds]);
 	
@@ -942,7 +943,7 @@
 	
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
 	
-	[[[currentTheme currentLineColor] colorWithAlphaComponent:0.4] setFill];
+	[[[currentTheme currentLineColor] colorWithAlphaComponent:0.65] setFill];
 	NSRectFillUsingOperation(lineRect, NSCompositeSourceOver);
 	[[currentTheme currentLineColor] setFill];
 	NSRectFill(NSMakeRect(NSMinX(lineRect), NSMinY(lineRect), NSWidth(lineRect), 1.0));

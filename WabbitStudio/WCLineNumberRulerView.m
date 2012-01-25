@@ -123,7 +123,7 @@
 	[dottedLine stroke];
 	 */
 	[[NSColor colorWithCalibratedWhite:164.0/255.0 alpha:1.0] setFill];
-	NSRectFill(NSMakeRect(NSMaxX(rightMarginRect)-1, NSMinY(rightMarginRect), 1.0, NSHeight(rightMarginRect)));
+	NSRectFill(NSMakeRect(NSMaxX(rightMarginRect)-1.0, NSMinY(rightMarginRect), 1.0, NSHeight(rightMarginRect)));
 }
 
 - (void)drawBackgroundAndDividerLineInRect:(NSRect)backgroundAndDividerLineRect; {
@@ -155,19 +155,16 @@
 	if (!numRects)
 		return;
 	
-	NSRect lineRect = NSZeroRect;
-	NSUInteger rectIndex;
-	for (rectIndex=0; rectIndex<numRects; rectIndex++)
-		lineRect = NSUnionRect(lineRect, rects[rectIndex]);
+	NSRect lineRect = rects[0];
 	
 	lineRect = NSMakeRect(NSMinX([self bounds]), [self convertPoint:lineRect.origin fromView:[self clientView]].y, NSWidth([self bounds]), NSHeight(lineRect));
 	
-	if (!NSIntersectsRect(lineRect, currentLineHighlightRect) || ![self needsToDrawRect:lineRect])
+	if (!NSIntersectsRect(lineRect, [self bounds]) || ![self needsToDrawRect:lineRect])
 		return;
 	
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
 	
-	[[[currentTheme currentLineColor] colorWithAlphaComponent:0.4] setFill];
+	[[[currentTheme currentLineColor] colorWithAlphaComponent:0.65] setFill];
 	NSRectFillUsingOperation(lineRect, NSCompositeSourceOver);
 	[[currentTheme currentLineColor] setFill];
 	NSRectFill(NSMakeRect(NSMinX(lineRect), NSMinY(lineRect), NSWidth(lineRect), 1.0));

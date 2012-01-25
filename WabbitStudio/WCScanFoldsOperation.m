@@ -12,6 +12,7 @@
 #import "WCFoldMarker.h"
 #import "RSDefines.h"
 #import "NSArray+WCExtensions.h"
+#import "WCSourceToken.h"
 
 static NSRegularExpression *startMarkersRegex;
 static NSRegularExpression *endMarkersRegex;
@@ -41,11 +42,18 @@ static NSRegularExpression *endMarkersRegex;
 - (void)main {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	BOOL isFinished = NO;
+	NSArray *tokens = [[self sourceScanner] tokens];
 	
 	while (![self isCancelled] && !isFinished) {
 		NSMutableArray *foldMarkers = [NSMutableArray arrayWithCapacity:0];
 		
 		[startMarkersRegex enumerateMatchesInString:[self string] options:0 range:NSMakeRange(0, [[self string] length]) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+			WCSourceToken *token = [tokens sourceTokenForRange:[result range]];
+			if (([token type] == WCSourceTokenTypeComment ||
+				[token type] == WCSourceTokenTypeString) &&
+				NSLocationInRange([result range].location, [token range]))
+				return;
+			
 			if ([[[[self string] substringWithRange:[result range]] lowercaseString] isEqualToString:@"#macro"])
 				[foldMarkers addObject:[WCFoldMarker foldMarkerOfType:WCFoldMarkerTypeMacroStart range:[result range]]];
 			else
@@ -53,6 +61,12 @@ static NSRegularExpression *endMarkersRegex;
 		}];
 		
 		[endMarkersRegex enumerateMatchesInString:[self string] options:0 range:NSMakeRange(0, [[self string] length]) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+			WCSourceToken *token = [tokens sourceTokenForRange:[result range]];
+			if (([token type] == WCSourceTokenTypeComment ||
+				 [token type] == WCSourceTokenTypeString) &&
+				NSLocationInRange([result range].location, [token range]))
+				return;
+			
 			if ([[[[self string] substringWithRange:[result range]] lowercaseString] isEqualToString:@"#endmacro"])
 				[foldMarkers addObject:[WCFoldMarker foldMarkerOfType:WCFoldMarkerTypeMacroEnd range:[result range]]];
 			else
@@ -116,6 +130,19 @@ static NSRegularExpression *endMarkersRegex;
 					break;
 			}
 		}];
+		
+		NSArray *sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"range" ascending:YES comparator:^NSComparisonResult(id obj1, id obj2) {
+			if ([obj1 rangeValue].location < [obj2 rangeValue].location)
+				return NSOrderedAscending;
+			else if ([obj1 rangeValue].location > [obj2 rangeValue].location)
+				return NSOrderedDescending;
+			return NSOrderedSame;
+		}]];
+		
+		[topLevelFolds sortUsingDescriptors:sortDescriptors];
+		
+		for (WCFold *fold in topLevelFolds)
+			[fold sortWithSortDescriptors:sortDescriptors recursively:YES];
 		
 		if ([self isCancelled])
 			break;

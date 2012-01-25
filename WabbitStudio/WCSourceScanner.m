@@ -75,15 +75,24 @@ NSString *const WCSourceScannerDidFinishScanningFoldsNotification = @"WCSourceSc
 		NSOperation *scanFoldsOperation = [WCScanFoldsOperation scanFoldsOperationWithSourceScanner:self];
 		
 		[scanSymbolsOperation addDependency:scanTokensOperation];
+		[scanFoldsOperation addDependency:scanTokensOperation];
 		
 		[_operationQueue setSuspended:YES];
-		[_operationQueue addOperation:scanFoldsOperation];
 		[_operationQueue addOperation:scanTokensOperation];
+		[_operationQueue addOperation:scanFoldsOperation];
 		[_operationQueue addOperation:scanSymbolsOperation];
 		[_operationQueue setSuspended:NO];
 	}
 	else {
-		[_operationQueue addOperation:[WCScanTokensOperation scanTokensOperationWithScanner:self]];
+		NSOperation *scanTokensOperation = [WCScanTokensOperation scanTokensOperationWithScanner:self];
+		NSOperation *scanFoldsOperation = [WCScanFoldsOperation scanFoldsOperationWithSourceScanner:self];
+		
+		[scanFoldsOperation addDependency:scanTokensOperation];
+		
+		[_operationQueue setSuspended:YES];
+		[_operationQueue addOperation:scanTokensOperation];
+		[_operationQueue addOperation:scanFoldsOperation];
+		[_operationQueue setSuspended:NO];
 	}
 }
 

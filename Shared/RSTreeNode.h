@@ -39,6 +39,8 @@ extern NSString *const RSTreeNodeChildNodesKey;
 
 - (BOOL)isDescendantOfNode:(RSTreeNode *)node;
 
+- (void)sortWithSortDescriptors:(NSArray *)sortDescriptors recursively:(BOOL)recursively;
+
 + (id)treeNodeWithRepresentedObject:(id)representedObject;
 - (id)initWithRepresentedObject:(id)representedObject;
 @end

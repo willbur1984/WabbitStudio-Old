@@ -9,9 +9,14 @@
 #import "WCLineNumberRulerView.h"
 #import "WCSourceRulerViewDelegate.h"
 
+@class WCFold;
+
 @interface WCSourceRulerView : WCLineNumberRulerView {
 	__weak id <WCSourceRulerViewDelegate> _delegate;
 	NSUInteger _clickedLineNumber;
+	NSTrackingArea *_codeFoldingTrackingArea;
+	WCFold *_foldToHighlight;
+	NSRect _rectForFoldHighlight;
 }
 @property (readwrite,assign,nonatomic) id <WCSourceRulerViewDelegate> delegate;
 

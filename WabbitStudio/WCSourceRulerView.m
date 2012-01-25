@@ -18,17 +18,28 @@
 #import "AIColorAdditions.h"
 #import "WCEditorViewController.h"
 #import "NSObject+WCExtensions.h"
+#import "WCFold.h"
+#import "NSBezierPath+StrokeExtensions.h"
+#import "WCFontAndColorThemeManager.h"
+#import "WCFontAndColorTheme.h"
 
 @interface WCSourceRulerView ()
 @property (readonly,nonatomic) WCSourceTextStorage *textStorage;
 @property (readwrite,assign,nonatomic) NSUInteger clickedLineNumber;
 
 - (NSUInteger)_lineNumberForPoint:(NSPoint)point;
+- (NSRange)_rangeForPoint:(NSPoint)point;
 - (void)_drawFoldsForFold:(WCFold *)fold inRect:(NSRect)ribbonRect topLevelFoldColor:(NSColor *)topLevelFoldColor;
+- (void)_drawFoldHighlightInRect:(NSRect)foldHighlightRect;
 @end
 
 @implementation WCSourceRulerView
 #pragma mark *** Subclass Overrides ***
+- (void)dealloc {
+	[_codeFoldingTrackingArea release];
+	[super dealloc];
+}
+
 + (NSMenu *)defaultMenu {
 	static NSMenu *retval;
 	static dispatch_once_t onceToken;
@@ -68,6 +79,62 @@
 	return [[self textStorage] lineStartIndexes];
 }
 
+static const CGFloat kIconWidthHeight = 11.0;
+static const CGFloat kIconPaddingLeft = 1.0;
+static const CGFloat kIconPaddingTop = 1.0;
+static const CGFloat kCodeFoldingRibbonWidth = 9.0;
+
+- (void)mouseEntered:(NSEvent *)theEvent {
+	NSRange range = [self _rangeForPoint:[self convertPointFromBase:[theEvent locationInWindow]]];
+	WCFold *fold = [[[[self delegate] sourceScannerForSourceRulerView:self] folds] foldForRange:range];
+	
+	if (NSLocationInRange(range.location, [fold range])) {
+		for (WCFold *childFold in [fold descendantNodes]) {
+			if (NSLocationInRange(range.location, [childFold range]) && [childFold range].length < [fold range].length)
+				fold = childFold;
+		}
+		
+		_foldToHighlight = fold;
+		[self setNeedsDisplay:YES];
+	}
+}
+- (void)mouseExited:(NSEvent *)theEvent {
+	_foldToHighlight = nil;
+	[self setNeedsDisplay:YES];
+}
+
+- (void)mouseMoved:(NSEvent *)theEvent {
+	NSRange range = [self _rangeForPoint:[self convertPointFromBase:[theEvent locationInWindow]]];
+	WCFold *fold = [[[[self delegate] sourceScannerForSourceRulerView:self] folds] foldForRange:range];
+	
+	if (NSLocationInRange(range.location, [fold range])) {
+		for (WCFold *childFold in [fold descendantNodes]) {
+			
+			if (NSLocationInRange(range.location, [childFold range]) && [childFold range].length < [fold range].length)
+				fold = childFold;
+		}
+		
+		_foldToHighlight = fold;
+	}
+	else
+		_foldToHighlight = nil;
+	
+	[self setNeedsDisplay:YES];
+}
+
+- (void)updateTrackingAreas {
+	[super updateTrackingAreas];
+	
+	[self removeTrackingArea:_codeFoldingTrackingArea];
+	[_codeFoldingTrackingArea release];
+	_codeFoldingTrackingArea = nil;
+	
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey]) {
+		_codeFoldingTrackingArea = [[NSTrackingArea alloc] initWithRect:NSMakeRect(NSMaxX([self bounds])-kCodeFoldingRibbonWidth, NSMinY([self bounds]), kCodeFoldingRibbonWidth, NSHeight([self bounds])) options:NSTrackingActiveInKeyWindow|NSTrackingMouseMoved|NSTrackingMouseEnteredAndExited owner:self userInfo:nil];
+		[self addTrackingArea:_codeFoldingTrackingArea];
+	}
+}
+
 - (NSSet *)userDefaultsKeyPathsToObserve {
 	NSMutableSet *keys = [[[super userDefaultsKeyPathsToObserve] mutableCopy] autorelease];
 	
@@ -77,16 +144,22 @@
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-	if ([keyPath isEqualToString:[kUserDefaultsKeyPathPrefix stringByAppendingFormat:WCEditorShowCodeFoldingRibbonKey]])
+	if ([keyPath isEqualToString:[kUserDefaultsKeyPathPrefix stringByAppendingFormat:WCEditorShowCodeFoldingRibbonKey]]) {
+		if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey]) {
+			_codeFoldingTrackingArea = [[NSTrackingArea alloc] initWithRect:NSMakeRect(NSMaxX([self bounds])-kCodeFoldingRibbonWidth, NSMinY([self bounds]), kCodeFoldingRibbonWidth, NSHeight([self bounds])) options:NSTrackingActiveInKeyWindow|NSTrackingMouseMoved|NSTrackingMouseEnteredAndExited owner:self userInfo:nil];
+			[self addTrackingArea:_codeFoldingTrackingArea];
+		}
+		else {
+			[self removeTrackingArea:_codeFoldingTrackingArea];
+			[_codeFoldingTrackingArea release];
+			_codeFoldingTrackingArea = nil;
+		}
 		[self setNeedsDisplay:YES];
+	}
 	else
 		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
 
-static const CGFloat kIconWidthHeight = 11.0;
-static const CGFloat kIconPaddingLeft = 1.0;
-static const CGFloat kIconPaddingTop = 1.0;
-static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 - (CGFloat)minimumThickness {
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey])
 		return [super minimumThickness]+kIconWidthHeight+kIconPaddingLeft+kCodeFoldingRibbonWidth;
@@ -141,13 +214,13 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 	if (![[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey])
 		return;
 	
-	[[NSColor colorWithCalibratedWhite:232.0/255.0 alpha:1.0] setFill];
+	[[NSColor colorWithCalibratedWhite:230.0/255.0 alpha:1.0] setFill];
 	NSRectFill(ribbonRect);
 	
 	NSArray *folds = [[[self delegate] sourceScannerForSourceRulerView:self] folds];
 	NSColor *topLevelFoldColor = [NSColor colorWithCalibratedWhite:212.0/255.0 alpha:1.0];
 	
-	for (WCFold *fold in folds) {
+	for (WCFold *fold in [folds foldsForRange:[[self textView] visibleRange]]) {
 		NSRange foldRange = [fold range];
 		if (NSMaxRange(foldRange) >= [[[self textView] string] length])
 			foldRange.length -= (NSMaxRange(foldRange) - [[[self textView] string] length]);
@@ -165,12 +238,17 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 		
 		foldRect = NSMakeRect(NSMinX(ribbonRect), [self convertPoint:foldRect.origin fromView:[self clientView]].y, NSWidth(ribbonRect), NSHeight(foldRect));
 		
+		if (_foldToHighlight == fold)
+			_rectForFoldHighlight = foldRect;
+		
 		[topLevelFoldColor setFill];
 		NSRectFill(foldRect);
 		
-		if ([[fold childNodes] count])
-			[self _drawFoldsForFold:fold inRect:ribbonRect topLevelFoldColor:topLevelFoldColor];
+		[self _drawFoldsForFold:fold inRect:ribbonRect topLevelFoldColor:topLevelFoldColor];
 	}
+	
+	if (_foldToHighlight)
+		[self _drawFoldHighlightInRect:_rectForFoldHighlight];
 	
 	[super drawRightMarginInRect:ribbonRect];
 }
@@ -235,6 +313,41 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 	return NSNotFound;
 }
 
+- (NSRange)_rangeForPoint:(NSPoint)point; {
+	NSLayoutManager *layoutManager = [[self textView] layoutManager];
+	NSTextContainer	*container = [[self textView] textContainer];
+	NSRange	glyphRange = [layoutManager glyphRangeForBoundingRect:[[self clientView] visibleRect] inTextContainer:container];
+	NSRange range = [layoutManager characterRangeForGlyphRange:glyphRange actualGlyphRange:NULL];
+	NSUInteger lineNumber, lineStartIndex, numberOfLines = [[self lineStartIndexes] count];
+	
+	// Fudge the range a tad in case there is an extra new line at end.
+	// It doesn't show up in the glyphs so would not be accounted for.
+	range.length++;
+	
+	for (lineNumber = [[self lineStartIndexes] lineNumberForRange:range]; lineNumber < numberOfLines; lineNumber++) {
+		lineStartIndex = [[[self lineStartIndexes] objectAtIndex:lineNumber] unsignedIntegerValue];
+		
+		if (NSLocationInRange(lineStartIndex, range)) {
+			NSUInteger rectCount;
+			NSRectArray rects = [layoutManager rectArrayForCharacterRange:NSMakeRange(lineStartIndex, 0) withinSelectedCharacterRange:NSNotFoundRange inTextContainer:container rectCount:&rectCount];
+			
+			if (rectCount) {
+				NSUInteger rectIndex;
+				for (rectIndex = 0; rectIndex < rectCount; rectIndex++) {
+					NSRect convertedRect = NSMakeRect(NSMinX([self bounds]), [self convertPoint:rects[rectIndex].origin fromView:[self clientView]].y, NSWidth(rects[rectIndex]), NSHeight(rects[rectIndex]));
+					
+					if ((point.y >= NSMinY(convertedRect)) && (point.y < NSMaxY(convertedRect)))
+						return NSMakeRange(lineStartIndex, 0);
+				}
+			}
+		}
+		
+		if (lineStartIndex > NSMaxRange(range))
+			break;
+	}
+	return NSNotFoundRange;
+}
+
 - (void)_drawFoldsForFold:(WCFold *)fold inRect:(NSRect)ribbonRect topLevelFoldColor:(NSColor *)topLevelFoldColor; {
 	static const CGFloat stepAmount = 0.1;
 	NSColor *colorForThisFoldLevel = nil;
@@ -257,15 +370,52 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 		
 		foldRect = NSMakeRect(NSMinX(ribbonRect), [self convertPoint:foldRect.origin fromView:[self clientView]].y, NSWidth(ribbonRect), NSHeight(foldRect));
 		
+		if (_foldToHighlight == childFold)
+			_rectForFoldHighlight = foldRect;
+		
 		if (!colorForThisFoldLevel)
 			colorForThisFoldLevel = [topLevelFoldColor darkenBy:stepAmount*((CGFloat)[childFold level])];
 		
 		[colorForThisFoldLevel setFill];
 		NSRectFill(foldRect);
 		
-		if ([[childFold childNodes] count])
-			[self _drawFoldsForFold:childFold inRect:ribbonRect topLevelFoldColor:topLevelFoldColor];
+		[self _drawFoldsForFold:childFold inRect:ribbonRect topLevelFoldColor:topLevelFoldColor];
 	}
+}
+
+static const CGFloat kTriangleHeight = 7.0;
+
+- (void)_drawFoldHighlightInRect:(NSRect)foldHighlightRect; {
+	/*
+	[[NSColor colorWithCalibratedWhite:255.0/255.0 alpha:1.0] setFill];
+	NSRectFill(foldHighlightRect);
+	
+	foldHighlightRect = NSInsetRect(foldHighlightRect, 1.0, 1.0);
+	
+	NSBezierPath *path = [NSBezierPath bezierPath];
+	
+	[path moveToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMinY(foldHighlightRect))];
+	[path lineToPoint:NSMakePoint(NSMaxX(foldHighlightRect), NSMinY(foldHighlightRect))];
+	[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect)+floor(NSWidth(foldHighlightRect)/2.0), NSMinY(foldHighlightRect)+kTriangleHeight)];
+	[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMinY(foldHighlightRect))];
+	[path closePath];
+	
+	[[NSColor darkGrayColor] setFill];
+	[path fill];
+	
+	[path moveToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMaxY(foldHighlightRect))];
+	[path lineToPoint:NSMakePoint(NSMaxX(foldHighlightRect), NSMaxY(foldHighlightRect))];
+	[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect)+floor(NSWidth(foldHighlightRect)/2.0), NSMaxY(foldHighlightRect)-kTriangleHeight)];
+	[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMaxY(foldHighlightRect))];
+	[path closePath];
+	
+	[[NSColor darkGrayColor] setFill];
+	[path fill];
+	 */
+	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
+	
+	[[[currentTheme currentLineColor] colorWithAlphaComponent:0.65] setFill];
+	NSRectFillUsingOperation(foldHighlightRect, NSCompositeSourceOver);
 }
 #pragma mark IBActions
 - (IBAction)_toggleBookmark:(id)sender; {
@@ -286,6 +436,9 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 	[self setNeedsDisplay:YES];
 }
 - (void)_sourceScannerDidFinishScanningFolds:(NSNotification *)note {
+	if (![[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey])
+		return;
+	
 	[self setNeedsDisplay:YES];
 }
 @end
