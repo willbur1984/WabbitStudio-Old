@@ -82,7 +82,7 @@
 static const CGFloat kIconWidthHeight = 11.0;
 static const CGFloat kIconPaddingLeft = 1.0;
 static const CGFloat kIconPaddingTop = 1.0;
-static const CGFloat kCodeFoldingRibbonWidth = 9.0;
+static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 
 - (void)mouseEntered:(NSEvent *)theEvent {
 	NSRange range = [self _rangeForPoint:[self convertPointFromBase:[theEvent locationInWindow]]];
@@ -169,7 +169,6 @@ static const CGFloat kCodeFoldingRibbonWidth = 9.0;
 - (void)drawHashMarksAndLabelsInRect:(NSRect)rect {
 	[super drawBackgroundInRect:rect];
 	[self drawCodeFoldingRibbonInRect:NSMakeRect(NSMaxX(rect)-kCodeFoldingRibbonWidth, NSMinY(rect), kCodeFoldingRibbonWidth, NSHeight(rect))];
-	[super drawCurrentLineHighlightInRect:rect];
 	
 	for (RSBookmark *bookmark in [[self textStorage] bookmarksForRange:[[self textView] visibleRange]]) {
 		NSUInteger numRects;
@@ -187,14 +186,17 @@ static const CGFloat kCodeFoldingRibbonWidth = 9.0;
 		[bookmarkImage drawInRect:NSMakeRect(NSMinX(bookmarkRect)+kIconPaddingLeft, NSMinY(bookmarkRect)+kIconPaddingTop, kIconWidthHeight, kIconWidthHeight) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
 	}
 	
-	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey]) {
-		[super drawLineNumbersInRect:NSMakeRect(NSMinX(rect), NSMinY(rect), NSWidth(rect)-kCodeFoldingRibbonWidth, NSHeight(rect))];
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey])
 		[super drawRightMarginInRect:NSMakeRect(NSMinX(rect), NSMinY(rect), NSWidth(rect)-kCodeFoldingRibbonWidth, NSHeight(rect))];
-	}
-	else {
-		[super drawLineNumbersInRect:rect];
+	else
 		[super drawRightMarginInRect:rect];
-	}
+	
+	[super drawCurrentLineHighlightInRect:rect];
+	
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey])
+		[super drawLineNumbersInRect:NSMakeRect(NSMinX(rect), NSMinY(rect), NSWidth(rect)-kCodeFoldingRibbonWidth, NSHeight(rect))];
+	else
+		[super drawLineNumbersInRect:rect];
 }
 #pragma mark NSMenuValidation
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
@@ -383,35 +385,7 @@ static const CGFloat kCodeFoldingRibbonWidth = 9.0;
 	}
 }
 
-static const CGFloat kTriangleHeight = 7.0;
-
 - (void)_drawFoldHighlightInRect:(NSRect)foldHighlightRect; {
-	/*
-	[[NSColor colorWithCalibratedWhite:255.0/255.0 alpha:1.0] setFill];
-	NSRectFill(foldHighlightRect);
-	
-	foldHighlightRect = NSInsetRect(foldHighlightRect, 1.0, 1.0);
-	
-	NSBezierPath *path = [NSBezierPath bezierPath];
-	
-	[path moveToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMinY(foldHighlightRect))];
-	[path lineToPoint:NSMakePoint(NSMaxX(foldHighlightRect), NSMinY(foldHighlightRect))];
-	[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect)+floor(NSWidth(foldHighlightRect)/2.0), NSMinY(foldHighlightRect)+kTriangleHeight)];
-	[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMinY(foldHighlightRect))];
-	[path closePath];
-	
-	[[NSColor darkGrayColor] setFill];
-	[path fill];
-	
-	[path moveToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMaxY(foldHighlightRect))];
-	[path lineToPoint:NSMakePoint(NSMaxX(foldHighlightRect), NSMaxY(foldHighlightRect))];
-	[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect)+floor(NSWidth(foldHighlightRect)/2.0), NSMaxY(foldHighlightRect)-kTriangleHeight)];
-	[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMaxY(foldHighlightRect))];
-	[path closePath];
-	
-	[[NSColor darkGrayColor] setFill];
-	[path fill];
-	 */
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
 	
 	[[[currentTheme currentLineColor] colorWithAlphaComponent:0.65] setFill];

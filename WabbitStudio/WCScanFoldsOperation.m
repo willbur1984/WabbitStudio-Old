@@ -103,12 +103,15 @@ static NSRegularExpression *endMarkersRegex;
 						if (([startMarker type] == WCFoldMarkerTypeMacroStart && [endMarker type] == WCFoldMarkerTypeMacroEnd) ||
 							([startMarker type] == WCFoldMarkerTypeIfStart && [endMarker type] == WCFoldMarkerTypeIfEnd)) {
 							
-							[topLevelFolds addObject:[WCFold foldWithRange:NSUnionRange([startMarker range], [endMarker range]) level:0]];
+							NSRange foldRange = NSUnionRange([startMarker range], [endMarker range]);
+							foldRange = [[self string] lineRangeForRange:foldRange];
+							
+							[topLevelFolds addObject:[WCFold foldWithRange:foldRange level:0]];
 							
 							[foldMarkerStack removeLastObject];
 							[foldMarkerStack removeFirstObject];
 							
-							[self _processFoldsForParentFold:[topLevelFolds lastObject] foldMarkers:[[[[foldMarkerStack reverseObjectEnumerator] allObjects] copy] autorelease]];
+							[self _processFoldsForParentFold:[topLevelFolds lastObject] foldMarkers:[[foldMarkerStack reverseObjectEnumerator] allObjects]];
 							
 							numberOfEndMarkers = 0;
 							numberOfStartMarkers = 0;
@@ -194,12 +197,15 @@ static NSRegularExpression *endMarkersRegex;
 					if (([startMarker type] == WCFoldMarkerTypeMacroStart && [endMarker type] == WCFoldMarkerTypeMacroEnd) ||
 						([startMarker type] == WCFoldMarkerTypeIfStart && [endMarker type] == WCFoldMarkerTypeIfEnd)) {
 						
-						[[parentFold mutableChildNodes] addObject:[WCFold foldWithRange:NSUnionRange([startMarker range], [endMarker range]) level:[parentFold level]+1]];
+						NSRange foldRange = NSUnionRange([startMarker range], [endMarker range]);
+						foldRange = [[self string] lineRangeForRange:foldRange];
+						
+						[[parentFold mutableChildNodes] addObject:[WCFold foldWithRange:foldRange level:[parentFold level]+1]];
 						
 						[foldMarkerStack removeLastObject];
 						[foldMarkerStack removeFirstObject];
 						
-						[self _processFoldsForParentFold:[[parentFold childNodes] lastObject] foldMarkers:[[[[foldMarkerStack reverseObjectEnumerator] allObjects] copy] autorelease]];
+						[self _processFoldsForParentFold:[[parentFold childNodes] lastObject] foldMarkers:[[foldMarkerStack reverseObjectEnumerator] allObjects]];
 						
 						numberOfEndMarkers = 0;
 						numberOfStartMarkers = 0;
