@@ -152,21 +152,26 @@
 	else
 		rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[[self textView] selectedRange] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&numRects];
 	
-	if (numRects) {
-		NSRect lineRect = rects[0];
-		lineRect = NSMakeRect(NSMinX([self bounds]), [self convertPoint:lineRect.origin fromView:[self clientView]].y, NSWidth([self bounds]), NSHeight(lineRect));
-		
-		if (NSIntersectsRect(lineRect, currentLineHighlightRect) && [self needsToDrawRect:lineRect]) {
-			
-			WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
-			
-			[[[currentTheme currentLineColor] colorWithAlphaComponent:0.5] setFill];
-			NSRectFillUsingOperation(lineRect, NSCompositeSourceOver);
-			[[currentTheme currentLineColor] setFill];
-			NSRectFill(NSMakeRect(NSMinX(lineRect), NSMinY(lineRect), NSWidth(lineRect), 1.0));
-			NSRectFill(NSMakeRect(NSMinX(lineRect), NSMaxY(lineRect)-1, NSWidth(lineRect), 1.0));
-		}
-	}
+	if (!numRects)
+		return;
+	
+	NSRect lineRect = NSZeroRect;
+	NSUInteger rectIndex;
+	for (rectIndex=0; rectIndex<numRects; rectIndex++)
+		lineRect = NSUnionRect(lineRect, rects[rectIndex]);
+	
+	lineRect = NSMakeRect(NSMinX([self bounds]), [self convertPoint:lineRect.origin fromView:[self clientView]].y, NSWidth([self bounds]), NSHeight(lineRect));
+	
+	if (!NSIntersectsRect(lineRect, currentLineHighlightRect) || ![self needsToDrawRect:lineRect])
+		return;
+	
+	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
+	
+	[[[currentTheme currentLineColor] colorWithAlphaComponent:0.4] setFill];
+	NSRectFillUsingOperation(lineRect, NSCompositeSourceOver);
+	[[currentTheme currentLineColor] setFill];
+	NSRectFill(NSMakeRect(NSMinX(lineRect), NSMinY(lineRect), NSWidth(lineRect), 1.0));
+	NSRectFill(NSMakeRect(NSMinX(lineRect), NSMaxY(lineRect)-1, NSWidth(lineRect), 1.0));
 }
 
 - (void)drawLineNumbersInRect:(NSRect)lineNumbersRect; {
@@ -307,10 +312,6 @@
 	if (([[note object] editedMask] & NSTextStorageEditedCharacters) == 0)
 		return;
 	
-#ifdef DEBUG
-	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
-#endif
-	
 	[self setShouldRecalculateLineStartIndexes:YES];
     [self setNeedsDisplay:YES];
 }
@@ -324,9 +325,6 @@
 	[self setNeedsDisplay:YES];
 }
 - (void)_viewFrameDidChange:(NSNotification *)note {
-#ifdef DEBUG
-	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
-#endif
 	[self setNeedsDisplay:YES];
 }
 - (void)_viewBoundsDidChange:(NSNotification *)note {

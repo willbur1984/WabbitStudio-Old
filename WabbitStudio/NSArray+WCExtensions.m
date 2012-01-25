@@ -11,6 +11,7 @@
 #import "WCSourceToken.h"
 #import "RSBookmark.h"
 #import "WCFold.h"
+#import "RSDefines.h"
 
 @implementation NSArray (WCExtensions)
 - (NSUInteger)sourceTokenIndexForRange:(NSRange)range; {
@@ -46,7 +47,7 @@
 	else {
 		NSUInteger startIndex = [self sourceTokenIndexForRange:range];
 		NSUInteger endIndex = [self sourceTokenIndexForRange:NSMakeRange(NSMaxRange(range), 0)];
-		if (endIndex < [self count])
+		if (endIndex < [self count] && NSMaxRange([[self objectAtIndex:endIndex] range]) <= NSMaxRange(range))
 			endIndex++;
 		
 		return [self subarrayWithRange:NSMakeRange(startIndex, endIndex-startIndex)];
@@ -165,14 +166,16 @@
 	if (![self count])
 		return nil;
 	else if ([self count] == 1) {
-		if (NSLocationInRange([[self lastObject] range].location, range))
+		if (NSIntersectionRange([[self lastObject] range],range).length)
 			return self;
 		return nil;
 	}
 	else {
 		NSUInteger startIndex = [self foldIndexForRange:range];
 		NSUInteger endIndex = [self foldIndexForRange:NSMakeRange(NSMaxRange(range), 0)];
-		if (endIndex < [self count])
+		if (startIndex == endIndex)
+			return [NSArray arrayWithObject:[self firstObject]];
+		else if (endIndex < [self count])
 			endIndex++;
 		
 		return [self subarrayWithRange:NSMakeRange(startIndex, endIndex-startIndex)];
@@ -199,5 +202,12 @@
 	if ([self count])
 		return [self objectAtIndex:0];
 	return nil;
+}
+@end
+
+@implementation NSMutableArray (WCExtensions)
+- (void)removeFirstObject; {
+	if ([self count])
+		[self removeObjectAtIndex:0];
 }
 @end

@@ -31,3 +31,7 @@
 
 - (id)firstObject;
 @end
+
+@interface NSMutableArray (WCExtensions)
+- (void)removeFirstObject;
+@end

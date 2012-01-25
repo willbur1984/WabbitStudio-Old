@@ -942,7 +942,7 @@
 	
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
 	
-	[[[currentTheme currentLineColor] colorWithAlphaComponent:0.5] setFill];
+	[[[currentTheme currentLineColor] colorWithAlphaComponent:0.4] setFill];
 	NSRectFillUsingOperation(lineRect, NSCompositeSourceOver);
 	[[currentTheme currentLineColor] setFill];
 	NSRectFill(NSMakeRect(NSMinX(lineRect), NSMinY(lineRect), NSWidth(lineRect), 1.0));

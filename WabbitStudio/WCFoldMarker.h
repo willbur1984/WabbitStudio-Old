@@ -9,10 +9,10 @@
 #import <Foundation/NSObject.h>
 
 typedef enum _WCFoldMarkerType {
-	WCFoldMarkerTypeMacroStart,
-	WCFoldMarkerTypeMacroEnd,
-	WCFoldMarkerTypeIfStart,
-	WCFoldMarkerTypeIfEnd
+	WCFoldMarkerTypeMacroStart = 0,
+	WCFoldMarkerTypeMacroEnd = 1,
+	WCFoldMarkerTypeIfStart = 2,
+	WCFoldMarkerTypeIfEnd = 3
 	
 } WCFoldMarkerType;
 

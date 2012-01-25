@@ -356,7 +356,7 @@
 
 #pragma mark Notifications
 - (void)_viewBoundsDidChange:(NSNotification *)note {
-	[[self sourceHighlighter] performHighlightingInRange:[[self textView] visibleRange]];
+	[self performSelector:@selector(_delayedHighlightVisibleRange) withObject:nil afterDelay:0.0];
 }
 #pragma mark Callbacks
 

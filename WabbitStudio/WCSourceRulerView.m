@@ -86,7 +86,7 @@
 static const CGFloat kIconWidthHeight = 11.0;
 static const CGFloat kIconPaddingLeft = 1.0;
 static const CGFloat kIconPaddingTop = 1.0;
-static const CGFloat kCodeFoldingRibbonWidth = 6.0;
+static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 - (CGFloat)minimumThickness {
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey])
 		return [super minimumThickness]+kIconWidthHeight+kIconPaddingLeft+kCodeFoldingRibbonWidth;
@@ -144,7 +144,7 @@ static const CGFloat kCodeFoldingRibbonWidth = 6.0;
 	[[NSColor colorWithCalibratedWhite:232.0/255.0 alpha:1.0] setFill];
 	NSRectFill(ribbonRect);
 	
-	NSArray *folds = [[[[self delegate] sourceScannerForSourceRulerView:self] folds] foldsForRange:[[self textView] visibleRange]];
+	NSArray *folds = [[[self delegate] sourceScannerForSourceRulerView:self] folds];
 	NSColor *topLevelFoldColor = [NSColor colorWithCalibratedWhite:212.0/255.0 alpha:1.0];
 	
 	for (WCFold *fold in folds) {
@@ -153,18 +153,23 @@ static const CGFloat kCodeFoldingRibbonWidth = 6.0;
 			foldRange.length -= (NSMaxRange(foldRange) - [[[self textView] string] length]);
 		
 		NSUInteger rectCount;
-		NSRectArray rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[[[self textView] string] lineRangeForRange:foldRange] withinSelectedCharacterRange:foldRange inTextContainer:[[self textView] textContainer] rectCount:&rectCount];
+		NSRectArray rects = [[[self textView] layoutManager] rectArrayForCharacterRange:foldRange withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&rectCount];
 		
 		if (!rectCount)
 			continue;
 		
-		NSRect foldRect = rects[0];
+		NSRect foldRect = NSZeroRect;
+		NSUInteger rectIndex;
+		for (rectIndex=0; rectIndex<rectCount; rectIndex++)
+			foldRect = NSUnionRect(foldRect, rects[rectIndex]);
+		
 		foldRect = NSMakeRect(NSMinX(ribbonRect), [self convertPoint:foldRect.origin fromView:[self clientView]].y, NSWidth(ribbonRect), NSHeight(foldRect));
 		
 		[topLevelFoldColor setFill];
 		NSRectFill(foldRect);
 		
-		[self _drawFoldsForFold:fold inRect:ribbonRect topLevelFoldColor:topLevelFoldColor];
+		if ([[fold childNodes] count])
+			[self _drawFoldsForFold:fold inRect:ribbonRect topLevelFoldColor:topLevelFoldColor];
 	}
 	
 	[super drawRightMarginInRect:ribbonRect];
@@ -231,13 +236,13 @@ static const CGFloat kCodeFoldingRibbonWidth = 6.0;
 }
 
 - (void)_drawFoldsForFold:(WCFold *)fold inRect:(NSRect)ribbonRect topLevelFoldColor:(NSColor *)topLevelFoldColor; {
-	static const CGFloat stepAmount = 0.15;
-	NSColor *colorForThisFoldLevel = [topLevelFoldColor darkenBy:stepAmount*((CGFloat)[fold level]+1)];
+	static const CGFloat stepAmount = 0.1;
+	NSColor *colorForThisFoldLevel = nil;
 	
 	for (WCFold *childFold in [fold childNodes]) {
 		NSRange foldRange = [childFold range];
-		if (NSMaxRange(foldRange) == [[[self textView] string] length])
-			foldRange.length--;
+		if (NSMaxRange(foldRange) >= [[[self textView] string] length])
+			foldRange.length -= (NSMaxRange(foldRange) - [[[self textView] string] length]);
 		
 		NSUInteger rectCount;
 		NSRectArray rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[[[self textView] string] lineRangeForRange:foldRange] withinSelectedCharacterRange:foldRange inTextContainer:[[self textView] textContainer] rectCount:&rectCount];
@@ -245,13 +250,21 @@ static const CGFloat kCodeFoldingRibbonWidth = 6.0;
 		if (!rectCount)
 			continue;
 		
-		NSRect foldRect = rects[0];
+		NSRect foldRect = NSZeroRect;
+		NSUInteger rectIndex;
+		for (rectIndex=0; rectIndex<rectCount; rectIndex++)
+			foldRect = NSUnionRect(foldRect, rects[rectIndex]);
+		
 		foldRect = NSMakeRect(NSMinX(ribbonRect), [self convertPoint:foldRect.origin fromView:[self clientView]].y, NSWidth(ribbonRect), NSHeight(foldRect));
+		
+		if (!colorForThisFoldLevel)
+			colorForThisFoldLevel = [topLevelFoldColor darkenBy:stepAmount*((CGFloat)[childFold level])];
 		
 		[colorForThisFoldLevel setFill];
 		NSRectFill(foldRect);
 		
-		[self _drawFoldsForFold:childFold inRect:ribbonRect topLevelFoldColor:topLevelFoldColor];
+		if ([[childFold childNodes] count])
+			[self _drawFoldsForFold:childFold inRect:ribbonRect topLevelFoldColor:topLevelFoldColor];
 	}
 }
 #pragma mark IBActions
