@@ -44,4 +44,7 @@
 
 - (IBAction)jumpToNextBookmark:(id)sender;
 - (IBAction)jumpToPreviousBookmark:(id)sender;
+
+- (IBAction)fold:(id)sender;
+- (IBAction)unfold:(id)sender;
 @end

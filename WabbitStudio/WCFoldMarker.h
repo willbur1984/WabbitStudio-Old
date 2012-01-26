@@ -12,7 +12,9 @@ typedef enum _WCFoldMarkerType {
 	WCFoldMarkerTypeMacroStart = 0,
 	WCFoldMarkerTypeMacroEnd = 1,
 	WCFoldMarkerTypeIfStart = 2,
-	WCFoldMarkerTypeIfEnd = 3
+	WCFoldMarkerTypeIfEnd = 3,
+	WCFoldMarkerTypeCommentStart = 4,
+	WCFoldMarkerTypeCommentEnd = 5
 	
 } WCFoldMarkerType;
 

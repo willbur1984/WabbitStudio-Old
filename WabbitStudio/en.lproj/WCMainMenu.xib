@@ -1128,6 +1128,34 @@
 									<reference key="NSOnImage" ref="1033313550"/>
 									<reference key="NSMixedImage" ref="310636482"/>
 								</object>
+								<object class="NSMenuItem" id="1045025699">
+									<reference key="NSMenu" ref="600456139"/>
+									<bool key="NSIsDisabled">YES</bool>
+									<bool key="NSIsSeparator">YES</bool>
+									<string key="NSTitle"/>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="1033313550"/>
+									<reference key="NSMixedImage" ref="310636482"/>
+								</object>
+								<object class="NSMenuItem" id="792449506">
+									<reference key="NSMenu" ref="600456139"/>
+									<string key="NSTitle">Fold</string>
+									<string key="NSKeyEquiv"></string>
+									<int key="NSKeyEquivModMask">1572864</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="1033313550"/>
+									<reference key="NSMixedImage" ref="310636482"/>
+								</object>
+								<object class="NSMenuItem" id="1026010419">
+									<reference key="NSMenu" ref="600456139"/>
+									<string key="NSTitle">Unfold</string>
+									<string key="NSKeyEquiv"></string>
+									<int key="NSKeyEquivModMask">1572864</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="1033313550"/>
+									<reference key="NSMixedImage" ref="310636482"/>
+								</object>
 							</array>
 						</object>
 					</object>
@@ -1902,6 +1930,22 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
+						<string key="label">fold:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="792449506"/>
+					</object>
+					<int key="connectionID">662</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">unfold:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="1026010419"/>
+					</object>
+					<int key="connectionID">663</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
 						<string key="label">preferences:</string>
 						<reference key="source" ref="968104485"/>
 						<reference key="destination" ref="609285721"/>
@@ -2489,6 +2533,9 @@
 							<reference ref="3802643"/>
 							<reference ref="638836715"/>
 							<reference ref="490322172"/>
+							<reference ref="792449506"/>
+							<reference ref="1045025699"/>
+							<reference ref="1026010419"/>
 						</array>
 						<reference key="parent" ref="405799454"/>
 					</object>
@@ -2874,6 +2921,21 @@
 						<reference key="object" ref="268251296"/>
 						<reference key="parent" ref="287866681"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">659</int>
+						<reference key="object" ref="792449506"/>
+						<reference key="parent" ref="600456139"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">660</int>
+						<reference key="object" ref="1045025699"/>
+						<reference key="parent" ref="600456139"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">661</int>
+						<reference key="object" ref="1026010419"/>
+						<reference key="parent" ref="600456139"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -3012,6 +3074,9 @@
 				<string key="653.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="654.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="655.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="659.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="660.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="661.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="72.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="73.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="74.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3028,7 +3093,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">658</int>
+			<int key="maxID">663</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -3394,6 +3459,7 @@
 						<string key="addBookmarkAtCurrentLine:">id</string>
 						<string key="commentSelection:">id</string>
 						<string key="commentUncommentSelection:">id</string>
+						<string key="fold:">id</string>
 						<string key="jumpInFile:">id</string>
 						<string key="jumpToDefinition:">id</string>
 						<string key="jumpToLine:">id</string>
@@ -3407,6 +3473,7 @@
 						<string key="shiftRight:">id</string>
 						<string key="toggleBookmarkAtCurrentLine:">id</string>
 						<string key="uncommentSelection:">id</string>
+						<string key="unfold:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
 						<object class="IBActionInfo" key="addBookmarkAtCurrentLine:">
@@ -3419,6 +3486,10 @@
 						</object>
 						<object class="IBActionInfo" key="commentUncommentSelection:">
 							<string key="name">commentUncommentSelection:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="fold:">
+							<string key="name">fold:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="jumpInFile:">
@@ -3471,6 +3542,10 @@
 						</object>
 						<object class="IBActionInfo" key="uncommentSelection:">
 							<string key="name">uncommentSelection:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="unfold:">
+							<string key="name">unfold:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 					</dictionary>

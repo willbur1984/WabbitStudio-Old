@@ -66,7 +66,7 @@ static NSString *const WCFileReferenceKey = @"fileReference";
 	return types;
 }
 - (id)pasteboardPropertyListForType:(NSString *)type {	
-	if ([type isEqualToString:WCPasteboardTypeFileUUID]) {
+	if ([type isEqualToString:WCPasteboardTypeFileUUID] || [type isEqualToString:NSPasteboardTypeString]) {
 		return [self UUID];
 	}
 	return [[self fileURL] pasteboardPropertyListForType:type];

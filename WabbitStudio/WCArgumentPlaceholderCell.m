@@ -8,10 +8,10 @@
 
 #import "WCArgumentPlaceholderCell.h"
 #import "NSBezierPath+StrokeExtensions.h"
-#import "NSColor+ContrastingLabelExtensions.h"
 #import "WCFontAndColorTheme.h"
 #import "WCFontAndColorThemeManager.h"
 #import "RSDefines.h"
+#import "AIColorAdditions.h"
 
 NSString *const WCPasteboardTypeArgumentPlaceholderCell = @"org.revsoft.wabbitstudio.argumentplaceholder";
 
@@ -49,9 +49,6 @@ static NSTextContainer *_textContainer;
 	[super dealloc];
 }
 
-static const CGFloat kIconPaddingRight = 4.0;
-static const CGFloat kIconPaddingTopBottom = 2.0;
-static const NSSize kIconSize = (NSSize){8.0,6.0};
 - (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView characterIndex:(NSUInteger)charIndex layoutManager:(NSLayoutManager *)layoutManager {
 	static NSColor *lightSelectedFillColor;
 	static NSColor *lightNotSelectedKeyFillColor;
@@ -81,7 +78,7 @@ static const NSSize kIconSize = (NSSize){8.0,6.0};
 	NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:cellFrame xRadius:5.0 yRadius:5.0];
 	NSTextView *textView = [layoutManager firstTextView];
 	BOOL isSelected = NSLocationInRange(charIndex, [textView selectedRange]);
-	BOOL backgroundColorIsLight = [[[textView backgroundColor] contrastingLabelColor] isEqualTo:[NSColor blackColor]];;
+	BOOL backgroundColorIsLight = (![[textView backgroundColor] colorIsDark]);
 	
 	if ([[controlView window] isKeyWindow]) {
 		if (isSelected) {

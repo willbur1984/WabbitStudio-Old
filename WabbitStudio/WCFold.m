@@ -10,23 +10,25 @@
 
 @implementation WCFold
 - (NSString *)description {
-	return [NSString stringWithFormat:@"range: %@ level: %lu",NSStringFromRange([self range]),[self level]];
+	return [NSString stringWithFormat:@"range: %@ level: %lu contentRange: %@",NSStringFromRange([self range]),[self level],NSStringFromRange([self contentRange])];
 }
 
-+ (id)foldWithRange:(NSRange)range level:(NSUInteger)level; {
-	return [[[[self class] alloc] initWithRange:range level:level] autorelease];
++ (id)foldWithRange:(NSRange)range level:(NSUInteger)level contentRange:(NSRange)contentRange; {
+	return [[[[self class] alloc] initWithRange:range level:level contentRange:contentRange] autorelease];
 }
-- (id)initWithRange:(NSRange)range level:(NSUInteger)level; {
+- (id)initWithRange:(NSRange)range level:(NSUInteger)level contentRange:(NSRange)contentRange; {
 	if (!(self = [super initWithRepresentedObject:nil]))
 		return nil;
 	
 	_range = range;
+	_contentRange = contentRange;
 	_level = level;
 	
 	return self;
 }
 
 @synthesize range=_range;
+@synthesize contentRange=_contentRange;
 @synthesize level=_level;
 
 @end

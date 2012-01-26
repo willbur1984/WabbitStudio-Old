@@ -218,6 +218,30 @@
 				<true/>
 			</dict>
 		</dict>
+		<key>fold:</key>
+		<dict>
+			<key>keyCode</key>
+			<integer>123</integer>
+			<key>modifierFlags</key>
+			<dict>
+				<key>command</key>
+				<true/>
+				<key>option</key>
+				<true/>
+			</dict>
+		</dict>
+		<key>unfold:</key>
+		<dict>
+			<key>keyCode</key>
+			<integer>124</integer>
+			<key>modifierFlags</key>
+			<dict>
+				<key>command</key>
+				<true/>
+				<key>option</key>
+				<true/>
+			</dict>
+		</dict>
 		<key>jumpToNextBookmark:</key>
 		<dict>
 			<key>keyCode</key>

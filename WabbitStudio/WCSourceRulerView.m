@@ -219,10 +219,10 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 	[[NSColor colorWithCalibratedWhite:230.0/255.0 alpha:1.0] setFill];
 	NSRectFill(ribbonRect);
 	
-	NSArray *folds = [[[self delegate] sourceScannerForSourceRulerView:self] folds];
+	NSArray *folds = [[[[self delegate] sourceScannerForSourceRulerView:self] folds] foldsForRange:[[self textView] visibleRange]];
 	NSColor *topLevelFoldColor = [NSColor colorWithCalibratedWhite:212.0/255.0 alpha:1.0];
 	
-	for (WCFold *fold in [folds foldsForRange:[[self textView] visibleRange]]) {
+	for (WCFold *fold in folds) {
 		NSRange foldRange = [fold range];
 		if (NSMaxRange(foldRange) >= [[[self textView] string] length])
 			foldRange.length -= (NSMaxRange(foldRange) - [[[self textView] string] length]);
@@ -385,11 +385,30 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 	}
 }
 
+static const CGFloat kTriangleHeight = 6.0;
 - (void)_drawFoldHighlightInRect:(NSRect)foldHighlightRect; {
-	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
+	[[NSColor whiteColor] setFill];
+	NSRectFill(foldHighlightRect);
 	
-	[[[currentTheme currentLineColor] colorWithAlphaComponent:0.65] setFill];
-	NSRectFillUsingOperation(foldHighlightRect, NSCompositeSourceOver);
+	foldHighlightRect = NSInsetRect(foldHighlightRect, 1.0, 1.0);
+	foldHighlightRect = NSOffsetRect(foldHighlightRect, -0.5, 0.0);
+	
+	NSBezierPath *path = [NSBezierPath bezierPath];
+	
+	[path moveToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMinY(foldHighlightRect))];
+	[path lineToPoint:NSMakePoint(NSMaxX(foldHighlightRect), NSMinY(foldHighlightRect))];
+	[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect)+floor(NSWidth(foldHighlightRect)/2.0), NSMinY(foldHighlightRect)+kTriangleHeight)];
+	[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMinY(foldHighlightRect))];
+	[path closePath];
+	
+	[path moveToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMaxY(foldHighlightRect))];
+	[path lineToPoint:NSMakePoint(NSMaxX(foldHighlightRect), NSMaxY(foldHighlightRect))];
+	[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect)+floor(NSWidth(foldHighlightRect)/2.0), NSMaxY(foldHighlightRect)-kTriangleHeight)];
+	[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMaxY(foldHighlightRect))];
+	[path closePath];
+	
+	[[NSColor darkGrayColor] setFill];
+	[path fill];
 }
 #pragma mark IBActions
 - (IBAction)_toggleBookmark:(id)sender; {

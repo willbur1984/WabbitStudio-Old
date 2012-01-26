@@ -175,13 +175,13 @@
 		07862BB014BA8A5F0057EB89 /* WCSourceFileWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07862BAF14BA8A5F0057EB89 /* WCSourceFileWindowController.m */; };
 		07862BC514BB6F850057EB89 /* WCSourceFileWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07862BC314BB6F850057EB89 /* WCSourceFileWindow.xib */; };
 		07862BC814BBA5B00057EB89 /* NSParagraphStyle+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07862BC714BBA5B00057EB89 /* NSParagraphStyle+RSExtensions.m */; };
+		0788E49A14D0AEF90038181F /* WCFoldAttachmentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0788E49914D0AEF90038181F /* WCFoldAttachmentCell.m */; };
 		07892EDA14B81375006FDB52 /* NSString+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07892ED914B81375006FDB52 /* NSString+RSExtensions.m */; };
 		078F03FD14AD0D760080ADBC /* RSToolTipBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F03F614AD0D760080ADBC /* RSToolTipBackgroundView.m */; };
 		078F03FE14AD0D760080ADBC /* RSToolTipManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F03F914AD0D760080ADBC /* RSToolTipManager.m */; };
 		078F03FF14AD0D760080ADBC /* RSToolTipPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F03FB14AD0D760080ADBC /* RSToolTipPanel.m */; };
 		078F040414AD0FA00080ADBC /* RSToolTipWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 078F040214AD0FA00080ADBC /* RSToolTipWindow.xib */; };
 		078F040714AD17AC0080ADBC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 078F040614AD17AC0080ADBC /* QuartzCore.framework */; };
-		078F040B14AD5BFA0080ADBC /* NSColor+ContrastingLabelExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F040A14AD5BFA0080ADBC /* NSColor+ContrastingLabelExtensions.m */; };
 		078F040F14AD73510080ADBC /* RSFindOptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F040D14AD73510080ADBC /* RSFindOptionsViewController.m */; };
 		078F041314AD736A0080ADBC /* RSFindOptionsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 078F041114AD736A0080ADBC /* RSFindOptionsView.xib */; };
 		078F041814AD784E0080ADBC /* RSFindBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F041614AD784E0080ADBC /* RSFindBarViewController.m */; };
@@ -583,6 +583,8 @@
 		07862BC414BB6F850057EB89 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCSourceFileWindow.xib; sourceTree = "<group>"; };
 		07862BC614BBA5B00057EB89 /* NSParagraphStyle+RSExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSParagraphStyle+RSExtensions.h"; sourceTree = "<group>"; };
 		07862BC714BBA5B00057EB89 /* NSParagraphStyle+RSExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSParagraphStyle+RSExtensions.m"; sourceTree = "<group>"; };
+		0788E49814D0AEF90038181F /* WCFoldAttachmentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCFoldAttachmentCell.h; sourceTree = "<group>"; };
+		0788E49914D0AEF90038181F /* WCFoldAttachmentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCFoldAttachmentCell.m; sourceTree = "<group>"; };
 		07892ED814B81375006FDB52 /* NSString+RSExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+RSExtensions.h"; sourceTree = "<group>"; };
 		07892ED914B81375006FDB52 /* NSString+RSExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+RSExtensions.m"; sourceTree = "<group>"; };
 		078F03F514AD0D760080ADBC /* RSToolTipBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSToolTipBackgroundView.h; sourceTree = "<group>"; };
@@ -596,8 +598,6 @@
 		078F040514AD11740080ADBC /* RSToolTipView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSToolTipView.h; sourceTree = "<group>"; };
 		078F040614AD17AC0080ADBC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		078F040814AD4A540080ADBC /* WCSourceScannerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSourceScannerDelegate.h; sourceTree = "<group>"; };
-		078F040914AD5BFA0080ADBC /* NSColor+ContrastingLabelExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSColor+ContrastingLabelExtensions.h"; sourceTree = "<group>"; };
-		078F040A14AD5BFA0080ADBC /* NSColor+ContrastingLabelExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSColor+ContrastingLabelExtensions.m"; sourceTree = "<group>"; };
 		078F040C14AD73500080ADBC /* RSFindOptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSFindOptionsViewController.h; sourceTree = "<group>"; };
 		078F040D14AD73510080ADBC /* RSFindOptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSFindOptionsViewController.m; sourceTree = "<group>"; };
 		078F041214AD736A0080ADBC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = RSFindOptionsView.xib; sourceTree = "<group>"; };
@@ -766,6 +766,8 @@
 				0706AFC614CF302800A0F93C /* WCFold.m */,
 				0706AFD614CF5B7600A0F93C /* WCFoldMarker.h */,
 				0706AFD714CF5B7600A0F93C /* WCFoldMarker.m */,
+				0788E49814D0AEF90038181F /* WCFoldAttachmentCell.h */,
+				0788E49914D0AEF90038181F /* WCFoldAttachmentCell.m */,
 			);
 			name = Folding;
 			sourceTree = "<group>";
@@ -953,8 +955,6 @@
 				07862BAC14BA78010057EB89 /* KBResponderNotifyingWindow.m */,
 				07713F1414B9551400324F77 /* EncodingManager.h */,
 				07713F1514B9551400324F77 /* EncodingManager.m */,
-				078F040914AD5BFA0080ADBC /* NSColor+ContrastingLabelExtensions.h */,
-				078F040A14AD5BFA0080ADBC /* NSColor+ContrastingLabelExtensions.m */,
 				0725433614A7996000C961B7 /* NSBezierPath+MCAdditions.h */,
 				0725433714A7996000C961B7 /* NSBezierPath+MCAdditions.m */,
 				0725433814A7996000C961B7 /* NSShadow+MCAdditions.h */,
@@ -1818,7 +1818,6 @@
 				078F03FD14AD0D760080ADBC /* RSToolTipBackgroundView.m in Sources */,
 				078F03FE14AD0D760080ADBC /* RSToolTipManager.m in Sources */,
 				078F03FF14AD0D760080ADBC /* RSToolTipPanel.m in Sources */,
-				078F040B14AD5BFA0080ADBC /* NSColor+ContrastingLabelExtensions.m in Sources */,
 				078F040F14AD73510080ADBC /* RSFindOptionsViewController.m in Sources */,
 				078F041814AD784E0080ADBC /* RSFindBarViewController.m in Sources */,
 				0791BE5214AD7F530004AC16 /* RSFindBarView.m in Sources */,
@@ -1924,6 +1923,7 @@
 				0706AFD014CF351600A0F93C /* AIFunctions.m in Sources */,
 				0706AFD314CF353600A0F93C /* AIApplicationAdditions.m in Sources */,
 				0706AFD814CF5B7600A0F93C /* WCFoldMarker.m in Sources */,
+				0788E49A14D0AEF90038181F /* WCFoldAttachmentCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

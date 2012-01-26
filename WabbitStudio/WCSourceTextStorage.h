@@ -19,6 +19,10 @@ extern NSString *const WCSourceTextStorageDidRemoveBookmarkNotification;
 	NSMutableAttributedString *_attributedString;
 	NSMutableArray *_lineStartIndexes;
 	NSMutableArray *_bookmarks;
+	struct {
+		unsigned int lineFolding:1;
+		unsigned int RESERVED:31;
+	} _textStorageFlags;
 }
 @property (readonly,nonatomic) NSArray *lineStartIndexes;
 @property (readwrite,assign,nonatomic) id <WCSourceTextStorageDelegate> delegate;

@@ -96,9 +96,7 @@
 	}
 }
 
-- (void)outlineView:(NSOutlineView *)outlineView updateDraggingItemsForDrag:(id<NSDraggingInfo>)draggingInfo {	
-	[self setProjectFilePaths:[[[self projectNavigatorViewController] projectDocument] filePaths]];
-	
+- (void)outlineView:(NSOutlineView *)outlineView updateDraggingItemsForDrag:(id<NSDraggingInfo>)draggingInfo {
 	// create a new NSTableCellView from out outline table view (which is the column that contains the disclosure arrow)
 	NSTableCellView *cellView = [outlineView makeViewWithIdentifier:@"MainCell" owner:nil];
 	// initial frame of the cell view, origin doesn't matter, but use the same size as the outline view
@@ -108,19 +106,23 @@
 	cellFrame.size.width -= [outlineView intercellSpacing].width;
 	
 	__block NSInteger numberOfValidDraggingItems = 0;
-	NSDictionary *UUIDsToObjects = [[[self projectNavigatorViewController] projectDocument] UUIDsToFiles];
 	
-	[draggingInfo enumerateDraggingItemsWithOptions:0 forView:outlineView classes:[NSArray arrayWithObjects:[NSString class],[NSURL class], nil] searchOptions:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],NSPasteboardURLReadingFileURLsOnlyKey, nil] usingBlock:^(NSDraggingItem *draggingItem, NSInteger idx, BOOL *stop) {
+	if ([draggingInfo draggingSource] == outlineView) {
+		NSDictionary *UUIDsToObjects = [[[self projectNavigatorViewController] projectDocument] UUIDsToFiles];
 		
-		// set our initial dragging frame from above
-		[draggingItem setDraggingFrame:cellFrame];
-		
-		id item = [draggingItem item];
-		
-		if ([item isKindOfClass:[NSString class]]) {
+		[draggingInfo enumerateDraggingItemsWithOptions:0 forView:outlineView classes:[NSArray arrayWithObjects:[NSString class], nil] searchOptions:nil usingBlock:^(NSDraggingItem *draggingItem, NSInteger idx, BOOL *stop) {
+			
+			// set our initial dragging frame from above
+			[draggingItem setDraggingFrame:cellFrame];
+			
+			id item = [draggingItem item];
+			
+			NSLogObject(item);
+			
 			WCFile *file = [UUIDsToObjects objectForKey:item];
 			
 			if (file) {
+				
 				[draggingItem setImageComponentsProvider:^(void) {
 					// object value for the cell view is our model object (instance of WCFile in this case)
 					[cellView setObjectValue:[RSTreeNode treeNodeWithRepresentedObject:file]];
@@ -137,8 +139,21 @@
 			}
 			else
 				[draggingItem setImageComponentsProvider:nil];
-		}
-		else if ([item isKindOfClass:[NSURL class]]) {
+		}];
+		
+		// let the dragging info know how many items we can accept, this updates the badge count correctly
+		[draggingInfo setNumberOfValidItemsForDrop:numberOfValidDraggingItems];
+	}
+	else {
+		[self setProjectFilePaths:[[[self projectNavigatorViewController] projectDocument] filePaths]];
+		
+		[draggingInfo enumerateDraggingItemsWithOptions:0 forView:outlineView classes:[NSArray arrayWithObjects:[NSURL class], nil] searchOptions:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],NSPasteboardURLReadingFileURLsOnlyKey, nil] usingBlock:^(NSDraggingItem *draggingItem, NSInteger idx, BOOL *stop) {
+			
+			// set our initial dragging frame from above
+			[draggingItem setDraggingFrame:cellFrame];
+			
+			id item = [draggingItem item];
+			
 			if ([[self projectFilePaths] containsObject:[[item filePathURL] path]])
 				[draggingItem setImageComponentsProvider:nil];
 			else {
@@ -156,13 +171,13 @@
 				cellFrame.origin.y += NSHeight(cellFrame);
 				numberOfValidDraggingItems++;
 			}
-		}
-	}];
-	
-	// let the dragging info know how many items we can accept, this updates the badge count correctly
-	[draggingInfo setNumberOfValidItemsForDrop:numberOfValidDraggingItems];
-	
-	[self setProjectFilePaths:nil];
+		}];
+		
+		// let the dragging info know how many items we can accept, this updates the badge count correctly
+		[draggingInfo setNumberOfValidItemsForDrop:numberOfValidDraggingItems];
+		
+		[self setProjectFilePaths:nil];
+	}
 }
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id<NSDraggingInfo>)info item:(id)item childIndex:(NSInteger)index {

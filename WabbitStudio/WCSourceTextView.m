@@ -35,6 +35,7 @@
 #import "NSTextView+WCExtensions.h"
 #import "WCProjectDocument.h"
 #import "WCFile.h"
+#import "WCFoldAttachmentCell.h"
 
 @interface WCSourceTextView ()
 
@@ -816,6 +817,22 @@
 	}
 	else
 		NSBeep();
+}
+
+- (IBAction)fold:(id)sender; {
+	NSTextAttachment *attachment = [[[NSTextAttachment alloc] initWithFileWrapper:nil] autorelease];
+	WCFoldAttachmentCell *cell = [[[WCFoldAttachmentCell alloc] initTextCell:@""] autorelease];
+	NSAttributedString *attributedString = [NSAttributedString attributedStringWithAttachment:attachment];
+	
+	[attachment setAttachmentCell:cell];
+	
+	if ([self shouldChangeTextInRange:[self selectedRange] replacementString:[attributedString string]]) {
+		[[self textStorage] replaceCharactersInRange:[self selectedRange] withAttributedString:attributedString];
+		[self didChangeText];
+	}
+}
+- (IBAction)unfold:(id)sender; {
+	
 }
 #pragma mark Properties
 @dynamic delegate;

@@ -18,6 +18,7 @@
 #import "RSBookmark.h"
 #import "NSString+RSExtensions.h"
 #import "NSArray+WCExtensions.h"
+#import "WCFoldAttachmentCell.h"
 
 NSString *const WCSourceTextStorageDidAddBookmarkNotification = @"WCSourceTextStorageDidAddBookmarkNotification";
 NSString *const WCSourceTextStorageDidRemoveBookmarkNotification = @"WCSourceTextStorageDidRemoveBookmarkNotification";

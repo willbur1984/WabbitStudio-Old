@@ -28,8 +28,8 @@ static NSRegularExpression *endMarkersRegex;
 + (void)initialize {
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		startMarkersRegex = [[NSRegularExpression alloc] initWithPattern:@"#(?:macro|ifndef|ifdef|if)" options:NSRegularExpressionCaseInsensitive error:NULL];
-		endMarkersRegex = [[NSRegularExpression alloc] initWithPattern:@"#(?:endmacro|endif)" options:NSRegularExpressionCaseInsensitive error:NULL];
+		startMarkersRegex = [[NSRegularExpression alloc] initWithPattern:@"#(?:comment|macro|ifndef|ifdef|if)" options:NSRegularExpressionCaseInsensitive error:NULL];
+		endMarkersRegex = [[NSRegularExpression alloc] initWithPattern:@"#(?:endcomment|endmacro|endif)" options:NSRegularExpressionCaseInsensitive error:NULL];
 	});
 }
 
@@ -48,29 +48,41 @@ static NSRegularExpression *endMarkersRegex;
 		NSMutableArray *foldMarkers = [NSMutableArray arrayWithCapacity:0];
 		
 		[startMarkersRegex enumerateMatchesInString:[self string] options:0 range:NSMakeRange(0, [[self string] length]) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-			WCSourceToken *token = [tokens sourceTokenForRange:[result range]];
-			if (([token type] == WCSourceTokenTypeComment ||
-				[token type] == WCSourceTokenTypeString) &&
-				NSLocationInRange([result range].location, [token range]))
-				return;
+			NSString *name = [[[self string] substringWithRange:[result range]] lowercaseString];
 			
-			if ([[[[self string] substringWithRange:[result range]] lowercaseString] isEqualToString:@"#macro"])
-				[foldMarkers addObject:[WCFoldMarker foldMarkerOfType:WCFoldMarkerTypeMacroStart range:[result range]]];
-			else
-				[foldMarkers addObject:[WCFoldMarker foldMarkerOfType:WCFoldMarkerTypeIfStart range:[result range]]];
+			if ([name isEqualToString:@"#comment"])
+				[foldMarkers addObject:[WCFoldMarker foldMarkerOfType:WCFoldMarkerTypeCommentStart range:[result range]]];
+			else {
+				WCSourceToken *token = [tokens sourceTokenForRange:[result range]];
+				if (([token type] == WCSourceTokenTypeComment ||
+					 [token type] == WCSourceTokenTypeString) &&
+					NSLocationInRange([result range].location, [token range]))
+					return;
+				
+				if ([name isEqualToString:@"#macro"])
+					[foldMarkers addObject:[WCFoldMarker foldMarkerOfType:WCFoldMarkerTypeMacroStart range:[result range]]];
+				else
+					[foldMarkers addObject:[WCFoldMarker foldMarkerOfType:WCFoldMarkerTypeIfStart range:[result range]]];
+			}
 		}];
 		
 		[endMarkersRegex enumerateMatchesInString:[self string] options:0 range:NSMakeRange(0, [[self string] length]) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-			WCSourceToken *token = [tokens sourceTokenForRange:[result range]];
-			if (([token type] == WCSourceTokenTypeComment ||
-				 [token type] == WCSourceTokenTypeString) &&
-				NSLocationInRange([result range].location, [token range]))
-				return;
+			NSString *name = [[[self string] substringWithRange:[result range]] lowercaseString];
 			
-			if ([[[[self string] substringWithRange:[result range]] lowercaseString] isEqualToString:@"#endmacro"])
-				[foldMarkers addObject:[WCFoldMarker foldMarkerOfType:WCFoldMarkerTypeMacroEnd range:[result range]]];
-			else
-				[foldMarkers addObject:[WCFoldMarker foldMarkerOfType:WCFoldMarkerTypeIfEnd range:[result range]]];
+			if ([name isEqualToString:@"#endcomment"])
+				[foldMarkers addObject:[WCFoldMarker foldMarkerOfType:WCFoldMarkerTypeCommentEnd range:[result range]]];
+			else {
+				WCSourceToken *token = [tokens sourceTokenForRange:[result range]];
+				if (([token type] == WCSourceTokenTypeComment ||
+					 [token type] == WCSourceTokenTypeString) &&
+					NSLocationInRange([result range].location, [token range]))
+					return;
+				
+				if ([name isEqualToString:@"#endmacro"])
+					[foldMarkers addObject:[WCFoldMarker foldMarkerOfType:WCFoldMarkerTypeMacroEnd range:[result range]]];
+				else
+					[foldMarkers addObject:[WCFoldMarker foldMarkerOfType:WCFoldMarkerTypeIfEnd range:[result range]]];
+			}
 		}];
 		
 		[foldMarkers sortUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"range" ascending:YES comparator:^NSComparisonResult(id obj1, id obj2) {
@@ -93,6 +105,7 @@ static NSRegularExpression *endMarkersRegex;
 			switch ([foldMarker type]) {
 				case WCFoldMarkerTypeMacroStart:
 				case WCFoldMarkerTypeIfStart:
+				case WCFoldMarkerTypeCommentStart:
 					numberOfStartMarkers++;
 					[foldMarkerStack addObject:foldMarker];
 					
@@ -101,12 +114,13 @@ static NSRegularExpression *endMarkersRegex;
 						WCFoldMarker *endMarker = [foldMarkerStack firstObject];
 						
 						if (([startMarker type] == WCFoldMarkerTypeMacroStart && [endMarker type] == WCFoldMarkerTypeMacroEnd) ||
-							([startMarker type] == WCFoldMarkerTypeIfStart && [endMarker type] == WCFoldMarkerTypeIfEnd)) {
+							([startMarker type] == WCFoldMarkerTypeIfStart && [endMarker type] == WCFoldMarkerTypeIfEnd) ||
+							([startMarker type] == WCFoldMarkerTypeCommentStart && [endMarker type] == WCFoldMarkerTypeCommentEnd)) {
 							
 							NSRange foldRange = NSUnionRange([startMarker range], [endMarker range]);
 							foldRange = [[self string] lineRangeForRange:foldRange];
 							
-							[topLevelFolds addObject:[WCFold foldWithRange:foldRange level:0]];
+							[topLevelFolds addObject:[WCFold foldWithRange:foldRange level:0 contentRange:NSEmptyRange]];
 							
 							[foldMarkerStack removeLastObject];
 							[foldMarkerStack removeFirstObject];
@@ -126,6 +140,7 @@ static NSRegularExpression *endMarkersRegex;
 					break;
 				case WCFoldMarkerTypeMacroEnd:
 				case WCFoldMarkerTypeIfEnd:
+				case WCFoldMarkerTypeCommentEnd:
 					numberOfEndMarkers++;
 					[foldMarkerStack addObject:foldMarker];
 					break;
@@ -187,6 +202,7 @@ static NSRegularExpression *endMarkersRegex;
 		switch ([foldMarker type]) {
 			case WCFoldMarkerTypeMacroStart:
 			case WCFoldMarkerTypeIfStart:
+			case WCFoldMarkerTypeCommentStart:
 				numberOfStartMarkers++;
 				[foldMarkerStack addObject:foldMarker];
 				
@@ -195,12 +211,13 @@ static NSRegularExpression *endMarkersRegex;
 					WCFoldMarker *endMarker = [foldMarkerStack firstObject];
 					
 					if (([startMarker type] == WCFoldMarkerTypeMacroStart && [endMarker type] == WCFoldMarkerTypeMacroEnd) ||
-						([startMarker type] == WCFoldMarkerTypeIfStart && [endMarker type] == WCFoldMarkerTypeIfEnd)) {
+						([startMarker type] == WCFoldMarkerTypeIfStart && [endMarker type] == WCFoldMarkerTypeIfEnd) ||
+						([startMarker type] == WCFoldMarkerTypeCommentStart && [endMarker type] == WCFoldMarkerTypeCommentEnd)) {
 						
 						NSRange foldRange = NSUnionRange([startMarker range], [endMarker range]);
 						foldRange = [[self string] lineRangeForRange:foldRange];
 						
-						[[parentFold mutableChildNodes] addObject:[WCFold foldWithRange:foldRange level:[parentFold level]+1]];
+						[[parentFold mutableChildNodes] addObject:[WCFold foldWithRange:foldRange level:[parentFold level]+1 contentRange:NSEmptyRange]];
 						
 						[foldMarkerStack removeLastObject];
 						[foldMarkerStack removeFirstObject];
@@ -220,6 +237,7 @@ static NSRegularExpression *endMarkersRegex;
 				break;
 			case WCFoldMarkerTypeMacroEnd:
 			case WCFoldMarkerTypeIfEnd:
+			case WCFoldMarkerTypeCommentEnd:
 				numberOfEndMarkers++;
 				[foldMarkerStack addObject:foldMarker];
 				break;
