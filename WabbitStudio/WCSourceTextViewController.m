@@ -23,7 +23,7 @@
 #import "WCStandardSourceTextViewController.h"
 #import "WCSourceSymbol.h"
 #import "WCProjectDocument.h"
-#import "WCLayoutManager.h"
+#import "WCSourceLayoutManager.h"
 #import "WCSourceToken.h"
 #import "WCArgumentPlaceholderWindowController.h"
 #import "WCProjectNavigatorViewController.h"
@@ -58,7 +58,7 @@
 	
 	[[[self scrollView] contentView] setAutoresizesSubviews:YES];
 	
-	WCLayoutManager *layoutManager = [[[WCLayoutManager alloc] init] autorelease];
+	WCSourceLayoutManager *layoutManager = [[[WCSourceLayoutManager alloc] init] autorelease];
 	
 	[[self textStorage] addLayoutManager:layoutManager];
 	

@@ -35,7 +35,7 @@
 #import "NSTextView+WCExtensions.h"
 #import "WCProjectDocument.h"
 #import "WCFile.h"
-#import "WCFoldAttachmentCell.h"
+#import "WCSourceTypesetter.h"
 #import "WCFold.h"
 
 @interface WCSourceTextView ()
@@ -169,6 +169,27 @@
 }
 
 - (void)setSelectedRanges:(NSArray *)ranges affinity:(NSSelectionAffinity)affinity stillSelecting:(BOOL)stillSelectingFlag {
+	if (!stillSelectingFlag && ([ranges count] == 1)) {
+        NSRange range = [[ranges objectAtIndex:0] rangeValue];
+        NSTextStorage *textStorage = [self textStorage];
+        NSUInteger length = [textStorage length];
+		
+        if ((range.location < length) && ([[ranges objectAtIndex:0] rangeValue].length == 0)) { // make sure it's not inside lineFoldingAttributeName
+            NSNumber *value = [textStorage attribute:WCLineFoldingAttributeName atIndex:range.location effectiveRange:NULL];
+			
+            if (value && [value boolValue]) {
+                NSRange effectiveRange;
+                (void)[textStorage attribute:WCLineFoldingAttributeName atIndex:range.location longestEffectiveRange:&effectiveRange inRange:NSMakeRange(0, length)];
+				
+                if (range.location != effectiveRange.location) { // it's not at the beginning. should be adjusted
+                    range.location = ((affinity == NSSelectionAffinityUpstream) ? effectiveRange.location : NSMaxRange(effectiveRange));
+                    [super setSelectedRange:range];
+                    return;
+                }
+            }
+        }   
+    }
+	
 	[super setSelectedRanges:ranges affinity:affinity stillSelecting:stillSelectingFlag];
 	
 	if (stillSelectingFlag) {
@@ -824,23 +845,40 @@
 	WCFold *fold = [[[[self delegate] sourceScannerForSourceTextView:self] folds] deepestFoldForRange:[self selectedRange]];
 	
 	if (fold) {
-		[self showFindIndicatorForRange:[fold contentRange]];
+		[self setSelectedRange:[fold contentRange]];
+		
+		NSNumber *trueValue = [NSNumber numberWithBool:YES];
+		NSTextStorage *textStorage = [self textStorage];
+		
+		[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:trueValue,WCLineFoldingAttributeName, nil] range:[fold contentRange]];
+		
+		[self setSelectedRange:NSMakeRange(NSMaxRange([fold contentRange]), 0)];
 	}
-	/*
-	NSTextAttachment *attachment = [[[NSTextAttachment alloc] initWithFileWrapper:nil] autorelease];
-	WCFoldAttachmentCell *cell = [[[WCFoldAttachmentCell alloc] initTextCell:@""] autorelease];
-	NSAttributedString *attributedString = [NSAttributedString attributedStringWithAttachment:attachment];
-	
-	[attachment setAttachmentCell:cell];
-	
-	if ([self shouldChangeTextInRange:[self selectedRange] replacementString:[attributedString string]]) {
-		[[self textStorage] replaceCharactersInRange:[self selectedRange] withAttributedString:attributedString];
-		[self didChangeText];
-	}
-	 */
 }
 - (IBAction)unfold:(id)sender; {
+	NSUInteger charIndex = [self selectedRange].location;
+	NSTextStorage *textStorage = [self textStorage];
+    NSRange range;
+    NSNumber *value = [textStorage attribute:WCLineFoldingAttributeName atIndex:charIndex longestEffectiveRange:&range inRange:NSMakeRange(0, [textStorage length])];
 	
+    if (value && [value boolValue]) {
+        [textStorage removeAttribute:WCLineFoldingAttributeName range:range];
+		
+        [self setSelectedRange:NSMakeRange(NSMaxRange(range), 0)];
+		return;
+    }
+	
+	charIndex--;
+	value = [textStorage attribute:WCLineFoldingAttributeName atIndex:charIndex longestEffectiveRange:&range inRange:NSMakeRange(0, [textStorage length])];
+	
+	if (value && [value boolValue]) {
+        [textStorage removeAttribute:WCLineFoldingAttributeName range:range];
+		
+        [self setSelectedRange:NSMakeRange(NSMaxRange(range), 0)];
+		return;
+    }
+	
+	NSBeep();
 }
 #pragma mark Properties
 @dynamic delegate;

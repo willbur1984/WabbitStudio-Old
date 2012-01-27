@@ -182,6 +182,7 @@
 	NSRange range = [layoutManager characterRangeForGlyphRange:glyphRange actualGlyphRange:NULL];
 	NSUInteger lineNumber, lineStartIndex, numberOfLines = [[self lineStartIndexes] count], stringLength = [[view string] length];
 	NSIndexSet *lineNumbers = [[[self textView] string] lineNumbersForRange:[[self textView] selectedRange]];
+	CGFloat lastLinePositionY = -1.0;
 	
 	// Fudge the range a tad in case there is an extra new line at end.
 	// It doesn't show up in the glyphs so would not be accounted for.
@@ -205,12 +206,16 @@
 			}
 			
 			if (lineStartIndex < stringLength || numRects) {
-				NSDictionary *textAttributes = [self textAttributesForLineNumber:lineNumber selectedLineNumbers:lineNumbers];
-				
-				NSSize stringSize = [labelText sizeWithAttributes:textAttributes];
-				
-				[labelText drawInRect:NSMakeRect(NSMinX(bounds), [self convertPoint:labelRect.origin fromView:[self clientView]].y + (floor(NSHeight(labelRect)/2.0)-floor(stringSize.height/2.0)), NSWidth(bounds)-floor(RULER_MARGIN/2.0), NSHeight(labelRect)) withAttributes:textAttributes];
+				if (NSMinY(labelRect) != lastLinePositionY) {
+					NSDictionary *textAttributes = [self textAttributesForLineNumber:lineNumber selectedLineNumbers:lineNumbers];
+					
+					NSSize stringSize = [labelText sizeWithAttributes:textAttributes];
+					
+					[labelText drawInRect:NSMakeRect(NSMinX(bounds), [self convertPoint:labelRect.origin fromView:[self clientView]].y + (floor(NSHeight(labelRect)/2.0)-floor(stringSize.height/2.0)), NSWidth(bounds)-floor(RULER_MARGIN/2.0), NSHeight(labelRect)) withAttributes:textAttributes];
+				}
 			}
+			
+			lastLinePositionY = NSMinY(labelRect);
 		}
 		
 		if (lineStartIndex > NSMaxRange(range))

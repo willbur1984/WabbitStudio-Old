@@ -20,7 +20,7 @@ extern NSString *const WCSourceTextStorageDidRemoveBookmarkNotification;
 	NSMutableArray *_lineStartIndexes;
 	NSMutableArray *_bookmarks;
 	struct {
-		unsigned int lineFolding:1;
+		unsigned int lineFoldingEnabled:1;
 		unsigned int RESERVED:31;
 	} _textStorageFlags;
 }
@@ -28,8 +28,10 @@ extern NSString *const WCSourceTextStorageDidRemoveBookmarkNotification;
 @property (readwrite,assign,nonatomic) id <WCSourceTextStorageDelegate> delegate;
 @property (readonly,nonatomic) NSParagraphStyle *paragraphStyle;
 @property (readonly,nonatomic) NSArray *bookmarks;
+@property (readwrite,assign,nonatomic) BOOL lineFoldingEnabled;
 
 + (NSParagraphStyle *)defaultParagraphStyle;
++ (NSTextAttachment *)sharedFoldAttachment;
 
 - (void)addBookmark:(RSBookmark *)bookmark;
 - (void)removeBookmark:(RSBookmark *)bookmark;

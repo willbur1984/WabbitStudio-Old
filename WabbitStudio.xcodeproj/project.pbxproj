@@ -122,6 +122,9 @@
 		072FCFB814CB972B00F76276 /* WCProjectNavigatorCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 072FCFB714CB972B00F76276 /* WCProjectNavigatorCellView.m */; };
 		072FCFBA14CBBD9700F76276 /* wabbitstudio.icns in Resources */ = {isa = PBXBuildFile; fileRef = 072FCFB914CBBD9700F76276 /* wabbitstudio.icns */; };
 		072FCFBD14CBCA6200F76276 /* RSStringToAbbreviatedStringTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 072FCFBC14CBCA6200F76276 /* RSStringToAbbreviatedStringTransformer.m */; };
+		0731614814D32C92002F0F55 /* WCSourceLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0731614714D32C92002F0F55 /* WCSourceLayoutManager.m */; };
+		0731614B14D32CE5002F0F55 /* WCSourceTypesetter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0731614A14D32CE5002F0F55 /* WCSourceTypesetter.m */; };
+		0731614E14D32D0D002F0F55 /* WCSourceGlyphGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 0731614D14D32D0D002F0F55 /* WCSourceGlyphGenerator.m */; };
 		073B5A9114B67B7400FCDC0F /* NSImage+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 073B5A9014B67B7400FCDC0F /* NSImage+RSExtensions.m */; };
 		073B5A9F14B6A4BF00FCDC0F /* WCJumpInWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 073B5A9E14B6A4BF00FCDC0F /* WCJumpInWindowController.m */; };
 		073B5AA414B6A92B00FCDC0F /* WCJumpInMatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 073B5AA314B6A92B00FCDC0F /* WCJumpInMatch.m */; };
@@ -489,6 +492,12 @@
 		072FCFB914CBBD9700F76276 /* wabbitstudio.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = wabbitstudio.icns; sourceTree = "<group>"; };
 		072FCFBB14CBCA6200F76276 /* RSStringToAbbreviatedStringTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSStringToAbbreviatedStringTransformer.h; sourceTree = "<group>"; };
 		072FCFBC14CBCA6200F76276 /* RSStringToAbbreviatedStringTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSStringToAbbreviatedStringTransformer.m; sourceTree = "<group>"; };
+		0731614614D32C92002F0F55 /* WCSourceLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSourceLayoutManager.h; sourceTree = "<group>"; };
+		0731614714D32C92002F0F55 /* WCSourceLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSourceLayoutManager.m; sourceTree = "<group>"; };
+		0731614914D32CE5002F0F55 /* WCSourceTypesetter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSourceTypesetter.h; sourceTree = "<group>"; };
+		0731614A14D32CE5002F0F55 /* WCSourceTypesetter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSourceTypesetter.m; sourceTree = "<group>"; };
+		0731614C14D32D0D002F0F55 /* WCSourceGlyphGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSourceGlyphGenerator.h; sourceTree = "<group>"; };
+		0731614D14D32D0D002F0F55 /* WCSourceGlyphGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSourceGlyphGenerator.m; sourceTree = "<group>"; };
 		073B5A8F14B67B7400FCDC0F /* NSImage+RSExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+RSExtensions.h"; sourceTree = "<group>"; };
 		073B5A9014B67B7400FCDC0F /* NSImage+RSExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+RSExtensions.m"; sourceTree = "<group>"; };
 		073B5A9D14B6A4BF00FCDC0F /* WCJumpInWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCJumpInWindowController.h; sourceTree = "<group>"; };
@@ -855,8 +864,7 @@
 				0706D64F14A8F45B0092F880 /* WCSourceTextViewController.m */,
 				076B7F8614BC15B600CC10E3 /* WCStandardSourceTextViewController.h */,
 				076B7F8714BC15B600CC10E3 /* WCStandardSourceTextViewController.m */,
-				07E91DF614C8020600B166E3 /* WCLayoutManager.h */,
-				07E91DF714C8020700B166E3 /* WCLayoutManager.m */,
+				0731614414D32C72002F0F55 /* Layout */,
 				0706AFBD14CF2D9A00A0F93C /* Folding */,
 				07BC6CB314B7DDF2007ECB3F /* Jump to Line */,
 				073B5A9A14B6A43900FCDC0F /* Views */,
@@ -1198,6 +1206,21 @@
 				076966E214B6366C005448F7 /* Advanced */,
 			);
 			name = Preferences;
+			sourceTree = "<group>";
+		};
+		0731614414D32C72002F0F55 /* Layout */ = {
+			isa = PBXGroup;
+			children = (
+				07E91DF614C8020600B166E3 /* WCLayoutManager.h */,
+				07E91DF714C8020700B166E3 /* WCLayoutManager.m */,
+				0731614614D32C92002F0F55 /* WCSourceLayoutManager.h */,
+				0731614714D32C92002F0F55 /* WCSourceLayoutManager.m */,
+				0731614914D32CE5002F0F55 /* WCSourceTypesetter.h */,
+				0731614A14D32CE5002F0F55 /* WCSourceTypesetter.m */,
+				0731614C14D32D0D002F0F55 /* WCSourceGlyphGenerator.h */,
+				0731614D14D32D0D002F0F55 /* WCSourceGlyphGenerator.m */,
+			);
+			name = Layout;
 			sourceTree = "<group>";
 		};
 		073B5A9814B6A3E400FCDC0F /* Jump in File */ = {
@@ -1924,6 +1947,9 @@
 				0706AFD314CF353600A0F93C /* AIApplicationAdditions.m in Sources */,
 				0706AFD814CF5B7600A0F93C /* WCFoldMarker.m in Sources */,
 				0788E49A14D0AEF90038181F /* WCFoldAttachmentCell.m in Sources */,
+				0731614814D32C92002F0F55 /* WCSourceLayoutManager.m in Sources */,
+				0731614B14D32CE5002F0F55 /* WCSourceTypesetter.m in Sources */,
+				0731614E14D32D0D002F0F55 /* WCSourceGlyphGenerator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -21,7 +21,6 @@ static NSRegularExpression *endMarkersRegex;
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
 @property (readonly,nonatomic) NSString *string;
 
-- (void)_processFoldsForParentFold:(WCFold *)parentFold foldMarkers:(NSArray *)foldMarkers;
 @end
 
 @implementation WCScanFoldsOperation
@@ -50,11 +49,14 @@ static NSRegularExpression *endMarkersRegex;
 		if ([self isCancelled])
 			break;
 		
+		// find all the start markers in our string
 		[startMarkersRegex enumerateMatchesInString:[self string] options:0 range:NSMakeRange(0, [[self string] length]) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
 			NSString *name = [[[self string] substringWithRange:[result range]] lowercaseString];
 			
+			// if its a comment, add it
 			if ([name isEqualToString:@"#comment"])
 				[foldMarkers addObject:[WCFoldMarker foldMarkerOfType:WCFoldMarkerTypeCommentStart range:[result range]]];
+			// otherwise check to see what the nearest token is to our match, if its a comment or string, dont add
 			else {
 				WCSourceToken *token = [tokens sourceTokenForRange:[result range]];
 				if (([token type] == WCSourceTokenTypeComment ||
@@ -72,6 +74,7 @@ static NSRegularExpression *endMarkersRegex;
 		if ([self isCancelled])
 			break;
 		
+		// find all the end markers in our string
 		[endMarkersRegex enumerateMatchesInString:[self string] options:0 range:NSMakeRange(0, [[self string] length]) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
 			NSString *name = [[[self string] substringWithRange:[result range]] lowercaseString];
 			
@@ -110,33 +113,47 @@ static NSRegularExpression *endMarkersRegex;
 		
 		for (WCFoldMarker *foldMarker in foldMarkers) {
 			switch ([foldMarker type]) {
+					// we have a start marker, place it on our stack
 				case WCFoldMarkerTypeCommentStart:
 				case WCFoldMarkerTypeIfStart:
 				case WCFoldMarkerTypeMacroStart:
 					[foldMarkerStack addObject:foldMarker];
 					break;
+					// we have an end marker, now the fun begins!
 				case WCFoldMarkerTypeCommentEnd:
 				case WCFoldMarkerTypeIfEnd:
 				case WCFoldMarkerTypeMacroEnd: {
+					// grab the top element from our stack
 					WCFoldMarker *startMarker = [foldMarkerStack lastObject];
+					// our end marker is the current element
 					WCFoldMarker *endMarker = foldMarker;
 					
+					// do the start and end types match?
 					if (([startMarker type] == WCFoldMarkerTypeCommentStart && [endMarker type] == WCFoldMarkerTypeCommentEnd) ||
 						([startMarker type] == WCFoldMarkerTypeIfStart && [endMarker type] == WCFoldMarkerTypeIfEnd) ||
 						([startMarker type] == WCFoldMarkerTypeMacroStart && [endMarker type] == WCFoldMarkerTypeMacroEnd)) {
 						
+						// foldRange is the range that will be drawn in the code folding ribbon
 						NSRange foldRange = [[self string] lineRangeForRange:NSUnionRange([startMarker range], [endMarker range])];
-						NSUInteger charIndexAfterStartMarkerLineRange = NSMaxRange([[self string] lineRangeForRange:[startMarker range]]);
-						NSUInteger charIndexBeforeEndMarkerLineRange = [[self string] lineRangeForRange:[endMarker range]].location - 1;
+						// get the start index of the line after the start marker
+						NSUInteger charIndexAfterStartMarkerLineRange = NSMaxRange([startMarker range]);
+						// get the end index of the line before the end marker
+						NSUInteger charIndexBeforeEndMarkerLineRange = [endMarker range].location - 1;
+						// create our new fold, contentRange is everything that falls between the start index of the line after start marker the end index of the line before end marker
 						WCFold *newFold = [WCFold foldWithRange:foldRange level:0 contentRange:NSMakeRange(charIndexAfterStartMarkerLineRange, charIndexBeforeEndMarkerLineRange-charIndexAfterStartMarkerLineRange)];
 						
-						for (WCFold *childNode in [[[topLevelFolds copy] autorelease] reverseObjectEnumerator]) {
+						// now look for possible children of our new fold, elements are encountered from deepest to top level so we get all child nodes before their parents, we have to look for the children now
+						for (WCFold *childNode in [topLevelFolds reverseObjectEnumerator]) {
+							// if the child range location in within our new folds foldRange, its our child
 							if (NSLocationInRange([childNode range].location, [newFold range])) {
 								[childNode retain];
 								
+								// increase the level, this will also increase the level of all the children of this node appropriately
 								[childNode setLevel:[childNode level]+1];
 								
+								// remove the childNode from our list of top level nodes
 								[topLevelFolds removeObjectIdenticalTo:childNode];
+								// add the childNode to our newNode's children
 								[[newFold mutableChildNodes] addObject:childNode];
 								
 								[childNode release];
@@ -145,14 +162,18 @@ static NSRegularExpression *endMarkersRegex;
 								break;
 						}
 						
+						// add the new node to our topLevelNodes array
 						[topLevelFolds addObject:newFold];
 						
+						// remove the matched startMarker from our stack
 						[foldMarkerStack removeLastObject];
 					}
 					else {
+						// special case for when start and end markers aren't matched, search through our stack from the top down looking for a matching start marker
 						for (WCFoldMarker *fold in [foldMarkerStack reverseObjectEnumerator]) {							
 							startMarker = fold;
 							
+							// do the start and end types match?
 							if (([startMarker type] == WCFoldMarkerTypeCommentStart && [endMarker type] == WCFoldMarkerTypeCommentEnd) ||
 								([startMarker type] == WCFoldMarkerTypeIfStart && [endMarker type] == WCFoldMarkerTypeIfEnd) ||
 								([startMarker type] == WCFoldMarkerTypeMacroStart && [endMarker type] == WCFoldMarkerTypeMacroEnd)) {
@@ -162,7 +183,8 @@ static NSRegularExpression *endMarkersRegex;
 								NSUInteger charIndexBeforeEndMarkerLineRange = [[self string] lineRangeForRange:[endMarker range]].location - 1;
 								WCFold *newFold = [WCFold foldWithRange:foldRange level:0 contentRange:NSMakeRange(charIndexAfterStartMarkerLineRange, charIndexBeforeEndMarkerLineRange-charIndexAfterStartMarkerLineRange)];
 								
-								for (WCFold *childNode in [[[topLevelFolds copy] autorelease] reverseObjectEnumerator]) {
+								// search for child nodes of the new node, just as above
+								for (WCFold *childNode in [topLevelFolds reverseObjectEnumerator]) {
 									if (NSLocationInRange([childNode range].location, [newFold range])) {
 										[childNode retain];
 										
@@ -179,6 +201,7 @@ static NSRegularExpression *endMarkersRegex;
 								
 								[topLevelFolds addObject:newFold];
 								
+								// remove the matched startMarker from our stack
 								[foldMarkerStack removeObjectIdenticalTo:startMarker];
 								
 								break;
@@ -204,8 +227,10 @@ static NSRegularExpression *endMarkersRegex;
 			return NSOrderedSame;
 		}]];
 		
+		// sort the top level folds by location
 		[topLevelFolds sortUsingDescriptors:sortDescriptors];
 		
+		// sort all children of the top level folds (and their children, etc) using the same descriptors
 		for (WCFold *fold in topLevelFolds)
 			[fold sortWithSortDescriptors:sortDescriptors recursively:YES];
 		
@@ -239,65 +264,5 @@ static NSRegularExpression *endMarkersRegex;
 	 
 @synthesize sourceScanner=_sourceScanner;
 @synthesize string=_string;
-
-- (void)_processFoldsForParentFold:(WCFold *)parentFold foldMarkers:(NSArray *)foldMarkers; {
-	NSMutableArray *foldMarkerStack = [NSMutableArray arrayWithCapacity:0];
-	__block NSUInteger numberOfStartMarkers = 0;
-	__block NSUInteger numberOfEndMarkers = 0;
-	
-	
-	[foldMarkers enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(WCFoldMarker *foldMarker, NSUInteger foldMarkerIndex, BOOL *stop) {
-		switch ([foldMarker type]) {
-			case WCFoldMarkerTypeMacroStart:
-			case WCFoldMarkerTypeIfStart:
-			case WCFoldMarkerTypeCommentStart:
-				numberOfStartMarkers++;
-				[foldMarkerStack addObject:foldMarker];
-				
-				if (numberOfStartMarkers == numberOfEndMarkers) {
-					WCFoldMarker *startMarker = [foldMarkerStack lastObject];
-					WCFoldMarker *endMarker = [foldMarkerStack firstObject];
-					
-					if (([startMarker type] == WCFoldMarkerTypeMacroStart && [endMarker type] == WCFoldMarkerTypeMacroEnd) ||
-						([startMarker type] == WCFoldMarkerTypeIfStart && [endMarker type] == WCFoldMarkerTypeIfEnd) ||
-						([startMarker type] == WCFoldMarkerTypeCommentStart && [endMarker type] == WCFoldMarkerTypeCommentEnd)) {
-						
-						NSRange foldRange = [[self string] lineRangeForRange:NSUnionRange([startMarker range], [endMarker range])];
-						NSUInteger lineStartIndexAfterStartMarker = NSMaxRange([[self string] lineRangeForRange:[startMarker range]]);
-						NSUInteger lineEndIndexBeforeEndMarker = [[self string] lineRangeForRange:[endMarker range]].location - 1;
-						NSRange contentRange = NSMakeRange(lineStartIndexAfterStartMarker, lineEndIndexBeforeEndMarker-lineStartIndexAfterStartMarker);
-						
-						[[parentFold mutableChildNodes] addObject:[WCFold foldWithRange:foldRange level:[parentFold level]+1 contentRange:contentRange]];
-						
-						[foldMarkerStack removeLastObject];
-						[foldMarkerStack removeFirstObject];
-						
-						[self _processFoldsForParentFold:[[parentFold childNodes] lastObject] foldMarkers:[[foldMarkerStack reverseObjectEnumerator] allObjects]];
-						
-						numberOfEndMarkers = 0;
-						numberOfStartMarkers = 0;
-						[foldMarkerStack removeAllObjects];
-					}
-				}
-				else if (numberOfStartMarkers > numberOfEndMarkers) {
-					numberOfEndMarkers = 0;
-					numberOfStartMarkers = 0;
-					[foldMarkerStack removeAllObjects];
-				}
-				break;
-			case WCFoldMarkerTypeMacroEnd:
-			case WCFoldMarkerTypeIfEnd:
-			case WCFoldMarkerTypeCommentEnd:
-				numberOfEndMarkers++;
-				[foldMarkerStack addObject:foldMarker];
-				break;
-			default:
-				break;
-		}
-		
-		if ([self isCancelled])
-			*stop = YES;
-	}];
-}
 
 @end

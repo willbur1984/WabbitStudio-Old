@@ -19,9 +19,12 @@
 #import "NSString+RSExtensions.h"
 #import "NSArray+WCExtensions.h"
 #import "WCFoldAttachmentCell.h"
+#import "WCSourceTypesetter.h"
 
 NSString *const WCSourceTextStorageDidAddBookmarkNotification = @"WCSourceTextStorageDidAddBookmarkNotification";
 NSString *const WCSourceTextStorageDidRemoveBookmarkNotification = @"WCSourceTextStorageDidRemoveBookmarkNotification";
+
+static NSTextAttachment *sharedAttachment;
 
 @interface WCSourceTextStorage ()
 - (void)_calculateLineStartIndexes;
@@ -31,6 +34,16 @@ NSString *const WCSourceTextStorageDidRemoveBookmarkNotification = @"WCSourceTex
 
 @implementation WCSourceTextStorage
 #pragma mark *** Subclass Overrides ***
++ (void)initialize {
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		sharedAttachment = [[NSTextAttachment alloc] init];
+		WCFoldAttachmentCell *cell = [[[WCFoldAttachmentCell alloc] initTextCell:@""] autorelease];
+		
+		[sharedAttachment setAttachmentCell:cell];
+	});
+}
+
 - (void)dealloc {
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
@@ -72,7 +85,41 @@ NSString *const WCSourceTextStorageDidRemoveBookmarkNotification = @"WCSourceTex
 	return [_attributedString string];
 }
 - (NSDictionary *)attributesAtIndex:(NSUInteger)location effectiveRange:(NSRangePointer)range; {
-	return [_attributedString attributesAtIndex:location effectiveRange:range];
+	//return [_attributedString attributesAtIndex:location effectiveRange:range];
+	NSDictionary *attributes = [_attributedString attributesAtIndex:location effectiveRange:range];
+	
+    if ([self lineFoldingEnabled]) {
+        id value;
+        NSRange effectiveRange;
+		
+        value = [attributes objectForKey:WCLineFoldingAttributeName];
+        if (value && [value boolValue]) {
+            [_attributedString attribute:WCLineFoldingAttributeName atIndex:location longestEffectiveRange:&effectiveRange inRange:NSMakeRange(0, [_attributedString length])];
+			
+            // We adds NSAttachmentAttributeName if in lineFoldingAttributeName
+            if (location == effectiveRange.location) { // beginning of a folded range
+                NSMutableDictionary *dict = [attributes mutableCopyWithZone:NULL];
+				
+				NSTextAttachment *attachment = [[[NSTextAttachment alloc] init] autorelease];
+				WCFoldAttachmentCell *cell = [[[WCFoldAttachmentCell alloc] initTextCell:@""] autorelease];
+				
+				[attachment setAttachmentCell:cell];
+				
+                //[dict setObject:sharedAttachment forKey:NSAttachmentAttributeName];
+				[dict setObject:attachment forKey:NSAttachmentAttributeName];
+				
+                attributes = [dict autorelease];
+				
+                effectiveRange.length = 1;
+            } else {
+                ++(effectiveRange.location); --(effectiveRange.length);
+            }
+			
+            if (range) *range = effectiveRange;
+        }
+    }
+	
+    return attributes;
 }
 - (void)replaceCharactersInRange:(NSRange)range withString:(NSString *)string; {
 	[_attributedString replaceCharactersInRange:range withString:string];
@@ -84,15 +131,36 @@ NSString *const WCSourceTextStorageDidRemoveBookmarkNotification = @"WCSourceTex
 	[self edited:NSTextStorageEditedAttributes range:range changeInLength:0];
 }
 
+// Attribute Fixing Overrides
+- (void)fixAttributesInRange:(NSRange)range {
+    [super fixAttributesInRange:range];
+	
+    // we want to avoid extending to the last paragraph separator
+    [self enumerateAttribute:WCLineFoldingAttributeName inRange:range options:0 usingBlock:^(id value, NSRange range, BOOL *stop) {
+        if (value && (range.length > 1)) {
+            NSUInteger paragraphStart, paragraphEnd, contentsEnd;
+            
+            [[self string] getParagraphStart:&paragraphStart end:&paragraphEnd contentsEnd:&contentsEnd forRange:range];
+            
+            if ((NSMaxRange(range) == paragraphEnd) && (contentsEnd < paragraphEnd)) {
+                [self removeAttribute:WCLineFoldingAttributeName range:NSMakeRange(contentsEnd, paragraphEnd - contentsEnd)];
+            }
+        }
+    }];
+}
+
 - (void)fixParagraphStyleAttributeInRange:(NSRange)range {
-	//[super fixParagraphStyleAttributeInRange:range];
+	[super fixParagraphStyleAttributeInRange:range];
 	
-	NSRange paragraphRange = [[self string] paragraphRangeForRange:range];
+	//NSRange paragraphRange = [[self string] paragraphRangeForRange:range];
 	
-	[self addAttribute:NSParagraphStyleAttributeName value:[self paragraphStyle] range:paragraphRange];
+	//[self addAttribute:NSParagraphStyleAttributeName value:[self paragraphStyle] range:paragraphRange];
 }
 
 - (void)fixAttachmentAttributeInRange:(NSRange)range {
+	[super fixAttachmentAttributeInRange:range];
+	
+	/*
 	NSRange effectiveRange;
 	id attributeValue;
 	while (range.length) {
@@ -106,6 +174,7 @@ NSString *const WCSourceTextStorageDidRemoveBookmarkNotification = @"WCSourceTex
 		
 		range = NSMakeRange(NSMaxRange(effectiveRange),NSMaxRange(range)-NSMaxRange(effectiveRange));
 	}
+	 */
 }
 
 - (NSUInteger)lineNumberForRange:(NSRange)range {
@@ -181,6 +250,10 @@ NSString *const WCSourceTextStorageDidRemoveBookmarkNotification = @"WCSourceTex
 - (NSArray *)bookmarksForRange:(NSRange)range; {
 	return [_bookmarks bookmarksForRange:range];
 }
+
++ (NSTextAttachment *)sharedFoldAttachment {
+	return sharedAttachment;
+}
 #pragma mark Properties
 @synthesize lineStartIndexes=_lineStartIndexes;
 @dynamic delegate;
@@ -201,6 +274,13 @@ NSString *const WCSourceTextStorageDidRemoveBookmarkNotification = @"WCSourceTex
 	return [[self class] defaultParagraphStyle];
 }
 @synthesize bookmarks=_bookmarks;
+@dynamic lineFoldingEnabled;
+- (BOOL)lineFoldingEnabled {
+	return _textStorageFlags.lineFoldingEnabled;
+}
+- (void)setLineFoldingEnabled:(BOOL)lineFoldingEnabled {
+	_textStorageFlags.lineFoldingEnabled = lineFoldingEnabled;
+}
 #pragma mark *** Private Methods ***
 - (void)_commonInit; {
 	_lineStartIndexes = [[NSMutableArray alloc] initWithCapacity:0];
