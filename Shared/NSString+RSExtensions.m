@@ -41,10 +41,11 @@
 	NSMutableIndexSet *lineNumbers = [NSMutableIndexSet indexSet];
 	__block NSUInteger lineNumber = 0;
 	
-	if (!range.length && NSMaxRange(range) == [self length]) {
+	if (!range.length && NSMaxRange(range) >= [self length]) {
 		NSUInteger numberOfLines = [self numberOfLines];
+		NSRange lineRange = [self lineRangeForRange:range];
 		
-		if (numberOfLines)
+		if (lineRange.length)
 			numberOfLines--;
 		
 		[lineNumbers addIndex:numberOfLines];
@@ -55,8 +56,10 @@
 				[lineNumbers addIndex:lineNumber];
 			else if (NSIntersectionRange(range, enclosingRange).length)
 				[lineNumbers addIndex:lineNumber];
-			else if (NSMaxRange(enclosingRange) > NSMaxRange(range))
+			else if (NSMaxRange(enclosingRange) > NSMaxRange(range)) {
 				*stop = YES;
+				
+			}
 			
 			lineNumber++;
 		}];

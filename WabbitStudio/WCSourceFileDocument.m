@@ -94,7 +94,7 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 }
 
 + (BOOL)autosavesInPlace {
-    return YES;
+    return NO;
 }
 
 + (BOOL)canConcurrentlyReadDocumentsOfType:(NSString *)typeName {

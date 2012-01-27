@@ -15,7 +15,7 @@
 }
 @property (readonly,nonatomic) NSRange range;
 @property (readonly,nonatomic) NSRange contentRange;
-@property (readonly,nonatomic) NSUInteger level;
+@property (readwrite,assign,nonatomic) NSUInteger level;
 
 + (id)foldWithRange:(NSRange)range level:(NSUInteger)level contentRange:(NSRange)contentRange;
 - (id)initWithRange:(NSRange)range level:(NSUInteger)level contentRange:(NSRange)contentRange;

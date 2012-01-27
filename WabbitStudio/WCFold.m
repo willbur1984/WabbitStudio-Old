@@ -30,5 +30,11 @@
 @synthesize range=_range;
 @synthesize contentRange=_contentRange;
 @synthesize level=_level;
+- (void)setLevel:(NSUInteger)level {
+	_level = level;
+	
+	for (WCFold *fold in [self childNodes])
+		[fold setLevel:level+1];
+}
 
 @end

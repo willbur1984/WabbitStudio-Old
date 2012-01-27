@@ -28,8 +28,8 @@ static NSRegularExpression *endMarkersRegex;
 + (void)initialize {
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		startMarkersRegex = [[NSRegularExpression alloc] initWithPattern:@"#(?:comment|macro|ifndef|ifdef|if)" options:NSRegularExpressionCaseInsensitive error:NULL];
-		endMarkersRegex = [[NSRegularExpression alloc] initWithPattern:@"#(?:endcomment|endmacro|endif)" options:NSRegularExpressionCaseInsensitive error:NULL];
+		startMarkersRegex = [[NSRegularExpression alloc] initWithPattern:@"#(?:comment|macro|ifndef|ifdef|if)\\b" options:NSRegularExpressionCaseInsensitive error:NULL];
+		endMarkersRegex = [[NSRegularExpression alloc] initWithPattern:@"#(?:endcomment|endmacro|endif)\\b" options:NSRegularExpressionCaseInsensitive error:NULL];
 	});
 }
 
@@ -46,6 +46,9 @@ static NSRegularExpression *endMarkersRegex;
 	
 	while (![self isCancelled] && !isFinished) {
 		NSMutableArray *foldMarkers = [NSMutableArray arrayWithCapacity:0];
+		
+		if ([self isCancelled])
+			break;
 		
 		[startMarkersRegex enumerateMatchesInString:[self string] options:0 range:NSMakeRange(0, [[self string] length]) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
 			NSString *name = [[[self string] substringWithRange:[result range]] lowercaseString];
@@ -66,6 +69,9 @@ static NSRegularExpression *endMarkersRegex;
 			}
 		}];
 		
+		if ([self isCancelled])
+			break;
+		
 		[endMarkersRegex enumerateMatchesInString:[self string] options:0 range:NSMakeRange(0, [[self string] length]) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
 			NSString *name = [[[self string] substringWithRange:[result range]] lowercaseString];
 			
@@ -85,6 +91,9 @@ static NSRegularExpression *endMarkersRegex;
 			}
 		}];
 		
+		if ([self isCancelled])
+			break;
+		
 		[foldMarkers sortUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"range" ascending:YES comparator:^NSComparisonResult(id obj1, id obj2) {
 			if ([obj1 rangeValue].location < [obj2 rangeValue].location)
 				return NSOrderedAscending;
@@ -98,56 +107,94 @@ static NSRegularExpression *endMarkersRegex;
 		
 		NSMutableArray *topLevelFolds = [NSMutableArray arrayWithCapacity:0];
 		NSMutableArray *foldMarkerStack = [NSMutableArray arrayWithCapacity:0];
-		__block NSUInteger numberOfStartMarkers = 0;
-		__block NSUInteger numberOfEndMarkers = 0;
 		
-		[foldMarkers enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(WCFoldMarker *foldMarker, NSUInteger foldMarkerIndex, BOOL *stop) {
+		for (WCFoldMarker *foldMarker in foldMarkers) {
 			switch ([foldMarker type]) {
-				case WCFoldMarkerTypeMacroStart:
-				case WCFoldMarkerTypeIfStart:
 				case WCFoldMarkerTypeCommentStart:
-					numberOfStartMarkers++;
+				case WCFoldMarkerTypeIfStart:
+				case WCFoldMarkerTypeMacroStart:
 					[foldMarkerStack addObject:foldMarker];
+					break;
+				case WCFoldMarkerTypeCommentEnd:
+				case WCFoldMarkerTypeIfEnd:
+				case WCFoldMarkerTypeMacroEnd: {
+					WCFoldMarker *startMarker = [foldMarkerStack lastObject];
+					WCFoldMarker *endMarker = foldMarker;
 					
-					if (numberOfStartMarkers == numberOfEndMarkers) {
-						WCFoldMarker *startMarker = [foldMarkerStack lastObject];
-						WCFoldMarker *endMarker = [foldMarkerStack firstObject];
+					if (([startMarker type] == WCFoldMarkerTypeCommentStart && [endMarker type] == WCFoldMarkerTypeCommentEnd) ||
+						([startMarker type] == WCFoldMarkerTypeIfStart && [endMarker type] == WCFoldMarkerTypeIfEnd) ||
+						([startMarker type] == WCFoldMarkerTypeMacroStart && [endMarker type] == WCFoldMarkerTypeMacroEnd)) {
 						
-						if (([startMarker type] == WCFoldMarkerTypeMacroStart && [endMarker type] == WCFoldMarkerTypeMacroEnd) ||
-							([startMarker type] == WCFoldMarkerTypeIfStart && [endMarker type] == WCFoldMarkerTypeIfEnd) ||
-							([startMarker type] == WCFoldMarkerTypeCommentStart && [endMarker type] == WCFoldMarkerTypeCommentEnd)) {
+						NSRange foldRange = [[self string] lineRangeForRange:NSUnionRange([startMarker range], [endMarker range])];
+						NSUInteger charIndexAfterStartMarkerLineRange = NSMaxRange([[self string] lineRangeForRange:[startMarker range]]);
+						NSUInteger charIndexBeforeEndMarkerLineRange = [[self string] lineRangeForRange:[endMarker range]].location - 1;
+						WCFold *newFold = [WCFold foldWithRange:foldRange level:0 contentRange:NSMakeRange(charIndexAfterStartMarkerLineRange, charIndexBeforeEndMarkerLineRange-charIndexAfterStartMarkerLineRange)];
+						
+						for (WCFold *childNode in [[[topLevelFolds copy] autorelease] reverseObjectEnumerator]) {
+							if (NSLocationInRange([childNode range].location, [newFold range])) {
+								[childNode retain];
+								
+								[childNode setLevel:[childNode level]+1];
+								
+								[topLevelFolds removeObjectIdenticalTo:childNode];
+								[[newFold mutableChildNodes] addObject:childNode];
+								
+								[childNode release];
+							}
+							else
+								break;
+						}
+						
+						[topLevelFolds addObject:newFold];
+						
+						[foldMarkerStack removeLastObject];
+					}
+					else {
+						for (WCFoldMarker *fold in [foldMarkerStack reverseObjectEnumerator]) {							
+							startMarker = fold;
 							
-							NSRange foldRange = NSUnionRange([startMarker range], [endMarker range]);
-							foldRange = [[self string] lineRangeForRange:foldRange];
-							
-							[topLevelFolds addObject:[WCFold foldWithRange:foldRange level:0 contentRange:NSEmptyRange]];
-							
-							[foldMarkerStack removeLastObject];
-							[foldMarkerStack removeFirstObject];
-							
-							[self _processFoldsForParentFold:[topLevelFolds lastObject] foldMarkers:[[foldMarkerStack reverseObjectEnumerator] allObjects]];
-							
-							numberOfEndMarkers = 0;
-							numberOfStartMarkers = 0;
-							[foldMarkerStack removeAllObjects];
+							if (([startMarker type] == WCFoldMarkerTypeCommentStart && [endMarker type] == WCFoldMarkerTypeCommentEnd) ||
+								([startMarker type] == WCFoldMarkerTypeIfStart && [endMarker type] == WCFoldMarkerTypeIfEnd) ||
+								([startMarker type] == WCFoldMarkerTypeMacroStart && [endMarker type] == WCFoldMarkerTypeMacroEnd)) {
+								
+								NSRange foldRange = [[self string] lineRangeForRange:NSUnionRange([startMarker range], [endMarker range])];
+								NSUInteger charIndexAfterStartMarkerLineRange = NSMaxRange([[self string] lineRangeForRange:[startMarker range]]);
+								NSUInteger charIndexBeforeEndMarkerLineRange = [[self string] lineRangeForRange:[endMarker range]].location - 1;
+								WCFold *newFold = [WCFold foldWithRange:foldRange level:0 contentRange:NSMakeRange(charIndexAfterStartMarkerLineRange, charIndexBeforeEndMarkerLineRange-charIndexAfterStartMarkerLineRange)];
+								
+								for (WCFold *childNode in [[[topLevelFolds copy] autorelease] reverseObjectEnumerator]) {
+									if (NSLocationInRange([childNode range].location, [newFold range])) {
+										[childNode retain];
+										
+										[childNode setLevel:[childNode level]+1];
+										
+										[topLevelFolds removeObjectIdenticalTo:childNode];
+										[[newFold mutableChildNodes] addObject:childNode];
+										
+										[childNode release];
+									}
+									else
+										break;
+								}
+								
+								[topLevelFolds addObject:newFold];
+								
+								[foldMarkerStack removeObjectIdenticalTo:startMarker];
+								
+								break;
+							}
 						}
 					}
-					else if (numberOfStartMarkers > numberOfEndMarkers) {
-						numberOfEndMarkers = 0;
-						numberOfStartMarkers = 0;
-						[foldMarkerStack removeAllObjects];
-					}
-					break;
-				case WCFoldMarkerTypeMacroEnd:
-				case WCFoldMarkerTypeIfEnd:
-				case WCFoldMarkerTypeCommentEnd:
-					numberOfEndMarkers++;
-					[foldMarkerStack addObject:foldMarker];
+					
+				}
 					break;
 				default:
 					break;
 			}
-		}];
+		}
+		
+		if ([self isCancelled])
+			break;
 		
 		NSArray *sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"range" ascending:YES comparator:^NSComparisonResult(id obj1, id obj2) {
 			if ([obj1 rangeValue].location < [obj2 rangeValue].location)
@@ -164,7 +211,7 @@ static NSRegularExpression *endMarkersRegex;
 		
 		if ([self isCancelled])
 			break;
-		
+		 
 		[[self sourceScanner] setFolds:topLevelFolds];
 		
 		isFinished = YES;
@@ -198,6 +245,7 @@ static NSRegularExpression *endMarkersRegex;
 	__block NSUInteger numberOfStartMarkers = 0;
 	__block NSUInteger numberOfEndMarkers = 0;
 	
+	
 	[foldMarkers enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(WCFoldMarker *foldMarker, NSUInteger foldMarkerIndex, BOOL *stop) {
 		switch ([foldMarker type]) {
 			case WCFoldMarkerTypeMacroStart:
@@ -214,10 +262,12 @@ static NSRegularExpression *endMarkersRegex;
 						([startMarker type] == WCFoldMarkerTypeIfStart && [endMarker type] == WCFoldMarkerTypeIfEnd) ||
 						([startMarker type] == WCFoldMarkerTypeCommentStart && [endMarker type] == WCFoldMarkerTypeCommentEnd)) {
 						
-						NSRange foldRange = NSUnionRange([startMarker range], [endMarker range]);
-						foldRange = [[self string] lineRangeForRange:foldRange];
+						NSRange foldRange = [[self string] lineRangeForRange:NSUnionRange([startMarker range], [endMarker range])];
+						NSUInteger lineStartIndexAfterStartMarker = NSMaxRange([[self string] lineRangeForRange:[startMarker range]]);
+						NSUInteger lineEndIndexBeforeEndMarker = [[self string] lineRangeForRange:[endMarker range]].location - 1;
+						NSRange contentRange = NSMakeRange(lineStartIndexAfterStartMarker, lineEndIndexBeforeEndMarker-lineStartIndexAfterStartMarker);
 						
-						[[parentFold mutableChildNodes] addObject:[WCFold foldWithRange:foldRange level:[parentFold level]+1 contentRange:NSEmptyRange]];
+						[[parentFold mutableChildNodes] addObject:[WCFold foldWithRange:foldRange level:[parentFold level]+1 contentRange:contentRange]];
 						
 						[foldMarkerStack removeLastObject];
 						[foldMarkerStack removeFirstObject];
@@ -244,6 +294,9 @@ static NSRegularExpression *endMarkersRegex;
 			default:
 				break;
 		}
+		
+		if ([self isCancelled])
+			*stop = YES;
 	}];
 }
 

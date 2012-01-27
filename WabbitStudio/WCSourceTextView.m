@@ -36,6 +36,7 @@
 #import "WCProjectDocument.h"
 #import "WCFile.h"
 #import "WCFoldAttachmentCell.h"
+#import "WCFold.h"
 
 @interface WCSourceTextView ()
 
@@ -820,6 +821,12 @@
 }
 
 - (IBAction)fold:(id)sender; {
+	WCFold *fold = [[[[self delegate] sourceScannerForSourceTextView:self] folds] deepestFoldForRange:[self selectedRange]];
+	
+	if (fold) {
+		[self showFindIndicatorForRange:[fold contentRange]];
+	}
+	/*
 	NSTextAttachment *attachment = [[[NSTextAttachment alloc] initWithFileWrapper:nil] autorelease];
 	WCFoldAttachmentCell *cell = [[[WCFoldAttachmentCell alloc] initTextCell:@""] autorelease];
 	NSAttributedString *attributedString = [NSAttributedString attributedStringWithAttachment:attachment];
@@ -830,6 +837,7 @@
 		[[self textStorage] replaceCharactersInRange:[self selectedRange] withAttributedString:attributedString];
 		[self didChangeText];
 	}
+	 */
 }
 - (IBAction)unfold:(id)sender; {
 	
@@ -935,22 +943,21 @@
 		return;
 	
 	NSUInteger numRects;
-	NSRectArray rects;
-	
-	if ([self selectedRange].length) {
-		NSRange selectedRange = [self selectedRange];
-		if (NSMaxRange(selectedRange) == [[self string] length])
-			selectedRange.length--;
-		
-		rects = [[self layoutManager] rectArrayForCharacterRange:[[self string] lineRangeForRange:selectedRange] withinSelectedCharacterRange:selectedRange inTextContainer:[self textContainer] rectCount:&numRects];
-	}
-	else
-		rects = [[self layoutManager] rectArrayForCharacterRange:[self selectedRange] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[self textContainer] rectCount:&numRects];
+	NSRectArray rects = [[self layoutManager] rectArrayForCharacterRange:[[self string] lineRangeForRange:[self selectedRange]] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[self textContainer] rectCount:&numRects];
 	
 	if (!numRects)
 		return;
 	
-	NSRect lineRect = rects[0];
+	NSRect lineRect;
+	
+	if (numRects == 1)
+		lineRect = rects[0];
+	else {
+		lineRect = NSZeroRect;
+		NSUInteger rectIndex;
+		for (rectIndex=0; rectIndex<numRects; rectIndex++)
+			lineRect = NSUnionRect(lineRect, rects[rectIndex]);
+	}
 	
 	lineRect.origin.x = NSMinX([self bounds]);
 	lineRect.size.width = NSWidth([self bounds]);

@@ -140,22 +140,21 @@
 		return;
 	
 	NSUInteger numRects;
-	NSRectArray rects;
-	
-	if ([[self textView] selectedRange].length) {
-		NSRange selectedRange = [[self textView] selectedRange];
-		if (NSMaxRange(selectedRange) == [[[self textView] string] length])
-			selectedRange.length--;
-		
-		rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[[[self textView] string] lineRangeForRange:selectedRange] withinSelectedCharacterRange:selectedRange inTextContainer:[[self textView] textContainer] rectCount:&numRects];
-	}
-	else
-		rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[[self textView] selectedRange] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&numRects];
+	NSRectArray rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[[[self textView] string] lineRangeForRange:[[self textView] selectedRange]] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&numRects];
 	
 	if (!numRects)
 		return;
 	
-	NSRect lineRect = rects[0];
+	NSRect lineRect;
+	
+	if (numRects == 1)
+		lineRect = rects[0];
+	else {
+		lineRect = NSZeroRect;
+		NSUInteger rectIndex;
+		for (rectIndex=0; rectIndex<numRects; rectIndex++)
+			lineRect = NSUnionRect(lineRect, rects[rectIndex]);
+	}
 	
 	lineRect = NSMakeRect(NSMinX([self bounds]), [self convertPoint:lineRect.origin fromView:[self clientView]].y, NSWidth([self bounds]), NSHeight(lineRect));
 	

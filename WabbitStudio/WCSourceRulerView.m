@@ -86,15 +86,11 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 
 - (void)mouseEntered:(NSEvent *)theEvent {
 	NSRange range = [self _rangeForPoint:[self convertPointFromBase:[theEvent locationInWindow]]];
-	WCFold *fold = [[[[self delegate] sourceScannerForSourceRulerView:self] folds] foldForRange:range];
+	WCFold *fold = [[[[self delegate] sourceScannerForSourceRulerView:self] folds] deepestFoldForRange:range];
 	
-	if (NSLocationInRange(range.location, [fold range])) {
-		for (WCFold *childFold in [fold descendantNodes]) {
-			if (NSLocationInRange(range.location, [childFold range]) && [childFold range].length < [fold range].length)
-				fold = childFold;
-		}
-		
-		_foldToHighlight = fold;
+	_foldToHighlight = fold;
+	if (_foldToHighlight) {
+		//[[self textView] showFindIndicatorForRange:[fold contentRange]];
 		[self setNeedsDisplay:YES];
 	}
 }
@@ -105,21 +101,19 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 
 - (void)mouseMoved:(NSEvent *)theEvent {
 	NSRange range = [self _rangeForPoint:[self convertPointFromBase:[theEvent locationInWindow]]];
-	WCFold *fold = [[[[self delegate] sourceScannerForSourceRulerView:self] folds] foldForRange:range];
+	WCFold *fold = [[[[self delegate] sourceScannerForSourceRulerView:self] folds] deepestFoldForRange:range];
 	
-	if (NSLocationInRange(range.location, [fold range])) {
-		for (WCFold *childFold in [fold descendantNodes]) {
-			
-			if (NSLocationInRange(range.location, [childFold range]) && [childFold range].length < [fold range].length)
-				fold = childFold;
+	if (fold) {
+		if (_foldToHighlight != fold) {
+			_foldToHighlight = fold;
+			//[[self textView] showFindIndicatorForRange:[fold contentRange]];
+			[self setNeedsDisplay:YES];
 		}
-		
-		_foldToHighlight = fold;
 	}
-	else
+	else if (_foldToHighlight) {
 		_foldToHighlight = nil;
-	
-	[self setNeedsDisplay:YES];
+		[self setNeedsDisplay:YES];
+	}
 }
 
 - (void)updateTrackingAreas {
@@ -220,7 +214,7 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 	NSRectFill(ribbonRect);
 	
 	NSArray *folds = [[[[self delegate] sourceScannerForSourceRulerView:self] folds] foldsForRange:[[self textView] visibleRange]];
-	NSColor *topLevelFoldColor = [NSColor colorWithCalibratedWhite:212.0/255.0 alpha:1.0];
+	NSColor *topLevelFoldColor = [NSColor colorWithCalibratedWhite:200.0/255.0 alpha:1.0];
 	
 	for (WCFold *fold in folds) {
 		NSRange foldRange = [fold range];
@@ -360,7 +354,7 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 			foldRange.length -= (NSMaxRange(foldRange) - [[[self textView] string] length]);
 		
 		NSUInteger rectCount;
-		NSRectArray rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[[[self textView] string] lineRangeForRange:foldRange] withinSelectedCharacterRange:foldRange inTextContainer:[[self textView] textContainer] rectCount:&rectCount];
+		NSRectArray rects = [[[self textView] layoutManager] rectArrayForCharacterRange:foldRange withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&rectCount];
 		
 		if (!rectCount)
 			continue;

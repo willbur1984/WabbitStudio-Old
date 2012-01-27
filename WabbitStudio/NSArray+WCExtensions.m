@@ -166,7 +166,7 @@
 	if (![self count])
 		return nil;
 	else if ([self count] == 1) {
-		if (NSIntersectionRange([[self lastObject] range],range).length)
+		if (NSLocationInRange(range.location, [[self lastObject] range]))
 			return self;
 		return nil;
 	}
@@ -180,6 +180,20 @@
 		
 		return [self subarrayWithRange:NSMakeRange(startIndex, endIndex-startIndex)];
 	}
+}
+- (WCFold *)deepestFoldForRange:(NSRange)range; {
+	WCFold *topLevelFold = [self foldForRange:range];
+	
+	if (!NSLocationInRange(range.location, [topLevelFold range]))
+		return nil;
+	
+	for (WCFold *fold in [topLevelFold descendantNodes]) {
+		if (NSLocationInRange(range.location, [fold range]) &&
+			[fold range].length < [topLevelFold range].length)
+			topLevelFold = fold;
+	}
+	
+	return topLevelFold;
 }
 
 - (NSUInteger)lineNumberForRange:(NSRange)range; {

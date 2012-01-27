@@ -26,6 +26,7 @@
 - (NSUInteger)foldIndexForRange:(NSRange)range;
 - (WCFold *)foldForRange:(NSRange)range;
 - (NSArray *)foldsForRange:(NSRange)range;
+- (WCFold *)deepestFoldForRange:(NSRange)range;
 
 - (NSUInteger)lineNumberForRange:(NSRange)range;
 
