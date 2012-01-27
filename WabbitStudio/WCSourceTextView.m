@@ -845,14 +845,13 @@
 	WCFold *fold = [[[[self delegate] sourceScannerForSourceTextView:self] folds] deepestFoldForRange:[self selectedRange]];
 	
 	if (fold) {
-		[self setSelectedRange:[fold contentRange]];
-		
 		NSNumber *trueValue = [NSNumber numberWithBool:YES];
 		NSTextStorage *textStorage = [self textStorage];
 		
 		[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:trueValue,WCLineFoldingAttributeName, nil] range:[fold contentRange]];
 		
 		[self setSelectedRange:NSMakeRange(NSMaxRange([fold contentRange]), 0)];
+		[self setNeedsDisplay:YES];
 	}
 }
 - (IBAction)unfold:(id)sender; {
@@ -865,6 +864,7 @@
         [textStorage removeAttribute:WCLineFoldingAttributeName range:range];
 		
         [self setSelectedRange:NSMakeRange(NSMaxRange(range), 0)];
+		[self setNeedsDisplay:YES];
 		return;
     }
 	
@@ -875,6 +875,7 @@
         [textStorage removeAttribute:WCLineFoldingAttributeName range:range];
 		
         [self setSelectedRange:NSMakeRange(NSMaxRange(range), 0)];
+		[self setNeedsDisplay:YES];
 		return;
     }
 	

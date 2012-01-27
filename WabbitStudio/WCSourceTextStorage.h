@@ -31,7 +31,6 @@ extern NSString *const WCSourceTextStorageDidRemoveBookmarkNotification;
 @property (readwrite,assign,nonatomic) BOOL lineFoldingEnabled;
 
 + (NSParagraphStyle *)defaultParagraphStyle;
-+ (NSTextAttachment *)sharedFoldAttachment;
 
 - (void)addBookmark:(RSBookmark *)bookmark;
 - (void)removeBookmark:(RSBookmark *)bookmark;

@@ -24,8 +24,6 @@
 NSString *const WCSourceTextStorageDidAddBookmarkNotification = @"WCSourceTextStorageDidAddBookmarkNotification";
 NSString *const WCSourceTextStorageDidRemoveBookmarkNotification = @"WCSourceTextStorageDidRemoveBookmarkNotification";
 
-static NSTextAttachment *sharedAttachment;
-
 @interface WCSourceTextStorage ()
 - (void)_calculateLineStartIndexes;
 - (void)_updateParagraphStyle;
@@ -34,15 +32,6 @@ static NSTextAttachment *sharedAttachment;
 
 @implementation WCSourceTextStorage
 #pragma mark *** Subclass Overrides ***
-+ (void)initialize {
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		sharedAttachment = [[NSTextAttachment alloc] init];
-		WCFoldAttachmentCell *cell = [[[WCFoldAttachmentCell alloc] initTextCell:@""] autorelease];
-		
-		[sharedAttachment setAttachmentCell:cell];
-	});
-}
 
 - (void)dealloc {
 #ifdef DEBUG
@@ -118,6 +107,7 @@ static NSTextAttachment *sharedAttachment;
             if (range) *range = effectiveRange;
         }
     }
+	 
 	
     return attributes;
 }
@@ -131,36 +121,13 @@ static NSTextAttachment *sharedAttachment;
 	[self edited:NSTextStorageEditedAttributes range:range changeInLength:0];
 }
 
-// Attribute Fixing Overrides
-- (void)fixAttributesInRange:(NSRange)range {
-    [super fixAttributesInRange:range];
+- (void)fixParagraphStyleAttributeInRange:(NSRange)range {	
+	NSRange paragraphRange = [[self string] paragraphRangeForRange:range];
 	
-    // we want to avoid extending to the last paragraph separator
-    [self enumerateAttribute:WCLineFoldingAttributeName inRange:range options:0 usingBlock:^(id value, NSRange range, BOOL *stop) {
-        if (value && (range.length > 1)) {
-            NSUInteger paragraphStart, paragraphEnd, contentsEnd;
-            
-            [[self string] getParagraphStart:&paragraphStart end:&paragraphEnd contentsEnd:&contentsEnd forRange:range];
-            
-            if ((NSMaxRange(range) == paragraphEnd) && (contentsEnd < paragraphEnd)) {
-                [self removeAttribute:WCLineFoldingAttributeName range:NSMakeRange(contentsEnd, paragraphEnd - contentsEnd)];
-            }
-        }
-    }];
-}
-
-- (void)fixParagraphStyleAttributeInRange:(NSRange)range {
-	[super fixParagraphStyleAttributeInRange:range];
-	
-	//NSRange paragraphRange = [[self string] paragraphRangeForRange:range];
-	
-	//[self addAttribute:NSParagraphStyleAttributeName value:[self paragraphStyle] range:paragraphRange];
+	[self addAttribute:NSParagraphStyleAttributeName value:[self paragraphStyle] range:paragraphRange];
 }
 
 - (void)fixAttachmentAttributeInRange:(NSRange)range {
-	[super fixAttachmentAttributeInRange:range];
-	
-	/*
 	NSRange effectiveRange;
 	id attributeValue;
 	while (range.length) {
@@ -174,7 +141,6 @@ static NSTextAttachment *sharedAttachment;
 		
 		range = NSMakeRange(NSMaxRange(effectiveRange),NSMaxRange(range)-NSMaxRange(effectiveRange));
 	}
-	 */
 }
 
 - (NSUInteger)lineNumberForRange:(NSRange)range {
@@ -251,9 +217,6 @@ static NSTextAttachment *sharedAttachment;
 	return [_bookmarks bookmarksForRange:range];
 }
 
-+ (NSTextAttachment *)sharedFoldAttachment {
-	return sharedAttachment;
-}
 #pragma mark Properties
 @synthesize lineStartIndexes=_lineStartIndexes;
 @dynamic delegate;

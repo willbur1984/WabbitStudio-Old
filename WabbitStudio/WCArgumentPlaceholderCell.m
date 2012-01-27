@@ -153,11 +153,9 @@ static NSTextContainer *_textContainer;
 	[_textStorage replaceCharactersInRange:NSMakeRange(0, [_textStorage length]) withAttributedString:[[[NSAttributedString alloc] initWithString:string attributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName, nil]] autorelease]];
 	[_layoutManager ensureLayoutForCharacterRange:NSMakeRange(0, [_textStorage length])];
 	
-	NSRect cellFrame = [super cellFrameForTextContainer:textContainer proposedLineFragment:lineFrag glyphPosition:position characterIndex:charIndex];
-	NSRect textFrame = [_layoutManager usedRectForTextContainer:_textContainer];
+	NSRect cellFrame = [_layoutManager usedRectForTextContainer:_textContainer];
 	
-	cellFrame.size.width = NSWidth(textFrame);
-	cellFrame.size.height = NSHeight(textFrame);
+	cellFrame.origin = NSZeroPoint;
 	cellFrame.origin.y -= [[_layoutManager typesetter] baselineOffsetInLayoutManager:_layoutManager glyphIndex:0];
 	
 	return cellFrame;

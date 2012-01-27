@@ -22,6 +22,7 @@
 #import "NSBezierPath+StrokeExtensions.h"
 #import "WCFontAndColorThemeManager.h"
 #import "WCFontAndColorTheme.h"
+#import "WCSourceTypesetter.h"
 
 @interface WCSourceRulerView ()
 @property (readonly,nonatomic) WCSourceTextStorage *textStorage;
@@ -113,6 +114,19 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 	else if (_foldToHighlight) {
 		_foldToHighlight = nil;
 		[self setNeedsDisplay:YES];
+	}
+}
+
+- (void)mouseDown:(NSEvent *)theEvent {
+	if (_foldToHighlight) {
+		WCFold *fold = _foldToHighlight;
+		NSNumber *trueValue = [NSNumber numberWithBool:YES];
+		NSTextStorage *textStorage = [[self textView] textStorage];
+		
+		[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:trueValue,WCLineFoldingAttributeName, nil] range:[fold contentRange]];
+		
+		[[self textView] setSelectedRange:NSMakeRange(NSMaxRange([fold contentRange]), 0)];
+		[[self textView] setNeedsDisplay:YES];
 	}
 }
 
