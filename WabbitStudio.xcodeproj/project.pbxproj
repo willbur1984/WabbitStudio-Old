@@ -43,6 +43,8 @@
 		071306AB14C8F74000862E4D /* Bookmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 071306AA14C8F74000862E4D /* Bookmark.png */; };
 		071306AE14C91C4C00862E4D /* DDHotKeyCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 071306AD14C91C4C00862E4D /* DDHotKeyCenter.m */; };
 		071306F114CA92EF00862E4D /* WCGroupContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 071306F014CA92EE00862E4D /* WCGroupContainer.m */; };
+		07154F5114D40AD400F57668 /* WCProjectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07154F4F14D40AD400F57668 /* WCProjectViewController.m */; };
+		07154F5514D40B3C00F57668 /* WCProjectView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07154F5314D40B3C00F57668 /* WCProjectView.xib */; };
 		071985DF14C010D800C8E91A /* WCGeneralViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 071985DD14C010D800C8E91A /* WCGeneralViewController.m */; };
 		071985E314C011A800C8E91A /* WCGeneralView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 071985E114C011A800C8E91A /* WCGeneralView.xib */; };
 		071985E614C01F5D00C8E91A /* NSURL+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 071985E514C01F5D00C8E91A /* NSURL+RSExtensions.m */; };
@@ -346,6 +348,9 @@
 		071306AD14C91C4C00862E4D /* DDHotKeyCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDHotKeyCenter.m; sourceTree = "<group>"; };
 		071306EF14CA92EE00862E4D /* WCGroupContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCGroupContainer.h; sourceTree = "<group>"; };
 		071306F014CA92EE00862E4D /* WCGroupContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCGroupContainer.m; sourceTree = "<group>"; };
+		07154F4E14D40AD400F57668 /* WCProjectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCProjectViewController.h; sourceTree = "<group>"; };
+		07154F4F14D40AD400F57668 /* WCProjectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCProjectViewController.m; sourceTree = "<group>"; };
+		07154F5414D40B3C00F57668 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCProjectView.xib; sourceTree = "<group>"; };
 		071985DC14C010D800C8E91A /* WCGeneralViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCGeneralViewController.h; sourceTree = "<group>"; };
 		071985DD14C010D800C8E91A /* WCGeneralViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCGeneralViewController.m; sourceTree = "<group>"; };
 		071985E214C011A800C8E91A /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCGeneralView.xib; sourceTree = "<group>"; };
@@ -826,6 +831,7 @@
 				0765361D14CD459E004D72D1 /* WCAddToProjectAccessoryView.xib */,
 				07AEB78014CE03C300A0BA1C /* WCArgumentPlaceholderWindow.xib */,
 				072BDC2E14CE623D00F3F555 /* WCAlertsView.xib */,
+				07154F5314D40B3C00F57668 /* WCProjectView.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -864,12 +870,12 @@
 				0706D64F14A8F45B0092F880 /* WCSourceTextViewController.m */,
 				076B7F8614BC15B600CC10E3 /* WCStandardSourceTextViewController.h */,
 				076B7F8714BC15B600CC10E3 /* WCStandardSourceTextViewController.m */,
+				073B5A9B14B6A45400FCDC0F /* Storage */,
 				0731614414D32C72002F0F55 /* Layout */,
 				0706AFBD14CF2D9A00A0F93C /* Folding */,
 				07BC6CB314B7DDF2007ECB3F /* Jump to Line */,
 				073B5A9A14B6A43900FCDC0F /* Views */,
 				073B5A9C14B6A45D00FCDC0F /* Highlighter */,
-				073B5A9B14B6A45400FCDC0F /* Storage */,
 				0708964014A6C8050017BBE4 /* Tokens/Symbols */,
 				073B5A9814B6A3E400FCDC0F /* Jump in File */,
 				0725436D14A83A1400C961B7 /* Jump Bar */,
@@ -973,6 +979,15 @@
 				0708963D14A67D1A0017BBE4 /* NSBezierPath+StrokeExtensions.m */,
 			);
 			path = External;
+			sourceTree = "<group>";
+		};
+		07154F4C14D40AB800F57668 /* Project */ = {
+			isa = PBXGroup;
+			children = (
+				07154F4E14D40AD400F57668 /* WCProjectViewController.h */,
+				07154F4F14D40AD400F57668 /* WCProjectViewController.m */,
+			);
+			name = Project;
 			sourceTree = "<group>";
 		};
 		071985DA14C010B900C8E91A /* General */ = {
@@ -1199,6 +1214,7 @@
 			children = (
 				072BBC4014AA66900044ECC2 /* WCPreferencesWindowController.h */,
 				072BBC4114AA66900044ECC2 /* WCPreferencesWindowController.m */,
+				07154F4C14D40AB800F57668 /* Project */,
 				071985DA14C010B900C8E91A /* General */,
 				0745BE2B14ABF81700F541DC /* Editor */,
 				0745BE2914ABF7F200F541DC /* Fonts & Colors */,
@@ -1769,6 +1785,7 @@
 				0765361F14CD459E004D72D1 /* WCAddToProjectAccessoryView.xib in Resources */,
 				07AEB78214CE03C300A0BA1C /* WCArgumentPlaceholderWindow.xib in Resources */,
 				072BDC3014CE623D00F3F555 /* WCAlertsView.xib in Resources */,
+				07154F5514D40B3C00F57668 /* WCProjectView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1950,6 +1967,7 @@
 				0731614814D32C92002F0F55 /* WCSourceLayoutManager.m in Sources */,
 				0731614B14D32CE5002F0F55 /* WCSourceTypesetter.m in Sources */,
 				0731614E14D32D0D002F0F55 /* WCSourceGlyphGenerator.m in Sources */,
+				07154F5114D40AD400F57668 /* WCProjectViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1979,6 +1997,14 @@
 			);
 			name = WCCompletionWindow.xib;
 			path = ..;
+			sourceTree = "<group>";
+		};
+		07154F5314D40B3C00F57668 /* WCProjectView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				07154F5414D40B3C00F57668 /* en */,
+			);
+			name = WCProjectView.xib;
 			sourceTree = "<group>";
 		};
 		071985E114C011A800C8E91A /* WCGeneralView.xib */ = {

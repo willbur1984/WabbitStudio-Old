@@ -37,7 +37,7 @@ NSString *const WCGeneralOnStartupKey = @"generalOnStartup";
 }
 #pragma mark RSUserDefaultsProvider
 + (NSDictionary *)userDefaults {
-	return [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:WCGeneralOnStartupShowNewProjectWindow],WCGeneralOnStartupKey, nil];;
+	return [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:WCGeneralOnStartupShowNewProjectWindow],WCGeneralOnStartupKey, nil];
 }
 
 @end
