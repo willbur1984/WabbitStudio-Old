@@ -23,6 +23,8 @@
 #import "WCFontAndColorThemeManager.h"
 #import "WCFontAndColorTheme.h"
 #import "WCSourceTypesetter.h"
+#import "WCFoldAttachmentCell.h"
+#import "WCSourceTextView.h"
 
 @interface WCSourceRulerView ()
 @property (readonly,nonatomic) WCSourceTextStorage *textStorage;
@@ -32,6 +34,7 @@
 - (NSRange)_rangeForPoint:(NSPoint)point;
 - (void)_drawFoldsForFold:(WCFold *)fold inRect:(NSRect)ribbonRect topLevelFoldColor:(NSColor *)topLevelFoldColor;
 - (void)_drawFoldHighlightInRect:(NSRect)foldHighlightRect;
+- (void)_updateCodeFoldingTrackingArea;
 @end
 
 @implementation WCSourceRulerView
@@ -119,53 +122,23 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 
 - (void)mouseDown:(NSEvent *)theEvent {
 	if (_foldToHighlight) {
-		WCFold *fold = _foldToHighlight;
-		NSNumber *trueValue = [NSNumber numberWithBool:YES];
-		NSTextStorage *textStorage = [[self textView] textStorage];
-		
-		[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:trueValue,WCLineFoldingAttributeName, nil] range:[fold contentRange]];
-		
-		[[self textView] setSelectedRange:NSMakeRange(NSMaxRange([fold contentRange]), 0)];
-		[[self textView] setNeedsDisplay:YES];
+		id attributeValue = [[self textStorage] attribute:WCLineFoldingAttributeName atIndex:[_foldToHighlight contentRange].location effectiveRange:NULL];
+		// the range is folded, unfold it
+		if ([attributeValue boolValue]) {
+			[[self textStorage] unfoldRange:[_foldToHighlight contentRange] effectiveRange:NULL];
+		}
+		// otherwise the range isn't folded, fold it
+		else {
+			[[self textStorage] foldRange:[_foldToHighlight contentRange]];
+		}
+		[self setNeedsDisplay:YES];
 	}
 }
 
 - (void)updateTrackingAreas {
 	[super updateTrackingAreas];
 	
-	[self removeTrackingArea:_codeFoldingTrackingArea];
-	[_codeFoldingTrackingArea release];
-	_codeFoldingTrackingArea = nil;
-	
-	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey]) {
-		_codeFoldingTrackingArea = [[NSTrackingArea alloc] initWithRect:NSMakeRect(NSMaxX([self bounds])-kCodeFoldingRibbonWidth, NSMinY([self bounds]), kCodeFoldingRibbonWidth, NSHeight([self bounds])) options:NSTrackingActiveInKeyWindow|NSTrackingMouseMoved|NSTrackingMouseEnteredAndExited owner:self userInfo:nil];
-		[self addTrackingArea:_codeFoldingTrackingArea];
-	}
-}
-
-- (NSSet *)userDefaultsKeyPathsToObserve {
-	NSMutableSet *keys = [[[super userDefaultsKeyPathsToObserve] mutableCopy] autorelease];
-	
-	[keys unionSet:[NSSet setWithObjects:WCEditorShowCodeFoldingRibbonKey, nil]];
-	
-	return keys;
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-	if ([keyPath isEqualToString:[kUserDefaultsKeyPathPrefix stringByAppendingFormat:WCEditorShowCodeFoldingRibbonKey]]) {
-		if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey]) {
-			_codeFoldingTrackingArea = [[NSTrackingArea alloc] initWithRect:NSMakeRect(NSMaxX([self bounds])-kCodeFoldingRibbonWidth, NSMinY([self bounds]), kCodeFoldingRibbonWidth, NSHeight([self bounds])) options:NSTrackingActiveInKeyWindow|NSTrackingMouseMoved|NSTrackingMouseEnteredAndExited owner:self userInfo:nil];
-			[self addTrackingArea:_codeFoldingTrackingArea];
-		}
-		else {
-			[self removeTrackingArea:_codeFoldingTrackingArea];
-			[_codeFoldingTrackingArea release];
-			_codeFoldingTrackingArea = nil;
-		}
-		[self setNeedsDisplay:YES];
-	}
-	else
-		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+	[self _updateCodeFoldingTrackingArea];
 }
 
 - (CGFloat)minimumThickness {
@@ -205,6 +178,22 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 		[super drawLineNumbersInRect:NSMakeRect(NSMinX(rect), NSMinY(rect), NSWidth(rect)-kCodeFoldingRibbonWidth, NSHeight(rect))];
 	else
 		[super drawLineNumbersInRect:rect];
+}
+- (NSSet *)userDefaultsKeyPathsToObserve {
+	NSMutableSet *keys = [[[super userDefaultsKeyPathsToObserve] mutableCopy] autorelease];
+	
+	[keys unionSet:[NSSet setWithObjects:WCEditorShowCodeFoldingRibbonKey, nil]];
+	
+	return keys;
+}
+#pragma mark NSKeyValueObserving
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+	if ([keyPath isEqualToString:[kUserDefaultsKeyPathPrefix stringByAppendingFormat:WCEditorShowCodeFoldingRibbonKey]]) {
+		[self _updateCodeFoldingTrackingArea];
+		[self setNeedsDisplay:YES];
+	}
+	else
+		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
 #pragma mark NSMenuValidation
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
@@ -286,6 +275,10 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 	if (_delegate) {
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_sourceScannerDidFinishScanningFolds:) name:WCSourceScannerDidFinishScanningFoldsNotification object:[_delegate sourceScannerForSourceRulerView:self]];
 	}
+}
+@dynamic sourceTextView;
+- (WCSourceTextView *)sourceTextView {
+	return (WCSourceTextView *)[self textView];
 }
 #pragma mark *** Private Methods ***
 - (NSUInteger)_lineNumberForPoint:(NSPoint)point {
@@ -403,20 +396,45 @@ static const CGFloat kTriangleHeight = 6.0;
 	
 	NSBezierPath *path = [NSBezierPath bezierPath];
 	
-	[path moveToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMinY(foldHighlightRect))];
-	[path lineToPoint:NSMakePoint(NSMaxX(foldHighlightRect), NSMinY(foldHighlightRect))];
-	[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect)+floor(NSWidth(foldHighlightRect)/2.0), NSMinY(foldHighlightRect)+kTriangleHeight)];
-	[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMinY(foldHighlightRect))];
-	[path closePath];
+	[[self textStorage] setLineFoldingEnabled:YES];
 	
-	[path moveToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMaxY(foldHighlightRect))];
-	[path lineToPoint:NSMakePoint(NSMaxX(foldHighlightRect), NSMaxY(foldHighlightRect))];
-	[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect)+floor(NSWidth(foldHighlightRect)/2.0), NSMaxY(foldHighlightRect)-kTriangleHeight)];
-	[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMaxY(foldHighlightRect))];
-	[path closePath];
+	NSTextAttachment *attachment = [[self textStorage] attribute:NSAttachmentAttributeName atIndex:[_foldToHighlight contentRange].location effectiveRange:NULL];
+	if ([[attachment attachmentCell] isKindOfClass:[WCFoldAttachmentCell class]]) {		
+		[path moveToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMinY(foldHighlightRect))];
+		[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMaxY(foldHighlightRect))];
+		[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect)+NSWidth(foldHighlightRect), NSMinY(foldHighlightRect)+kTriangleHeight)];
+		[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMinY(foldHighlightRect))];
+		[path closePath];
+	}
+	else {
+		[path moveToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMinY(foldHighlightRect))];
+		[path lineToPoint:NSMakePoint(NSMaxX(foldHighlightRect), NSMinY(foldHighlightRect))];
+		[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect)+floor(NSWidth(foldHighlightRect)/2.0), NSMinY(foldHighlightRect)+kTriangleHeight)];
+		[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMinY(foldHighlightRect))];
+		[path closePath];
+		
+		[path moveToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMaxY(foldHighlightRect))];
+		[path lineToPoint:NSMakePoint(NSMaxX(foldHighlightRect), NSMaxY(foldHighlightRect))];
+		[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect)+floor(NSWidth(foldHighlightRect)/2.0), NSMaxY(foldHighlightRect)-kTriangleHeight)];
+		[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMaxY(foldHighlightRect))];
+		[path closePath];
+	}
+	
+	[[self textStorage] setLineFoldingEnabled:NO];
 	
 	[[NSColor darkGrayColor] setFill];
 	[path fill];
+}
+
+- (void)_updateCodeFoldingTrackingArea; {
+	[self removeTrackingArea:_codeFoldingTrackingArea];
+	[_codeFoldingTrackingArea release];
+	_codeFoldingTrackingArea = nil;
+	
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey]) {
+		_codeFoldingTrackingArea = [[NSTrackingArea alloc] initWithRect:NSMakeRect(NSMaxX([self bounds])-kCodeFoldingRibbonWidth, NSMinY([self bounds]), kCodeFoldingRibbonWidth, NSHeight([self bounds])) options:NSTrackingActiveInKeyWindow|NSTrackingMouseMoved|NSTrackingMouseEnteredAndExited owner:self userInfo:nil];
+		[self addTrackingArea:_codeFoldingTrackingArea];
+	}
 }
 #pragma mark IBActions
 - (IBAction)_toggleBookmark:(id)sender; {

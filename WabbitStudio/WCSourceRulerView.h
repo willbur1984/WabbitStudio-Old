@@ -9,7 +9,7 @@
 #import "WCLineNumberRulerView.h"
 #import "WCSourceRulerViewDelegate.h"
 
-@class WCFold;
+@class WCFold,WCSourceTextView;
 
 @interface WCSourceRulerView : WCLineNumberRulerView {
 	__weak id <WCSourceRulerViewDelegate> _delegate;
@@ -19,6 +19,7 @@
 	NSRect _rectForFoldHighlight;
 }
 @property (readwrite,assign,nonatomic) id <WCSourceRulerViewDelegate> delegate;
+@property (readonly,nonatomic) WCSourceTextView *sourceTextView;
 
 - (void)drawCodeFoldingRibbonInRect:(NSRect)ribbonRect;
 @end

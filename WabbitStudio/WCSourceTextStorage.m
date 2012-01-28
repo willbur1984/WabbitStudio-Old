@@ -222,6 +222,23 @@ NSString *const WCSourceTextStorageDidRemoveBookmarkNotification = @"WCSourceTex
 	return [_bookmarks bookmarksForRange:range];
 }
 
+- (void)foldRange:(NSRange)range; {
+	[self addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],WCLineFoldingAttributeName, nil] range:range];
+}
+- (BOOL)unfoldRange:(NSRange)range effectiveRange:(NSRangePointer)effectiveRange; {
+	NSRange mEffectiveRange;
+	id attributeValue = [self attribute:WCLineFoldingAttributeName atIndex:range.location longestEffectiveRange:&mEffectiveRange inRange:NSMakeRange(0, [self length])];
+	
+	if (![attributeValue boolValue])
+		return NO;
+	
+	[self removeAttribute:WCLineFoldingAttributeName range:mEffectiveRange];
+	
+	if (effectiveRange)
+		*effectiveRange = mEffectiveRange;
+	
+	return YES;
+}
 #pragma mark Properties
 @synthesize lineStartIndexes=_lineStartIndexes;
 @dynamic delegate;

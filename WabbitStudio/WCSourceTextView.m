@@ -49,6 +49,7 @@
 - (void)_handleAutoCompletionWithString:(id)string;
 - (BOOL)_handleAutoIndentAfterLabel;
 - (void)_highlightEnclosedMacroArguments;
+- (BOOL)_handleUnfoldForEvent:(NSEvent *)theEvent;
 @end
 
 @implementation WCSourceTextView
@@ -85,10 +86,8 @@
 }
 
 - (void)mouseDown:(NSEvent *)theEvent {
-	[super mouseDown:theEvent];
-	
-	if ([theEvent clickCount] == 2 &&
-		[theEvent type] == NSLeftMouseDown &&
+	if ([theEvent type] == NSLeftMouseDown &&
+		[theEvent clickCount] == 2 &&
 		[theEvent isOnlyCommandKeyPressed]) {
 		
 		NSRange symbolRange = [[self string] symbolRangeForRange:NSMakeRange([self characterIndexForInsertionAtPoint:[self convertPointFromBase:[theEvent locationInWindow]]], 0)];
@@ -100,6 +99,10 @@
 		[self setSelectedRange:symbolRange];
 		[self jumpToDefinition:nil];
 	}
+	else if ([self _handleUnfoldForEvent:theEvent])
+		return;
+	
+	[super mouseDown:theEvent];
 }
 
 - (void)viewDidMoveToWindow {
@@ -845,41 +848,21 @@
 	WCFold *fold = [[[[self delegate] sourceScannerForSourceTextView:self] folds] deepestFoldForRange:[self selectedRange]];
 	
 	if (fold) {
-		NSNumber *trueValue = [NSNumber numberWithBool:YES];
-		NSTextStorage *textStorage = [self textStorage];
-		
-		[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:trueValue,WCLineFoldingAttributeName, nil] range:[fold contentRange]];
+		[(WCSourceTextStorage *)[self textStorage] foldRange:[fold contentRange]];
 		
 		[self setSelectedRange:NSMakeRange(NSMaxRange([fold contentRange]), 0)];
 		[self setNeedsDisplay:YES];
 	}
 }
 - (IBAction)unfold:(id)sender; {
-	NSUInteger charIndex = [self selectedRange].location;
-	NSTextStorage *textStorage = [self textStorage];
-    NSRange range;
-    NSNumber *value = [textStorage attribute:WCLineFoldingAttributeName atIndex:charIndex longestEffectiveRange:&range inRange:NSMakeRange(0, [textStorage length])];
-	
-    if (value && [value boolValue]) {
-        [textStorage removeAttribute:WCLineFoldingAttributeName range:range];
-		
-        [self setSelectedRange:NSMakeRange(NSMaxRange(range), 0)];
-		[self setNeedsDisplay:YES];
+	NSRange effectiveRange;
+	if (![(WCSourceTextStorage *)[self textStorage] unfoldRange:[self selectedRange] effectiveRange:&effectiveRange]) {
+		NSBeep();
 		return;
-    }
+	}
 	
-	charIndex--;
-	value = [textStorage attribute:WCLineFoldingAttributeName atIndex:charIndex longestEffectiveRange:&range inRange:NSMakeRange(0, [textStorage length])];
-	
-	if (value && [value boolValue]) {
-        [textStorage removeAttribute:WCLineFoldingAttributeName range:range];
-		
-        [self setSelectedRange:NSMakeRange(NSMaxRange(range), 0)];
-		[self setNeedsDisplay:YES];
-		return;
-    }
-	
-	NSBeep();
+	[self setSelectedRange:NSMakeRange(NSMaxRange(effectiveRange), 0)];
+	[self setNeedsDisplay:YES];
 }
 #pragma mark Properties
 @dynamic delegate;
@@ -1370,6 +1353,58 @@
 	}];
 	
 	_lastAutoHighlightArgumentsRange = [macro valueRange];
+}
+- (BOOL)_handleUnfoldForEvent:(NSEvent *)theEvent {
+	[(WCSourceTextStorage *)[self textStorage] setLineFoldingEnabled:YES];
+	
+	if ([theEvent type] == NSLeftMouseDown &&
+		[theEvent clickCount] == 2) {
+		
+		NSUInteger glyphIndex = [[self layoutManager] glyphIndexForPoint:[self convertPointFromBase:[theEvent locationInWindow]] inTextContainer:[self textContainer]];
+		
+		if (glyphIndex >= [[self layoutManager] numberOfGlyphs]) {
+			[(WCSourceTextStorage *)[self textStorage] setLineFoldingEnabled:NO];
+			return NO;
+		}
+		
+		NSUInteger charIndex = [[self layoutManager] characterIndexForGlyphAtIndex:glyphIndex];
+		NSRange effectiveRange;
+		id attributeValue = [[self textStorage] attribute:WCLineFoldingAttributeName atIndex:charIndex longestEffectiveRange:&effectiveRange inRange:NSMakeRange(0, [[self textStorage] length])];
+		
+		if (![attributeValue boolValue]) {
+			[(WCSourceTextStorage *)[self textStorage] setLineFoldingEnabled:NO];
+			return NO;
+		}
+		
+		NSTextAttachment *attachment = [[self textStorage] attribute:NSAttachmentAttributeName atIndex:effectiveRange.location effectiveRange:NULL];
+		
+		if (!attachment) {
+			[(WCSourceTextStorage *)[self textStorage] setLineFoldingEnabled:NO];
+			return NO;
+		}
+		
+		glyphIndex = [[self layoutManager] glyphIndexForCharacterAtIndex:effectiveRange.location];
+		
+		id <NSTextAttachmentCell> cell = [attachment attachmentCell];
+		NSPoint delta = [[self layoutManager] lineFragmentRectForGlyphAtIndex:glyphIndex effectiveRange:NULL].origin;
+		NSRect cellFrame;
+		
+		cellFrame.origin = [self textContainerOrigin];
+		cellFrame.size = [[self layoutManager] attachmentSizeForGlyphAtIndex:glyphIndex];
+		cellFrame.origin.x += delta.x;
+		cellFrame.origin.y += delta.y;
+		cellFrame.origin.x += [[self layoutManager] locationForGlyphAtIndex:glyphIndex].x;
+		
+		if ([cell wantsToTrackMouseForEvent:theEvent inRect:cellFrame ofView:self atCharacterIndex:effectiveRange.location] &&
+			[cell trackMouse:theEvent inRect:cellFrame ofView:self atCharacterIndex:effectiveRange.location untilMouseUp:YES]) {
+			
+			[(WCSourceTextStorage *)[self textStorage] setLineFoldingEnabled:NO];
+			return NO;
+		}
+	}
+	
+	[(WCSourceTextStorage *)[self textStorage] setLineFoldingEnabled:NO];
+	return NO;
 }
 #pragma mark IBActions
 - (IBAction)_symbolMenuClicked:(NSMenuItem *)sender {

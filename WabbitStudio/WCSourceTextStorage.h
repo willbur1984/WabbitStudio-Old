@@ -36,4 +36,7 @@ extern NSString *const WCSourceTextStorageDidRemoveBookmarkNotification;
 - (void)removeBookmark:(RSBookmark *)bookmark;
 - (RSBookmark *)bookmarkAtLineNumber:(NSUInteger)lineNumber;
 - (NSArray *)bookmarksForRange:(NSRange)range;
+
+- (void)foldRange:(NSRange)range;
+- (BOOL)unfoldRange:(NSRange)range effectiveRange:(NSRangePointer)effectiveRange;
 @end
