@@ -89,10 +89,15 @@ NSString *const WCSourceTextStorageDidRemoveBookmarkNotification = @"WCSourceTex
             if (location == effectiveRange.location) { // beginning of a folded range
                 NSMutableDictionary *dict = [attributes mutableCopyWithZone:NULL];
 				
-				NSTextAttachment *attachment = [[[NSTextAttachment alloc] init] autorelease];
-				WCFoldAttachmentCell *cell = [[[WCFoldAttachmentCell alloc] initTextCell:@""] autorelease];
-				
-				[attachment setAttachmentCell:cell];
+				static NSTextAttachment *attachment;
+				static WCFoldAttachmentCell *cell;
+				static dispatch_once_t onceToken;
+				dispatch_once(&onceToken, ^{
+					attachment = [[NSTextAttachment alloc] init];
+					cell = [[WCFoldAttachmentCell alloc] initTextCell:@""];
+					
+					[attachment setAttachmentCell:cell];
+				});
 				
                 //[dict setObject:sharedAttachment forKey:NSAttachmentAttributeName];
 				[dict setObject:attachment forKey:NSAttachmentAttributeName];

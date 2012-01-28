@@ -136,11 +136,11 @@ static NSRegularExpression *endMarkersRegex;
 						// foldRange is the range that will be drawn in the code folding ribbon
 						NSRange foldRange = [[self string] lineRangeForRange:NSUnionRange([startMarker range], [endMarker range])];
 						// get the start index of the line after the start marker
-						NSUInteger charIndexAfterStartMarkerLineRange = NSMaxRange([startMarker range]);
+						NSUInteger firstCharIndex = NSMaxRange([startMarker range]);
 						// get the end index of the line before the end marker
-						NSUInteger charIndexBeforeEndMarkerLineRange = [endMarker range].location - 1;
+						NSUInteger lastCharIndex = [endMarker range].location;
 						// create our new fold, contentRange is everything that falls between the start index of the line after start marker the end index of the line before end marker
-						WCFold *newFold = [WCFold foldWithRange:foldRange level:0 contentRange:NSMakeRange(charIndexAfterStartMarkerLineRange, charIndexBeforeEndMarkerLineRange-charIndexAfterStartMarkerLineRange)];
+						WCFold *newFold = [WCFold foldWithRange:foldRange level:0 contentRange:NSMakeRange(firstCharIndex, lastCharIndex-firstCharIndex)];
 						
 						// now look for possible children of our new fold, elements are encountered from deepest to top level so we get all child nodes before their parents, we have to look for the children now
 						for (WCFold *childNode in [topLevelFolds reverseObjectEnumerator]) {
