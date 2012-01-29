@@ -146,11 +146,6 @@
 	if ([cell isKindOfClass:[WCArgumentPlaceholderCell class]]) {
 		[textView setSelectedRange:NSMakeRange(charIndex, 1)];
 	}
-	else {
-#ifdef DEBUG
-		NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
-#endif
-	}
 }
 - (void)textView:(NSTextView *)textView doubleClickedOnCell:(id<NSTextAttachmentCell>)cell inRect:(NSRect)cellFrame atIndex:(NSUInteger)charIndex {
 	if ([cell isKindOfClass:[WCArgumentPlaceholderCell class]]) {
@@ -163,11 +158,6 @@
 			[textView insertText:[(WCArgumentPlaceholderCell *)cell stringValue] replacementRange:NSMakeRange(charIndex, 1)];
 			[textView setSelectedRange:NSMakeRange(charIndex, [[(WCArgumentPlaceholderCell *)cell stringValue] length])];
 		}
-	}
-	else if ([cell isKindOfClass:[WCFoldAttachmentCell class]]) {
-#ifdef DEBUG
-		NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
-#endif
 	}
 }
 

@@ -24,6 +24,10 @@
 NSString *const WCSourceTextStorageDidAddBookmarkNotification = @"WCSourceTextStorageDidAddBookmarkNotification";
 NSString *const WCSourceTextStorageDidRemoveBookmarkNotification = @"WCSourceTextStorageDidRemoveBookmarkNotification";
 
+NSString *const WCSourceTextStorageDidFoldNotification = @"WCSourceTextStorageDidFoldNotification";
+NSString *const WCSourceTextStorageDidUnfoldNotification = @"WCSourceTextStorageDidUnfoldNotification";
+NSString *const WCSourceTextStorageFoldRangeUserInfoKey = @"WCSourceTextStorageFoldRangeUserInfoKey";
+
 @interface WCSourceTextStorage ()
 - (void)_calculateLineStartIndexes;
 - (void)_updateParagraphStyle;
@@ -224,12 +228,13 @@ NSString *const WCSourceTextStorageDidRemoveBookmarkNotification = @"WCSourceTex
 
 - (void)foldRange:(NSRange)range; {
 	[self addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],WCLineFoldingAttributeName, nil] range:range];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:WCSourceTextStorageDidFoldNotification object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSValue valueWithRange:range],WCSourceTextStorageFoldRangeUserInfoKey, nil]];
 }
 - (BOOL)unfoldRange:(NSRange)range effectiveRange:(NSRangePointer)effectiveRange; {
-	NSRange mEffectiveRange;
-	id attributeValue = [self attribute:WCLineFoldingAttributeName atIndex:range.location longestEffectiveRange:&mEffectiveRange inRange:NSMakeRange(0, [self length])];
+	NSRange mEffectiveRange = [self foldRangeForRange:range];
 	
-	if (![attributeValue boolValue])
+	if (mEffectiveRange.location == NSNotFound)
 		return NO;
 	
 	[self removeAttribute:WCLineFoldingAttributeName range:mEffectiveRange];
@@ -237,7 +242,18 @@ NSString *const WCSourceTextStorageDidRemoveBookmarkNotification = @"WCSourceTex
 	if (effectiveRange)
 		*effectiveRange = mEffectiveRange;
 	
+	[[NSNotificationCenter defaultCenter] postNotificationName:WCSourceTextStorageDidUnfoldNotification object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSValue valueWithRange:mEffectiveRange],WCSourceTextStorageFoldRangeUserInfoKey, nil]];
+	
 	return YES;
+}
+
+- (NSRange)foldRangeForRange:(NSRange)range; {
+	NSRange effectiveRange;
+	id attributeValue = [self attribute:WCLineFoldingAttributeName atIndex:range.location longestEffectiveRange:&effectiveRange inRange:NSMakeRange(0, [self length])];
+	
+	if ([attributeValue boolValue])
+		return effectiveRange;
+	return NSNotFoundRange;
 }
 #pragma mark Properties
 @synthesize lineStartIndexes=_lineStartIndexes;

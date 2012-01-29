@@ -29,7 +29,7 @@ NSString *const WCLineFoldingAttributeName = @"WCLineFoldingAttributeName";
 }
 
 - (NSUInteger)layoutParagraphAtPoint:(NSPointPointer)lineFragmentOrigin {
-    id attrString = ([attributedString respondsToSelector:@selector(setLineFoldingEnabled:)] ? attributedString : nil);
+    id attrString = ([attributedString respondsToSelector:@selector(setLineFoldingEnabled:)] ? [self attributedString] : nil);
     NSUInteger result;
 	
     [attrString setLineFoldingEnabled:YES];

@@ -12,6 +12,10 @@
 extern NSString *const WCSourceTextStorageDidAddBookmarkNotification;
 extern NSString *const WCSourceTextStorageDidRemoveBookmarkNotification;
 
+extern NSString *const WCSourceTextStorageDidFoldNotification;
+extern NSString *const WCSourceTextStorageDidUnfoldNotification;
+extern NSString *const WCSourceTextStorageFoldRangeUserInfoKey;
+
 @class RSBookmark;
 
 @interface WCSourceTextStorage : NSTextStorage {
@@ -39,4 +43,5 @@ extern NSString *const WCSourceTextStorageDidRemoveBookmarkNotification;
 
 - (void)foldRange:(NSRange)range;
 - (BOOL)unfoldRange:(NSRange)range effectiveRange:(NSRangePointer)effectiveRange;
+- (NSRange)foldRangeForRange:(NSRange)range;
 @end

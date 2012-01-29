@@ -40,6 +40,8 @@
 @implementation WCSourceRulerView
 #pragma mark *** Subclass Overrides ***
 - (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	_foldToHighlight = nil;
 	[_codeFoldingTrackingArea release];
 	[super dealloc];
 }
@@ -75,6 +77,8 @@
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidAddBookmark:) name:WCSourceTextStorageDidAddBookmarkNotification object:[self textStorage]];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidRemoveBookmark:) name:WCSourceTextStorageDidRemoveBookmarkNotification object:[self textStorage]];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidFold:) name:WCSourceTextStorageDidFoldNotification object:[self textStorage]];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidUnfold:) name:WCSourceTextStorageDidUnfoldNotification object:[self textStorage]];
 	
 	return self;
 }
@@ -122,16 +126,13 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 
 - (void)mouseDown:(NSEvent *)theEvent {
 	if (_foldToHighlight) {
-		id attributeValue = [[self textStorage] attribute:WCLineFoldingAttributeName atIndex:[_foldToHighlight contentRange].location effectiveRange:NULL];
+		NSRange foldRange = [[self textStorage] foldRangeForRange:[_foldToHighlight contentRange]];
 		// the range is folded, unfold it
-		if ([attributeValue boolValue]) {
-			[[self textStorage] unfoldRange:[_foldToHighlight contentRange] effectiveRange:NULL];
-		}
-		// otherwise the range isn't folded, fold it
-		else {
+		if (foldRange.location == NSNotFound)
 			[[self textStorage] foldRange:[_foldToHighlight contentRange]];
-		}
-		[self setNeedsDisplay:YES];
+		// otherwise the range isn't folded, fold it
+		else
+			[[self textStorage] unfoldRange:foldRange effectiveRange:NULL];
 	}
 }
 
@@ -388,8 +389,8 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 
 static const CGFloat kTriangleHeight = 6.0;
 - (void)_drawFoldHighlightInRect:(NSRect)foldHighlightRect; {
-	[[NSColor whiteColor] setFill];
-	NSRectFill(foldHighlightRect);
+	[[[NSColor whiteColor] colorWithAlphaComponent:0.45] setFill];
+	NSRectFillUsingOperation(foldHighlightRect, NSCompositeSourceOver);
 	
 	foldHighlightRect = NSInsetRect(foldHighlightRect, 1.0, 1.0);
 	foldHighlightRect = NSOffsetRect(foldHighlightRect, -0.5, 0.0);
@@ -459,5 +460,17 @@ static const CGFloat kTriangleHeight = 6.0;
 		return;
 	
 	[self setNeedsDisplay:YES];
+}
+- (void)_textStorageDidFold:(NSNotification *)note {
+	_foldToHighlight = nil;
+	
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey])
+		[self setNeedsDisplay:YES];
+}
+- (void)_textStorageDidUnfold:(NSNotification *)note {
+	_foldToHighlight = nil;
+	
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey])
+		[self setNeedsDisplay:YES];
 }
 @end

@@ -18,7 +18,7 @@ static NSTextStorage *_textStorage;
 static NSLayoutManager *_layoutManager;
 static NSTextContainer *_textContainer;
 
-static const CGFloat kCellPaddingLeftRight = 2.0;
+static const CGFloat kCellPaddingLeftRight = 3.0;
 
 @implementation WCFoldAttachmentCell
 + (void)initialize {
@@ -51,7 +51,7 @@ static const CGFloat kCellPaddingLeftRight = 2.0;
 }
 
 - (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView characterIndex:(NSUInteger)charIndex layoutManager:(NSLayoutManager *)layoutManager {
-    NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:NSInsetRect(cellFrame, kCellPaddingLeftRight, 1.0) xRadius:5.0 yRadius:5.0];
+    NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:NSInsetRect(cellFrame, kCellPaddingLeftRight, 0.0) xRadius:5.0 yRadius:5.0];
 	
 	[[NSColor colorWithCalibratedRed:247.0/255.0 green:245.0/255.0 blue:196.0/255.0 alpha:1.0] setFill];
 	[path fill];

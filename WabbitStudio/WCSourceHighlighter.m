@@ -15,6 +15,7 @@
 #import "WCFontAndColorTheme.h"
 #import "WCFontAndColorThemeManager.h"
 #import "RSDefines.h"
+#import "WCSourceTextStorage.h"
 
 @interface WCSourceHighlighter ()
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
@@ -50,6 +51,8 @@
 	else {
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_sourceScannerDidFinishScanning:) name:WCSourceScannerDidFinishScanningNotification object:sourceScanner];
 	}
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidFold:) name:WCSourceTextStorageDidFoldNotification object:[sourceScanner textStorage]];
 	
 	return self;
 }
@@ -243,11 +246,15 @@
 #pragma mark Notifications
 
 - (void)_sourceScannerDidFinishScanning:(NSNotification *)note {
-	//[self performHighlightingInVisibleRange];
+	[self performHighlightingInVisibleRange];
 }
 
 - (void)_sourceScannerDidFinishScanningSymbols:(NSNotification *)note {
 	//[self performFullHighlightIfNeeded];
 	[self performHighlightingInVisibleRange];
 }
+- (void)_textStorageDidFold:(NSNotification *)note {
+	[self performHighlightingInVisibleRange];
+}
+
 @end

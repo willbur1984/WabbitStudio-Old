@@ -414,7 +414,43 @@
 		_lastAutoHighlightArgumentsRange = NSEmptyRange;
 	}
 }
- 
+
+- (void)deleteBackward:(id)sender {
+	if ([self selectedRange].length) {
+		[super deleteBackward:nil];
+		return;
+	}
+	
+	NSRange foldRange = [(WCSourceTextStorage *)[self textStorage] foldRangeForRange:NSMakeRange([self selectedRange].location-1, 0)];
+	
+	if (foldRange.location == NSNotFound) {
+		[super deleteBackward:nil];
+		return;
+	}
+	
+	if ([self shouldChangeTextInRange:foldRange replacementString:@""]) {
+		[self replaceCharactersInRange:foldRange withString:@""];
+		[self didChangeText];
+	}
+}
+- (void)deleteForward:(id)sender {
+	if ([self selectedRange].length) {
+		[super deleteForward:nil];
+		return;
+	}
+	
+	NSRange foldRange = [(WCSourceTextStorage *)[self textStorage] foldRangeForRange:[self selectedRange]];
+	
+	if (foldRange.location == NSNotFound) {
+		[super deleteForward:nil];
+		return;
+	}
+	
+	if ([self shouldChangeTextInRange:foldRange replacementString:@""]) {
+		[self replaceCharactersInRange:foldRange withString:@""];
+		[self didChangeText];
+	}
+}
 #pragma mark NSObject+WCExtensions
 - (NSSet *)userDefaultsKeyPathsToObserve {
 	return [NSSet setWithObjects:WCEditorShowCurrentLineHighlightKey,WCEditorWrapLinesToEditorWidthKey,WCEditorPageGuideColumnNumberKey,WCEditorShowPageGuideAtColumnKey, nil];
@@ -851,18 +887,17 @@
 		[(WCSourceTextStorage *)[self textStorage] foldRange:[fold contentRange]];
 		
 		[self setSelectedRange:NSMakeRange(NSMaxRange([fold contentRange]), 0)];
-		[self setNeedsDisplay:YES];
 	}
 }
 - (IBAction)unfold:(id)sender; {
 	NSRange effectiveRange;
-	if (![(WCSourceTextStorage *)[self textStorage] unfoldRange:[self selectedRange] effectiveRange:&effectiveRange]) {
+	if (![(WCSourceTextStorage *)[self textStorage] unfoldRange:[self selectedRange] effectiveRange:&effectiveRange] &&
+		![(WCSourceTextStorage *)[self textStorage] unfoldRange:NSMakeRange([self selectedRange].location-1, 0) effectiveRange:&effectiveRange]) {
 		NSBeep();
 		return;
 	}
 	
 	[self setSelectedRange:NSMakeRange(NSMaxRange(effectiveRange), 0)];
-	[self setNeedsDisplay:YES];
 }
 #pragma mark Properties
 @dynamic delegate;
@@ -958,6 +993,8 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_backgroundColorDidChange:) name:WCFontAndColorThemeManagerBackgroundColorDidChangeNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_currentLineColorDidChange:) name:WCFontAndColorThemeManagerCurrentLineColorDidChangeNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_cursorColorDidChange:) name:WCFontAndColorThemeManagerCursorColorDidChangeNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidFold:) name:WCSourceTextStorageDidFoldNotification object:[self textStorage]];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidUnfold:) name:WCSourceTextStorageDidUnfoldNotification object:[self textStorage]];
 }
 
 - (void)_drawCurrentLineHighlightInRect:(NSRect)rect; {
@@ -1456,6 +1493,12 @@
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
 	
 	[self setInsertionPointColor:[currentTheme cursorColor]];
+}
+- (void)_textStorageDidFold:(NSNotification *)note {
+	[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:NO];
+}
+- (void)_textStorageDidUnfold:(NSNotification *)note {
+	[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:NO];
 }
 #pragma mark Callbacks
 - (void)_completionTimerCallback:(NSTimer *)timer {
