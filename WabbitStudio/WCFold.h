@@ -8,15 +8,24 @@
 
 #import "RSTreeNode.h"
 
+typedef enum _WCFoldType {
+	WCFoldTypeComment,
+	WCFoldTypeIf,
+	WCFoldTypeMacro
+	
+} WCFoldType;
+
 @interface WCFold : RSTreeNode {
+	WCFoldType _type;
 	NSRange _range;
 	NSRange _contentRange;
 	NSUInteger _level;
 }
+@property (readonly,nonatomic) WCFoldType type;
 @property (readonly,nonatomic) NSRange range;
 @property (readonly,nonatomic) NSRange contentRange;
 @property (readwrite,assign,nonatomic) NSUInteger level;
 
-+ (id)foldWithRange:(NSRange)range level:(NSUInteger)level contentRange:(NSRange)contentRange;
-- (id)initWithRange:(NSRange)range level:(NSUInteger)level contentRange:(NSRange)contentRange;
++ (id)foldOfType:(WCFoldType)type level:(NSUInteger)level range:(NSRange)range contentRange:(NSRange)contentRange;
+- (id)initWithType:(WCFoldType)type level:(NSUInteger)level range:(NSRange)range contentRange:(NSRange)contentRange;
 @end

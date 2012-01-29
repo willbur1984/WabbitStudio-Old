@@ -298,16 +298,24 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 		
 		if (NSLocationInRange(lineStartIndex, range)) {
 			NSUInteger rectCount;
-			NSRectArray rects = [layoutManager rectArrayForCharacterRange:NSMakeRange(lineStartIndex, 0) withinSelectedCharacterRange:NSNotFoundRange inTextContainer:container rectCount:&rectCount];
+			NSRectArray rects = [layoutManager rectArrayForCharacterRange:[[[self textView] string] lineRangeForRange:NSMakeRange(lineStartIndex, 0)] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:container rectCount:&rectCount];
 			
 			if (rectCount) {
-				NSUInteger rectIndex;
-				for (rectIndex = 0; rectIndex < rectCount; rectIndex++) {
-					NSRect convertedRect = NSMakeRect(NSMinX([self bounds]), [self convertPoint:rects[rectIndex].origin fromView:[self clientView]].y, NSWidth(rects[rectIndex]), NSHeight(rects[rectIndex]));
-					
-					if ((point.y >= NSMinY(convertedRect)) && (point.y < NSMaxY(convertedRect)))
-						return lineNumber;
+				NSRect lineRect;
+				
+				if (rectCount == 1)
+					lineRect = rects[0];
+				else {
+					lineRect = NSZeroRect;
+					NSUInteger rectIndex;
+					for (rectIndex = 0; rectIndex < rectCount; rectIndex++)
+						lineRect = NSUnionRect(lineRect, rects[rectIndex]);
 				}
+				
+				lineRect = NSMakeRect(NSMinX([self bounds]), [self convertPoint:lineRect.origin fromView:[self clientView]].y, NSWidth([self bounds]), NSHeight(lineRect));
+				
+				if ((point.y >= NSMinY(lineRect)) && (point.y < NSMaxY(lineRect)))
+					return lineNumber;
 			}
 		}
 		
@@ -333,16 +341,24 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 		
 		if (NSLocationInRange(lineStartIndex, range)) {
 			NSUInteger rectCount;
-			NSRectArray rects = [layoutManager rectArrayForCharacterRange:NSMakeRange(lineStartIndex, 0) withinSelectedCharacterRange:NSNotFoundRange inTextContainer:container rectCount:&rectCount];
+			NSRectArray rects = [layoutManager rectArrayForCharacterRange:[[[self textView] string] lineRangeForRange:NSMakeRange(lineStartIndex, 0)] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:container rectCount:&rectCount];
 			
 			if (rectCount) {
-				NSUInteger rectIndex;
-				for (rectIndex = 0; rectIndex < rectCount; rectIndex++) {
-					NSRect convertedRect = NSMakeRect(NSMinX([self bounds]), [self convertPoint:rects[rectIndex].origin fromView:[self clientView]].y, NSWidth(rects[rectIndex]), NSHeight(rects[rectIndex]));
-					
-					if ((point.y >= NSMinY(convertedRect)) && (point.y < NSMaxY(convertedRect)))
-						return NSMakeRange(lineStartIndex, 0);
+				NSRect lineRect;
+				
+				if (rectCount == 1)
+					lineRect = rects[0];
+				else {
+					lineRect = NSZeroRect;
+					NSUInteger rectIndex;
+					for (rectIndex = 0; rectIndex < rectCount; rectIndex++)
+						lineRect = NSUnionRect(lineRect, rects[rectIndex]);
 				}
+				
+				lineRect = NSMakeRect(NSMinX([self bounds]), [self convertPoint:lineRect.origin fromView:[self clientView]].y, NSWidth([self bounds]), NSHeight(lineRect));
+				
+				if ((point.y >= NSMinY(lineRect)) && (point.y < NSMaxY(lineRect)))
+					return NSMakeRange(lineStartIndex, 0);
 			}
 		}
 		

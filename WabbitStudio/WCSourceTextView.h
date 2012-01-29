@@ -47,4 +47,7 @@
 
 - (IBAction)fold:(id)sender;
 - (IBAction)unfold:(id)sender;
+- (IBAction)unfoldAll:(id)sender;
+- (IBAction)foldCommentBlocks:(id)sender;
+- (IBAction)unfoldCommentBlocks:(id)sender;
 @end

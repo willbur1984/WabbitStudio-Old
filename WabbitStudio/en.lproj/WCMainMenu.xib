@@ -1156,6 +1156,42 @@
 									<reference key="NSOnImage" ref="1033313550"/>
 									<reference key="NSMixedImage" ref="310636482"/>
 								</object>
+								<object class="NSMenuItem" id="987565633">
+									<reference key="NSMenu" ref="600456139"/>
+									<string key="NSTitle">Unfold All</string>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="1033313550"/>
+									<reference key="NSMixedImage" ref="310636482"/>
+								</object>
+								<object class="NSMenuItem" id="158671392">
+									<reference key="NSMenu" ref="600456139"/>
+									<bool key="NSIsDisabled">YES</bool>
+									<bool key="NSIsSeparator">YES</bool>
+									<string key="NSTitle"/>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="1033313550"/>
+									<reference key="NSMixedImage" ref="310636482"/>
+								</object>
+								<object class="NSMenuItem" id="973512917">
+									<reference key="NSMenu" ref="600456139"/>
+									<string key="NSTitle">Fold Comment Blocks</string>
+									<string key="NSKeyEquiv"></string>
+									<int key="NSKeyEquivModMask">1703936</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="1033313550"/>
+									<reference key="NSMixedImage" ref="310636482"/>
+								</object>
+								<object class="NSMenuItem" id="1000466140">
+									<reference key="NSMenu" ref="600456139"/>
+									<string key="NSTitle">Unfold Comment Blocks</string>
+									<string key="NSKeyEquiv"></string>
+									<int key="NSKeyEquivModMask">1703936</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="1033313550"/>
+									<reference key="NSMixedImage" ref="310636482"/>
+								</object>
 							</array>
 						</object>
 					</object>
@@ -1946,6 +1982,30 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
+						<string key="label">foldCommentBlocks:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="973512917"/>
+					</object>
+					<int key="connectionID">667</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">unfoldCommentBlocks:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="1000466140"/>
+					</object>
+					<int key="connectionID">668</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">unfoldAll:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="987565633"/>
+					</object>
+					<int key="connectionID">670</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
 						<string key="label">preferences:</string>
 						<reference key="source" ref="968104485"/>
 						<reference key="destination" ref="609285721"/>
@@ -2536,6 +2596,10 @@
 							<reference ref="792449506"/>
 							<reference ref="1045025699"/>
 							<reference ref="1026010419"/>
+							<reference ref="973512917"/>
+							<reference ref="1000466140"/>
+							<reference ref="158671392"/>
+							<reference ref="987565633"/>
 						</array>
 						<reference key="parent" ref="405799454"/>
 					</object>
@@ -2936,6 +3000,26 @@
 						<reference key="object" ref="1026010419"/>
 						<reference key="parent" ref="600456139"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">664</int>
+						<reference key="object" ref="973512917"/>
+						<reference key="parent" ref="600456139"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">665</int>
+						<reference key="object" ref="1000466140"/>
+						<reference key="parent" ref="600456139"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">666</int>
+						<reference key="object" ref="158671392"/>
+						<reference key="parent" ref="600456139"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">669</int>
+						<reference key="object" ref="987565633"/>
+						<reference key="parent" ref="600456139"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -3077,6 +3161,10 @@
 				<string key="659.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="660.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="661.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="664.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="665.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="666.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="669.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="72.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="73.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="74.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3093,7 +3181,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">663</int>
+			<int key="maxID">670</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -3460,6 +3548,7 @@
 						<string key="commentSelection:">id</string>
 						<string key="commentUncommentSelection:">id</string>
 						<string key="fold:">id</string>
+						<string key="foldCommentBlocks:">id</string>
 						<string key="jumpInFile:">id</string>
 						<string key="jumpToDefinition:">id</string>
 						<string key="jumpToLine:">id</string>
@@ -3474,6 +3563,8 @@
 						<string key="toggleBookmarkAtCurrentLine:">id</string>
 						<string key="uncommentSelection:">id</string>
 						<string key="unfold:">id</string>
+						<string key="unfoldAll:">id</string>
+						<string key="unfoldCommentBlocks:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
 						<object class="IBActionInfo" key="addBookmarkAtCurrentLine:">
@@ -3490,6 +3581,10 @@
 						</object>
 						<object class="IBActionInfo" key="fold:">
 							<string key="name">fold:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="foldCommentBlocks:">
+							<string key="name">foldCommentBlocks:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="jumpInFile:">
@@ -3546,6 +3641,14 @@
 						</object>
 						<object class="IBActionInfo" key="unfold:">
 							<string key="name">unfold:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="unfoldAll:">
+							<string key="name">unfoldAll:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="unfoldCommentBlocks:">
+							<string key="name">unfoldCommentBlocks:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 					</dictionary>

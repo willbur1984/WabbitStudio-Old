@@ -242,6 +242,34 @@
 				<true/>
 			</dict>
 		</dict>
+		<key>foldCommentBlocks:</key>
+		<dict>
+			<key>keyCode</key>
+			<integer>123</integer>
+			<key>modifierFlags</key>
+			<dict>
+				<key>command</key>
+				<true/>
+				<key>option</key>
+				<true/>
+				<key>shift</key>
+				<true/>
+			</dict>
+		</dict>
+		<key>unfoldCommentBlocks:</key>
+		<dict>
+			<key>keyCode</key>
+			<integer>124</integer>
+			<key>modifierFlags</key>
+			<dict>
+				<key>command</key>
+				<true/>
+				<key>option</key>
+				<true/>
+				<key>shift</key>
+				<true/>
+			</dict>
+		</dict>
 		<key>jumpToNextBookmark:</key>
 		<dict>
 			<key>keyCode</key>

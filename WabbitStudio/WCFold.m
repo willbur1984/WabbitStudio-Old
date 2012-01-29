@@ -13,20 +13,22 @@
 	return [NSString stringWithFormat:@"range: %@ level: %lu contentRange: %@",NSStringFromRange([self range]),[self level],NSStringFromRange([self contentRange])];
 }
 
-+ (id)foldWithRange:(NSRange)range level:(NSUInteger)level contentRange:(NSRange)contentRange; {
-	return [[[[self class] alloc] initWithRange:range level:level contentRange:contentRange] autorelease];
++ (id)foldOfType:(WCFoldType)type level:(NSUInteger)level range:(NSRange)range contentRange:(NSRange)contentRange; {
+	return [[[[self class] alloc] initWithType:type level:level range:range contentRange:contentRange] autorelease];
 }
-- (id)initWithRange:(NSRange)range level:(NSUInteger)level contentRange:(NSRange)contentRange; {
+- (id)initWithType:(WCFoldType)type level:(NSUInteger)level range:(NSRange)range contentRange:(NSRange)contentRange; {
 	if (!(self = [super initWithRepresentedObject:nil]))
 		return nil;
 	
+	_type = type;
+	_level = level;
 	_range = range;
 	_contentRange = contentRange;
-	_level = level;
 	
 	return self;
 }
 
+@synthesize type=_type;
 @synthesize range=_range;
 @synthesize contentRange=_contentRange;
 @synthesize level=_level;

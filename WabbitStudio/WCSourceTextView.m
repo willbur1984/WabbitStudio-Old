@@ -899,6 +899,28 @@
 	
 	[self setSelectedRange:NSMakeRange(NSMaxRange(effectiveRange), 0)];
 }
+- (IBAction)unfoldAll:(id)sender; {
+	NSArray *folds = [[[self delegate] sourceScannerForSourceTextView:self] folds];
+	
+	for (WCFold *fold in folds)
+		[(WCSourceTextStorage *)[self textStorage] unfoldRange:[fold contentRange] effectiveRange:NULL];
+}
+- (IBAction)foldCommentBlocks:(id)sender; {
+	NSArray *folds = [[[self delegate] sourceScannerForSourceTextView:self] folds];
+	
+	for (WCFold *fold in folds) {
+		if ([fold type] == WCFoldTypeComment)
+			[(WCSourceTextStorage *)[self textStorage] foldRange:[fold contentRange]];
+	}
+}
+- (IBAction)unfoldCommentBlocks:(id)sender; {
+	NSArray *folds = [[[self delegate] sourceScannerForSourceTextView:self] folds];
+	
+	for (WCFold *fold in folds) {
+		if ([fold type] == WCFoldTypeComment)
+			[(WCSourceTextStorage *)[self textStorage] unfoldRange:[fold contentRange] effectiveRange:NULL];
+	}
+}
 #pragma mark Properties
 @dynamic delegate;
 - (id<WCSourceTextViewDelegate>)delegate {
