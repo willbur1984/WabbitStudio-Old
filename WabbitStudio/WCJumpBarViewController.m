@@ -519,13 +519,13 @@
 	}];
 }
 - (IBAction)_includesMenuItemClicked:(id)sender {
-	[[[self jumpBarDataSource] projectDocument] openTabForFile:[sender representedObject]];
+	[[[self jumpBarDataSource] projectDocument] openTabForFile:[sender representedObject] tabViewContext:nil];
 }
 - (IBAction)_filesMenuItemClicked:(id)sender {
-	[[[self jumpBarDataSource] projectDocument] openTabForFile:[sender representedObject]];
+	[[[self jumpBarDataSource] projectDocument] openTabForFile:[sender representedObject] tabViewContext:nil];
 }
 - (IBAction)_unsavedFilesMenuItemClicked:(id)sender {
-	[[[self jumpBarDataSource] projectDocument] openTabForFile:[sender representedObject]];
+	[[[self jumpBarDataSource] projectDocument] openTabForFile:[sender representedObject] tabViewContext:nil];
 }
 #pragma mark Notifications
 - (void)_textViewDidChangeSelection:(NSNotification *)note {

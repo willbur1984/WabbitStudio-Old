@@ -8,6 +8,7 @@
 
 #import <AppKit/NSDocument.h>
 #import "WCOpenQuicklyDataSource.h"
+#import "WCTabViewContext.h"
 
 extern NSString *const WCProjectDocumentFileReferencesKey;
 extern NSString *const WCProjectDocumentProjectContainerKey;
@@ -15,7 +16,7 @@ extern NSString *const WCProjectDocumentProjectContainerKey;
 extern NSString *const WCProjectDataFileName;
 extern NSString *const WCProjectSettingsFileExtension;
 
-@class WCProjectContainer,WCProjectWindowController,WCSourceTextViewController,WCFile,WCSourceFileDocument,WCFileContainer;
+@class WCProjectContainer,WCProjectWindowController,WCSourceTextViewController,WCFile,WCSourceFileDocument,WCFileContainer,WCSourceFileSeparateWindowController;
 
 @interface WCProjectDocument : NSDocument <WCOpenQuicklyDataSource> {
 	WCProjectContainer *_projectContainer;
@@ -44,8 +45,12 @@ extern NSString *const WCProjectSettingsFileExtension;
 
 - (WCFileContainer *)fileContainerForFile:(WCFile *)file;
 
-- (WCSourceTextViewController *)openTabForFile:(WCFile *)file;
-- (WCSourceTextViewController *)openTabForSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument;
+- (WCSourceTextViewController *)openTabForFile:(WCFile *)file tabViewContext:(id<WCTabViewContext>)tabViewContext;
+- (WCSourceTextViewController *)openTabForSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument tabViewContext:(id<WCTabViewContext>)tabViewContext;
+- (id<WCTabViewContext>)currentTabViewContext;
+
+- (WCSourceFileSeparateWindowController *)openSeparateEditorForFile:(WCFile *)file;
+- (WCSourceFileSeparateWindowController *)openSeparateEditorForSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument;
 
 - (IBAction)openQuickly:(id)sender;
 @end

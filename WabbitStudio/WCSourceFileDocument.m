@@ -90,6 +90,8 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 - (void)makeWindowControllers {
 	WCSourceFileWindowController *windowController = [[[WCSourceFileWindowController alloc] init] autorelease];
 	
+	[windowController setShouldCloseDocument:YES];
+	
 	[self addWindowController:windowController];
 }
 

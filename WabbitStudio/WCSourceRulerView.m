@@ -405,8 +405,8 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 
 static const CGFloat kTriangleHeight = 6.0;
 - (void)_drawFoldHighlightInRect:(NSRect)foldHighlightRect; {
-	[[[NSColor whiteColor] colorWithAlphaComponent:0.45] setFill];
-	NSRectFillUsingOperation(foldHighlightRect, NSCompositeSourceOver);
+	[[NSColor whiteColor] setFill];
+	NSRectFill(foldHighlightRect);
 	
 	foldHighlightRect = NSInsetRect(foldHighlightRect, 1.0, 1.0);
 	foldHighlightRect = NSOffsetRect(foldHighlightRect, -0.5, 0.0);

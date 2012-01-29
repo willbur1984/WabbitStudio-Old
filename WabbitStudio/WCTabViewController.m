@@ -67,29 +67,31 @@ static NSString *const WCTabViewControllerSelectedTabKey = @"selectedTab";
 	[[self tabBarControl] setTearOffStyle:PSMTabBarTearOffMiniwindow];
 	[[self tabBarControl] setUseOverflowMenu:YES];
 	
-	NSDictionary *settings = [[self delegate] projectDocumentSettingsForTabViewController:self];
-	
-	if ([[settings objectForKey:WCTabViewControllerOpenTabsKey] count]) {
-		WCProjectDocument *projectDocument = [[self delegate] projectDocumentForTabViewController:self];
-		NSDictionary *UUIDsToObjects = [projectDocument UUIDsToFiles];
-		NSMapTable *filesToDocuments = [projectDocument filesToSourceFileDocuments];
+	if ([[self delegate] respondsToSelector:@selector(projectDocumentSettingsForTabViewController:)]) {
+		NSDictionary *settings = [[self delegate] projectDocumentSettingsForTabViewController:self];
 		
-		for (NSString *UUID in [settings objectForKey:WCTabViewControllerOpenTabsKey]) {
-			WCFile *file = [UUIDsToObjects objectForKey:UUID];
-			WCSourceFileDocument *document = [filesToDocuments objectForKey:file];
+		if ([[settings objectForKey:WCTabViewControllerOpenTabsKey] count]) {
+			WCProjectDocument *projectDocument = [[self delegate] projectDocumentForTabViewController:self];
+			NSDictionary *UUIDsToFiles = [projectDocument UUIDsToFiles];
+			NSMapTable *filesToDocuments = [projectDocument filesToSourceFileDocuments];
 			
-			if (document)
-				[self addTabForSourceFileDocument:document];
-		}
-		
-		if ([settings objectForKey:WCTabViewControllerSelectedTabKey]) {
-			NSString *UUID = [settings objectForKey:WCTabViewControllerSelectedTabKey];
-			WCFile *file = [UUIDsToObjects objectForKey:UUID];
-			WCSourceFileDocument *document = [filesToDocuments objectForKey:file];
-			NSUInteger itemIndex = [[[self tabBarControl] tabView] indexOfTabViewItemWithIdentifier:document];
+			for (NSString *UUID in [settings objectForKey:WCTabViewControllerOpenTabsKey]) {
+				WCFile *file = [UUIDsToFiles objectForKey:UUID];
+				WCSourceFileDocument *document = [filesToDocuments objectForKey:file];
+				
+				if (document)
+					[self addTabForSourceFileDocument:document];
+			}
 			
-			if (itemIndex != NSNotFound)
-				[[[self tabBarControl] tabView] selectTabViewItemAtIndex:itemIndex];
+			if ([settings objectForKey:WCTabViewControllerSelectedTabKey]) {
+				NSString *UUID = [settings objectForKey:WCTabViewControllerSelectedTabKey];
+				WCFile *file = [UUIDsToFiles objectForKey:UUID];
+				WCSourceFileDocument *document = [filesToDocuments objectForKey:file];
+				NSUInteger itemIndex = [[[self tabBarControl] tabView] indexOfTabViewItemWithIdentifier:document];
+				
+				if (itemIndex != NSNotFound)
+					[[[self tabBarControl] tabView] selectTabViewItemAtIndex:itemIndex];
+			}
 		}
 	}
 	

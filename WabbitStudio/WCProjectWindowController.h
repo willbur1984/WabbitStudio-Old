@@ -11,10 +11,11 @@
 #import "RSNavigatorControlDelegate.h"
 #import "WCProjectDocumentSettingsProvider.h"
 #import "WCTabViewControllerDelegate.h"
+#import "WCTabViewContext.h"
 
 @class WCProjectNavigatorViewController,WCTabViewController;
 
-@interface WCProjectWindowController : NSWindowController <WCTabViewControllerDelegate,WCProjectDocumentSettingsProvider,RSNavigatorControlDataSource,RSNavigatorControlDelegate,NSSplitViewDelegate> {
+@interface WCProjectWindowController : NSWindowController <WCTabViewControllerDelegate,WCProjectDocumentSettingsProvider,RSNavigatorControlDataSource,RSNavigatorControlDelegate,WCTabViewContext,NSSplitViewDelegate,NSWindowDelegate> {
 	NSArray *_navigatorItemDictionaries;
 	WCProjectNavigatorViewController *_projectNavigatorViewController;
 	WCTabViewController *_tabViewController;

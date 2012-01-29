@@ -19,6 +19,10 @@
 #import "WCSourceScanner.h"
 #import "WCProjectNavigatorViewController.h"
 #import "GTMNSData+zlib.h"
+#import "WCSourceFileSeparateWindowController.h"
+#import "NSWindow+ULIZoomEffect.h"
+#import "RSNavigatorControl.h"
+#import "NSTreeController+RSExtensions.h"
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
 NSString *const WCProjectDocumentFileReferencesKey = @"fileReferences";
@@ -35,6 +39,8 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 @property (readwrite,retain) NSMutableDictionary *UUIDsToFiles;
 @property (readwrite,copy) NSDictionary *projectSettings;
 @property (readwrite,retain) NSHashTable *projectSettingsProviders;
+
+- (WCSourceFileSeparateWindowController *)_sourceFileSeparateWindowControllerForSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument;
 @end
 
 @implementation WCProjectDocument
@@ -71,6 +77,8 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 
 - (void)makeWindowControllers {
 	WCProjectWindowController *windowController = [[[WCProjectWindowController alloc] init] autorelease];
+	
+	[windowController setShouldCloseDocument:YES];
 	
 	[self addWindowController:windowController];
 	
@@ -216,17 +224,62 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	return [self displayName];
 }
 #pragma mark *** Public Methods ***
-- (WCSourceTextViewController *)openTabForFile:(WCFile *)file; {
+
+- (WCSourceTextViewController *)openTabForFile:(WCFile *)file tabViewContext:(id<WCTabViewContext>)tabViewContext; {
 	WCSourceFileDocument *sfDocument = [[self filesToSourceFileDocuments] objectForKey:file];
 	if (sfDocument)
-		return [self openTabForSourceFileDocument:sfDocument];
-	else {
+		return [self openTabForSourceFileDocument:sfDocument tabViewContext:tabViewContext];
+	else
 		[[[self projectWindowController] projectNavigatorViewController] setSelectedModelObjects:[NSArray arrayWithObjects:file, nil]];
-	}
 	return nil;
 }
-- (WCSourceTextViewController *)openTabForSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument; {
-	return [[[self projectWindowController] tabViewController] addTabForSourceFileDocument:sourceFileDocument];
+- (WCSourceTextViewController *)openTabForSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument tabViewContext:(id<WCTabViewContext>)tabViewContext {
+	
+	
+	if (!tabViewContext)
+		tabViewContext = [self currentTabViewContext];
+	return [[tabViewContext tabViewController] addTabForSourceFileDocument:sourceFileDocument];
+}
+- (id<WCTabViewContext>)currentTabViewContext; {
+	id windowController = [[[NSApplication sharedApplication] keyWindow] windowController];
+	if ([windowController conformsToProtocol:@protocol(WCTabViewContext)])
+		return windowController;
+	return [self projectWindowController];
+}
+
+- (WCSourceFileSeparateWindowController *)openSeparateEditorForFile:(WCFile *)file; {
+	WCSourceFileDocument *sfDocument = [[self filesToSourceFileDocuments] objectForKey:file];
+	
+	return [self openSeparateEditorForSourceFileDocument:sfDocument];
+}
+- (WCSourceFileSeparateWindowController *)openSeparateEditorForSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument; {
+	WCSourceFileSeparateWindowController *windowController = [self _sourceFileSeparateWindowControllerForSourceFileDocument:sourceFileDocument];
+	
+	if (windowController) {
+		[windowController showWindow:nil];
+	}
+	else {
+		windowController = [[[WCSourceFileSeparateWindowController alloc] initWithSourceFileDocument:sourceFileDocument] autorelease];
+		[self addWindowController:windowController];
+		
+		if ([[[[self projectWindowController] navigatorControl] selectedItemIdentifier] isEqualToString:@"project"]) {
+			NSArray *files = [NSArray arrayWithObjects:[[self sourceFileDocumentsToFiles] objectForKey:sourceFileDocument], nil];
+			NSTreeNode *item = [[[[[self projectWindowController] projectNavigatorViewController] treeController] treeNodesForModelObjects:files] lastObject];
+			NSInteger itemRow = [[[[self projectWindowController] projectNavigatorViewController] outlineView] rowForItem:item];
+			NSTableCellView *view = [[[[self projectWindowController] projectNavigatorViewController] outlineView] viewAtColumn:0 row:itemRow makeIfNecessary:NO];
+			if (view) {
+				NSRect zoomRect = [[view window] convertRectToScreen:[view convertRectToBase:[[view imageView] bounds]]];
+				
+				[[windowController window] makeKeyAndOrderFrontWithZoomEffectFromRect:zoomRect];
+			}
+			else
+				[[windowController window] makeKeyAndOrderFrontWithPopEffect];
+		}
+		else
+			[[windowController window] makeKeyAndOrderFrontWithPopEffect];
+	}
+	
+	return windowController;
 }
 
 - (WCFileContainer *)fileContainerForFile:(WCFile *)file; {
@@ -274,7 +327,14 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 @synthesize projectSettingsProviders=_projectSettingsProviders;
 @synthesize projectSettings=_projectSettings;
 #pragma mark *** Private Methods ***
-
+- (WCSourceFileSeparateWindowController *)_sourceFileSeparateWindowControllerForSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument; {
+	for (id windowController in [self windowControllers]) {
+		if ([windowController respondsToSelector:@selector(sourceFileDocument)] &&
+			[windowController sourceFileDocument] == sourceFileDocument)
+			return windowController;
+	}
+	return nil;
+}
 #pragma mark Notifications
 - (void)_projectNavigatorDidAddNewGroup:(NSNotification *)note {
 	WCGroupContainer *newGroupContainer = [[note userInfo] objectForKey:WCProjectNavigatorDidAddNewGroupNotificationNewGroupUserInfoKey];

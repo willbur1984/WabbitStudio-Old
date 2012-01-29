@@ -140,7 +140,11 @@
 		return;
 	
 	NSUInteger numRects;
-	NSRectArray rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[[[self textView] string] lineRangeForRange:[[self textView] selectedRange]] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&numRects];
+	NSRectArray rects;
+	if ([[self textView] selectedRange].length)
+		rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[[[self textView] string] lineRangeForRange:[[self textView] selectedRange]] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&numRects];
+	else
+		rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[[self textView] selectedRange] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&numRects];
 	
 	if (!numRects)
 		return;

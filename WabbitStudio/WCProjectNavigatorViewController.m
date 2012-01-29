@@ -284,7 +284,7 @@ static const CGFloat kMainCellHeight = 18.0;
 - (void)handleReturnPressedForOutlineView:(RSOutlineView *)outlineView {
 	for (WCFileContainer *selectedNode in [self selectedObjects]) {
 		if ([[selectedNode representedObject] isSourceFile])
-			[[[[self projectContainer] project] document] openTabForFile:[selectedNode representedObject]];
+			[[[[self projectContainer] project] document] openTabForFile:[selectedNode representedObject] tabViewContext:nil];
 	}
 }
 #pragma mark QLPreviewPanelDataSource
@@ -676,7 +676,10 @@ static const NSInteger WCProjectNavigatorFileAlreadyExistsInProjectErrorCode = 1
 }
 
 - (IBAction)openInSeparateEditor:(id)sender; {
-	
+	for (WCFile *file in [self selectedModelObjects]) {
+		if ([file isSourceFile])
+			[[self projectDocument] openSeparateEditorForFile:file];
+	}
 }
 
 - (IBAction)moveFocusToNextArea:(id)sender; {
@@ -784,7 +787,7 @@ static const NSInteger WCProjectNavigatorFileAlreadyExistsInProjectErrorCode = 1
 - (IBAction)_outlineViewDoubleClick:(id)sender; {
 	for (WCFileContainer *selectedNode in [self selectedObjects]) {
 		if ([[selectedNode representedObject] isSourceFile])
-			[[[[self projectContainer] project] document] openTabForFile:[selectedNode representedObject]];
+			[[[[self projectContainer] project] document] openTabForFile:[selectedNode representedObject] tabViewContext:nil];
 	}
 }
 @end

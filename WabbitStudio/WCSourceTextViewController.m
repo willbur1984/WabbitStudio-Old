@@ -44,6 +44,8 @@
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[_scrollingHighlightTimer invalidate];
+	_scrollingHighlightTimer = nil;
 	_standardSourceTextViewController = nil;
 	[_jumpBarViewController release];
 	_sourceFileDocument = nil;
@@ -244,14 +246,14 @@
 		[textView scrollRangeToVisible:[symbol range]];
 	}
 	else {
-		WCSourceTextViewController *stvController = [[[self sourceFileDocument] projectDocument] openTabForSourceFileDocument:[[[symbol sourceScanner] delegate] sourceFileDocumentForSourceScanner:[symbol sourceScanner]]];
+		WCSourceTextViewController *stvController = [[[self sourceFileDocument] projectDocument] openTabForSourceFileDocument:[[[symbol sourceScanner] delegate] sourceFileDocumentForSourceScanner:[symbol sourceScanner]] tabViewContext:nil];
 		
 		[[stvController textView] setSelectedRange:[symbol range]];
 		[[stvController textView] scrollRangeToVisible:[symbol range]];
 	}
 }
 - (void)handleJumpToDefinitionForSourceTextView:(WCSourceTextView *)textView file:(WCFile *)file; {
-	[[[self sourceFileDocument] projectDocument] openTabForFile:file];
+	[[[self sourceFileDocument] projectDocument] openTabForFile:file tabViewContext:nil];
 }
 #pragma mark WCSourceRulerViewDelegate
 - (WCSourceScanner *)sourceScannerForSourceRulerView:(WCSourceRulerView *)rulerView {
@@ -272,6 +274,8 @@
 }
 
 - (void)performCleanup; {
+	[_scrollingHighlightTimer invalidate];
+	_scrollingHighlightTimer = nil;
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
 	[[self textStorage] removeLayoutManager:[[self textView] layoutManager]];
@@ -350,15 +354,25 @@
 	[[self sourceHighlighter] performHighlightingInRange:[[self textView] visibleRange]];
 }
 #pragma mark IBActions
-- (IBAction)_argumentPlaceholderMenuItemClicked:(id)sender {
-	
-}
 
 #pragma mark Notifications
 - (void)_viewBoundsDidChange:(NSNotification *)note {
-	//[self performSelector:@selector(_delayedHighlightVisibleRange) withObject:nil afterDelay:0.0];
 	[[self sourceHighlighter] performHighlightingInRange:[[self textView] visibleRange]];
+	
+	/*
+	if (_scrollingHighlightTimer)
+		[_scrollingHighlightTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
+	else {
+		_scrollingHighlightTimer = [NSTimer timerWithTimeInterval:0.1 target:self selector:@selector(_scrollingHighlightTimerCallback:) userInfo:nil repeats:NO];
+		[[NSRunLoop mainRunLoop] addTimer:_scrollingHighlightTimer forMode:NSRunLoopCommonModes];
+	}
+	 */
 }
 #pragma mark Callbacks
-
+- (void)_scrollingHighlightTimerCallback:(NSTimer *)timer {
+	[_scrollingHighlightTimer invalidate];
+	_scrollingHighlightTimer = nil;
+	
+	[[self sourceHighlighter] performHighlightingInRange:[[self textView] visibleRange]];
+}
 @end

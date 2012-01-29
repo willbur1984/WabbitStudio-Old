@@ -67,6 +67,12 @@
 		return [NSString stringWithFormat:NSLocalizedString(@"%@ - %@",@"project window controller window title format string"),displayName,[[[[[[self tabViewController] tabBarControl] tabView] selectedTabViewItem] identifier] displayName]];
 	return displayName;
 }
+#pragma mark NSWindowDelegate
+- (void)windowWillClose:(NSNotification *)notification {
+	while ([[[self tabViewController] tabView] numberOfTabViewItems])
+		[[[self tabViewController] tabView] removeTabViewItem:[[[self tabViewController] tabView] tabViewItemAtIndex:0]];
+}
+
 #pragma mark NSSplitViewDelegate
 - (BOOL)splitView:(NSSplitView *)splitView shouldAdjustSizeOfSubview:(NSView *)view {
 	if ([splitView isVertical] && view == [[splitView subviews] objectAtIndex:0])
@@ -94,7 +100,7 @@ static const CGFloat kRightSubviewMinWidth = 400.0;
 	return [_navigatorItemDictionaries valueForKey:@"identifier"];
 }
 - (CGFloat)itemWidthForNavigatorControl:(RSNavigatorControl *)navigatorControl {
-	return floor(NSSmallSize.width*2);
+	return (NSSmallSize.width*2);
 }
 - (NSImage *)navigatorControl:(RSNavigatorControl *)navigatorControl imageForItemIdentifier:(NSString *)itemIdentifier atIndex:(NSUInteger)index {
 	return [[_navigatorItemDictionaries objectAtIndex:index] objectForKey:@"image"];
