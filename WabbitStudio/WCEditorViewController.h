@@ -46,6 +46,8 @@ extern NSString *const WCEditorDefaultTextEncodingKey;
 @interface WCEditorViewController : NSViewController <RSPreferencesModule,RSUserDefaultsProvider>
 @property (readwrite,assign,nonatomic) IBOutlet NSView *initialFirstResponder;
 @property (readwrite,assign,nonatomic) IBOutlet NSPopUpButton *popUpButton;
+@property (readwrite,assign,nonatomic) IBOutlet NSStepper *highlightEnclosedMacroArgumentsDelayStepper;
+@property (readwrite,assign,nonatomic) IBOutlet NSStepper *suggestCompletionsDelayStepper;
 
 - (IBAction)changeDefaultTextEncoding:(id)sender;
 @end

@@ -73,6 +73,7 @@ NSString *const RSPreferencesWindowControllerLastSelectedToolbarIdentifierKey = 
 	NSViewController <RSPreferencesModule> *viewController = [[self identifiersToToolbarItems] objectForKey:itemIdentifier];	
 	
 	[item setLabel:[viewController label]];
+	[item setToolTip:[NSString stringWithFormat:NSLocalizedString(@"%@ Preferences", @"preferences toolbar item tooltip format string"),[item label]]];
 	
 	if ([viewController respondsToSelector:@selector(image)])
 		[item setImage:[viewController image]];

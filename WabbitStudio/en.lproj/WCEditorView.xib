@@ -61,6 +61,7 @@
 						<string key="NSFrame">{{13, 10}, {480, 549}}</string>
 						<reference key="NSSuperview" ref="1005"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView" ref="625266327"/>
 						<string key="NSReuseIdentifierKey">_NS:608</string>
 						<object class="NSMutableArray" key="NSTabViewItems">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -658,6 +659,7 @@
 											<string key="NSFrame">{{161, 14}, {235, 26}}</string>
 											<reference key="NSSuperview" ref="625266327"/>
 											<reference key="NSWindow"/>
+											<reference key="NSNextKeyView" ref="115317228"/>
 											<string key="NSReuseIdentifierKey">_NS:868</string>
 											<bool key="NSEnabled">YES</bool>
 											<object class="NSPopUpButtonCell" key="NSCell" id="812652289">
@@ -1542,6 +1544,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 											<int key="NSvFlags">268</int>
 											<string key="NSFrame">{{158, 347}, {227, 18}}</string>
 											<reference key="NSSuperview" ref="871670900"/>
+											<reference key="NSNextKeyView" ref="115317228"/>
 											<string key="NSReuseIdentifierKey">_NS:771</string>
 											<bool key="NSEnabled">YES</bool>
 											<object class="NSButtonCell" key="NSCell" id="392351995">
@@ -1610,6 +1613,30 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<reference key="destination" ref="254698765"/>
 					</object>
 					<int key="connectionID">128</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">highlightEnclosedMacroArgumentsDelayStepper</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="1067638445"/>
+					</object>
+					<int key="connectionID">162</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">suggestCompletionsDelayStepper</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="475515100"/>
+					</object>
+					<int key="connectionID">163</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">initialFirstResponder</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="880382237"/>
+					</object>
+					<int key="connectionID">164</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -1935,9 +1962,9 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">nextKeyView</string>
 						<reference key="source" ref="880382237"/>
-						<reference key="destination" ref="317874768"/>
+						<reference key="destination" ref="824510413"/>
 					</object>
-					<int key="connectionID">125</int>
+					<int key="connectionID">165</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -2082,6 +2109,14 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						</object>
 					</object>
 					<int key="connectionID">157</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">nextKeyView</string>
+						<reference key="source" ref="824510413"/>
+						<reference key="destination" ref="317874768"/>
+					</object>
+					<int key="connectionID">166</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -3150,7 +3185,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">161</int>
+			<int key="maxID">166</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -3199,24 +3234,34 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>highlightEnclosedMacroArgumentsDelayStepper</string>
 							<string>initialFirstResponder</string>
 							<string>popUpButton</string>
+							<string>suggestCompletionsDelayStepper</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>NSStepper</string>
 							<string>NSView</string>
 							<string>NSPopUpButton</string>
+							<string>NSStepper</string>
 						</object>
 					</object>
 					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>highlightEnclosedMacroArgumentsDelayStepper</string>
 							<string>initialFirstResponder</string>
 							<string>popUpButton</string>
+							<string>suggestCompletionsDelayStepper</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBToOneOutletInfo">
+								<string key="name">highlightEnclosedMacroArgumentsDelayStepper</string>
+								<string key="candidateClassName">NSStepper</string>
+							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">initialFirstResponder</string>
 								<string key="candidateClassName">NSView</string>
@@ -3224,6 +3269,10 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<object class="IBToOneOutletInfo">
 								<string key="name">popUpButton</string>
 								<string key="candidateClassName">NSPopUpButton</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">suggestCompletionsDelayStepper</string>
+								<string key="candidateClassName">NSStepper</string>
 							</object>
 						</object>
 					</object>

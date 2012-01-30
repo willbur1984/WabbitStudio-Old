@@ -53,6 +53,9 @@ NSString *const WCEditorDefaultTextEncodingKey = @"editorDefaultTextEncoding";
 	
 	NSStringEncoding defaultEncoding = [[[NSUserDefaults standardUserDefaults] objectForKey:WCEditorDefaultTextEncodingKey] unsignedIntegerValue];
 	[[EncodingManager sharedInstance] setupPopUpCell:[[self popUpButton] cell] selectedEncoding:defaultEncoding withDefaultEntry:NO];
+	
+	[[self highlightEnclosedMacroArgumentsDelayStepper] setIncrement:0.1];
+	[[self suggestCompletionsDelayStepper] setIncrement:0.1];
 }
 #pragma mark RSPreferencesModule
 - (NSString *)identifier {
@@ -83,4 +86,7 @@ NSString *const WCEditorDefaultTextEncodingKey = @"editorDefaultTextEncoding";
 #pragma mark Properties
 @synthesize initialFirstResponder=_initialFirstResponder;
 @synthesize popUpButton=_popUpButton;
+@synthesize highlightEnclosedMacroArgumentsDelayStepper=_highlightEnclosedMacroArgumentsDelayStepper;
+@synthesize suggestCompletionsDelayStepper=_suggestCompletionsDelayStepper;
+
 @end

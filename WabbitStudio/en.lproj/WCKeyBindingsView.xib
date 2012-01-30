@@ -209,7 +209,7 @@
 														<string key="NSFrameSize">{451, 420}</string>
 														<reference key="NSSuperview" ref="828049908"/>
 														<reference key="NSWindow"/>
-														<reference key="NSNextKeyView" ref="801257732"/>
+														<reference key="NSNextKeyView"/>
 														<string key="NSReuseIdentifierKey">_NS:1703</string>
 														<bool key="NSEnabled">YES</bool>
 														<object class="NSTableHeaderView" key="NSHeaderView" id="520357988">
@@ -1596,7 +1596,7 @@
 				<reference key="dict.values" ref="1002"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">95</int>
+			<int key="maxID">106</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
