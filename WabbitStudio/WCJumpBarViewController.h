@@ -25,6 +25,9 @@
 @property (readwrite,assign,nonatomic) IBOutlet NSMenu *recentFilesMenu;
 @property (readwrite,assign,nonatomic) IBOutlet NSMenu *unsavedFilesMenu;
 @property (readwrite,assign,nonatomic) IBOutlet NSMenu *includesMenu;
+@property (readwrite,assign,nonatomic) IBOutlet NSImageView *rightVerticalSeparator;
+@property (readwrite,assign,nonatomic) IBOutlet NSButton *addAssistantEditorButton;
+@property (readwrite,assign,nonatomic) IBOutlet NSButton *removeAssistantEditorButton;
 
 @property (readonly,nonatomic) NSTextView *textView;
 @property (readonly,copy,nonatomic) NSString *textViewSelectedLineAndColumn;

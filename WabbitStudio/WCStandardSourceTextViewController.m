@@ -19,6 +19,7 @@
 #import "WCSourceFileDocument.h"
 #import "RSFindBarFieldEditor.h"
 #import "RSFindBarViewController.h"
+#import "WCJumpBar.h"
 
 @interface WCStandardSourceTextViewController ()
 @property (readonly,nonatomic) WCSplitView *firstSplitView;
@@ -33,6 +34,27 @@
 	[_assistantSourceTextViewControllers release];
 	[_assistantSplitViews release];
 	[super dealloc];
+}
+
+- (void)loadView {
+	[super loadView];
+	
+	CGFloat delta = 0.0;
+	
+	delta += [[[self jumpBarViewController] addAssistantEditorButton] frame].size.width;
+	delta += [[[self jumpBarViewController] removeAssistantEditorButton] frame].size.width;
+	delta += [[[self jumpBarViewController] rightVerticalSeparator] frame].size.width;
+	delta += 12.0;
+	
+	[[[self jumpBarViewController] addAssistantEditorButton] removeFromSuperview];
+	[[[self jumpBarViewController] removeAssistantEditorButton] removeFromSuperview];
+	[[[self jumpBarViewController] rightVerticalSeparator] removeFromSuperview];
+	
+	NSSize size = [[[self jumpBarViewController] jumpBar] frame].size;
+	
+	size.width += delta;
+	
+	[[[self jumpBarViewController] jumpBar] setFrameSize:size];
 }
 
 - (id)initWithSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument standardSourceTextViewController:(WCStandardSourceTextViewController *)sourceTextViewController {
@@ -220,7 +242,7 @@
 
 - (void)removeAssistantEditorForSourceTextViewController:(WCSourceTextViewController *)sourceTextViewController; {
 	if ([_assistantSplitViews count] <= 1) {
-		NSBeep();
+		[self showStandardEditor:nil];
 		return;
 	}
 	

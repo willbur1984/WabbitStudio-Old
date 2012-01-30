@@ -309,6 +309,9 @@
 @synthesize filesMenu=_filesMenu;
 @synthesize fileSubmenusToFileContainers=_fileSubmenusToFileContainers;
 @synthesize unsavedFiles=_unsavedFiles;
+@synthesize addAssistantEditorButton=_addAssistantEditorButton;
+@synthesize removeAssistantEditorButton=_removeAssistantEditorButton;
+@synthesize rightVerticalSeparator=_rightVerticalSeparator;
 #pragma mark *** Private Methods ***
 - (void)_updatePathComponentCells; {
 	if (![self jumpBarDataSource])

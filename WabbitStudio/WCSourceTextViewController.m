@@ -110,6 +110,11 @@
 	[[self scrollView] setFrame:NSMakeRect(NSMinX(scrollViewFrame), NSMinY(scrollViewFrame), NSWidth(scrollViewFrame), NSHeight(scrollViewFrame)-NSHeight(jumpBarFrame))];
 	[[[self jumpBarViewController] view] setFrame:NSMakeRect(NSMinX(scrollViewFrame), NSMaxY(scrollViewFrame)-NSHeight(jumpBarFrame), NSWidth(scrollViewFrame), NSHeight(jumpBarFrame))];
 	
+	[[[self jumpBarViewController] addAssistantEditorButton] setAction:@selector(addAssistantEditor:)];
+	[[[self jumpBarViewController] addAssistantEditorButton] setTarget:self];
+	[[[self jumpBarViewController] removeAssistantEditorButton] setAction:@selector(removeAssistantEditor:)];
+	[[[self jumpBarViewController] removeAssistantEditorButton] setTarget:self];
+	
 	[[self textView] setSelectedRange:NSEmptyRange];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewBoundsDidChange:) name:NSViewBoundsDidChangeNotification object:[[self scrollView] contentView]];
