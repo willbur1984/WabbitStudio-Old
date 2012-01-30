@@ -499,6 +499,10 @@
 	if (toolTipRange.location == NSNotFound)
 		return nil;
 	
+	NSRange foldRange = [(WCSourceTextStorage *)[self textStorage] foldRangeForRange:toolTipRange];
+	if (foldRange.location != NSNotFound)
+		return nil;
+	
 	WCSourceToken *token = [[[self delegate] sourceTokensForSourceTextView:self] sourceTokenForRange:toolTipRange];
 	if (NSLocationInRange(toolTipRange.location, [token range]) &&
 		([token type] == WCSourceTokenTypeComment || [token type] == WCSourceTokenTypeString))

@@ -125,7 +125,7 @@ NSString *const WCSourceScannerDidFinishScanningFoldsNotification = @"WCSourceSc
 	static NSRegularExpression *retval;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		retval = [[NSRegularExpression alloc] initWithPattern:@"\\b(ixh|iyh|ixl|iyl|sp|af'|af|pc|bc|de|hl|ix|iy|a|f|b|c|d|e|h|l|r|i)\\b" options:0 error:NULL];
+		retval = [[NSRegularExpression alloc] initWithPattern:@"\\b(ixh|iyh|ixl|iyl|sp|af|pc|bc|de|hl|ix|iy|a|f|b|c|d|e|h|l|r|i)\\b" options:0 error:NULL];
 	});
 	return retval;
 }
