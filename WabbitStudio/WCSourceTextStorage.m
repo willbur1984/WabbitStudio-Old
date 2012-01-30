@@ -23,6 +23,7 @@
 
 NSString *const WCSourceTextStorageDidAddBookmarkNotification = @"WCSourceTextStorageDidAddBookmarkNotification";
 NSString *const WCSourceTextStorageDidRemoveBookmarkNotification = @"WCSourceTextStorageDidRemoveBookmarkNotification";
+NSString *const WCSourceTextStorageDidRemoveAllBookmarksNotification = @"WCSourceTextStorageDidRemoveAllBookmarksNotification";
 
 NSString *const WCSourceTextStorageDidFoldNotification = @"WCSourceTextStorageDidFoldNotification";
 NSString *const WCSourceTextStorageDidUnfoldNotification = @"WCSourceTextStorageDidUnfoldNotification";
@@ -201,6 +202,11 @@ NSString *const WCSourceTextStorageFoldRangeUserInfoKey = @"WCSourceTextStorageF
 	[_bookmarks removeObjectIdenticalTo:bookmark];
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:WCSourceTextStorageDidRemoveBookmarkNotification object:self];
+}
+- (void)removeAllBookmarks; {
+	[_bookmarks removeAllObjects];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:WCSourceTextStorageDidRemoveAllBookmarksNotification object:self];
 }
 - (RSBookmark *)bookmarkAtLineNumber:(NSUInteger)lineNumber; {
 	if (![_bookmarks count])

@@ -157,6 +157,9 @@
 		07713F1314B954FC00324F77 /* SelectEncodingsPanel.nib in Resources */ = {isa = PBXBuildFile; fileRef = 07713F1114B954FC00324F77 /* SelectEncodingsPanel.nib */; };
 		07713F1614B9551400324F77 /* EncodingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 07713F1514B9551400324F77 /* EncodingManager.m */; };
 		07713F1914B9586400324F77 /* NSUserDefaults+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07713F1814B9586400324F77 /* NSUserDefaults+RSExtensions.m */; };
+		0773AA1C14D67FB3004612D9 /* Bookmarks.png in Resources */ = {isa = PBXBuildFile; fileRef = 0773AA1B14D67FB3004612D9 /* Bookmarks.png */; };
+		0773AA2014D680B8004612D9 /* Debug.png in Resources */ = {isa = PBXBuildFile; fileRef = 0773AA1E14D680B8004612D9 /* Debug.png */; };
+		0773AA2114D680B8004612D9 /* Issue.png in Resources */ = {isa = PBXBuildFile; fileRef = 0773AA1F14D680B8004612D9 /* Issue.png */; };
 		077884EC14C0CE6A00605F5D /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 077884EB14C0CE6A00605F5D /* Sparkle.framework */; };
 		077884EF14C0CE9F00605F5D /* Sparkle.framework in Copy Private Frameworks */ = {isa = PBXBuildFile; fileRef = 077884EB14C0CE6A00605F5D /* Sparkle.framework */; };
 		077884F214C1019E00605F5D /* RSObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 077884F114C1019E00605F5D /* RSObject.m */; };
@@ -565,6 +568,9 @@
 		07713F1514B9551400324F77 /* EncodingManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncodingManager.m; sourceTree = "<group>"; };
 		07713F1714B9586400324F77 /* NSUserDefaults+RSExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSUserDefaults+RSExtensions.h"; sourceTree = "<group>"; };
 		07713F1814B9586400324F77 /* NSUserDefaults+RSExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSUserDefaults+RSExtensions.m"; sourceTree = "<group>"; };
+		0773AA1B14D67FB3004612D9 /* Bookmarks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Bookmarks.png; sourceTree = "<group>"; };
+		0773AA1E14D680B8004612D9 /* Debug.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Debug.png; sourceTree = "<group>"; };
+		0773AA1F14D680B8004612D9 /* Issue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Issue.png; sourceTree = "<group>"; };
 		077884EB14C0CE6A00605F5D /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		077884F014C1019E00605F5D /* RSObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSObject.h; sourceTree = "<group>"; };
 		077884F114C1019E00605F5D /* RSObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSObject.m; sourceTree = "<group>"; };
@@ -1101,6 +1107,9 @@
 		071ECCC914A4233C002409F8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				0773AA1E14D680B8004612D9 /* Debug.png */,
+				0773AA1F14D680B8004612D9 /* Issue.png */,
+				0773AA1B14D67FB3004612D9 /* Bookmarks.png */,
 				072FCFB914CBBD9700F76276 /* wabbitstudio.icns */,
 				071306AA14C8F74000862E4D /* Bookmark.png */,
 				0778851514C2377C00605F5D /* FileNotFound.acorn */,
@@ -1802,6 +1811,9 @@
 				072BDC3014CE623D00F3F555 /* WCAlertsView.xib in Resources */,
 				07154F5514D40B3C00F57668 /* WCProjectView.xib in Resources */,
 				07154F5C14D5D88000F57668 /* WCSourceFileSeparateWindow.xib in Resources */,
+				0773AA1C14D67FB3004612D9 /* Bookmarks.png in Resources */,
+				0773AA2014D680B8004612D9 /* Debug.png in Resources */,
+				0773AA2114D680B8004612D9 /* Issue.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

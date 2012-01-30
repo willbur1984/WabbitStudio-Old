@@ -75,12 +75,17 @@
 	
 	_clickedLineNumber = NSNotFound;
 	
+	return self;
+}
+
+- (void)setClientView:(NSView *)client {
+	[super setClientView:client];
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidAddBookmark:) name:WCSourceTextStorageDidAddBookmarkNotification object:[self textStorage]];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidRemoveBookmark:) name:WCSourceTextStorageDidRemoveBookmarkNotification object:[self textStorage]];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidRemoveAllBookmarks:) name:WCSourceTextStorageDidRemoveAllBookmarksNotification object:[self textStorage]];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidFold:) name:WCSourceTextStorageDidFoldNotification object:[self textStorage]];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidUnfold:) name:WCSourceTextStorageDidUnfoldNotification object:[self textStorage]];
-	
-	return self;
 }
 
 - (NSArray *)lineStartIndexes {
@@ -150,23 +155,8 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 
 - (void)drawHashMarksAndLabelsInRect:(NSRect)rect {
 	[super drawBackgroundInRect:rect];
-	[self drawCodeFoldingRibbonInRect:NSMakeRect(NSMaxX(rect)-kCodeFoldingRibbonWidth, NSMinY(rect), kCodeFoldingRibbonWidth, NSHeight(rect))];
 	
-	for (RSBookmark *bookmark in [[self textStorage] bookmarksForRange:[[self textView] visibleRange]]) {
-		NSUInteger numRects;
-		NSRectArray rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[[[self textView] string] lineRangeForRange:[bookmark range]] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&numRects];
-		
-		if (!numRects)
-			continue;
-		
-		NSRect bookmarkRect = rects[0];
-		bookmarkRect = NSMakeRect(NSMinX([self bounds]), [self convertPoint:bookmarkRect.origin fromView:[self clientView]].y, NSWidth([self bounds]), NSHeight(bookmarkRect));
-		bookmarkRect = NSInsetRect(bookmarkRect, 1.0, 0.0);
-		
-		NSImage *bookmarkImage = [NSImage imageNamed:@"Bookmark"];
-		
-		[bookmarkImage drawInRect:NSMakeRect(NSMinX(bookmarkRect)+kIconPaddingLeft, NSMinY(bookmarkRect)+kIconPaddingTop, kIconWidthHeight, kIconWidthHeight) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
-	}
+	[self drawCodeFoldingRibbonInRect:NSMakeRect(NSMaxX(rect)-kCodeFoldingRibbonWidth, NSMinY(rect), kCodeFoldingRibbonWidth, NSHeight(rect))];
 	
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey])
 		[super drawRightMarginInRect:NSMakeRect(NSMinX(rect), NSMinY(rect), NSWidth(rect)-kCodeFoldingRibbonWidth, NSHeight(rect))];
@@ -174,6 +164,8 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 		[super drawRightMarginInRect:rect];
 	
 	[super drawCurrentLineHighlightInRect:rect];
+	
+	[self drawBookmarksInRect:rect];
 	
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey])
 		[super drawLineNumbersInRect:NSMakeRect(NSMinX(rect), NSMinY(rect), NSWidth(rect)-kCodeFoldingRibbonWidth, NSHeight(rect))];
@@ -210,6 +202,24 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 	return YES;
 }
 #pragma mark *** Public Methods ***
+- (void)drawBookmarksInRect:(NSRect)rect; {
+	for (RSBookmark *bookmark in [[self textStorage] bookmarksForRange:[[self textView] visibleRange]]) {
+		NSUInteger numRects;
+		NSRectArray rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[[[self textView] string] lineRangeForRange:[bookmark range]] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&numRects];
+		
+		if (!numRects)
+			continue;
+		
+		NSRect bookmarkRect = rects[0];
+		bookmarkRect = NSMakeRect(NSMinX([self bounds]), [self convertPoint:bookmarkRect.origin fromView:[self clientView]].y, NSWidth([self bounds]), NSHeight(bookmarkRect));
+		bookmarkRect = NSInsetRect(bookmarkRect, 1.0, 0.0);
+		
+		NSImage *bookmarkImage = [NSImage imageNamed:@"Bookmark"];
+		
+		[bookmarkImage drawInRect:NSMakeRect(NSMinX(bookmarkRect)+kIconPaddingLeft, NSMinY(bookmarkRect)+kIconPaddingTop, kIconWidthHeight, kIconWidthHeight) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+	}
+}
+
 - (void)drawCodeFoldingRibbonInRect:(NSRect)ribbonRect; {
 	if (![[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey])
 		return;
@@ -469,6 +479,9 @@ static const CGFloat kTriangleHeight = 6.0;
 	[self setNeedsDisplay:YES];
 }
 - (void)_textStorageDidRemoveBookmark:(NSNotification *)note {
+	[self setNeedsDisplay:YES];
+}
+- (void)_textStorageDidRemoveAllBookmarks:(NSNotification *)note {
 	[self setNeedsDisplay:YES];
 }
 - (void)_sourceScannerDidFinishScanningFolds:(NSNotification *)note {

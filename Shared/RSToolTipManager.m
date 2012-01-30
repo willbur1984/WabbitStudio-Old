@@ -115,7 +115,12 @@ static const NSTimeInterval kCloseToolTipDelay = 0.25;
     NSAssert([toolTipView window], @"toolTipView %@ must have a window!",toolTipView);
 #endif
 	
-	NSTrackingArea *trackingArea = [[[NSTrackingArea alloc] initWithRect:NSZeroRect options:NSTrackingActiveInKeyWindow|NSTrackingInVisibleRect|NSTrackingMouseMoved|NSTrackingMouseEnteredAndExited owner:self userInfo:nil] autorelease];
+	NSView *contentView = [[toolTipView window] contentView];
+	BOOL assumeInside = ([contentView hitTest:[contentView convertPointFromBase:[[contentView window] convertScreenToBase:[NSEvent mouseLocation]]]] == toolTipView);
+	NSTrackingAreaOptions options = (NSTrackingActiveInKeyWindow|NSTrackingInVisibleRect|NSTrackingMouseMoved|NSTrackingMouseEnteredAndExited);
+	if (assumeInside)
+		options |= NSTrackingAssumeInside;
+	NSTrackingArea *trackingArea = [[[NSTrackingArea alloc] initWithRect:NSZeroRect options:options owner:self userInfo:nil] autorelease];
 	
 	[_viewsToTrackingAreas setObject:trackingArea forKey:toolTipView];
 	[_trackingAreasToViews setObject:toolTipView forKey:trackingArea];

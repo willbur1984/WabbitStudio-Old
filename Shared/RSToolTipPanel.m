@@ -20,6 +20,7 @@
 	[self setFloatingPanel:YES];
 	[self setIgnoresMouseEvents:YES];
 	[self setHasShadow:YES];
+	[self setLevel:NSPopUpMenuWindowLevel];
 	
 	return self;
 }

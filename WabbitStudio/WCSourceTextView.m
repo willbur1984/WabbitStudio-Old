@@ -37,6 +37,7 @@
 #import "WCFile.h"
 #import "WCSourceTypesetter.h"
 #import "WCFold.h"
+#import "NSAlert-OAExtensions.h"
 
 @interface WCSourceTextView ()
 
@@ -844,6 +845,18 @@
 	
 	[(WCSourceTextStorage *)[self textStorage] removeBookmark:bookmark];
 }
+- (IBAction)removeAllBookmarks:(id)sender; {
+	WCSourceScanner *scanner = [[self delegate] sourceScannerForSourceTextView:self];
+	NSAlert *removeAlert = [NSAlert alertWithMessageText:NSLocalizedString(@"Remove All Bookmarks?", @"Remove All Bookmarks?") defaultButton:NSLocalizedString(@"Remove All Bookmarks", @"Remove All Bookmarks") alternateButton:LOCALIZED_STRING_CANCEL otherButton:nil informativeTextWithFormat:NSLocalizedString(@"Are you sure you want to remove all bookmarks in \"%@\"? This operation cannot be undone.", @"remove all bookmarks alert informative text format string"),[[scanner delegate] fileDisplayNameForSourceScanner:scanner]];
+	
+	[removeAlert beginSheetModalForWindow:[self window] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
+		[[alert window] orderOut:nil];
+		if (returnCode == NSAlertAlternateReturn)
+			return;
+		
+		[(WCSourceTextStorage *)[self textStorage] removeAllBookmarks];
+	}];
+}
 
 - (IBAction)jumpToNextBookmark:(id)sender; {
 	NSArray *bookmarks = [(WCSourceTextStorage *)[self textStorage] bookmarksForRange:NSMakeRange(0, [[self string] length])];
@@ -1052,7 +1065,7 @@
 	
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
 	
-	[[[currentTheme currentLineColor] colorWithAlphaComponent:0.55] setFill];
+	[[[currentTheme currentLineColor] colorWithAlphaComponent:0.5] setFill];
 	NSRectFillUsingOperation(lineRect, NSCompositeSourceOver);
 	[[currentTheme currentLineColor] setFill];
 	NSRectFill(NSMakeRect(NSMinX(lineRect), NSMinY(lineRect), NSWidth(lineRect), 1.0));

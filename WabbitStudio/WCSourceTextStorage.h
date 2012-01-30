@@ -11,6 +11,7 @@
 
 extern NSString *const WCSourceTextStorageDidAddBookmarkNotification;
 extern NSString *const WCSourceTextStorageDidRemoveBookmarkNotification;
+extern NSString *const WCSourceTextStorageDidRemoveAllBookmarksNotification;
 
 extern NSString *const WCSourceTextStorageDidFoldNotification;
 extern NSString *const WCSourceTextStorageDidUnfoldNotification;
@@ -38,6 +39,7 @@ extern NSString *const WCSourceTextStorageFoldRangeUserInfoKey;
 
 - (void)addBookmark:(RSBookmark *)bookmark;
 - (void)removeBookmark:(RSBookmark *)bookmark;
+- (void)removeAllBookmarks;
 - (RSBookmark *)bookmarkAtLineNumber:(NSUInteger)lineNumber;
 - (NSArray *)bookmarksForRange:(NSRange)range;
 

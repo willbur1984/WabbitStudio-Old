@@ -41,6 +41,7 @@
 - (IBAction)toggleBookmarkAtCurrentLine:(id)sender;
 - (IBAction)addBookmarkAtCurrentLine:(id)sender;
 - (IBAction)removeBookmarkAtCurrentLine:(id)sender;
+- (IBAction)removeAllBookmarks:(id)sender;
 
 - (IBAction)jumpToNextBookmark:(id)sender;
 - (IBAction)jumpToPreviousBookmark:(id)sender;
