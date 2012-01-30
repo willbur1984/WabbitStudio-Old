@@ -500,8 +500,12 @@
 		return nil;
 	
 	NSRange foldRange = [(WCSourceTextStorage *)[self textStorage] foldRangeForRange:toolTipRange];
-	if (foldRange.location != NSNotFound)
+	if (foldRange.location != NSNotFound) {
+		WCFold *fold = [[[[self delegate] sourceScannerForSourceTextView:self] folds] deepestFoldForRange:NSMakeRange(foldRange.location, 0)];
+		if (fold)
+			return [NSArray arrayWithObjects:fold, nil];
 		return nil;
+	}
 	
 	WCSourceToken *token = [[[self delegate] sourceTokensForSourceTextView:self] sourceTokenForRange:toolTipRange];
 	if (NSLocationInRange(toolTipRange.location, [token range]) &&

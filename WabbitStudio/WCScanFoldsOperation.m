@@ -140,7 +140,7 @@ static NSRegularExpression *endMarkersRegex;
 						// get the end index of the line before the end marker
 						NSUInteger lastCharIndex = [endMarker range].location;
 						// create our new fold, contentRange is everything that falls between the start index of the line after start marker the end index of the line before end marker
-				
+						NSRange contentRange = NSMakeRange(firstCharIndex, lastCharIndex-firstCharIndex);
 						WCFoldType foldType;
 						switch ([startMarker type]) {
 							case WCFoldMarkerTypeCommentStart:
@@ -155,7 +155,7 @@ static NSRegularExpression *endMarkersRegex;
 							default:
 								break;
 						}
-						WCFold *newFold = [WCFold foldOfType:foldType level:0 range:foldRange contentRange:NSMakeRange(firstCharIndex, lastCharIndex-firstCharIndex)];
+						WCFold *newFold = [WCFold foldOfType:foldType level:0 range:foldRange contentRange:contentRange string:[[self string] substringWithRange:contentRange]];
 						
 						// now look for possible children of our new fold, elements are encountered from deepest to top level so we get all child nodes before their parents, we have to look for the children now
 						for (WCFold *childNode in [topLevelFolds reverseObjectEnumerator]) {
@@ -196,6 +196,7 @@ static NSRegularExpression *endMarkersRegex;
 								NSRange foldRange = [[self string] lineRangeForRange:NSUnionRange([startMarker range], [endMarker range])];
 								NSUInteger firstCharIndex = NSMaxRange([startMarker range]);
 								NSUInteger lastCharIndex = [endMarker range].location;
+								NSRange contentRange = NSMakeRange(firstCharIndex, lastCharIndex-firstCharIndex);
 								WCFoldType foldType;
 								switch ([startMarker type]) {
 									case WCFoldMarkerTypeCommentStart:
@@ -210,7 +211,7 @@ static NSRegularExpression *endMarkersRegex;
 									default:
 										break;
 								}
-								WCFold *newFold = [WCFold foldOfType:foldType level:0 range:foldRange contentRange:NSMakeRange(firstCharIndex, lastCharIndex-firstCharIndex)];
+								WCFold *newFold = [WCFold foldOfType:foldType level:0 range:foldRange contentRange:contentRange string:[[self string] substringWithRange:contentRange]];
 								
 								// search for child nodes of the new node, just as above
 								for (WCFold *childNode in [topLevelFolds reverseObjectEnumerator]) {
