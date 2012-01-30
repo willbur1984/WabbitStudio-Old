@@ -231,6 +231,12 @@
 		if ([argumentNames containsObject:name])
 			[attributedString addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithUnsignedInteger:NSUnderlineStyleSingle],NSUnderlineStyleAttributeName,[NSColor blackColor],NSForegroundColorAttributeName, nil] range:[result range]];
 	}];
+	[[WCSourceScanner commentRegularExpression] enumerateMatchesInString:[attributedString string] options:0 range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+		[attributedString addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme commentColor],NSForegroundColorAttributeName, nil] range:[result range]];
+	}];
+	[[WCSourceScanner multilineCommentRegularExpression] enumerateMatchesInString:[attributedString string] options:0 range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+		[attributedString addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme commentColor],NSForegroundColorAttributeName, nil] range:[result range]];
+	}];
 }
 #pragma mark Properties
 @synthesize sourceScanner=_sourceScanner;

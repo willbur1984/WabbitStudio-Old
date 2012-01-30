@@ -7,10 +7,18 @@
 //
 
 #import "WCFold.h"
+#import "WCSourceScanner.h"
+#import "WCSourceHighlighter.h"
+#import "RSDefines.h"
+
+@interface WCFold ()
+@property (readonly,nonatomic) NSAttributedString *attributedString;
+@end
 
 @implementation WCFold
 - (void)dealloc {
-	[_string release];
+	_sourceScanner = nil;
+	[_attributedString release];
 	[super dealloc];
 }
 
@@ -19,13 +27,13 @@
 }
 
 - (NSAttributedString *)attributedToolTip {
-	return [[[NSAttributedString alloc] initWithString:[self string] attributes:RSToolTipProviderDefaultAttributes()] autorelease];
+	return [self attributedString];
 }
 
-+ (id)foldOfType:(WCFoldType)type level:(NSUInteger)level range:(NSRange)range contentRange:(NSRange)contentRange string:(NSString *)string; {
-	return [[[[self class] alloc] initWithType:type level:level range:range contentRange:contentRange string:string] autorelease];
++ (id)foldOfType:(WCFoldType)type level:(NSUInteger)level range:(NSRange)range contentRange:(NSRange)contentRange; {
+	return [[[[self class] alloc] initWithType:type level:level range:range contentRange:contentRange] autorelease];
 }
-- (id)initWithType:(WCFoldType)type level:(NSUInteger)level range:(NSRange)range contentRange:(NSRange)contentRange string:(NSString *)string; {
+- (id)initWithType:(WCFoldType)type level:(NSUInteger)level range:(NSRange)range contentRange:(NSRange)contentRange; {
 	if (!(self = [super initWithRepresentedObject:nil]))
 		return nil;
 	
@@ -33,13 +41,11 @@
 	_level = level;
 	_range = range;
 	_contentRange = contentRange;
-	string = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-	string = [string stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-	_string = [string copy];
 	
 	return self;
 }
 
+@synthesize sourceScanner=_sourceScanner;
 @synthesize type=_type;
 @synthesize range=_range;
 @synthesize contentRange=_contentRange;
@@ -50,6 +56,18 @@
 	for (WCFold *fold in [self childNodes])
 		[fold setLevel:level+1];
 }
-@synthesize string=_string;
+@dynamic attributedString;
+- (NSAttributedString *)attributedString {
+	if (!_attributedString) {
+		NSString *string = [[[[[self sourceScanner] textStorage] string] substringWithRange:[self range]] stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+		NSMutableAttributedString *temp = [[[NSMutableAttributedString alloc] initWithString:string attributes:RSToolTipProviderDefaultAttributes()] autorelease];
+		WCSourceHighlighter *highlighter = [[[self sourceScanner] delegate] sourceHighlighterForSourceScanner:[self sourceScanner]];
+		
+		[highlighter highlightAttributeString:temp];
+		
+		_attributedString = [temp copy];
+	}
+	return _attributedString;
+}
 
 @end

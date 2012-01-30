@@ -11,6 +11,8 @@
 #import "RSToolTipView.h"
 #import "WCJumpInDataSource.h"
 
+@class WCSourceTextStorage;
+
 @interface WCSourceTextView : WCFindableTextView <RSToolTipView,WCJumpInDataSource> {
 	__weak id <WCSourceTextViewDelegate> _delegate;
 	id _windowDidResignKeyObservingToken;
@@ -21,6 +23,7 @@
 }
 @property (readwrite,assign,nonatomic) IBOutlet id <WCSourceTextViewDelegate> delegate;
 @property (readwrite,assign,nonatomic) BOOL wrapLines;
+@property (readonly,nonatomic) WCSourceTextStorage *sourceTextStorage;
 
 - (IBAction)jumpToNextPlaceholder:(id)sender;
 - (IBAction)jumpToPreviousPlaceholder:(id)sender;

@@ -155,7 +155,9 @@ static NSRegularExpression *endMarkersRegex;
 							default:
 								break;
 						}
-						WCFold *newFold = [WCFold foldOfType:foldType level:0 range:foldRange contentRange:contentRange string:[[self string] substringWithRange:contentRange]];
+						WCFold *newFold = [WCFold foldOfType:foldType level:0 range:foldRange contentRange:contentRange];
+						
+						[newFold setSourceScanner:[self sourceScanner]];
 						
 						// now look for possible children of our new fold, elements are encountered from deepest to top level so we get all child nodes before their parents, we have to look for the children now
 						for (WCFold *childNode in [topLevelFolds reverseObjectEnumerator]) {
@@ -211,7 +213,9 @@ static NSRegularExpression *endMarkersRegex;
 									default:
 										break;
 								}
-								WCFold *newFold = [WCFold foldOfType:foldType level:0 range:foldRange contentRange:contentRange string:[[self string] substringWithRange:contentRange]];
+								WCFold *newFold = [WCFold foldOfType:foldType level:0 range:foldRange contentRange:contentRange];
+								
+								[newFold setSourceScanner:[self sourceScanner]];
 								
 								// search for child nodes of the new node, just as above
 								for (WCFold *childNode in [topLevelFolds reverseObjectEnumerator]) {

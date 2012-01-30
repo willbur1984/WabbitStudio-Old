@@ -492,20 +492,20 @@
 	NSUInteger charIndex = [self characterIndexForInsertionAtPoint:toolTipPoint];
 	if (charIndex >= [[self string] length])
 		return nil;
-	else if ([[NSCharacterSet whitespaceAndNewlineCharacterSet] characterIsMember:[[self string] characterAtIndex:charIndex]])
-		return nil;
 	
-	NSRange toolTipRange = [[self string] symbolRangeForRange:NSMakeRange(charIndex, 0)];
-	if (toolTipRange.location == NSNotFound)
-		return nil;
-	
-	NSRange foldRange = [(WCSourceTextStorage *)[self textStorage] foldRangeForRange:toolTipRange];
+	NSRange foldRange = [[self sourceTextStorage] foldRangeForRange:NSMakeRange(charIndex, 0)];
 	if (foldRange.location != NSNotFound) {
 		WCFold *fold = [[[[self delegate] sourceScannerForSourceTextView:self] folds] deepestFoldForRange:NSMakeRange(foldRange.location, 0)];
 		if (fold)
 			return [NSArray arrayWithObjects:fold, nil];
 		return nil;
 	}
+	else if ([[NSCharacterSet whitespaceAndNewlineCharacterSet] characterIsMember:[[self string] characterAtIndex:charIndex]])
+		return nil;
+	
+	NSRange toolTipRange = [[self string] symbolRangeForRange:NSMakeRange(charIndex, 0)];
+	if (toolTipRange.location == NSNotFound)
+		return nil;
 	
 	WCSourceToken *token = [[[self delegate] sourceTokensForSourceTextView:self] sourceTokenForRange:toolTipRange];
 	if (NSLocationInRange(toolTipRange.location, [token range]) &&
@@ -838,7 +838,7 @@
 }
 
 - (IBAction)toggleBookmarkAtCurrentLine:(id)sender; {
-	if ([(WCSourceTextStorage *)[self textStorage] bookmarkAtLineNumber:[[self string] lineNumberForRange:[self selectedRange]]])
+	if ([[self sourceTextStorage] bookmarkAtLineNumber:[[self string] lineNumberForRange:[self selectedRange]]])
 		[self removeBookmarkAtCurrentLine:nil];
 	else
 		[self addBookmarkAtCurrentLine:nil];
@@ -846,12 +846,12 @@
 - (IBAction)addBookmarkAtCurrentLine:(id)sender; {
 	RSBookmark *bookmark = [RSBookmark bookmarkWithRange:[self selectedRange] visibleRange:NSEmptyRange textStorage:[self textStorage]];
 	
-	[(WCSourceTextStorage *)[self textStorage] addBookmark:bookmark];
+	[[self sourceTextStorage] addBookmark:bookmark];
 }
 - (IBAction)removeBookmarkAtCurrentLine:(id)sender; {
-	RSBookmark *bookmark = [(WCSourceTextStorage *)[self textStorage] bookmarkAtLineNumber:[[self string] lineNumberForRange:[self selectedRange]]];
+	RSBookmark *bookmark = [[self sourceTextStorage] bookmarkAtLineNumber:[[self string] lineNumberForRange:[self selectedRange]]];
 	
-	[(WCSourceTextStorage *)[self textStorage] removeBookmark:bookmark];
+	[[self sourceTextStorage] removeBookmark:bookmark];
 }
 - (IBAction)removeAllBookmarks:(id)sender; {
 	WCSourceScanner *scanner = [[self delegate] sourceScannerForSourceTextView:self];
@@ -981,6 +981,10 @@
 		[self setHorizontallyResizable:YES];
 		[[self enclosingScrollView] setHasHorizontalScroller:YES];
 	}
+}
+@dynamic sourceTextStorage;
+- (WCSourceTextStorage *)sourceTextStorage {
+	return (WCSourceTextStorage *)[self textStorage];
 }
 #pragma mark *** Private Methods ***
 - (void)_commonInit; {
