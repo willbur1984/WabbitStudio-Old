@@ -92,7 +92,7 @@
 	return [[self textStorage] lineStartIndexes];
 }
 
-static const CGFloat kIconWidthHeight = 11.0;
+static const CGFloat kIconWidthHeight = 12.0;
 static const CGFloat kIconPaddingLeft = 1.0;
 static const CGFloat kIconPaddingTop = 1.0;
 static const CGFloat kCodeFoldingRibbonWidth = 8.0;
@@ -139,6 +139,20 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 		else
 			[[self textStorage] unfoldRange:foldRange effectiveRange:NULL];
 	}
+	/*
+	else {
+		NSUInteger lineNumber = [self _lineNumberForPoint:[self convertPointFromBase:[theEvent locationInWindow]]];
+		
+		if (lineNumber != NSNotFound) {
+			RSBookmark *bookmark = [[[self sourceTextView] sourceTextStorage] bookmarkAtLineNumber:lineNumber];
+			
+			if (bookmark)
+				[[[self sourceTextView] sourceTextStorage] removeBookmark:bookmark];
+			else
+				[[[self sourceTextView] sourceTextStorage] addBookmark:[RSBookmark bookmarkWithRange:NSMakeRange([[[self textView] string] rangeForLineNumber:lineNumber].location, 0) visibleRange:NSEmptyRange textStorage:[self textStorage]]];
+		}
+	}
+	 */
 }
 
 - (void)updateTrackingAreas {
@@ -151,6 +165,16 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey])
 		return [super minimumThickness]+kIconWidthHeight+kIconPaddingLeft+kCodeFoldingRibbonWidth;
 	return [super minimumThickness]+kIconWidthHeight+kIconPaddingLeft;
+}
+
+- (void)viewWillDraw {
+	[super viewWillDraw];
+	
+	CGFloat oldThickness = [self ruleThickness];
+	CGFloat newThickness = [self minimumThickness];
+	
+	if (fabs(oldThickness - newThickness) > 1)
+		[self _updateCodeFoldingTrackingArea];
 }
 
 - (void)drawHashMarksAndLabelsInRect:(NSRect)rect {
@@ -214,9 +238,9 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 		bookmarkRect = NSMakeRect(NSMinX([self bounds]), [self convertPoint:bookmarkRect.origin fromView:[self clientView]].y, NSWidth([self bounds]), NSHeight(bookmarkRect));
 		bookmarkRect = NSInsetRect(bookmarkRect, 1.0, 0.0);
 		
-		NSImage *bookmarkImage = [NSImage imageNamed:@"Bookmark"];
+		NSImage *bookmarkImage = [NSImage imageNamed:@"flag_green"];
 		
-		[bookmarkImage drawInRect:NSMakeRect(NSMinX(bookmarkRect)+kIconPaddingLeft, NSMinY(bookmarkRect)+kIconPaddingTop, kIconWidthHeight, kIconWidthHeight) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+		[bookmarkImage drawInRect:NSMakeRect(NSMinX(bookmarkRect)+kIconPaddingLeft, NSMinY(bookmarkRect), kIconWidthHeight, kIconWidthHeight) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
 	}
 }
 
@@ -379,7 +403,7 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 }
 
 - (void)_drawFoldsForFold:(WCFold *)fold inRect:(NSRect)ribbonRect topLevelFoldColor:(NSColor *)topLevelFoldColor; {
-	static const CGFloat stepAmount = 0.1;
+	static const CGFloat stepAmount = 0.05;
 	NSColor *colorForThisFoldLevel = nil;
 	
 	for (WCFold *childFold in [fold childNodes]) {
