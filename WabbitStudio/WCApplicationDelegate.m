@@ -35,7 +35,7 @@
 	[[NSUserDefaults standardUserDefaults] registerDefaults:userDefaults];
 }
 
-- (void)applicationDidFinishLaunching:(NSNotification *)notification {
+- (void)applicationDidFinishLaunching:(NSNotification *)notification {	
 	[[WCKeyBindingCommandSetManager sharedManager] loadKeyBindingsFromCurrentCommandSet];
 	
 	WCGeneralOnStartup startupAction = [[[NSUserDefaults standardUserDefaults] objectForKey:WCGeneralOnStartupKey] unsignedIntValue];

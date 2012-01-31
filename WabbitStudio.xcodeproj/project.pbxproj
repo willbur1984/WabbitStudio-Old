@@ -260,6 +260,7 @@
 		07F5F76D14A59BCD00F1F326 /* WCLineNumberRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F5F76C14A59BCC00F1F326 /* WCLineNumberRulerView.m */; };
 		07F5F77114A5A91800F1F326 /* NSString+WCExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F5F77014A5A91700F1F326 /* NSString+WCExtensions.m */; };
 		07F5F77414A5BC5700F1F326 /* NDTrie.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F5F77314A5BC5600F1F326 /* NDTrie.m */; };
+		07F6EFF314D7B20A00138231 /* NDKeyboardLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F6EFF214D7B20A00138231 /* NDKeyboardLayout.m */; };
 		07FF7B3F14C763EB000AE014 /* UKFileWatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 07FF7B3C14C763EB000AE014 /* UKFileWatcher.m */; };
 		07FF7B4014C763EB000AE014 /* UKKQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 07FF7B3E14C763EB000AE014 /* UKKQueue.m */; };
 		07FF7B4314C763FC000AE014 /* UKMainThreadProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 07FF7B4214C763FC000AE014 /* UKMainThreadProxy.m */; };
@@ -741,6 +742,8 @@
 		07F5F77014A5A91700F1F326 /* NSString+WCExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+WCExtensions.m"; sourceTree = "<group>"; };
 		07F5F77214A5BC5600F1F326 /* NDTrie.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDTrie.h; sourceTree = "<group>"; };
 		07F5F77314A5BC5600F1F326 /* NDTrie.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NDTrie.m; sourceTree = "<group>"; };
+		07F6EFF114D7B20A00138231 /* NDKeyboardLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDKeyboardLayout.h; sourceTree = "<group>"; };
+		07F6EFF214D7B20A00138231 /* NDKeyboardLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NDKeyboardLayout.m; sourceTree = "<group>"; };
 		07FF7B3B14C763EB000AE014 /* UKFileWatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UKFileWatcher.h; sourceTree = "<group>"; };
 		07FF7B3C14C763EB000AE014 /* UKFileWatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UKFileWatcher.m; sourceTree = "<group>"; };
 		07FF7B3D14C763EB000AE014 /* UKKQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UKKQueue.h; sourceTree = "<group>"; };
@@ -950,6 +953,8 @@
 		0708964614A6C9020017BBE4 /* External */ = {
 			isa = PBXGroup;
 			children = (
+				07F6EFF114D7B20A00138231 /* NDKeyboardLayout.h */,
+				07F6EFF214D7B20A00138231 /* NDKeyboardLayout.m */,
 				07FF7B4114C763FC000AE014 /* UKMainThreadProxy.h */,
 				07FF7B4214C763FC000AE014 /* UKMainThreadProxy.m */,
 				07FF7B3B14C763EB000AE014 /* UKFileWatcher.h */,
@@ -1998,6 +2003,7 @@
 				07154F5114D40AD400F57668 /* WCProjectViewController.m in Sources */,
 				07154F5814D5D5E100F57668 /* WCSourceFileSeparateWindowController.m in Sources */,
 				07154F5F14D5EDA400F57668 /* NSWindow+ULIZoomEffect.m in Sources */,
+				07F6EFF314D7B20A00138231 /* NDKeyboardLayout.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

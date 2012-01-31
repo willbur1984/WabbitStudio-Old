@@ -362,15 +362,16 @@
 
 #pragma mark Notifications
 - (void)_viewBoundsDidChange:(NSNotification *)note {
-	//[[self sourceHighlighter] performHighlightingInRange:[[self textView] visibleRange]];
+	[[self sourceHighlighter] performHighlightingInRange:[[self textView] visibleRange]];
 	
-	
+	/*
 	if (_scrollingHighlightTimer)
 		[_scrollingHighlightTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
 	else {
 		_scrollingHighlightTimer = [NSTimer timerWithTimeInterval:0.1 target:self selector:@selector(_scrollingHighlightTimerCallback:) userInfo:nil repeats:NO];
 		[[NSRunLoop mainRunLoop] addTimer:_scrollingHighlightTimer forMode:NSRunLoopCommonModes];
 	}
+	 */
 	 
 }
 #pragma mark Callbacks

@@ -702,7 +702,7 @@
 		<dict/>
 	</dict>
 	<key>name</key>
-	<string>The Default</string>
+	<string>Default</string>
 	<key>identifier</key>
 	<string>org.revsoft.wabbitstudio.keybindingcommandset.default</string>
 </dict>

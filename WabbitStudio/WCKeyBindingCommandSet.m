@@ -165,8 +165,8 @@ NSString *const WCKeyBindingCommandSetKeyBindingsKey = @"keyBindings";
 			if ([[[keyBindingDict objectForKey:WCKeyBindingCommandPairModifierFlagsKey] objectForKey:WCKeyBindingCommandPairControlModifierMaskKey] boolValue])
 				combo.flags |= NSControlKeyMask;
 			
-			if ([item isAlternate])
-				combo.flags |= NSAlternateKeyMask;
+			//if ([item isAlternate])
+			//combo.flags |= NSAlternateKeyMask;
 			
 			WCKeyBindingCommandPair *pair = [WCKeyBindingCommandPair keyBindingCommandPairForAction:[item action] keyCombo:combo];
 			[pair setRepresentedObject:item];

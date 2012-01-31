@@ -9,6 +9,7 @@
 #import "WCKeyBindingCommandPair.h"
 #import "WCKeyBindingCommandSet.h"
 #import "RSDefines.h"
+#import "NDKeyboardLayout.h"
 
 NSString *const WCKeyBindingCommandPairKeyCodeKey = @"keyCode";
 NSString *const WCKeyBindingCommandPairModifierFlagsKey = @"modifierFlags";
@@ -94,7 +95,12 @@ NSString *const WCKeyBindingCommandPairShiftModifierMaskKey = @"shift";
 		return;
 	}
 	
-	[[self menuItem] setKeyEquivalent:SRCharacterForKeyCodeAndCocoaFlags(_keyCombo.code, _keyCombo.flags)];
+	unichar character = [[NDKeyboardLayout keyboardLayout] characterForKeyCode:(UInt16)_keyCombo.code];
+	NSString *string = [NSString stringWithFormat:@"%C",character];
+	
+	string = SRCharacterForKeyCodeAndCocoaFlags(_keyCombo.code, _keyCombo.flags);
+	
+	[[self menuItem] setKeyEquivalent:string];
 	[[self menuItem] setKeyEquivalentModifierMask:_keyCombo.flags];
 }
 #pragma mark Properties

@@ -18,7 +18,7 @@ static NSTextStorage *_textStorage;
 static NSLayoutManager *_layoutManager;
 static NSTextContainer *_textContainer;
 
-static const CGFloat kCellPaddingLeftRight = 3.0;
+static const CGFloat kCellPaddingLeftRight = 2.0;
 
 @implementation WCFoldAttachmentCell
 + (void)initialize {
