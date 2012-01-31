@@ -25,16 +25,12 @@ static const CGFloat kCellPaddingLeftRight = 2.0;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
 		// [NSString stringWithFormat:@"%C",0x2026]
-		_textStorage = [[NSTextStorage alloc] initWithString:[NSString stringWithFormat:@"%C",0x2026] attributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSColor colorWithCalibratedRed:129.0/255.0 green:116.0/255.0 blue:34.0/255.0 alpha:1.0],NSForegroundColorAttributeName, nil]];
+		_textStorage = [[NSTextStorage alloc] initWithString:NSLocalizedString(@"...", @"...") attributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSColor colorWithCalibratedRed:129.0/255.0 green:116.0/255.0 blue:34.0/255.0 alpha:1.0],NSForegroundColorAttributeName, nil]];
 		_layoutManager = [[[NSLayoutManager alloc] init] autorelease];
 		[_textStorage addLayoutManager:_layoutManager];
 		_textContainer = [[[NSTextContainer alloc] initWithContainerSize:NSMakeSize(CGFLOAT_MAX, CGFLOAT_MAX)] autorelease];
 		[_layoutManager addTextContainer:_textContainer];
 	});
-}
-
-- (void)dealloc {
-	[super dealloc];
 }
 
 - (BOOL)wantsToTrackMouseForEvent:(NSEvent *)theEvent inRect:(NSRect)cellFrame ofView:(NSView *)controlView atCharacterIndex:(NSUInteger)charIndex {
@@ -67,6 +63,7 @@ static const CGFloat kCellPaddingLeftRight = 2.0;
 	[_textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName, nil] range:NSMakeRange(0, [_textStorage length])];
 	
 	cellFrame.origin.x += kCellPaddingLeftRight;
+	//cellFrame.origin.y -= kCellPaddingLeftRight;
 	
 	[_layoutManager ensureLayoutForCharacterRange:NSMakeRange(0, [_textStorage length])];
 	[_layoutManager drawGlyphsForGlyphRange:NSMakeRange(0, [_textStorage length]) atPoint:cellFrame.origin];

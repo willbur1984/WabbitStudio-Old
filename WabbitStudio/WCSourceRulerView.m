@@ -35,6 +35,7 @@
 - (void)_drawFoldsForFold:(WCFold *)fold inRect:(NSRect)ribbonRect topLevelFoldColor:(NSColor *)topLevelFoldColor;
 - (void)_drawFoldHighlightInRect:(NSRect)foldHighlightRect;
 - (void)_updateCodeFoldingTrackingArea;
+- (NSRect)_rectForFold:(WCFold *)fold inRect:(NSRect)ribbonRect;
 @end
 
 @implementation WCSourceRulerView
@@ -249,18 +250,7 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 		if (NSMaxRange(foldRange) >= [[[self textView] string] length])
 			foldRange.length -= (NSMaxRange(foldRange) - [[[self textView] string] length]);
 		
-		NSUInteger rectCount;
-		NSRectArray rects = [[[self textView] layoutManager] rectArrayForCharacterRange:foldRange withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&rectCount];
-		
-		if (!rectCount)
-			continue;
-		
-		NSRect foldRect = NSZeroRect;
-		NSUInteger rectIndex;
-		for (rectIndex=0; rectIndex<rectCount; rectIndex++)
-			foldRect = NSUnionRect(foldRect, rects[rectIndex]);
-		
-		foldRect = NSMakeRect(NSMinX(ribbonRect), [self convertPoint:foldRect.origin fromView:[self clientView]].y, NSWidth(ribbonRect), NSHeight(foldRect));
+		NSRect foldRect = [self _rectForFold:fold inRect:ribbonRect];
 		
 		if (_foldToHighlight == fold)
 			_rectForFoldHighlight = foldRect;
@@ -397,22 +387,7 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 	NSColor *colorForThisFoldLevel = nil;
 	
 	for (WCFold *childFold in [fold childNodes]) {
-		NSRange foldRange = [childFold range];
-		if (NSMaxRange(foldRange) >= [[[self textView] string] length])
-			foldRange.length -= (NSMaxRange(foldRange) - [[[self textView] string] length]);
-		
-		NSUInteger rectCount;
-		NSRectArray rects = [[[self textView] layoutManager] rectArrayForCharacterRange:foldRange withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&rectCount];
-		
-		if (!rectCount)
-			continue;
-		
-		NSRect foldRect = NSZeroRect;
-		NSUInteger rectIndex;
-		for (rectIndex=0; rectIndex<rectCount; rectIndex++)
-			foldRect = NSUnionRect(foldRect, rects[rectIndex]);
-		
-		foldRect = NSMakeRect(NSMinX(ribbonRect), [self convertPoint:foldRect.origin fromView:[self clientView]].y, NSWidth(ribbonRect), NSHeight(foldRect));
+		NSRect foldRect = [self _rectForFold:childFold inRect:ribbonRect];
 		
 		if (_foldToHighlight == childFold)
 			_rectForFoldHighlight = foldRect;
@@ -439,15 +414,8 @@ static const CGFloat kTriangleHeight = 6.0;
 	
 	[[self textStorage] setLineFoldingEnabled:YES];
 	
-	NSTextAttachment *attachment = [[self textStorage] attribute:NSAttachmentAttributeName atIndex:[_foldToHighlight contentRange].location effectiveRange:NULL];
-	if ([[attachment attachmentCell] isKindOfClass:[WCFoldAttachmentCell class]]) {		
-		[path moveToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMinY(foldHighlightRect))];
-		[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMaxY(foldHighlightRect))];
-		[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect)+NSWidth(foldHighlightRect), NSMinY(foldHighlightRect)+kTriangleHeight)];
-		[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMinY(foldHighlightRect))];
-		[path closePath];
-	}
-	else {
+	NSRange foldRange = [[[self sourceTextView] sourceTextStorage] foldRangeForRange:[_foldToHighlight contentRange]];
+	if (foldRange.location == NSNotFound) {		
 		[path moveToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMinY(foldHighlightRect))];
 		[path lineToPoint:NSMakePoint(NSMaxX(foldHighlightRect), NSMinY(foldHighlightRect))];
 		[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect)+floor(NSWidth(foldHighlightRect)/2.0), NSMinY(foldHighlightRect)+kTriangleHeight)];
@@ -458,6 +426,13 @@ static const CGFloat kTriangleHeight = 6.0;
 		[path lineToPoint:NSMakePoint(NSMaxX(foldHighlightRect), NSMaxY(foldHighlightRect))];
 		[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect)+floor(NSWidth(foldHighlightRect)/2.0), NSMaxY(foldHighlightRect)-kTriangleHeight)];
 		[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMaxY(foldHighlightRect))];
+		[path closePath];
+	}
+	else {
+		[path moveToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMinY(foldHighlightRect))];
+		[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMaxY(foldHighlightRect))];
+		[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect)+NSWidth(foldHighlightRect), NSMinY(foldHighlightRect)+kTriangleHeight)];
+		[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMinY(foldHighlightRect))];
 		[path closePath];
 	}
 	
@@ -473,9 +448,32 @@ static const CGFloat kTriangleHeight = 6.0;
 	_codeFoldingTrackingArea = nil;
 	
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey]) {
-		_codeFoldingTrackingArea = [[NSTrackingArea alloc] initWithRect:NSMakeRect(NSMaxX([self bounds])-kCodeFoldingRibbonWidth, NSMinY([self bounds]), kCodeFoldingRibbonWidth, NSHeight([self bounds])) options:NSTrackingActiveInKeyWindow|NSTrackingMouseMoved|NSTrackingMouseEnteredAndExited owner:self userInfo:nil];
+		NSView *contentView = [[self window] contentView];
+		BOOL assumeInside = ([contentView hitTest:[contentView convertPointFromBase:[[contentView window] convertScreenToBase:[NSEvent mouseLocation]]]] == self);
+		NSTrackingAreaOptions options = (NSTrackingActiveInKeyWindow|NSTrackingMouseMoved|NSTrackingMouseEnteredAndExited);
+		if (assumeInside)
+			options |= NSTrackingAssumeInside;
+		_codeFoldingTrackingArea = [[NSTrackingArea alloc] initWithRect:NSMakeRect(NSMaxX([self bounds])-kCodeFoldingRibbonWidth, NSMinY([self bounds]), kCodeFoldingRibbonWidth, NSHeight([self bounds])) options:options owner:self userInfo:nil];
 		[self addTrackingArea:_codeFoldingTrackingArea];
 	}
+}
+- (NSRect)_rectForFold:(WCFold *)fold inRect:(NSRect)ribbonRect; {
+	NSRange foldRange = [fold range];
+	if (NSMaxRange(foldRange) >= [[[self textView] string] length])
+		foldRange.length -= (NSMaxRange(foldRange) - [[[self textView] string] length]);
+	
+	NSUInteger rectCount;
+	NSRectArray rects = [[[self textView] layoutManager] rectArrayForCharacterRange:foldRange withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&rectCount];
+	
+	if (!rectCount)
+		return NSZeroRect;
+	
+	NSRect foldRect = NSZeroRect;
+	NSUInteger rectIndex;
+	for (rectIndex=0; rectIndex<rectCount; rectIndex++)
+		foldRect = NSUnionRect(foldRect, rects[rectIndex]);
+	
+	return NSMakeRect(NSMinX(ribbonRect), [self convertPoint:foldRect.origin fromView:[self clientView]].y, NSWidth(ribbonRect), NSHeight(foldRect));
 }
 #pragma mark IBActions
 - (IBAction)_toggleBookmark:(id)sender; {
