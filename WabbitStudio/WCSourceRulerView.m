@@ -167,16 +167,6 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 	return [super minimumThickness]+kIconWidthHeight+kIconPaddingLeft;
 }
 
-- (void)viewWillDraw {
-	[super viewWillDraw];
-	
-	CGFloat oldThickness = [self ruleThickness];
-	CGFloat newThickness = [self minimumThickness];
-	
-	if (fabs(oldThickness - newThickness) > 1)
-		[self _updateCodeFoldingTrackingArea];
-}
-
 - (void)drawHashMarksAndLabelsInRect:(NSRect)rect {
 	[super drawBackgroundInRect:rect];
 	
@@ -477,7 +467,7 @@ static const CGFloat kTriangleHeight = 6.0;
 	[path fill];
 }
 
-- (void)_updateCodeFoldingTrackingArea; {
+- (void)_updateCodeFoldingTrackingArea; {	
 	[self removeTrackingArea:_codeFoldingTrackingArea];
 	[_codeFoldingTrackingArea release];
 	_codeFoldingTrackingArea = nil;
