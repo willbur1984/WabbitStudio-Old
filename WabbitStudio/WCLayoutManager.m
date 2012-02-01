@@ -37,6 +37,8 @@
 }
 
 - (void)drawGlyphsForGlyphRange:(NSRange)glyphsToShow atPoint:(NSPoint)origin {	
+	[super drawGlyphsForGlyphRange:glyphsToShow atPoint:origin];
+	
 	if ([self showsInvisibleCharacters]) {
 		WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
 		NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[NSColor darkGrayColor],NSForegroundColorAttributeName, nil];
@@ -79,8 +81,6 @@
 			}
 		}
 	}
-	
-	[super drawGlyphsForGlyphRange:glyphsToShow atPoint:origin];
 }
 
 - (NSSet *)userDefaultsKeyPathsToObserve {
