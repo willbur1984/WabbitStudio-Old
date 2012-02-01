@@ -142,12 +142,19 @@
 		return nil;
 	}
 	else {
-		NSUInteger startIndex = [self sourceSymbolIndexForRange:range];
-		NSUInteger endIndex = [self sourceSymbolIndexForRange:NSMakeRange(NSMaxRange(range), 0)];
-		if (endIndex < [self count])
-			endIndex++;
+		NSUInteger startIndex = [self bookmarkIndexForRange:range];
+		NSMutableArray *retval = [NSMutableArray arrayWithCapacity:[self count]];
 		
-		return [self subarrayWithRange:NSMakeRange(startIndex, endIndex-startIndex)];
+		[retval addObject:[self objectAtIndex:startIndex]];
+		
+		for (RSBookmark *bookmark in [self subarrayWithRange:NSMakeRange(startIndex, [self count] - startIndex)]) {
+			if ([bookmark range].location > NSMaxRange(range))
+				break;
+			
+			[retval addObject:bookmark];
+		}
+		
+		return retval;
 	}
 }
 
@@ -180,19 +187,24 @@
 	if (![self count])
 		return nil;
 	else if ([self count] == 1) {
-		if (NSIntersectionRange(range, [[self lastObject] range]).length)
+		if (NSLocationInRange(range.location, [[self lastObject] range]))
 			return self;
 		return nil;
 	}
 	else {
 		NSUInteger startIndex = [self foldIndexForRange:range];
-		NSUInteger endIndex = [self foldIndexForRange:NSMakeRange(NSMaxRange(range), 0)];
-		if (startIndex == endIndex)
-			return [NSArray arrayWithObject:[self firstObject]];
-		else if (endIndex < [self count])
-			endIndex++;
+		NSMutableArray *retval = [NSMutableArray arrayWithCapacity:[self count]];
 		
-		return [self subarrayWithRange:NSMakeRange(startIndex, endIndex-startIndex)];
+		[retval addObject:[self objectAtIndex:startIndex]];
+		
+		for (WCFold *fold in [self subarrayWithRange:NSMakeRange(startIndex, [self count] - startIndex)]) {
+			if ([fold range].location > NSMaxRange(range))
+				break;
+			
+			[retval addObject:fold];
+		}
+		
+		return retval;
 	}
 }
 - (WCFold *)deepestFoldForRange:(NSRange)range; {

@@ -217,7 +217,7 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 	return YES;
 }
 #pragma mark *** Public Methods ***
-- (void)drawBookmarksInRect:(NSRect)rect; {
+- (void)drawBookmarksInRect:(NSRect)rect; {	
 	for (RSBookmark *bookmark in [[self textStorage] bookmarksForRange:[[self textView] visibleRange]]) {
 		NSUInteger numRects;
 		NSRectArray rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[[[self textView] string] lineRangeForRange:[bookmark range]] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&numRects];
@@ -227,9 +227,8 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 		
 		NSRect bookmarkRect = rects[0];
 		bookmarkRect = NSMakeRect(NSMinX([self bounds]), [self convertPoint:bookmarkRect.origin fromView:[self clientView]].y, NSWidth([self bounds]), NSHeight(bookmarkRect));
-		bookmarkRect = NSInsetRect(bookmarkRect, 1.0, 0.0);
 		
-		NSImage *bookmarkImage = [NSImage imageNamed:@"StarBlue"];
+		NSImage *bookmarkImage = [NSImage imageNamed:@"Bookmark"];
 		
 		[bookmarkImage drawInRect:NSMakeRect(NSMinX(bookmarkRect)+kIconPaddingLeft, NSMinY(bookmarkRect), kIconWidthHeight, kIconWidthHeight) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
 	}
@@ -383,7 +382,7 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 }
 
 - (void)_drawFoldsForFold:(WCFold *)fold inRect:(NSRect)ribbonRect topLevelFoldColor:(NSColor *)topLevelFoldColor; {
-	static const CGFloat stepAmount = 0.05;
+	static const CGFloat stepAmount = 0.08;
 	NSColor *colorForThisFoldLevel = nil;
 	
 	for (WCFold *childFold in [fold childNodes]) {

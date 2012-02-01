@@ -39,7 +39,7 @@
 		0708965214A6CDEA0017BBE4 /* MneumonicCompletions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0708965114A6CDEA0017BBE4 /* MneumonicCompletions.plist */; };
 		0708965514A6CE900017BBE4 /* WCCompletionChoice.m in Sources */ = {isa = PBXBuildFile; fileRef = 0708965414A6CE900017BBE4 /* WCCompletionChoice.m */; };
 		0708965714A6F1360017BBE4 /* PreProcessorCompletions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0708965614A6F1360017BBE4 /* PreProcessorCompletions.plist */; };
-		0708A5BF14D9031600BE60EE /* StarBlue.png in Resources */ = {isa = PBXBuildFile; fileRef = 0708A5BE14D9031600BE60EE /* StarBlue.png */; };
+		0708A5BF14D9031600BE60EE /* Bookmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 0708A5BE14D9031600BE60EE /* Bookmark.png */; };
 		071306A414C8D0F800862E4D /* RSBookmark.m in Sources */ = {isa = PBXBuildFile; fileRef = 071306A314C8D0F800862E4D /* RSBookmark.m */; };
 		071306AE14C91C4C00862E4D /* DDHotKeyCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 071306AD14C91C4C00862E4D /* DDHotKeyCenter.m */; };
 		071306F114CA92EF00862E4D /* WCGroupContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 071306F014CA92EE00862E4D /* WCGroupContainer.m */; };
@@ -253,7 +253,6 @@
 		07EB8E3614B64D2500F8A8C6 /* WCKeyboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07EB8E3414B64D2500F8A8C6 /* WCKeyboardViewController.m */; };
 		07EB8E3914B64D9A00F8A8C6 /* Keyboard.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 07EB8E3814B64D9A00F8A8C6 /* Keyboard.tiff */; };
 		07EB8E3C14B64DB600F8A8C6 /* WCKeyboardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07EB8E3A14B64DB600F8A8C6 /* WCKeyboardView.xib */; };
-		07F5AF2314D7C6B500FF799B /* Bookmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 07F5AF2214D7C6B500FF799B /* Bookmark.png */; };
 		07F5F75714A4F37200F1F326 /* WCSourceHighlighter.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F5F75614A4F37200F1F326 /* WCSourceHighlighter.m */; };
 		07F5F75E14A5024D00F1F326 /* NSTextView+WCExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F5F75D14A5024D00F1F326 /* NSTextView+WCExtensions.m */; };
 		07F5F76114A5451700F1F326 /* WCScanSymbolsOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F5F76014A5451700F1F326 /* WCScanSymbolsOperation.m */; };
@@ -349,7 +348,7 @@
 		0708965314A6CE900017BBE4 /* WCCompletionChoice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCCompletionChoice.h; sourceTree = "<group>"; };
 		0708965414A6CE900017BBE4 /* WCCompletionChoice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCCompletionChoice.m; sourceTree = "<group>"; };
 		0708965614A6F1360017BBE4 /* PreProcessorCompletions.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PreProcessorCompletions.plist; sourceTree = "<group>"; };
-		0708A5BE14D9031600BE60EE /* StarBlue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = StarBlue.png; sourceTree = "<group>"; };
+		0708A5BE14D9031600BE60EE /* Bookmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Bookmark.png; sourceTree = "<group>"; };
 		071306A214C8D0F800862E4D /* RSBookmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSBookmark.h; sourceTree = "<group>"; };
 		071306A314C8D0F800862E4D /* RSBookmark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSBookmark.m; sourceTree = "<group>"; };
 		071306AC14C91C4C00862E4D /* DDHotKeyCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDHotKeyCenter.h; sourceTree = "<group>"; };
@@ -727,7 +726,6 @@
 		07EB8E3414B64D2500F8A8C6 /* WCKeyboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCKeyboardViewController.m; sourceTree = "<group>"; };
 		07EB8E3814B64D9A00F8A8C6 /* Keyboard.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Keyboard.tiff; sourceTree = "<group>"; };
 		07EB8E3B14B64DB600F8A8C6 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCKeyboardView.xib; sourceTree = "<group>"; };
-		07F5AF2214D7C6B500FF799B /* Bookmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Bookmark.png; sourceTree = "<group>"; };
 		07F5F75514A4F37200F1F326 /* WCSourceHighlighter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSourceHighlighter.h; sourceTree = "<group>"; };
 		07F5F75614A4F37200F1F326 /* WCSourceHighlighter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSourceHighlighter.m; sourceTree = "<group>"; };
 		07F5F75C14A5024C00F1F326 /* NSTextView+WCExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTextView+WCExtensions.h"; sourceTree = "<group>"; };
@@ -1114,8 +1112,7 @@
 		071ECCC914A4233C002409F8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				0708A5BE14D9031600BE60EE /* StarBlue.png */,
-				07F5AF2214D7C6B500FF799B /* Bookmark.png */,
+				0708A5BE14D9031600BE60EE /* Bookmark.png */,
 				0773AA1E14D680B8004612D9 /* Debug.png */,
 				0773AA1F14D680B8004612D9 /* Issue.png */,
 				0773AA1B14D67FB3004612D9 /* Bookmarks.png */,
@@ -1821,8 +1818,7 @@
 				0773AA1C14D67FB3004612D9 /* Bookmarks.png in Resources */,
 				0773AA2014D680B8004612D9 /* Debug.png in Resources */,
 				0773AA2114D680B8004612D9 /* Issue.png in Resources */,
-				07F5AF2314D7C6B500FF799B /* Bookmark.png in Resources */,
-				0708A5BF14D9031600BE60EE /* StarBlue.png in Resources */,
+				0708A5BF14D9031600BE60EE /* Bookmark.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

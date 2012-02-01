@@ -51,6 +51,7 @@
 - (BOOL)_handleAutoIndentAfterLabel;
 - (void)_highlightEnclosedMacroArguments;
 - (BOOL)_handleUnfoldForEvent:(NSEvent *)theEvent;
+- (void)_drawVisibleBookmarksInRect:(NSRect)bookmarkRect;
 @end
 
 @implementation WCSourceTextView
@@ -137,6 +138,9 @@
 	[super drawViewBackgroundInRect:rect];
 	
 	[self _drawPageGuideInRect:rect];
+	
+	[self _drawVisibleBookmarksInRect:[self bounds]];
+	
 	[self _drawCurrentLineHighlightInRect:rect];
 }
 
@@ -1493,6 +1497,9 @@
 	
 	[(WCSourceTextStorage *)[self textStorage] setLineFoldingEnabled:NO];
 	return NO;
+}
+- (void)_drawVisibleBookmarksInRect:(NSRect)bookmarkRect; {
+	
 }
 #pragma mark IBActions
 - (IBAction)_symbolMenuClicked:(NSMenuItem *)sender {
