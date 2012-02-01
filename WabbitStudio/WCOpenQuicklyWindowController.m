@@ -43,6 +43,9 @@
 	
 	[[self tableView] setTarget:self];
 	[[self tableView] setDoubleAction:@selector(_tableViewDoubleClick:)];
+	
+	[[self pathControl] setTarget:self];
+	[[self pathControl] setAction:@selector(_pathControlSingleClick:)];
 }
 #pragma mark NSControlTextEditingDelegate
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector {
@@ -140,6 +143,7 @@
 @synthesize cancelButton=_cancelButton;
 @synthesize searchField=_searchField;
 @synthesize tableView=_tableView;
+@synthesize pathControl=_pathControl;
 
 @synthesize searchString=_searchString;
 @synthesize statusString=_statusString;
@@ -191,5 +195,16 @@
 	}
 	
 	[self open:nil];
+}
+
+- (IBAction)_pathControlSingleClick:(id)sender; {
+	NSPathComponentCell *cell = [[self pathControl] clickedPathComponentCell];
+	
+	if (!cell) {
+		NSBeep();
+		return;
+	}
+	
+	[[NSWorkspace sharedWorkspace] openURL:[cell URL]];
 }
 @end
