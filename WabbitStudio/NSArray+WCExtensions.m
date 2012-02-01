@@ -46,11 +46,18 @@
 		return self;
 	else {
 		NSUInteger startIndex = [self sourceTokenIndexForRange:range];
-		NSUInteger endIndex = [self sourceTokenIndexForRange:NSMakeRange(NSMaxRange(range), 0)];
-		if (endIndex < [self count] && NSMaxRange([[self objectAtIndex:endIndex] range]) <= NSMaxRange(range))
-			endIndex++;
+		NSMutableArray *retval = [NSMutableArray arrayWithCapacity:[self count]];
 		
-		return [self subarrayWithRange:NSMakeRange(startIndex, endIndex-startIndex)];
+		[retval addObject:[self objectAtIndex:startIndex]];
+		
+		for (WCSourceToken *token in [self subarrayWithRange:NSMakeRange(startIndex, [self count] - startIndex)]) {
+			if ([token range].location > NSMaxRange(range))
+				break;
+			
+			[retval addObject:token];
+		}
+		
+		return retval;
 	}
 }
 
@@ -85,12 +92,19 @@
 	else if ([self count] == 1)
 		return self;
 	else {
-		NSUInteger startIndex = [self sourceSymbolIndexForRange:range];
-		NSUInteger endIndex = [self sourceSymbolIndexForRange:NSMakeRange(NSMaxRange(range), 0)];
-		if (endIndex < [self count])
-			endIndex++;
+		NSUInteger startIndex = [self sourceTokenIndexForRange:range];
+		NSMutableArray *retval = [NSMutableArray arrayWithCapacity:[self count]];
 		
-		return [self subarrayWithRange:NSMakeRange(startIndex, endIndex-startIndex)];
+		[retval addObject:[self objectAtIndex:startIndex]];
+		
+		for (WCSourceSymbol *symbol in [self subarrayWithRange:NSMakeRange(startIndex, [self count] - startIndex)]) {
+			if ([symbol range].location > NSMaxRange(range))
+				break;
+			
+			[retval addObject:symbol];
+		}
+		
+		return retval;
 	}
 }
 

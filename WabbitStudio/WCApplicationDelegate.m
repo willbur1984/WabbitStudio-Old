@@ -56,8 +56,6 @@
 		default:
 			break;
 	}
-	
-	[[[NSImage imageNamed:NSImageNameGoRightTemplate] TIFFRepresentation] writeToURL:[NSURL fileURLWithPath:[NSHomeDirectory() stringByAppendingPathComponent:@"image.tiff"]] options:NSAtomicWrite error:NULL];
 }
 
 - (BOOL)applicationShouldOpenUntitledFile:(NSApplication *)sender {

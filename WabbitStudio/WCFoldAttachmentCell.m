@@ -25,7 +25,7 @@ static const CGFloat kCellPaddingLeftRight = 2.0;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
 		// [NSString stringWithFormat:@"%C",0x2026]
-		_textStorage = [[NSTextStorage alloc] initWithString:NSLocalizedString(@"...", @"...") attributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSColor colorWithCalibratedRed:129.0/255.0 green:116.0/255.0 blue:34.0/255.0 alpha:1.0],NSForegroundColorAttributeName, nil]];
+		_textStorage = [[NSTextStorage alloc] initWithString:[NSString stringWithFormat:@"%C",0x2026] attributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSColor colorWithCalibratedRed:129.0/255.0 green:116.0/255.0 blue:34.0/255.0 alpha:1.0],NSForegroundColorAttributeName, nil]];
 		_layoutManager = [[[NSLayoutManager alloc] init] autorelease];
 		[_textStorage addLayoutManager:_layoutManager];
 		_textContainer = [[[NSTextContainer alloc] initWithContainerSize:NSMakeSize(CGFLOAT_MAX, CGFLOAT_MAX)] autorelease];
@@ -63,10 +63,9 @@ static const CGFloat kCellPaddingLeftRight = 2.0;
 	[_textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName, nil] range:NSMakeRange(0, [_textStorage length])];
 	
 	cellFrame.origin.x += kCellPaddingLeftRight;
-	//cellFrame.origin.y -= kCellPaddingLeftRight;
 	
 	[_layoutManager ensureLayoutForCharacterRange:NSMakeRange(0, [_textStorage length])];
-	[_layoutManager drawGlyphsForGlyphRange:NSMakeRange(0, [_textStorage length]) atPoint:cellFrame.origin];
+	[_layoutManager drawGlyphsForGlyphRange:[_layoutManager glyphRangeForCharacterRange:NSMakeRange(0, [_textStorage length]) actualCharacterRange:NULL] atPoint:cellFrame.origin];
     
     [[NSGraphicsContext currentContext] restoreGraphicsState];
 }
@@ -80,7 +79,7 @@ static const CGFloat kCellPaddingLeftRight = 2.0;
 	NSRect cellFrame = [_layoutManager usedRectForTextContainer:_textContainer];
 	
     cellFrame.origin = NSZeroPoint;
-	cellFrame.origin.y -= [[_layoutManager typesetter] baselineOffsetInLayoutManager:_layoutManager glyphIndex:0];
+	cellFrame.origin.y -= [[_layoutManager typesetter] baselineOffsetInLayoutManager:_layoutManager glyphIndex:[_layoutManager glyphIndexForCharacterAtIndex:0]];
 	cellFrame.size.width += kCellPaddingLeftRight*2;
 	
     return cellFrame;

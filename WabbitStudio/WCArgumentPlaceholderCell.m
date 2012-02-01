@@ -156,7 +156,7 @@ static NSTextContainer *_textContainer;
 	NSRect cellFrame = [_layoutManager usedRectForTextContainer:_textContainer];
 	
 	cellFrame.origin = NSZeroPoint;
-	cellFrame.origin.y -= [[_layoutManager typesetter] baselineOffsetInLayoutManager:_layoutManager glyphIndex:0];
+	cellFrame.origin.y -= [[_layoutManager typesetter] baselineOffsetInLayoutManager:_layoutManager glyphIndex:[_layoutManager glyphIndexForCharacterAtIndex:0]];
 	
 	return cellFrame;
 }

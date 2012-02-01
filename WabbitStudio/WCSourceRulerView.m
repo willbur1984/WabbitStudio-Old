@@ -229,7 +229,7 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 		bookmarkRect = NSMakeRect(NSMinX([self bounds]), [self convertPoint:bookmarkRect.origin fromView:[self clientView]].y, NSWidth([self bounds]), NSHeight(bookmarkRect));
 		bookmarkRect = NSInsetRect(bookmarkRect, 1.0, 0.0);
 		
-		NSImage *bookmarkImage = [NSImage imageNamed:@"flag_green"];
+		NSImage *bookmarkImage = [NSImage imageNamed:@"StarBlue"];
 		
 		[bookmarkImage drawInRect:NSMakeRect(NSMinX(bookmarkRect)+kIconPaddingLeft, NSMinY(bookmarkRect), kIconWidthHeight, kIconWidthHeight) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
 	}
