@@ -15,9 +15,15 @@
 static NSString *const RSFileReferenceFileReferenceURLKey = @"fileReferenceURL";
 static NSString *const RSFileReferenceFilePathKey = @"filePath";
 
+@interface RSFileReference ()
+@property (readonly) NSOperationQueue *operationQueue;
+@end
+
 @implementation RSFileReference
 #pragma mark *** Subclass Overrides ***
 - (void)dealloc {
+	[NSFileCoordinator removeFilePresenter:self];
+	[_operationQueue release];
 	[_kqueue release];
 	[_fileURL release];
 	[_fileReferenceURL release];
@@ -26,6 +32,19 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 
 - (NSString *)description {
 	return [NSString stringWithFormat:@"path: %@",[[self fileURL] path]];
+}
+#pragma mark NSFilePresenter
+- (NSURL *)presentedItemURL {
+	return [self fileURL];
+}
+- (NSOperationQueue *)presentedItemOperationQueue {
+	return [self operationQueue];
+}
+- (void)presentedItemDidMoveToURL:(NSURL *)newURL {	
+	
+}
+- (void)presentedItemDidChange {
+
 }
 #pragma mark RSPlistArchiving
 - (NSDictionary *)plistRepresentation {
@@ -53,6 +72,10 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 #endif
 	
 	_fileURL = [[_fileReferenceURL filePathURL] copy];
+	_operationQueue = [[NSOperationQueue alloc] init];
+	[_operationQueue setMaxConcurrentOperationCount:NSOperationQueueDefaultMaxConcurrentOperationCount];
+	
+	[NSFileCoordinator addFilePresenter:self];
 	
 	return self;
 }
@@ -166,5 +189,6 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 		_kqueue = nil;
 	}
 }
+@synthesize operationQueue=_operationQueue;
 
 @end

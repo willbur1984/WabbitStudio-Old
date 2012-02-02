@@ -192,6 +192,9 @@
 	}
 	return modifiedResults;
 }
+- (NSString *)textView:(NSTextView *)textView willDisplayToolTip:(NSString *)tooltip forCharacterAtIndex:(NSUInteger)characterIndex {
+	return nil;
+}
 - (NSUndoManager *)undoManagerForTextView:(NSTextView *)view {
 	return [[self sourceFileDocument] undoManager];
 }

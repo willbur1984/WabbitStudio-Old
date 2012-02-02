@@ -235,6 +235,7 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 	
 	[super saveDocument:nil];
 }
+
 #pragma mark PSMTabBarControlCell
 @dynamic icon;
 - (NSImage *)icon {

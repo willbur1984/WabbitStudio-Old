@@ -1000,7 +1000,7 @@
 	[self setAutomaticDataDetectionEnabled:NO];
 	[self setAutomaticLinkDetectionEnabled:YES];
 	[self setAutomaticQuoteSubstitutionEnabled:NO];
-	[self setAutomaticSpellingCorrectionEnabled:NO];
+	[self setAutomaticSpellingCorrectionEnabled:YES];
 	[self setAutomaticTextReplacementEnabled:NO];
 	[self setAutoresizingMask:NSViewHeightSizable|NSViewWidthSizable|NSViewMinXMargin|NSViewMinYMargin];
 	[self setContinuousSpellCheckingEnabled:YES];

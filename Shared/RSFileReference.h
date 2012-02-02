@@ -17,11 +17,13 @@
  
  */
 
-@interface RSFileReference : RSObject <RSPlistArchiving> {
+@interface RSFileReference : RSObject <RSPlistArchiving,NSFilePresenter> {
 	__weak id <RSFileReferenceDelegate> _delegate;
 	NSURL *_fileReferenceURL;
 	NSURL *_fileURL;
 	UKKQueue *_kqueue;
+	NSFileCoordinator *_fileCoordinator;
+	NSOperationQueue *_operationQueue;
 	struct {
 		unsigned int ignoreNextFileWatcherNotification:1;
 		unsigned int shouldMonitorFile:1;

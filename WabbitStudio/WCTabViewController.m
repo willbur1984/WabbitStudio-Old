@@ -16,6 +16,8 @@
 #import "WCFile.h"
 #import "WCProjectWindowController.h"
 #import "WCProjectNavigatorViewController.h"
+#import "WCSourceHighlighter.h"
+#import "NSTextView+WCExtensions.h"
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
 NSString *const WCTabViewControllerDidSelectTabNotification = @"WCTabViewControllerDidSelectTabNotification";
@@ -117,10 +119,10 @@ static NSString *const WCTabViewControllerSelectedTabKey = @"selectedTab";
 }
 #pragma mark PSMTabBarControlDelegate
 - (NSString *)tabView:(NSTabView *)tabView toolTipForTabViewItem:(NSTabViewItem *)tabViewItem; {
-	WCSourceFileDocument *sfController = [tabViewItem identifier];
+	WCSourceFileDocument *sfDocument = [tabViewItem identifier];
 	
 	// just show the on-disk path to the file as the tool tip
-	return [[[sfController fileURL] path] stringByAbbreviatingWithTildeInPath];
+	return [[[sfDocument fileURL] path] stringByAbbreviatingWithTildeInPath];
 }
 
 - (NSMenu *)tabView:(NSTabView *)aTabView menuForTabViewItem:(NSTabViewItem *)tabViewItem {
@@ -162,10 +164,14 @@ static NSString *const WCTabViewControllerSelectedTabKey = @"selectedTab";
 			return NO;
 		else if (![[[self tabBarControl] tabView] numberOfTabViewItems])
 			return NO;
+		
+		[menuItem setTitle:[NSString stringWithFormat:NSLocalizedString(@"Close \"%@\"", @"Close \"%@\""),[[[[self clickedTabViewItem] identifier] fileURL] fileName]]];
 	}
 	else if ([menuItem action] == @selector(_closeAllExceptTab:)) {
 		if ([[[self tabBarControl] tabView] numberOfTabViewItems] <= 1)
 			return NO;
+		
+		[menuItem setTitle:[NSString stringWithFormat:NSLocalizedString(@"Close All Except \"%@\"", @"Close All Except \"%@\""),[[[[self clickedTabViewItem] identifier] fileURL] fileName]]];
 	}
 	else if ([menuItem action] == @selector(_showInFinder:)) {
 		[menuItem setTitle:[NSString stringWithFormat:NSLocalizedString(@"Show \"%@\" in Finder", @"Show \"%@\" in Finder"),[[[[self clickedTabViewItem] identifier] fileURL] fileName]]];
@@ -236,6 +242,8 @@ static NSString *const WCTabViewControllerSelectedTabKey = @"selectedTab";
 		[[[sourceFileDocument projectDocument] openFiles] removeObject:file];
 		
 		[[[self tabBarControl] tabView] addTabViewItem:tabViewItem];
+		
+		[[sourceFileDocument sourceHighlighter] performHighlightingInRange:[[stvController textView] visibleRange]];
 	}
 	else
 		tabViewItem = [[[self tabBarControl] tabView] tabViewItemAtIndex:tabViewItemIndex];
