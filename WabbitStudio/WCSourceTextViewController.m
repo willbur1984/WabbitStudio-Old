@@ -263,6 +263,9 @@
 - (WCProjectDocument *)projectDocumentForSourceTextView:(WCSourceTextView *)textView; {
 	return [[self sourceFileDocument] projectDocument];
 }
+- (WCSourceFileDocument *)sourceFileDocumentForSourceTextView:(WCSourceTextView *)textView {
+	return [self sourceFileDocument];
+}
 - (void)handleJumpToDefinitionForSourceTextView:(WCSourceTextView *)textView sourceSymbol:(WCSourceSymbol *)symbol {
 	if ([symbol sourceScanner] == [self sourceScanner]) {
 		[textView setSelectedRange:[symbol range]];

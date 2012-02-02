@@ -22,7 +22,6 @@
 	NSURL *_fileReferenceURL;
 	NSURL *_fileURL;
 	UKKQueue *_kqueue;
-	NSFileCoordinator *_fileCoordinator;
 	NSOperationQueue *_operationQueue;
 	struct {
 		unsigned int ignoreNextFileWatcherNotification:1;
@@ -32,7 +31,7 @@
 }
 @property (readwrite,assign,nonatomic) id <RSFileReferenceDelegate> delegate;
 @property (readonly,nonatomic) NSURL *fileReferenceURL;
-@property (readwrite,copy,nonatomic) NSURL *fileURL;
+@property (readwrite,copy) NSURL *fileURL;
 @property (readonly,nonatomic) NSImage *fileIcon;
 @property (readonly,nonatomic) NSString *fileName;
 @property (readonly,nonatomic) NSString *fileUTI;
@@ -44,4 +43,5 @@
 + (RSFileReference *)fileReferenceWithFileURL:(NSURL *)fileURL;
 - (id)initWithFileURL:(NSURL *)fileURL;
 
+- (void)performCleanup;
 @end

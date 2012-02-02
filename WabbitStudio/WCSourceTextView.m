@@ -321,6 +321,8 @@
 		[retval addItem:[NSMenuItem separatorItem]];
 		[retval addItemWithTitle:NSLocalizedString(@"Reveal in Project Navigator", @"Reveal in Project Navigator") action:@selector(revealInProjectNavigator:) keyEquivalent:@""];
 		[retval addItemWithTitle:NSLocalizedString(@"Show in Finder", @"Show in Finder") action:@selector(showInFinder:) keyEquivalent:@""];
+		[retval addItem:[NSMenuItem separatorItem]];
+		[retval addItemWithTitle:NSLocalizedString(@"Open in Separate Editor", @"Open in Separate Editor") action:@selector(openInSeparateEditor:) keyEquivalent:@""];
 		
 	});
 	return retval;
@@ -946,6 +948,17 @@
 		if ([fold type] == WCFoldTypeComment)
 			[(WCSourceTextStorage *)[self textStorage] unfoldRange:[fold contentRange] effectiveRange:NULL];
 	}
+}
+
+- (IBAction)openInSeparateEditor:(id)sender; {
+	WCProjectDocument *projectDocument = [[self delegate] projectDocumentForSourceTextView:self];
+	
+	if (!projectDocument) {
+		NSBeep();
+		return;
+	}
+	
+	[projectDocument openSeparateEditorForSourceFileDocument:[[self delegate] sourceFileDocumentForSourceTextView:self]];
 }
 #pragma mark Properties
 @dynamic delegate;

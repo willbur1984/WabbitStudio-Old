@@ -54,4 +54,6 @@
 - (IBAction)unfoldAll:(id)sender;
 - (IBAction)foldCommentBlocks:(id)sender;
 - (IBAction)unfoldCommentBlocks:(id)sender;
+
+- (IBAction)openInSeparateEditor:(id)sender;
 @end

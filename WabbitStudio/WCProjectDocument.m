@@ -23,6 +23,7 @@
 #import "NSWindow+ULIZoomEffect.h"
 #import "RSNavigatorControl.h"
 #import "NSTreeController+RSExtensions.h"
+#import "RSFileReference.h"
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
 NSString *const WCProjectDocumentFileReferencesKey = @"fileReferences";
@@ -84,6 +85,7 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_projectNavigatorDidAddNewGroup:) name:WCProjectNavigatorDidAddNewGroupNotification object:[windowController projectNavigatorViewController]];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_projectNavigatorDidRemoveNodes:) name:WCProjectNavigatorDidRemoveNodesNotification object:[windowController projectNavigatorViewController]];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_windowWillClose:) name:NSWindowWillCloseNotification object:[windowController window]];
 }
 
 + (BOOL)canConcurrentlyReadDocumentsOfType:(NSString *)typeName {
@@ -347,5 +349,8 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	for (WCFileContainer *fileContainer in removedFileContainers)
 		[[self filesToFileContainers] removeObjectForKey:[fileContainer representedObject]];
 }
-
+- (void)_windowWillClose:(NSNotification *)note {
+	for (WCFile *file in [[self filesToSourceFileDocuments] keyEnumerator])
+		[NSFileCoordinator removeFilePresenter:[file fileReference]];
+}
 @end

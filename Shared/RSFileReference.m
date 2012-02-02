@@ -22,7 +22,6 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 @implementation RSFileReference
 #pragma mark *** Subclass Overrides ***
 - (void)dealloc {
-	[NSFileCoordinator removeFilePresenter:self];
 	[_operationQueue release];
 	[_kqueue release];
 	[_fileURL release];
@@ -117,6 +116,10 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 	_fileReferenceURL = [[fileURL fileReferenceURL] copy];
 	
 	return self;
+}
+
+- (void)performCleanup; {
+	[NSFileCoordinator removeFilePresenter:self];
 }
 #pragma mark Properties
 @synthesize fileReferenceURL=_fileReferenceURL;
