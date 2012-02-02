@@ -332,6 +332,7 @@
 		retval = [[self class] defaultMenu];
 	return retval;
 }
+
 #pragma mark IBActions
 - (IBAction)complete:(id)sender {
 	[[WCCompletionWindowController sharedWindowController] showCompletionWindowControllerForSourceTextView:self];
@@ -1002,7 +1003,7 @@
 	[self setAutomaticSpellingCorrectionEnabled:NO];
 	[self setAutomaticTextReplacementEnabled:NO];
 	[self setAutoresizingMask:NSViewHeightSizable|NSViewWidthSizable|NSViewMinXMargin|NSViewMinYMargin];
-	[self setContinuousSpellCheckingEnabled:NO];
+	[self setContinuousSpellCheckingEnabled:YES];
 	[self setDisplaysLinkToolTips:YES];
 	[self setDrawsBackground:YES];
 	[self setSelectable:YES];

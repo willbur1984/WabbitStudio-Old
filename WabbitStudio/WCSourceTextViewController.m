@@ -29,6 +29,7 @@
 #import "WCProjectNavigatorViewController.h"
 #import "WCProjectWindowController.h"
 #import "WCFoldAttachmentCell.h"
+#import "NSArray+WCExtensions.h"
 
 @interface WCSourceTextViewController ()
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
@@ -176,6 +177,20 @@
 - (BOOL)textView:(NSTextView *)textView shouldChangeTextInRanges:(NSArray *)affectedRanges replacementStrings:(NSArray *)replacementStrings {
 	
 	return YES;
+}
+- (NSArray *)textView:(NSTextView *)textView didCheckTextInRange:(NSRange)range types:(NSTextCheckingTypes)checkingTypes options:(NSDictionary *)options results:(NSArray *)results orthography:(NSOrthography *)orthography wordCount:(NSInteger)wordCount {
+	NSMutableArray *modifiedResults = [NSMutableArray arrayWithCapacity:[results count]];
+	NSArray *tokens = [[[self sourceFileDocument] sourceScanner] tokens];
+	
+	for (NSTextCheckingResult *result in results) {
+		WCSourceToken *token = [tokens sourceTokenForRange:[result range]];
+		
+		if (NSLocationInRange([result range].location, [token range]) &&
+			([token type] == WCSourceTokenTypeComment || [token type] == WCSourceTokenTypeString) &&
+			![[[textView string] substringWithRange:[result range]] isEqualToString:@"endcomment"])
+			[modifiedResults addObject:result];
+	}
+	return modifiedResults;
 }
 - (NSUndoManager *)undoManagerForTextView:(NSTextView *)view {
 	return [[self sourceFileDocument] undoManager];
