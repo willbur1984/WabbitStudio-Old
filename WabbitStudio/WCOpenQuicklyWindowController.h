@@ -26,6 +26,7 @@
 @property (readwrite,assign,nonatomic) IBOutlet NSButton *cancelButton;
 @property (readwrite,assign,nonatomic) IBOutlet NSSearchField *searchField;
 @property (readwrite,assign,nonatomic) IBOutlet NSTableView *tableView;
+@property (readwrite,assign,nonatomic) IBOutlet NSPathControl *pathControl;
 
 @property (readwrite,copy,nonatomic) NSString *searchString;
 @property (readwrite,copy,nonatomic) NSString *statusString;
