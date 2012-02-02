@@ -10,7 +10,14 @@
 
 @implementation RSFindBarFieldEditor
 #pragma mark *** Subclass Overrides ***
-
+- (id)initWithFrame:(NSRect)frameRect {
+	if (!(self = [super initWithFrame:frameRect]))
+		return nil;
+	
+	[self setFieldEditor:YES];
+	
+	return self;
+}
 #pragma mark IBActions
 - (void)performTextFinderAction:(id)sender {
 	[[self findTextView] performTextFinderAction:sender];

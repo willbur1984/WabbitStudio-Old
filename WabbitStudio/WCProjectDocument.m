@@ -24,6 +24,7 @@
 #import "RSNavigatorControl.h"
 #import "NSTreeController+RSExtensions.h"
 #import "RSFileReference.h"
+#import "NDTrie.h"
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
 NSString *const WCProjectDocumentFileReferencesKey = @"fileReferences";
@@ -40,6 +41,7 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 @property (readwrite,retain) NSMutableDictionary *UUIDsToFiles;
 @property (readwrite,copy) NSDictionary *projectSettings;
 @property (readwrite,retain) NSHashTable *projectSettingsProviders;
+@property (readwrite,retain) NDTrie *fileCompletions;
 
 - (WCSourceFileSeparateWindowController *)_sourceFileSeparateWindowControllerForSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument;
 @end
@@ -50,6 +52,7 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
+	[_fileCompletions release];
 	[_openFiles release];
 	[_unsavedFiles release];
 	[_projectSettingsProviders release];
@@ -163,6 +166,7 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	NSMapTable *filesToSourceFileDocuments = [NSMapTable mapTableWithWeakToStrongObjects];
 	NSMapTable *sourceFileDocumentsToFiles = [NSMapTable mapTableWithWeakToWeakObjects];
 	NSMutableDictionary *UUIDsToObjects = [NSMutableDictionary dictionaryWithCapacity:0];
+	NDMutableTrie *fileCompletions = [NDMutableTrie trie];
 	
 	for (WCFileContainer *fileContainer in [projectContainer descendantNodesInclusive]) {
 		[filesToFileContainers setObject:fileContainer forKey:[fileContainer representedObject]];
@@ -180,6 +184,9 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 			}
 		}
 		
+		if ([fileContainer isLeafNode])
+			[fileCompletions setObject:[fileContainer representedObject] forKey:[[[fileContainer representedObject] fileName] lowercaseString]];
+			
 		[UUIDsToObjects setObject:[fileContainer representedObject] forKey:[[fileContainer representedObject] UUID]];
 	}
 	
@@ -187,6 +194,7 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	[self setFilesToSourceFileDocuments:filesToSourceFileDocuments];
 	[self setSourceFileDocumentsToFiles:sourceFileDocumentsToFiles];
 	[self setUUIDsToFiles:UUIDsToObjects];
+	[self setFileCompletions:fileCompletions];
 	
 	NSFileWrapper *settingsDataWrapper = [[fileWrapper fileWrappers] objectForKey:[NSUserName() stringByAppendingPathExtension:WCProjectSettingsFileExtension]];
 	if (!settingsDataWrapper)
@@ -337,6 +345,7 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	}
 	return nil;
 }
+@synthesize fileCompletions=_fileCompletions;
 #pragma mark Notifications
 - (void)_projectNavigatorDidAddNewGroup:(NSNotification *)note {
 	WCGroupContainer *newGroupContainer = [[note userInfo] objectForKey:WCProjectNavigatorDidAddNewGroupNotificationNewGroupUserInfoKey];
@@ -348,6 +357,11 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	
 	for (WCFileContainer *fileContainer in removedFileContainers)
 		[[self filesToFileContainers] removeObjectForKey:[fileContainer representedObject]];
+	
+	[_fileCompletions removeAllObjects];
+	
+	for (WCFileContainer *fileContainer in [[self projectContainer] descendantLeafNodes])
+		[_fileCompletions setObject:[fileContainer representedObject] forKey:[[[fileContainer representedObject] fileName] lowercaseString]];
 }
 - (void)_windowWillClose:(NSNotification *)note {
 	for (WCFile *file in [[self filesToSourceFileDocuments] keyEnumerator])

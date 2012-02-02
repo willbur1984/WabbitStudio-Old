@@ -71,6 +71,17 @@ static NSString *const WCFileReferenceKey = @"fileReference";
 	}
 	return [[self fileURL] pasteboardPropertyListForType:type];
 }
+#pragma mark WCCompletionItem
+- (NSString *)completionName {
+	return [self fileName];
+}
+- (NSString *)completionInsertionName {
+	return [self fileName];
+}
+- (NSImage *)completionIcon {
+	return [self fileIcon];
+}
+
 #pragma mark WCOpenQuicklyItem
 - (NSRange)openQuicklyRange {
 	return NSEmptyRange;
