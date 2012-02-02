@@ -51,6 +51,7 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
+	[_fileCompletions release];
 	[_openFiles release];
 	[_unsavedFiles release];
 	[_projectSettingsProviders release];
@@ -181,8 +182,10 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 			}
 		}
 		
+		if ([fileContainer isLeafNode])
+			[fileCompletions setObject:[fileContainer representedObject] forKey:[[[fileContainer representedObject] fileName] lowercaseString]];
+			
 		[UUIDsToObjects setObject:[fileContainer representedObject] forKey:[[fileContainer representedObject] UUID]];
-		[fileCompletions setObject:[fileContainer representedObject] forKey:[[[fileContainer representedObject] fileName] lowercaseString]];
 	}
 	
 	[self setFilesToFileContainers:filesToFileContainers];
@@ -352,6 +355,11 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	
 	for (WCFileContainer *fileContainer in removedFileContainers)
 		[[self filesToFileContainers] removeObjectForKey:[fileContainer representedObject]];
+	
+	[_fileCompletions removeAllObjects];
+	
+	for (WCFileContainer *fileContainer in [[self projectContainer] descendantLeafNodes])
+		[_fileCompletions setObject:[fileContainer representedObject] forKey:[[[fileContainer representedObject] fileName] lowercaseString]];
 }
 
 @end
