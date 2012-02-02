@@ -23,6 +23,7 @@
 #import "NSWindow+ULIZoomEffect.h"
 #import "RSNavigatorControl.h"
 #import "NSTreeController+RSExtensions.h"
+#import "NDTrie.h"
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
 NSString *const WCProjectDocumentFileReferencesKey = @"fileReferences";
@@ -39,6 +40,7 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 @property (readwrite,retain) NSMutableDictionary *UUIDsToFiles;
 @property (readwrite,copy) NSDictionary *projectSettings;
 @property (readwrite,retain) NSHashTable *projectSettingsProviders;
+@property (readwrite,retain) NDTrie *fileCompletions;
 
 - (WCSourceFileSeparateWindowController *)_sourceFileSeparateWindowControllerForSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument;
 @end
@@ -161,6 +163,7 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	NSMapTable *filesToSourceFileDocuments = [NSMapTable mapTableWithWeakToStrongObjects];
 	NSMapTable *sourceFileDocumentsToFiles = [NSMapTable mapTableWithWeakToWeakObjects];
 	NSMutableDictionary *UUIDsToObjects = [NSMutableDictionary dictionaryWithCapacity:0];
+	NDMutableTrie *fileCompletions = [NDMutableTrie trie];
 	
 	for (WCFileContainer *fileContainer in [projectContainer descendantNodesInclusive]) {
 		[filesToFileContainers setObject:fileContainer forKey:[fileContainer representedObject]];
@@ -179,12 +182,14 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 		}
 		
 		[UUIDsToObjects setObject:[fileContainer representedObject] forKey:[[fileContainer representedObject] UUID]];
+		[fileCompletions setObject:[fileContainer representedObject] forKey:[[[fileContainer representedObject] fileName] lowercaseString]];
 	}
 	
 	[self setFilesToFileContainers:filesToFileContainers];
 	[self setFilesToSourceFileDocuments:filesToSourceFileDocuments];
 	[self setSourceFileDocumentsToFiles:sourceFileDocumentsToFiles];
 	[self setUUIDsToFiles:UUIDsToObjects];
+	[self setFileCompletions:fileCompletions];
 	
 	NSFileWrapper *settingsDataWrapper = [[fileWrapper fileWrappers] objectForKey:[NSUserName() stringByAppendingPathExtension:WCProjectSettingsFileExtension]];
 	if (!settingsDataWrapper)
@@ -335,6 +340,7 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	}
 	return nil;
 }
+@synthesize fileCompletions=_fileCompletions;
 #pragma mark Notifications
 - (void)_projectNavigatorDidAddNewGroup:(NSNotification *)note {
 	WCGroupContainer *newGroupContainer = [[note userInfo] objectForKey:WCProjectNavigatorDidAddNewGroupNotificationNewGroupUserInfoKey];

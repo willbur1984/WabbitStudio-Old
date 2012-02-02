@@ -16,7 +16,7 @@ extern NSString *const WCProjectDocumentProjectContainerKey;
 extern NSString *const WCProjectDataFileName;
 extern NSString *const WCProjectSettingsFileExtension;
 
-@class WCProjectContainer,WCProjectWindowController,WCSourceTextViewController,WCFile,WCSourceFileDocument,WCFileContainer,WCSourceFileSeparateWindowController;
+@class WCProjectContainer,WCProjectWindowController,WCSourceTextViewController,WCFile,WCSourceFileDocument,WCFileContainer,WCSourceFileSeparateWindowController,NDMutableTrie,NDTrie;
 
 @interface WCProjectDocument : NSDocument <WCOpenQuicklyDataSource> {
 	WCProjectContainer *_projectContainer;
@@ -28,6 +28,7 @@ extern NSString *const WCProjectSettingsFileExtension;
 	NSCountedSet *_openFiles;
 	NSHashTable *_projectSettingsProviders;
 	NSDictionary *_projectSettings;
+	NDMutableTrie *_fileCompletions;
 }
 @property (readonly,retain) WCProjectContainer *projectContainer;
 @property (readonly,retain) NSMapTable *filesToSourceFileDocuments;
@@ -42,6 +43,7 @@ extern NSString *const WCProjectSettingsFileExtension;
 @property (readonly,retain) NSMutableDictionary *UUIDsToFiles;
 @property (readonly,copy) NSDictionary *projectSettings;
 @property (readonly,retain) NSHashTable *projectSettingsProviders;
+@property (readonly,retain) NDTrie *fileCompletions;
 
 - (WCFileContainer *)fileContainerForFile:(WCFile *)file;
 

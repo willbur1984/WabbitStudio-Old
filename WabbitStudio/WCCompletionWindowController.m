@@ -15,6 +15,7 @@
 #import "WCArgumentPlaceholderCell.h"
 #import "WCSourceToken.h"
 #import "NSArray+WCExtensions.h"
+#import "WCProjectDocument.h"
 #import "NSAttributedString+WCExtensions.h"
 
 @interface WCCompletionWindowController ()
@@ -59,6 +60,12 @@
 	[[self tableView] setTarget:self];
 	[[self tableView] setDoubleAction:@selector(_tableViewDoubleClick:)];
 }
+#pragma mark NSTableViewDelegate
+- (void)tableView:(NSTableView *)tableView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
+	if ([cell respondsToSelector:@selector(image)])
+		[[cell image] setSize:NSSmallSize];
+}
+
 #pragma mark RSTableViewDelegate
 - (void)handleReturnPressedForTableView:(RSTableView *)tableView {
 	if ([[[self arrayController] selectedObjects] count])
@@ -330,16 +337,36 @@
 		[[self mutableCompletions] setArray:staticCompletions];
 	}
 	else {
-		NSString *completionString = [[[[self textView] string] substringWithRange:completionRange] lowercaseString];
+		if ([[[self textView] delegate] projectDocumentForSourceTextView:[self textView]]) {
+			static NSRegularExpression *includeImportRegex;
+			static dispatch_once_t onceToken;
+			dispatch_once(&onceToken, ^{
+				includeImportRegex = [[NSRegularExpression alloc] initWithPattern:@"#(?:include|import)\\s+\"(.*?)\"" options:NSRegularExpressionCaseInsensitive error:NULL];
+			});
+			
+			NSTextCheckingResult *result = [includeImportRegex firstMatchInString:[[self textView] string] options:0 range:[[[self textView] string] lineRangeForRange:completionRange]];
+			
+			if (result) {
+				NDTrie *fileCompletions = [[[[self textView] delegate] projectDocumentForSourceTextView:[self textView]] fileCompletions];
+				
+				[staticCompletions addObjectsFromArray:[fileCompletions everyObjectForKeyWithPrefix:[[[[self textView] string] substringWithRange:[result rangeAtIndex:1]] lowercaseString]]];
+				
+				[[self mutableCompletions] setArray:staticCompletions];
+			}
+		}
 		
-		[self _addStaticCompletionsFromCompletionsTrie:_mneumonicCompletions toArray:staticCompletions forPrefix:completionString];
-		[self _addStaticCompletionsFromCompletionsTrie:_preProcessorCompletions toArray:staticCompletions forPrefix:completionString];
-		[self _addStaticCompletionsFromCompletionsTrie:_registerCompletions toArray:staticCompletions forPrefix:completionString];
-		[self _addStaticCompletionsFromCompletionsTrie:_conditionalCompletions toArray:staticCompletions forPrefix:completionString];
-		[self _addStaticCompletionsFromCompletionsTrie:_directiveCompletions toArray:staticCompletions forPrefix:completionString];
-		
-		[[self mutableCompletions] setArray:staticCompletions];
-		[[self mutableCompletions] addObjectsFromArray:[[sourceScanner delegate] sourceScanner:sourceScanner completionsForPrefix:completionString]];
+		if (![staticCompletions count]) {
+			NSString *completionString = [[[[self textView] string] substringWithRange:completionRange] lowercaseString];
+			
+			[self _addStaticCompletionsFromCompletionsTrie:_mneumonicCompletions toArray:staticCompletions forPrefix:completionString];
+			[self _addStaticCompletionsFromCompletionsTrie:_preProcessorCompletions toArray:staticCompletions forPrefix:completionString];
+			[self _addStaticCompletionsFromCompletionsTrie:_registerCompletions toArray:staticCompletions forPrefix:completionString];
+			[self _addStaticCompletionsFromCompletionsTrie:_conditionalCompletions toArray:staticCompletions forPrefix:completionString];
+			[self _addStaticCompletionsFromCompletionsTrie:_directiveCompletions toArray:staticCompletions forPrefix:completionString];
+			
+			[[self mutableCompletions] setArray:staticCompletions];
+			[[self mutableCompletions] addObjectsFromArray:[[sourceScanner delegate] sourceScanner:sourceScanner completionsForPrefix:completionString]];
+		}
 	}
 	
 	if (![[self completions] count])
