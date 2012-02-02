@@ -131,7 +131,8 @@
 	
 	[[self window] setFrameTopLeftPoint:[[[self textView] window] convertBaseToScreen:[[self textView] convertPointToBase:lineRect.origin]]];
 	
-	[[self window] makeKeyAndOrderFront:nil];
+	[[[self textView] window] addChildWindow:[self window] ordered:NSWindowAbove];
+	[[self window] orderFront:nil];
 }
 
 + (WCArgumentPlaceholderWindowController *)argumentPlaceholderWindowControllerWithArgumentPlaceholderCell:(WCArgumentPlaceholderCell *)argumentPlaceholderCell characterIndex:(NSUInteger)characterIndex textView:(NSTextView *)textView; {
@@ -157,6 +158,7 @@
 - (void)_closeArgumentPlaceholderWindowAndInsertChoice:(BOOL)insertChoice; {
 	[self autorelease];
 	
+	[[[self textView] window] removeChildWindow:[self window]];
 	[[self window] orderOut:nil];
 	
 	if (insertChoice) {

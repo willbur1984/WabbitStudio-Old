@@ -226,6 +226,9 @@
 	
 	return (!shouldCancel);
 }
+- (BOOL)menuHasKeyEquivalent:(NSMenu *)menu forEvent:(NSEvent *)event target:(id *)target action:(SEL *)action {
+	return NO;
+}
 - (void)menuWillOpen:(NSMenu *)menu {
 	if (menu == [self filesMenu])
 		_fileSubmenusToFileContainers = [[NSMapTable mapTableWithWeakToWeakObjects] retain];

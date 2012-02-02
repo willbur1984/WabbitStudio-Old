@@ -47,7 +47,7 @@
 				<string key="NSWindowRect">{{196, 240}, {240, 135}}</string>
 				<int key="NSWTFlags">1618478080</int>
 				<string key="NSWindowTitle">Window</string>
-				<string key="NSWindowClass">WCCompletionWindow</string>
+				<string key="NSWindowClass">NSWindow</string>
 				<nil key="NSViewClass"/>
 				<nil key="NSUserInterfaceItemIdentifier"/>
 				<object class="NSView" key="NSWindowView" id="1006">
@@ -71,7 +71,7 @@
 											<string key="NSFrameSize">{240, 135}</string>
 											<reference key="NSSuperview" ref="106550615"/>
 											<reference key="NSWindow"/>
-											<reference key="NSNextKeyView" ref="870196331"/>
+											<reference key="NSNextKeyView" ref="559131881"/>
 											<string key="NSReuseIdentifierKey">_NS:1828</string>
 											<bool key="NSEnabled">YES</bool>
 											<object class="_NSCornerView" key="NSCornerView">
@@ -208,11 +208,11 @@
 								<object class="NSScroller" id="559131881">
 									<reference key="NSNextResponder" ref="794556002"/>
 									<int key="NSvFlags">-2147483392</int>
-									<string key="NSFrame">{{229, 0}, {11, 135}}</string>
+									<string key="NSFrame">{{229, 0}, {15, 135}}</string>
 									<reference key="NSSuperview" ref="794556002"/>
 									<reference key="NSWindow"/>
+									<reference key="NSNextKeyView"/>
 									<string key="NSReuseIdentifierKey">_NS:1845</string>
-									<int key="NSsFlags">256</int>
 									<reference key="NSTarget" ref="794556002"/>
 									<string key="NSAction">_doScroller:</string>
 									<double key="NSPercent">0.99264705882352944</double>
@@ -234,7 +234,7 @@
 							<string key="NSFrameSize">{240, 135}</string>
 							<reference key="NSSuperview" ref="1006"/>
 							<reference key="NSWindow"/>
-							<reference key="NSNextKeyView" ref="106550615"/>
+							<reference key="NSNextKeyView" ref="870196331"/>
 							<string key="NSReuseIdentifierKey">_NS:1824</string>
 							<int key="NSsFlags">133648</int>
 							<reference key="NSVScroller" ref="559131881"/>
@@ -475,8 +475,8 @@
 					<string>2.IBPluginDependency</string>
 					<string>20.IBPluginDependency</string>
 					<string>23.IBPluginDependency</string>
+					<string>4.CustomClassName</string>
 					<string>4.IBPluginDependency</string>
-					<string>5.CustomClassName</string>
 					<string>5.IBPluginDependency</string>
 					<string>6.IBPluginDependency</string>
 					<string>8.IBPluginDependency</string>
@@ -495,8 +495,8 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>WCCompletionScrollView</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>WCCompletionTableView</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -536,41 +536,6 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/NSView.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">RSTableView</string>
-					<string key="superclassName">NSTableView</string>
-					<object class="NSMutableDictionary" key="outlets">
-						<string key="NS.key.0">delegate</string>
-						<string key="NS.object.0">id</string>
-					</object>
-					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<string key="NS.key.0">delegate</string>
-						<object class="IBToOneOutletInfo" key="NS.object.0">
-							<string key="name">delegate</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</object>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/RSTableView.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">WCCompletionTableView</string>
-					<string key="superclassName">RSTableView</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/WCCompletionTableView.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">WCCompletionWindow</string>
-					<string key="superclassName">NSWindow</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/WCCompletionWindow.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

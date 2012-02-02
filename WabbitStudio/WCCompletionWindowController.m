@@ -151,8 +151,10 @@
 		[self _closeCompletionWindowControllerAndInsertCompletion:NO];
 	}];
 	
-	if ([self _updateCompletions])
-		[[self window] makeKeyAndOrderFront:nil];
+	if ([self _updateCompletions]) {
+		[[[self textView] window] addChildWindow:[self window] ordered:NSWindowAbove];
+		[[self window] orderFront:nil];
+	}
 	else
 		[self _closeCompletionWindowControllerAndInsertCompletion:NO];
 }
@@ -182,6 +184,7 @@
 }
 #pragma mark *** Private Methods ***
 - (void)_closeCompletionWindowControllerAndInsertCompletion:(BOOL)insertCompletion; {
+	[[[self textView] window] removeChildWindow:[self window]];
 	[[self window] orderOut:nil];
 	
 	if (insertCompletion) {

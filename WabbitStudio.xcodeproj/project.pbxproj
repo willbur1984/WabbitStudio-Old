@@ -204,7 +204,6 @@
 		0797327514C5368200A71F54 /* RSTabView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0797327414C5368200A71F54 /* RSTabView.m */; };
 		0797327914C5372900A71F54 /* WCTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0797327814C5372900A71F54 /* WCTabViewController.m */; };
 		0797327C14C5374300A71F54 /* WCTabView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0797327B14C5374300A71F54 /* WCTabView.m */; };
-		07A7A0FE14B8C83900507FC7 /* WCCompletionWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A7A0FD14B8C83900507FC7 /* WCCompletionWindow.m */; };
 		07A8AF8214BDC7EC008CB9FF /* KeyBindings.png in Resources */ = {isa = PBXBuildFile; fileRef = 07A8AF8014BDC7EC008CB9FF /* KeyBindings.png */; };
 		07A8AF8314BDC7EC008CB9FF /* PBXKeyBindingsPrefsModule.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 07A8AF8114BDC7EC008CB9FF /* PBXKeyBindingsPrefsModule.tiff */; };
 		07A8AF8914BDC82A008CB9FF /* WCKeyBindingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A8AF8714BDC82A008CB9FF /* WCKeyBindingsViewController.m */; };
@@ -647,8 +646,6 @@
 		0797327814C5372900A71F54 /* WCTabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCTabViewController.m; sourceTree = "<group>"; };
 		0797327A14C5374300A71F54 /* WCTabView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTabView.h; sourceTree = "<group>"; };
 		0797327B14C5374300A71F54 /* WCTabView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCTabView.m; sourceTree = "<group>"; };
-		07A7A0FC14B8C83900507FC7 /* WCCompletionWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCCompletionWindow.h; sourceTree = "<group>"; };
-		07A7A0FD14B8C83900507FC7 /* WCCompletionWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCCompletionWindow.m; sourceTree = "<group>"; };
 		07A8AF8014BDC7EC008CB9FF /* KeyBindings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = KeyBindings.png; sourceTree = "<group>"; };
 		07A8AF8114BDC7EC008CB9FF /* PBXKeyBindingsPrefsModule.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = PBXKeyBindingsPrefsModule.tiff; sourceTree = "<group>"; };
 		07A8AF8614BDC82A008CB9FF /* WCKeyBindingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCKeyBindingsViewController.h; sourceTree = "<group>"; };
@@ -909,8 +906,6 @@
 			children = (
 				0708962D14A656E90017BBE4 /* WCCompletionWindowController.h */,
 				0708962E14A656E90017BBE4 /* WCCompletionWindowController.m */,
-				07A7A0FC14B8C83900507FC7 /* WCCompletionWindow.h */,
-				07A7A0FD14B8C83900507FC7 /* WCCompletionWindow.m */,
 				0708963314A65BF50017BBE4 /* WCCompletionItem.h */,
 				0708965314A6CE900017BBE4 /* WCCompletionChoice.h */,
 				0708965414A6CE900017BBE4 /* WCCompletionChoice.m */,
@@ -1917,7 +1912,6 @@
 				07CC8F3F14B7DBDB0081EE69 /* WCJumpInCellView.m in Sources */,
 				07BC6CB614B7DE43007ECB3F /* WCJumpToLineWindowController.m in Sources */,
 				07892EDA14B81375006FDB52 /* NSString+RSExtensions.m in Sources */,
-				07A7A0FE14B8C83900507FC7 /* WCCompletionWindow.m in Sources */,
 				07713F1614B9551400324F77 /* EncodingManager.m in Sources */,
 				07713F1914B9586400324F77 /* NSUserDefaults+RSExtensions.m in Sources */,
 				07862BA614BA33040057EB89 /* WCDocumentController.m in Sources */,
