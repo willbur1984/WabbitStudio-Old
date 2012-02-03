@@ -17,6 +17,10 @@ NSString *const WCSourceScannerDidFinishScanningNotification = @"WCSourceScanner
 NSString *const WCSourceScannerDidFinishScanningSymbolsNotification = @"WCSourceScannerDidFinishScanningSymbolsNotification";
 NSString *const WCSourceScannerDidFinishScanningFoldsNotification = @"WCSourceScannerDidFinishScanningFoldsNotification";
 
+@interface WCSourceScanner ()
+
+@end
+
 @implementation WCSourceScanner
 #pragma mark *** Subclass Overrides ***
 - (void)dealloc {
