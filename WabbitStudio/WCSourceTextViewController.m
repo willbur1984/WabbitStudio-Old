@@ -383,7 +383,7 @@
 
 #pragma mark Notifications
 - (void)_viewBoundsDidChange:(NSNotification *)note {
-	//[[self sourceHighlighter] performHighlightingInRange:[[self textView] visibleRange]];
+	[[self sourceHighlighter] highlightSymbolsInRange:[[self textView] visibleRange]];
 	
 	/*
 	if (_scrollingHighlightTimer)

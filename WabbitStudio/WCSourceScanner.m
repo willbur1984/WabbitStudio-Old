@@ -121,7 +121,7 @@ NSString *const WCSourceScannerDidFinishScanningFoldsNotification = @"WCSourceSc
 	static NSRegularExpression *retval;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		retval = [[NSRegularExpression alloc] initWithPattern:@"^\\s+(?:adc|add|and|bit|call|ccf|cpdr|cpd|cpir|cpi|cpl|cp|daa|dec|di|djnz|ei|exx|ex|halt|im|inc|indr|ind|inir|ini|in|jp|jr|lddr|ldd|ldir|ldi|ld|neg|nop|or|otdr|otir|outd|outi|out|pop|push|res|reti|retn|ret|rla|rlca|rlc|rld|rl|rra|rrca|rrc|rrd|rr|rst|sbc|scf|set|sla|sll|sra|srl|sub|xor)\\b" options:NSRegularExpressionAnchorsMatchLines error:NULL];
+		retval = [[NSRegularExpression alloc] initWithPattern:@"\\b(?:adc|add|and|bit|call|ccf|cpdr|cpd|cpir|cpi|cpl|cp|daa|dec|di|djnz|ei|exx|ex|halt|im|inc|indr|ind|inir|ini|in|jp|jr|lddr|ldd|ldir|ldi|ld|neg|nop|or|otdr|otir|outd|outi|out|pop|push|res|reti|retn|ret|rla|rlca|rlc|rld|rl|rra|rrca|rrc|rrd|rr|rst|sbc|scf|set|sla|sll|sra|srl|sub|xor)\\b" options:NSRegularExpressionAnchorsMatchLines error:NULL];
 	});
 	return retval;
 }
@@ -129,7 +129,7 @@ NSString *const WCSourceScannerDidFinishScanningFoldsNotification = @"WCSourceSc
 	static NSRegularExpression *retval;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		retval = [[NSRegularExpression alloc] initWithPattern:@"\\b(?:ixh|iyh|ixl|iyl|sp|af|pc|bc|de|hl|ix|iy|a|f|b|c|d|e|h|l|r|i)\\b" options:0 error:NULL];
+		retval = [[NSRegularExpression alloc] initWithPattern:@"(?:\\b(?:ixh|iyh|ixl|iyl|sp|af|pc|bc|de|hl|ix|iy|a|f|b|c|d|e|h|l|r|i)\\b)|(?:\\baf')" options:0 error:NULL];
 	});
 	return retval;
 }

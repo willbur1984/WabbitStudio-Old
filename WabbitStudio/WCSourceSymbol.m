@@ -13,6 +13,8 @@
 #import "WCSourceScanner.h"
 #import "NSString+RSExtensions.h"
 
+NSString *const WCSourceSymbolTypeAttributeName = @"WCSourceSymbolTypeAttributeName";
+
 @interface WCSourceSymbol ()
 + (NSImage *)_sourceSymbolIconForSourceSymbolType:(WCSourceSymbolType)sourceSymbolType;
 @end

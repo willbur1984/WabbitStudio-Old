@@ -13,12 +13,15 @@
 #import "WCOpenQuicklyItem.h"
 
 typedef enum _WCSourceSymbolType {
+	WCSourceSymbolTypeNone = 0,
 	WCSourceSymbolTypeLabel,
 	WCSourceSymbolTypeEquate,
 	WCSourceSymbolTypeDefine,
 	WCSourceSymbolTypeMacro
 	
 } WCSourceSymbolType;
+
+extern NSString *const WCSourceSymbolTypeAttributeName;
 
 @class WCSourceScanner;
 

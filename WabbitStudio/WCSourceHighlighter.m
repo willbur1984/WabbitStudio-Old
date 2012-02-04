@@ -16,6 +16,7 @@
 #import "WCFontAndColorThemeManager.h"
 #import "RSDefines.h"
 #import "WCSourceTextStorage.h"
+#import "WCSourceSymbol.h"
 
 @interface WCSourceHighlighter ()
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
@@ -47,7 +48,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidProcessEditing:) name:NSTextStorageDidProcessEditingNotification object:[sourceScanner textStorage]];
 	
 	if ([sourceScanner needsToScanSymbols]) {
-		//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_sourceScannerDidFinishScanningSymbols:) name:WCSourceScannerDidFinishScanningSymbolsNotification object:sourceScanner];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_sourceScannerDidFinishScanningSymbols:) name:WCSourceScannerDidFinishScanningSymbolsNotification object:sourceScanner];
 	}
 	else {
 		//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_sourceScannerDidFinishScanning:) name:WCSourceScannerDidFinishScanningNotification object:sourceScanner];
@@ -65,8 +66,7 @@
 	}
 }
 
-- (void)highlightTokensInVisibleRange; {
-	/*
+- (void)highlightSymbolsInVisibleRange; {
 	NSMutableIndexSet *ranges = [NSMutableIndexSet indexSet];
 	for (NSLayoutManager *layoutManager in [[[self sourceScanner] textStorage] layoutManagers]) {
 		for (NSTextContainer *textContainer in [layoutManager textContainers]) {
@@ -74,9 +74,48 @@
 		}
 	}
 	[ranges enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
-		[self _highlightInRange:range];
+		[self highlightSymbolsInRange:range];
 	}];
-	 */
+}
+
+- (void)highlightSymbolsInRange:(NSRange)range; {
+	if (!range.length)
+		return;
+	
+	[[[self sourceScanner] textStorage] beginEditing];
+	
+	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
+	
+	[[[self sourceScanner] textStorage] removeAttribute:WCSourceSymbolTypeAttributeName range:range];
+	
+	NSArray *labelNames = [[self delegate] labelSymbolsForSourceHighlighter:self];
+	NSArray *equateNames = [[self delegate] equateSymbolsForSourceHighlighter:self];	
+	NSArray *defineNames = [[self delegate] defineSymbolsForSourceHighlighter:self];
+	NSArray *macroNames = [[self delegate] macroSymbolsForSourceHighlighter:self];
+	//NSArray *tokens = [[self sourceScanner] tokens];
+	
+	[[WCSourceScanner symbolRegularExpression] enumerateMatchesInString:[[[self sourceScanner] textStorage] string] options:0 range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+		id tokenType = [[[self sourceScanner] textStorage] attribute:WCSourceTokenTypeAttributeName atIndex:[result range].location effectiveRange:NULL];
+		if (tokenType)
+			return;
+		
+		NSString *name = [[[[[self sourceScanner] textStorage] string] substringWithRange:[result range]] lowercaseString];
+		
+		if ([self _symbolName:name existsInArrayOfSymbolNames:equateNames]) {
+			[[[self sourceScanner] textStorage] addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme equateFont],NSFontAttributeName,[currentTheme equateColor],NSForegroundColorAttributeName,[NSNumber numberWithUnsignedInt:WCSourceSymbolTypeEquate],WCSourceSymbolTypeAttributeName, nil] range:[result range]];
+		}
+		else if ([self _symbolName:name existsInArrayOfSymbolNames:labelNames]) {
+			[[[self sourceScanner] textStorage] addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme labelFont],NSFontAttributeName,[currentTheme labelColor],NSForegroundColorAttributeName,[NSNumber numberWithUnsignedInt:WCSourceSymbolTypeLabel],WCSourceSymbolTypeAttributeName,nil] range:[result range]];
+		}
+		else if ([self _symbolName:name existsInArrayOfSymbolNames:macroNames]) {
+			[[[self sourceScanner] textStorage] addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme macroFont],NSFontAttributeName,[currentTheme macroColor],NSForegroundColorAttributeName,[NSNumber numberWithUnsignedInt:WCSourceSymbolTypeMacro],WCSourceSymbolTypeAttributeName,nil] range:[result range]];
+		}
+		else if ([self _symbolName:name existsInArrayOfSymbolNames:defineNames]) {
+			[[[self sourceScanner] textStorage] addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme defineFont],NSFontAttributeName,[currentTheme defineColor],NSForegroundColorAttributeName,[NSNumber numberWithUnsignedInt:WCSourceSymbolTypeDefine],WCSourceSymbolTypeAttributeName,nil] range:[result range]];
+		}
+	}];
+	
+	[[[self sourceScanner] textStorage] endEditing];
 }
 
 - (void)performHighlightingInVisibleRange; {
@@ -404,10 +443,10 @@
 
 - (void)_sourceScannerDidFinishScanningSymbols:(NSNotification *)note {
 	//[self performFullHighlightIfNeeded];
-	//[self performHighlightingInVisibleRange];
+	[self highlightSymbolsInVisibleRange];
 }
 - (void)_textStorageDidFold:(NSNotification *)note {
-	//[self performHighlightingInVisibleRange];
+	[self highlightSymbolsInVisibleRange];
 }
 
 @end

@@ -21,7 +21,8 @@
 - (id)initWithSourceScanner:(WCSourceScanner *)sourceScanner;
 
 - (void)performFullHighlightIfNeeded;
-- (void)highlightTokensInVisibleRange;
+- (void)highlightSymbolsInVisibleRange;
+- (void)highlightSymbolsInRange:(NSRange)range;
 
 - (void)performHighlightingInVisibleRange;
 - (void)performHighlightingInRange:(NSRange)range;
