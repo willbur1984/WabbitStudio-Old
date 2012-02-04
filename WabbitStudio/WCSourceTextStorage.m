@@ -31,6 +31,7 @@ NSString *const WCSourceTextStorageFoldRangeUserInfoKey = @"WCSourceTextStorageF
 
 @interface WCSourceTextStorage ()
 - (void)_calculateLineStartIndexes;
+- (void)_calculateLineStartIndexesStartingAtLineNumber:(NSUInteger)lineNumber;
 - (void)_updateParagraphStyle;
 - (void)_commonInit;
 @end
@@ -92,7 +93,7 @@ NSString *const WCSourceTextStorageFoldRangeUserInfoKey = @"WCSourceTextStorageF
 			
             // We adds NSAttachmentAttributeName if in lineFoldingAttributeName
             if (location == effectiveRange.location) { // beginning of a folded range
-                NSMutableDictionary *dict = [attributes mutableCopyWithZone:NULL];
+                NSMutableDictionary *dict = [attributes mutableCopy];
 				
 				static NSTextAttachment *attachment;
 				static WCFoldAttachmentCell *cell;
@@ -111,10 +112,12 @@ NSString *const WCSourceTextStorageFoldRangeUserInfoKey = @"WCSourceTextStorageF
 				
                 effectiveRange.length = 1;
             } else {
-                ++(effectiveRange.location); --(effectiveRange.length);
+                ++(effectiveRange.location);
+				--(effectiveRange.length);
             }
 			
-            if (range) *range = effectiveRange;
+            if (range)
+				*range = effectiveRange;
         }
     }
 	 
@@ -123,7 +126,11 @@ NSString *const WCSourceTextStorageFoldRangeUserInfoKey = @"WCSourceTextStorageF
 }
 - (void)replaceCharactersInRange:(NSRange)range withString:(NSString *)string; {
 	[_attributedString replaceCharactersInRange:range withString:string];
-	[self _calculateLineStartIndexes];
+	
+	NSUInteger lineNumber = [[self lineStartIndexes] lineNumberForRange:range];
+	
+	[self _calculateLineStartIndexesStartingAtLineNumber:lineNumber];
+	
 	[self edited:NSTextStorageEditedCharacters range:range changeInLength:[string length] - range.length];
 }
 - (void)setAttributes:(NSDictionary *)attrs range:(NSRange)range; {
@@ -131,10 +138,8 @@ NSString *const WCSourceTextStorageFoldRangeUserInfoKey = @"WCSourceTextStorageF
 	[self edited:NSTextStorageEditedAttributes range:range changeInLength:0];
 }
 
-- (void)fixParagraphStyleAttributeInRange:(NSRange)range {	
-	NSRange paragraphRange = [[self string] paragraphRangeForRange:range];
-	
-	[self addAttribute:NSParagraphStyleAttributeName value:[self paragraphStyle] range:paragraphRange];
+- (BOOL)fixesAttributesLazily {
+	return YES;
 }
 
 - (void)fixAttachmentAttributeInRange:(NSRange)range {
@@ -289,8 +294,8 @@ NSString *const WCSourceTextStorageFoldRangeUserInfoKey = @"WCSourceTextStorageF
 	_textStorageFlags.lineFoldingEnabled = lineFoldingEnabled;
 }
 #pragma mark *** Private Methods ***
-- (void)_commonInit; {
-	_lineStartIndexes = [[NSMutableArray alloc] initWithCapacity:0];
+- (void)_commonInit; {	
+	_lineStartIndexes = [[NSMutableArray alloc] initWithObjects:[NSNumber numberWithUnsignedInteger:0], nil];
 	_bookmarks = [[NSMutableArray alloc] initWithCapacity:0];
 	
 	[self setupUserDefaultsObserving];
@@ -303,11 +308,13 @@ NSString *const WCSourceTextStorageFoldRangeUserInfoKey = @"WCSourceTextStorageF
 }
 
 - (void)_calculateLineStartIndexes; {
-	NSUInteger characterIndex = 0, stringLength = [[self string] length], lineEnd, contentEnd;
+	[self _calculateLineStartIndexesStartingAtLineNumber:0];
+}
+- (void)_calculateLineStartIndexesStartingAtLineNumber:(NSUInteger)lineNumber {
+	NSUInteger characterIndex = [[_lineStartIndexes objectAtIndex:lineNumber] unsignedIntegerValue], stringLength = [[self string] length], lineEnd, contentEnd;
 	
-	[_lineStartIndexes removeAllObjects];
+	[_lineStartIndexes removeObjectsInRange:NSMakeRange(lineNumber, [_lineStartIndexes count]-lineNumber)];
 	
-	// ensures we get a single line number even if the string is empty
 	do {
 		[_lineStartIndexes addObject:[NSNumber numberWithUnsignedInteger:characterIndex]];
 		
@@ -315,7 +322,6 @@ NSString *const WCSourceTextStorageFoldRangeUserInfoKey = @"WCSourceTextStorageF
 		
 	} while (characterIndex < stringLength);
 	
-	// Check if text ends with a new line.
 	[[self string] getLineStart:NULL end:&lineEnd contentsEnd:&contentEnd forRange:NSMakeRange([[_lineStartIndexes lastObject] unsignedIntegerValue], 0)];
 	if (contentEnd < lineEnd)
 		[_lineStartIndexes addObject:[NSNumber numberWithUnsignedInteger:characterIndex]];

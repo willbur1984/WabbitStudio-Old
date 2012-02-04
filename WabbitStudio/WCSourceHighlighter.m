@@ -20,6 +20,7 @@
 @interface WCSourceHighlighter ()
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
 
+- (void)_highlightInRange:(NSRange)range;
 - (BOOL)_symbolName:(NSString *)symbolName existsInArrayOfSymbolNames:(NSArray *)arrayOfSymbolNames;
 @end
 
@@ -40,24 +41,46 @@
 	if (!(self = [super init]))
 		return nil;
 	
-	//_needsToPerformFullHighlight = YES;
+	_needsToPerformFullHighlight = YES;
 	_sourceScanner = sourceScanner;
 	
-	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageWillProcessEditing:) name:NSTextStorageWillProcessEditingNotification object:[sourceScanner textStorage]];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidProcessEditing:) name:NSTextStorageDidProcessEditingNotification object:[sourceScanner textStorage]];
 	
 	if ([sourceScanner needsToScanSymbols]) {
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_sourceScannerDidFinishScanningSymbols:) name:WCSourceScannerDidFinishScanningSymbolsNotification object:sourceScanner];
+		//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_sourceScannerDidFinishScanningSymbols:) name:WCSourceScannerDidFinishScanningSymbolsNotification object:sourceScanner];
 	}
 	else {
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_sourceScannerDidFinishScanning:) name:WCSourceScannerDidFinishScanningNotification object:sourceScanner];
+		//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_sourceScannerDidFinishScanning:) name:WCSourceScannerDidFinishScanningNotification object:sourceScanner];
 	}
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidFold:) name:WCSourceTextStorageDidFoldNotification object:[sourceScanner textStorage]];
+	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidFold:) name:WCSourceTextStorageDidFoldNotification object:[sourceScanner textStorage]];
 	
 	return self;
 }
 
+- (void)performFullHighlightIfNeeded; {
+	if (_needsToPerformFullHighlight) {
+		_needsToPerformFullHighlight = NO;
+		[self _highlightInRange:NSMakeRange(0, [[[self sourceScanner] textStorage] length])];
+	}
+}
+
+- (void)highlightTokensInVisibleRange; {
+	/*
+	NSMutableIndexSet *ranges = [NSMutableIndexSet indexSet];
+	for (NSLayoutManager *layoutManager in [[[self sourceScanner] textStorage] layoutManagers]) {
+		for (NSTextContainer *textContainer in [layoutManager textContainers]) {
+			[ranges addIndexesInRange:[[textContainer textView] visibleRange]];
+		}
+	}
+	[ranges enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
+		[self _highlightInRange:range];
+	}];
+	 */
+}
+
 - (void)performHighlightingInVisibleRange; {
+	/*
 	NSMutableIndexSet *ranges = [NSMutableIndexSet indexSet];
 	for (NSLayoutManager *layoutManager in [[[self sourceScanner] textStorage] layoutManagers]) {
 		for (NSTextContainer *textContainer in [layoutManager textContainers]) {
@@ -67,9 +90,11 @@
 	[ranges enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
 		[self performHighlightingInRange:range];
 	}];
+	 */
 }
 
 - (void)performHighlightingInRange:(NSRange)range; {
+	/*
 	if (![[[self sourceScanner] textStorage] length])
 		return;
 	
@@ -150,6 +175,7 @@
 	}
 	
 	[[[self sourceScanner] textStorage] endEditing];
+	 */
 }
 
 - (void)highlightAttributeString:(NSMutableAttributedString *)attributedString; {
@@ -242,6 +268,67 @@
 @synthesize sourceScanner=_sourceScanner;
 @synthesize delegate=_delegate;
 #pragma mark *** Private Methods ***
+- (void)_highlightInRange:(NSRange)range; {	
+	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
+	NSTextStorage *textStorage = [[self sourceScanner] textStorage];
+	
+	[textStorage beginEditing];
+	
+	[textStorage removeAttribute:WCSourceTokenTypeAttributeName range:range];
+	[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName, nil] range:range];
+	
+	[[WCSourceScanner registerRegularExpression] enumerateMatchesInString:[textStorage string] options:0 range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+		[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme registerFont],NSFontAttributeName,[currentTheme registerColor],NSForegroundColorAttributeName,[NSNumber numberWithUnsignedInt:WCSourceTokenTypeRegister],WCSourceTokenTypeAttributeName, nil] range:[result range]];
+	}];
+	
+	[[WCSourceScanner conditionalRegularExpression] enumerateMatchesInString:[textStorage string] options:0 range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+		[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme conditionalFont],NSFontAttributeName,[currentTheme conditionalColor],NSForegroundColorAttributeName,[NSNumber numberWithUnsignedInt:WCSourceTokenTypeConditional],WCSourceTokenTypeAttributeName, nil] range:[result range]];
+	}];
+	
+	[[WCSourceScanner mnemonicRegularExpression] enumerateMatchesInString:[textStorage string] options:0 range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+		[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme mneumonicFont],NSFontAttributeName,[currentTheme mneumonicColor],NSForegroundColorAttributeName,[NSNumber numberWithUnsignedInt:WCSourceTokenTypeMneumonic],WCSourceTokenTypeAttributeName, nil] range:[result range]];
+	}];
+	
+	[[WCSourceScanner directiveRegularExpression] enumerateMatchesInString:[textStorage string] options:0 range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+		[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme directiveFont],NSFontAttributeName,[currentTheme directiveColor],NSForegroundColorAttributeName,[NSNumber numberWithUnsignedInt:WCSourceTokenTypeDirective],WCSourceTokenTypeAttributeName, nil] range:[result range]];
+	}];
+	
+	[[WCSourceScanner numberRegularExpression] enumerateMatchesInString:[textStorage string] options:0 range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+		[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme numberFont],NSFontAttributeName,[currentTheme numberColor],NSForegroundColorAttributeName,[NSNumber numberWithUnsignedInt:WCSourceTokenTypeNumber],WCSourceTokenTypeAttributeName, nil] range:[result range]];
+	}];
+	
+	[[WCSourceScanner binaryRegularExpression] enumerateMatchesInString:[textStorage string] options:0 range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+		[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme binaryFont],NSFontAttributeName,[currentTheme binaryColor],NSForegroundColorAttributeName,[NSNumber numberWithUnsignedInt:WCSourceTokenTypeBinary],WCSourceTokenTypeAttributeName, nil] range:[result range]];
+	}];
+	
+	[[WCSourceScanner hexadecimalRegularExpression] enumerateMatchesInString:[textStorage string] options:0 range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+		[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme hexadecimalFont],NSFontAttributeName,[currentTheme hexadecimalColor],NSForegroundColorAttributeName,[NSNumber numberWithUnsignedInt:WCSourceTokenTypeHexadecimal],WCSourceTokenTypeAttributeName, nil] range:[result range]];
+	}];
+	
+	[[WCSourceScanner preProcessorRegularExpression] enumerateMatchesInString:[textStorage string] options:0 range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+		[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme preProcessorFont],NSFontAttributeName,[currentTheme preProcessorColor],NSForegroundColorAttributeName,[NSNumber numberWithUnsignedInt:WCSourceTokenTypePreProcessor],WCSourceTokenTypeAttributeName, nil] range:[result range]];
+	}];
+	
+	[[WCSourceScanner stringRegularExpression] enumerateMatchesInString:[textStorage string] options:0 range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+		[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme stringFont],NSFontAttributeName,[currentTheme stringColor],NSForegroundColorAttributeName,[NSNumber numberWithUnsignedInt:WCSourceTokenTypeString],WCSourceTokenTypeAttributeName, nil] range:[result range]];
+	}];
+	
+	[[WCSourceScanner commentRegularExpression] enumerateMatchesInString:[textStorage string] options:0 range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+		[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme commentFont],NSFontAttributeName,[currentTheme commentColor],NSForegroundColorAttributeName,[NSNumber numberWithUnsignedInt:WCSourceTokenTypeComment],WCSourceTokenTypeAttributeName, nil] range:[result range]];
+	}];
+	
+	[[WCSourceScanner multilineCommentRegularExpression] enumerateMatchesInString:[textStorage string] options:0 range:NSMakeRange(0, [[[self sourceScanner] textStorage] length]) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+		if ([result range].location > NSMaxRange(range)) {
+			*stop = YES;
+			return;
+		}
+		else if (NSIntersectionRange([result range], range).length)
+			[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme commentFont],NSFontAttributeName,[currentTheme commentColor],NSForegroundColorAttributeName,[NSNumber numberWithUnsignedInt:WCSourceTokenTypeMultilineComment],WCSourceTokenTypeAttributeName, nil] range:[result range]];
+	}];
+	
+	[textStorage endEditing];
+}
+
 - (BOOL)_symbolName:(NSString *)symbolName existsInArrayOfSymbolNames:(NSArray *)arrayOfSymbolNames; {
 	for (NSDictionary *symbolNames in arrayOfSymbolNames) {
 		if ([symbolNames objectForKey:symbolName])
@@ -250,17 +337,77 @@
 	return NO;
 }
 #pragma mark Notifications
+- (void)_textStorageDidProcessEditing:(NSNotification *)note {
+	if (([[note object] editedMask] & NSTextStorageEditedCharacters) == 0)
+		return;
+	else if (![[note object] length])
+		return;
+	//else
+	//	return;
+	
+	NSRange editedRange = [[note object] editedRange];
+	NSInteger changeInLength = [[note object] changeInLength];
+	NSUInteger stringLength = [[note object] length];
+	NSInteger delta;
+	
+	if (changeInLength < 0 && NSMaxRange(editedRange) >= stringLength) {
+		delta = editedRange.location + changeInLength;
+		
+		if (delta < 0)
+			delta = 0;
+		
+		editedRange.location = delta;
+	}
+	else if (NSMaxRange(editedRange) > stringLength) {
+		if (changeInLength < 0) {
+			delta = editedRange.location + changeInLength;
+			
+			if (delta < 0)
+				delta = 0;
+			
+			editedRange.location = delta;
+		}
+		else if (changeInLength > 0) {
+			delta = editedRange.location - changeInLength;
+			
+			if (delta < 0)
+				delta = 0;
+			
+			editedRange.location = delta;
+		}
+	}
+	
+	NSRange lineRange = [[[note object] string] lineRangeForRange:editedRange];
+	if (lineRange.location != editedRange.location) {
+		delta = editedRange.location;
+		
+		if ((--delta) < 0)
+			delta = 0;
+		
+		editedRange.location = delta;
+	}
+	
+	NSRange tokenRange;
+	id tokenType = [[note object] attribute:WCSourceTokenTypeAttributeName atIndex:editedRange.location longestEffectiveRange:&tokenRange inRange:NSMakeRange(0, [[note object] length])];
+	
+	if ([tokenType unsignedIntValue] == WCSourceTokenTypeMultilineComment)
+		tokenRange = [[[note object] string] lineRangeForRange:tokenRange];
+	else
+		tokenRange = lineRange;
+	
+	[self _highlightInRange:tokenRange];
+}
 
 - (void)_sourceScannerDidFinishScanning:(NSNotification *)note {
-	[self performHighlightingInVisibleRange];
+	//[self performHighlightingInVisibleRange];
 }
 
 - (void)_sourceScannerDidFinishScanningSymbols:(NSNotification *)note {
 	//[self performFullHighlightIfNeeded];
-	[self performHighlightingInVisibleRange];
+	//[self performHighlightingInVisibleRange];
 }
 - (void)_textStorageDidFold:(NSNotification *)note {
-	[self performHighlightingInVisibleRange];
+	//[self performHighlightingInVisibleRange];
 }
 
 @end

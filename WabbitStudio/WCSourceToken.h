@@ -9,18 +9,22 @@
 #import <Foundation/NSObject.h>
 
 typedef enum _WCSourceTokenType {
-	WCSourceTokenTypeComment = 0,
-	WCSourceTokenTypeRegister = 1,
-	WCSourceTokenTypeString = 2,
-	WCSourceTokenTypeMneumonic = 3,
-	WCSourceTokenTypeNumber = 4,
-	WCSourceTokenTypeHexadecimal = 5,
-	WCSourceTokenTypeBinary = 6,
-	WCSourceTokenTypePreProcessor = 7,
-	WCSourceTokenTypeDirective = 8,
-	WCSourceTokenTypeConditional = 9
+	WCSourceTokenTypeNone = 0,
+	WCSourceTokenTypeComment,
+	WCSourceTokenTypeMultilineComment,
+	WCSourceTokenTypeRegister,
+	WCSourceTokenTypeString,
+	WCSourceTokenTypeMneumonic,
+	WCSourceTokenTypeNumber,
+	WCSourceTokenTypeHexadecimal,
+	WCSourceTokenTypeBinary,
+	WCSourceTokenTypePreProcessor,
+	WCSourceTokenTypeDirective,
+	WCSourceTokenTypeConditional
 	
 } WCSourceTokenType;
+
+extern NSString *const WCSourceTokenTypeAttributeName;
 
 @interface WCSourceToken : NSObject {
 	WCSourceTokenType _type;

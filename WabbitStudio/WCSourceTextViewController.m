@@ -120,7 +120,7 @@
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewBoundsDidChange:) name:NSViewBoundsDidChangeNotification object:[[self scrollView] contentView]];
 	
-	//[self performSelector:@selector(_delayedHighlightVisibleRange) withObject:nil afterDelay:0.0];
+	[[self sourceHighlighter] performFullHighlightIfNeeded];
 }
 #pragma mark NSMenuValidation
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
@@ -377,13 +377,13 @@
 @synthesize sourceFileDocument=_sourceFileDocument;
 #pragma mark *** Private Methods ***
 - (void)_delayedHighlightVisibleRange; {
-	[[self sourceHighlighter] performHighlightingInRange:[[self textView] visibleRange]];
+	//[[self sourceHighlighter] performHighlightingInRange:[[self textView] visibleRange]];
 }
 #pragma mark IBActions
 
 #pragma mark Notifications
 - (void)_viewBoundsDidChange:(NSNotification *)note {
-	[[self sourceHighlighter] performHighlightingInRange:[[self textView] visibleRange]];
+	//[[self sourceHighlighter] performHighlightingInRange:[[self textView] visibleRange]];
 	
 	/*
 	if (_scrollingHighlightTimer)
@@ -400,6 +400,6 @@
 	[_scrollingHighlightTimer invalidate];
 	_scrollingHighlightTimer = nil;
 	
-	[[self sourceHighlighter] performHighlightingInRange:[[self textView] visibleRange]];
+	//[[self sourceHighlighter] performHighlightingInRange:[[self textView] visibleRange]];
 }
 @end

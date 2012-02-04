@@ -20,6 +20,9 @@
 
 - (id)initWithSourceScanner:(WCSourceScanner *)sourceScanner;
 
+- (void)performFullHighlightIfNeeded;
+- (void)highlightTokensInVisibleRange;
+
 - (void)performHighlightingInVisibleRange;
 - (void)performHighlightingInRange:(NSRange)range;
 

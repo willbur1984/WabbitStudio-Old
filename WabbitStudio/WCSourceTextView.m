@@ -917,6 +917,12 @@
 		[self setSelectedRange:NSMakeRange(NSMaxRange([fold contentRange]), 0)];
 	}
 }
+- (IBAction)foldAll:(id)sender; {
+	NSArray *folds = [[[self delegate] sourceScannerForSourceTextView:self] folds];
+	
+	for (WCFold *fold in folds)
+		[[self sourceTextStorage] foldRange:[fold contentRange]];
+}
 - (IBAction)unfold:(id)sender; {
 	NSRange effectiveRange;
 	if (![(WCSourceTextStorage *)[self textStorage] unfoldRange:[self selectedRange] effectiveRange:&effectiveRange] &&
@@ -1013,10 +1019,10 @@
 	[self setAutomaticDataDetectionEnabled:NO];
 	[self setAutomaticLinkDetectionEnabled:YES];
 	[self setAutomaticQuoteSubstitutionEnabled:NO];
-	[self setAutomaticSpellingCorrectionEnabled:YES];
+	[self setAutomaticSpellingCorrectionEnabled:NO];
 	[self setAutomaticTextReplacementEnabled:NO];
 	[self setAutoresizingMask:NSViewHeightSizable|NSViewWidthSizable|NSViewMinXMargin|NSViewMinYMargin];
-	[self setContinuousSpellCheckingEnabled:YES];
+	[self setContinuousSpellCheckingEnabled:NO];
 	[self setDisplaysLinkToolTips:YES];
 	[self setDrawsBackground:YES];
 	[self setSelectable:YES];

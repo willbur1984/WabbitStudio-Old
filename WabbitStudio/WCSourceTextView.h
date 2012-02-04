@@ -50,6 +50,7 @@
 - (IBAction)jumpToPreviousBookmark:(id)sender;
 
 - (IBAction)fold:(id)sender;
+- (IBAction)foldAll:(id)sender;
 - (IBAction)unfold:(id)sender;
 - (IBAction)unfoldAll:(id)sender;
 - (IBAction)foldCommentBlocks:(id)sender;

@@ -11,6 +11,8 @@
 #import "WCFontAndColorTheme.h"
 #import "WCFontAndColorThemeManager.h"
 
+NSString *const WCSourceTokenTypeAttributeName = @"WCSourceTokenTypeAttributeName";
+
 @interface WCSourceToken ()
 + (NSImage *)_sourceTokenIconForSourceTokenType:(WCSourceTokenType)sourceTokenType;
 @end

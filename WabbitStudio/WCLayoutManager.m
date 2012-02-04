@@ -27,7 +27,7 @@
 	if (!(self = [super init]))
 		return nil;
 	
-	[self setBackgroundLayoutEnabled:YES];
+	//[self setBackgroundLayoutEnabled:YES];
 	[self setAllowsNonContiguousLayout:YES];
 	[self setShowsInvisibleCharacters:[[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowInvisibleCharactersKey]];
 	

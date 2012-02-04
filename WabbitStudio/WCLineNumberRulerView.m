@@ -27,7 +27,7 @@
 @property (readonly,nonatomic) NSDictionary *selectedTextAttributes;
 
 - (void)_calculateLineStartIndexes;
-
+- (void)_calculateLineStartIndexesStartingAtLineNumber:(NSUInteger)lineNumber;
 @end
 
 @implementation WCLineNumberRulerView
@@ -46,7 +46,8 @@
 	if (!(self = [super initWithScrollView:scrollView orientation:NSVerticalRuler]))
 		return nil;
 	
-	_lineStartIndexes = [[NSMutableArray alloc] initWithCapacity:0];
+	_lineStartIndexes = [[NSMutableArray alloc] initWithObjects:[NSNumber numberWithUnsignedInteger:0], nil];
+	_lineNumberToRecalculateFrom = 0;
 	
 	[self setupUserDefaultsObserving];
 	
@@ -241,7 +242,7 @@
 	if ([self shouldRecalculateLineStartIndexes]) {
 		[self setShouldRecalculateLineStartIndexes:NO];
 		
-		[self _calculateLineStartIndexes];
+		[self _calculateLineStartIndexesStartingAtLineNumber:_lineNumberToRecalculateFrom];
 	}
 	return [[_lineStartIndexes copy] autorelease];
 }
@@ -296,9 +297,13 @@
 }
 #pragma mark *** Private Methods ***
 - (void)_calculateLineStartIndexes; {
-	NSUInteger characterIndex = 0, stringLength = [[[self textView] string] length], lineEnd, contentEnd;
+	[self _calculateLineStartIndexesStartingAtLineNumber:0];
+}
+
+- (void)_calculateLineStartIndexesStartingAtLineNumber:(NSUInteger)lineNumber; {
+	NSUInteger characterIndex = [[_lineStartIndexes objectAtIndex:lineNumber] unsignedIntegerValue], stringLength = [[[self textView] string] length], lineEnd, contentEnd;
 	
-	[_lineStartIndexes removeAllObjects];
+	[_lineStartIndexes removeObjectsInRange:NSMakeRange(lineNumber, [_lineStartIndexes count]-lineNumber)];
 	
 	do {
 		[_lineStartIndexes addObject:[NSNumber numberWithUnsignedInteger:characterIndex]];
@@ -307,7 +312,6 @@
 		
 	} while (characterIndex < stringLength);
 	
-	// Check if text ends with a new line.
 	[[[self textView] string] getLineStart:NULL end:&lineEnd contentsEnd:&contentEnd forRange:NSMakeRange([[_lineStartIndexes lastObject] unsignedIntegerValue], 0)];
 	if (contentEnd < lineEnd)
 		[_lineStartIndexes addObject:[NSNumber numberWithUnsignedInteger:characterIndex]];
@@ -316,6 +320,10 @@
 - (void)_textStorageDidProcessEditing:(NSNotification *)note {
 	if (([[note object] editedMask] & NSTextStorageEditedCharacters) == 0)
 		return;
+	
+	NSUInteger lineNumber = [[self lineStartIndexes] lineNumberForRange:[[note object] editedRange]];
+	
+	_lineNumberToRecalculateFrom = lineNumber;
 	
 	[self setShouldRecalculateLineStartIndexes:YES];
     [self setNeedsDisplay:YES];

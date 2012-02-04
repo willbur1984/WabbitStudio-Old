@@ -18,6 +18,7 @@
 @interface WCLineNumberRulerView : NSRulerView {
 	NSMutableArray *_lineStartIndexes;
 	BOOL _shouldRecalculateLineStartIndexes;
+	NSUInteger _lineNumberToRecalculateFrom;
 }
 /** Accessor for the `_lineStartIndexes` array of starting line indexes.
  

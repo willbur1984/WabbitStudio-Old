@@ -7,6 +7,16 @@
 		<key>name</key>
 		<string>#defcont</string>
 	</dict>
+	<key>#comment</key>
+	<dict>
+		<key>name</key>
+		<string>#comment</string>
+	</dict>
+	<key>#endcomment</key>
+	<dict>
+		<key>name</key>
+		<string>#endcomment</string>
+	</dict>
 	<key>#elif</key>
 	<dict>
 		<key>name</key>
