@@ -35,7 +35,6 @@
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
 @property (readonly,nonatomic) WCStandardSourceTextViewController *standardSourceTextViewController;
 
-- (void)_delayedHighlightVisibleRange;
 @end
 
 @implementation WCSourceTextViewController
@@ -119,6 +118,7 @@
 	[[self textView] setSelectedRange:NSEmptyRange];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewBoundsDidChange:) name:NSViewBoundsDidChangeNotification object:[[self scrollView] contentView]];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewBoundsDidChange:) name:NSViewFrameDidChangeNotification object:[[self scrollView] contentView]];
 	
 	[[self sourceHighlighter] performFullHighlightIfNeeded];
 }
@@ -376,30 +376,25 @@
 @synthesize standardSourceTextViewController=_standardSourceTextViewController;
 @synthesize sourceFileDocument=_sourceFileDocument;
 #pragma mark *** Private Methods ***
-- (void)_delayedHighlightVisibleRange; {
-	//[[self sourceHighlighter] performHighlightingInRange:[[self textView] visibleRange]];
-}
+
 #pragma mark IBActions
 
 #pragma mark Notifications
 - (void)_viewBoundsDidChange:(NSNotification *)note {
-	[[self sourceHighlighter] highlightSymbolsInRange:[[self textView] visibleRange]];
+	//[[self sourceHighlighter] highlightSymbolsInRange:[[self textView] visibleRange]];
 	
-	/*
 	if (_scrollingHighlightTimer)
 		[_scrollingHighlightTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
 	else {
 		_scrollingHighlightTimer = [NSTimer timerWithTimeInterval:0.1 target:self selector:@selector(_scrollingHighlightTimerCallback:) userInfo:nil repeats:NO];
 		[[NSRunLoop mainRunLoop] addTimer:_scrollingHighlightTimer forMode:NSRunLoopCommonModes];
 	}
-	 */
-	 
 }
 #pragma mark Callbacks
 - (void)_scrollingHighlightTimerCallback:(NSTimer *)timer {
 	[_scrollingHighlightTimer invalidate];
 	_scrollingHighlightTimer = nil;
 	
-	//[[self sourceHighlighter] performHighlightingInRange:[[self textView] visibleRange]];
+	[[self sourceHighlighter] highlightSymbolsInRange:[[self textView] visibleRange]];
 }
 @end

@@ -18,6 +18,8 @@
 #import "WCSourceTextStorage.h"
 #import "WCSourceSymbol.h"
 
+static NSString *const WCSourceHighlighterSymbolAttributeName = @"WCSourceHighlighterSymbolAttributeName";
+
 @interface WCSourceHighlighter ()
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
 
@@ -54,6 +56,9 @@
 		//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_sourceScannerDidFinishScanning:) name:WCSourceScannerDidFinishScanningNotification object:sourceScanner];
 	}
 	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_currentThemeDidChange:) name:WCFontAndColorThemeManagerCurrentThemeDidChangeNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_colorDidChange:) name:WCFontAndColorThemeManagerColorDidChangeNotification object:nil];
+	
 	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidFold:) name:WCSourceTextStorageDidFoldNotification object:[sourceScanner textStorage]];
 	
 	return self;
@@ -86,34 +91,37 @@
 	
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
 	
-	[[[self sourceScanner] textStorage] removeAttribute:WCSourceSymbolTypeAttributeName range:range];
-	
 	NSArray *labelNames = [[self delegate] labelSymbolsForSourceHighlighter:self];
 	NSArray *equateNames = [[self delegate] equateSymbolsForSourceHighlighter:self];	
 	NSArray *defineNames = [[self delegate] defineSymbolsForSourceHighlighter:self];
 	NSArray *macroNames = [[self delegate] macroSymbolsForSourceHighlighter:self];
-	//NSArray *tokens = [[self sourceScanner] tokens];
 	
-	[[WCSourceScanner symbolRegularExpression] enumerateMatchesInString:[[[self sourceScanner] textStorage] string] options:0 range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-		id tokenType = [[[self sourceScanner] textStorage] attribute:WCSourceTokenTypeAttributeName atIndex:[result range].location effectiveRange:NULL];
-		if (tokenType)
-			return;
+	NSRange effectiveRange;
+	id symbolValue;
+	while (range.length) {
+		if ((symbolValue = [[[self sourceScanner] textStorage] attribute:WCSourceHighlighterSymbolAttributeName atIndex:range.location longestEffectiveRange:&effectiveRange inRange:range])) {
+			NSString *name = [[[[[self sourceScanner] textStorage] string] substringWithRange:effectiveRange] lowercaseString];
+			
+			if ([self _symbolName:name existsInArrayOfSymbolNames:equateNames]) {
+				[[[self sourceScanner] textStorage] addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme equateFont],NSFontAttributeName,[currentTheme equateColor],NSForegroundColorAttributeName,[NSNumber numberWithUnsignedInt:WCSourceSymbolTypeEquate],WCSourceSymbolTypeAttributeName, nil] range:effectiveRange];
+			}
+			else if ([self _symbolName:name existsInArrayOfSymbolNames:labelNames]) {
+				[[[self sourceScanner] textStorage] addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme labelFont],NSFontAttributeName,[currentTheme labelColor],NSForegroundColorAttributeName,[NSNumber numberWithUnsignedInt:WCSourceSymbolTypeLabel],WCSourceSymbolTypeAttributeName,nil] range:effectiveRange];
+			}
+			else if ([self _symbolName:name existsInArrayOfSymbolNames:macroNames]) {
+				[[[self sourceScanner] textStorage] addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme macroFont],NSFontAttributeName,[currentTheme macroColor],NSForegroundColorAttributeName,[NSNumber numberWithUnsignedInt:WCSourceSymbolTypeMacro],WCSourceSymbolTypeAttributeName,nil] range:effectiveRange];
+			}
+			else if ([self _symbolName:name existsInArrayOfSymbolNames:defineNames]) {
+				[[[self sourceScanner] textStorage] addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme defineFont],NSFontAttributeName,[currentTheme defineColor],NSForegroundColorAttributeName,[NSNumber numberWithUnsignedInt:WCSourceSymbolTypeDefine],WCSourceSymbolTypeAttributeName,nil] range:effectiveRange];
+			}
+			else {
+				[[[self sourceScanner] textStorage] removeAttribute:WCSourceSymbolTypeAttributeName range:effectiveRange];
+				[[[self sourceScanner] textStorage] addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName, nil] range:effectiveRange];
+			}
+		}
 		
-		NSString *name = [[[[[self sourceScanner] textStorage] string] substringWithRange:[result range]] lowercaseString];
-		
-		if ([self _symbolName:name existsInArrayOfSymbolNames:equateNames]) {
-			[[[self sourceScanner] textStorage] addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme equateFont],NSFontAttributeName,[currentTheme equateColor],NSForegroundColorAttributeName,[NSNumber numberWithUnsignedInt:WCSourceSymbolTypeEquate],WCSourceSymbolTypeAttributeName, nil] range:[result range]];
-		}
-		else if ([self _symbolName:name existsInArrayOfSymbolNames:labelNames]) {
-			[[[self sourceScanner] textStorage] addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme labelFont],NSFontAttributeName,[currentTheme labelColor],NSForegroundColorAttributeName,[NSNumber numberWithUnsignedInt:WCSourceSymbolTypeLabel],WCSourceSymbolTypeAttributeName,nil] range:[result range]];
-		}
-		else if ([self _symbolName:name existsInArrayOfSymbolNames:macroNames]) {
-			[[[self sourceScanner] textStorage] addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme macroFont],NSFontAttributeName,[currentTheme macroColor],NSForegroundColorAttributeName,[NSNumber numberWithUnsignedInt:WCSourceSymbolTypeMacro],WCSourceSymbolTypeAttributeName,nil] range:[result range]];
-		}
-		else if ([self _symbolName:name existsInArrayOfSymbolNames:defineNames]) {
-			[[[self sourceScanner] textStorage] addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme defineFont],NSFontAttributeName,[currentTheme defineColor],NSForegroundColorAttributeName,[NSNumber numberWithUnsignedInt:WCSourceSymbolTypeDefine],WCSourceSymbolTypeAttributeName,nil] range:[result range]];
-		}
-	}];
+		range = NSMakeRange(NSMaxRange(effectiveRange),NSMaxRange(range)-NSMaxRange(effectiveRange));
+	}
 	
 	[[[self sourceScanner] textStorage] endEditing];
 }
@@ -313,8 +321,9 @@
 	
 	[textStorage beginEditing];
 	
-	[textStorage removeAttribute:WCSourceTokenTypeAttributeName range:range];
-	[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName, nil] range:range];
+	[textStorage removeAttribute:WCSourceHighlighterSymbolAttributeName range:range];
+	[textStorage removeAttribute:NSBackgroundColorAttributeName range:range];
+	[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName,[NSNumber numberWithUnsignedInt:WCSourceTokenTypeNone],WCSourceTokenTypeAttributeName, nil] range:range];
 	
 	[[WCSourceScanner registerRegularExpression] enumerateMatchesInString:[textStorage string] options:0 range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
 		[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme registerFont],NSFontAttributeName,[currentTheme registerColor],NSForegroundColorAttributeName,[NSNumber numberWithUnsignedInt:WCSourceTokenTypeRegister],WCSourceTokenTypeAttributeName, nil] range:[result range]];
@@ -363,6 +372,14 @@
 		}
 		else if (NSIntersectionRange([result range], range).length)
 			[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme commentFont],NSFontAttributeName,[currentTheme commentColor],NSForegroundColorAttributeName,[NSNumber numberWithUnsignedInt:WCSourceTokenTypeMultilineComment],WCSourceTokenTypeAttributeName, nil] range:[result range]];
+	}];
+	
+	[[WCSourceScanner symbolRegularExpression] enumerateMatchesInString:[textStorage string] options:0 range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+		id tokenType = [textStorage attribute:WCSourceTokenTypeAttributeName atIndex:[result range].location effectiveRange:NULL];
+		if (tokenType && [tokenType unsignedIntValue] != WCSourceTokenTypeNone)
+			return;
+		
+		[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],WCSourceHighlighterSymbolAttributeName, nil] range:[result range]];
 	}];
 	
 	[textStorage endEditing];
@@ -446,7 +463,76 @@
 	[self highlightSymbolsInVisibleRange];
 }
 - (void)_textStorageDidFold:(NSNotification *)note {
-	[self highlightSymbolsInVisibleRange];
+	//[self highlightSymbolsInVisibleRange];
 }
-
+- (void)_currentThemeDidChange:(NSNotification *)note {
+	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme]; 
+	NSTextStorage *textStorage = [[self sourceScanner] textStorage];
+	
+	[textStorage beginEditing];
+	
+	[textStorage enumerateAttribute:WCSourceTokenTypeAttributeName inRange:NSMakeRange(0, [textStorage length]) options:NSAttributedStringEnumerationLongestEffectiveRangeNotRequired usingBlock:^(id tokenType, NSRange range, BOOL *stop) {
+		switch ([tokenType unsignedIntValue]) {
+			case WCSourceTokenTypeNone:
+				[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName, nil] range:range];
+				break;
+			case WCSourceTokenTypeBinary:
+				[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme binaryFont],NSFontAttributeName,[currentTheme binaryColor],NSForegroundColorAttributeName, nil] range:range];
+				break;
+			case WCSourceTokenTypeComment:
+				[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme commentFont],NSFontAttributeName,[currentTheme commentColor],NSForegroundColorAttributeName, nil] range:range];
+				break;
+			case WCSourceTokenTypeConditional:
+				[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme conditionalFont],NSFontAttributeName,[currentTheme conditionalColor],NSForegroundColorAttributeName, nil] range:range];
+				break;
+			case WCSourceTokenTypeDirective:
+				[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme directiveFont],NSFontAttributeName,[currentTheme directiveColor],NSForegroundColorAttributeName, nil] range:range];
+				break;
+			case WCSourceTokenTypeHexadecimal:
+				[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme hexadecimalFont],NSFontAttributeName,[currentTheme hexadecimalColor],NSForegroundColorAttributeName, nil] range:range];
+				break;
+			case WCSourceTokenTypeMneumonic:
+				[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme mneumonicFont],NSFontAttributeName,[currentTheme mneumonicColor],NSForegroundColorAttributeName, nil] range:range];
+				break;
+			case WCSourceTokenTypeMultilineComment:
+				[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme commentFont],NSFontAttributeName,[currentTheme commentColor],NSForegroundColorAttributeName, nil] range:range];
+				break;
+			case WCSourceTokenTypeNumber:
+				[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme numberFont],NSFontAttributeName,[currentTheme numberColor],NSForegroundColorAttributeName, nil] range:range];
+				break;
+			case WCSourceTokenTypePreProcessor:
+				[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme preProcessorFont],NSFontAttributeName,[currentTheme preProcessorColor],NSForegroundColorAttributeName, nil] range:range];
+				break;
+			case WCSourceTokenTypeRegister:
+				[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme registerFont],NSFontAttributeName,[currentTheme registerColor],NSForegroundColorAttributeName, nil] range:range];
+				break;
+			case WCSourceTokenTypeString:
+				[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme stringFont],NSFontAttributeName,[currentTheme stringColor],NSForegroundColorAttributeName, nil] range:range];
+				break;
+			default:
+				break;
+		}
+	}];
+	
+	[self highlightSymbolsInVisibleRange];
+	
+	[textStorage endEditing];
+}
+- (void)_colorDidChange:(NSNotification *)note {
+	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme]; 
+	NSTextStorage *textStorage = [[self sourceScanner] textStorage];
+	WCSourceTokenType tokenTypeToChange = [[[note userInfo] objectForKey:WCFontAndColorThemeManagerColorDidChangeColorSelectorKey] unsignedIntValue];
+	SEL colorSelector = NSSelectorFromString([[note userInfo] objectForKey:WCFontAndColorThemeManagerColorDidChangeColorNameKey]);
+	
+	[textStorage beginEditing];
+	
+	[textStorage enumerateAttribute:WCSourceTokenTypeAttributeName inRange:NSMakeRange(0, [textStorage length]) options:NSAttributedStringEnumerationLongestEffectiveRangeNotRequired usingBlock:^(id tokenType, NSRange range, BOOL *stop) {
+		if ([tokenType unsignedIntValue] == tokenTypeToChange)
+			[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme performSelector:colorSelector],NSForegroundColorAttributeName, nil] range:range];
+	}];
+	
+	[self highlightSymbolsInVisibleRange];
+	
+	[textStorage endEditing];
+}
 @end

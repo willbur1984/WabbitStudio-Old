@@ -300,10 +300,6 @@ NSString *const WCSourceTextStorageFoldRangeUserInfoKey = @"WCSourceTextStorageF
 	
 	[self setupUserDefaultsObserving];
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_currentThemeDidChange:) name:WCFontAndColorThemeManagerCurrentThemeDidChangeNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_colorDidChange:) name:WCFontAndColorThemeManagerColorDidChangeNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_fontDidChange:) name:WCFontAndColorThemeManagerFontDidChangeNotification object:nil];
-	
 	[self _calculateLineStartIndexes];
 }
 
@@ -338,12 +334,12 @@ NSString *const WCSourceTextStorageFoldRangeUserInfoKey = @"WCSourceTextStorageF
 }
 #pragma mark Notifications
 - (void)_currentThemeDidChange:(NSNotification *)note {
-	[[[self delegate] sourceHighlighterForSourceTextStorage:self] performHighlightingInVisibleRange];
+	//[[[self delegate] sourceHighlighterForSourceTextStorage:self] highlightSymbolsInVisibleRange];
 }
 - (void)_colorDidChange:(NSNotification *)note {
-	[[[self delegate] sourceHighlighterForSourceTextStorage:self] performHighlightingInVisibleRange];
+	//[[[self delegate] sourceHighlighterForSourceTextStorage:self] highlightSymbolsInVisibleRange];
 }
 - (void)_fontDidChange:(NSNotification *)note {
-	[[[self delegate] sourceHighlighterForSourceTextStorage:self] performHighlightingInVisibleRange];
+	//[[[self delegate] sourceHighlighterForSourceTextStorage:self] highlightSymbolsInVisibleRange];
 }
 @end

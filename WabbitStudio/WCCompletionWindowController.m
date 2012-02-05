@@ -240,6 +240,11 @@
 			if ([[itemToInsert completionDictionary] objectForKey:WCCompletionItemArgumentsKey]) {
 				attributedString = [[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ ",[itemToInsert completionInsertionName]] attributes:defaultAttributes] autorelease];
 				
+				if ([[itemToInsert completionDictionary] objectForKey:WCCompletionItemRequiresTrailingNewlineKey]) {
+					[attributedString deleteCharactersInRange:NSMakeRange([attributedString length]-1, 1)];
+					[attributedString appendAttributedString:[[[NSAttributedString alloc] initWithString:@"\n" attributes:defaultAttributes] autorelease]];
+				}
+				
 				for (NSDictionary *argumentDict in [[itemToInsert completionDictionary] objectForKey:WCCompletionItemArgumentsKey]) {
 					if ([argumentDict objectForKey:WCCompletionItemSubArgumentsKey]) {
 						for (NSDictionary *subArgumentDict in [argumentDict objectForKey:WCCompletionItemSubArgumentsKey]) {

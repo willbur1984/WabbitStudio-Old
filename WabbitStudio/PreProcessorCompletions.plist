@@ -10,7 +10,31 @@
 	<key>#comment</key>
 	<dict>
 		<key>name</key>
-		<string>#comment</string>
+		<string>#comment text #endcomment</string>
+		<key>requiresTrailingNewline</key>
+		<true/>
+		<key>arguments</key>
+		<array>
+			<dict>
+				<key>subArguments</key>
+				<array>
+					<dict>
+						<key>name</key>
+						<string>text</string>
+						<key>isPlaceholder</key>
+						<true/>
+						<key>requiresTrailingNewline</key>
+						<true/>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>#endcomment</string>
+						<key>isPlaceholder</key>
+						<false/>
+					</dict>
+				</array>
+			</dict>
+		</array>
 	</dict>
 	<key>#endcomment</key>
 	<dict>
@@ -207,7 +231,7 @@
 	<key>#macro</key>
 	<dict>
 		<key>name</key>
-		<string>#macro name(arguments)</string>
+		<string>#macro name(arguments) #endmacro</string>
 		<key>arguments</key>
 		<array>
 			<dict>

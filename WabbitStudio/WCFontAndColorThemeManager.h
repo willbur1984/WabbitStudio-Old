@@ -19,6 +19,7 @@ extern NSString *const WCFontAndColorThemeManagerCurrentLineColorDidChangeNotifi
 
 extern NSString *const WCFontAndColorThemeManagerColorDidChangeNotification;
 extern NSString *const WCFontAndColorThemeManagerColorDidChangeColorNameKey;
+extern NSString *const WCFontAndColorThemeManagerColorDidChangeColorSelectorKey;
 extern NSString *const WCFontAndColorThemeManagerFontDidChangeNotification;
 extern NSString *const WCFontAndColorThemeManagerFontDidChangeFontNameKey;
 

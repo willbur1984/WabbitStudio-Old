@@ -11,6 +11,8 @@
 #import "WCFontsAndColorsViewController.h"
 #import "WCMiscellaneousPerformer.h"
 #import "NSObject+WCExtensions.h"
+#import "WCSourceToken.h"
+#import "WCSourceSymbol.h"
 
 NSString *const WCFontAndColorThemeManagerCurrentThemeDidChangeNotification = @"WCFontAndColorThemeManagerCurrentThemeDidChangeNotification";
 
@@ -21,8 +23,10 @@ NSString *const WCFontAndColorThemeManagerCurrentLineColorDidChangeNotification 
 
 NSString *const WCFontAndColorThemeManagerColorDidChangeNotification = @"WCFontAndColorThemeManagerColorDidChangeNotification";
 NSString *const WCFontAndColorThemeManagerColorDidChangeColorNameKey = @"colorName";
+NSString *const WCFontAndColorThemeManagerColorDidChangeColorSelectorKey = @"colorSelector";
 NSString *const WCFontAndColorThemeManagerFontDidChangeNotification = @"WCFontAndColorThemeManagerFontDidChangeNotification";
 NSString *const WCFontAndColorThemeManagerFontDidChangeFontNameKey = @"fontName";
+
 
 @interface WCFontAndColorThemeManager ()
 @property (readonly,nonatomic) NSMutableArray *mutableThemes;
@@ -117,10 +121,44 @@ NSString *const WCFontAndColorThemeManagerFontDidChangeFontNameKey = @"fontName"
 			[[NSNotificationCenter defaultCenter] postNotificationName:WCFontAndColorThemeManagerCursorColorDidChangeNotification object:self];
 		else if ([keyPath isEqualToString:@"currentLineColor"])
 			[[NSNotificationCenter defaultCenter] postNotificationName:WCFontAndColorThemeManagerCurrentLineColorDidChangeNotification object:self];
-		else if ([fontKeyPaths containsObject:keyPath])
+		else if ([fontKeyPaths containsObject:keyPath]) {
 			[[NSNotificationCenter defaultCenter] postNotificationName:WCFontAndColorThemeManagerFontDidChangeNotification object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:keyPath,WCFontAndColorThemeManagerFontDidChangeFontNameKey, nil]];
-		else if ([colorKeyPaths containsObject:keyPath])
-			[[NSNotificationCenter defaultCenter] postNotificationName:WCFontAndColorThemeManagerColorDidChangeNotification object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:keyPath,WCFontAndColorThemeManagerColorDidChangeColorNameKey, nil]];
+		}
+		else if ([colorKeyPaths containsObject:keyPath]) {
+			NSNumber *tokenOrSymbolType;
+			if ([keyPath isEqualToString:@"plainTextColor"])
+				tokenOrSymbolType = [NSNumber numberWithUnsignedInt:WCSourceTokenTypeNone];
+			else if ([keyPath isEqualToString:@"registerColor"])
+				tokenOrSymbolType = [NSNumber numberWithUnsignedInt:WCSourceTokenTypeRegister];
+			else if ([keyPath isEqualToString:@"commentColor"])
+				tokenOrSymbolType = [NSNumber numberWithUnsignedInt:WCSourceTokenTypeComment];
+			else if ([keyPath isEqualToString:@"preProcessorColor"])
+				tokenOrSymbolType = [NSNumber numberWithUnsignedInt:WCSourceTokenTypePreProcessor];
+			else if ([keyPath isEqualToString:@"mneumonicColor"])
+				tokenOrSymbolType = [NSNumber numberWithUnsignedInt:WCSourceTokenTypeMneumonic];
+			else if ([keyPath isEqualToString:@"directiveColor"])
+				tokenOrSymbolType = [NSNumber numberWithUnsignedInt:WCSourceTokenTypeDirective];
+			else if ([keyPath isEqualToString:@"numberColor"])
+				tokenOrSymbolType = [NSNumber numberWithUnsignedInt:WCSourceTokenTypeNumber];
+			else if ([keyPath isEqualToString:@"hexadecimalColor"])
+				tokenOrSymbolType = [NSNumber numberWithUnsignedInt:WCSourceTokenTypeHexadecimal];
+			else if ([keyPath isEqualToString:@"binaryColor"])
+				tokenOrSymbolType = [NSNumber numberWithUnsignedInt:WCSourceTokenTypeBinary];
+			else if ([keyPath isEqualToString:@"conditionalColor"])
+				tokenOrSymbolType = [NSNumber numberWithUnsignedInt:WCSourceTokenTypeNone];
+			else if ([keyPath isEqualToString:@"stringColor"])
+				tokenOrSymbolType = [NSNumber numberWithUnsignedInt:WCSourceTokenTypeString];
+			else if ([keyPath isEqualToString:@"labelColor"])
+				tokenOrSymbolType = [NSNumber numberWithUnsignedInt:WCSourceSymbolTypeLabel];
+			else if ([keyPath isEqualToString:@"equateColor"])
+				tokenOrSymbolType = [NSNumber numberWithUnsignedInt:WCSourceSymbolTypeEquate];
+			else if ([keyPath isEqualToString:@"defineColor"])
+				tokenOrSymbolType = [NSNumber numberWithUnsignedInt:WCSourceSymbolTypeDefine];
+			else if ([keyPath isEqualToString:@"macroColor"])
+				tokenOrSymbolType = [NSNumber numberWithUnsignedInt:WCSourceSymbolTypeMacro];
+			
+			[[NSNotificationCenter defaultCenter] postNotificationName:WCFontAndColorThemeManagerColorDidChangeNotification object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:keyPath,WCFontAndColorThemeManagerColorDidChangeColorNameKey,tokenOrSymbolType,WCFontAndColorThemeManagerColorDidChangeColorSelectorKey, nil]];
+		}
 		
 		[_unsavedThemes addObject:object];
 	}
