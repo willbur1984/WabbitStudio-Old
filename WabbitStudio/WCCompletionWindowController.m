@@ -83,7 +83,7 @@
 - (void)showCompletionWindowControllerForSourceTextView:(WCSourceTextView *)textView; {
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		[[self window] setAnimationBehavior:NSWindowAnimationBehaviorUtilityWindow];
+		[[self window] setAnimationBehavior:NSWindowAnimationBehaviorAlertPanel];
 	});
 	
 	if ([self textView])
@@ -230,7 +230,7 @@
 				[[[self textView] textStorage] replaceCharactersInRange:completionRange withAttributedString:attributedString];
 				[[self textView] didChangeText];
 				
-				[self _selectFirstArgumentPlaceholderWithOldSelectedRange:oldSelectedRange];
+				[self _selectFirstArgumentPlaceholderWithOldSelectedRange:NSMakeRange(oldSelectedRange.location, [attributedString length])];
 			}
 		}
 		else if ([itemToInsert respondsToSelector:@selector(completionDictionary)]) {
@@ -292,7 +292,7 @@
 				[[[self textView] textStorage] replaceCharactersInRange:completionRange withAttributedString:attributedString];
 				[[self textView] didChangeText];
 				
-				[self _selectFirstArgumentPlaceholderWithOldSelectedRange:oldSelectedRange];
+				[self _selectFirstArgumentPlaceholderWithOldSelectedRange:NSMakeRange(oldSelectedRange.location, [attributedString length])];
 			}
 		}
 		else {
@@ -316,7 +316,7 @@
 	NSMutableArray *staticCompletions = [NSMutableArray arrayWithCapacity:0];
 	
 	if (completionRange.location == NSNotFound) {
-		// can we provide context specific matches
+		// can we provide context specific matches?
 		completionRange = [[self textView] selectedRange];
 		
 		if ([[[self textView] delegate] projectDocumentForSourceTextView:[self textView]]) {

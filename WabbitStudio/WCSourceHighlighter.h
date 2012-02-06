@@ -24,9 +24,8 @@
 - (void)highlightSymbolsInVisibleRange;
 - (void)highlightSymbolsInRange:(NSRange)range;
 
-- (void)performHighlightingInVisibleRange;
-- (void)performHighlightingInRange:(NSRange)range;
-
 - (void)highlightAttributeString:(NSMutableAttributedString *)attributedString;
 - (void)highlightAttributeString:(NSMutableAttributedString *)attributedString withArgumentNames:(NSSet *)argumentNames;
+
++ (void)highlightTextStorageAttributedString:(NSMutableAttributedString *)attributedString;
 @end

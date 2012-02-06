@@ -54,6 +54,7 @@
 		retval = [[NSMenu alloc] initWithTitle:@""];
 		
 		[retval addItemWithTitle:@"" action:@selector(_toggleBookmark:) keyEquivalent:@""];
+		[retval addItemWithTitle:NSLocalizedString(@"Remove All Bookmarks\u2026", @"Remove All Bookmarks with ellipsis") action:@selector(removeAllBookmarks:) keyEquivalent:@""];
 	});
 	return retval;
 }
@@ -68,6 +69,12 @@
 	}
 	
 	return retval;
+}
+
+- (id)supplementalTargetForAction:(SEL)action sender:(id)sender {
+	if (action == @selector(removeAllBookmarks:))
+		return [self sourceTextView];
+	return [super supplementalTargetForAction:action sender:sender];
 }
 
 - (id)initWithScrollView:(NSScrollView *)scrollView orientation:(NSRulerOrientation)orientation {

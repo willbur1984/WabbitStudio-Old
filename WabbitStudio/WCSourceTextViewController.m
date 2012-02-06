@@ -59,6 +59,8 @@
 - (void)loadView {
 	[super loadView];
 	
+	//[[self sourceHighlighter] performFullHighlightIfNeeded];
+	
 	[[[self scrollView] contentView] setAutoresizesSubviews:YES];
 	
 	WCSourceLayoutManager *layoutManager = [[[WCSourceLayoutManager alloc] init] autorelease];
@@ -119,8 +121,6 @@
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewBoundsDidChange:) name:NSViewBoundsDidChangeNotification object:[[self scrollView] contentView]];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewBoundsDidChange:) name:NSViewFrameDidChangeNotification object:[[self scrollView] contentView]];
-	
-	[[self sourceHighlighter] performFullHighlightIfNeeded];
 }
 #pragma mark NSMenuValidation
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
@@ -384,9 +384,9 @@
 	//[[self sourceHighlighter] highlightSymbolsInRange:[[self textView] visibleRange]];
 	
 	if (_scrollingHighlightTimer)
-		[_scrollingHighlightTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
+		[_scrollingHighlightTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:0.2]];
 	else {
-		_scrollingHighlightTimer = [NSTimer timerWithTimeInterval:0.1 target:self selector:@selector(_scrollingHighlightTimerCallback:) userInfo:nil repeats:NO];
+		_scrollingHighlightTimer = [NSTimer timerWithTimeInterval:0.2 target:self selector:@selector(_scrollingHighlightTimerCallback:) userInfo:nil repeats:NO];
 		[[NSRunLoop mainRunLoop] addTimer:_scrollingHighlightTimer forMode:NSRunLoopCommonModes];
 	}
 }

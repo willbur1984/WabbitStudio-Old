@@ -187,7 +187,7 @@
 	if (![self count])
 		return nil;
 	else if ([self count] == 1) {
-		if (NSLocationInRange(range.location, [[self lastObject] range]))
+		if (NSIntersectionRange(range, [[self lastObject] range]).length)
 			return self;
 		return nil;
 	}

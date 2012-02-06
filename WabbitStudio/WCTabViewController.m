@@ -242,8 +242,6 @@ static NSString *const WCTabViewControllerSelectedTabKey = @"selectedTab";
 		[[[sourceFileDocument projectDocument] openFiles] removeObject:file];
 		
 		[[[self tabBarControl] tabView] addTabViewItem:tabViewItem];
-		
-		[[sourceFileDocument sourceHighlighter] performHighlightingInRange:[[stvController textView] visibleRange]];
 	}
 	else
 		tabViewItem = [[[self tabBarControl] tabView] tabViewItemAtIndex:tabViewItemIndex];

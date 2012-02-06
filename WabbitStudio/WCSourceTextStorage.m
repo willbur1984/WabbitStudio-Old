@@ -71,6 +71,8 @@ NSString *const WCSourceTextStorageFoldRangeUserInfoKey = @"WCSourceTextStorageF
 
 	_attributedString = [[NSMutableAttributedString alloc] initWithString:string attributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName,[self paragraphStyle],NSParagraphStyleAttributeName, nil]];
 	
+	[WCSourceHighlighter highlightTextStorageAttributedString:_attributedString];
+	
 	[self _commonInit];
 	
 	return self;
@@ -138,9 +140,11 @@ NSString *const WCSourceTextStorageFoldRangeUserInfoKey = @"WCSourceTextStorageF
 	[self edited:NSTextStorageEditedAttributes range:range changeInLength:0];
 }
 
+/*
 - (BOOL)fixesAttributesLazily {
 	return YES;
 }
+ */
 
 - (void)fixAttachmentAttributeInRange:(NSRange)range {
 	NSRange effectiveRange;

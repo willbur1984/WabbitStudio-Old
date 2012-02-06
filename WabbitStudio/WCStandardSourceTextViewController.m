@@ -125,7 +125,7 @@
 		[[self view] setFrame:firstSubviewFrame];
 		[[[self firstTextViewController] view] setFrame:secondSubviewFrame];
 		
-		[[self sourceHighlighter] performHighlightingInVisibleRange];
+		[[self sourceHighlighter] highlightSymbolsInVisibleRange];
 	}
 	
 	[[[self view] window] makeFirstResponder:[[self firstTextViewController] textView]];
@@ -235,7 +235,7 @@
 	[[firstSourceTextViewController view] setFrame:firstSubviewFrame];
 	[[secondSourceTextViewController view] setFrame:secondSubviewFrame];
 	
-	[[self sourceHighlighter] performHighlightingInVisibleRange];
+	[[self sourceHighlighter] highlightSymbolsInVisibleRange];
 	
 	[[[self view] window] makeFirstResponder:[secondSourceTextViewController textView]];
 }
