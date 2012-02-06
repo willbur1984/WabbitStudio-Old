@@ -71,7 +71,7 @@ NSString *const WCSourceTextStorageFoldRangeUserInfoKey = @"WCSourceTextStorageF
 
 	_attributedString = [[NSMutableAttributedString alloc] initWithString:string attributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName,[self paragraphStyle],NSParagraphStyleAttributeName, nil]];
 	
-	[WCSourceHighlighter highlightTextStorageAttributedString:_attributedString];
+	//[WCSourceHighlighter highlightTextStorageAttributedString:_attributedString];
 	
 	[self _commonInit];
 	

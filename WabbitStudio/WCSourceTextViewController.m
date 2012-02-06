@@ -59,7 +59,7 @@
 - (void)loadView {
 	[super loadView];
 	
-	//[[self sourceHighlighter] performFullHighlightIfNeeded];
+	[[self sourceHighlighter] performFullHighlightIfNeeded];
 	
 	[[[self scrollView] contentView] setAutoresizesSubviews:YES];
 	
@@ -180,14 +180,12 @@
 }
 - (NSArray *)textView:(NSTextView *)textView didCheckTextInRange:(NSRange)range types:(NSTextCheckingTypes)checkingTypes options:(NSDictionary *)options results:(NSArray *)results orthography:(NSOrthography *)orthography wordCount:(NSInteger)wordCount {
 	NSMutableArray *modifiedResults = [NSMutableArray arrayWithCapacity:[results count]];
-	NSArray *tokens = [[[self sourceFileDocument] sourceScanner] tokens];
 	
 	for (NSTextCheckingResult *result in results) {
-		WCSourceToken *token = [tokens sourceTokenForRange:[result range]];
+		id tokenType = [[textView textStorage] attribute:WCSourceTokenTypeAttributeName atIndex:[result range].location effectiveRange:NULL];
 		
-		if (NSLocationInRange([result range].location, [token range]) &&
-			([token type] == WCSourceTokenTypeComment || [token type] == WCSourceTokenTypeString) &&
-			![[[textView string] substringWithRange:[result range]] isEqualToString:@"endcomment"])
+		if ([tokenType unsignedIntValue] == WCSourceTokenTypeComment ||
+			[tokenType unsignedIntValue] == WCSourceTokenTypeMultilineComment)
 			[modifiedResults addObject:result];
 	}
 	return modifiedResults;
