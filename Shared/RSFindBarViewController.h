@@ -22,7 +22,7 @@ typedef enum _RSFindBarViewControllerViewMode {
 	NSString *_replaceString;
 	NSRegularExpression *_findRegularExpression;
 	NSString *_statusString;
-	NSPointerArray *_findRanges;
+	NSMutableIndexSet *_findRanges;
 	NSViewAnimation *_showFindBarAnimation;
 	NSViewAnimation *_hideFindBarAnimation;
 	NSViewAnimation *_showReplaceControlsAnimation;

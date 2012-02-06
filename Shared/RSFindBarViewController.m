@@ -7,7 +7,6 @@
 //
 
 #import "RSFindBarViewController.h"
-#import "NSPointerArray+WCExtensions.h"
 #import "RSFindOptionsViewController.h"
 #import "RSDefines.h"
 #import "RSBezelWidgetManager.h"
@@ -159,7 +158,7 @@
 		return nil;
 	
 	_textView = textView;
-	_findRanges = [[NSPointerArray pointerArrayForRanges] retain];
+	_findRanges = [[NSMutableIndexSet alloc] init];
 	_findOptionsViewController = [[RSFindOptionsViewController alloc] init];
 	[_findOptionsViewController setDelegate:self];
 	_replaceString = @"";
@@ -192,7 +191,7 @@ static const NSAnimationCurve kFindBarShowHideAnimationCurve = NSAnimationEaseIn
 			return;
 		
 		if ([_findRanges count]) {
-			[_findRanges setCount:0];
+			[_findRanges removeAllIndexes];
 			[self performSelector:@selector(_removeFindTextAttributes) withObject:nil afterDelay:0.0];
 		}
 		
@@ -372,9 +371,7 @@ static const CGFloat kReplaceControlsHeight = 22.0;
 	NSMutableArray *replaceRanges = [NSMutableArray arrayWithCapacity:rangeCount];
 	NSMutableArray *replaceStrings = [NSMutableArray arrayWithCapacity:rangeCount];
 	
-	for (rangeIndex=0; rangeIndex<rangeCount; rangeIndex++) {
-		NSRange replaceRange = *(NSRangePointer)[_findRanges pointerAtIndex:rangeIndex];
-		
+	[_findRanges enumerateRangesUsingBlock:^(NSRange replaceRange, BOOL *stop) {
 		[replaceRanges addObject:[NSValue valueWithRange:replaceRange]];
 		
 		NSString *replaceString;
@@ -384,7 +381,7 @@ static const CGFloat kReplaceControlsHeight = 22.0;
 			replaceString = [[self findRegularExpression] stringByReplacingMatchesInString:[[[self textView] string] substringWithRange:replaceRange] options:0 range:NSMakeRange(0, replaceRange.length) withTemplate:[self replaceString]];
 		
 		[replaceStrings addObject:replaceString];
-	}
+	}];
 	
 	if ([[self textView] shouldChangeTextInRanges:replaceRanges replacementStrings:replaceStrings]) {
 		[[[self textView] textStorage] beginEditing];
@@ -506,7 +503,7 @@ static const CGFloat kReplaceControlsHeight = 22.0;
 #pragma mark *** Private Methods ***
 - (void)_findAndHighlightNearestRange:(BOOL)highlightNearestRange highlightMatches:(BOOL)highlightMatches; {
 	[self setStatusString:nil];
-	[_findRanges setCount:0];
+	[_findRanges removeAllIndexes];
 	[self _removeFindTextAttributesInRange:[[self textView] visibleRange]];
 	
 	if (![[self findString] length]) {
@@ -535,6 +532,7 @@ static const CGFloat kReplaceControlsHeight = 22.0;
 	NSRange searchRange = NSMakeRange(0, stringLength);
 	NSStringCompareOptions options = ([[self findOptionsViewController] matchCase])?NSLiteralSearch:(NSCaseInsensitiveSearch|NSLiteralSearch);
 	RSFindOptionsMatchStyle matchStyle = [[self findOptionsViewController] matchStyle];
+	__block NSUInteger numberOfMatches = 0;
 	
 	if ([[self findOptionsViewController] findStyle] == RSFindOptionsFindStyleTextual) {
 		CFLocaleRef currentLocale = CFLocaleCopyCurrent();
@@ -554,24 +552,34 @@ static const CGFloat kReplaceControlsHeight = 22.0;
 			switch (matchStyle) {
 					// token range doesn't matter in this case
 				case RSFindOptionsMatchStyleContains:
-					[_findRanges addPointer:&foundRange];
+					[_findRanges addIndexesInRange:foundRange];
+					numberOfMatches++;
 					break;
 					// token range and found range starting indexes must match and match range can't be longer than token range
 				case RSFindOptionsMatchStyleStartsWith:
 					if (foundRange.location == tokenRange.location &&
-						foundRange.length < tokenRange.length)
-						[_findRanges addPointer:&foundRange];
+						foundRange.length < tokenRange.length) {
+						
+						[_findRanges addIndexesInRange:foundRange];
+						numberOfMatches++;
+					}
 					break;
 					// the ending indexes of token range and found range must match
 				case RSFindOptionsMatchStyleEndsWith:
-					if (NSMaxRange(foundRange) == (tokenRange.location + tokenRange.length))
-						[_findRanges addPointer:&foundRange];
+					if (NSMaxRange(foundRange) == (tokenRange.location + tokenRange.length)) {
+						
+						[_findRanges addIndexesInRange:foundRange];
+						numberOfMatches++;
+					}
 					break;
 					// token range and found range must match exactly
 				case RSFindOptionsMatchStyleWholeWord:
 					if (foundRange.location == tokenRange.location &&
-						foundRange.length == tokenRange.length)
-						[_findRanges addPointer:&foundRange];
+						foundRange.length == tokenRange.length) {
+						
+						[_findRanges addIndexesInRange:foundRange];
+						numberOfMatches++;
+					}
 					break;
 				default:
 					break;
@@ -587,18 +595,19 @@ static const CGFloat kReplaceControlsHeight = 22.0;
 		[[self findRegularExpression] enumerateMatchesInString:string options:0 range:searchRange usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
 			NSRange foundRange = [result range];
 			
-			[_findRanges addPointer:&foundRange];
+			[_findRanges addIndexesInRange:foundRange];
+			numberOfMatches++;
 		}];
 	}
 	
-	if (![_findRanges count]) {
+	if (!numberOfMatches) {
 		[self setStatusString:NSLocalizedString(@"Not found", @"Not found")];
 		return;
 	}
-	else if ([_findRanges count] == 1)
+	else if (numberOfMatches == 1)
 		[self setStatusString:NSLocalizedString(@"1 match", @"1 match")];
 	else
-		[self setStatusString:[NSString stringWithFormat:NSLocalizedString(@"%lu matches", @"find bar multiple matches status string"),[_findRanges count]]];
+		[self setStatusString:[NSString stringWithFormat:NSLocalizedString(@"%lu matches", @"find bar multiple matches status string"),numberOfMatches]];
 	
 	NSMutableArray *recentSearches = [[[[self searchField] recentSearches] mutableCopy] autorelease];
 	
@@ -633,14 +642,10 @@ static const CGFloat kReplaceControlsHeight = 22.0;
 }
 - (void)_addFindTextAttributesInRange:(NSRange)range; {
 	NSDictionary *attributes = WCTransparentFindTextAttributes();
-	NSPointerArray *ranges = [_findRanges rangesForRange:range];
-	NSUInteger rangeIndex, rangeCount = [ranges count];
 	
-	for (rangeIndex = 0; rangeIndex < rangeCount; rangeIndex++) {
-		NSRange attrRange = *(NSRangePointer)[ranges pointerAtIndex:rangeIndex];
-		
-		[[[self textView] layoutManager] addTemporaryAttributes:attributes forCharacterRange:attrRange];
-	}
+	[_findRanges enumerateRangesInRange:range options:0 usingBlock:^(NSRange range, BOOL *stop) {
+		[[[self textView] layoutManager] addTemporaryAttributes:attributes forCharacterRange:range];
+	}];
 }
 - (void)_removeFindTextAttributesInRange:(NSRange)range; {
 	[[[self textView] layoutManager] removeTemporaryAttribute:NSBackgroundColorAttributeName forCharacterRange:range];
