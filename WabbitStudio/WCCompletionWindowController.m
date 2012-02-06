@@ -17,6 +17,7 @@
 #import "NSArray+WCExtensions.h"
 #import "WCProjectDocument.h"
 #import "NSAttributedString+WCExtensions.h"
+#import "WCDefines.h"
 
 @interface WCCompletionWindowController ()
 @property (readwrite,assign,nonatomic) WCSourceTextView *textView;
@@ -62,8 +63,17 @@
 }
 #pragma mark NSTableViewDelegate
 - (void)tableView:(NSTableView *)tableView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
-	if ([cell respondsToSelector:@selector(image)])
+	NSUInteger columnIndex = [[tableView tableColumns] indexOfObjectIdenticalTo:tableColumn];
+	
+	if (columnIndex == 0)
 		[[cell image] setSize:NSSmallSize];
+	else if ([[self textView] rangeForUserCompletion].length) {
+		NSMutableAttributedString *attributedString = [[[cell attributedStringValue] mutableCopy] autorelease];
+		
+		[attributedString addAttributes:WCTransparentFindTextAttributes() range:NSMakeRange(0, [[self textView] rangeForUserCompletion].length)];
+		
+		[cell setAttributedStringValue:attributedString];
+	}
 }
 
 #pragma mark RSTableViewDelegate
@@ -81,10 +91,7 @@
 	return sharedInstance;
 }
 - (void)showCompletionWindowControllerForSourceTextView:(WCSourceTextView *)textView; {
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		[[self window] setAnimationBehavior:NSWindowAnimationBehaviorAlertPanel];
-	});
+	[[self window] setAnimationBehavior:NSWindowAnimationBehaviorAlertPanel];
 	
 	if ([self textView])
 		return;
@@ -189,14 +196,15 @@
 - (void)replaceCompletionsAtIndexes:(NSIndexSet *)indexes withCompletions:(NSArray *)completions {
 	[_completions replaceObjectsAtIndexes:indexes withObjects:completions];
 }
+
 #pragma mark *** Private Methods ***
 - (void)_closeCompletionWindowControllerAndInsertCompletion:(BOOL)insertCompletion; {
+	[[self window] setAnimationBehavior:NSWindowAnimationBehaviorUtilityWindow];
 	[[[self textView] window] removeChildWindow:[self window]];
 	[[self window] orderOut:nil];
 	
 	if (insertCompletion) {
 		id <WCCompletionItem> itemToInsert = [[[self arrayController] selectedObjects] lastObject];
-		NSRange oldSelectedRange = [[self textView] selectedRange];
 		NSRange completionRange = [[self textView] rangeForUserCompletion];
 		if (completionRange.location == NSNotFound)
 			completionRange = [[self textView] selectedRange];
@@ -230,7 +238,7 @@
 				[[[self textView] textStorage] replaceCharactersInRange:completionRange withAttributedString:attributedString];
 				[[self textView] didChangeText];
 				
-				[self _selectFirstArgumentPlaceholderWithOldSelectedRange:NSMakeRange(oldSelectedRange.location, [attributedString length])];
+				[self _selectFirstArgumentPlaceholderWithOldSelectedRange:NSMakeRange(completionRange.location, [attributedString length])];
 			}
 		}
 		else if ([itemToInsert respondsToSelector:@selector(completionDictionary)]) {
@@ -292,7 +300,7 @@
 				[[[self textView] textStorage] replaceCharactersInRange:completionRange withAttributedString:attributedString];
 				[[self textView] didChangeText];
 				
-				[self _selectFirstArgumentPlaceholderWithOldSelectedRange:NSMakeRange(oldSelectedRange.location, [attributedString length])];
+				[self _selectFirstArgumentPlaceholderWithOldSelectedRange:NSMakeRange(completionRange.location, [attributedString length])];
 			}
 		}
 		else {
@@ -302,7 +310,7 @@
 			}
 		}
 	}
-			  
+	
 	[self setTextView:nil];
 	[[self mutableCompletions] removeAllObjects];
 	[NSEvent removeMonitor:_eventMonitor];
@@ -470,7 +478,7 @@
 	}
 }
 - (void)_selectFirstArgumentPlaceholderWithOldSelectedRange:(NSRange)oldSelectedRange; {
-	NSRange placeholderRange = [[[self textView] textStorage] nextArgumentPlaceholderRangeForRange:oldSelectedRange inRange:[[[self textView] string] lineRangeForRange:oldSelectedRange] wrapAround:NO];
+	NSRange placeholderRange = [[[self textView] textStorage] nextArgumentPlaceholderRangeForRange:NSMakeRange(oldSelectedRange.location, 0) inRange:[[[self textView] string] lineRangeForRange:oldSelectedRange] wrapAround:NO];
 	
 	if (placeholderRange.location == NSNotFound)
 		return;
