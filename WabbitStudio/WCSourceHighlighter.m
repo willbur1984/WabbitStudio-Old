@@ -58,6 +58,7 @@ NSString *const WCSourceHighlighterNoHighlightAttributeName = @"WCSourceHighligh
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_currentThemeDidChange:) name:WCFontAndColorThemeManagerCurrentThemeDidChangeNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_colorDidChange:) name:WCFontAndColorThemeManagerColorDidChangeNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_fontDidChange:) name:WCFontAndColorThemeManagerFontDidChangeNotification object:nil];
 	
 	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidFold:) name:WCSourceTextStorageDidFoldNotification object:[sourceScanner textStorage]];
 	
@@ -466,7 +467,7 @@ NSString *const WCSourceHighlighterNoHighlightAttributeName = @"WCSourceHighligh
 - (void)_colorDidChange:(NSNotification *)note {
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme]; 
 	NSTextStorage *textStorage = [[self sourceScanner] textStorage];
-	WCSourceTokenType tokenTypeToChange = [[[note userInfo] objectForKey:WCFontAndColorThemeManagerColorDidChangeColorSelectorKey] unsignedIntValue];
+	WCSourceTokenType tokenTypeToChange = [[[note userInfo] objectForKey:WCFontAndColorThemeManagerColorDidChangeColorTypeKey] unsignedIntValue];
 	SEL colorSelector = NSSelectorFromString([[note userInfo] objectForKey:WCFontAndColorThemeManagerColorDidChangeColorNameKey]);
 	
 	[textStorage beginEditing];
@@ -474,10 +475,34 @@ NSString *const WCSourceHighlighterNoHighlightAttributeName = @"WCSourceHighligh
 	[textStorage enumerateAttribute:WCSourceTokenTypeAttributeName inRange:NSMakeRange(0, [textStorage length]) options:NSAttributedStringEnumerationLongestEffectiveRangeNotRequired usingBlock:^(id tokenType, NSRange range, BOOL *stop) {
 		if ([tokenType unsignedIntValue] == tokenTypeToChange)
 			[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme performSelector:colorSelector],NSForegroundColorAttributeName, nil] range:range];
+		else if ([tokenType unsignedIntValue] == WCSourceTokenTypeMultilineComment &&
+				 tokenTypeToChange == WCSourceTokenTypeComment)
+			[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme performSelector:colorSelector],NSForegroundColorAttributeName, nil] range:range];
 	}];
 	
+	[textStorage endEditing];
+	
 	[self highlightSymbolsInVisibleRange];
+}
+- (void)_fontDidChange:(NSNotification *)note {
+	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme]; 
+	NSTextStorage *textStorage = [[self sourceScanner] textStorage];
+	WCSourceTokenType tokenTypeToChange = [[[note userInfo] objectForKey:WCFontAndColorThemeManagerFontDidChangeFontTypeKey] unsignedIntValue];
+	SEL fontSelector = NSSelectorFromString([[note userInfo] objectForKey:WCFontAndColorThemeManagerFontDidChangeFontNameKey]);
+	
+	[textStorage beginEditing];
+	
+	[textStorage enumerateAttribute:WCSourceTokenTypeAttributeName inRange:NSMakeRange(0, [textStorage length]) options:NSAttributedStringEnumerationLongestEffectiveRangeNotRequired usingBlock:^(id tokenType, NSRange range, BOOL *stop) {
+		if ([tokenType unsignedIntValue] == tokenTypeToChange)
+			[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme performSelector:fontSelector],NSFontAttributeName, nil] range:range];
+		else if ([tokenType unsignedIntValue] == WCSourceTokenTypeMultilineComment &&
+				 tokenTypeToChange == WCSourceTokenTypeComment)
+			[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme performSelector:fontSelector],NSFontAttributeName, nil] range:range];
+				 
+	}];
 	
 	[textStorage endEditing];
+	
+	[self highlightSymbolsInVisibleRange];
 }
 @end

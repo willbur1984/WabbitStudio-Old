@@ -1633,10 +1633,10 @@
 	[self setInsertionPointColor:[currentTheme cursorColor]];
 }
 - (void)_textStorageDidFold:(NSNotification *)note {
-	//[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:NO];
+	[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:NO];
 }
 - (void)_textStorageDidUnfold:(NSNotification *)note {
-	//[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:NO];
+	[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:NO];
 }
 #pragma mark Callbacks
 - (void)_completionTimerCallback:(NSTimer *)timer {

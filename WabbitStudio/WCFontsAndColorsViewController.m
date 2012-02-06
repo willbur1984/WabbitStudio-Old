@@ -53,7 +53,8 @@ NSString *const WCFontsAndColorsUserThemeIdentifiersKey = @"WCFontsAndColorsUser
 	WCFontAndColorThemePair *selectedPair = [[[self pairsArrayController] selectedObjects] lastObject];
 	NSFont *newFont = [sender convertFont:[selectedPair font]];
 	
-	[selectedPair setFont:newFont];
+	for (WCFontAndColorThemePair *pair in [[self pairsArrayController] selectedObjects])
+		[pair setFont:newFont];
 	
 	[[self pairsTableView] noteHeightOfRowsWithIndexesChanged:[[self pairsArrayController] selectionIndexes]];
 }
