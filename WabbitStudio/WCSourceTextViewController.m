@@ -35,6 +35,7 @@
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
 @property (readonly,nonatomic) WCStandardSourceTextViewController *standardSourceTextViewController;
 
+- (void)_highlightVisibleTokens;
 @end
 
 @implementation WCSourceTextViewController
@@ -58,8 +59,6 @@
 
 - (void)loadView {
 	[super loadView];
-	
-	[[self sourceHighlighter] performFullHighlightIfNeeded];
 	
 	[[[self scrollView] contentView] setAutoresizesSubviews:YES];
 	
@@ -121,6 +120,8 @@
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewBoundsDidChange:) name:NSViewBoundsDidChangeNotification object:[[self scrollView] contentView]];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewBoundsDidChange:) name:NSViewFrameDidChangeNotification object:[[self scrollView] contentView]];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidFold:) name:WCSourceTextStorageDidFoldNotification object:[self textStorage]];
 }
 #pragma mark NSMenuValidation
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
@@ -374,19 +375,51 @@
 @synthesize standardSourceTextViewController=_standardSourceTextViewController;
 @synthesize sourceFileDocument=_sourceFileDocument;
 #pragma mark *** Private Methods ***
-
+- (void)_highlightVisibleTokens; {
+	NSRange effectiveRange;
+	NSRange visibleRange = [[self textView] visibleRange];
+	NSUInteger searchIndex = NSMaxRange(visibleRange);
+	if (searchIndex >= [[self textStorage] length])
+		searchIndex--;
+	id tokenType = [[self textStorage] attribute:WCSourceHighlighterNoHighlightAttributeName atIndex:searchIndex longestEffectiveRange:&effectiveRange inRange:visibleRange];
+	
+	if (tokenType && [tokenType boolValue]) {
+		NSRange highlightRange = NSIntersectionRange(visibleRange, effectiveRange);
+		
+		[[self textStorage] removeAttribute:WCSourceHighlighterNoHighlightAttributeName range:highlightRange];
+		[[self sourceHighlighter] highlightTokensInRange:highlightRange];
+	}
+	// to cover the case of scrolling upwards from the bottom of the document
+	else {
+		tokenType = [[self textStorage] attribute:WCSourceHighlighterNoHighlightAttributeName atIndex:visibleRange.location longestEffectiveRange:&effectiveRange inRange:visibleRange];
+		
+		if (tokenType && [tokenType boolValue]) {
+			NSRange highlightRange = NSIntersectionRange(visibleRange, effectiveRange);
+			
+			[[self textStorage] removeAttribute:WCSourceHighlighterNoHighlightAttributeName range:highlightRange];
+			[[self sourceHighlighter] highlightTokensInRange:highlightRange];
+		}
+	}
+}
 #pragma mark IBActions
 
 #pragma mark Notifications
+
+static const NSTimeInterval kScrollingHighlightTimerDelay = 0.1;
 - (void)_viewBoundsDidChange:(NSNotification *)note {
-	//[[self sourceHighlighter] highlightSymbolsInRange:[[self textView] visibleRange]];
+	[self _highlightVisibleTokens];
 	
 	if (_scrollingHighlightTimer)
-		[_scrollingHighlightTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:0.2]];
+		[_scrollingHighlightTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:kScrollingHighlightTimerDelay]];
 	else {
-		_scrollingHighlightTimer = [NSTimer timerWithTimeInterval:0.2 target:self selector:@selector(_scrollingHighlightTimerCallback:) userInfo:nil repeats:NO];
+		_scrollingHighlightTimer = [NSTimer timerWithTimeInterval:kScrollingHighlightTimerDelay target:self selector:@selector(_scrollingHighlightTimerCallback:) userInfo:nil repeats:NO];
 		[[NSRunLoop mainRunLoop] addTimer:_scrollingHighlightTimer forMode:NSRunLoopCommonModes];
 	}
+}
+- (void)_textStorageDidFold:(NSNotification *)note {
+	[self _highlightVisibleTokens];
+	
+	[[self sourceHighlighter] highlightSymbolsInRange:[[self textView] visibleRange]];
 }
 #pragma mark Callbacks
 - (void)_scrollingHighlightTimerCallback:(NSTimer *)timer {

@@ -38,8 +38,10 @@
 #import "WCSourceTypesetter.h"
 #import "WCFold.h"
 #import "NSAlert-OAExtensions.h"
+#import "NSBezierPath+StrokeExtensions.h"
 
 @interface WCSourceTextView ()
+@property (readwrite,copy,nonatomic) NSIndexSet *autoHighlightArgumentsRanges;
 
 - (void)_commonInit;
 - (void)_drawCurrentLineHighlightInRect:(NSRect)rect;
@@ -65,6 +67,7 @@
 	_completionTimer = nil;
 	[_autoHighlightArgumentsTimer invalidate];
 	_autoHighlightArgumentsTimer = nil;
+	[_autoHighlightArgumentsRanges release];
 	[self cleanUpUserDefaultsObserving];
 	[super dealloc];
 }
@@ -124,12 +127,8 @@
 			[self _highlightEnclosedMacroArguments];
 		}];
 		_windowDidResignKeyObservingToken = [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidResignKeyNotification object:[self window] queue:nil usingBlock:^(NSNotification *note) {
+			[self setAutoHighlightArgumentsRanges:nil];
 			[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
-			
-			if (_lastAutoHighlightArgumentsRange.length && NSMaxRange(_lastAutoHighlightArgumentsRange) < [[self string] length]) {
-				[[self layoutManager] removeTemporaryAttribute:NSUnderlineStyleAttributeName forCharacterRange:_lastAutoHighlightArgumentsRange];
-				_lastAutoHighlightArgumentsRange = NSEmptyRange;
-			}
 		}];
 	}
 }
@@ -139,9 +138,33 @@
 	
 	[self _drawPageGuideInRect:rect];
 	
-	[self _drawVisibleBookmarksInRect:[self bounds]];
-	
 	[self _drawCurrentLineHighlightInRect:rect];
+	
+	if ([[self autoHighlightArgumentsRanges] count]) {
+		[[self autoHighlightArgumentsRanges] enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
+			NSUInteger rectCount;
+			NSRectArray rects = [[self layoutManager] rectArrayForCharacterRange:range withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[self textContainer] rectCount:&rectCount];
+			
+			if (!rectCount)
+				return;
+			
+			NSRect argumentRect = rects[0];
+			
+			if (!NSIntersectsRect(argumentRect, rect) || ![self needsToDrawRect:argumentRect])
+				return;
+			
+			NSBezierPath *path = [NSBezierPath bezierPathWithRect:argumentRect];
+			
+			CGFloat dash[2];
+			
+			dash[0] = 3.0;
+			dash[1] = 1.0;
+			
+			[path setLineDash:dash count:2 phase:0.0];
+			[[NSColor darkGrayColor] setStroke];
+			[path strokeInside];
+		}];
+	}
 }
 
 - (NSRange)rangeForUserCompletion {
@@ -413,14 +436,11 @@
 - (void)insertText:(id)insertString {
 	[super insertText:insertString];
 	
+	[self setAutoHighlightArgumentsRanges:nil];
+	
 	[self _insertMatchingBraceWithString:insertString];
 	
 	[self _handleAutoCompletionWithString:insertString];
-	
-	if (_lastAutoHighlightArgumentsRange.length && NSMaxRange(_lastAutoHighlightArgumentsRange) < [[self string] length]) {
-		[[self layoutManager] removeTemporaryAttribute:NSUnderlineStyleAttributeName forCharacterRange:_lastAutoHighlightArgumentsRange];
-		_lastAutoHighlightArgumentsRange = NSEmptyRange;
-	}
 }
 
 - (void)deleteBackward:(id)sender {
@@ -1010,6 +1030,19 @@
 - (WCSourceTextStorage *)sourceTextStorage {
 	return (WCSourceTextStorage *)[self textStorage];
 }
+@dynamic autoHighlightArgumentsRanges;
+- (NSIndexSet *)autoHighlightArgumentsRanges {
+	return _autoHighlightArgumentsRanges;
+}
+- (void)setAutoHighlightArgumentsRanges:(NSIndexSet *)autoHighlightArgumentsRanges {
+	BOOL needsUpdate = (_autoHighlightArgumentsRanges != autoHighlightArgumentsRanges);
+	
+	[_autoHighlightArgumentsRanges release];
+	_autoHighlightArgumentsRanges = [autoHighlightArgumentsRanges copy];
+	
+	if (needsUpdate)
+		[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
+}
 #pragma mark *** Private Methods ***
 - (void)_commonInit; {
 	[self setAllowsImageEditing:NO];
@@ -1372,7 +1405,7 @@
 		}
 	}
 	
-	CGFloat completionDelay = [[NSUserDefaults standardUserDefaults] floatForKey:WCEditorSuggestCompletionsWhileTypingDelayKey];
+	NSTimeInterval completionDelay = [[NSUserDefaults standardUserDefaults] floatForKey:WCEditorSuggestCompletionsWhileTypingDelayKey];
 	
 	// if the timer already exists, restart it
 	if (_completionTimer)
@@ -1404,18 +1437,10 @@
 }
 
 - (void)_highlightEnclosedMacroArguments; {
-	if (![[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowHighlightEnclosedMacroArgumentsKey]) {
-		if (_lastAutoHighlightArgumentsRange.length && NSMaxRange(_lastAutoHighlightArgumentsRange) < [[self string] length]) {
-			[[self layoutManager] removeTemporaryAttribute:NSUnderlineStyleAttributeName forCharacterRange:_lastAutoHighlightArgumentsRange];
-			_lastAutoHighlightArgumentsRange = NSEmptyRange;
-		}
-		return;
-	}
-	else if ([self selectedRange].length) {
-		if (_lastAutoHighlightArgumentsRange.length && NSMaxRange(_lastAutoHighlightArgumentsRange) < [[self string] length]) {
-			[[self layoutManager] removeTemporaryAttribute:NSUnderlineStyleAttributeName forCharacterRange:_lastAutoHighlightArgumentsRange];
-			_lastAutoHighlightArgumentsRange = NSEmptyRange;
-		}
+	if (![[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowHighlightEnclosedMacroArgumentsKey] ||
+		[self selectedRange].length) {
+		
+		[self setAutoHighlightArgumentsRanges:nil];
 		return;
 	}
 	
@@ -1423,48 +1448,33 @@
 	WCMacroSymbol *macro = (WCMacroSymbol *)[macros sourceSymbolForRange:[self selectedRange]];
 	
 	if (!macro || !NSLocationInRange([self selectedRange].location, [macro valueRange])) {
-		if (_lastAutoHighlightArgumentsRange.length && NSMaxRange(_lastAutoHighlightArgumentsRange) < [[self string] length]) {
-			[[self layoutManager] removeTemporaryAttribute:NSUnderlineStyleAttributeName forCharacterRange:_lastAutoHighlightArgumentsRange];
-			_lastAutoHighlightArgumentsRange = NSEmptyRange;
-		}
+		[self setAutoHighlightArgumentsRanges:nil];
 		return;
 	}
 	else if (![[macro arguments] count]) {
-		if (_lastAutoHighlightArgumentsRange.length && NSMaxRange(_lastAutoHighlightArgumentsRange) < [[self string] length]) {
-			[[self layoutManager] removeTemporaryAttribute:NSUnderlineStyleAttributeName forCharacterRange:_lastAutoHighlightArgumentsRange];
-			_lastAutoHighlightArgumentsRange = NSEmptyRange;
-		}
+		[self setAutoHighlightArgumentsRanges:nil];
 		return;
 	}
 	
 	NSRange symbolRange = [[self string] symbolRangeForRange:[self selectedRange]];
 	if (symbolRange.location == NSNotFound) {
-		if (_lastAutoHighlightArgumentsRange.length && NSMaxRange(_lastAutoHighlightArgumentsRange) < [[self string] length]) {
-			[[self layoutManager] removeTemporaryAttribute:NSUnderlineStyleAttributeName forCharacterRange:_lastAutoHighlightArgumentsRange];
-			_lastAutoHighlightArgumentsRange = NSEmptyRange;
-		}
+		[self setAutoHighlightArgumentsRanges:nil];
 		return;
 	}
 	
 	NSString *symbolString = [[self string] substringWithRange:symbolRange];
 	if (![[macro argumentsSet] containsObject:[symbolString lowercaseString]]) {
-		if (_lastAutoHighlightArgumentsRange.length && NSMaxRange(_lastAutoHighlightArgumentsRange) < [[self string] length]) {
-			[[self layoutManager] removeTemporaryAttribute:NSUnderlineStyleAttributeName forCharacterRange:_lastAutoHighlightArgumentsRange];
-			_lastAutoHighlightArgumentsRange = NSEmptyRange;
-		}
+		[self setAutoHighlightArgumentsRanges:nil];
 		return;
 	}
-	else if (_lastAutoHighlightArgumentsRange.length && NSMaxRange(_lastAutoHighlightArgumentsRange) < [[self string] length]) {
-		[[self layoutManager] removeTemporaryAttribute:NSUnderlineStyleAttributeName forCharacterRange:_lastAutoHighlightArgumentsRange];
-		_lastAutoHighlightArgumentsRange = NSEmptyRange;
-	}
 	
+	NSMutableIndexSet *autoHighlightRanges = [NSMutableIndexSet indexSet];
 	NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:[NSString stringWithFormat:@"\\b%@\\b",symbolString] options:NSRegularExpressionCaseInsensitive error:NULL];
 	[regex enumerateMatchesInString:[self string] options:0 range:[macro valueRange] usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-		[[self layoutManager] addTemporaryAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithUnsignedInteger:NSUnderlineStyleSingle|NSUnderlinePatternDot] forCharacterRange:[result range]];
+		[autoHighlightRanges addIndexesInRange:[result range]];
 	}];
 	
-	_lastAutoHighlightArgumentsRange = [macro valueRange];
+	[self setAutoHighlightArgumentsRanges:autoHighlightRanges];
 }
 - (BOOL)_handleUnfoldForEvent:(NSEvent *)theEvent {
 	[(WCSourceTextStorage *)[self textStorage] setLineFoldingEnabled:YES];
@@ -1573,10 +1583,10 @@
 	[self setInsertionPointColor:[currentTheme cursorColor]];
 }
 - (void)_textStorageDidFold:(NSNotification *)note {
-	[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:NO];
+	//[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:NO];
 }
 - (void)_textStorageDidUnfold:(NSNotification *)note {
-	[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:NO];
+	//[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:NO];
 }
 #pragma mark Callbacks
 - (void)_completionTimerCallback:(NSTimer *)timer {

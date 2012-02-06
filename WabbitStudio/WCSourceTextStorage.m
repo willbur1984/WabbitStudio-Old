@@ -69,7 +69,7 @@ NSString *const WCSourceTextStorageFoldRangeUserInfoKey = @"WCSourceTextStorageF
 	
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
 
-	_attributedString = [[NSMutableAttributedString alloc] initWithString:string attributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName,[self paragraphStyle],NSParagraphStyleAttributeName, nil]];
+	_attributedString = [[NSMutableAttributedString alloc] initWithString:string attributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName,[self paragraphStyle],NSParagraphStyleAttributeName,[NSNumber numberWithBool:YES],WCSourceHighlighterNoHighlightAttributeName, nil]];
 	
 	//[WCSourceHighlighter highlightTextStorageAttributedString:_attributedString];
 	

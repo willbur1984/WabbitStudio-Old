@@ -9,6 +9,8 @@
 #import <Foundation/NSObject.h>
 #import "WCSourceHighlighterDelegate.h"
 
+extern NSString *const WCSourceHighlighterNoHighlightAttributeName;
+
 @class WCSourceScanner;
 
 @interface WCSourceHighlighter : NSObject {
@@ -21,6 +23,8 @@
 - (id)initWithSourceScanner:(WCSourceScanner *)sourceScanner;
 
 - (void)performFullHighlightIfNeeded;
+- (void)highlightTokensInRange:(NSRange)range;
+
 - (void)highlightSymbolsInVisibleRange;
 - (void)highlightSymbolsInRange:(NSRange)range;
 

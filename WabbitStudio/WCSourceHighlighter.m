@@ -18,7 +18,7 @@
 #import "WCSourceTextStorage.h"
 #import "WCSourceSymbol.h"
 
-static NSString *const WCSourceHighlighterSymbolAttributeName = @"WCSourceHighlighterSymbolAttributeName";
+NSString *const WCSourceHighlighterNoHighlightAttributeName = @"WCSourceHighlighterNoHighlightAttributeName";
 
 @interface WCSourceHighlighter ()
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
@@ -69,6 +69,9 @@ static NSString *const WCSourceHighlighterSymbolAttributeName = @"WCSourceHighli
 		_needsToPerformFullHighlight = NO;
 		[self _highlightInRange:NSMakeRange(0, [[[self sourceScanner] textStorage] length])];
 	}
+}
+- (void)highlightTokensInRange:(NSRange)range; {
+	[self _highlightInRange:range];
 }
 
 - (void)highlightSymbolsInVisibleRange; {
@@ -128,8 +131,6 @@ static NSString *const WCSourceHighlighterSymbolAttributeName = @"WCSourceHighli
 	
 	//[attributedString beginEditing];
 	
-	//[attributedString removeAttribute:WCSourceHighlighterSymbolAttributeName range:range];
-	//[attributedString removeAttribute:NSBackgroundColorAttributeName range:range];
 	[attributedString addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithUnsignedInt:WCSourceTokenTypeNone],WCSourceTokenTypeAttributeName, nil] range:range];
 	
 	[[WCSourceScanner registerRegularExpression] enumerateMatchesInString:[attributedString string] options:0 range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
