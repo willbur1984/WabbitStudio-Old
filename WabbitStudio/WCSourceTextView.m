@@ -165,6 +165,39 @@
 			[path strokeInside];
 		}];
 	}
+	
+	/*
+	if ([[self findRanges] count]) {
+		[[[NSColor blackColor] colorWithAlphaComponent:0.5] setFill];
+		NSRectFillUsingOperation(rect, NSCompositeSourceOver);
+		
+		NSShadow *shadow = [[[NSShadow alloc] init] autorelease];
+		[shadow setShadowBlurRadius:2.0];
+		[shadow setShadowColor:[[NSColor blackColor] colorWithAlphaComponent:0.65]];
+		[shadow setShadowOffset:NSMakeSize(1.0, -1.0)];
+		
+		[[NSGraphicsContext currentContext] saveGraphicsState];
+		[shadow set];
+		
+		[[self findRanges] enumerateRangesInRange:[self visibleRange] options:0 usingBlock:^(NSRange range, BOOL *stop) {
+			NSUInteger rectCount;
+			NSRectArray rects = [[self layoutManager] rectArrayForCharacterRange:range withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[self textContainer] rectCount:&rectCount];
+			
+			if (!rectCount)
+				return;
+			
+			NSRect findRect = rects[0];
+			
+			if (!NSIntersectsRect(findRect, rect) || ![self needsToDrawRect:findRect])
+				return;
+			
+			[[self backgroundColor] setFill];
+			NSRectFill(findRect);
+		}];
+		
+		[[NSGraphicsContext currentContext] restoreGraphicsState];
+	}
+	 */
 }
 
 - (NSRange)rangeForUserCompletion {
@@ -506,6 +539,10 @@
 			[menuItem setTitle:NSLocalizedString(@"Remove Bookmark at Current Line", @"Remove Bookmark at Current Line")];
 		else
 			[menuItem setTitle:NSLocalizedString(@"Add Bookmark at Current Line", @"Add Bookmark at Current Line")];
+	}
+	else if ([menuItem action] == @selector(openInSeparateEditor:)) {
+		if (![[self delegate] projectDocumentForSourceTextView:self])
+			return NO;
 	}
 	return YES;
 }
@@ -1039,6 +1076,19 @@
 	
 	[_autoHighlightArgumentsRanges release];
 	_autoHighlightArgumentsRanges = [autoHighlightArgumentsRanges copy];
+	
+	if (needsUpdate)
+		[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
+}
+@dynamic findRanges;
+- (NSIndexSet *)findRanges {
+	return _findRanges;
+}
+- (void)setFindRanges:(NSIndexSet *)findRanges {
+	BOOL needsUpdate = (_findRanges != findRanges);
+	
+	[_findRanges release];
+	_findRanges = [findRanges copy];
 	
 	if (needsUpdate)
 		[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];

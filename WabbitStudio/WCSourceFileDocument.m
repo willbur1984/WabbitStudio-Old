@@ -96,7 +96,7 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 }
 
 + (BOOL)autosavesInPlace {
-    return NO;
+    return YES;
 }
 
 + (BOOL)canConcurrentlyReadDocumentsOfType:(NSString *)typeName {
@@ -113,6 +113,12 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 		[typeName isEqualToString:WCActiveServerIncludeFileUTI])
 		return YES;
 	return NO;
+}
+
+- (BOOL)checkAutosavingSafetyAndReturnError:(NSError **)outError {
+	if ([self projectDocument])
+		return YES;
+	return [super checkAutosavingSafetyAndReturnError:outError];
 }
 
 - (void)saveToURL:(NSURL *)url ofType:(NSString *)typeName forSaveOperation:(NSSaveOperationType)saveOperation completionHandler:(void (^)(NSError *))completionHandler {

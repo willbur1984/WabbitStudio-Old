@@ -12,6 +12,7 @@
 #import "RSBezelWidgetManager.h"
 #import "WCDefines.h"
 #import "NSTextView+WCExtensions.h"
+#import "WCSourceTextView.h"
 
 @interface RSFindBarViewController ()
 @property (readwrite,assign,nonatomic) BOOL wrapAround;
@@ -222,6 +223,9 @@ static const NSAnimationCurve kFindBarShowHideAnimationCurve = NSAnimationEaseIn
 - (IBAction)hideFindBar:(id)sender; {
 	[[[self textView] window] makeFirstResponder:[self textView]];
 	[self _removeFindTextAttributes];
+	
+	if ([[self textView] respondsToSelector:@selector(setFindRanges:)])
+		[(WCSourceTextView *)[self textView] setFindRanges:nil];
 	
 	NSRect scrollViewFrame = [[[self textView] enclosingScrollView] frame];
 	NSRect findBarFrame = [[self view] frame];
@@ -506,6 +510,9 @@ static const CGFloat kReplaceControlsHeight = 22.0;
 	[_findRanges removeAllIndexes];
 	[self _removeFindTextAttributesInRange:[[self textView] visibleRange]];
 	
+	if ([[self textView] respondsToSelector:@selector(setFindRanges:)])
+		[(WCSourceTextView *)[self textView] setFindRanges:nil];
+	
 	if (![[self findString] length]) {
 		NSBeep();
 		return;
@@ -609,6 +616,9 @@ static const CGFloat kReplaceControlsHeight = 22.0;
 	else
 		[self setStatusString:[NSString stringWithFormat:NSLocalizedString(@"%lu matches", @"find bar multiple matches status string"),numberOfMatches]];
 	
+	if ([[self textView] respondsToSelector:@selector(setFindRanges:)])
+		[(WCSourceTextView *)[self textView] setFindRanges:_findRanges];
+	
 	NSMutableArray *recentSearches = [[[[self searchField] recentSearches] mutableCopy] autorelease];
 	
 	if (![recentSearches containsObject:[self findString]]) {
@@ -641,11 +651,13 @@ static const CGFloat kReplaceControlsHeight = 22.0;
 	[self _removeFindTextAttributesInRange:NSMakeRange(0, [[[self textView] string] length])];
 }
 - (void)_addFindTextAttributesInRange:(NSRange)range; {
+	
 	NSDictionary *attributes = WCTransparentFindTextAttributes();
 	
 	[_findRanges enumerateRangesInRange:range options:0 usingBlock:^(NSRange range, BOOL *stop) {
 		[[[self textView] layoutManager] addTemporaryAttributes:attributes forCharacterRange:range];
 	}];
+	 
 }
 - (void)_removeFindTextAttributesInRange:(NSRange)range; {
 	[[[self textView] layoutManager] removeTemporaryAttribute:NSBackgroundColorAttributeName forCharacterRange:range];

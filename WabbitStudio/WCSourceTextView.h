@@ -20,10 +20,12 @@
 	NSTimer *_completionTimer;
 	NSTimer *_autoHighlightArgumentsTimer;
 	NSIndexSet *_autoHighlightArgumentsRanges;
+	NSIndexSet *_findRanges;
 }
 @property (readwrite,assign,nonatomic) IBOutlet id <WCSourceTextViewDelegate> delegate;
 @property (readwrite,assign,nonatomic) BOOL wrapLines;
 @property (readonly,nonatomic) WCSourceTextStorage *sourceTextStorage;
+@property (readwrite,copy,nonatomic) NSIndexSet *findRanges;
 
 - (IBAction)jumpToNextPlaceholder:(id)sender;
 - (IBAction)jumpToPreviousPlaceholder:(id)sender;
