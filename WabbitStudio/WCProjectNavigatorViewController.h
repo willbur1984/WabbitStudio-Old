@@ -16,6 +16,9 @@
 extern NSString *const WCProjectNavigatorDidAddNewGroupNotification;
 extern NSString *const WCProjectNavigatorDidAddNewGroupNotificationNewGroupUserInfoKey;
 
+extern NSString *const WCProjectNavigatorDidAddNodesNotification;
+extern NSString *const WCProjectNavigatorDidAddNodesNotificationNewNodesUserInfoKey;
+
 extern NSString *const WCProjectNavigatorDidGroupNodesNotification;
 extern NSString *const WCProjectNavigatorDidGroupNodesNotificationGroupedNodesUserInfoKey;
 

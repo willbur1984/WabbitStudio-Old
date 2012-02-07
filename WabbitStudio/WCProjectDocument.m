@@ -87,7 +87,10 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	[self addWindowController:windowController];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_projectNavigatorDidAddNewGroup:) name:WCProjectNavigatorDidAddNewGroupNotification object:[windowController projectNavigatorViewController]];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_projectNavigatorDidAddNodes:) name:WCProjectNavigatorDidAddNodesNotification object:[windowController projectNavigatorViewController]];
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_projectNavigatorDidRemoveNodes:) name:WCProjectNavigatorDidRemoveNodesNotification object:[windowController projectNavigatorViewController]];
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_windowWillClose:) name:NSWindowWillCloseNotification object:[windowController window]];
 }
 
@@ -352,6 +355,30 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	
 	[[self filesToFileContainers] setObject:newGroupContainer forKey:[newGroupContainer representedObject]];
 }
+- (void)_projectNavigatorDidAddNodes:(NSNotification *)note {
+	NSArray *newFileContainers = [[note userInfo] objectForKey:WCProjectNavigatorDidAddNodesNotificationNewNodesUserInfoKey];
+	
+	for (WCFileContainer *newFileContainer in newFileContainers) {
+		[[self filesToFileContainers] setObject:newFileContainer forKey:[newFileContainer representedObject]];
+		
+		if ([[newFileContainer representedObject] isSourceFile]) {
+			NSError *outError;
+			WCSourceFileDocument *document = [[[WCSourceFileDocument alloc] initWithContentsOfURL:[[newFileContainer representedObject] fileURL] ofType:[[newFileContainer representedObject] fileUTI] error:&outError] autorelease];
+			[document setProjectDocument:self];
+			
+			if (document) {
+				[[self filesToSourceFileDocuments] setObject:document forKey:[newFileContainer representedObject]];
+				[[self sourceFileDocumentsToFiles] setObject:[newFileContainer representedObject] forKey:document];
+			}
+		}
+		
+		if ([newFileContainer isLeafNode])
+			[_fileCompletions setObject:[newFileContainer representedObject] forKey:[[[newFileContainer representedObject] fileName] lowercaseString]];
+		
+		[[self UUIDsToFiles] setObject:[newFileContainer representedObject] forKey:[[newFileContainer representedObject] UUID]];
+	}
+}
+
 - (void)_projectNavigatorDidRemoveNodes:(NSNotification *)note {
 	NSSet *removedFileContainers = [[note userInfo] objectForKey:WCProjectNavigatorDidRemoveNodesNotificationRemovedNodesUserInfoKey];
 	

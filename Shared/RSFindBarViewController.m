@@ -224,9 +224,6 @@ static const NSAnimationCurve kFindBarShowHideAnimationCurve = NSAnimationEaseIn
 	[[[self textView] window] makeFirstResponder:[self textView]];
 	[self _removeFindTextAttributes];
 	
-	if ([[self textView] respondsToSelector:@selector(setFindRanges:)])
-		[(WCSourceTextView *)[self textView] setFindRanges:nil];
-	
 	NSRect scrollViewFrame = [[[self textView] enclosingScrollView] frame];
 	NSRect findBarFrame = [[self view] frame];
 	
@@ -510,9 +507,6 @@ static const CGFloat kReplaceControlsHeight = 22.0;
 	[_findRanges removeAllIndexes];
 	[self _removeFindTextAttributesInRange:[[self textView] visibleRange]];
 	
-	if ([[self textView] respondsToSelector:@selector(setFindRanges:)])
-		[(WCSourceTextView *)[self textView] setFindRanges:nil];
-	
 	if (![[self findString] length]) {
 		NSBeep();
 		return;
@@ -615,9 +609,6 @@ static const CGFloat kReplaceControlsHeight = 22.0;
 		[self setStatusString:NSLocalizedString(@"1 match", @"1 match")];
 	else
 		[self setStatusString:[NSString stringWithFormat:NSLocalizedString(@"%lu matches", @"find bar multiple matches status string"),numberOfMatches]];
-	
-	if ([[self textView] respondsToSelector:@selector(setFindRanges:)])
-		[(WCSourceTextView *)[self textView] setFindRanges:_findRanges];
 	
 	NSMutableArray *recentSearches = [[[[self searchField] recentSearches] mutableCopy] autorelease];
 	

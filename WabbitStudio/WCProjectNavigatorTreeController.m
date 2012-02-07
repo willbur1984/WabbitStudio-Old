@@ -16,6 +16,7 @@
 #import "WCFile.h"
 #import "RSTreeNode.h"
 #import "WCAddToProjectAccessoryViewController.h"
+#import "WCInterfacePerformer.h"
 
 @interface WCProjectNavigatorTreeController ()
 @property (readwrite,retain,nonatomic) WCAddToProjectAccessoryViewController *addToProjectAccessoryViewController;
@@ -60,8 +61,9 @@
 			[files addObject:file];
 		}
 		
+		NSArray *nodes = [self representedObjectsForModelObjects:files];
 		// grab the corresponding RSTreeNode objects for each file in the files array
-		for (RSTreeNode *node in [self representedObjectsForModelObjects:files]) {
+		for (RSTreeNode *node in nodes) {
 			// cannot drag an item to itself
 			if (node == item)
 				return NSDragOperationNone;
@@ -69,10 +71,10 @@
 			else if ([(RSTreeNode *)item isDescendantOfNode:node])
 				return NSDragOperationNone;
 			// if we are dragging a single item with its parent, require the item to move up or down at least one index
-			else if ([pboardItems count] == 1 &&
+			else if (node == [nodes objectAtIndex:0] &&
 					 item == [node parentNode] &&
 					 ([[[node parentNode] childNodes] indexOfObjectIdenticalTo:node] == index ||
-					  [[[node parentNode] childNodes] indexOfObjectIdenticalTo:node] == --index))
+					  [[[node parentNode] childNodes] indexOfObjectIdenticalTo:node] == index - 1))
 				return NSDragOperationNone;
 		}
 		return NSDragOperationMove;
@@ -241,18 +243,32 @@
 		
 		NSString *message = NSLocalizedString(@"Choose options for adding the following files:", @"Choose options for adding the following files:");
 		NSString *informative = [NSString stringWithFormat:NSLocalizedString(@"These options affect how the files %@ will be added to the project.", @"add files to project drag and drop alert informative format string"),fileNames];
-		NSAlert *alert = [NSAlert alertWithMessageText:message defaultButton:NSLocalizedString(@"Add To Project", @"Add to Project") alternateButton:LOCALIZED_STRING_CANCEL otherButton:nil informativeTextWithFormat:informative];
+		NSAlert *addToProjectAlert = [NSAlert alertWithMessageText:message defaultButton:NSLocalizedString(@"Add To Project", @"Add to Project") alternateButton:LOCALIZED_STRING_CANCEL otherButton:nil informativeTextWithFormat:informative];
 		
-		[alert setAccessoryView:[[self addToProjectAccessoryViewController] view]];
+		[addToProjectAlert setAccessoryView:[[self addToProjectAccessoryViewController] view]];
 		
-		[alert beginSheetModalForWindow:[outlineView window] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
+		[addToProjectAlert beginSheetModalForWindow:[outlineView window] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
 			[[alert window] orderOut:nil];
 			[self setAddToProjectAccessoryViewController:nil];
 			if (returnCode == NSAlertAlternateReturn)
 				return;
 			
-			// TODO: add the files to the project
+			NSError *outError;
+			if ([[WCInterfacePerformer sharedPerformer] addFileURLs:acceptedFileURLs toGroupContainer:[item representedObject] atIndex:index error:&outError]) {
+				NSArray *newNodes = [[[item representedObject] childNodes] subarrayWithRange:NSMakeRange(index, [acceptedFileURLs count])];
+				
+				[self setSelectedRepresentedObjects:newNodes];
+				
+				[[NSNotificationCenter defaultCenter] postNotificationName:WCProjectNavigatorDidAddNodesNotification object:[self projectNavigatorViewController] userInfo:[NSDictionary dictionaryWithObjectsAndKeys:newNodes,WCProjectNavigatorDidAddNodesNotificationNewNodesUserInfoKey, nil]];
+				
+				// let the project document know there was a change
+				[[[self projectNavigatorViewController] projectDocument] updateChangeCount:NSChangeDone];
+			}
+			else if (outError)
+				[[NSApplication sharedApplication] presentError:outError];
 		}];
+		
+		[self setProjectFilePaths:nil];
 	}
 	return YES;
 }

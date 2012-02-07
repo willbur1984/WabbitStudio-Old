@@ -26,10 +26,15 @@
 #import "WCTabViewController.h"
 #import "WCSourceTextViewController.h"
 #import "WCSourceTextView.h"
+#import "WCInterfacePerformer.h"
+
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
 NSString *const WCProjectNavigatorDidAddNewGroupNotification = @"WCProjectNavigatorDidAddNewGroupNotification";
 NSString *const WCProjectNavigatorDidAddNewGroupNotificationNewGroupUserInfoKey = @"WCProjectNavigatorDidAddNewGroupNotificationNewGroupUserInfoKey";
+
+NSString *const WCProjectNavigatorDidAddNodesNotification = @"WCProjectNavigatorDidAddNodesNotification";
+NSString *const WCProjectNavigatorDidAddNodesNotificationNewNodesUserInfoKey = @"WCProjectNavigatorDidAddNodesNotificationNewNodesUserInfoKey";
 
 NSString *const WCProjectNavigatorDidGroupNodesNotification = @"WCProjectNavigatorDidGroupNodesNotification";
 NSString *const WCProjectNavigatorDidGroupNodesNotificationGroupedNodesUserInfoKey = @"WCProjectNavigatorDidGroupNodesNotificationGroupedNodesUserInfoKey";
@@ -66,6 +71,9 @@ static NSString *const WCProjectNavigatorSelectedItemsKey = @"selectedItems";
 
 @implementation WCProjectNavigatorViewController
 - (void)dealloc {
+#ifdef DEBUG
+	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
+#endif
 	[_projectFilePaths release];
 	[_addToProjectAccessoryViewController release];
 	[_selectedItemsAfterFilterOperation release];
@@ -548,7 +556,29 @@ static const NSInteger WCProjectNavigatorFileAlreadyExistsInProjectErrorCode = 1
 		if (result == NSFileHandlingPanelCancelButton)
 			return;
 		
-		// TODO: add the files to the project
+		WCGroupContainer *groupContainer = [[self selectedObjects] firstObject];
+		NSUInteger insertIndex = 0;
+		
+		// if the node is a leaf node, adjust the insertion index and node appropriately
+		if ([groupContainer isLeafNode]) {
+			insertIndex = [[[groupContainer parentNode] childNodes] indexOfObjectIdenticalTo:groupContainer] + 1;
+			groupContainer = [groupContainer parentNode];
+		}
+		
+		NSArray *acceptedFileURLs = [openPanel URLs];
+		NSError *outError;
+		if ([[WCInterfacePerformer sharedPerformer] addFileURLs:acceptedFileURLs toGroupContainer:groupContainer atIndex:insertIndex error:&outError]) {
+			NSArray *newNodes = [[groupContainer childNodes] subarrayWithRange:NSMakeRange(insertIndex, [acceptedFileURLs count])];
+			
+			[self setSelectedObjects:newNodes];
+			
+			[[NSNotificationCenter defaultCenter] postNotificationName:WCProjectNavigatorDidAddNodesNotification object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:newNodes,WCProjectNavigatorDidAddNodesNotificationNewNodesUserInfoKey, nil]];
+			
+			// let the project document know there was a change
+			[[self projectDocument] updateChangeCount:NSChangeDone];
+		}
+		else if (outError)
+			[[NSApplication sharedApplication] presentError:outError];
 	}];
 }
 

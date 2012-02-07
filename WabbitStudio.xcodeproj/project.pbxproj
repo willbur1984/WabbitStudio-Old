@@ -180,6 +180,11 @@
 		0778853A14C4A3E100605F5D /* JAViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 071985EF14C0AEAC00C8E91A /* JAViewController.m */; };
 		0778853B14C4A3E400605F5D /* NSObject+JAExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 071985F114C0AEAC00C8E91A /* NSObject+JAExtensions.m */; };
 		0778853C14C4A3E700605F5D /* NSView+JAExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 071985F314C0AEAC00C8E91A /* NSView+JAExtensions.m */; };
+		0779069D14E0B499006C16EF /* WCInterfacePerformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0779069C14E0B499006C16EF /* WCInterfacePerformer.m */; };
+		077906A214E0DD2D006C16EF /* WCSearchNavigatorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 077906A114E0DD2D006C16EF /* WCSearchNavigatorViewController.m */; };
+		077906A514E0DE08006C16EF /* WCSearchNavigatorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 077906A314E0DE08006C16EF /* WCSearchNavigatorView.xib */; };
+		077906A814E0E1C5006C16EF /* WCSearchNavigatorOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 077906A714E0E1C5006C16EF /* WCSearchNavigatorOutlineView.m */; };
+		077906AB14E0E4BB006C16EF /* WCSearchContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 077906AA14E0E4BB006C16EF /* WCSearchContainer.m */; };
 		07862BA614BA33040057EB89 /* WCDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07862BA514BA33040057EB89 /* WCDocumentController.m */; };
 		07862BA914BA46720057EB89 /* WCSplitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07862BA814BA46720057EB89 /* WCSplitView.m */; };
 		07862BAD14BA78010057EB89 /* KBResponderNotifyingWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 07862BAC14BA78010057EB89 /* KBResponderNotifyingWindow.m */; };
@@ -601,6 +606,15 @@
 		0778852114C2402200605F5D /* WCProjectNavigatorOutlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCProjectNavigatorOutlineView.m; sourceTree = "<group>"; };
 		0778853414C49ABB00605F5D /* WCNavigatorModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCNavigatorModule.h; sourceTree = "<group>"; };
 		0778853514C49F0300605F5D /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
+		0779069B14E0B499006C16EF /* WCInterfacePerformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCInterfacePerformer.h; sourceTree = "<group>"; };
+		0779069C14E0B499006C16EF /* WCInterfacePerformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCInterfacePerformer.m; sourceTree = "<group>"; };
+		077906A014E0DD2D006C16EF /* WCSearchNavigatorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSearchNavigatorViewController.h; sourceTree = "<group>"; };
+		077906A114E0DD2D006C16EF /* WCSearchNavigatorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSearchNavigatorViewController.m; sourceTree = "<group>"; };
+		077906A414E0DE08006C16EF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCSearchNavigatorView.xib; sourceTree = "<group>"; };
+		077906A614E0E1C5006C16EF /* WCSearchNavigatorOutlineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSearchNavigatorOutlineView.h; sourceTree = "<group>"; };
+		077906A714E0E1C5006C16EF /* WCSearchNavigatorOutlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSearchNavigatorOutlineView.m; sourceTree = "<group>"; };
+		077906A914E0E4BB006C16EF /* WCSearchContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSearchContainer.h; sourceTree = "<group>"; };
+		077906AA14E0E4BB006C16EF /* WCSearchContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSearchContainer.m; sourceTree = "<group>"; };
 		07862BA414BA33040057EB89 /* WCDocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCDocumentController.h; sourceTree = "<group>"; };
 		07862BA514BA33040057EB89 /* WCDocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCDocumentController.m; sourceTree = "<group>"; };
 		07862BA714BA46720057EB89 /* WCSplitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSplitView.h; sourceTree = "<group>"; };
@@ -848,6 +862,7 @@
 				072BDC2E14CE623D00F3F555 /* WCAlertsView.xib */,
 				07154F5314D40B3C00F57668 /* WCProjectView.xib */,
 				07154F5A14D5D88000F57668 /* WCSourceFileSeparateWindow.xib */,
+				077906A314E0DE08006C16EF /* WCSearchNavigatorView.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -1020,6 +1035,8 @@
 			children = (
 				0745BE1C14AB921300F541DC /* WCMiscellaneousPerformer.h */,
 				0745BE1D14AB921300F541DC /* WCMiscellaneousPerformer.m */,
+				0779069B14E0B499006C16EF /* WCInterfacePerformer.h */,
+				0779069C14E0B499006C16EF /* WCInterfacePerformer.m */,
 			);
 			name = Performers;
 			sourceTree = "<group>";
@@ -1395,6 +1412,7 @@
 			isa = PBXGroup;
 			children = (
 				0778853414C49ABB00605F5D /* WCNavigatorModule.h */,
+				0779069F14E0DD05006C16EF /* Search */,
 				0765361214CD107E004D72D1 /* Project */,
 			);
 			name = Navigators;
@@ -1416,6 +1434,8 @@
 				077884FC14C116F600605F5D /* WCProjectContainer.m */,
 				071306EF14CA92EE00862E4D /* WCGroupContainer.h */,
 				071306F014CA92EE00862E4D /* WCGroupContainer.m */,
+				077906A914E0E4BB006C16EF /* WCSearchContainer.h */,
+				077906AA14E0E4BB006C16EF /* WCSearchContainer.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -1450,6 +1470,17 @@
 				07154F5714D5D5E100F57668 /* WCSourceFileSeparateWindowController.m */,
 			);
 			name = "Window Controllers";
+			sourceTree = "<group>";
+		};
+		0779069F14E0DD05006C16EF /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				077906A014E0DD2D006C16EF /* WCSearchNavigatorViewController.h */,
+				077906A114E0DD2D006C16EF /* WCSearchNavigatorViewController.m */,
+				077906A614E0E1C5006C16EF /* WCSearchNavigatorOutlineView.h */,
+				077906A714E0E1C5006C16EF /* WCSearchNavigatorOutlineView.m */,
+			);
+			name = Search;
 			sourceTree = "<group>";
 		};
 		07862BAA14BA5E350057EB89 /* Window Controllers */ = {
@@ -1814,6 +1845,7 @@
 				0773AA2014D680B8004612D9 /* Debug.png in Resources */,
 				0773AA2114D680B8004612D9 /* Issue.png in Resources */,
 				0708A5BF14D9031600BE60EE /* Bookmark.png in Resources */,
+				077906A514E0DE08006C16EF /* WCSearchNavigatorView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1998,6 +2030,10 @@
 				07154F5814D5D5E100F57668 /* WCSourceFileSeparateWindowController.m in Sources */,
 				07154F5F14D5EDA400F57668 /* NSWindow+ULIZoomEffect.m in Sources */,
 				07F6EFF314D7B20A00138231 /* NDKeyboardLayout.m in Sources */,
+				0779069D14E0B499006C16EF /* WCInterfacePerformer.m in Sources */,
+				077906A214E0DD2D006C16EF /* WCSearchNavigatorViewController.m in Sources */,
+				077906A814E0E1C5006C16EF /* WCSearchNavigatorOutlineView.m in Sources */,
+				077906AB14E0E4BB006C16EF /* WCSearchContainer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2172,6 +2208,14 @@
 				0778851314C2349B00605F5D /* en */,
 			);
 			name = WCProjectNavigatorView.xib;
+			sourceTree = "<group>";
+		};
+		077906A314E0DE08006C16EF /* WCSearchNavigatorView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				077906A414E0DE08006C16EF /* en */,
+			);
+			name = WCSearchNavigatorView.xib;
 			sourceTree = "<group>";
 		};
 		07862BC314BB6F850057EB89 /* WCSourceFileWindow.xib */ = {

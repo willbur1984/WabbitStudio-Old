@@ -28,6 +28,10 @@ static NSString *const WCGroupNameKey = @"name";
 - (NSImage *)fileIcon {
 	return [NSImage imageNamed:@"Group"];
 }
+
+- (BOOL)isSourceFile {
+	return NO;
+}
 #pragma mark RSPlistArchiving
 - (NSDictionary *)plistRepresentation {
 	NSMutableDictionary *retval = [NSMutableDictionary dictionaryWithDictionary:[super plistRepresentation]];

@@ -15,6 +15,7 @@
 #import "NSURL+RSExtensions.h"
 #import "WCProjectDocument.h"
 #import "GTMNSData+zlib.h"
+#import "WCInterfacePerformer.h"
 
 @implementation WCNewProjectWindowController
 #pragma mark *** Subclass Overrides ***
@@ -46,37 +47,9 @@
 	
 	WCProjectContainer *projectNode = [WCProjectContainer projectContainerWithProject:nil];
 	
-	NSDirectoryEnumerator *directoryEnumerator = [[NSFileManager defaultManager] enumeratorAtURL:directoryURL includingPropertiesForKeys:[NSArray arrayWithObjects:NSURLIsDirectoryKey,NSURLIsPackageKey,NSURLParentDirectoryURLKey, nil] options:NSDirectoryEnumerationSkipsHiddenFiles|NSDirectoryEnumerationSkipsPackageDescendants errorHandler:^BOOL(NSURL *url, NSError *error) {
-		
-		return NO;
-	}];
-	
-	NSMutableDictionary *directoryPathsToDirectoryNodes = [NSMutableDictionary dictionaryWithCapacity:0];
-	for (NSURL *fileURL in directoryEnumerator) {
-		if ([fileURL isPackage] && [[fileURL fileUTI] isEqualToString:WCProjectFileUTI])
-			continue;
-		else if ([fileURL isDirectory]) {
-			WCGroupContainer *directoryNode = [WCGroupContainer fileContainerWithFile:[WCGroup fileWithFileURL:fileURL]];
-			
-			[directoryPathsToDirectoryNodes setObject:directoryNode forKey:[fileURL path]];
-			
-			WCGroupContainer *parentDirectoryNode = [directoryPathsToDirectoryNodes objectForKey:[[fileURL parentDirectoryURL] path]];
-			
-			if (parentDirectoryNode)
-				[[parentDirectoryNode mutableChildNodes] addObject:directoryNode];
-			else
-				[[projectNode mutableChildNodes] addObject:directoryNode];
-		}
-		else {
-			WCFileContainer *childNode = [WCFileContainer fileContainerWithFile:[WCFile fileWithFileURL:fileURL]];
-			WCFileContainer *parentDirectoryNode = [directoryPathsToDirectoryNodes objectForKey:[[fileURL parentDirectoryURL] path]];
-			
-			if (parentDirectoryNode)
-				[[parentDirectoryNode mutableChildNodes] addObject:childNode];
-			else
-				[[projectNode mutableChildNodes] addObject:childNode];
-		}
-	}
+	NSArray *fileURLs = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:directoryURL includingPropertiesForKeys:[NSArray arrayWithObjects:NSURLIsDirectoryKey,NSURLIsPackageKey,NSURLParentDirectoryURLKey, nil] options:NSDirectoryEnumerationSkipsHiddenFiles|NSDirectoryEnumerationSkipsPackageDescendants error:outError];
+	if (![[WCInterfacePerformer sharedPerformer] addFileURLs:fileURLs toGroupContainer:projectNode atIndex:0 copyFiles:NO error:outError])
+		return nil;
 	
 	NSFileWrapper *projectWrapper = [[[NSFileWrapper alloc] initDirectoryWithFileWrappers:nil] autorelease];
 	NSData *projectData = [NSPropertyListSerialization dataWithPropertyList:[projectNode plistRepresentation] format:NSPropertyListXMLFormat_v1_0 options:0 error:outError];

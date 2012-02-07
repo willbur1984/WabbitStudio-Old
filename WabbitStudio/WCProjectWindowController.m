@@ -13,6 +13,8 @@
 #import "WCProjectDocument.h"
 #import "WCProject.h"
 #import "WCTabViewController.h"
+#import "WCSearchNavigatorViewController.h"
+
 #import <PSMTabBarControl/PSMTabBarControl.h>
 #import <Quartz/Quartz.h>
 
@@ -24,6 +26,7 @@
 #endif
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[_tabViewController release];
+	[_searchNavigatorViewController release];
 	[_projectNavigatorViewController release];
 	[_navigatorItemDictionaries release];
 	[super dealloc];
@@ -112,6 +115,8 @@ static const CGFloat kRightSubviewMinWidth = 400.0;
 - (NSView *)navigatorControl:(RSNavigatorControl *)navigatorControl contentViewForItemIdentifier:(NSString *)itemIdentifier atIndex:(NSUInteger)index {
 	if ([itemIdentifier isEqualToString:@"project"])
 		return [[self projectNavigatorViewController] view];
+	else if ([itemIdentifier isEqualToString:@"search"])
+		return [[self searchNavigatorViewController] view];
 	return nil;
 }
 
@@ -149,6 +154,25 @@ static const CGFloat kRightSubviewMinWidth = 400.0;
 }
 #pragma mark *** Public Methods ***
 
+#pragma mark IBActions
+- (IBAction)showProjectNavigator:(id)sender; {
+	[[self navigatorControl] setSelectedItemIdentifier:@"project"];
+}
+- (IBAction)showSearchNavigator:(id)sender; {
+	[[self navigatorControl] setSelectedItemIdentifier:@"search"];
+}
+- (IBAction)showIssueNavigator:(id)sender; {
+	[[self navigatorControl] setSelectedItemIdentifier:@"issue"];
+}
+- (IBAction)showBreakpointNavigator:(id)sender; {
+	[[self navigatorControl] setSelectedItemIdentifier:@"breakpoint"];
+}
+- (IBAction)showDebugNavigator:(id)sender; {
+	[[self navigatorControl] setSelectedItemIdentifier:@"debug"];
+}
+- (IBAction)showBookmarkNavigator:(id)sender; {
+	[[self navigatorControl] setSelectedItemIdentifier:@"bookmark"];
+}
 #pragma mark Properties
 @synthesize navigatorControl=_navigatorControl;
 @synthesize splitView=_splitView;
@@ -159,6 +183,13 @@ static const CGFloat kRightSubviewMinWidth = 400.0;
 		_projectNavigatorViewController = [[WCProjectNavigatorViewController alloc] initWithProjectContainer:[[self document] projectContainer]];
 	}
 	return _projectNavigatorViewController;
+}
+@dynamic searchNavigatorViewController;
+- (WCSearchNavigatorViewController *)searchNavigatorViewController {
+	if (!_searchNavigatorViewController) {
+		_searchNavigatorViewController = [[WCSearchNavigatorViewController alloc] initWithProjectContainer:[[self document] projectContainer]];
+	}
+	return _searchNavigatorViewController;
 }
 @synthesize tabViewController=_tabViewController;
 
