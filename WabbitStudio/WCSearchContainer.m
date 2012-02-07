@@ -14,11 +14,11 @@
 	return NO;
 }
 
-+ (id)searchContainerWithProject:(WCProject *)project; {
-	return [[[[self class] alloc] initWithProject:project] autorelease];
++ (id)searchContainerWithFile:(WCFile *)file; {
+	return [[(WCSearchContainer *)[[self class] alloc] initWithFile:file] autorelease];
 }
-- (id)initWithProject:(WCProject *)project; {
-	if (!(self = [super initWithRepresentedObject:project]))
+- (id)initWithFile:(WCFile *)file; {
+	if (!(self = [super initWithRepresentedObject:file]))
 		return nil;
 	
 	return self;
@@ -26,6 +26,8 @@
 
 @dynamic searchStatus;
 - (NSString *)searchStatus {
-	return NSLocalizedString(@"Search for some stuffs!", @"Search for some stuffs!");
+	if ([[self representedObject] isKindOfClass:[WCProject class]])
+		return NSLocalizedString(@"Search for some stuffs!", @"Search for some stuffs!");
+	return [NSString stringWithFormat:NSLocalizedString(@"%lu result(s)", @"search container search status format string"),[[self childNodes] count]];
 }
 @end

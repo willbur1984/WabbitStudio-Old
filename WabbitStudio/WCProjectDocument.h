@@ -40,6 +40,7 @@ extern NSString *const WCProjectSettingsFileExtension;
 @property (readonly,nonatomic) WCProjectWindowController *projectWindowController;
 @property (readonly,nonatomic) NSHashTable *unsavedFiles;
 @property (readonly,nonatomic) NSCountedSet *openFiles;
+@property (readonly,nonatomic) NSArray *openSourceFileDocuments;
 @property (readonly,retain) NSMutableDictionary *UUIDsToFiles;
 @property (readonly,copy) NSDictionary *projectSettings;
 @property (readonly,retain) NSHashTable *projectSettingsProviders;

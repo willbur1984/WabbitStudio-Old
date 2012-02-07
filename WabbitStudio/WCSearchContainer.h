@@ -8,11 +8,11 @@
 
 #import "RSTreeNode.h"
 
-@class WCProject;
+@class WCFile;
 
 @interface WCSearchContainer : RSTreeNode
 @property (readonly,nonatomic) NSString *searchStatus;
 
-+ (id)searchContainerWithProject:(WCProject *)project;
-- (id)initWithProject:(WCProject *)project;
++ (id)searchContainerWithFile:(WCFile *)file;
+- (id)initWithFile:(WCFile *)file;
 @end

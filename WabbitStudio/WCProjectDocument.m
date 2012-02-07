@@ -336,6 +336,19 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 @synthesize unsavedFiles=_unsavedFiles;
 @synthesize filesToFileContainers=_filesToFileContainers;
 @synthesize openFiles=_openFiles;
+@dynamic openSourceFileDocuments;
+- (NSArray *)openSourceFileDocuments {
+	NSMutableArray *retval = [NSMutableArray arrayWithCapacity:[[self openFiles] count]];
+	
+	for (WCFile *file in [self openFiles]) {
+		WCSourceFileDocument *sfDocument = [[self filesToSourceFileDocuments] objectForKey:file];
+		
+		if (sfDocument)
+			[retval addObject:sfDocument];
+	}
+	
+	return [[retval copy] autorelease];
+}
 @synthesize UUIDsToFiles=_UUIDsToFiles;
 @synthesize projectSettingsProviders=_projectSettingsProviders;
 @synthesize projectSettings=_projectSettings;

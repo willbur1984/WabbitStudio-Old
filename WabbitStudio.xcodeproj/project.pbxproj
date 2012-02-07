@@ -185,6 +185,10 @@
 		077906A514E0DE08006C16EF /* WCSearchNavigatorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 077906A314E0DE08006C16EF /* WCSearchNavigatorView.xib */; };
 		077906A814E0E1C5006C16EF /* WCSearchNavigatorOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 077906A714E0E1C5006C16EF /* WCSearchNavigatorOutlineView.m */; };
 		077906AB14E0E4BB006C16EF /* WCSearchContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 077906AA14E0E4BB006C16EF /* WCSearchContainer.m */; };
+		077906AE14E1AF37006C16EF /* WCSearchOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 077906AD14E1AF36006C16EF /* WCSearchOperation.m */; };
+		077906B114E1B3CC006C16EF /* WCSearchResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 077906B014E1B3CC006C16EF /* WCSearchResult.m */; };
+		077906B414E1BAAA006C16EF /* WCSearchResultContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 077906B314E1BAA9006C16EF /* WCSearchResultContainer.m */; };
+		077906B714E1CF97006C16EF /* RSLightBackgroundTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 077906B614E1CF97006C16EF /* RSLightBackgroundTextFieldCell.m */; };
 		07862BA614BA33040057EB89 /* WCDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07862BA514BA33040057EB89 /* WCDocumentController.m */; };
 		07862BA914BA46720057EB89 /* WCSplitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07862BA814BA46720057EB89 /* WCSplitView.m */; };
 		07862BAD14BA78010057EB89 /* KBResponderNotifyingWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 07862BAC14BA78010057EB89 /* KBResponderNotifyingWindow.m */; };
@@ -615,6 +619,14 @@
 		077906A714E0E1C5006C16EF /* WCSearchNavigatorOutlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSearchNavigatorOutlineView.m; sourceTree = "<group>"; };
 		077906A914E0E4BB006C16EF /* WCSearchContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSearchContainer.h; sourceTree = "<group>"; };
 		077906AA14E0E4BB006C16EF /* WCSearchContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSearchContainer.m; sourceTree = "<group>"; };
+		077906AC14E1AF36006C16EF /* WCSearchOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSearchOperation.h; sourceTree = "<group>"; };
+		077906AD14E1AF36006C16EF /* WCSearchOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSearchOperation.m; sourceTree = "<group>"; };
+		077906AF14E1B3CC006C16EF /* WCSearchResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSearchResult.h; sourceTree = "<group>"; };
+		077906B014E1B3CC006C16EF /* WCSearchResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSearchResult.m; sourceTree = "<group>"; };
+		077906B214E1BAA8006C16EF /* WCSearchResultContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSearchResultContainer.h; sourceTree = "<group>"; };
+		077906B314E1BAA9006C16EF /* WCSearchResultContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSearchResultContainer.m; sourceTree = "<group>"; };
+		077906B514E1CF97006C16EF /* RSLightBackgroundTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSLightBackgroundTextFieldCell.h; sourceTree = "<group>"; };
+		077906B614E1CF97006C16EF /* RSLightBackgroundTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSLightBackgroundTextFieldCell.m; sourceTree = "<group>"; };
 		07862BA414BA33040057EB89 /* WCDocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCDocumentController.h; sourceTree = "<group>"; };
 		07862BA514BA33040057EB89 /* WCDocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCDocumentController.m; sourceTree = "<group>"; };
 		07862BA714BA46720057EB89 /* WCSplitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSplitView.h; sourceTree = "<group>"; };
@@ -1436,6 +1448,10 @@
 				071306F014CA92EE00862E4D /* WCGroupContainer.m */,
 				077906A914E0E4BB006C16EF /* WCSearchContainer.h */,
 				077906AA14E0E4BB006C16EF /* WCSearchContainer.m */,
+				077906AF14E1B3CC006C16EF /* WCSearchResult.h */,
+				077906B014E1B3CC006C16EF /* WCSearchResult.m */,
+				077906B214E1BAA8006C16EF /* WCSearchResultContainer.h */,
+				077906B314E1BAA9006C16EF /* WCSearchResultContainer.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -1477,6 +1493,8 @@
 			children = (
 				077906A014E0DD2D006C16EF /* WCSearchNavigatorViewController.h */,
 				077906A114E0DD2D006C16EF /* WCSearchNavigatorViewController.m */,
+				077906AC14E1AF36006C16EF /* WCSearchOperation.h */,
+				077906AD14E1AF36006C16EF /* WCSearchOperation.m */,
 				077906A614E0E1C5006C16EF /* WCSearchNavigatorOutlineView.h */,
 				077906A714E0E1C5006C16EF /* WCSearchNavigatorOutlineView.m */,
 			);
@@ -1558,6 +1576,8 @@
 				0725436B14A8376500C961B7 /* RSVerticallyCenteredTextFieldCell.m */,
 				0725436E14A85F7000C961B7 /* RSRaisedBackgroundTextFieldCell.h */,
 				0725436F14A85F7000C961B7 /* RSRaisedBackgroundTextFieldCell.m */,
+				077906B514E1CF97006C16EF /* RSLightBackgroundTextFieldCell.h */,
+				077906B614E1CF97006C16EF /* RSLightBackgroundTextFieldCell.m */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -2034,6 +2054,10 @@
 				077906A214E0DD2D006C16EF /* WCSearchNavigatorViewController.m in Sources */,
 				077906A814E0E1C5006C16EF /* WCSearchNavigatorOutlineView.m in Sources */,
 				077906AB14E0E4BB006C16EF /* WCSearchContainer.m in Sources */,
+				077906AE14E1AF37006C16EF /* WCSearchOperation.m in Sources */,
+				077906B114E1B3CC006C16EF /* WCSearchResult.m in Sources */,
+				077906B414E1BAAA006C16EF /* WCSearchResultContainer.m in Sources */,
+				077906B714E1CF97006C16EF /* RSLightBackgroundTextFieldCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

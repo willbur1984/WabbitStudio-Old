@@ -49,8 +49,7 @@ extern NSString *const WCProjectNavigatorDidMoveNodesNotificationMovedNodesUserI
 	struct {
 		unsigned int switchTreeControllerContentBinding:1;
 		unsigned int ignoreChangesToProjectDocumentSettings:1;
-		unsigned int ignoreOutlineViewSelectionChangeForSelectedItemsAfterFilterOperation:1;
-		unsigned int RESERVED:29;
+		unsigned int RESERVED:30;
 	} _projectNavigatorFlags;
 }
 @property (readwrite,assign,nonatomic) IBOutlet NSSearchField *searchField;

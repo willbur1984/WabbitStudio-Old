@@ -10,4 +10,6 @@
 
 @interface NSParagraphStyle (RSExtensions)
 + (NSParagraphStyle *)rightAlignedParagraphStyle;
++ (NSParagraphStyle *)truncatingHeadParagraphStyle;
++ (NSParagraphStyle *)truncatingTailParagraphStyle;
 @end

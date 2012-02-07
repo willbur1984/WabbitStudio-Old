@@ -62,7 +62,6 @@ static NSString *const WCProjectNavigatorSelectedItemsKey = @"selectedItems";
 @property (readwrite,copy,nonatomic) NSArray *expandedItemsBeforeFilterOperation;
 @property (readwrite,copy,nonatomic) NSArray *selectedItemsBeforeFilterOperation;
 @property (readwrite,copy,nonatomic) NSArray *selectedItemsAfterFilterOperation;
-@property (readwrite,assign,nonatomic) BOOL ignoreOutlineViewSelectionChangeForSelectedItemsAfterFilterOperation;
 @property (readwrite,retain,nonatomic) WCAddToProjectAccessoryViewController *addToProjectAccessoryViewController;
 @property (readwrite,copy,nonatomic) NSSet *projectFilePaths;
 
@@ -221,14 +220,6 @@ static const CGFloat kMainCellHeight = 18.0;
 		return kProjectCellHeight;
 	return kMainCellHeight;
 }
-- (void)outlineViewItemDidCollapse:(NSNotification *)notification {
-	//if (![self ignoreChangesToProjectDocumentSettings])
-	//	[[[[self projectContainer] project] document] updateChangeCount:NSChangeDone|NSChangeDiscardable];
-}
-- (void)outlineViewItemDidExpand:(NSNotification *)notification {
-	//if (![self ignoreChangesToProjectDocumentSettings])
-	//	[[[[self projectContainer] project] document] updateChangeCount:NSChangeDone|NSChangeDiscardable];
-}
 - (void)outlineViewSelectionDidChange:(NSNotification *)notification {
 	if ([QLPreviewPanel sharedPreviewPanelExists] &&
 		[[QLPreviewPanel sharedPreviewPanel] isVisible]) {
@@ -236,11 +227,8 @@ static const CGFloat kMainCellHeight = 18.0;
 		[[QLPreviewPanel sharedPreviewPanel] reloadData];
 	}
 	
-	if ([[self filterString] length] && ![self ignoreOutlineViewSelectionChangeForSelectedItemsAfterFilterOperation])
+	if ([[self filterString] length])
 		[self setSelectedItemsAfterFilterOperation:[[self treeController] selectedModelObjects]];
-	
-	//if (![self ignoreChangesToProjectDocumentSettings])
-	//	[[[[self projectContainer] project] document] updateChangeCount:NSChangeDone|NSChangeDiscardable];
 }
 #pragma mark RSOutlineViewDelegate
 - (void)handleSpacePressedForOutlineView:(RSOutlineView *)outlineView {
@@ -506,7 +494,6 @@ static const NSInteger WCProjectNavigatorFileAlreadyExistsInProjectErrorCode = 1
 			[[filteredProjectContainer mutableChildNodes] addObject:filteredLeafNode];
 	}
 	
-	[self setIgnoreOutlineViewSelectionChangeForSelectedItemsAfterFilterOperation:YES];
 	[self setFilteredProjectContainer:filteredProjectContainer];
 	
 	[[self outlineView] expandItem:[[self outlineView] itemAtRow:0] expandChildren:YES];
@@ -519,7 +506,6 @@ static const NSInteger WCProjectNavigatorFileAlreadyExistsInProjectErrorCode = 1
 	}
 	
 	[self setSelectedItemsAfterFilterOperation:[[self treeController] selectedModelObjects]];
-	[self setIgnoreOutlineViewSelectionChangeForSelectedItemsAfterFilterOperation:NO];
 }
 
 - (IBAction)toggleFilterOptions:(id)sender; {
@@ -772,13 +758,6 @@ static const NSInteger WCProjectNavigatorFileAlreadyExistsInProjectErrorCode = 1
 @synthesize expandedItemsBeforeFilterOperation=_expandedItemsBeforeFilterOperation;
 @synthesize selectedItemsBeforeFilterOperation=_selectedItemsBeforeFilterOperation;
 @synthesize selectedItemsAfterFilterOperation=_selectedItemsAfterFilterOperation;
-@dynamic ignoreOutlineViewSelectionChangeForSelectedItemsAfterFilterOperation;
-- (BOOL)ignoreOutlineViewSelectionChangeForSelectedItemsAfterFilterOperation {
-	return _projectNavigatorFlags.ignoreOutlineViewSelectionChangeForSelectedItemsAfterFilterOperation;
-}
-- (void)setIgnoreOutlineViewSelectionChangeForSelectedItemsAfterFilterOperation:(BOOL)ignoreOutlineViewSelectionChangeForSelectedItemsAfterFilterOperation {
-	_projectNavigatorFlags.ignoreOutlineViewSelectionChangeForSelectedItemsAfterFilterOperation = ignoreOutlineViewSelectionChangeForSelectedItemsAfterFilterOperation;
-}
 @dynamic projectDocument;
 - (WCProjectDocument *)projectDocument {
 	return [[[self projectContainer] project] document];
