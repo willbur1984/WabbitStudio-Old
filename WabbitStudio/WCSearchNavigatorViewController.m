@@ -27,6 +27,8 @@
 @property (readonly,nonatomic) RSFindOptionsViewController *filterOptionsViewController;
 @property (readwrite,retain,nonatomic) NSRegularExpression *searchRegularExpression;
 @property (readwrite,assign,nonatomic) BOOL switchTreeControllerContentBinding;
+@property (readwrite,assign,nonatomic) WCSearchNavigatorViewMode viewMode;
+@property (readonly,nonatomic,getter = areReplaceControlsVisible) BOOL replaceControlsVisible;
 
 - (void)_removeAllSearchResults;
 @end
@@ -37,6 +39,9 @@
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
+	[_replaceString release];
+	[_showReplaceControlsAnimation release];
+	[_hideReplaceControlsAnimation release];
 	[_searchRegularExpression release];
 	[_operationQueue release];
 	[_searchOptionsViewController release];
@@ -65,6 +70,8 @@
 	[[[[self searchField] cell] cancelButtonCell] setAction:@selector(_searchFieldCancelClick:)];
 	[[[self searchField] cell] setPlaceholderString:NSLocalizedString(@"Textual Search", @"Textual Search")];
 	
+	[[[self replaceField] cell] setPlaceholderString:NSLocalizedString(@"Replace String", @"Replace String")];
+	
 	[[self outlineView] setTarget:self];
 	[[self outlineView] setDoubleAction:@selector(_outlineViewDoubleClick:)];
 	[[self outlineView] setAction:@selector(_outlineViewSingleClick:)];
@@ -85,6 +92,20 @@
 	}
 	return YES;
 }
+#pragma mark NSAnimationDelegate
+- (void)animationDidEnd:(NSAnimation *)animation {
+	if (animation == _showReplaceControlsAnimation) {
+		[_showReplaceControlsAnimation release];
+		_showReplaceControlsAnimation = nil;
+	}
+	else if (animation == _hideReplaceControlsAnimation) {
+		[_hideReplaceControlsAnimation release];
+		_hideReplaceControlsAnimation = nil;
+		
+		[self setViewMode:WCSearchNavigatorViewModeFind];
+	}
+}
+
 #pragma mark NSControlTextEditingDelegate
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector {
 	if ([self searchField] == control) {
@@ -321,6 +342,51 @@ static const CGFloat kMainCellHeight = 20.0;
 	[_operationQueue addOperation:[[[WCSearchOperation alloc] initWithSearchNavigatorViewController:self] autorelease]];
 }
 
+- (IBAction)toggleReplaceControls:(id)sender; {
+	if ([self areReplaceControlsVisible])
+		[self hideReplaceControls:nil];
+	else
+		[self showReplaceControls:nil];
+}
+
+static const NSTimeInterval kShowReplaceControlsDelay = 0.35;
+static const NSAnimationCurve kShowHideAnimationCurve = NSAnimationEaseIn;
+static const CGFloat kReplaceControlsHeight = (19.0+17.0+4.0+4.0);
+- (IBAction)showReplaceControls:(id)sender; {
+	if ([self areReplaceControlsVisible]) {
+		NSBeep();
+		return;
+	}
+	
+	[self setViewMode:WCSearchNavigatorViewModeFindAndReplace];
+	
+	NSRect scrollViewFrame = [[[self outlineView] enclosingScrollView] frame];
+	NSRect findViewFrame = [[self findView] frame];
+	
+	_showReplaceControlsAnimation = [[NSViewAnimation alloc] initWithDuration:kShowReplaceControlsDelay animationCurve:kShowHideAnimationCurve];
+	[_showReplaceControlsAnimation setDelegate:self];
+	[_showReplaceControlsAnimation setAnimationBlockingMode:NSAnimationNonblocking];
+	[_showReplaceControlsAnimation setViewAnimations:[NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:[self findView],NSViewAnimationTargetKey,[NSValue valueWithRect:NSMakeRect(NSMinX(findViewFrame), NSMinY(findViewFrame)-kReplaceControlsHeight, NSWidth(findViewFrame), NSHeight(findViewFrame)+kReplaceControlsHeight)],NSViewAnimationEndFrameKey, nil],[NSDictionary dictionaryWithObjectsAndKeys:[[self outlineView] enclosingScrollView],NSViewAnimationTargetKey,[NSValue valueWithRect:NSMakeRect(NSMinX(scrollViewFrame), NSMinY(scrollViewFrame), NSWidth(scrollViewFrame), NSHeight(scrollViewFrame)-kReplaceControlsHeight)],NSViewAnimationEndFrameKey, nil],[NSDictionary dictionaryWithObjectsAndKeys:[self replaceField],NSViewAnimationTargetKey,NSViewAnimationFadeInEffect,NSViewAnimationEffectKey, nil],[NSDictionary dictionaryWithObjectsAndKeys:[self replaceButton],NSViewAnimationTargetKey,NSViewAnimationFadeInEffect,NSViewAnimationEffectKey, nil],[NSDictionary dictionaryWithObjectsAndKeys:[self replaceAllButton],NSViewAnimationTargetKey,NSViewAnimationFadeInEffect,NSViewAnimationEffectKey, nil], nil]];
+	
+	[_showReplaceControlsAnimation startAnimation];
+}
+- (IBAction)hideReplaceControls:(id)sender; {
+	if (![self areReplaceControlsVisible]) {
+		NSBeep();
+		return;
+	}
+	
+	NSRect scrollViewFrame = [[[self outlineView] enclosingScrollView] frame];
+	NSRect findViewFrame = [[self findView] frame];
+	
+	_hideReplaceControlsAnimation = [[NSViewAnimation alloc] initWithDuration:kShowReplaceControlsDelay animationCurve:kShowHideAnimationCurve];
+	[_hideReplaceControlsAnimation setDelegate:self];
+	[_hideReplaceControlsAnimation setAnimationBlockingMode:NSAnimationNonblocking];
+	[_hideReplaceControlsAnimation setViewAnimations:[NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:[self findView],NSViewAnimationTargetKey,[NSValue valueWithRect:NSMakeRect(NSMinX(findViewFrame), NSMinY(findViewFrame)+kReplaceControlsHeight, NSWidth(findViewFrame), NSHeight(findViewFrame)-kReplaceControlsHeight)],NSViewAnimationEndFrameKey, nil],[NSDictionary dictionaryWithObjectsAndKeys:[[self outlineView] enclosingScrollView],NSViewAnimationTargetKey,[NSValue valueWithRect:NSMakeRect(NSMinX(scrollViewFrame), NSMinY(scrollViewFrame), NSWidth(scrollViewFrame), NSHeight(scrollViewFrame)+kReplaceControlsHeight)],NSViewAnimationEndFrameKey, nil],[NSDictionary dictionaryWithObjectsAndKeys:[self replaceField],NSViewAnimationTargetKey,NSViewAnimationFadeOutEffect,NSViewAnimationEffectKey, nil],[NSDictionary dictionaryWithObjectsAndKeys:[self replaceButton],NSViewAnimationTargetKey,NSViewAnimationFadeOutEffect,NSViewAnimationEffectKey, nil],[NSDictionary dictionaryWithObjectsAndKeys:[self replaceAllButton],NSViewAnimationTargetKey,NSViewAnimationFadeOutEffect,NSViewAnimationEffectKey, nil], nil]];
+	
+	[_hideReplaceControlsAnimation startAnimation];
+}
+
 - (IBAction)toggleSearchOptions:(id)sender; {
 	if ([[self searchOptionsViewController] areFindOptionsVisible])
 		[self hideSearchOptions:nil];
@@ -348,11 +414,22 @@ static const CGFloat kMainCellHeight = 20.0;
 - (IBAction)hideFilterOptions:(id)sender; {
 	[[self filterOptionsViewController] hideFindOptionsView];
 }
+
+- (IBAction)replace:(id)sender; {
+	
+}
+- (IBAction)replaceAll:(id)sender; {
+	
+}
 #pragma mark Properties
 @synthesize outlineView=_outlineView;
 @synthesize treeController=_treeController;
 @synthesize searchField=_searchField;
 @synthesize filterField=_filterField;
+@synthesize replaceField=_replaceField;
+@synthesize replaceButton=_replaceButton;
+@synthesize replaceAllButton=_replaceAllButton;
+@synthesize findView=_findView;
 
 @synthesize searchContainer=_searchContainer;
 @synthesize filteredSearchContainer=_filteredSearchContainer;
@@ -402,6 +479,11 @@ static const CGFloat kMainCellHeight = 20.0;
 - (void)setSwitchTreeControllerContentBinding:(BOOL)switchTreeControllerContentBinding {
 	_searchNavigatorFlags.switchTreeControllerContentBinding = switchTreeControllerContentBinding;
 }
+@dynamic replaceControlsVisible;
+- (BOOL)areReplaceControlsVisible {
+	return ([self viewMode] == WCSearchNavigatorViewModeFindAndReplace);
+}
+@synthesize replaceString=_replaceString;
 
 #pragma mark *** Private Methods ***
 - (void)_removeAllSearchResults; {

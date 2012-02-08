@@ -26,17 +26,20 @@ typedef enum _WCSearchNavigatorSearchScope {
 
 @class WCProjectContainer,WCSearchContainer,RSFindOptionsViewController,WCProjectDocument;
 
-@interface WCSearchNavigatorViewController : JAViewController <WCNavigatorModule,RSFindOptionsViewControllerDelegate,RSOutlineViewDelegate,NSControlTextEditingDelegate> {
+@interface WCSearchNavigatorViewController : JAViewController <WCNavigatorModule,RSFindOptionsViewControllerDelegate,RSOutlineViewDelegate,NSControlTextEditingDelegate,NSAnimationDelegate> {
 	WCProjectContainer *_projectContainer;
 	WCSearchContainer *_searchContainer;
 	WCSearchContainer *_filteredSearchContainer;
 	NSString *_filterString;
 	NSString *_searchString;
 	NSRegularExpression *_searchRegularExpression;
+	NSString *_replaceString;
 	WCSearchNavigatorSearchScope _searchScope;
 	NSString *_statusString;
 	RSFindOptionsViewController *_filterOptionsViewController;
 	RSFindOptionsViewController *_searchOptionsViewController;
+	NSViewAnimation *_showReplaceControlsAnimation;
+	NSViewAnimation *_hideReplaceControlsAnimation;
 	WCSearchNavigatorViewMode _viewMode;
 	NSOperationQueue *_operationQueue;
 	struct {
@@ -50,14 +53,19 @@ typedef enum _WCSearchNavigatorSearchScope {
 @property (readwrite,assign,nonatomic) IBOutlet NSTreeController *treeController;
 @property (readwrite,assign,nonatomic) IBOutlet NSSearchField *filterField;
 @property (readwrite,assign,nonatomic) IBOutlet NSSearchField *searchField;
+@property (readwrite,assign,nonatomic) IBOutlet NSTextField *replaceField;
+@property (readwrite,assign,nonatomic) IBOutlet NSButton *replaceButton;
+@property (readwrite,assign,nonatomic) IBOutlet NSButton *replaceAllButton;
+@property (readwrite,assign,nonatomic) IBOutlet NSView *findView;
 
 @property (readonly,nonatomic) WCSearchContainer *searchContainer;
 @property (readonly,retain,nonatomic) WCSearchContainer *filteredSearchContainer;
 @property (readwrite,copy,nonatomic) NSString *filterString;
 @property (readwrite,copy,nonatomic) NSString *searchString;
 @property (readwrite,copy,nonatomic) NSString *statusString;
+@property (readwrite,copy,nonatomic) NSString *replaceString;
 @property (readwrite,assign,nonatomic) WCSearchNavigatorSearchScope searchScope;
-@property (readwrite,assign,nonatomic) WCSearchNavigatorViewMode viewMode;
+@property (readonly,assign,nonatomic) WCSearchNavigatorViewMode viewMode;
 @property (readwrite,assign,nonatomic,getter = isSearching) BOOL searching;
 @property (readonly,nonatomic) WCProjectDocument *projectDocument;
 @property (readonly,nonatomic) WCProjectContainer *projectContainer;
@@ -69,6 +77,10 @@ typedef enum _WCSearchNavigatorSearchScope {
 - (IBAction)filter:(id)sender;
 - (IBAction)search:(id)sender;
 
+- (IBAction)toggleReplaceControls:(id)sender;
+- (IBAction)showReplaceControls:(id)sender;
+- (IBAction)hideReplaceControls:(id)sender;
+
 - (IBAction)toggleSearchOptions:(id)sender;
 - (IBAction)showSearchOptions:(id)sender;
 - (IBAction)hideSearchOptions:(id)sender;
@@ -76,5 +88,8 @@ typedef enum _WCSearchNavigatorSearchScope {
 - (IBAction)toggleFilterOptions:(id)sender;
 - (IBAction)showFilterOptions:(id)sender;
 - (IBAction)hideFilterOptions:(id)sender;
+
+- (IBAction)replace:(id)sender;
+- (IBAction)replaceAll:(id)sender;
 
 @end
