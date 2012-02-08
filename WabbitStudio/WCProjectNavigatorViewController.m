@@ -480,7 +480,7 @@ static const NSInteger WCProjectNavigatorFileAlreadyExistsInProjectErrorCode = 1
 				break;
 			}
 			
-			filteredParentNode = [RSTreeNode treeNodeWithRepresentedObject:[[leafNode parentNode] representedObject]];
+			filteredParentNode = [WCGroupContainer treeNodeWithRepresentedObject:[[leafNode parentNode] representedObject]];
 			[parentNodesToFilteredParentNodes setObject:filteredParentNode forKey:[leafNode parentNode]];
 			[[filteredParentNode mutableChildNodes] addObject:filteredLeafNode];
 			

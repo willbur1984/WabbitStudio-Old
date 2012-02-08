@@ -46,17 +46,15 @@
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	BOOL isFinished = NO;
 	
-	dispatch_async(dispatch_get_main_queue(), ^{
-		[[self searchNavigatorViewController] setSearching:YES];
-		[[self searchNavigatorViewController] setStatusString:NSLocalizedString(@"Searching\u2026", @"Searching with ellipsis")];
-	});
-	
 	NSMutableArray *searchResults = [NSMutableArray arrayWithCapacity:[[self searchDocuments] count]];
 	NSMapTable *sourceFileDocumentsToSearchContainers = [[NSMapTable mapTableWithWeakToStrongObjects] retain];
 	__block NSUInteger numberOfSearchResults = 0;
 	
 	while (![self isCancelled] && !isFinished) {
 		for (WCSourceFileDocument *sfDocument in [self searchDocuments]) {
+			if ([self isCancelled])
+				break;
+			
 			NSString *string = [[[[sfDocument textStorage] string] copy] autorelease];
 			NSUInteger stringLength = [string length];
 			NSArray *tokens = [[sfDocument sourceScanner] tokens];
@@ -180,16 +178,24 @@
 		isFinished = YES;
 	}
 	
-	dispatch_async(dispatch_get_main_queue(), ^{
-		[[self searchNavigatorViewController] setStatusString:[NSString stringWithFormat:NSLocalizedString(@"%lu result(s) in %lu file(s)", @"search navigator status format string"),numberOfSearchResults,[[self searchDocuments] count]]];
-		[[self searchNavigatorViewController] setSearching:NO];
-		
-		[[[self searchNavigatorViewController] searchContainer] willChangeValueForKey:@"searchStatus"];
-		[[[[self searchNavigatorViewController] searchContainer] mutableChildNodes] addObjectsFromArray:searchResults];
-		[[[self searchNavigatorViewController] searchContainer] didChangeValueForKey:@"searchStatus"];
-		
-		[[[self searchNavigatorViewController] outlineView] expandItem:nil expandChildren:YES];
-	});
+	if ([self isCancelled]) {
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[[self searchNavigatorViewController] setStatusString:NSLocalizedString(@"Search cancelled", @"Search cancelled")];
+			[[self searchNavigatorViewController] setSearching:NO];
+		});
+	}
+	else {
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[[self searchNavigatorViewController] setStatusString:[NSString stringWithFormat:NSLocalizedString(@"%lu result(s) in %lu file(s)", @"search navigator status format string"),numberOfSearchResults,[[self searchDocuments] count]]];
+			[[self searchNavigatorViewController] setSearching:NO];
+			
+			[[[self searchNavigatorViewController] searchContainer] willChangeValueForKey:@"searchStatus"];
+			[[[[self searchNavigatorViewController] searchContainer] mutableChildNodes] addObjectsFromArray:searchResults];
+			[[[self searchNavigatorViewController] searchContainer] didChangeValueForKey:@"searchStatus"];
+			
+			[[[self searchNavigatorViewController] outlineView] expandItem:nil expandChildren:YES];
+		});
+	}
 	
 	[pool release];
 }
@@ -234,7 +240,7 @@
 - (WCSearchResult *)_searchResultForRange:(NSRange)range string:(NSString *)string tokens:(NSArray *)tokens symbols:(NSArray *)symbols; {
 	NSRange lineRange = [string lineRangeForRange:range];
 	NSRange firstLineRange = [string lineRangeForRange:NSMakeRange(range.location, 0)];
-	NSString *lineString = [[string substringWithRange:lineRange] stringByReplacingOccurrencesOfString:@"\t" withString:@" " options:NSLiteralSearch range:NSMakeRange(0, lineRange.length)];
+	NSString *lineString = [string substringWithRange:lineRange];
 	NSMutableAttributedString *attributedString = [[[NSMutableAttributedString alloc] initWithString:[string substringWithRange:firstLineRange] attributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]],NSFontAttributeName, nil]] autorelease];
 	
 	if (NSMaxRange(range) > NSMaxRange(firstLineRange))

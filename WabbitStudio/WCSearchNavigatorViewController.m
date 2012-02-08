@@ -20,11 +20,15 @@
 #import "WCSourceFileSeparateWindowController.h"
 #import "WCTabViewController.h"
 #import "RSOutlineView.h"
+#import "WCSearchResultContainer.h"
 
 @interface WCSearchNavigatorViewController ()
+@property (readwrite,retain,nonatomic) WCSearchContainer *filteredSearchContainer;
 @property (readonly,nonatomic) RSFindOptionsViewController *filterOptionsViewController;
 @property (readwrite,retain,nonatomic) NSRegularExpression *searchRegularExpression;
+@property (readwrite,assign,nonatomic) BOOL switchTreeControllerContentBinding;
 
+- (void)_removeAllSearchResults;
 @end
 
 @implementation WCSearchNavigatorViewController
@@ -57,6 +61,10 @@
 	[[[[self filterField] cell] searchButtonCell] setImage:[NSImage imageNamed:@"Filter"]];
 	[[[[self filterField] cell] searchButtonCell] setAlternateImage:nil];
 	
+	[[[[self searchField] cell] cancelButtonCell] setTarget:self];
+	[[[[self searchField] cell] cancelButtonCell] setAction:@selector(_searchFieldCancelClick:)];
+	[[[self searchField] cell] setPlaceholderString:NSLocalizedString(@"Textual Search", @"Textual Search")];
+	
 	[[self outlineView] setTarget:self];
 	[[self outlineView] setDoubleAction:@selector(_outlineViewDoubleClick:)];
 	[[self outlineView] setAction:@selector(_outlineViewSingleClick:)];
@@ -76,6 +84,22 @@
 			[menuItem setTitle:NSLocalizedString(@"Show Search Options\u2026", @"Show Search Options with ellipsis")];
 	}
 	return YES;
+}
+#pragma mark NSControlTextEditingDelegate
+- (BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector {
+	if ([self searchField] == control) {
+		if (commandSelector == @selector(cancelOperation:)) {
+			[_operationQueue cancelAllOperations];
+			
+			[self setStatusString:nil];
+			[self setSearchString:nil];
+			
+			[self _removeAllSearchResults];
+			
+			return YES;
+		}
+	}
+	return NO;
 }
 
 #pragma mark NSOutlineViewDelegate
@@ -115,7 +139,14 @@ static const CGFloat kMainCellHeight = 20.0;
 #pragma mark RSFindOptionsViewControllerDelegate
 - (void)findOptionsViewControllerDidChangeFindOptions:(RSFindOptionsViewController *)viewController {
 	if (viewController == [self filterOptionsViewController]) {
-		// TODO: update the filter results
+		if ([[self filterString] length])
+			[self filter:nil];
+	}
+	else if (viewController == [self searchOptionsViewController]) {
+		if ([[self searchOptionsViewController] findStyle] == RSFindOptionsFindStyleTextual)
+			[[[self searchField] cell] setPlaceholderString:NSLocalizedString(@"Textual Search", @"Textual Search")];
+		else
+			[[[self searchField] cell] setPlaceholderString:NSLocalizedString(@"Regex Search", @"Regex Search")];
 	}
 }
 
@@ -163,12 +194,98 @@ static const CGFloat kMainCellHeight = 20.0;
 	_searchContainer = [[WCSearchContainer alloc] initWithFile:[_projectContainer project]];
 	_operationQueue = [[NSOperationQueue alloc] init];
 	[_operationQueue setMaxConcurrentOperationCount:1];
+	_searchNavigatorFlags.switchTreeControllerContentBinding = YES;
 	
 	return self;
 }
 #pragma mark IBActions
 - (IBAction)filter:(id)sender; {
+	if (![[self filterString] length]) {
+		[self setSwitchTreeControllerContentBinding:YES];
+		[[self treeController] bind:NSContentObjectBinding toObject:self withKeyPath:@"searchContainer" options:nil];
+		[[self outlineView] expandItem:nil expandChildren:YES];
+		[self setFilteredSearchContainer:nil];
+		return;
+	}
+	else if ([self switchTreeControllerContentBinding]) {
+		[self setSwitchTreeControllerContentBinding:NO];
+		[[self treeController] bind:NSContentObjectBinding toObject:self withKeyPath:@"filteredSearchContainer" options:nil];
+	}
 	
+	WCSearchContainer *filteredSearchContainer = [WCSearchContainer searchContainerWithFile:[[self searchContainer] representedObject]];
+	NSArray *leafNodes = [[self searchContainer] descendantLeafNodes];
+	NSMutableArray *filteredLeafNodes = [NSMutableArray arrayWithCapacity:[leafNodes count]];
+	NSMapTable *parentNodesToFilteredParentNodes = [NSMapTable mapTableWithWeakToStrongObjects];
+	NSPredicate *predicate;
+	
+	[parentNodesToFilteredParentNodes setObject:filteredSearchContainer forKey:[self searchContainer]];
+	
+	if ([[self filterOptionsViewController] findStyle] == RSFindOptionsFindStyleTextual) {
+		switch ([[self filterOptionsViewController] matchStyle]) {
+			case RSFindOptionsMatchStyleContains:
+				if ([[self filterOptionsViewController] matchCase])
+					predicate = [NSPredicate predicateWithFormat:@"representedObject.string CONTAINS %@",[self filterString]];
+				else
+					predicate = [NSPredicate predicateWithFormat:@"representedObject.string CONTAINS[c] %@",[self filterString]];
+				break;
+			case RSFindOptionsMatchStyleStartsWith:
+				if ([[self filterOptionsViewController] matchCase])
+					predicate = [NSPredicate predicateWithFormat:@"representedObject.string BEGINSWITH %@",[self filterString]];
+				else
+					predicate = [NSPredicate predicateWithFormat:@"representedObject.string BEGINSWITH[c] %@",[self filterString]];
+				break;
+			case RSFindOptionsMatchStyleEndsWith:
+				if ([[self filterOptionsViewController] matchCase])
+					predicate = [NSPredicate predicateWithFormat:@"representedObject.string ENDSWITH %@",[self filterString]];
+				else
+					predicate = [NSPredicate predicateWithFormat:@"representedObject.string ENDSWITH[c] %@",[self filterString]];
+				break;
+			case RSFindOptionsMatchStyleWholeWord:
+				if ([[self filterOptionsViewController] matchCase])
+					predicate = [NSPredicate predicateWithFormat:@"representedObject.string LIKE %@",[self filterString]];
+				else
+					predicate = [NSPredicate predicateWithFormat:@"representedObject.string LIKE[c] %@",[self filterString]];
+				break;
+			default:
+				break;
+		}
+	}
+	else {
+		if ([[self filterOptionsViewController] matchCase])
+			predicate = [NSPredicate predicateWithFormat:@"representedObject.string MATCHES %@",[self filterString]];
+		else
+			predicate = [NSPredicate predicateWithFormat:@"representedObject.string MATCHES[c] %@",[self filterString]];
+	}
+	
+	[filteredLeafNodes setArray:[leafNodes filteredArrayUsingPredicate:predicate]];
+	
+	for (WCSearchContainer *leafNode in filteredLeafNodes) {
+		id filteredLeafNode = [WCSearchResultContainer searchResultContainerWithSearchResult:[leafNode representedObject]];
+		
+		while ([leafNode parentNode]) {
+			WCSearchContainer *filteredParentNode = [parentNodesToFilteredParentNodes objectForKey:[leafNode parentNode]];
+			
+			if (filteredParentNode) {
+				[[filteredParentNode mutableChildNodes] addObject:filteredLeafNode];
+				filteredLeafNode = nil;
+				break;
+			}
+			
+			filteredParentNode = [WCSearchContainer searchContainerWithFile:[[leafNode parentNode] representedObject]];
+			[parentNodesToFilteredParentNodes setObject:filteredParentNode forKey:[leafNode parentNode]];
+			[[filteredParentNode mutableChildNodes] addObject:filteredLeafNode];
+			
+			leafNode = [leafNode parentNode];
+			filteredLeafNode = filteredParentNode;
+		}
+		
+		if (filteredLeafNode)
+			[[filteredSearchContainer mutableChildNodes] addObject:filteredLeafNode];
+	}
+	
+	[self setFilteredSearchContainer:filteredSearchContainer];
+	
+	[[self outlineView] expandItem:nil expandChildren:YES];
 }
 - (IBAction)search:(id)sender; {
 	if (![[self searchString] length]) {
@@ -195,7 +312,10 @@ static const CGFloat kMainCellHeight = 20.0;
 		[self setSearchRegularExpression:regex];
 	}
 	
-	[[[self searchContainer] mutableChildNodes] removeObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [[[self searchContainer] childNodes] count])]];
+	[self _removeAllSearchResults];
+	
+	[self setSearching:YES];
+	[self setStatusString:NSLocalizedString(@"Searching\u2026", @"Searching with ellipsis")];
 	
 	[_operationQueue cancelAllOperations];
 	[_operationQueue addOperation:[[[WCSearchOperation alloc] initWithSearchNavigatorViewController:self] autorelease]];
@@ -275,7 +395,21 @@ static const CGFloat kMainCellHeight = 20.0;
 }
 @synthesize projectContainer=_projectContainer;
 @synthesize searchRegularExpression=_searchRegularExpression;
+@dynamic switchTreeControllerContentBinding;
+- (BOOL)switchTreeControllerContentBinding {
+	return _searchNavigatorFlags.switchTreeControllerContentBinding;
+}
+- (void)setSwitchTreeControllerContentBinding:(BOOL)switchTreeControllerContentBinding {
+	_searchNavigatorFlags.switchTreeControllerContentBinding = switchTreeControllerContentBinding;
+}
 
+#pragma mark *** Private Methods ***
+- (void)_removeAllSearchResults; {
+	[[self searchContainer] willChangeValueForKey:@"searchStatus"];
+	[[[self searchContainer] mutableChildNodes] removeObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [[[self searchContainer] childNodes] count])]];
+	[[self searchContainer] didChangeValueForKey:@"searchStatus"];
+}
+#pragma mark IBActions
 - (IBAction)_outlineViewDoubleClick:(id)sender; {
 	for (id container in [self selectedObjects]) {
 		id result = [container representedObject];
@@ -304,6 +438,14 @@ static const CGFloat kMainCellHeight = 20.0;
 		[[stvController textView] setSelectedRange:[result range]];
 		[[stvController textView] scrollRangeToVisible:[result range]];
 	}
+}
+- (IBAction)_searchFieldCancelClick:(id)sender; {
+	[_operationQueue cancelAllOperations];
+	
+	[self setStatusString:nil];
+	[self setSearchString:nil];
+	
+	[self _removeAllSearchResults];
 }
 
 @end

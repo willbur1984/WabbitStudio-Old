@@ -52,7 +52,7 @@ typedef enum _WCSearchNavigatorSearchScope {
 @property (readwrite,assign,nonatomic) IBOutlet NSSearchField *searchField;
 
 @property (readonly,nonatomic) WCSearchContainer *searchContainer;
-@property (readonly,nonatomic) WCSearchContainer *filteredSearchContainer;
+@property (readonly,retain,nonatomic) WCSearchContainer *filteredSearchContainer;
 @property (readwrite,copy,nonatomic) NSString *filterString;
 @property (readwrite,copy,nonatomic) NSString *searchString;
 @property (readwrite,copy,nonatomic) NSString *statusString;

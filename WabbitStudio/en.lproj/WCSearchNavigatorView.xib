@@ -721,14 +721,6 @@
 					<int key="connectionID">86</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">filter:</string>
-						<reference key="source" ref="1001"/>
-						<reference key="destination" ref="544675628"/>
-					</object>
-					<int key="connectionID">90</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">searchField</string>
 						<reference key="source" ref="1001"/>
@@ -751,6 +743,14 @@
 						<reference key="destination" ref="504656410"/>
 					</object>
 					<int key="connectionID">97</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">filter:</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="544675628"/>
+					</object>
+					<int key="connectionID">104</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -847,7 +847,7 @@
 								<object class="NSTextField" id="828314426">
 									<reference key="NSNextResponder" ref="995375800"/>
 									<int key="NSvFlags">266</int>
-									<string key="NSFrame">{{20, 3}, {460, 14}}</string>
+									<string key="NSFrame">{{22, 3}, {458, 14}}</string>
 									<reference key="NSSuperview" ref="995375800"/>
 									<reference key="NSNextKeyView" ref="368653148"/>
 									<string key="NSReuseIdentifierKey">_NS:78</string>
@@ -929,6 +929,34 @@
 					<int key="connectionID">82</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: filterString</string>
+						<reference key="source" ref="544675628"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="544675628"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">value: filterString</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">filterString</string>
+							<object class="NSDictionary" key="NSOptions">
+								<string key="NS.key.0">NSContinuouslyUpdatesValue</string>
+								<boolean value="YES" key="NS.object.0"/>
+							</object>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">102</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">delegate</string>
+						<reference key="source" ref="544675628"/>
+						<reference key="destination" ref="1001"/>
+					</object>
+					<int key="connectionID">105</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">imageView</string>
 						<object class="NSTableCellView" key="source" id="368653148">
@@ -971,7 +999,7 @@
 								<object class="NSTextField" id="957673102">
 									<reference key="NSNextResponder" ref="368653148"/>
 									<int key="NSvFlags">266</int>
-									<string key="NSFrame">{{20, 15}, {460, 14}}</string>
+									<string key="NSFrame">{{22, 15}, {458, 14}}</string>
 									<reference key="NSSuperview" ref="368653148"/>
 									<reference key="NSNextKeyView" ref="846655664"/>
 									<string key="NSReuseIdentifierKey">_NS:78</string>
@@ -994,9 +1022,9 @@
 								<object class="NSTextField" id="846655664">
 									<reference key="NSNextResponder" ref="368653148"/>
 									<int key="NSvFlags">266</int>
-									<string key="NSFrame">{{20, 1}, {460, 14}}</string>
+									<string key="NSFrame">{{22, 1}, {458, 14}}</string>
 									<reference key="NSSuperview" ref="368653148"/>
-									<reference key="NSNextKeyView" ref="480788652"/>
+									<reference key="NSNextKeyView" ref="321024542"/>
 									<string key="NSReuseIdentifierKey">_NS:3944</string>
 									<bool key="NSEnabled">YES</bool>
 									<object class="NSTextFieldCell" key="NSCell" id="462984706">
@@ -1134,14 +1162,10 @@
 							<string key="NSLabel">value: searchString</string>
 							<string key="NSBinding">value</string>
 							<string key="NSKeyPath">searchString</string>
-							<object class="NSDictionary" key="NSOptions">
-								<string key="NS.key.0">NSContinuouslyUpdatesValue</string>
-								<boolean value="YES" key="NS.object.0"/>
-							</object>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
-					<int key="connectionID">85</int>
+					<int key="connectionID">103</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -1190,21 +1214,6 @@
 						</object>
 					</object>
 					<int key="connectionID">89</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">outlineView</string>
-						<object class="NSCustomView" key="source" id="480788652">
-							<nil key="NSNextResponder"/>
-							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{1, 50}, {477, 30}}</string>
-							<reference key="NSNextKeyView" ref="799003375"/>
-							<string key="NSReuseIdentifierKey">_NS:1192</string>
-							<string key="NSClassName">WCSearchNavigatorOutlineRowView</string>
-						</object>
-						<reference key="destination" ref="113596729"/>
-					</object>
-					<int key="connectionID">99</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -1285,7 +1294,14 @@
 							<reference ref="215594407"/>
 							<reference ref="995375800"/>
 							<reference ref="368653148"/>
-							<reference ref="480788652"/>
+							<object class="NSCustomView" id="321024542">
+								<nil key="NSNextResponder"/>
+								<int key="NSvFlags">268</int>
+								<string key="NSFrame">{{1, 50}, {477, 30}}</string>
+								<reference key="NSNextKeyView" ref="799003375"/>
+								<string key="NSReuseIdentifierKey">_NS:1192</string>
+								<string key="NSClassName">WCSearchNavigatorOutlineRowView</string>
+							</object>
 						</object>
 						<reference key="parent" ref="113596729"/>
 					</object>
@@ -1622,7 +1638,7 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">98</int>
-						<reference key="object" ref="480788652"/>
+						<reference key="object" ref="321024542"/>
 						<reference key="parent" ref="522014816"/>
 					</object>
 				</object>
@@ -1764,7 +1780,7 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<reference ref="995375800"/>
 						<reference ref="368653148"/>
-						<reference ref="480788652"/>
+						<reference ref="321024542"/>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -1783,7 +1799,7 @@
 				<reference key="dict.values" ref="1002"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">99</int>
+			<int key="maxID">105</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
