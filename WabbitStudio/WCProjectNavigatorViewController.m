@@ -98,6 +98,7 @@ static NSString *const WCProjectNavigatorSelectedItemsKey = @"selectedItems";
 	
 	[[self outlineView] setTarget:self];
 	[[self outlineView] setDoubleAction:@selector(_outlineViewDoubleClick:)];
+	[[self outlineView] setAction:@selector(_outlineViewSingleClick:)];
 	
 	NSDictionary *settings = [[[[[self projectContainer] project] document] projectSettings] objectForKey:[self projectDocumentSettingsKey]];
 	WCProjectDocument *projectDocument = [[[self projectContainer] project] document];
@@ -212,7 +213,7 @@ static NSString *const kMainCellIdentifier = @"MainCell";
 }
 
 static const CGFloat kProjectCellHeight = 30.0;
-static const CGFloat kMainCellHeight = 18.0;
+static const CGFloat kMainCellHeight = 20.0;
 - (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
 	id file = [[item representedObject] representedObject];
 	
@@ -278,10 +279,7 @@ static const CGFloat kMainCellHeight = 18.0;
 	}
 }
 - (void)handleReturnPressedForOutlineView:(RSOutlineView *)outlineView {
-	for (WCFileContainer *selectedNode in [self selectedObjects]) {
-		if ([[selectedNode representedObject] isSourceFile])
-			[[[[self projectContainer] project] document] openTabForFile:[selectedNode representedObject] tabViewContext:nil];
-	}
+	[[self outlineView] sendAction:[[self outlineView] action] to:[[self outlineView] target]];
 }
 #pragma mark QLPreviewPanelDataSource
 - (NSInteger)numberOfPreviewItemsInPreviewPanel:(QLPreviewPanel *)panel; {
@@ -794,6 +792,12 @@ static const NSInteger WCProjectNavigatorFileAlreadyExistsInProjectErrorCode = 1
 }
 #pragma mark IBActions
 - (IBAction)_outlineViewDoubleClick:(id)sender; {
+	for (WCFileContainer *selectedNode in [self selectedObjects]) {
+		if ([[selectedNode representedObject] isSourceFile])
+			[[[[self projectContainer] project] document] openSeparateEditorForFile:[selectedNode representedObject]];
+	}
+}
+- (IBAction)_outlineViewSingleClick:(id)sender; {
 	for (WCFileContainer *selectedNode in [self selectedObjects]) {
 		if ([[selectedNode representedObject] isSourceFile])
 			[[[[self projectContainer] project] document] openTabForFile:[selectedNode representedObject] tabViewContext:nil];

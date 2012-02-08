@@ -17,10 +17,13 @@
 #import "WCSearchResult.h"
 #import "WCSourceTextViewController.h"
 #import "WCSourceTextView.h"
+#import "WCSourceFileSeparateWindowController.h"
+#import "WCTabViewController.h"
+#import "RSOutlineView.h"
 
 @interface WCSearchNavigatorViewController ()
 @property (readonly,nonatomic) RSFindOptionsViewController *filterOptionsViewController;
-@property (readwrite,copy,nonatomic) NSString *statusString;
+@property (readwrite,retain,nonatomic) NSRegularExpression *searchRegularExpression;
 
 @end
 
@@ -30,6 +33,7 @@
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
+	[_searchRegularExpression release];
 	[_operationQueue release];
 	[_searchOptionsViewController release];
 	[_filterOptionsViewController release];
@@ -55,6 +59,7 @@
 	
 	[[self outlineView] setTarget:self];
 	[[self outlineView] setDoubleAction:@selector(_outlineViewDoubleClick:)];
+	[[self outlineView] setAction:@selector(_outlineViewSingleClick:)];
 }
 #pragma mark NSMenuValidation
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
@@ -85,13 +90,27 @@ static NSString *const kMainCellIdentifier = @"MainCell";
 }
 
 static const CGFloat kProjectCellHeight = 30.0;
-static const CGFloat kMainCellHeight = 18.0;
+static const CGFloat kMainCellHeight = 20.0;
 - (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
 	id file = [[item representedObject] representedObject];
 	
 	if ([file isKindOfClass:[WCFile class]])
 		return kProjectCellHeight;
 	return kMainCellHeight;
+}
+
+- (void)outlineView:(NSOutlineView *)outlineView didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row {
+	if ([rowView respondsToSelector:@selector(setOutlineView:)])
+		[(id)rowView setOutlineView:outlineView];
+}
+- (void)outlineView:(NSOutlineView *)outlineView didRemoveRowView:(NSTableRowView *)rowView forRow:(NSInteger)row {
+	if ([rowView respondsToSelector:@selector(setOutlineView:)])
+		[(id)rowView setOutlineView:nil];
+}
+
+#pragma mark RSOutlineViewDelegate
+- (void)handleReturnPressedForOutlineView:(RSOutlineView *)outlineView {
+	[[self outlineView] sendAction:[[self outlineView] action] to:[[self outlineView] target]];
 }
 #pragma mark RSFindOptionsViewControllerDelegate
 - (void)findOptionsViewControllerDidChangeFindOptions:(RSFindOptionsViewController *)viewController {
@@ -156,6 +175,27 @@ static const CGFloat kMainCellHeight = 18.0;
 		NSBeep();
 		return;
 	}
+	else if ([[self searchOptionsViewController] findStyle] == RSFindOptionsFindStyleRegularExpression) {
+		NSRegularExpressionOptions regexOptions = 0;
+		if (![[self searchOptionsViewController] matchCase])
+			regexOptions |= NSRegularExpressionCaseInsensitive;
+		if ([[self searchOptionsViewController] anchorsMatchLines])
+			regexOptions |= NSRegularExpressionAnchorsMatchLines;
+		if ([[self searchOptionsViewController] dotMatchesNewlines])
+			regexOptions |= NSRegularExpressionDotMatchesLineSeparators;
+		
+		NSError *outError;
+		NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:[self searchString] options:regexOptions error:&outError];
+		
+		if (!regex) {
+			[[NSApplication sharedApplication] presentError:outError];
+			return;
+		}
+		
+		[self setSearchRegularExpression:regex];
+	}
+	
+	[[[self searchContainer] mutableChildNodes] removeObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [[[self searchContainer] childNodes] count])]];
 	
 	[_operationQueue cancelAllOperations];
 	[_operationQueue addOperation:[[[WCSearchOperation alloc] initWithSearchNavigatorViewController:self] autorelease]];
@@ -234,8 +274,24 @@ static const CGFloat kMainCellHeight = 18.0;
 	return [[[self projectContainer] project] document];
 }
 @synthesize projectContainer=_projectContainer;
+@synthesize searchRegularExpression=_searchRegularExpression;
 
 - (IBAction)_outlineViewDoubleClick:(id)sender; {
+	for (id container in [self selectedObjects]) {
+		id result = [container representedObject];
+		
+		if (![result isKindOfClass:[WCSearchResult class]])
+			continue;
+		
+		WCFile *file = [[container parentNode] representedObject];
+		WCSourceFileSeparateWindowController *windowController = [[self projectDocument] openSeparateEditorForFile:file];
+		WCSourceTextViewController *stvController = [[[[[windowController tabViewController] sourceFileDocumentsToSourceTextViewControllers] objectEnumerator] allObjects] lastObject];
+		
+		[[stvController textView] setSelectedRange:[result range]];
+		[[stvController textView] scrollRangeToVisible:[result range]];
+	}
+}
+- (IBAction)_outlineViewSingleClick:(id)sender; {
 	for (id container in [self selectedObjects]) {
 		id result = [container representedObject];
 		

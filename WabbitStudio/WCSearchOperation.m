@@ -28,12 +28,14 @@
 @property (readonly,nonatomic) RSFindOptionsFindStyle findStyle;
 @property (readonly,nonatomic) RSFindOptionsMatchStyle matchStyle;
 @property (readonly,nonatomic) BOOL matchCase;
+@property (readonly,nonatomic) NSRegularExpression *searchRegularExpression;
 
 - (WCSearchResult *)_searchResultForRange:(NSRange)range string:(NSString *)string tokens:(NSArray *)tokens symbols:(NSArray *)symbols;
 @end
 
 @implementation WCSearchOperation
 - (void)dealloc {
+	[_searchRegularExpression release];
 	[_searchNavigatorViewController release];
 	[_searchString release];
 	[_searchDocuments release];
@@ -46,6 +48,7 @@
 	
 	dispatch_async(dispatch_get_main_queue(), ^{
 		[[self searchNavigatorViewController] setSearching:YES];
+		[[self searchNavigatorViewController] setStatusString:NSLocalizedString(@"Searching\u2026", @"Searching with ellipsis")];
 	});
 	
 	NSMutableArray *searchResults = [NSMutableArray arrayWithCapacity:[[self searchDocuments] count]];
@@ -63,6 +66,7 @@
 			CFStringTokenizerRef stringTokenizer = CFStringTokenizerCreate(kCFAllocatorDefault, (CFStringRef)string, CFRangeMake(0, (CFIndex)stringLength), kCFStringTokenizerUnitWordBoundary, currentLocale);
 			CFRelease(currentLocale);
 			
+			// textual matching
 			if ([self findStyle] == RSFindOptionsFindStyleTextual) {
 				NSRange searchRange = NSMakeRange(0, stringLength);
 				NSStringCompareOptions options = ([self matchCase])?NSLiteralSearch:(NSLiteralSearch|NSCaseInsensitiveSearch);
@@ -122,7 +126,52 @@
 			}
 			// regular expression matching
 			else {
-				
+				[[self searchRegularExpression] enumerateMatchesInString:string options:0 range:NSMakeRange(0, stringLength) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+					NSRange foundRange = [result range];
+					CFStringTokenizerGoToTokenAtIndex(stringTokenizer, (CFIndex)foundRange.location);
+					CFRange tokenRange = CFStringTokenizerGetCurrentTokenRange(stringTokenizer);
+					
+					WCSearchResult *searchResult = nil;
+					
+					switch ([self matchStyle]) {
+						case RSFindOptionsMatchStyleContains:
+							searchResult = [self _searchResultForRange:foundRange string:string tokens:tokens symbols:symbols];
+							break;
+							// token range and found range starting indexes must match and match range can't be longer than token range
+						case RSFindOptionsMatchStyleStartsWith:
+							if (foundRange.location == tokenRange.location &&
+								foundRange.length < tokenRange.length)
+								searchResult = [self _searchResultForRange:foundRange string:string tokens:tokens symbols:symbols];
+							break;
+							// the ending indexes of token range and found range must match
+						case RSFindOptionsMatchStyleEndsWith:
+							if (NSMaxRange(foundRange) == (tokenRange.location + tokenRange.length))
+								searchResult = [self _searchResultForRange:foundRange string:string tokens:tokens symbols:symbols];
+							break;
+							// token range and found range must match exactly
+						case RSFindOptionsMatchStyleWholeWord:
+							if (foundRange.location == tokenRange.location &&
+								foundRange.length == tokenRange.length)
+								searchResult = [self _searchResultForRange:foundRange string:string tokens:tokens symbols:symbols];
+							break;
+						default:
+							break;
+					}
+					
+					if (searchResult) {
+						WCSearchContainer *parentContainer = [sourceFileDocumentsToSearchContainers objectForKey:sfDocument];
+						
+						if (!parentContainer) {
+							parentContainer = [WCSearchContainer searchContainerWithFile:[[[sfDocument projectDocument] sourceFileDocumentsToFiles] objectForKey:sfDocument]];
+							
+							[searchResults addObject:parentContainer];
+							[sourceFileDocumentsToSearchContainers setObject:parentContainer forKey:sfDocument];
+						}
+						
+						[[parentContainer mutableChildNodes] addObject:[WCSearchResultContainer searchResultContainerWithSearchResult:searchResult]];
+						numberOfSearchResults++;
+					}
+				}];
 			}
 			
 			CFRelease(stringTokenizer);
@@ -132,11 +181,14 @@
 	}
 	
 	dispatch_async(dispatch_get_main_queue(), ^{
-		[[[[self searchNavigatorViewController] searchContainer] mutableChildNodes] setArray:searchResults];
+		[[self searchNavigatorViewController] setStatusString:[NSString stringWithFormat:NSLocalizedString(@"%lu result(s) in %lu file(s)", @"search navigator status format string"),numberOfSearchResults,[[self searchDocuments] count]]];
+		[[self searchNavigatorViewController] setSearching:NO];
+		
+		[[[self searchNavigatorViewController] searchContainer] willChangeValueForKey:@"searchStatus"];
+		[[[[self searchNavigatorViewController] searchContainer] mutableChildNodes] addObjectsFromArray:searchResults];
+		[[[self searchNavigatorViewController] searchContainer] didChangeValueForKey:@"searchStatus"];
 		
 		[[[self searchNavigatorViewController] outlineView] expandItem:nil expandChildren:YES];
-		
-		[[self searchNavigatorViewController] setSearching:NO];
 	});
 	
 	[pool release];
@@ -166,6 +218,7 @@
 	_findStyle = [[searchNavigatorViewController searchOptionsViewController] findStyle];
 	_matchStyle = [[searchNavigatorViewController searchOptionsViewController] matchStyle];
 	_matchCase = [[searchNavigatorViewController searchOptionsViewController] matchCase];
+	_searchRegularExpression = [[searchNavigatorViewController searchRegularExpression] retain];
 	
 	return self;
 }
@@ -176,6 +229,7 @@
 @synthesize findStyle=_findStyle;
 @synthesize matchCase=_matchCase;
 @synthesize matchStyle=_matchStyle;
+@synthesize searchRegularExpression=_searchRegularExpression;
 
 - (WCSearchResult *)_searchResultForRange:(NSRange)range string:(NSString *)string tokens:(NSArray *)tokens symbols:(NSArray *)symbols; {
 	NSRange lineRange = [string lineRangeForRange:range];

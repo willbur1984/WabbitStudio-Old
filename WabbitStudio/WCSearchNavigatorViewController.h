@@ -9,6 +9,7 @@
 #import "JAViewController.h"
 #import "WCNavigatorModule.h"
 #import "RSFindOptionsViewControllerDelegate.h"
+#import "RSOutlineViewDelegate.h"
 
 typedef enum _WCSearchNavigatorViewMode {
 	WCSearchNavigatorViewModeFind = 0,
@@ -25,12 +26,13 @@ typedef enum _WCSearchNavigatorSearchScope {
 
 @class WCProjectContainer,WCSearchContainer,RSFindOptionsViewController,WCProjectDocument;
 
-@interface WCSearchNavigatorViewController : JAViewController <WCNavigatorModule,RSFindOptionsViewControllerDelegate,NSControlTextEditingDelegate> {
+@interface WCSearchNavigatorViewController : JAViewController <WCNavigatorModule,RSFindOptionsViewControllerDelegate,RSOutlineViewDelegate,NSControlTextEditingDelegate> {
 	WCProjectContainer *_projectContainer;
 	WCSearchContainer *_searchContainer;
 	WCSearchContainer *_filteredSearchContainer;
 	NSString *_filterString;
 	NSString *_searchString;
+	NSRegularExpression *_searchRegularExpression;
 	WCSearchNavigatorSearchScope _searchScope;
 	NSString *_statusString;
 	RSFindOptionsViewController *_filterOptionsViewController;
@@ -53,12 +55,14 @@ typedef enum _WCSearchNavigatorSearchScope {
 @property (readonly,nonatomic) WCSearchContainer *filteredSearchContainer;
 @property (readwrite,copy,nonatomic) NSString *filterString;
 @property (readwrite,copy,nonatomic) NSString *searchString;
+@property (readwrite,copy,nonatomic) NSString *statusString;
 @property (readwrite,assign,nonatomic) WCSearchNavigatorSearchScope searchScope;
 @property (readwrite,assign,nonatomic) WCSearchNavigatorViewMode viewMode;
 @property (readwrite,assign,nonatomic,getter = isSearching) BOOL searching;
 @property (readonly,nonatomic) WCProjectDocument *projectDocument;
 @property (readonly,nonatomic) WCProjectContainer *projectContainer;
 @property (readonly,nonatomic) RSFindOptionsViewController *searchOptionsViewController;
+@property (readonly,retain,nonatomic) NSRegularExpression *searchRegularExpression;
 
 - (id)initWithProjectContainer:(WCProjectContainer *)projectContainer;
 

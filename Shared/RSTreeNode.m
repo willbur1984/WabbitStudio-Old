@@ -146,9 +146,6 @@ static NSString *const RSTreeNodeRepresentedObjectKey = @"representedObject";
 - (NSUInteger)countOfChildNodes {
 	return [_childNodes count];
 }
-- (id)objectInChildNodesAtIndex:(NSUInteger)index {
-	return [_childNodes objectAtIndex:index];
-}
 - (NSArray *)childNodesAtIndexes:(NSIndexSet *)indexes {
 	return [_childNodes objectsAtIndexes:indexes];
 }

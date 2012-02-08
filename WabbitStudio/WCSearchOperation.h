@@ -18,6 +18,7 @@
 	RSFindOptionsFindStyle _findStyle;
 	RSFindOptionsMatchStyle _matchStyle;
 	BOOL _matchCase;
+	NSRegularExpression *_searchRegularExpression;
 }
 - (id)initWithSearchNavigatorViewController:(WCSearchNavigatorViewController *)searchNavigatorViewController;
 @end
