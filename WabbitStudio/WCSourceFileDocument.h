@@ -19,7 +19,7 @@ extern NSString *const WCSourceFileDocumentVisibleRangeKey;
 
 @class WCSourceScanner,WCSourceHighlighter,WCSourceTextStorage,WCProjectDocument;
 
-@interface WCSourceFileDocument : NSDocument <WCJumpBarDataSource,WCSourceTextStorageDelegate,WCSourceScannerDelegate,WCSourceHighlighterDelegate> {
+@interface WCSourceFileDocument : NSDocument <WCJumpBarDataSource,WCSourceTextStorageDelegate,WCSourceScannerDelegate,WCSourceHighlighterDelegate,NSTextViewDelegate> {
 	__weak WCProjectDocument *_projectDocument;
 	
 	NSStringEncoding _fileEncoding;
@@ -27,12 +27,15 @@ extern NSString *const WCSourceFileDocumentVisibleRangeKey;
 	WCSourceTextStorage *_textStorage;
 	WCSourceScanner *_sourceScanner;
 	WCSourceHighlighter *_sourceHighlighter;
+	
+	NSTextView *_undoTextView;
 }
 
 @property (readonly,retain) WCSourceScanner *sourceScanner;
 @property (readonly,retain) WCSourceHighlighter *sourceHighlighter;
 @property (readonly,retain) WCSourceTextStorage *textStorage;
 @property (readwrite,assign) WCProjectDocument *projectDocument;
+@property (readonly,nonatomic) NSTextView *undoTextView;
 
 - (void)reloadDocumentFromDisk;
 

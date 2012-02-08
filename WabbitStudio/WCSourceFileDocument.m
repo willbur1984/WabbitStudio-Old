@@ -54,6 +54,10 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	if (_undoTextView) {
+		[_textStorage removeLayoutManager:[_undoTextView layoutManager]];
+		[_undoTextView release];
+	}
 	_projectDocument = nil;
 	[_sourceHighlighter release];
 	[_sourceScanner release];
@@ -241,6 +245,10 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 	
 	[super saveDocument:nil];
 }
+#pragma mark NSTextViewDelegate
+- (NSUndoManager *)undoManagerForTextView:(NSTextView *)view {
+	return [self undoManager];
+}
 
 #pragma mark PSMTabBarControlCell
 @dynamic icon;
@@ -427,7 +435,41 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 @synthesize textStorage=_textStorage;
 @synthesize projectDocument=_projectDocument;
 @synthesize fileEncoding=_fileEncoding;
-
+@dynamic undoTextView;
+- (NSTextView *)undoTextView {
+	if (!_undoTextView) {
+		_undoTextView = [[NSTextView alloc] initWithFrame:NSMakeRect(0, 0, 100, 100)];
+		
+		[[_undoTextView layoutManager] replaceTextStorage:[self textStorage]];
+		
+		[_undoTextView setDelegate:self];
+		[_undoTextView setSelectable:YES];
+		[_undoTextView setEditable:YES];
+		[_undoTextView setAllowsDocumentBackgroundColorChange:NO];
+		[_undoTextView setAllowsImageEditing:NO];
+		[_undoTextView setAllowsUndo:YES];
+		[_undoTextView setAutomaticDashSubstitutionEnabled:NO];
+		[_undoTextView setAutomaticDataDetectionEnabled:NO];
+		[_undoTextView setAutomaticLinkDetectionEnabled:NO];
+		[_undoTextView setAutomaticQuoteSubstitutionEnabled:NO];
+		[_undoTextView setAutomaticSpellingCorrectionEnabled:NO];
+		[_undoTextView setAutomaticTextReplacementEnabled:NO];
+		[_undoTextView setContinuousSpellCheckingEnabled:NO];
+		[_undoTextView setDisplaysLinkToolTips:NO];
+		[_undoTextView setGrammarCheckingEnabled:NO];
+		[_undoTextView setImportsGraphics:NO];
+		[_undoTextView setIncrementalSearchingEnabled:NO];
+		[_undoTextView setRichText:NO];
+		[_undoTextView setRulerVisible:NO];
+		[_undoTextView setSmartInsertDeleteEnabled:NO];
+		[_undoTextView setUsesFindBar:NO];
+		[_undoTextView setUsesFindPanel:NO];
+		[_undoTextView setUsesInspectorBar:NO];
+		[_undoTextView setUsesRuler:NO];
+	}
+	return _undoTextView;
+}
+#pragma mark *** Private Methods ***
 - (void)_updateFileEditedStatus {
 	[self willChangeValueForKey:@"icon"];
 	[self willChangeValueForKey:@"isEdited"];

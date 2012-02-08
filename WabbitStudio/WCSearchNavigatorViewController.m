@@ -21,6 +21,9 @@
 #import "WCTabViewController.h"
 #import "RSOutlineView.h"
 #import "WCSearchResultContainer.h"
+#import "NSAlert-OAExtensions.h"
+#import "RSDefines.h"
+#import "WCSourceFileDocument.h"
 
 @interface WCSearchNavigatorViewController ()
 @property (readwrite,retain,nonatomic) WCSearchContainer *filteredSearchContainer;
@@ -31,6 +34,7 @@
 @property (readonly,nonatomic,getter = areReplaceControlsVisible) BOOL replaceControlsVisible;
 
 - (void)_removeAllSearchResults;
+- (void)_replaceSearchResultContainers:(NSArray *)searchResultContainers;
 @end
 
 @implementation WCSearchNavigatorViewController
@@ -416,10 +420,32 @@ static const CGFloat kReplaceControlsHeight = (19.0+17.0+4.0+4.0);
 }
 
 - (IBAction)replace:(id)sender; {
+	NSMutableArray *replaceContainers = [NSMutableArray arrayWithCapacity:0];
 	
+	for (id container in [self selectedObjects]) {
+		if ([container isLeafNode])
+			[replaceContainers addObject:container];
+	}
+	
+	if (![replaceContainers count]) {
+		NSBeep();
+		return;
+	}
+	
+	[self _replaceSearchResultContainers:replaceContainers];
 }
 - (IBAction)replaceAll:(id)sender; {
+	NSString *message = NSLocalizedString(@"Replace All", @"Replace All");
+	NSString *informative = [NSString stringWithFormat:NSLocalizedString(@"Replace all occurrences of \"%@\" with \"%@\"?", @"replace all alert format string"),[self searchString],[self replaceString]];
+	NSAlert *replaceAllAlert = [NSAlert alertWithMessageText:message defaultButton:NSLocalizedString(@"Replace All", @"Replace All") alternateButton:LOCALIZED_STRING_CANCEL otherButton:nil informativeTextWithFormat:informative];
 	
+	[replaceAllAlert beginSheetModalForWindow:[[self view] window] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
+		[[alert window] orderOut:nil];
+		if (returnCode == NSAlertAlternateReturn)
+			return;
+		
+		[self _replaceSearchResultContainers:[[self searchContainer] descendantLeafNodes]];
+	}];
 }
 #pragma mark Properties
 @synthesize outlineView=_outlineView;
@@ -490,6 +516,26 @@ static const CGFloat kReplaceControlsHeight = (19.0+17.0+4.0+4.0);
 	[[self searchContainer] willChangeValueForKey:@"searchStatus"];
 	[[[self searchContainer] mutableChildNodes] removeObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [[[self searchContainer] childNodes] count])]];
 	[[self searchContainer] didChangeValueForKey:@"searchStatus"];
+}
+
+- (void)_replaceSearchResultContainers:(NSArray *)searchResultContainers; {
+	for (WCSearchResultContainer *resultContainer in [searchResultContainers reverseObjectEnumerator]) {
+		WCSourceFileDocument *sfDocument = [[[self projectDocument] filesToSourceFileDocuments] objectForKey:[[resultContainer parentNode] representedObject]];
+		
+#ifdef DEBUG
+		NSAssert(sfDocument, @"sfDocument cannot be nil!");
+#endif
+		
+		if ([[self searchOptionsViewController] findStyle] == RSFindOptionsFindStyleTextual) {
+			if ([[sfDocument undoTextView] shouldChangeTextInRange:[[resultContainer representedObject] range] replacementString:[self replaceString]]) {
+				[[sfDocument undoTextView] replaceCharactersInRange:[[resultContainer representedObject] range] withString:[self replaceString]];
+				[[sfDocument undoTextView] didChangeText];
+			}
+		}
+		else {
+			
+		}
+	}
 }
 #pragma mark IBActions
 - (IBAction)_outlineViewDoubleClick:(id)sender; {
