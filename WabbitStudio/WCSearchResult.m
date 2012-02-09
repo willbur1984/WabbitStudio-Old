@@ -13,7 +13,6 @@
 	[_string release];
 	[_attributedString release];
 	[_tokenOrSymbol release];
-	[_icon release];
 	[super dealloc];
 }
 

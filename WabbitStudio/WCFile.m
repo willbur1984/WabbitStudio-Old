@@ -112,12 +112,13 @@ static NSString *const WCFileReferenceKey = @"fileReference";
 		if (![currentDate isEqualToDate:[sfDocument fileModificationDate]])
 			[sfDocument reloadDocumentFromDisk];
 	}
-	
-	[self willChangeValueForKey:@"filePath"];
-	[self willChangeValueForKey:@"fileName"];
-	[sfDocument setFileURL:url];
-	[self didChangeValueForKey:@"fileName"];
-	[self didChangeValueForKey:@"filePath"];
+	else {
+		[self willChangeValueForKey:@"filePath"];
+		[self willChangeValueForKey:@"fileName"];
+		[sfDocument setFileURL:url];
+		[self didChangeValueForKey:@"fileName"];
+		[self didChangeValueForKey:@"filePath"];
+	}
 }
 - (void)fileReferenceWasDeleted:(RSFileReference *)fileReference {
 	[self willChangeValueForKey:@"fileIcon"];

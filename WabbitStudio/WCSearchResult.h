@@ -13,9 +13,8 @@
 	id _tokenOrSymbol;
 	NSString *_string;
 	NSAttributedString *_attributedString;
-	NSImage *_icon;
 }
-@property (readonly,nonatomic) NSRange range;
+@property (readwrite,assign,nonatomic) NSRange range;
 @property (readonly,nonatomic) id tokenOrSymbol;
 @property (readonly,nonatomic) NSString *string;
 @property (readonly,nonatomic) NSAttributedString *attributedString;

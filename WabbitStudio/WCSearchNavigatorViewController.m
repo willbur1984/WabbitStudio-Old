@@ -24,6 +24,7 @@
 #import "NSAlert-OAExtensions.h"
 #import "RSDefines.h"
 #import "WCSourceFileDocument.h"
+#import "WCSourceTextStorage.h"
 
 @interface WCSearchNavigatorViewController ()
 @property (readwrite,retain,nonatomic) WCSearchContainer *filteredSearchContainer;
@@ -342,6 +343,8 @@ static const CGFloat kMainCellHeight = 20.0;
 	[self setSearching:YES];
 	[self setStatusString:NSLocalizedString(@"Searching\u2026", @"Searching with ellipsis")];
 	
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSTextStorageDidProcessEditingNotification object:nil];
+	
 	[_operationQueue cancelAllOperations];
 	[_operationQueue addOperation:[[[WCSearchOperation alloc] initWithSearchNavigatorViewController:self] autorelease]];
 }
@@ -533,7 +536,13 @@ static const CGFloat kReplaceControlsHeight = (19.0+17.0+4.0+4.0);
 			}
 		}
 		else {
+			NSRange replaceRange = [[resultContainer representedObject] range];
+			NSString *replaceString = [[self searchRegularExpression] stringByReplacingMatchesInString:[[[sfDocument textStorage] string] substringWithRange:replaceRange] options:0 range:NSMakeRange(0, replaceRange.length) withTemplate:[NSRegularExpression escapedTemplateForString:[self replaceString]]];
 			
+			if ([[sfDocument undoTextView] shouldChangeTextInRange:replaceRange replacementString:replaceString]) {
+				[[sfDocument undoTextView] replaceCharactersInRange:replaceRange withString:replaceString];
+				[[sfDocument undoTextView] didChangeText];
+			}
 		}
 	}
 }
@@ -575,5 +584,47 @@ static const CGFloat kReplaceControlsHeight = (19.0+17.0+4.0+4.0);
 	
 	[self _removeAllSearchResults];
 }
-
+#pragma mark Notifications
+- (void)_textStorageDidProcessEditing:(NSNotification *)note {	
+	NSTextStorage *textStorage = [note object];
+	
+	if (([textStorage editedMask] & NSTextStorageEditedCharacters) == 0)
+		return;
+	
+	for (WCSearchContainer *container in [[self searchContainer] childNodes]) {
+		WCSourceFileDocument *sfDocument = [[[self projectDocument] filesToSourceFileDocuments] objectForKey:[container representedObject]];
+		
+		if (textStorage == [sfDocument textStorage]) {
+			NSMutableArray *resultsToRemove = [NSMutableArray arrayWithCapacity:0];
+			NSRange editedRange = [textStorage editedRange];
+			NSInteger changeInLength = [textStorage changeInLength];
+			
+			RSLogRange(editedRange);
+			RSLogInteger(changeInLength);
+			
+			for (WCSearchResultContainer *resultContainer in [container childNodes]) {
+				NSRange resultRange = [[resultContainer representedObject] range];
+				
+				RSLogRange(resultRange);
+				
+				if (NSMaxRange(editedRange) < resultRange.location) {
+					resultRange.location += changeInLength;
+					[[resultContainer representedObject] setRange:resultRange];
+				}
+				else if (NSLocationInRange(editedRange.location, resultRange))
+					[resultsToRemove addObject:resultContainer];
+				else if (NSLocationInRange(resultRange.location, editedRange))
+					[resultsToRemove addObject:resultContainer];
+			}
+			
+			if ([resultsToRemove count]) {
+				[container willChangeValueForKey:@"searchStatus"];
+				[[container mutableChildNodes] removeObjectsInArray:resultsToRemove];
+				[container didChangeValueForKey:@"searchStatus"];
+			}
+			
+			break;
+		}
+	}
+}
 @end

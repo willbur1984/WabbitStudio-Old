@@ -112,6 +112,10 @@
 							
 							[searchResults addObject:parentContainer];
 							[sourceFileDocumentsToSearchContainers setObject:parentContainer forKey:sfDocument];
+							
+							dispatch_async(dispatch_get_main_queue(), ^{
+								[[NSNotificationCenter defaultCenter] addObserver:[self searchNavigatorViewController] selector:@selector(_textStorageDidProcessEditing:) name:NSTextStorageDidProcessEditingNotification object:[sfDocument textStorage]];
+							});
 						}
 						
 						[[parentContainer mutableChildNodes] addObject:[WCSearchResultContainer searchResultContainerWithSearchResult:searchResult]];
@@ -182,6 +186,8 @@
 		dispatch_async(dispatch_get_main_queue(), ^{
 			[[self searchNavigatorViewController] setStatusString:NSLocalizedString(@"Search cancelled", @"Search cancelled")];
 			[[self searchNavigatorViewController] setSearching:NO];
+			
+			[[NSNotificationCenter defaultCenter] removeObserver:[self searchNavigatorViewController] name:NSTextStorageDidProcessEditingNotification object:nil];
 		});
 	}
 	else {

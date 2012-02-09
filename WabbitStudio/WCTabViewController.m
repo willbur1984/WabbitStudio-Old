@@ -239,7 +239,7 @@ static NSString *const WCTabViewControllerSelectedTabKey = @"selectedTab";
 		
 		WCFile *file = [[[sourceFileDocument projectDocument] sourceFileDocumentsToFiles] objectForKey:sourceFileDocument];
 		
-		[[[sourceFileDocument projectDocument] openFiles] removeObject:file];
+		[[[sourceFileDocument projectDocument] openFiles] addObject:file];
 		
 		[[[self tabBarControl] tabView] addTabViewItem:tabViewItem];
 	}

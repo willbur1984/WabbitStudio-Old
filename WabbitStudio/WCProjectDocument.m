@@ -247,8 +247,6 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	return nil;
 }
 - (WCSourceTextViewController *)openTabForSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument tabViewContext:(id<WCTabViewContext>)tabViewContext {
-	
-	
 	if (!tabViewContext)
 		tabViewContext = [self currentTabViewContext];
 	return [[tabViewContext tabViewController] addTabForSourceFileDocument:sourceFileDocument];
