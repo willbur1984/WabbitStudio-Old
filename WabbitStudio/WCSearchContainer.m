@@ -32,8 +32,12 @@
 		for (RSTreeNode *node in [self childNodes])
 			total += [[node childNodes] count];
 		
-		return [NSString stringWithFormat:NSLocalizedString(@"%lu result(s) total", @"search container search status project format string"),total];
+		if (total == 1)
+			return NSLocalizedString(@"1 result total", @"1 result total");
+		return [NSString stringWithFormat:NSLocalizedString(@"%lu results total", @"search container search status project format string"),total];
 	}
-	return [NSString stringWithFormat:NSLocalizedString(@"%lu result(s)", @"search container search status format string"),[[self childNodes] count]];
+	if ([[self childNodes] count] == 1)
+		return NSLocalizedString(@"1 result", @"1 result");
+	return [NSString stringWithFormat:NSLocalizedString(@"%lu results", @"search container search status format string"),[[self childNodes] count]];
 }
 @end

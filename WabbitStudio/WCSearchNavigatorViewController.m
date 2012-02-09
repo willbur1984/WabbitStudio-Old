@@ -599,13 +599,8 @@ static const CGFloat kReplaceControlsHeight = (19.0+17.0+4.0+4.0);
 			NSRange editedRange = [textStorage editedRange];
 			NSInteger changeInLength = [textStorage changeInLength];
 			
-			RSLogRange(editedRange);
-			RSLogInteger(changeInLength);
-			
 			for (WCSearchResultContainer *resultContainer in [container childNodes]) {
 				NSRange resultRange = [[resultContainer representedObject] range];
-				
-				RSLogRange(resultRange);
 				
 				if (NSMaxRange(editedRange) < resultRange.location) {
 					resultRange.location += changeInLength;

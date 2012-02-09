@@ -179,6 +179,8 @@
 			CFRelease(stringTokenizer);
 		}
 		
+		[searchResults sortUsingDescriptors:[NSArray arrayWithObjects:[NSSortDescriptor sortDescriptorWithKey:@"representedObject.fileName" ascending:YES selector:@selector(localizedStandardCompare:)], nil]];
+		
 		isFinished = YES;
 	}
 	
