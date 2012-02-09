@@ -73,4 +73,14 @@
 - (NSString *)filePath; {
 	return [self path];
 }
+- (NSDate *)modificationDate {
+	NSError *outError;
+	NSDate *retval = nil;
+	if (![self getResourceValue:&retval forKey:NSURLContentModificationDateKey error:&outError]) {
+#ifdef DEBUG
+		NSLogObject(outError);
+#endif
+	}
+	return retval;
+}
 @end

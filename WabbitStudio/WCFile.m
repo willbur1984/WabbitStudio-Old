@@ -13,6 +13,7 @@
 #import "WCSourceFileDocument.h"
 #import "WCDocumentController.h"
 #import "NSString+RSExtensions.h"
+#import "NSURL+RSExtensions.h"
 
 NSString *const WCPasteboardTypeFileUUID = @"org.revsoft.wabbitstudio.uuid";
 
@@ -105,9 +106,18 @@ static NSString *const WCFileReferenceKey = @"fileReference";
 - (void)fileReference:(RSFileReference *)fileReference wasMovedToURL:(NSURL *)url; {
 	WCSourceFileDocument *sfDocument = [[self delegate] sourceFileDocumentForFile:self];
 	
+	if ([[sfDocument fileURL] isEqual:url]) {
+		NSDate *currentDate = [[fileReference fileURL] modificationDate];
+		
+		if (![currentDate isEqualToDate:[sfDocument fileModificationDate]])
+			[sfDocument reloadDocumentFromDisk];
+	}
+	
+	[self willChangeValueForKey:@"filePath"];
 	[self willChangeValueForKey:@"fileName"];
 	[sfDocument setFileURL:url];
 	[self didChangeValueForKey:@"fileName"];
+	[self didChangeValueForKey:@"filePath"];
 }
 - (void)fileReferenceWasDeleted:(RSFileReference *)fileReference {
 	[self willChangeValueForKey:@"fileIcon"];
@@ -116,8 +126,10 @@ static NSString *const WCFileReferenceKey = @"fileReference";
 }
 - (void)fileReferenceWasWrittenTo:(RSFileReference *)fileReference; {
 	WCSourceFileDocument *sfDocument = [[self delegate] sourceFileDocumentForFile:self];
+	NSDate *currentDate = [[fileReference fileURL] modificationDate];
 	
-	[sfDocument reloadDocumentFromDisk];
+	if (![currentDate isEqualToDate:[sfDocument fileModificationDate]])
+		[sfDocument reloadDocumentFromDisk];
 }
 #pragma mark *** Public Methods ***
 + (id)fileWithFileURL:(NSURL *)fileURL; {

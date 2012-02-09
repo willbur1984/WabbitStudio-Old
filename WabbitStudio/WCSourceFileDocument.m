@@ -245,6 +245,7 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 	
 	[super saveDocument:nil];
 }
+
 #pragma mark NSTextViewDelegate
 - (NSUndoManager *)undoManagerForTextView:(NSTextView *)view {
 	return [self undoManager];
@@ -426,8 +427,23 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 #pragma mark *** Public Methods ***
 
 - (void)reloadDocumentFromDisk; {
+	NSMutableArray *textViewsAndSelectedRanges = [NSMutableArray arrayWithCapacity:0];
+	for (NSLayoutManager *layoutManager in [[self textStorage] layoutManagers]) {
+		for (NSTextContainer *textContainer in [layoutManager textContainers])
+			[textViewsAndSelectedRanges addObject:[NSDictionary dictionaryWithObjectsAndKeys:[textContainer textView],@"textView",[NSValue valueWithRange:[[textContainer textView] selectedRange]],@"selectedRange", nil]];
+	}
+	
 	[[self textStorage] replaceCharactersInRange:NSMakeRange(0, [[self textStorage] length]) withString:[NSString stringWithContentsOfURL:[self fileURL] encoding:[self fileEncoding] error:NULL]];
-	[self setFileModificationDate:[[[NSFileManager defaultManager] attributesOfItemAtPath:[[self fileURL] path] error:NULL] fileModificationDate]];
+	[self setFileModificationDate:[[self fileURL] modificationDate]];
+	
+	NSUInteger stringLength = [[self textStorage] length];
+	for (NSDictionary *dict in textViewsAndSelectedRanges) {
+		NSRange selectedRange = [[dict objectForKey:@"selectedRange"] rangeValue];
+		NSTextView *textView = [dict objectForKey:@"textView"];
+		
+		if (NSMaxRange(selectedRange) < stringLength)
+			[textView setSelectedRange:selectedRange];
+	}
 }
 #pragma mark Properties
 @synthesize sourceScanner=_sourceScanner;

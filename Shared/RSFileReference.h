@@ -9,8 +9,6 @@
 #import "RSObject.h"
 #import "RSFileReferenceDelegate.h"
 
-@class UKKQueue;
-
 /** Allows referencing a file and tracking its movement/modification.
  
  Anything that wants to reference a file should do so through a RSFileReference instance. Uses the excellent UKKQueue class to watch its path and report changes to the tracked file to its delegate.
@@ -21,7 +19,7 @@
 	__weak id <RSFileReferenceDelegate> _delegate;
 	NSURL *_fileReferenceURL;
 	NSURL *_fileURL;
-	UKKQueue *_kqueue;
+	NSLock *_fileURLLock;
 	NSOperationQueue *_operationQueue;
 	struct {
 		unsigned int ignoreNextFileWatcherNotification:1;
@@ -40,7 +38,7 @@
 @property (readonly,nonatomic) NSURL *parentDirectoryURL;
 @property (readwrite,assign,nonatomic) BOOL shouldMonitorFile;
 
-+ (RSFileReference *)fileReferenceWithFileURL:(NSURL *)fileURL;
++ (id)fileReferenceWithFileURL:(NSURL *)fileURL;
 - (id)initWithFileURL:(NSURL *)fileURL;
 
 - (void)performCleanup;

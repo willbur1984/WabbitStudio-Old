@@ -10,7 +10,6 @@
 #import "NSString+RSExtensions.h"
 #import "NSURL+RSExtensions.h"
 #import "RSDefines.h"
-#import "UKKQueue.h"
 
 static NSString *const RSFileReferenceFileReferenceURLKey = @"fileReferenceURL";
 static NSString *const RSFileReferenceFilePathKey = @"filePath";
@@ -23,7 +22,7 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 #pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 	[_operationQueue release];
-	[_kqueue release];
+	[_fileURLLock release];
 	[_fileURL release];
 	[_fileReferenceURL release];
 	[super dealloc];
@@ -39,17 +38,58 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 - (NSOperationQueue *)presentedItemOperationQueue {
 	return [self operationQueue];
 }
-- (void)presentedItemDidMoveToURL:(NSURL *)newURL {	
+- (void)relinquishPresentedItemToWriter:(void (^)(void (^)(void)))writer {
+#ifdef DEBUG
+	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
+#endif
+	writer(^{
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[[self delegate] fileReferenceWasWrittenTo:self];
+		});
+	});
+}
+- (void)accommodatePresentedItemDeletionWithCompletionHandler:(void (^)(NSError *))completionHandler {
+#ifdef DEBUG
+	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
+#endif
 	
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[[self delegate] fileReferenceWasDeleted:self];
+	});
+	completionHandler(nil);
+}
+- (void)presentedItemDidMoveToURL:(NSURL *)newURL {	
+#ifdef DEBUG
+	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
+#endif
+	
+	[self setFileURL:newURL];
+	
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[_fileReferenceURL release];
+		_fileReferenceURL = [[newURL fileReferenceURL] copy];
+		
+		[[self delegate] fileReference:self wasMovedToURL:newURL];
+	});
 }
 - (void)presentedItemDidChange {
-
+#ifdef DEBUG
+	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
+#endif
+	
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[[self delegate] fileReferenceWasWrittenTo:self];
+	});
 }
 #pragma mark RSPlistArchiving
 - (NSDictionary *)plistRepresentation {
 	NSMutableDictionary *retval = [NSMutableDictionary dictionaryWithDictionary:[super plistRepresentation]];
 	
-	[retval addEntriesFromDictionary:[NSDictionary dictionaryWithObjectsAndKeys:[[self fileReferenceURL] bookmarkDataWithOptions:NSURLBookmarkCreationMinimalBookmark|NSURLBookmarkCreationPreferFileIDResolution includingResourceValuesForKeys:nil relativeToURL:nil error:NULL],RSFileReferenceFileReferenceURLKey,[[self fileURL] path],RSFileReferenceFilePathKey, nil]];
+	NSData *bookmarkData = [[self fileReferenceURL] bookmarkDataWithOptions:NSURLBookmarkCreationMinimalBookmark includingResourceValuesForKeys:nil relativeToURL:nil error:NULL];
+	if (bookmarkData)
+		[retval setObject:bookmarkData forKey:RSFileReferenceFileReferenceURLKey];
+	
+	[retval setObject:[[self fileURL] path] forKey:RSFileReferenceFilePathKey];
 	
 	return retval;
 }
@@ -57,61 +97,43 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 	if (!(self = [super init]))
 		return nil;
 	
-	BOOL bookmarkDataIsStale;
-	NSData *bookmarkData = [plistRepresentation objectForKey:RSFileReferenceFileReferenceURLKey];
-	NSURL *fileReferenceURL = [[[NSURL alloc] initByResolvingBookmarkData:bookmarkData options:NSURLBookmarkResolutionWithoutUI relativeToURL:nil bookmarkDataIsStale:&bookmarkDataIsStale error:NULL] autorelease];
+	NSError *outError;
+	BOOL bookmarkIsStale = NO;
+	NSURL *fileReferenceURL = [NSURL URLByResolvingBookmarkData:[plistRepresentation objectForKey:RSFileReferenceFileReferenceURLKey] options:NSURLBookmarkResolutionWithoutUI relativeToURL:nil bookmarkDataIsStale:&bookmarkIsStale error:&outError];
 	
-	if (!fileReferenceURL || bookmarkDataIsStale)
-		_fileReferenceURL = [[[NSURL fileURLWithPath:[plistRepresentation objectForKey:RSFileReferenceFilePathKey]] fileReferenceURL] copy];
-	else
-		_fileReferenceURL = [fileReferenceURL retain];
+	if (!fileReferenceURL || bookmarkIsStale) {
+		if (outError)
+			RSLog(@"%@",outError);
+		
+		NSURL *fileURL = [NSURL fileURLWithPath:[plistRepresentation objectForKey:RSFileReferenceFilePathKey]];
+		
+		_fileURL = [fileURL copy];
+		_fileReferenceURL = [[_fileURL fileReferenceURL] copy];
+	}
+	else {
+		_fileReferenceURL = [fileReferenceURL copy];
+		_fileURL = [[_fileReferenceURL filePathURL] copy];
+	}
 	
-#ifdef DEBUG
-    NSAssert(_fileReferenceURL, @"fileReferenceURL cannot be nil!");
-#endif
+	_fileURLLock = [[NSLock alloc] init];
 	
-	_fileURL = [[_fileReferenceURL filePathURL] copy];
 	_operationQueue = [[NSOperationQueue alloc] init];
-	[_operationQueue setMaxConcurrentOperationCount:NSOperationQueueDefaultMaxConcurrentOperationCount];
+	[_operationQueue setMaxConcurrentOperationCount:1];
 	
 	[NSFileCoordinator addFilePresenter:self];
 	
 	return self;
 }
-#pragma mark UKFileWatcherDelegate
--(void) watcher: (id<UKFileWatcher>)kq receivedNotification: (NSString*)nm forPath: (NSString*)fpath; {
-	if ([nm isEqualToString:UKFileWatcherRenameNotification]) {
-		[self setFileURL:[[self fileReferenceURL] filePathURL]];
-		[[self delegate] fileReference:self wasMovedToURL:[[self fileReferenceURL] filePathURL]];
-	}
-	else if ([nm isEqualToString:UKFileWatcherDeleteNotification]) {
-		[_kqueue removeAllPaths];
-		
-		if ([[self fileURL] checkResourceIsReachableAndReturnError:NULL]) {
-			[_kqueue addPath:[[self fileURL] path] notifyingAbout:UKKQueueNotifyAboutRename|UKKQueueNotifyAboutDelete|UKKQueueNotifyAboutWrite];
-			
-			if ([self ignoreNextFileWatcherNotification]) {
-				[self setIgnoreNextFileWatcherNotification:NO];
-				return;
-			}
-			
-			[[self delegate] fileReferenceWasWrittenTo:self];
-		}
-		else
-			[[self delegate] fileReferenceWasDeleted:self];
-	}
-	else if ([nm isEqualToString:UKFileWatcherWriteNotification]) {
-		[[self delegate] fileReferenceWasWrittenTo:self];
-	}
-}
+
 #pragma mark *** Public Methods ***
-+ (RSFileReference *)fileReferenceWithFileURL:(NSURL *)fileURL; {
++ (id)fileReferenceWithFileURL:(NSURL *)fileURL; {
 	return [[[[self class] alloc] initWithFileURL:fileURL] autorelease];
 }
 - (id)initWithFileURL:(NSURL *)fileURL; {
 	if (!(self = [super init]))
 		return nil;
 	
+	_fileURLLock = [[NSLock alloc] init];
 	_fileURL = [[fileURL filePathURL] copy];
 	_fileReferenceURL = [[fileURL fileReferenceURL] copy];
 	
@@ -125,14 +147,19 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 @synthesize fileReferenceURL=_fileReferenceURL;
 @dynamic fileURL;
 - (NSURL *)fileURL {
-	return _fileURL;
+	NSURL *retval;
+	
+	[_fileURLLock lock];
+	retval = [[_fileURL copy] autorelease];
+	[_fileURLLock unlock];
+	
+	return retval;
 }
 - (void)setFileURL:(NSURL *)fileURL {
-	if (_fileURL == fileURL)
-		return;
-	
+	[_fileURLLock lock];
 	[_fileURL release];
 	_fileURL = [fileURL copy];
+	[_fileURLLock unlock];
 }
 @dynamic fileIcon;
 - (NSImage *)fileIcon {
@@ -175,22 +202,6 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 - (void)setShouldMonitorFile:(BOOL)shouldMonitorFile {
 	_fileReferenceFlags.shouldMonitorFile = shouldMonitorFile;
 	
-	if (shouldMonitorFile) {		
-		[_kqueue removeAllPaths];
-		[_kqueue setDelegate:nil];
-		[_kqueue release];
-		_kqueue = nil;
-		
-		_kqueue = [[UKKQueue alloc] init];
-		[_kqueue setDelegate:self];
-		[_kqueue addPath:[self filePath] notifyingAbout:UKKQueueNotifyAboutRename|UKKQueueNotifyAboutDelete|UKKQueueNotifyAboutWrite];
-	}
-	else {		
-		[_kqueue removeAllPaths];
-		[_kqueue setDelegate:nil];
-		[_kqueue release];
-		_kqueue = nil;
-	}
 }
 @synthesize operationQueue=_operationQueue;
 

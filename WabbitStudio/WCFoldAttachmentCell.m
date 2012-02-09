@@ -52,7 +52,7 @@ static const CGFloat kCellPaddingLeftRight = 2.0;
 	[[NSColor colorWithCalibratedRed:247.0/255.0 green:245.0/255.0 blue:196.0/255.0 alpha:1.0] setFill];
 	[path fill];
 	[[NSColor colorWithCalibratedRed:167.0/255.0 green:164.0/255.0 blue:60.0/255.0 alpha:1.0] setStroke];
-	[path stroke];
+	[path strokeInside];
     
     [[NSGraphicsContext currentContext] saveGraphicsState];
     

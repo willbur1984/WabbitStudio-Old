@@ -12,6 +12,7 @@
 	NSMutableArray *_assistantSplitViews;
 	NSMutableArray *_assistantSourceTextViewControllers;
 }
+
 - (void)addAssistantEditorForSourceTextViewController:(WCSourceTextViewController *)firstSourceTextViewController;
 - (void)removeAssistantEditorForSourceTextViewController:(WCSourceTextViewController *)sourceTextViewController;
 

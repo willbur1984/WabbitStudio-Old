@@ -16,4 +16,5 @@
 - (NSURL *)parentDirectoryURL;
 - (NSString *)fileUTI;
 - (NSString *)filePath;
+- (NSDate *)modificationDate;
 @end
