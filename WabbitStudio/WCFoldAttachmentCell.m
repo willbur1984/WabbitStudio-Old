@@ -19,6 +19,7 @@ static NSLayoutManager *_layoutManager;
 static NSTextContainer *_textContainer;
 
 static const CGFloat kCellPaddingLeftRight = 2.0;
+static const CGFloat kCellPaddingTopBottom = 1.0;
 
 @implementation WCFoldAttachmentCell
 + (void)initialize {
@@ -47,12 +48,12 @@ static const CGFloat kCellPaddingLeftRight = 2.0;
 }
 
 - (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView characterIndex:(NSUInteger)charIndex layoutManager:(NSLayoutManager *)layoutManager {
-    NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:NSInsetRect(cellFrame, kCellPaddingLeftRight, 1.0) xRadius:5.0 yRadius:5.0];
+    NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:NSInsetRect(cellFrame, kCellPaddingLeftRight, kCellPaddingTopBottom) xRadius:5.0 yRadius:5.0];
 	
 	[[NSColor colorWithCalibratedRed:247.0/255.0 green:245.0/255.0 blue:196.0/255.0 alpha:1.0] setFill];
 	[path fill];
 	[[NSColor colorWithCalibratedRed:167.0/255.0 green:164.0/255.0 blue:60.0/255.0 alpha:1.0] setStroke];
-	[path strokeInside];
+	[path stroke];
     
     [[NSGraphicsContext currentContext] saveGraphicsState];
     
@@ -63,6 +64,7 @@ static const CGFloat kCellPaddingLeftRight = 2.0;
 	[_textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName, nil] range:NSMakeRange(0, [_textStorage length])];
 	
 	cellFrame.origin.x += kCellPaddingLeftRight;
+	cellFrame.origin.y -= kCellPaddingTopBottom;
 	
 	[_layoutManager ensureLayoutForCharacterRange:NSMakeRange(0, [_textStorage length])];
 	[_layoutManager drawGlyphsForGlyphRange:[_layoutManager glyphRangeForCharacterRange:NSMakeRange(0, [_textStorage length]) actualCharacterRange:NULL] atPoint:cellFrame.origin];

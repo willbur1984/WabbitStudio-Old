@@ -47,6 +47,11 @@
 	[[self pathControl] setTarget:self];
 	[[self pathControl] setAction:@selector(_pathControlSingleClick:)];
 }
+#pragma mark NSWindowDelegate
+- (void)windowWillClose:(NSNotification *)notification {
+	[[NSApplication sharedApplication] stopModalWithCode:NSCancelButton];
+}
+
 #pragma mark NSControlTextEditingDelegate
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector {
 	if (commandSelector == @selector(insertNewline:)) {

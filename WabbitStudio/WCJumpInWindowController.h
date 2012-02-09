@@ -9,7 +9,7 @@
 #import <AppKit/NSWindowController.h>
 #import "WCJumpInDataSource.h"
 
-@interface WCJumpInWindowController : NSWindowController <NSControlTextEditingDelegate> {
+@interface WCJumpInWindowController : NSWindowController <NSControlTextEditingDelegate,NSWindowDelegate> {
 	__weak id <WCJumpInDataSource> _dataSource;
 	NSArray *_items;
 	NSMutableArray *_matches;

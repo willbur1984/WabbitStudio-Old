@@ -43,6 +43,11 @@
 	[[self tableView] setTarget:self];
 	[[self tableView] setDoubleAction:@selector(_tableViewDoubleClick:)];
 }
+#pragma mark NSWindowDelegate
+- (void)windowWillClose:(NSNotification *)notification {
+	[[NSApplication sharedApplication] stopModalWithCode:NSCancelButton];
+}
+
 #pragma mark NSControlTextEditingDelegate
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector {
 	if (commandSelector == @selector(insertNewline:)) {
