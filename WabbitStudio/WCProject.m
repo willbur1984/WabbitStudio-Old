@@ -10,6 +10,9 @@
 #import "WCProjectDocument.h"
 #import "NSURL+RSExtensions.h"
 #import "NSString+RSExtensions.h"
+#import "WCBuildTarget.h"
+
+static NSString *const WCProjectBuildTargetsKey = @"buildTargets";
 
 @implementation WCProject
 #pragma mark *** Subclass Overrides ***
@@ -41,8 +44,9 @@
 }
 
 - (NSDictionary *)plistRepresentation {
-	NSMutableDictionary *retval = [NSMutableDictionary dictionaryWithDictionary:[super plistRepresentation]];
+	NSMutableDictionary *retval = [NSMutableDictionary dictionaryWithCapacity:0];
 	
+	[retval setObject:[self className] forKey:RSObjectClassNameKey];
 	[retval setObject:[self UUID] forKey:WCFileUUIDKey];
 	
 	return [[retval copy] autorelease];

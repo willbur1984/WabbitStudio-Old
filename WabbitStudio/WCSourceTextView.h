@@ -20,12 +20,14 @@
 	NSTimer *_completionTimer;
 	NSTimer *_autoHighlightArgumentsTimer;
 	NSIndexSet *_autoHighlightArgumentsRanges;
-	NSIndexSet *_findRanges;
+	struct {
+		unsigned int editingArgumentsRanges:1;
+		unsigned int RESERVED:31;
+	} _textViewFlags;
 }
 @property (readwrite,assign,nonatomic) IBOutlet id <WCSourceTextViewDelegate> delegate;
 @property (readwrite,assign,nonatomic) BOOL wrapLines;
 @property (readonly,nonatomic) WCSourceTextStorage *sourceTextStorage;
-@property (readwrite,copy,nonatomic) NSIndexSet *findRanges;
 
 - (IBAction)jumpToNextPlaceholder:(id)sender;
 - (IBAction)jumpToPreviousPlaceholder:(id)sender;
@@ -57,6 +59,8 @@
 - (IBAction)unfoldAll:(id)sender;
 - (IBAction)foldCommentBlocks:(id)sender;
 - (IBAction)unfoldCommentBlocks:(id)sender;
+
+- (IBAction)editAllMacroArgumentsInScope:(id)sender;
 
 - (IBAction)openInSeparateEditor:(id)sender;
 @end

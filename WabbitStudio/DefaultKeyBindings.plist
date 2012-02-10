@@ -140,6 +140,18 @@
 				<true/>
 			</dict>
 		</dict>
+		<key>editAllMacroArgumentsInScope:</key>
+		<dict>
+			<key>keyCode</key>
+			<integer>14</integer>
+			<key>modifierFlags</key>
+			<dict>
+				<key>command</key>
+				<true/>
+				<key>control</key>
+				<true/>
+			</dict>
+		</dict>
 		<key>openQuickly:</key>
 		<dict>
 			<key>keyCode</key>

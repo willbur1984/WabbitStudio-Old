@@ -8,6 +8,8 @@
 
 #import <Foundation/NSObject.h>
 
+static NSString *const RSPlistArchivingPlistRepresentationKey = @"plistRepresentation";
+
 /** Protocol that our model objects must conform to.
  
  This allows reading and writing our model objects as plist's.

@@ -467,9 +467,9 @@
 }
 
 - (void)insertText:(id)insertString {
-	[super insertText:insertString];
-	
 	[self setAutoHighlightArgumentsRanges:nil];
+	
+	[super insertText:insertString];
 	
 	[self _insertMatchingBraceWithString:insertString];
 	
@@ -1013,6 +1013,10 @@
 	}
 }
 
+- (IBAction)editAllMacroArgumentsInScope:(id)sender; {
+	
+}
+
 - (IBAction)openInSeparateEditor:(id)sender; {
 	WCProjectDocument *projectDocument = [[self delegate] projectDocumentForSourceTextView:self];
 	
@@ -1076,19 +1080,6 @@
 	
 	[_autoHighlightArgumentsRanges release];
 	_autoHighlightArgumentsRanges = [autoHighlightArgumentsRanges copy];
-	
-	if (needsUpdate)
-		[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
-}
-@dynamic findRanges;
-- (NSIndexSet *)findRanges {
-	return _findRanges;
-}
-- (void)setFindRanges:(NSIndexSet *)findRanges {
-	BOOL needsUpdate = (_findRanges != findRanges);
-	
-	[_findRanges release];
-	_findRanges = [findRanges copy];
 	
 	if (needsUpdate)
 		[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
@@ -1600,7 +1591,7 @@
 	
 	[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
 	
-	CGFloat autoHighlightArgumentsDelay = [[NSUserDefaults standardUserDefaults] floatForKey:WCEditorShowHighlightEnclosedMacroArgumentsDelayKey];
+	NSTimeInterval autoHighlightArgumentsDelay = [[NSUserDefaults standardUserDefaults] floatForKey:WCEditorShowHighlightEnclosedMacroArgumentsDelayKey];
 	if (_autoHighlightArgumentsTimer)
 		[_autoHighlightArgumentsTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:autoHighlightArgumentsDelay]];
 	else

@@ -12,6 +12,7 @@
 
 extern NSString *const WCProjectDocumentFileReferencesKey;
 extern NSString *const WCProjectDocumentProjectContainerKey;
+extern NSString *const WCProjectDocumentBuildTargetsKey;
 
 extern NSString *const WCProjectDataFileName;
 extern NSString *const WCProjectSettingsFileExtension;
@@ -29,6 +30,7 @@ extern NSString *const WCProjectSettingsFileExtension;
 	NSHashTable *_projectSettingsProviders;
 	NSDictionary *_projectSettings;
 	NDMutableTrie *_fileCompletions;
+	NSMutableArray *_buildTargets;
 }
 @property (readonly,retain) WCProjectContainer *projectContainer;
 @property (readonly,retain) NSMapTable *filesToSourceFileDocuments;
@@ -45,6 +47,8 @@ extern NSString *const WCProjectSettingsFileExtension;
 @property (readonly,copy) NSDictionary *projectSettings;
 @property (readonly,retain) NSHashTable *projectSettingsProviders;
 @property (readonly,retain) NDTrie *fileCompletions;
+@property (readonly,retain) NSArray *buildTargets;
+@property (readonly,nonatomic) NSMutableArray *mutableBuildTargets;
 
 - (WCFileContainer *)fileContainerForFile:(WCFile *)file;
 
@@ -56,4 +60,7 @@ extern NSString *const WCProjectSettingsFileExtension;
 - (WCSourceFileSeparateWindowController *)openSeparateEditorForSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument;
 
 - (IBAction)openQuickly:(id)sender;
+
+- (IBAction)build:(id)sender;
+- (IBAction)buildAndRun:(id)sender;
 @end

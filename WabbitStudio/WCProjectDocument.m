@@ -25,10 +25,13 @@
 #import "NSTreeController+RSExtensions.h"
 #import "RSFileReference.h"
 #import "NDTrie.h"
+#import "WCBuildTarget.h"
+
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
 NSString *const WCProjectDocumentFileReferencesKey = @"fileReferences";
 NSString *const WCProjectDocumentProjectContainerKey = @"projectContainer";
+NSString *const WCProjectDocumentBuildTargetsKey = @"buildTargets";
 
 NSString *const WCProjectDataFileName = @"project.wstudioprojdata";
 NSString *const WCProjectSettingsFileExtension = @"plist";
@@ -42,6 +45,7 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 @property (readwrite,copy) NSDictionary *projectSettings;
 @property (readwrite,retain) NSHashTable *projectSettingsProviders;
 @property (readwrite,retain) NDTrie *fileCompletions;
+@property (readwrite,retain) NSArray *buildTargets;
 
 - (WCSourceFileSeparateWindowController *)_sourceFileSeparateWindowControllerForSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument;
 @end
@@ -52,6 +56,7 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
+	[_buildTargets release];
 	[_fileCompletions release];
 	[_openFiles release];
 	[_unsavedFiles release];
@@ -75,6 +80,7 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	_unsavedFiles = [[NSHashTable hashTableWithWeakObjects] retain];
 	_openFiles = [[NSCountedSet alloc] initWithCapacity:0];
 	_projectSettingsProviders = [[NSHashTable hashTableWithWeakObjects] retain];
+	_buildTargets = [[NSMutableArray alloc] initWithCapacity:0];
 	
 	return self;
 }
@@ -114,7 +120,10 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 }
 
 - (NSFileWrapper *)fileWrapperOfType:(NSString *)typeName error:(NSError **)outError {
-	NSDictionary *projectPlist = [[self projectContainer] plistRepresentation];
+	NSMutableDictionary *projectPlist = [[[[self projectContainer] plistRepresentation] mutableCopy] autorelease];
+	
+	[projectPlist setObject:[[self buildTargets] valueForKey:@"plistRepresentation"] forKey:WCProjectDocumentBuildTargetsKey];
+	
 	NSMutableDictionary *projectSettings = [NSMutableDictionary dictionaryWithDictionary:[self projectSettings]];
 	
 	for (id <WCProjectDocumentSettingsProvider> settingsProvider in [self projectSettingsProviders])
@@ -152,12 +161,10 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	WCProjectContainer *projectContainer = [WCProjectContainer projectContainerWithProject:[WCProject projectWithDocument:self]];
 	
 	for (NSDictionary *childPlist in [projectDataPlist objectForKey:RSTreeNodeChildNodesKey]) {
-		RSTreeNode *childNode = [[NSClassFromString([childPlist objectForKey:RSObjectClassNameKey]) alloc] initWithPlistRepresentation:childPlist];
+		RSTreeNode *childNode = [[[NSClassFromString([childPlist objectForKey:RSObjectClassNameKey]) alloc] initWithPlistRepresentation:childPlist] autorelease];
 		
 		if (childNode)
 			[[projectContainer mutableChildNodes] addObject:childNode];
-		
-		[childNode release];
 	}
 	
 	if (!projectContainer)
@@ -199,6 +206,17 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	[self setUUIDsToFiles:UUIDsToObjects];
 	[self setFileCompletions:fileCompletions];
 	
+	NSMutableArray *buildTargets = [NSMutableArray arrayWithCapacity:0];
+	
+	for (NSDictionary *buildTargetPlist in [projectDataPlist objectForKey:WCProjectDocumentBuildTargetsKey]) {
+		WCBuildTarget *buildTarget = [[[WCBuildTarget alloc] initWithPlistRepresentation:buildTargetPlist] autorelease];
+		
+		if (buildTarget)
+			[buildTargets addObject:buildTarget];
+	}
+	
+	[self setBuildTargets:buildTargets];
+	
 	NSFileWrapper *settingsDataWrapper = [[fileWrapper fileWrappers] objectForKey:[NSUserName() stringByAppendingPathExtension:WCProjectSettingsFileExtension]];
 	if (!settingsDataWrapper)
 		return YES;
@@ -214,7 +232,7 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 - (IBAction)saveDocument:(id)sender {
 	[super saveDocument:nil];
 	
-	NSTabViewItem *selectedTabViewItem = [[[[[self projectWindowController] tabViewController] tabBarControl] tabView] selectedTabViewItem];
+	NSTabViewItem *selectedTabViewItem = [[[[[self currentTabViewContext] tabViewController] tabBarControl] tabView] selectedTabViewItem];
 	if (selectedTabViewItem && [[selectedTabViewItem identifier] isDocumentEdited])
 		[[selectedTabViewItem identifier] saveDocument:nil];
 }
@@ -300,6 +318,13 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 - (IBAction)openQuickly:(id)sender; {
 	[[WCOpenQuicklyWindowController sharedWindowController] showOpenQuicklyWindowWithDataSource:self];
 }
+
+- (IBAction)build:(id)sender; {
+	
+}
+- (IBAction)buildAndRun:(id)sender; {
+	
+}
 #pragma mark Properties
 @synthesize projectContainer=_projectContainer;
 @dynamic projectWindowController;
@@ -360,6 +385,26 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	return nil;
 }
 @synthesize fileCompletions=_fileCompletions;
+@synthesize buildTargets=_buildTargets;
+@dynamic mutableBuildTargets;
+- (NSMutableArray *)mutableBuildTargets {
+	return [self mutableArrayValueForKey:@"buildTargets"];
+}
+- (NSUInteger)countOfBuildTargets {
+	return [_buildTargets count];
+}
+- (NSArray *)buildTargetsAtIndexes:(NSIndexSet *)indexes {
+	return [_buildTargets objectsAtIndexes:indexes];
+}
+- (void)insertBuildTargets:(NSArray *)array atIndexes:(NSIndexSet *)indexes {
+	[_buildTargets insertObjects:array atIndexes:indexes];
+}
+- (void)removeBuildTargetsAtIndexes:(NSIndexSet *)indexes {
+	[_buildTargets removeObjectsAtIndexes:indexes];
+}
+- (void)replaceBuildTargetsAtIndexes:(NSIndexSet *)indexes withBuildTargets:(NSArray *)array {
+	[_buildTargets replaceObjectsAtIndexes:indexes withObjects:array];
+}
 #pragma mark Notifications
 - (void)_projectNavigatorDidAddNewGroup:(NSNotification *)note {
 	WCGroupContainer *newGroupContainer = [[note userInfo] objectForKey:WCProjectNavigatorDidAddNewGroupNotificationNewGroupUserInfoKey];
