@@ -102,13 +102,15 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 	NSURL *fileReferenceURL = [NSURL URLByResolvingBookmarkData:[plistRepresentation objectForKey:RSFileReferenceFileReferenceURLKey] options:NSURLBookmarkResolutionWithoutUI relativeToURL:nil bookmarkDataIsStale:&bookmarkIsStale error:&outError];
 	
 	if (!fileReferenceURL || bookmarkIsStale) {
-		if (outError)
-			RSLog(@"%@",outError);
-		
 		NSURL *fileURL = [NSURL fileURLWithPath:[plistRepresentation objectForKey:RSFileReferenceFilePathKey]];
 		
 		_fileURL = [fileURL copy];
 		_fileReferenceURL = [[_fileURL fileReferenceURL] copy];
+		
+#ifdef DEBUG
+		if (outError)
+			RSLogObject(outError);
+#endif
 	}
 	else {
 		_fileReferenceURL = [fileReferenceURL copy];

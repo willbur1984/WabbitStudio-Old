@@ -10,7 +10,7 @@
 #import "WCJumpInItem.h"
 
 @interface WCJumpInMatch : NSObject {
-	__weak id <WCJumpInItem> _item;
+	id <WCJumpInItem> _item;
 	NSAttributedString *_name;
 	NSArray *_ranges;
 	NSArray *_weights;

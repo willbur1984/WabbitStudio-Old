@@ -17,7 +17,7 @@
 @implementation WCJumpInMatch
 #pragma mark *** Subclass Overrides ***
 - (void)dealloc {
-	_item = nil;
+	[_item release];
 	[_weights release];
 	[_ranges release];
 	[_name release];
@@ -35,7 +35,7 @@
 	if (!(self = [super init]))
 		return nil;
 	
-	_item = item;
+	_item = [item retain];
 	_ranges = [ranges copy];
 	_weights = [weights copy];
 	

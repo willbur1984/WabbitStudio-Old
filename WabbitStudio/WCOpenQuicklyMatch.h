@@ -10,7 +10,7 @@
 #import "WCOpenQuicklyItem.h"
 
 @interface WCOpenQuicklyMatch : NSObject {
-	__weak id <WCOpenQuicklyItem> _item;
+	id <WCOpenQuicklyItem> _item;
 	NSAttributedString *_name;
 	NSArray *_ranges;
 	NSArray *_weights;
