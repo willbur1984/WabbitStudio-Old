@@ -7,7 +7,8 @@
 //
 
 #import <AppKit/NSPathControl.h>
+#import "RSToolTipView.h"
 
-@interface WCJumpBar : NSPathControl
+@interface WCJumpBar : NSPathControl <RSToolTipView>
 
 @end

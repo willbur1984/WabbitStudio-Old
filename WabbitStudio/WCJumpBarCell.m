@@ -10,17 +10,21 @@
 #import "WCJumpBarComponentCell.h"
 
 @interface WCJumpBarCell ()
+@property (readwrite,copy,nonatomic) NSString *toolTip;
+
 - (void)_commonInit;
 @end
 
 @implementation WCJumpBarCell
 #pragma mark *** Subclass Overrides ***
+
 + (Class)pathComponentCellClass {
 	return [WCJumpBarComponentCell class];
 }
 
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[_toolTip release];
 	[super dealloc];
 }
 
@@ -32,6 +36,7 @@
 	
 	return self;
 }
+
 #pragma mark NSCoding
 - (id)initWithCoder:(NSCoder *)coder {
 	if (!(self = [super initWithCoder:coder]))
@@ -41,8 +46,11 @@
 	
 	return self;
 }
+
+@synthesize toolTip=_toolTip;
+
 #pragma mark *** Private Methods ***
-- (void)_commonInit; {	
+- (void)_commonInit; {
 	[self setPlaceholderString:NSLocalizedString(@"No Document", @"No Document")];
 }
 

@@ -7,10 +7,11 @@
 //
 
 #import <AppKit/NSPathComponentCell.h>
+#import "RSToolTipProvider.h"
 
 @class RSVerticallyCenteredTextFieldCell;
 
-@interface WCJumpBarComponentCell : NSPathComponentCell <NSCopying> {
+@interface WCJumpBarComponentCell : NSPathComponentCell <RSToolTipProvider,NSCopying> {
 	RSVerticallyCenteredTextFieldCell *_titleCell;
 }
 @end

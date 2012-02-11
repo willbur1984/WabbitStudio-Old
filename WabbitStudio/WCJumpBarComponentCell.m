@@ -9,6 +9,8 @@
 #import "WCJumpBarComponentCell.h"
 #import "RSDefines.h"
 #import "RSVerticallyCenteredTextFieldCell.h"
+#import "WCFile.h"
+#import "WCSourceSymbol.h"
 
 @interface WCJumpBarComponentCell ()
 @property (readonly,nonatomic) BOOL isLastPathComponentCell;
@@ -69,6 +71,14 @@
 	
 	if (![self isLastPathComponentCell])
 		[arrowSeparator drawInRect:NSCenteredRectWithSize([arrowSeparator size], NSMakeRect(NSMaxX(cellFrame)-[arrowSeparator size].width-kArrowSeparatorMarginRight, NSMinY(cellFrame), [arrowSeparator size].width, NSHeight(cellFrame))) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+}
+
+- (NSAttributedString *)attributedToolTip {	
+	if ([[self representedObject] isKindOfClass:[WCFile class]])
+		return [[[NSAttributedString alloc] initWithString:[[self representedObject] filePath] attributes:RSToolTipProviderDefaultAttributes()] autorelease];
+	else if ([[self representedObject] isKindOfClass:[WCSourceSymbol class]])
+		return [[self representedObject] attributedToolTip];
+	return nil;
 }
 
 #pragma mark NSCoding

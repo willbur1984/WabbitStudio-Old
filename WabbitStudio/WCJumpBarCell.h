@@ -8,6 +8,7 @@
 
 #import <AppKit/NSPathCell.h>
 
-@interface WCJumpBarCell : NSPathCell
-
+@interface WCJumpBarCell : NSPathCell {
+	NSString *_toolTip;
+}
 @end

@@ -8,6 +8,8 @@
 
 #import "WCJumpBar.h"
 #import "WCJumpBarCell.h"
+#import "WCJumpBarComponentCell.h"
+#import "RSToolTipManager.h"
 
 @interface WCJumpBar ()
 - (void)_commonInit;
@@ -27,6 +29,24 @@
 	
 	return self;
 }
+
+- (void)viewDidMoveToWindow {
+	[super viewDidMoveToWindow];
+	
+	[[RSToolTipManager sharedManager] removeView:self];
+	
+	if ([self window])
+		[[RSToolTipManager sharedManager] addView:self];
+}
+
+- (NSArray *)toolTipManager:(RSToolTipManager *)toolTipManager toolTipProvidersForToolTipAtPoint:(NSPoint)toolTipPoint {
+	WCJumpBarComponentCell *cell = (WCJumpBarComponentCell *)[[self cell] pathComponentCellAtPoint:toolTipPoint withFrame:[self bounds] inView:self];
+	
+	if (cell && [cell attributedToolTip])
+		return [NSArray arrayWithObjects:cell, nil];
+	return nil;
+}
+
 #pragma mark NSCoding
 - (id)initWithCoder:(NSCoder *)coder {
 	if (!(self = [super initWithCoder:coder]))
@@ -38,6 +58,7 @@
 }
 #pragma mark *** Private Methods ***
 - (void)_commonInit; {
+	[self setCell:[[[[[self class] cellClass] alloc] initTextCell:@"/"] autorelease]];
 	[self setRefusesFirstResponder:YES];
 	[self setBackgroundColor:[NSColor clearColor]];
 	[self setPathStyle:NSPathStyleStandard];
