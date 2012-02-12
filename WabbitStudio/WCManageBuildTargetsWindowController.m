@@ -11,6 +11,7 @@
 #import "WCBuildTarget.h"
 #import "RSTableView.h"
 #import "NSArray+WCExtensions.h"
+#import "WCEditBuildTargetWindowController.h"
 
 @implementation WCManageBuildTargetsWindowController
 - (void)dealloc {
@@ -28,6 +29,10 @@
 
 - (NSString *)windowNibName {
 	return @"WCManageBuildTargetsWindow";
+}
+
+- (BOOL)control:(NSControl *)control textShouldEndEditing:(NSText *)fieldEditor {
+	return ([[fieldEditor string] length]);
 }
 
 - (void)handleSpacePressedForTableView:(RSTableView *)tableView {
@@ -57,12 +62,12 @@
 - (IBAction)ok:(id)sender; {
 	[[NSApplication sharedApplication] endSheet:[self window] returnCode:NSCancelButton];
 }
-- (IBAction)edit:(id)sender; {
+- (IBAction)editBuildTarget:(id)sender; {
 	[[NSApplication sharedApplication] endSheet:[self window] returnCode:NSOKButton];
 }
 
 - (IBAction)newBuildTarget:(id)sender; {
-	WCBuildTarget *newBuildTarget = [WCBuildTarget buildTargetWithName:NSLocalizedString(@"New Target", @"New Target") outputType:WCBuildTargetOutputTypeBinary];
+	WCBuildTarget *newBuildTarget = [WCBuildTarget buildTargetWithName:NSLocalizedString(@"New Target", @"New Target") outputType:WCBuildTargetOutputTypeBinary projectDocument:[self projectDocument]];
 	NSUInteger selectionIndex = [[[self arrayController] selectionIndexes] firstIndex];
 	
 	if (selectionIndex == NSNotFound)
@@ -87,7 +92,10 @@
 	if (code == NSCancelButton)
 		return;
 	
-	// TODO: edit the selected build target
+	WCBuildTarget *buildTarget = [[[self arrayController] selectedObjects] firstObject];
+	WCEditBuildTargetWindowController *windowController = [WCEditBuildTargetWindowController editBuildTargetWindowControllerWithBuildTarget:buildTarget];
+	
+	[windowController showEditBuildTargetWindow];
 }
 
 @end

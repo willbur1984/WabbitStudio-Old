@@ -258,6 +258,10 @@
 		07CC8E8C14E7B65700B303C1 /* Calculator16x16.png in Resources */ = {isa = PBXBuildFile; fileRef = 07CC8E8B14E7B65700B303C1 /* Calculator16x16.png */; };
 		07CC8E8E14E7B8CA00B303C1 /* Success.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 07CC8E8D14E7B8CA00B303C1 /* Success.pdf */; };
 		07CC8E9014E7BFF700B303C1 /* Symbol.png in Resources */ = {isa = PBXBuildFile; fileRef = 07CC8E8F14E7BFF700B303C1 /* Symbol.png */; };
+		07CC8E9614E8470100B303C1 /* WCEditBuildTargetWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CC8E9514E8470100B303C1 /* WCEditBuildTargetWindowController.m */; };
+		07CC8E9914E849BC00B303C1 /* WCEditBuildTargetWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07CC8E9714E849BC00B303C1 /* WCEditBuildTargetWindow.xib */; };
+		07CC8E9C14E850EC00B303C1 /* WCEditBuildTargetDefinesTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CC8E9B14E850EC00B303C1 /* WCEditBuildTargetDefinesTableView.m */; };
+		07CC8E9F14E8538C00B303C1 /* WCEditBuildTargetIncludesTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CC8E9E14E8538B00B303C1 /* WCEditBuildTargetIncludesTableView.m */; };
 		07CC8F3F14B7DBDB0081EE69 /* WCJumpInCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CC8F3E14B7DBDB0081EE69 /* WCJumpInCellView.m */; };
 		07E91DF814C8020800B166E3 /* WCLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 07E91DF714C8020700B166E3 /* WCLayoutManager.m */; };
 		07EB8E2214B63C4F00F8A8C6 /* BGHUDAppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0791BE5314ADA3B80004AC16 /* BGHUDAppKit.framework */; };
@@ -758,6 +762,13 @@
 		07CC8E8B14E7B65700B303C1 /* Calculator16x16.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Calculator16x16.png; sourceTree = "<group>"; };
 		07CC8E8D14E7B8CA00B303C1 /* Success.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Success.pdf; sourceTree = "<group>"; };
 		07CC8E8F14E7BFF700B303C1 /* Symbol.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Symbol.png; sourceTree = "<group>"; };
+		07CC8E9414E8470100B303C1 /* WCEditBuildTargetWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCEditBuildTargetWindowController.h; sourceTree = "<group>"; };
+		07CC8E9514E8470100B303C1 /* WCEditBuildTargetWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCEditBuildTargetWindowController.m; sourceTree = "<group>"; };
+		07CC8E9814E849BC00B303C1 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCEditBuildTargetWindow.xib; sourceTree = "<group>"; };
+		07CC8E9A14E850EC00B303C1 /* WCEditBuildTargetDefinesTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCEditBuildTargetDefinesTableView.h; sourceTree = "<group>"; };
+		07CC8E9B14E850EC00B303C1 /* WCEditBuildTargetDefinesTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCEditBuildTargetDefinesTableView.m; sourceTree = "<group>"; };
+		07CC8E9D14E8538B00B303C1 /* WCEditBuildTargetIncludesTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCEditBuildTargetIncludesTableView.h; sourceTree = "<group>"; };
+		07CC8E9E14E8538B00B303C1 /* WCEditBuildTargetIncludesTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCEditBuildTargetIncludesTableView.m; sourceTree = "<group>"; };
 		07CC8F3D14B7DBDB0081EE69 /* WCJumpInCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCJumpInCellView.h; sourceTree = "<group>"; };
 		07CC8F3E14B7DBDB0081EE69 /* WCJumpInCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCJumpInCellView.m; sourceTree = "<group>"; };
 		07E91DF614C8020600B166E3 /* WCLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCLayoutManager.h; sourceTree = "<group>"; };
@@ -899,6 +910,7 @@
 				07154F5A14D5D88000F57668 /* WCSourceFileSeparateWindow.xib */,
 				077906A314E0DE08006C16EF /* WCSearchNavigatorView.xib */,
 				0718E98714E7530200F9696E /* WCManageBuildTargetsWindow.xib */,
+				07CC8E9714E849BC00B303C1 /* WCEditBuildTargetWindow.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -1693,6 +1705,12 @@
 				0718E98414E7153F00F9696E /* WCManageBuildTargetsWindowController.m */,
 				07CC8E8814E7B3B400B303C1 /* WCManageBuildTargetsTableView.h */,
 				07CC8E8914E7B3B400B303C1 /* WCManageBuildTargetsTableView.m */,
+				07CC8E9414E8470100B303C1 /* WCEditBuildTargetWindowController.h */,
+				07CC8E9514E8470100B303C1 /* WCEditBuildTargetWindowController.m */,
+				07CC8E9A14E850EC00B303C1 /* WCEditBuildTargetDefinesTableView.h */,
+				07CC8E9B14E850EC00B303C1 /* WCEditBuildTargetDefinesTableView.m */,
+				07CC8E9D14E8538B00B303C1 /* WCEditBuildTargetIncludesTableView.h */,
+				07CC8E9E14E8538B00B303C1 /* WCEditBuildTargetIncludesTableView.m */,
 				07992B5114E59C3B008AD47D /* WCBuildTarget.h */,
 				07992B5214E59C3B008AD47D /* WCBuildTarget.m */,
 				0718E98A14E75BDF00F9696E /* WCBuildController.h */,
@@ -1907,6 +1925,7 @@
 				07CC8E8C14E7B65700B303C1 /* Calculator16x16.png in Resources */,
 				07CC8E8E14E7B8CA00B303C1 /* Success.pdf in Resources */,
 				07CC8E9014E7BFF700B303C1 /* Symbol.png in Resources */,
+				07CC8E9914E849BC00B303C1 /* WCEditBuildTargetWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2104,6 +2123,9 @@
 				0718E98514E7153F00F9696E /* WCManageBuildTargetsWindowController.m in Sources */,
 				0718E98C14E75BDF00F9696E /* WCBuildController.m in Sources */,
 				07CC8E8A14E7B3B400B303C1 /* WCManageBuildTargetsTableView.m in Sources */,
+				07CC8E9614E8470100B303C1 /* WCEditBuildTargetWindowController.m in Sources */,
+				07CC8E9C14E850EC00B303C1 /* WCEditBuildTargetDefinesTableView.m in Sources */,
+				07CC8E9F14E8538C00B303C1 /* WCEditBuildTargetIncludesTableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2366,6 +2388,14 @@
 				07BC6CB814B7E3DD007ECB3F /* en */,
 			);
 			name = WCJumpToLineWindow.xib;
+			sourceTree = "<group>";
+		};
+		07CC8E9714E849BC00B303C1 /* WCEditBuildTargetWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				07CC8E9814E849BC00B303C1 /* en */,
+			);
+			name = WCEditBuildTargetWindow.xib;
 			sourceTree = "<group>";
 		};
 		07EB8E2414B63EB800F8A8C6 /* WCAdvancedView.xib */ = {

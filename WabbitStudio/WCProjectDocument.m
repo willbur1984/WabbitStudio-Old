@@ -218,8 +218,10 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	for (NSDictionary *buildTargetPlist in [projectDataPlist objectForKey:WCProjectDocumentBuildTargetsKey]) {
 		WCBuildTarget *buildTarget = [[[WCBuildTarget alloc] initWithPlistRepresentation:buildTargetPlist] autorelease];
 		
-		if (buildTarget)
+		if (buildTarget) {
 			[buildTargets addObject:buildTarget];
+			[buildTarget setProjectDocument:self];
+		}
 	}
 	
 	[self setBuildTargets:buildTargets];

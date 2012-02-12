@@ -25,7 +25,7 @@
 - (void)showManageBuildTargetsWindow;
 
 - (IBAction)ok:(id)sender;
-- (IBAction)edit:(id)sender;
+- (IBAction)editBuildTarget:(id)sender;
 - (IBAction)newBuildTarget:(id)sender;
 - (IBAction)newBuildTargetFromTemplate:(id)sender;
 @end
