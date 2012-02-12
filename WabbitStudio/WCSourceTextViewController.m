@@ -123,6 +123,8 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewBoundsDidChange:) name:NSViewFrameDidChangeNotification object:[[self scrollView] contentView]];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidFold:) name:WCSourceTextStorageDidFoldNotification object:[self textStorage]];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidProcessEditing:) name:NSTextStorageDidProcessEditingNotification object:[self textStorage]];
 }
 #pragma mark NSMenuValidation
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
@@ -401,7 +403,7 @@
 
 #pragma mark Notifications
 
-static const NSTimeInterval kScrollingHighlightTimerDelay = 0.1;
+static const NSTimeInterval kScrollingHighlightTimerDelay = 0.15;
 - (void)_viewBoundsDidChange:(NSNotification *)note {
 	[self _highlightVisibleTokens];
 	
@@ -416,6 +418,14 @@ static const NSTimeInterval kScrollingHighlightTimerDelay = 0.1;
 	[self _highlightVisibleTokens];
 	
 	[[self sourceHighlighter] highlightSymbolsInRange:[[self textView] visibleRange]];
+}
+- (void)_textStorageDidProcessEditing:(NSNotification *)note {
+	if (([[note object] editedMask] & NSTextStorageEditedCharacters) == 0)
+		return;
+	
+	if ([[note object] editedRange].length &&
+		[[note object] changeInLength] < -1)
+		[self _highlightVisibleTokens];
 }
 #pragma mark Callbacks
 - (void)_scrollingHighlightTimerCallback:(NSTimer *)timer {

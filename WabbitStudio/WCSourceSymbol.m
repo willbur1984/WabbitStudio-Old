@@ -29,6 +29,20 @@ NSString *const WCSourceSymbolTypeAttributeName = @"WCSourceSymbolTypeAttributeN
 - (NSString *)description {
 	return [NSString stringWithFormat:@"type: %@\nrange: %@\nname: %@",[self typeDescription],NSStringFromRange([self range]),[self name]];
 }
+/*
+- (NSUInteger)hash {
+	return [[self name] hash] ^ [self type] ^ NSMaxRange([self range]);
+}
+
+- (BOOL)isEqual:(id)object {
+	if ([object isKindOfClass:[self class]] &&
+		[self type] == [(WCSourceSymbol *)object type] &&
+		NSEqualRanges([self range], [object range]) &&
+		[[self name] isEqualToString:[object name]])
+		return YES;
+	return NO;
+}
+ */
 #pragma mark WCCompletionItem
 - (NSString *)completionName {
 	return [NSString stringWithFormat:@"%@ \u2192 (%@:%lu)",[self name],[[[self sourceScanner] delegate] fileDisplayNameForSourceScanner:[self sourceScanner]],[[[[self sourceScanner] textStorage] string] lineNumberForRange:[self range]]+1];

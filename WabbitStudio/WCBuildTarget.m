@@ -14,6 +14,7 @@ static NSString *const WCBuildTargetNameKey = @"name";
 static NSString *const WCBuildTargetInputFileUUIDKey = @"inputFileUUID";
 static NSString *const WCBuildTargetDefinesKey = @"defines";
 static NSString *const WCBuildTargetIncludesKey = @"includes";
+static NSString *const WCBuildTargetStepsKey = @"steps";
 static NSString *const WCBuildTargetActiveKey = @"active";
 static NSString *const WCBuildTargetGenerateCodeListingKey = @"generateCodeListing";
 static NSString *const WCBuildTargetGenerateLabelFileKey = @"generateLabelFile";
@@ -24,10 +25,10 @@ static NSString *const WCBuildTargetSymbolsAreCaseSensitiveKey = @"symbolsAreCas
 - (void)dealloc {
 	_project = nil;
 	[_name release];
-	[_inputFile release];
 	[_inputFileUUID release];
 	[_defines release];
 	[_includes release];
+	[_steps release];
 	[super dealloc];
 }
 #pragma mark RSPlistArchiving
@@ -37,11 +38,9 @@ static NSString *const WCBuildTargetSymbolsAreCaseSensitiveKey = @"symbolsAreCas
 	[retval setObject:[NSNumber numberWithUnsignedInteger:[self outputType]] forKey:WCBuildTargetOutputTypeKey];
 	[retval setObject:[self name] forKey:WCBuildTargetNameKey];
 	
-	if ([self inputFile])
-		[retval setObject:[[self inputFile] UUID] forKey:WCBuildTargetInputFileUUIDKey];
-	
 	[retval setObject:[[self defines] valueForKey:RSPlistArchivingPlistRepresentationKey] forKey:WCBuildTargetDefinesKey];
 	[retval setObject:[[self includes] valueForKey:RSPlistArchivingPlistRepresentationKey] forKey:WCBuildTargetIncludesKey];
+	[retval setObject:[[self steps] valueForKey:RSPlistArchivingPlistRepresentationKey] forKey:WCBuildTargetStepsKey];
 	
 	[retval setObject:[NSNumber numberWithBool:[self isActive]] forKey:WCBuildTargetActiveKey];
 	[retval setObject:[NSNumber numberWithBool:[self generateCodeListing]] forKey:WCBuildTargetGenerateCodeListingKey];
@@ -69,6 +68,11 @@ static NSString *const WCBuildTargetSymbolsAreCaseSensitiveKey = @"symbolsAreCas
 		
 	}
 	
+	_steps = [[NSMutableArray alloc] initWithCapacity:0];
+	for (NSDictionary *stepPlist in [plistRepresentation objectForKey:WCBuildTargetStepsKey]) {
+		
+	}
+	
 	_buildTargetFlags.active = [[plistRepresentation objectForKey:WCBuildTargetActiveKey] boolValue];
 	_buildTargetFlags.generateCodeListing = [[plistRepresentation objectForKey:WCBuildTargetGenerateCodeListingKey] boolValue];
 	_buildTargetFlags.generateLabelFile = [[plistRepresentation objectForKey:WCBuildTargetGenerateLabelFileKey] boolValue];
@@ -82,9 +86,9 @@ static NSString *const WCBuildTargetSymbolsAreCaseSensitiveKey = @"symbolsAreCas
 	
 	copy->_outputType = _outputType;
 	copy->_name = [_name copy];
-	copy->_inputFile = [_inputFile retain];
 	copy->_defines = [_defines mutableCopy];
 	copy->_includes = [_includes mutableCopy];
+	copy->_steps = [_steps mutableCopy];
 	copy->_buildTargetFlags = _buildTargetFlags;
 	
 	return copy;
@@ -95,13 +99,15 @@ static NSString *const WCBuildTargetSymbolsAreCaseSensitiveKey = @"symbolsAreCas
 	
 	copy->_outputType = _outputType;
 	copy->_name = [_name copy];
-	copy->_inputFile = [_inputFile retain];
 	
 	copy->_defines = [[NSMutableArray alloc] initWithCapacity:[_defines count]];
 	// TODO: copy each define
 	
 	copy->_includes = [[NSMutableArray alloc] initWithCapacity:[_includes count]];
 	// TODO: copy each include
+	
+	copy->_steps = [[NSMutableArray alloc] initWithCapacity:[_steps count]];
+	// TODO: copy each step
 	
 	copy->_buildTargetFlags = _buildTargetFlags;
 	copy->_buildTargetFlags.active = NO;
@@ -120,13 +126,13 @@ static NSString *const WCBuildTargetSymbolsAreCaseSensitiveKey = @"symbolsAreCas
 	_outputType = outputType;
 	_defines = [[NSMutableArray alloc] initWithCapacity:0];
 	_includes = [[NSMutableArray alloc] initWithCapacity:0];
+	_steps = [[NSMutableArray alloc] initWithCapacity:0];
 	
 	return self;
 }
 #pragma mark Properties
 @synthesize outputType=_outputType;
 @synthesize name=_name;
-@synthesize inputFile=_inputFile;
 @synthesize defines=_defines;
 @dynamic mutableDefines;
 - (NSMutableArray *)mutableDefines {
@@ -166,6 +172,26 @@ static NSString *const WCBuildTargetSymbolsAreCaseSensitiveKey = @"symbolsAreCas
 }
 - (void)replaceIncludesAtIndexes:(NSIndexSet *)indexes withIncludes:(NSArray *)array {
 	[_includes replaceObjectsAtIndexes:indexes withObjects:array];
+}
+@synthesize steps=_steps;
+@dynamic mutableSteps;
+- (NSMutableArray *)mutableSteps {
+	return [self mutableArrayValueForKey:WCBuildTargetStepsKey];
+}
+- (NSUInteger)countOfSteps {
+	return [_steps count];
+}
+- (NSArray *)stepsAtIndexes:(NSIndexSet *)indexes {
+	return [_steps objectsAtIndexes:indexes];
+}
+- (void)insertSteps:(NSArray *)array atIndexes:(NSIndexSet *)indexes {
+	[_steps insertObjects:array atIndexes:indexes];
+}
+- (void)removeStepsAtIndexes:(NSIndexSet *)indexes {
+	[_steps removeObjectsAtIndexes:indexes];
+}
+- (void)replaceStepsAtIndexes:(NSIndexSet *)indexes withSteps:(NSArray *)array {
+	[_steps replaceObjectsAtIndexes:indexes withObjects:array];
 }
 @dynamic active;
 - (BOOL)isActive {

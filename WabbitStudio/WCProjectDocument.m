@@ -26,6 +26,8 @@
 #import "RSFileReference.h"
 #import "NDTrie.h"
 #import "WCBuildTarget.h"
+#import "WCManageBuildTargetsWindowController.h"
+#import "WCBuildController.h"
 
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
@@ -56,6 +58,7 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
+	[_buildController release];
 	[_buildTargets release];
 	[_fileCompletions release];
 	[_openFiles release];
@@ -320,10 +323,16 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 }
 
 - (IBAction)build:(id)sender; {
-	
+	[[self buildController] build];
 }
 - (IBAction)buildAndRun:(id)sender; {
+	[[self buildController] buildAndRun];
+}
+
+- (IBAction)manageBuildTargets:(id)sender; {
+	WCManageBuildTargetsWindowController *windowController = [WCManageBuildTargetsWindowController manageBuildTargetsWindowControllerWithProjectDocument:self];
 	
+	[windowController showManageBuildTargetsWindow];
 }
 #pragma mark Properties
 @synthesize projectContainer=_projectContainer;
@@ -404,6 +413,20 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 }
 - (void)replaceBuildTargetsAtIndexes:(NSIndexSet *)indexes withBuildTargets:(NSArray *)array {
 	[_buildTargets replaceObjectsAtIndexes:indexes withObjects:array];
+}
+@dynamic activeBuildTarget;
+- (WCBuildTarget *)activeBuildTarget {
+	for (WCBuildTarget *buildTarget in [self buildTargets]) {
+		if ([buildTarget isActive])
+			return buildTarget;
+	}
+	return nil;
+}
+@dynamic buildController;
+- (WCBuildController *)buildController {
+	if (!_buildController)
+		_buildController = [[WCBuildController alloc] initWithProjectDocument:self];
+	return _buildController;
 }
 #pragma mark Notifications
 - (void)_projectNavigatorDidAddNewGroup:(NSNotification *)note {

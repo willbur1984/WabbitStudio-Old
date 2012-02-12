@@ -322,6 +322,7 @@
 	NSRange completionRange = [[self textView] rangeForUserCompletion];
 	WCSourceScanner *sourceScanner = [[[self textView] delegate] sourceScannerForSourceTextView:[self textView]];
 	NSMutableArray *staticCompletions = [NSMutableArray arrayWithCapacity:0];
+	id <WCCompletionItem> selectedItem = [[[self arrayController] selectedObjects] lastObject];
 	
 	if (completionRange.location == NSNotFound) {
 		// can we provide context specific matches?
@@ -444,6 +445,18 @@
 	lineRect.origin.x += selectedPoint.x;
 	
 	[[self window] setFrameTopLeftPoint:[[[self textView] window] convertBaseToScreen:[[self textView] convertPointToBase:lineRect.origin]]];
+	
+	__block NSUInteger selectedItemIndex = NSNotFound;
+	[[self completions] enumerateObjectsUsingBlock:^(id <WCCompletionItem> item, NSUInteger idx, BOOL *stop) {
+		if (item == selectedItem ||
+			[[item completionName] isEqualToString:[selectedItem completionName]]) {
+			selectedItemIndex = idx;
+			*stop = YES;
+		}
+	}];
+	
+	if (selectedItemIndex != NSNotFound)
+		[[self arrayController] setSelectionIndex:selectedItemIndex];
 	
 	return YES;
 }

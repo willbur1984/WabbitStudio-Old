@@ -15,6 +15,7 @@
 	[_dictionary release];
 	[super dealloc];
 }
+
 #pragma mark WCCompletionItem
 - (NSString *)completionName {
 	return [[self completionDictionary] objectForKey:WCCompletionItemArgumentNameKey];
@@ -42,4 +43,5 @@
 #pragma mark Properties
 @synthesize completionDictionary=_dictionary;
 @synthesize name=_name;
+@synthesize type=_type;
 @end

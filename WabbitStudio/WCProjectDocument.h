@@ -17,7 +17,7 @@ extern NSString *const WCProjectDocumentBuildTargetsKey;
 extern NSString *const WCProjectDataFileName;
 extern NSString *const WCProjectSettingsFileExtension;
 
-@class WCProjectContainer,WCProjectWindowController,WCSourceTextViewController,WCFile,WCSourceFileDocument,WCFileContainer,WCSourceFileSeparateWindowController,NDMutableTrie,NDTrie;
+@class WCProjectContainer,WCProjectWindowController,WCSourceTextViewController,WCFile,WCSourceFileDocument,WCFileContainer,WCSourceFileSeparateWindowController,NDMutableTrie,NDTrie,WCBuildTarget,WCBuildController;
 
 @interface WCProjectDocument : NSDocument <WCOpenQuicklyDataSource> {
 	WCProjectContainer *_projectContainer;
@@ -31,6 +31,7 @@ extern NSString *const WCProjectSettingsFileExtension;
 	NSDictionary *_projectSettings;
 	NDMutableTrie *_fileCompletions;
 	NSMutableArray *_buildTargets;
+	WCBuildController *_buildController;
 }
 @property (readonly,retain) WCProjectContainer *projectContainer;
 @property (readonly,retain) NSMapTable *filesToSourceFileDocuments;
@@ -49,6 +50,8 @@ extern NSString *const WCProjectSettingsFileExtension;
 @property (readonly,retain) NDTrie *fileCompletions;
 @property (readonly,retain) NSArray *buildTargets;
 @property (readonly,nonatomic) NSMutableArray *mutableBuildTargets;
+@property (readwrite,retain,nonatomic) WCBuildTarget *activeBuildTarget;
+@property (readonly,nonatomic) WCBuildController *buildController;
 
 - (WCFileContainer *)fileContainerForFile:(WCFile *)file;
 
@@ -63,4 +66,6 @@ extern NSString *const WCProjectSettingsFileExtension;
 
 - (IBAction)build:(id)sender;
 - (IBAction)buildAndRun:(id)sender;
+
+- (IBAction)manageBuildTargets:(id)sender;
 @end

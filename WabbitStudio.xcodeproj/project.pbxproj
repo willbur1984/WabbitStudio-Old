@@ -48,6 +48,9 @@
 		07154F5814D5D5E100F57668 /* WCSourceFileSeparateWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07154F5714D5D5E100F57668 /* WCSourceFileSeparateWindowController.m */; };
 		07154F5C14D5D88000F57668 /* WCSourceFileSeparateWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07154F5A14D5D88000F57668 /* WCSourceFileSeparateWindow.xib */; };
 		07154F5F14D5EDA400F57668 /* NSWindow+ULIZoomEffect.m in Sources */ = {isa = PBXBuildFile; fileRef = 07154F5E14D5EDA400F57668 /* NSWindow+ULIZoomEffect.m */; };
+		0718E98514E7153F00F9696E /* WCManageBuildTargetsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0718E98414E7153F00F9696E /* WCManageBuildTargetsWindowController.m */; };
+		0718E98914E7530200F9696E /* WCManageBuildTargetsWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0718E98714E7530200F9696E /* WCManageBuildTargetsWindow.xib */; };
+		0718E98C14E75BDF00F9696E /* WCBuildController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0718E98B14E75BDF00F9696E /* WCBuildController.m */; };
 		071985DF14C010D800C8E91A /* WCGeneralViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 071985DD14C010D800C8E91A /* WCGeneralViewController.m */; };
 		071985E314C011A800C8E91A /* WCGeneralView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 071985E114C011A800C8E91A /* WCGeneralView.xib */; };
 		071985E614C01F5D00C8E91A /* NSURL+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 071985E514C01F5D00C8E91A /* NSURL+RSExtensions.m */; };
@@ -374,6 +377,11 @@
 		07154F5B14D5D88000F57668 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCSourceFileSeparateWindow.xib; sourceTree = "<group>"; };
 		07154F5D14D5EDA400F57668 /* NSWindow+ULIZoomEffect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSWindow+ULIZoomEffect.h"; sourceTree = "<group>"; };
 		07154F5E14D5EDA400F57668 /* NSWindow+ULIZoomEffect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSWindow+ULIZoomEffect.m"; sourceTree = "<group>"; };
+		0718E98314E7153F00F9696E /* WCManageBuildTargetsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCManageBuildTargetsWindowController.h; sourceTree = "<group>"; };
+		0718E98414E7153F00F9696E /* WCManageBuildTargetsWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCManageBuildTargetsWindowController.m; sourceTree = "<group>"; };
+		0718E98814E7530200F9696E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCManageBuildTargetsWindow.xib; sourceTree = "<group>"; };
+		0718E98A14E75BDF00F9696E /* WCBuildController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCBuildController.h; sourceTree = "<group>"; };
+		0718E98B14E75BDF00F9696E /* WCBuildController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCBuildController.m; sourceTree = "<group>"; };
 		071985DC14C010D800C8E91A /* WCGeneralViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCGeneralViewController.h; sourceTree = "<group>"; };
 		071985DD14C010D800C8E91A /* WCGeneralViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCGeneralViewController.m; sourceTree = "<group>"; };
 		071985E214C011A800C8E91A /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCGeneralView.xib; sourceTree = "<group>"; };
@@ -881,6 +889,7 @@
 				07154F5314D40B3C00F57668 /* WCProjectView.xib */,
 				07154F5A14D5D88000F57668 /* WCSourceFileSeparateWindow.xib */,
 				077906A314E0DE08006C16EF /* WCSearchNavigatorView.xib */,
+				0718E98714E7530200F9696E /* WCManageBuildTargetsWindow.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -1477,6 +1486,8 @@
 				0719860514C0BDC900C8E91A /* WCProjectWindowController.m */,
 				07154F5614D5D5E100F57668 /* WCSourceFileSeparateWindowController.h */,
 				07154F5714D5D5E100F57668 /* WCSourceFileSeparateWindowController.m */,
+				0718E98314E7153F00F9696E /* WCManageBuildTargetsWindowController.h */,
+				0718E98414E7153F00F9696E /* WCManageBuildTargetsWindowController.m */,
 			);
 			name = "Window Controllers";
 			sourceTree = "<group>";
@@ -1670,6 +1681,8 @@
 			children = (
 				07992B5114E59C3B008AD47D /* WCBuildTarget.h */,
 				07992B5214E59C3B008AD47D /* WCBuildTarget.m */,
+				0718E98A14E75BDF00F9696E /* WCBuildController.h */,
+				0718E98B14E75BDF00F9696E /* WCBuildController.m */,
 			);
 			name = Building;
 			sourceTree = "<group>";
@@ -1876,6 +1889,7 @@
 				0773AA2114D680B8004612D9 /* Issue.png in Resources */,
 				0708A5BF14D9031600BE60EE /* Bookmark.png in Resources */,
 				077906A514E0DE08006C16EF /* WCSearchNavigatorView.xib in Resources */,
+				0718E98914E7530200F9696E /* WCManageBuildTargetsWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2070,6 +2084,8 @@
 				077906B714E1CF97006C16EF /* RSLightBackgroundTextFieldCell.m in Sources */,
 				07CB619A14E269C700337362 /* WCSearchNavigatorOutlineRowView.m in Sources */,
 				07992B5314E59C3B008AD47D /* WCBuildTarget.m in Sources */,
+				0718E98514E7153F00F9696E /* WCManageBuildTargetsWindowController.m in Sources */,
+				0718E98C14E75BDF00F9696E /* WCBuildController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2115,6 +2131,14 @@
 				07154F5B14D5D88000F57668 /* en */,
 			);
 			name = WCSourceFileSeparateWindow.xib;
+			sourceTree = "<group>";
+		};
+		0718E98714E7530200F9696E /* WCManageBuildTargetsWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0718E98814E7530200F9696E /* en */,
+			);
+			name = WCManageBuildTargetsWindow.xib;
 			sourceTree = "<group>";
 		};
 		071985E114C011A800C8E91A /* WCGeneralView.xib */ = {

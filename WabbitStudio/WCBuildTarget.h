@@ -20,16 +20,16 @@ enum {
 };
 typedef NSUInteger WCBuildTargetOutputType;
 
-@class WCProject,WCFile;
+@class WCProject;
 
 @interface WCBuildTarget : RSObject <RSPlistArchiving,NSCopying,NSMutableCopying> {
 	__weak WCProject *_project;
 	WCBuildTargetOutputType _outputType;
 	NSString *_name;
-	WCFile *_inputFile;
 	NSString *_inputFileUUID;
 	NSMutableArray *_defines;
 	NSMutableArray *_includes;
+	NSMutableArray *_steps;
 	struct {
 		unsigned int active:1;
 		unsigned int generateCodeListing:1;
@@ -40,11 +40,12 @@ typedef NSUInteger WCBuildTargetOutputType;
 }
 @property (readwrite,assign,nonatomic) WCBuildTargetOutputType outputType;
 @property (readwrite,copy,nonatomic) NSString *name;
-@property (readwrite,retain,nonatomic) WCFile *inputFile;
 @property (readonly,nonatomic) NSArray *defines;
 @property (readonly,nonatomic) NSMutableArray *mutableDefines;
 @property (readonly,nonatomic) NSArray *includes;
 @property (readonly,nonatomic) NSMutableArray *mutableIncludes;
+@property (readonly,nonatomic) NSArray *steps;
+@property (readonly,nonatomic) NSMutableArray *mutableSteps;
 @property (readwrite,assign,nonatomic,getter = isActive) BOOL active;
 @property (readwrite,assign,nonatomic) BOOL generateCodeListing;
 @property (readwrite,assign,nonatomic) BOOL generateLabelFile;

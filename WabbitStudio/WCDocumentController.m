@@ -14,6 +14,16 @@ NSString *const WCActiveServerIncludeFileUTI = @"com.panic.coda.active-server-in
 NSString *const WCProjectFileUTI = @"org.revsoft.wabbitstudio.project";
 
 @implementation WCDocumentController
+#pragma mark *** Subclass Overrides ***
+- (id)init {
+	if (!(self = [super init]))
+		return nil;
+	
+	[self setAutosavingDelay:30.0];
+	
+	return self;
+}
+
 #pragma mark *** Public Methods ***
 
 #pragma mark Properties

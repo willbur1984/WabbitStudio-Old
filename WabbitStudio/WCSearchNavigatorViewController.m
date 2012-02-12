@@ -602,7 +602,7 @@ static const CGFloat kReplaceControlsHeight = (19.0+17.0+4.0+4.0);
 			for (WCSearchResultContainer *resultContainer in [container childNodes]) {
 				NSRange resultRange = [[resultContainer representedObject] range];
 				
-				if (changeInLength < 0 &&
+				if (changeInLength < -1 &&
 					NSLocationInRange(resultRange.location, NSMakeRange(editedRange.location, ABS(changeInLength))))
 					[resultsToRemove addObject:resultContainer];
 				else if (NSMaxRange(editedRange) < resultRange.location) {

@@ -17,6 +17,7 @@
 }
 @property (readonly,nonatomic) NSDictionary *completionDictionary;
 @property (readonly,nonatomic) NSString *name;
+@property (readonly,nonatomic) WCSourceTokenType type;
 
 + (id)completionChoiceOfType:(WCSourceTokenType)type name:(NSString *)name dictionary:(NSDictionary *)dictionary;
 - (id)initWithType:(WCSourceTokenType)type name:(NSString *)name dictionary:(NSDictionary *)dictionary;

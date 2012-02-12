@@ -8,6 +8,7 @@
 
 #import "WCSourceTypesetter.h"
 #import "WCSourceTextStorage.h"
+#import "RSDefines.h"
 
 NSString *const WCLineFoldingAttributeName = @"WCLineFoldingAttributeName";
 
@@ -21,9 +22,10 @@ NSString *const WCLineFoldingAttributeName = @"WCLineFoldingAttributeName";
 }
 
 - (NSTypesetterControlCharacterAction)actionForControlCharacterAtIndex:(NSUInteger)charIndex {
-    id attribute = [[self attributedString] attribute:WCLineFoldingAttributeName atIndex:charIndex effectiveRange:NULL];
-    
-    if (attribute && [attribute boolValue]) return NSTypesetterZeroAdvancementAction;
+	id attributeValue = [[self attributedString] attribute:WCLineFoldingAttributeName atIndex:charIndex effectiveRange:NULL];
+	
+	if ([attributeValue boolValue])
+		return NSTypesetterZeroAdvancementAction;
 	
     return [super actionForControlCharacterAtIndex:charIndex];
 }
