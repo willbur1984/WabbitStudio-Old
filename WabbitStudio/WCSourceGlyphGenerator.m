@@ -19,14 +19,15 @@
 }
 
 // NSGlyphStorage interface
-- (void)insertGlyphs:(const NSGlyph *)glyphs length:(NSUInteger)length forStartingGlyphAtIndex:(NSUInteger)glyphIndex characterIndex:(NSUInteger)charIndex {
+- (void)insertGlyphs:(const NSGlyph *)glyphs length:(NSUInteger)length forStartingGlyphAtIndex:(NSUInteger)glyphIndex characterIndex:(NSUInteger)charIndex {	
     id attribute;
     NSRange effectiveRange;
     NSGlyph *buffer = NULL;
 	
-    attribute = [[self attributedString] attribute:WCLineFoldingAttributeName atIndex:charIndex longestEffectiveRange:&effectiveRange inRange:NSMakeRange(0, charIndex + length)];
+    //attribute = [[self attributedString] attribute:WCLineFoldingAttributeName atIndex:charIndex longestEffectiveRange:&effectiveRange inRange:NSMakeRange(0, charIndex + length)];
+	attribute = [[self attributedString] attribute:WCLineFoldingAttributeName atIndex:charIndex effectiveRange:&effectiveRange];
 	
-    if (attribute && [attribute boolValue]) {
+    if ([attribute boolValue]) {
         NSInteger size = sizeof(NSGlyph) * length;
         NSGlyph aGlyph = NSNullGlyph;
         buffer = NSZoneMalloc(NULL, size);

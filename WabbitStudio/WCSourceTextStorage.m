@@ -20,6 +20,8 @@
 #import "NSArray+WCExtensions.h"
 #import "WCFoldAttachmentCell.h"
 #import "WCSourceTypesetter.h"
+#import "WCSourceScanner.h"
+#import "WCFold.h"
 
 NSString *const WCSourceTextStorageDidAddBookmarkNotification = @"WCSourceTextStorageDidAddBookmarkNotification";
 NSString *const WCSourceTextStorageDidRemoveBookmarkNotification = @"WCSourceTextStorageDidRemoveBookmarkNotification";
@@ -90,8 +92,12 @@ NSString *const WCSourceTextStorageFoldRangeUserInfoKey = @"WCSourceTextStorageF
         NSRange effectiveRange;
 		
         value = [attributes objectForKey:WCLineFoldingAttributeName];
-        if (value && [value boolValue]) {
-            [_attributedString attribute:WCLineFoldingAttributeName atIndex:location longestEffectiveRange:&effectiveRange inRange:NSMakeRange(0, [_attributedString length])];
+        if ([value boolValue]) {
+            //[_attributedString attribute:WCLineFoldingAttributeName atIndex:location longestEffectiveRange:&effectiveRange inRange:NSMakeRange(0, [_attributedString length])];
+			NSArray *folds = [[[self delegate] sourceScannerForSourceTextStorage:self] folds];
+			WCFold *fold = [folds deepestFoldForRange:NSMakeRange(location, 0)];
+			
+			effectiveRange = [fold contentRange];
 			
             // We adds NSAttachmentAttributeName if in lineFoldingAttributeName
             if (location == effectiveRange.location) { // beginning of a folded range
@@ -122,8 +128,6 @@ NSString *const WCSourceTextStorageFoldRangeUserInfoKey = @"WCSourceTextStorageF
 				*range = effectiveRange;
         }
     }
-	 
-	
     return attributes;
 }
 - (void)replaceCharactersInRange:(NSRange)range withString:(NSString *)string; {

@@ -9,6 +9,8 @@
 #import "WCSourceTypesetter.h"
 #import "WCSourceTextStorage.h"
 #import "RSDefines.h"
+#import "WCFold.h"
+#import "WCSourceScanner.h"
 
 NSString *const WCLineFoldingAttributeName = @"WCLineFoldingAttributeName";
 

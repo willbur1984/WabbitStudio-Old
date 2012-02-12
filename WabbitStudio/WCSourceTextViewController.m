@@ -61,6 +61,8 @@
 - (void)loadView {
 	[super loadView];
 	
+	[[self sourceHighlighter] performFullHighlightIfNeeded];
+	
 	[[[self scrollView] contentView] setAutoresizesSubviews:YES];
 	
 	WCSourceLayoutManager *layoutManager = [[[WCSourceLayoutManager alloc] init] autorelease];
@@ -124,7 +126,7 @@
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidFold:) name:WCSourceTextStorageDidFoldNotification object:[self textStorage]];
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidProcessEditing:) name:NSTextStorageDidProcessEditingNotification object:[self textStorage]];
+	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidProcessEditing:) name:NSTextStorageDidProcessEditingNotification object:[self textStorage]];
 }
 #pragma mark NSMenuValidation
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
@@ -379,7 +381,7 @@
 	NSUInteger searchIndex = NSMaxRange(visibleRange);
 	if (searchIndex >= [[self textStorage] length])
 		searchIndex--;
-	id tokenType = [[self textStorage] attribute:WCSourceHighlighterNoHighlightAttributeName atIndex:searchIndex longestEffectiveRange:&effectiveRange inRange:visibleRange];
+	id tokenType = [[self textStorage] attribute:WCSourceHighlighterNoHighlightAttributeName atIndex:searchIndex effectiveRange:&effectiveRange];
 	
 	if (tokenType && [tokenType boolValue]) {
 		NSRange highlightRange = NSIntersectionRange(visibleRange, effectiveRange);
@@ -389,7 +391,7 @@
 	}
 	// to cover the case of scrolling upwards from the bottom of the document
 	else {
-		tokenType = [[self textStorage] attribute:WCSourceHighlighterNoHighlightAttributeName atIndex:visibleRange.location longestEffectiveRange:&effectiveRange inRange:visibleRange];
+		tokenType = [[self textStorage] attribute:WCSourceHighlighterNoHighlightAttributeName atIndex:visibleRange.location effectiveRange:&effectiveRange];
 		
 		if (tokenType && [tokenType boolValue]) {
 			NSRange highlightRange = NSIntersectionRange(visibleRange, effectiveRange);
@@ -405,7 +407,7 @@
 
 static const NSTimeInterval kScrollingHighlightTimerDelay = 0.15;
 - (void)_viewBoundsDidChange:(NSNotification *)note {
-	[self _highlightVisibleTokens];
+	//[self _highlightVisibleTokens];
 	
 	if (_scrollingHighlightTimer)
 		[_scrollingHighlightTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:kScrollingHighlightTimerDelay]];
@@ -415,7 +417,7 @@ static const NSTimeInterval kScrollingHighlightTimerDelay = 0.15;
 	}
 }
 - (void)_textStorageDidFold:(NSNotification *)note {
-	[self _highlightVisibleTokens];
+	//[self _highlightVisibleTokens];
 	
 	[[self sourceHighlighter] highlightSymbolsInRange:[[self textView] visibleRange]];
 }

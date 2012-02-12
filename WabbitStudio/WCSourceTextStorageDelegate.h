@@ -9,9 +9,10 @@
 #import <Foundation/NSObject.h>
 #import <AppKit/NSTextStorage.h>
 
-@class WCSourceTextStorage,WCSourceHighlighter;
+@class WCSourceTextStorage,WCSourceHighlighter,WCSourceScanner;
 
 @protocol WCSourceTextStorageDelegate <NSTextStorageDelegate>
 @required
 - (WCSourceHighlighter *)sourceHighlighterForSourceTextStorage:(WCSourceTextStorage *)textStorage;
+- (WCSourceScanner *)sourceScannerForSourceTextStorage:(WCSourceTextStorage *)textStorage;
 @end

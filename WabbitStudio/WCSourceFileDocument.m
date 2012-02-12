@@ -361,6 +361,9 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 - (WCSourceHighlighter *)sourceHighlighterForSourceTextStorage:(WCSourceTextStorage *)textStorage {
 	return [self sourceHighlighter];
 }
+- (WCSourceScanner *)sourceScannerForSourceTextStorage:(WCSourceTextStorage *)textStorage {
+	return [self sourceScanner];
+}
 #pragma mark WCSourceHighlighterDelegate
 
 - (NSArray *)labelSymbolsForSourceHighlighter:(WCSourceHighlighter *)highlighter {
