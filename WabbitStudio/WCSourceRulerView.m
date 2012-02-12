@@ -32,8 +32,8 @@
 
 - (NSUInteger)_lineNumberForPoint:(NSPoint)point;
 - (NSRange)_rangeForPoint:(NSPoint)point;
-- (void)_drawFoldsForFold:(WCFold *)fold inRect:(NSRect)ribbonRect topLevelFoldColor:(NSColor *)topLevelFoldColor;
-- (void)_drawFoldHighlightInRect:(NSRect)foldHighlightRect;
+- (void)_drawFoldsForFold:(WCFold *)fold inRect:(NSRect)ribbonRect topLevelFoldColor:(NSColor *)topLevelFoldColor stepAmount:(CGFloat)stepAmount level:(NSUInteger)level;
+- (void)_drawFoldHighlightInRect:(NSRect)ribbonRect;
 - (void)_updateCodeFoldingTrackingArea;
 - (NSRect)_rectForFold:(WCFold *)fold inRect:(NSRect)ribbonRect;
 @end
@@ -258,17 +258,14 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 		
 		NSRect foldRect = [self _rectForFold:fold inRect:ribbonRect];
 		
-		if (_foldToHighlight == fold)
-			_rectForFoldHighlight = foldRect;
-		
 		[topLevelFoldColor setFill];
 		NSRectFill(foldRect);
 		
-		[self _drawFoldsForFold:fold inRect:ribbonRect topLevelFoldColor:topLevelFoldColor];
+		[self _drawFoldsForFold:fold inRect:ribbonRect topLevelFoldColor:topLevelFoldColor stepAmount:0.08 level:0];
 	}
 	
 	if (_foldToHighlight)
-		[self _drawFoldHighlightInRect:_rectForFoldHighlight];
+		[self _drawFoldHighlightInRect:ribbonRect];
 	
 	[super drawRightMarginInRect:ribbonRect];
 }
@@ -388,28 +385,30 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 	return NSNotFoundRange;
 }
 
-- (void)_drawFoldsForFold:(WCFold *)fold inRect:(NSRect)ribbonRect topLevelFoldColor:(NSColor *)topLevelFoldColor; {
-	static const CGFloat stepAmount = 0.08;
+- (void)_drawFoldsForFold:(WCFold *)fold inRect:(NSRect)ribbonRect topLevelFoldColor:(NSColor *)topLevelFoldColor stepAmount:(CGFloat)stepAmount level:(NSUInteger)level; {
 	NSColor *colorForThisFoldLevel = nil;
 	
 	for (WCFold *childFold in [fold childNodes]) {
 		NSRect foldRect = [self _rectForFold:childFold inRect:ribbonRect];
 		
-		if (_foldToHighlight == childFold)
-			_rectForFoldHighlight = foldRect;
-		
 		if (!colorForThisFoldLevel)
-			colorForThisFoldLevel = [topLevelFoldColor darkenBy:stepAmount*((CGFloat)[childFold level])];
+			colorForThisFoldLevel = [topLevelFoldColor darkenBy:stepAmount*((CGFloat)++level)];
 		
 		[colorForThisFoldLevel setFill];
 		NSRectFill(foldRect);
 		
-		[self _drawFoldsForFold:childFold inRect:ribbonRect topLevelFoldColor:topLevelFoldColor];
+		[self _drawFoldsForFold:childFold inRect:ribbonRect topLevelFoldColor:topLevelFoldColor stepAmount:stepAmount level:level];
 	}
 }
 
 static const CGFloat kTriangleHeight = 6.0;
-- (void)_drawFoldHighlightInRect:(NSRect)foldHighlightRect; {
+- (void)_drawFoldHighlightInRect:(NSRect)ribbonRect; {
+#ifdef DEBUG
+    NSAssert(_foldToHighlight, @"_foldToHighlight cannot be nil!");
+#endif
+	
+	NSRect foldHighlightRect = [self _rectForFold:_foldToHighlight inRect:ribbonRect];
+	
 	[[NSColor whiteColor] setFill];
 	NSRectFill(foldHighlightRect);
 	
@@ -433,6 +432,11 @@ static const CGFloat kTriangleHeight = 6.0;
 		[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect)+floor(NSWidth(foldHighlightRect)/2.0), NSMaxY(foldHighlightRect)-kTriangleHeight)];
 		[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMaxY(foldHighlightRect))];
 		[path closePath];
+		
+		[[NSColor darkGrayColor] setFill];
+		[path fill];
+		
+		[self _drawFoldsForFold:_foldToHighlight inRect:ribbonRect topLevelFoldColor:[NSColor whiteColor] stepAmount:0.15 level:0];
 	}
 	else {
 		[path moveToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMinY(foldHighlightRect))];
@@ -440,12 +444,12 @@ static const CGFloat kTriangleHeight = 6.0;
 		[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect)+NSWidth(foldHighlightRect), NSMinY(foldHighlightRect)+kTriangleHeight)];
 		[path lineToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMinY(foldHighlightRect))];
 		[path closePath];
+		
+		[[NSColor darkGrayColor] setFill];
+		[path fill];
 	}
 	
 	[[self textStorage] setLineFoldingEnabled:NO];
-	
-	[[NSColor darkGrayColor] setFill];
-	[path fill];
 }
 
 - (void)_updateCodeFoldingTrackingArea; {	

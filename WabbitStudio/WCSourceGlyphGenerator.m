@@ -25,21 +25,27 @@
     NSGlyph *buffer = NULL;
 	
     //attribute = [[self attributedString] attribute:WCLineFoldingAttributeName atIndex:charIndex longestEffectiveRange:&effectiveRange inRange:NSMakeRange(0, charIndex + length)];
-	attribute = [[self attributedString] attribute:WCLineFoldingAttributeName atIndex:charIndex effectiveRange:&effectiveRange];
+	attribute = [[self attributedString] attribute:WCLineFoldingAttributeName atIndex:charIndex effectiveRange:NULL];
 	
     if ([attribute boolValue]) {
-        NSInteger size = sizeof(NSGlyph) * length;
-        NSGlyph aGlyph = NSNullGlyph;
-        buffer = NSZoneMalloc(NULL, size);
-        memset_pattern4(buffer, &aGlyph, size);
+		attribute = [[self attributedString] attribute:WCLineFoldingAttributeName atIndex:charIndex longestEffectiveRange:&effectiveRange inRange:NSMakeRange(0, charIndex + length)];
 		
-        if (effectiveRange.location == charIndex) buffer[0] = NSControlGlyph;
-        glyphs = buffer;
+		if ([attribute boolValue]) {
+			NSInteger size = sizeof(NSGlyph) * length;
+			NSGlyph aGlyph = NSNullGlyph;
+			buffer = NSZoneMalloc(NULL, size);
+			memset_pattern4(buffer, &aGlyph, size);
+			
+			if (effectiveRange.location == charIndex)
+				buffer[0] = NSControlGlyph;
+			glyphs = buffer;
+		}
     }
 	
     [_destination insertGlyphs:glyphs length:length forStartingGlyphAtIndex:glyphIndex characterIndex:charIndex];
 	
-    if (buffer) NSZoneFree(NULL, buffer);
+    if (buffer)
+		NSZoneFree(NULL, buffer);
 }
 
 - (void)setIntAttribute:(NSInteger)attributeTag value:(NSInteger)val forGlyphAtIndex:(NSUInteger)glyphIndex {

@@ -9,8 +9,6 @@
 #import <Foundation/NSObject.h>
 #import "WCSourceHighlighterDelegate.h"
 
-extern NSString *const WCSourceHighlighterNoHighlightAttributeName;
-
 @class WCSourceScanner;
 
 @interface WCSourceHighlighter : NSObject {
@@ -30,6 +28,4 @@ extern NSString *const WCSourceHighlighterNoHighlightAttributeName;
 
 - (void)highlightAttributeString:(NSMutableAttributedString *)attributedString;
 - (void)highlightAttributeString:(NSMutableAttributedString *)attributedString withArgumentNames:(NSSet *)argumentNames;
-
-+ (void)highlightTextStorageAttributedString:(NSMutableAttributedString *)attributedString;
 @end

@@ -39,6 +39,7 @@
 #import "WCFold.h"
 #import "NSAlert-OAExtensions.h"
 #import "NSBezierPath+StrokeExtensions.h"
+#import "WCFoldAttachmentCell.h"
 
 @interface WCSourceTextView ()
 @property (readwrite,copy,nonatomic) NSIndexSet *autoHighlightArgumentsRanges;
@@ -1546,6 +1547,8 @@
 			return NO;
 		}
 		
+		[(WCSourceTextStorage *)[self textStorage] setLineFoldingEnabled:NO];
+		
 		glyphIndex = [[self layoutManager] glyphIndexForCharacterAtIndex:effectiveRange.location];
 		
 		id <NSTextAttachmentCell> cell = [attachment attachmentCell];
@@ -1559,11 +1562,10 @@
 		cellFrame.origin.x += [[self layoutManager] locationForGlyphAtIndex:glyphIndex].x;
 		
 		if ([cell wantsToTrackMouseForEvent:theEvent inRect:cellFrame ofView:self atCharacterIndex:effectiveRange.location] &&
-			[cell trackMouse:theEvent inRect:cellFrame ofView:self atCharacterIndex:effectiveRange.location untilMouseUp:YES]) {
-			
-			[(WCSourceTextStorage *)[self textStorage] setLineFoldingEnabled:NO];
+			[cell trackMouse:theEvent inRect:cellFrame ofView:self atCharacterIndex:effectiveRange.location untilMouseUp:YES])
 			return NO;
-		}
+		
+		return YES;
 	}
 	
 	[(WCSourceTextStorage *)[self textStorage] setLineFoldingEnabled:NO];

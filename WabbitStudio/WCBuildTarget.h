@@ -26,7 +26,6 @@ typedef NSUInteger WCBuildTargetOutputType;
 	__weak WCProject *_project;
 	WCBuildTargetOutputType _outputType;
 	NSString *_name;
-	NSString *_inputFileUUID;
 	NSMutableArray *_defines;
 	NSMutableArray *_includes;
 	NSMutableArray *_steps;
@@ -40,6 +39,7 @@ typedef NSUInteger WCBuildTargetOutputType;
 }
 @property (readwrite,assign,nonatomic) WCBuildTargetOutputType outputType;
 @property (readwrite,copy,nonatomic) NSString *name;
+@property (readonly,nonatomic) NSImage *icon;
 @property (readonly,nonatomic) NSArray *defines;
 @property (readonly,nonatomic) NSMutableArray *mutableDefines;
 @property (readonly,nonatomic) NSArray *includes;

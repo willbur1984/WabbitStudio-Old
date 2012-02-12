@@ -139,7 +139,9 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	if (!projectData)
 		return nil;
 	
+#ifndef DEBUG
 	projectData = [NSData gtm_dataByGzippingData:projectData];
+#endif
 	
 	[projectWrapper addRegularFileWithContents:projectData preferredFilename:WCProjectDataFileName];
 	
@@ -153,7 +155,9 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	NSFileWrapper *projectDataWrapper = [[fileWrapper fileWrappers] objectForKey:WCProjectDataFileName];
 	NSData *projectData = [projectDataWrapper regularFileContents];
 	
+#ifndef DEBUG
 	projectData = [NSData gtm_dataByInflatingData:projectData];
+#endif
 	
 	NSPropertyListFormat format;
 	NSDictionary *projectDataPlist = [NSPropertyListSerialization propertyListWithData:projectData options:0 format:&format error:outError];
@@ -421,6 +425,14 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 			return buildTarget;
 	}
 	return nil;
+}
+- (void)setActiveBuildTarget:(WCBuildTarget *)activeBuildTarget {
+	for (WCBuildTarget *buildTarget in [self buildTargets]) {
+		if (buildTarget == activeBuildTarget)
+			[buildTarget setActive:YES];
+		else
+			[buildTarget setActive:NO];
+	}
 }
 @dynamic buildController;
 - (WCBuildController *)buildController {

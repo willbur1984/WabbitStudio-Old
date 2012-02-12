@@ -56,7 +56,9 @@
 	if (!projectData)
 		return nil;
 	
+#ifndef DEBUG
 	projectData = [NSData gtm_dataByGzippingData:projectData];
+#endif
 	
 	[projectWrapper addRegularFileWithContents:projectData preferredFilename:WCProjectDataFileName];
 	

@@ -9,6 +9,8 @@
 #import "WCManageBuildTargetsWindowController.h"
 #import "WCProjectDocument.h"
 #import "WCBuildTarget.h"
+#import "RSTableView.h"
+#import "NSArray+WCExtensions.h"
 
 @implementation WCManageBuildTargetsWindowController
 - (void)dealloc {
@@ -26,6 +28,12 @@
 
 - (NSString *)windowNibName {
 	return @"WCManageBuildTargetsWindow";
+}
+
+- (void)handleSpacePressedForTableView:(RSTableView *)tableView {
+	WCBuildTarget *selectedBuildTarget = [[[self arrayController] selectedObjects] firstObject];
+	
+	[[self projectDocument] setActiveBuildTarget:selectedBuildTarget];
 }
 
 + (id)manageBuildTargetsWindowControllerWithProjectDocument:(WCProjectDocument *)projectDocument; {
@@ -47,18 +55,29 @@
 }
 
 - (IBAction)ok:(id)sender; {
-	[[NSApplication sharedApplication] endSheet:[self window] returnCode:NSOKButton];
+	[[NSApplication sharedApplication] endSheet:[self window] returnCode:NSCancelButton];
 }
 - (IBAction)edit:(id)sender; {
-	
+	[[NSApplication sharedApplication] endSheet:[self window] returnCode:NSOKButton];
 }
 
 - (IBAction)newBuildTarget:(id)sender; {
+	WCBuildTarget *newBuildTarget = [WCBuildTarget buildTargetWithName:NSLocalizedString(@"New Target", @"New Target") outputType:WCBuildTargetOutputTypeBinary];
+	NSUInteger selectionIndex = [[[self arrayController] selectionIndexes] firstIndex];
 	
+	if (selectionIndex == NSNotFound)
+		selectionIndex = 0;
+	
+	[[self arrayController] insertObject:newBuildTarget atArrangedObjectIndex:selectionIndex];
+	
+	[[self tableView] editColumn:0 row:selectionIndex withEvent:nil select:YES];
 }
 - (IBAction)newBuildTargetFromTemplate:(id)sender; {
 	
 }
+
+@synthesize tableView=_tableView;
+@synthesize arrayController=_arrayController;
 
 @synthesize projectDocument=_projectDocument;
 
@@ -68,7 +87,7 @@
 	if (code == NSCancelButton)
 		return;
 	
-	
+	// TODO: edit the selected build target
 }
 
 @end

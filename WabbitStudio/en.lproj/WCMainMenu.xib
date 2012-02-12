@@ -862,10 +862,19 @@
 												<reference key="NSOnImage" ref="1033313550"/>
 												<reference key="NSMixedImage" ref="310636482"/>
 											</object>
+											<object class="NSMenuItem" id="530190042">
+												<reference key="NSMenu" ref="809715601"/>
+												<string key="NSTitle">Show Symbol Navigator</string>
+												<string key="NSKeyEquiv">2</string>
+												<int key="NSKeyEquivModMask">1048576</int>
+												<int key="NSMnemonicLoc">2147483647</int>
+												<reference key="NSOnImage" ref="1033313550"/>
+												<reference key="NSMixedImage" ref="310636482"/>
+											</object>
 											<object class="NSMenuItem" id="771657586">
 												<reference key="NSMenu" ref="809715601"/>
 												<string key="NSTitle">Show Search Navigator</string>
-												<string key="NSKeyEquiv">2</string>
+												<string key="NSKeyEquiv">3</string>
 												<int key="NSKeyEquivModMask">1048576</int>
 												<int key="NSMnemonicLoc">2147483647</int>
 												<reference key="NSOnImage" ref="1033313550"/>
@@ -874,7 +883,7 @@
 											<object class="NSMenuItem" id="899264342">
 												<reference key="NSMenu" ref="809715601"/>
 												<string key="NSTitle">Show Issue Navigator</string>
-												<string key="NSKeyEquiv">3</string>
+												<string key="NSKeyEquiv">4</string>
 												<int key="NSKeyEquivModMask">1048576</int>
 												<int key="NSMnemonicLoc">2147483647</int>
 												<reference key="NSOnImage" ref="1033313550"/>
@@ -883,7 +892,7 @@
 											<object class="NSMenuItem" id="779423994">
 												<reference key="NSMenu" ref="809715601"/>
 												<string key="NSTitle">Show Breakpoint Navigator</string>
-												<string key="NSKeyEquiv">4</string>
+												<string key="NSKeyEquiv">5</string>
 												<int key="NSKeyEquivModMask">1048576</int>
 												<int key="NSMnemonicLoc">2147483647</int>
 												<reference key="NSOnImage" ref="1033313550"/>
@@ -892,7 +901,7 @@
 											<object class="NSMenuItem" id="566232939">
 												<reference key="NSMenu" ref="809715601"/>
 												<string key="NSTitle">Show Debug Navigator</string>
-												<string key="NSKeyEquiv">5</string>
+												<string key="NSKeyEquiv">6</string>
 												<int key="NSKeyEquivModMask">1048576</int>
 												<int key="NSMnemonicLoc">2147483647</int>
 												<reference key="NSOnImage" ref="1033313550"/>
@@ -901,7 +910,7 @@
 											<object class="NSMenuItem" id="924705576">
 												<reference key="NSMenu" ref="809715601"/>
 												<string key="NSTitle">Show Bookmark Navigator</string>
-												<string key="NSKeyEquiv">6</string>
+												<string key="NSKeyEquiv">7</string>
 												<int key="NSKeyEquivModMask">1048576</int>
 												<int key="NSMnemonicLoc">2147483647</int>
 												<reference key="NSOnImage" ref="1033313550"/>
@@ -1407,7 +1416,8 @@
 								<object class="NSMenuItem" id="882418428">
 									<reference key="NSMenu" ref="640650906"/>
 									<string key="NSTitle">Manage Build Targets…</string>
-									<string key="NSKeyEquiv"/>
+									<string key="NSKeyEquiv">t</string>
+									<int key="NSKeyEquivModMask">1310720</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="1033313550"/>
 									<reference key="NSMixedImage" ref="310636482"/>
@@ -2248,6 +2258,14 @@
 						<reference key="destination" ref="882418428"/>
 					</object>
 					<int key="connectionID">699</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">showSymbolNavigator:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="530190042"/>
+					</object>
+					<int key="connectionID">701</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
@@ -3303,6 +3321,7 @@
 							<reference ref="566232939"/>
 							<reference ref="924705576"/>
 							<reference ref="779423994"/>
+							<reference ref="530190042"/>
 						</array>
 						<reference key="parent" ref="426484903"/>
 					</object>
@@ -3370,6 +3389,11 @@
 						<int key="objectID">698</int>
 						<reference key="object" ref="882418428"/>
 						<reference key="parent" ref="640650906"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">700</int>
+						<reference key="object" ref="530190042"/>
+						<reference key="parent" ref="809715601"/>
 					</object>
 				</array>
 			</object>
@@ -3533,6 +3557,7 @@
 				<string key="694.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="697.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="698.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="700.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="72.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="73.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="74.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3549,7 +3574,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">699</int>
+			<int key="maxID">701</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -3932,6 +3957,7 @@
 						<string key="showIssueNavigator:">id</string>
 						<string key="showProjectNavigator:">id</string>
 						<string key="showSearchNavigator:">id</string>
+						<string key="showSymbolNavigator:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
 						<object class="IBActionInfo" key="showBookmarkNavigator:">
@@ -3956,6 +3982,10 @@
 						</object>
 						<object class="IBActionInfo" key="showSearchNavigator:">
 							<string key="name">showSearchNavigator:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="showSymbolNavigator:">
+							<string key="name">showSymbolNavigator:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 					</dictionary>

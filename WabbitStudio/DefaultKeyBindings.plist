@@ -80,6 +80,18 @@
 				<true/>
 			</dict>
 		</dict>
+		<key>manageBuildTargets:</key>
+		<dict>
+			<key>keyCode</key>
+			<integer>17</integer>
+			<key>modifierFlags</key>
+			<dict>
+				<key>command</key>
+				<true/>
+				<key>control</key>
+				<true/>
+			</dict>
+		</dict>
 		<key>showProjectNavigator:</key>
 		<dict>
 			<key>keyCode</key>
@@ -90,7 +102,7 @@
 				<true/>
 			</dict>
 		</dict>
-		<key>showSearchNavigator:</key>
+		<key>showSymbolNavigator:</key>
 		<dict>
 			<key>keyCode</key>
 			<integer>19</integer>
@@ -100,7 +112,7 @@
 				<true/>
 			</dict>
 		</dict>
-		<key>showIssueNavigator:</key>
+		<key>showSearchNavigator:</key>
 		<dict>
 			<key>keyCode</key>
 			<integer>20</integer>
@@ -110,10 +122,20 @@
 				<true/>
 			</dict>
 		</dict>
-		<key>showBreakpointNavigator:</key>
+		<key>showIssueNavigator:</key>
 		<dict>
 			<key>keyCode</key>
 			<integer>21</integer>
+			<key>modifierFlags</key>
+			<dict>
+				<key>command</key>
+				<true/>
+			</dict>
+		</dict>
+		<key>showBreakpointNavigator:</key>
+		<dict>
+			<key>keyCode</key>
+			<integer>22</integer>
 			<key>modifierFlags</key>
 			<dict>
 				<key>command</key>
@@ -133,7 +155,7 @@
 		<key>showBookmarkNavigator:</key>
 		<dict>
 			<key>keyCode</key>
-			<integer>22</integer>
+			<integer>26</integer>
 			<key>modifierFlags</key>
 			<dict>
 				<key>command</key>

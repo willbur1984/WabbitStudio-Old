@@ -7,12 +7,16 @@
 //
 
 #import <AppKit/NSWindowController.h>
+#import "RSTableViewDelegate.h"
 
 @class WCProjectDocument;
 
-@interface WCManageBuildTargetsWindowController : NSWindowController {
+@interface WCManageBuildTargetsWindowController : NSWindowController <RSTableViewDelegate> {
 	WCProjectDocument *_projectDocument;
 }
+@property (readwrite,assign,nonatomic) IBOutlet NSTableView *tableView;
+@property (readwrite,assign,nonatomic) IBOutlet NSArrayController *arrayController;
+
 @property (readonly,nonatomic) WCProjectDocument *projectDocument;
 
 + (id)manageBuildTargetsWindowControllerWithProjectDocument:(WCProjectDocument *)projectDocument;

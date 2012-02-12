@@ -915,7 +915,7 @@
 									<bool key="NSEnabled">YES</bool>
 									<object class="NSTextFieldCell" key="NSCell" id="712258186">
 										<int key="NSCellFlags">337772097</int>
-										<int key="NSCellFlags2">272762880</int>
+										<int key="NSCellFlags2">4327424</int>
 										<string key="NSContents">Table View Cell</string>
 										<reference key="NSSupport" ref="26"/>
 										<string key="NSCellIdentifier">_NS:78</string>

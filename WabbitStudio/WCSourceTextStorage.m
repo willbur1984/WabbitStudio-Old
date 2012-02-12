@@ -71,9 +71,7 @@ NSString *const WCSourceTextStorageFoldRangeUserInfoKey = @"WCSourceTextStorageF
 	
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
 
-	_attributedString = [[NSMutableAttributedString alloc] initWithString:string attributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName,[self paragraphStyle],NSParagraphStyleAttributeName,[NSNumber numberWithBool:YES],WCSourceHighlighterNoHighlightAttributeName, nil]];
-	
-	//[WCSourceHighlighter highlightTextStorageAttributedString:_attributedString];
+	_attributedString = [[NSMutableAttributedString alloc] initWithString:string attributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme plainTextFont],NSFontAttributeName,[currentTheme plainTextColor],NSForegroundColorAttributeName,[self paragraphStyle],NSParagraphStyleAttributeName/*,[NSNumber numberWithBool:YES],WCSourceHighlighterNoHighlightAttributeName*/, nil]];
 	
 	[self _commonInit];
 	
@@ -84,7 +82,6 @@ NSString *const WCSourceTextStorageFoldRangeUserInfoKey = @"WCSourceTextStorageF
 	return [_attributedString string];
 }
 - (NSDictionary *)attributesAtIndex:(NSUInteger)location effectiveRange:(NSRangePointer)range; {
-	//return [_attributedString attributesAtIndex:location effectiveRange:range];
 	NSDictionary *attributes = [_attributedString attributesAtIndex:location effectiveRange:range];
 	
     if ([self lineFoldingEnabled]) {
@@ -93,13 +90,8 @@ NSString *const WCSourceTextStorageFoldRangeUserInfoKey = @"WCSourceTextStorageF
 		
         value = [attributes objectForKey:WCLineFoldingAttributeName];
         if ([value boolValue]) {
-            //[_attributedString attribute:WCLineFoldingAttributeName atIndex:location longestEffectiveRange:&effectiveRange inRange:NSMakeRange(0, [_attributedString length])];
-			NSArray *folds = [[[self delegate] sourceScannerForSourceTextStorage:self] folds];
-			WCFold *fold = [folds deepestFoldForRange:NSMakeRange(location, 0)];
+            [_attributedString attribute:WCLineFoldingAttributeName atIndex:location longestEffectiveRange:&effectiveRange inRange:NSMakeRange(0, [_attributedString length])];
 			
-			effectiveRange = [fold contentRange];
-			
-            // We adds NSAttachmentAttributeName if in lineFoldingAttributeName
             if (location == effectiveRange.location) { // beginning of a folded range
                 NSMutableDictionary *dict = [attributes mutableCopy];
 				
@@ -144,11 +136,9 @@ NSString *const WCSourceTextStorageFoldRangeUserInfoKey = @"WCSourceTextStorageF
 	[self edited:NSTextStorageEditedAttributes range:range changeInLength:0];
 }
 
-/*
 - (BOOL)fixesAttributesLazily {
 	return YES;
 }
- */
 
 - (void)fixAttachmentAttributeInRange:(NSRange)range {
 	NSRange effectiveRange;

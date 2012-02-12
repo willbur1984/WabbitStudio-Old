@@ -29,6 +29,7 @@
 @property (readonly,nonatomic) WCSearchNavigatorViewController *searchNavigatorViewController;
 
 - (IBAction)showProjectNavigator:(id)sender;
+- (IBAction)showSymbolNavigator:(id)sender;
 - (IBAction)showSearchNavigator:(id)sender;
 - (IBAction)showIssueNavigator:(id)sender;
 - (IBAction)showBreakpointNavigator:(id)sender;

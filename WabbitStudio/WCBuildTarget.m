@@ -8,6 +8,7 @@
 
 #import "WCBuildTarget.h"
 #import "WCProject.h"
+#import "NSImage+RSExtensions.h"
 
 static NSString *const WCBuildTargetOutputTypeKey = @"outputType";
 static NSString *const WCBuildTargetNameKey = @"name";
@@ -25,7 +26,6 @@ static NSString *const WCBuildTargetSymbolsAreCaseSensitiveKey = @"symbolsAreCas
 - (void)dealloc {
 	_project = nil;
 	[_name release];
-	[_inputFileUUID release];
 	[_defines release];
 	[_includes release];
 	[_steps release];
@@ -56,7 +56,6 @@ static NSString *const WCBuildTargetSymbolsAreCaseSensitiveKey = @"symbolsAreCas
 	
 	_outputType = [[plistRepresentation objectForKey:WCBuildTargetOutputTypeKey] unsignedIntegerValue];
 	_name = [[plistRepresentation objectForKey:WCBuildTargetNameKey] copy];
-	_inputFileUUID = [[plistRepresentation objectForKey:WCBuildTargetInputFileUUIDKey] copy];
 	
 	_defines = [[NSMutableArray alloc] initWithCapacity:0];
 	for (NSDictionary *definePlist in [plistRepresentation objectForKey:WCBuildTargetDefinesKey]) {
@@ -133,6 +132,15 @@ static NSString *const WCBuildTargetSymbolsAreCaseSensitiveKey = @"symbolsAreCas
 #pragma mark Properties
 @synthesize outputType=_outputType;
 @synthesize name=_name;
+@dynamic icon;
+- (NSImage *)icon {
+	if ([self isActive])
+		return [[NSImage imageNamed:@"Calculator16x16"] badgedImageWithImage:[NSImage imageNamed:@"Success"] badgePosition:WCImageBadgePositionLowerRight];
+	return [NSImage imageNamed:@"Calculator16x16"];
+}
++ (NSSet *)keyPathsForValuesAffectingIcon {
+	return [NSSet setWithObjects:@"active", nil];
+}
 @synthesize defines=_defines;
 @dynamic mutableDefines;
 - (NSMutableArray *)mutableDefines {
