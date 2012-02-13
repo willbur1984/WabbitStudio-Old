@@ -559,7 +559,7 @@ static const CGFloat kReplaceControlsHeight = (19.0+17.0+4.0+4.0);
 		WCSourceTextViewController *stvController = [[[[[windowController tabViewController] sourceFileDocumentsToSourceTextViewControllers] objectEnumerator] allObjects] lastObject];
 		
 		[[stvController textView] setSelectedRange:[result range]];
-		[[stvController textView] scrollRangeToVisible:[result range]];
+		[[stvController textView] centerSelectionInVisibleArea:nil];
 	}
 }
 - (IBAction)_outlineViewSingleClick:(id)sender; {
@@ -573,7 +573,7 @@ static const CGFloat kReplaceControlsHeight = (19.0+17.0+4.0+4.0);
 		WCSourceTextViewController *stvController = [[self projectDocument] openTabForFile:file tabViewContext:nil];
 		
 		[[stvController textView] setSelectedRange:[result range]];
-		[[stvController textView] scrollRangeToVisible:[result range]];
+		[[stvController textView] centerSelectionInVisibleArea:nil];
 	}
 }
 - (IBAction)_searchFieldCancelClick:(id)sender; {

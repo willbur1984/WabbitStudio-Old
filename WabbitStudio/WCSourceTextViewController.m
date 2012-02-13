@@ -263,13 +263,13 @@
 - (void)handleJumpToDefinitionForSourceTextView:(WCSourceTextView *)textView sourceSymbol:(WCSourceSymbol *)symbol {
 	if ([symbol sourceScanner] == [self sourceScanner]) {
 		[textView setSelectedRange:[symbol range]];
-		[textView scrollRangeToVisible:[symbol range]];
+		[textView centerSelectionInVisibleArea:nil];
 	}
 	else {
 		WCSourceTextViewController *stvController = [[[self sourceFileDocument] projectDocument] openTabForSourceFileDocument:[[[symbol sourceScanner] delegate] sourceFileDocumentForSourceScanner:[symbol sourceScanner]] tabViewContext:nil];
 		
 		[[stvController textView] setSelectedRange:[symbol range]];
-		[[stvController textView] scrollRangeToVisible:[symbol range]];
+		[[stvController textView] centerSelectionInVisibleArea:nil];
 	}
 }
 - (void)handleJumpToDefinitionForSourceTextView:(WCSourceTextView *)textView file:(WCFile *)file; {

@@ -109,7 +109,7 @@
 		WCJumpInMatch *match = [[[self arrayController] selectedObjects] lastObject];
 		
 		[[[self dataSource] jumpInTextView] setSelectedRange:[[match item] jumpInRange]];
-		[[[self dataSource] jumpInTextView] scrollRangeToVisible:[[match item] jumpInRange]];
+		[[[self dataSource] jumpInTextView] centerSelectionInVisibleArea:nil];
 		[[[self dataSource] jumpInTextView] showFindIndicatorForRange:[[match item] jumpInRange]];
 	}
 	

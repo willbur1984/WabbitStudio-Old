@@ -109,7 +109,7 @@
 			WCSourceTextViewController *stvController = [[sfDocument projectDocument] openTabForSourceFileDocument:sfDocument tabViewContext:nil];
 			
 			[[stvController textView] setSelectedRange:[[match item] openQuicklyRange]];
-			[[stvController textView] scrollRangeToVisible:[[match item] openQuicklyRange]];
+			[[stvController textView] centerSelectionInVisibleArea:nil];
 		}
 	}
 	

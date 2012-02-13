@@ -80,7 +80,7 @@
 		}
 		
 		[[self textView] setSelectedRange:range];
-		[[self textView] scrollRangeToVisible:range];
+		[[self textView] centerSelectionInVisibleArea:nil];
 	}
 	
 	[self setTextView:nil];
