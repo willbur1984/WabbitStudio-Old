@@ -1139,8 +1139,6 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_backgroundColorDidChange:) name:WCFontAndColorThemeManagerBackgroundColorDidChangeNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_currentLineColorDidChange:) name:WCFontAndColorThemeManagerCurrentLineColorDidChangeNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_cursorColorDidChange:) name:WCFontAndColorThemeManagerCursorColorDidChangeNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidFold:) name:WCSourceTextStorageDidFoldNotification object:[self textStorage]];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidUnfold:) name:WCSourceTextStorageDidUnfoldNotification object:[self textStorage]];
 }
 
 - (void)_drawCurrentLineHighlightInRect:(NSRect)rect; {
@@ -1194,15 +1192,13 @@
 	CGFloat xPosition = floor(width*columnNumber);
 	NSRect guideRect = NSMakeRect(xPosition, NSMinY([self bounds]), 1.0, NSHeight([self bounds]));
 	
-	if (!NSIntersectsRect(guideRect, rect) ||
-		![self needsToDrawRect:guideRect])
+	if (!NSIntersectsRect(guideRect, rect) || ![self needsToDrawRect:guideRect])
 		return;
 	
 	guideRect.size.width = NSWidth([self bounds]) - xPosition;
 	
 	[[[NSColor lightGrayColor] colorWithAlphaComponent:0.35] setFill];
 	NSRectFillUsingOperation(guideRect, NSCompositeSourceOver);
-	
 	
 	guideRect.size.width = 1.0;
 	
@@ -1220,8 +1216,8 @@
 	else if ([self selectedRange].length)
 		return;
 	
-	static NSCharacterSet *closingCharacterSet = nil;
-	static NSCharacterSet *openingCharacterSet = nil;
+	static NSCharacterSet *closingCharacterSet;
+	static NSCharacterSet *openingCharacterSet;
 	if (!closingCharacterSet) {
 		closingCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:@")]}"] retain];
 		openingCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:@"([{"] retain];
@@ -1624,12 +1620,6 @@
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
 	
 	[self setInsertionPointColor:[currentTheme cursorColor]];
-}
-- (void)_textStorageDidFold:(NSNotification *)note {
-	[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:NO];
-}
-- (void)_textStorageDidUnfold:(NSNotification *)note {
-	[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:NO];
 }
 #pragma mark Callbacks
 - (void)_completionTimerCallback:(NSTimer *)timer {

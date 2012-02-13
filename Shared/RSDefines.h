@@ -48,11 +48,15 @@
 #define RSLogSize(sizeToLog) RSLog(@"%@",NSStringFromSize(sizeToLog))
 #define RSLogFloat(floatToLog) RSLog(@"%f",(floatToLog))
 
+#define NSNumberWithBool(boolForNumber) [NSNumber numberWithBool:(boolForNumber)]
+#define NSNumberWithInteger(integerForNumber) [NSNumber numberWithInteger:(integerForNumber)]
+#define NSNumberWithUnsignedInteger(unsignedIntegerForNumber) [NSNumber numberWithUnsignedInteger:(unsignedIntegerForNumber)]
+
 #ifdef __OBJC__
 #import <Foundation/NSGeometry.h>
 #import <Foundation/NSString.h>
 
-static const NSRange NSNotFoundRange = {.location = NSNotFound};
+static const NSRange NSNotFoundRange = {.location = NSNotFound, .length = 0};
 static const NSRange NSEmptyRange = {.location = 0, .length = 0};
 
 static const NSSize NSSmallSize = {.width = 16.0, .height = 16.0};

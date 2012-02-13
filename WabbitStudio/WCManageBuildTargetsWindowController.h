@@ -12,7 +12,7 @@
 @class WCProjectDocument;
 
 @interface WCManageBuildTargetsWindowController : NSWindowController <RSTableViewDelegate> {
-	WCProjectDocument *_projectDocument;
+	__weak WCProjectDocument *_projectDocument;
 }
 @property (readwrite,assign,nonatomic) IBOutlet NSTableView *tableView;
 @property (readwrite,assign,nonatomic) IBOutlet NSArrayController *arrayController;

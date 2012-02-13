@@ -28,6 +28,7 @@
 #import "WCBuildTarget.h"
 #import "WCManageBuildTargetsWindowController.h"
 #import "WCBuildController.h"
+#import "WCEditBuildTargetWindowController.h"
 
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
@@ -335,6 +336,11 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	[[self buildController] buildAndRun];
 }
 
+- (IBAction)editActiveBuildTarget:(id)sender; {
+	WCEditBuildTargetWindowController *windowController = [WCEditBuildTargetWindowController editBuildTargetWindowControllerWithBuildTarget:[self activeBuildTarget]];
+	
+	[windowController showEditBuildTargetWindow];
+}
 - (IBAction)manageBuildTargets:(id)sender; {
 	WCManageBuildTargetsWindowController *windowController = [WCManageBuildTargetsWindowController manageBuildTargetsWindowControllerWithProjectDocument:self];
 	

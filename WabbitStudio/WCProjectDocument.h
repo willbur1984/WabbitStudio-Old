@@ -67,5 +67,6 @@ extern NSString *const WCProjectSettingsFileExtension;
 - (IBAction)build:(id)sender;
 - (IBAction)buildAndRun:(id)sender;
 
+- (IBAction)editActiveBuildTarget:(id)sender;
 - (IBAction)manageBuildTargets:(id)sender;
 @end

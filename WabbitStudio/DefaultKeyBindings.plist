@@ -80,6 +80,20 @@
 				<true/>
 			</dict>
 		</dict>
+		<key>editActiveBuildTarget:</key>
+		<dict>
+			<key>keyCode</key>
+			<integer>17</integer>
+			<key>modifierFlags</key>
+			<dict>
+				<key>command</key>
+				<true/>
+				<key>control</key>
+				<true/>
+				<key>shift</key>
+				<true/>
+			</dict>
+		</dict>
 		<key>manageBuildTargets:</key>
 		<dict>
 			<key>keyCode</key>

@@ -10,6 +10,7 @@
 #import "WCProjectDocument.h"
 #import "NSImage+RSExtensions.h"
 #import "WCFile.h"
+#import "WCBuildDefine.h"
 
 static NSString *const WCBuildTargetOutputTypeKey = @"outputType";
 static NSString *const WCBuildTargetNameKey = @"name";
@@ -64,7 +65,10 @@ static NSString *const WCBuildTargetSymbolsAreCaseSensitiveKey = @"symbolsAreCas
 	
 	_defines = [[NSMutableArray alloc] initWithCapacity:0];
 	for (NSDictionary *definePlist in [plistRepresentation objectForKey:WCBuildTargetDefinesKey]) {
+		WCBuildDefine *define = [[[WCBuildDefine alloc] initWithPlistRepresentation:definePlist] autorelease];
 		
+		if (define)
+			[_defines addObject:define];
 	}
 	
 	_includes = [[NSMutableArray alloc] initWithCapacity:0];

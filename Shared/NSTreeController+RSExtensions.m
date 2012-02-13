@@ -132,8 +132,14 @@
 	[self setSelectionIndexPaths:indexPaths];
 }
 
+- (id)selectedModelObject; {
+	return [[self selectedModelObjects] firstObject];
+}
 - (NSArray *)selectedModelObjects; {
 	return [[self selectedNodes] valueForKeyPath:@"representedObject.representedObject"];
+}
+- (void)setSelectedModelObject:(id)modelObject; {
+	[self setSelectedModelObjects:[NSArray arrayWithObject:modelObject]];
 }
 - (void)setSelectedModelObjects:(NSArray *)modelObjects; {
 	NSMutableArray *indexPaths = [NSMutableArray arrayWithCapacity:[modelObjects count]];

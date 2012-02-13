@@ -32,7 +32,9 @@
 - (void)setSelectedRepresentedObject:(id)representedObject;
 - (void)setSelectedRepresentedObjects:(NSArray *)representedObjects;
 
+- (id)selectedModelObject;
 - (NSArray *)selectedModelObjects;
+- (void)setSelectedModelObject:(id)modelObject;
 - (void)setSelectedModelObjects:(NSArray *)modelObjects;
 
 - (NSArray *)treeNodesForModelObjects:(NSArray *)modelObjects;

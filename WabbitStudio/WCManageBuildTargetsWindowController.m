@@ -12,13 +12,14 @@
 #import "RSTableView.h"
 #import "NSArray+WCExtensions.h"
 #import "WCEditBuildTargetWindowController.h"
+#import "RSDefines.h"
 
 @implementation WCManageBuildTargetsWindowController
 - (void)dealloc {
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
-	[_projectDocument release];
+	_projectDocument = nil;
 	[super dealloc];
 }
 
@@ -48,7 +49,7 @@
 	if (!(self = [super initWithWindowNibName:[self windowNibName]]))
 		return nil;
 	
-	_projectDocument = [projectDocument retain];
+	_projectDocument = projectDocument;
 	
 	return self;
 }
@@ -75,7 +76,7 @@
 	
 	[[self arrayController] insertObject:newBuildTarget atArrangedObjectIndex:selectionIndex];
 	
-	[[self tableView] editColumn:0 row:selectionIndex withEvent:nil select:YES];
+	[[self tableView] editColumn:1 row:selectionIndex withEvent:nil select:YES];
 }
 - (IBAction)newBuildTargetFromTemplate:(id)sender; {
 	
@@ -89,6 +90,7 @@
 - (void)_sheetDidEnd:(NSWindow *)sheet code:(NSInteger)code context:(void *)context {
 	[self autorelease];
 	[sheet orderOut:nil];
+	
 	if (code == NSCancelButton)
 		return;
 	

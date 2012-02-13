@@ -436,7 +436,7 @@ static const CGFloat kTriangleHeight = 6.0;
 		[[NSColor darkGrayColor] setFill];
 		[path fill];
 		
-		[self _drawFoldsForFold:_foldToHighlight inRect:ribbonRect topLevelFoldColor:[NSColor whiteColor] stepAmount:0.15 level:0];
+		[self _drawFoldsForFold:_foldToHighlight inRect:ribbonRect topLevelFoldColor:[NSColor whiteColor] stepAmount:0.12 level:0];
 	}
 	else {
 		[path moveToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMinY(foldHighlightRect))];
