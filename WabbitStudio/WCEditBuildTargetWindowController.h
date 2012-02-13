@@ -9,10 +9,11 @@
 #import <AppKit/NSWindowController.h>
 #import "RSTableViewDelegate.h"
 
-@class WCBuildTarget,WCProjectDocument;
+@class WCBuildTarget,WCProjectDocument,WCEditBuildTargetChooseInputFileAccessoryViewController;
 
 @interface WCEditBuildTargetWindowController : NSWindowController <RSTableViewDelegate,NSControlTextEditingDelegate> {
 	WCBuildTarget *_buildTarget;
+	WCEditBuildTargetChooseInputFileAccessoryViewController *_chooseInputFileAccessoryViewController;
 }
 @property (readwrite,assign,nonatomic) IBOutlet NSTextField *nameTextField;
 @property (readwrite,assign,nonatomic) IBOutlet NSArrayController *definesArrayController;

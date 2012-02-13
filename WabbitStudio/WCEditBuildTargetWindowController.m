@@ -13,13 +13,20 @@
 #import "WCAlertsViewController.h"
 #import "RSDefines.h"
 #import "NSAlert-OAExtensions.h"
-#import "WCEditBuildTargetChooseInputFileViewController.h"
+#import "NSURL+RSExtensions.h"
+#import "WCDocumentController.h"
+#import "WCEditBuildTargetChooseInputFileAccessoryViewController.h"
+
+@interface WCEditBuildTargetWindowController ()
+@property (readwrite,retain,nonatomic) WCEditBuildTargetChooseInputFileAccessoryViewController *chooseInputFileAccessoryViewController;
+@end
 
 @implementation WCEditBuildTargetWindowController
 - (void)dealloc {
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
+	[_chooseInputFileAccessoryViewController release];
 	[_buildTarget release];
 	[super dealloc];
 }
@@ -125,10 +132,32 @@
 		[[self definesArrayController] removeObjectsAtArrangedObjectIndexes:[[self definesArrayController] selectionIndexes]];
 }
 
-- (IBAction)chooseInputFile:(id)sender; {
-	WCEditBuildTargetChooseInputFileViewController *viewController = [WCEditBuildTargetChooseInputFileViewController editBuildTargetChooseInputFileViewControllerWithEditBuildTargetWindowController:self];
+- (IBAction)chooseInputFile:(id)sender; {	
+	NSOpenPanel *openPanel = [NSOpenPanel openPanel];
 	
-	[viewController showChooseInputFileViewRelativeToRect:[[self chooseInputFileButton] bounds] ofView:[self chooseInputFileButton] preferredEdge:NSMinYEdge];
+	[openPanel setCanChooseDirectories:NO];
+	[openPanel setAllowsMultipleSelection:NO];
+	[openPanel setAllowedFileTypes:[NSArray arrayWithObjects:WCAssemblyFileUTI,WCIncludeFileUTI,WCActiveServerIncludeFileUTI, nil]];
+	[openPanel setDirectoryURL:[[[[self buildTarget] projectDocument] fileURL] parentDirectoryURL]];
+	[openPanel setPrompt:LOCALIZED_STRING_CHOOSE];
+	[openPanel setAccessoryView:[[self chooseInputFileAccessoryViewController] view]];
+	
+	[openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {
+		[openPanel orderOut:nil];
+		[self setChooseInputFileAccessoryViewController:nil];
+		if (result == NSFileHandlingPanelCancelButton)
+			return;
+		
+		NSDictionary *filePathsToFiles = [[[self buildTarget] projectDocument] filePathsToFiles];
+		WCFile *file = [filePathsToFiles objectForKey:[[[openPanel URLs] lastObject] path]];
+		
+		if (file)
+			[[self buildTarget] setInputFile:file];
+		// TODO: copy the file into the project, then set the build target's input file
+		else {
+			
+		}
+	}];
 }
 
 @synthesize nameTextField=_nameTextField;
@@ -137,6 +166,12 @@
 @synthesize chooseInputFileButton=_chooseInputFileButton;
 
 @synthesize buildTarget=_buildTarget;
+@synthesize chooseInputFileAccessoryViewController=_chooseInputFileAccessoryViewController;
+- (WCEditBuildTargetChooseInputFileAccessoryViewController *)chooseInputFileAccessoryViewController {
+	if (!_chooseInputFileAccessoryViewController)
+		_chooseInputFileAccessoryViewController = [[WCEditBuildTargetChooseInputFileAccessoryViewController alloc] init];
+	return _chooseInputFileAccessoryViewController;
+}
 
 - (void)_sheetDidEnd:(NSWindow *)sheet code:(NSInteger)code context:(void *)context {
 	[self autorelease];
