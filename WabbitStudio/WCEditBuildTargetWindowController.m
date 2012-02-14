@@ -40,6 +40,10 @@
     
 	[[self definesTableView] setTarget:self];
 	[[self definesTableView] setDoubleAction:@selector(_definesTableViewDoubleClick:)];
+	
+	[[[self definesSearchField] cell] setPlaceholderString:NSLocalizedString(@"Filter Defines", @"Filter Defines")];
+	[[[[self definesSearchField] cell] searchButtonCell] setImage:[NSImage imageNamed:@"Filter"]];
+	[[[[self definesSearchField] cell] searchButtonCell] setAlternateImage:nil];
 }
 
 #pragma mark NSControlTextEditingDelegate
@@ -94,6 +98,10 @@
 	[[NSApplication sharedApplication] endSheet:[self window] returnCode:NSOKButton];
 }
 
+static NSString *const kNameColumnIdentifier = @"name";
+static NSString *const kValueColumnIdentifier = @"value";
+static NSString *const kIconColumnIdentifier = @"icon";
+
 - (IBAction)newBuildDefine:(id)sender; {
 	WCBuildDefine *newBuildDefine = [WCBuildDefine buildDefine];
 	NSUInteger insertIndex = [[[self definesArrayController] selectionIndexes] firstIndex];
@@ -103,7 +111,7 @@
 	
 	[[self definesArrayController] insertObject:newBuildDefine atArrangedObjectIndex:insertIndex];
 	
-	[[self definesTableView] editColumn:0 row:insertIndex withEvent:nil select:YES];
+	[[self definesTableView] editColumn:[[self definesTableView] columnWithIdentifier:kNameColumnIdentifier] row:insertIndex withEvent:nil select:YES];
 }
 - (IBAction)deleteBuildDefine:(id)sender; {
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCAlertsWarnBeforeDeletingBuildDefinesKey]) {
@@ -164,6 +172,7 @@
 @synthesize definesArrayController=_definesArrayController;
 @synthesize definesTableView=_definesTableView;
 @synthesize chooseInputFileButton=_chooseInputFileButton;
+@synthesize definesSearchField=_definesSearchField;
 
 @synthesize buildTarget=_buildTarget;
 @synthesize chooseInputFileAccessoryViewController=_chooseInputFileAccessoryViewController;

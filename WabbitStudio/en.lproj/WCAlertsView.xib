@@ -42,29 +42,29 @@
 				<int key="NSvFlags">268</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<object class="NSButton" id="448392756">
+					<object class="NSButton" id="883054572">
 						<reference key="NSNextResponder" ref="1005"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{17, 18}, {207, 18}}</string>
+						<string key="NSFrame">{{17, 18}, {205, 18}}</string>
 						<reference key="NSSuperview" ref="1005"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:771</string>
 						<bool key="NSEnabled">YES</bool>
-						<object class="NSButtonCell" key="NSCell" id="389103690">
+						<object class="NSButtonCell" key="NSCell" id="347265994">
 							<int key="NSCellFlags">-2080244224</int>
 							<int key="NSCellFlags2">131072</int>
-							<string key="NSContents">Warn before deleting build defines</string>
+							<string key="NSContents">Warn before deleting build targets</string>
 							<object class="NSFont" key="NSSupport" id="26">
 								<string key="NSName">LucidaGrande</string>
 								<double key="NSSize">11</double>
 								<int key="NSfFlags">3100</int>
 							</object>
 							<string key="NSCellIdentifier">_NS:771</string>
-							<reference key="NSControlView" ref="448392756"/>
+							<reference key="NSControlView" ref="883054572"/>
 							<int key="NSButtonFlags">1211912703</int>
 							<int key="NSButtonFlags2">2</int>
-							<object class="NSCustomResource" key="NSNormalImage" id="108925454">
+							<object class="NSCustomResource" key="NSNormalImage" id="642022745">
 								<string key="NSClassName">NSImage</string>
 								<string key="NSResourceName">NSSwitch</string>
 							</object>
@@ -77,13 +77,39 @@
 							<int key="NSPeriodicInterval">25</int>
 						</object>
 					</object>
+					<object class="NSButton" id="828899889">
+						<reference key="NSNextResponder" ref="1005"/>
+						<int key="NSvFlags">268</int>
+						<string key="NSFrame">{{17, 38}, {207, 18}}</string>
+						<reference key="NSSuperview" ref="1005"/>
+						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView" ref="883054572"/>
+						<string key="NSReuseIdentifierKey">_NS:771</string>
+						<bool key="NSEnabled">YES</bool>
+						<object class="NSButtonCell" key="NSCell" id="1069608730">
+							<int key="NSCellFlags">-2080244224</int>
+							<int key="NSCellFlags2">131072</int>
+							<string key="NSContents">Warn before deleting build defines</string>
+							<reference key="NSSupport" ref="26"/>
+							<string key="NSCellIdentifier">_NS:771</string>
+							<reference key="NSControlView" ref="828899889"/>
+							<int key="NSButtonFlags">1211912703</int>
+							<int key="NSButtonFlags2">2</int>
+							<reference key="NSNormalImage" ref="642022745"/>
+							<reference key="NSAlternateImage" ref="761952893"/>
+							<string key="NSAlternateContents"/>
+							<string key="NSKeyEquivalent"/>
+							<int key="NSPeriodicDelay">200</int>
+							<int key="NSPeriodicInterval">25</int>
+						</object>
+					</object>
 					<object class="NSButton" id="221311832">
 						<reference key="NSNextResponder" ref="1005"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{17, 38}, {281, 18}}</string>
+						<string key="NSFrame">{{17, 58}, {281, 18}}</string>
 						<reference key="NSSuperview" ref="1005"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="448392756"/>
+						<reference key="NSNextKeyView" ref="828899889"/>
 						<string key="NSReuseIdentifierKey">_NS:771</string>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSButtonCell" key="NSCell" id="413786229">
@@ -95,7 +121,7 @@
 							<reference key="NSControlView" ref="221311832"/>
 							<int key="NSButtonFlags">1211912703</int>
 							<int key="NSButtonFlags2">2</int>
-							<reference key="NSNormalImage" ref="108925454"/>
+							<reference key="NSNormalImage" ref="642022745"/>
 							<reference key="NSAlternateImage" ref="761952893"/>
 							<string key="NSAlternateContents"/>
 							<string key="NSKeyEquivalent"/>
@@ -106,7 +132,7 @@
 					<object class="NSButton" id="316101205">
 						<reference key="NSNextResponder" ref="1005"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{17, 58}, {255, 18}}</string>
+						<string key="NSFrame">{{17, 78}, {255, 18}}</string>
 						<reference key="NSSuperview" ref="1005"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="221311832"/>
@@ -121,7 +147,7 @@
 							<reference key="NSControlView" ref="316101205"/>
 							<int key="NSButtonFlags">1211912703</int>
 							<int key="NSButtonFlags2">2</int>
-							<reference key="NSNormalImage" ref="108925454"/>
+							<reference key="NSNormalImage" ref="642022745"/>
 							<reference key="NSAlternateImage" ref="761952893"/>
 							<string key="NSAlternateContents"/>
 							<string key="NSKeyEquivalent"/>
@@ -130,7 +156,7 @@
 						</object>
 					</object>
 				</object>
-				<string key="NSFrameSize">{316, 94}</string>
+				<string key="NSFrameSize">{316, 114}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="316101205"/>
@@ -186,10 +212,10 @@
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
 						<string key="label">value: values.alertsWarnBeforeDeletingBuildDefines</string>
-						<reference key="source" ref="448392756"/>
+						<reference key="source" ref="828899889"/>
 						<reference key="destination" ref="945639347"/>
 						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="448392756"/>
+							<reference key="NSSource" ref="828899889"/>
 							<reference key="NSDestination" ref="945639347"/>
 							<string key="NSLabel">value: values.alertsWarnBeforeDeletingBuildDefines</string>
 							<string key="NSBinding">value</string>
@@ -198,6 +224,22 @@
 						</object>
 					</object>
 					<int key="connectionID">12</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: values.alertsWarnBeforeDeletingBuildTargets</string>
+						<reference key="source" ref="883054572"/>
+						<reference key="destination" ref="945639347"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="883054572"/>
+							<reference key="NSDestination" ref="945639347"/>
+							<string key="NSLabel">value: values.alertsWarnBeforeDeletingBuildTargets</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">values.alertsWarnBeforeDeletingBuildTargets</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">15</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -236,7 +278,8 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="316101205"/>
 							<reference ref="221311832"/>
-							<reference ref="448392756"/>
+							<reference ref="828899889"/>
+							<reference ref="883054572"/>
 						</object>
 						<reference key="parent" ref="1002"/>
 					</object>
@@ -275,17 +318,31 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">10</int>
-						<reference key="object" ref="448392756"/>
+						<reference key="object" ref="828899889"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="389103690"/>
+							<reference ref="1069608730"/>
 						</object>
 						<reference key="parent" ref="1005"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">11</int>
-						<reference key="object" ref="389103690"/>
-						<reference key="parent" ref="448392756"/>
+						<reference key="object" ref="1069608730"/>
+						<reference key="parent" ref="828899889"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">13</int>
+						<reference key="object" ref="883054572"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="347265994"/>
+						</object>
+						<reference key="parent" ref="1005"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">14</int>
+						<reference key="object" ref="347265994"/>
+						<reference key="parent" ref="883054572"/>
 					</object>
 				</object>
 			</object>
@@ -299,6 +356,8 @@
 					<string>1.IBPluginDependency</string>
 					<string>10.IBPluginDependency</string>
 					<string>11.IBPluginDependency</string>
+					<string>13.IBPluginDependency</string>
+					<string>14.IBPluginDependency</string>
 					<string>2.IBPluginDependency</string>
 					<string>3.IBPluginDependency</string>
 					<string>4.IBPluginDependency</string>
@@ -307,6 +366,8 @@
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -332,7 +393,7 @@
 				<reference key="dict.values" ref="1002"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">12</int>
+			<int key="maxID">15</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

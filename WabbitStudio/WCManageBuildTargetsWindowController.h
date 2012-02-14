@@ -16,8 +16,10 @@
 }
 @property (readwrite,assign,nonatomic) IBOutlet NSTableView *tableView;
 @property (readwrite,assign,nonatomic) IBOutlet NSArrayController *arrayController;
+@property (readwrite,assign,nonatomic) IBOutlet NSSearchField *searchField;
 
 @property (readonly,nonatomic) WCProjectDocument *projectDocument;
+@property (readwrite,copy,nonatomic) NSArray *selectedBuildTargets;
 
 + (id)manageBuildTargetsWindowControllerWithProjectDocument:(WCProjectDocument *)projectDocument;
 - (id)initWithProjectDocument:(WCProjectDocument *)projectDocument;
@@ -28,4 +30,7 @@
 - (IBAction)editBuildTarget:(id)sender;
 - (IBAction)newBuildTarget:(id)sender;
 - (IBAction)newBuildTargetFromTemplate:(id)sender;
+- (IBAction)deleteBuildTarget:(id)sender;
+- (IBAction)duplicateBuildTarget:(id)sender;
+- (IBAction)renameBuildTarget:(id)sender;
 @end

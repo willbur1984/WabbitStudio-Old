@@ -82,7 +82,7 @@
 		return;
 	}
 	
-	[(id<RSTableViewDelegate>)[self delegate] handleDeletePressedForTableView:self];
+	[[self delegate] handleDeletePressedForTableView:self];
 }
 #pragma mark Properties
 @dynamic emptyContentString;

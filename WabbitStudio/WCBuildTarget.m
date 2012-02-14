@@ -101,11 +101,13 @@ static NSString *const WCBuildTargetSymbolsAreCaseSensitiveKey = @"symbolsAreCas
 	WCBuildTarget *copy = [[[self class] alloc] init];
 	
 	copy->_outputType = _outputType;
-	copy->_name = [_name copy];
+	copy->_name = [[NSString alloc] initWithFormat:NSLocalizedString(@"Copy of \"%@\"", @"build target copy name format string"),[self name]];
 	copy->_inputFile = [_inputFile retain];
 	
-	copy->_defines = [[NSMutableArray alloc] initWithCapacity:[_defines count]];
-	// TODO: copy each define
+	NSMutableArray *defines = [[NSMutableArray alloc] initWithCapacity:[_defines count]];
+	for (WCBuildDefine *define in [self defines])
+		[defines addObject:[[define copy] autorelease]];
+	copy->_defines = defines;
 	
 	copy->_includes = [[NSMutableArray alloc] initWithCapacity:[_includes count]];
 	// TODO: copy each include

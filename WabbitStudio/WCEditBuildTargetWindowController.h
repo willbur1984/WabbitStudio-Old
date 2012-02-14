@@ -19,6 +19,7 @@
 @property (readwrite,assign,nonatomic) IBOutlet NSArrayController *definesArrayController;
 @property (readwrite,assign,nonatomic) IBOutlet NSTableView *definesTableView;
 @property (readwrite,assign,nonatomic) IBOutlet NSButton *chooseInputFileButton;
+@property (readwrite,assign,nonatomic) IBOutlet NSSearchField *definesSearchField;
 
 @property (readwrite,retain,nonatomic) WCBuildTarget *buildTarget;
 
