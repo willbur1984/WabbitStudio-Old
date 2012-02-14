@@ -32,6 +32,8 @@
 - (IBAction)jumpToNextPlaceholder:(id)sender;
 - (IBAction)jumpToPreviousPlaceholder:(id)sender;
 
+- (IBAction)findSelectedTextInProject:(id)sender;
+
 - (IBAction)jumpToSelection:(id)sender;
 - (IBAction)jumpToDefinition:(id)sender;
 

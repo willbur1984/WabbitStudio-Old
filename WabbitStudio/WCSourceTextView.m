@@ -40,6 +40,9 @@
 #import "NSAlert-OAExtensions.h"
 #import "NSBezierPath+StrokeExtensions.h"
 #import "WCFoldAttachmentCell.h"
+#import "WCSearchNavigatorViewController.h"
+#import "WCProjectWindowController.h"
+#import "RSNavigatorControl.h"
 
 @interface WCSourceTextView ()
 @property (readwrite,copy,nonatomic) NSIndexSet *autoHighlightArgumentsRanges;
@@ -111,6 +114,43 @@
 	[super mouseDown:theEvent];
 }
 
++ (NSMenu *)defaultMenu; {
+	static NSMenu *retval;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		retval = [[NSMenu alloc] initWithTitle:@""];
+		
+		[retval addItemWithTitle:NSLocalizedString(@"Cut", @"Cut") action:@selector(cut:) keyEquivalent:@""];
+		[retval addItemWithTitle:NSLocalizedString(@"Copy", @"Copy") action:@selector(copy:) keyEquivalent:@""];
+		[retval addItemWithTitle:NSLocalizedString(@"Paste", @"Paste") action:@selector(paste:) keyEquivalent:@""];
+		[retval addItem:[NSMenuItem separatorItem]];
+		[retval addItemWithTitle:NSLocalizedString(@"Find Selected Text in Project\u2026", @"Find Selected Text in Project with ellipsis") action:@selector(findSelectedTextInProject:) keyEquivalent:@""];
+		[retval addItem:[NSMenuItem separatorItem]];
+		[retval addItemWithTitle:NSLocalizedString(@"Jump to Definition", @"Jump to Definition") action:@selector(jumpToDefinition:) keyEquivalent:@""];
+		[retval addItem:[NSMenuItem separatorItem]];
+		[retval addItemWithTitle:NSLocalizedString(@"Shift Left", @"Shift Left") action:@selector(shiftLeft:) keyEquivalent:@""];
+		[retval addItemWithTitle:NSLocalizedString(@"Shift Right", @"Shift Right") action:@selector(shiftRight:) keyEquivalent:@""];
+		[retval addItem:[NSMenuItem separatorItem]];
+		[retval addItemWithTitle:NSLocalizedString(@"Comment/Uncomment Selection", @"Comment/Uncomment Selection") action:@selector(commentUncommentSelection:) keyEquivalent:@""];
+		[retval addItem:[NSMenuItem separatorItem]];
+		[retval addItemWithTitle:@"" action:@selector(toggleBookmarkAtCurrentLine:) keyEquivalent:@""];
+		[retval addItem:[NSMenuItem separatorItem]];
+		[retval addItemWithTitle:NSLocalizedString(@"Reveal in Project Navigator", @"Reveal in Project Navigator") action:@selector(revealInProjectNavigator:) keyEquivalent:@""];
+		[retval addItemWithTitle:NSLocalizedString(@"Show in Finder", @"Show in Finder") action:@selector(showInFinder:) keyEquivalent:@""];
+		[retval addItem:[NSMenuItem separatorItem]];
+		[retval addItemWithTitle:NSLocalizedString(@"Open in Separate Editor", @"Open in Separate Editor") action:@selector(openInSeparateEditor:) keyEquivalent:@""];
+		
+	});
+	return retval;
+}
+
+- (NSMenu *)menuForEvent:(NSEvent *)event {
+	NSMenu *retval = [super menuForEvent:event];
+	if (retval)
+		retval = [[self class] defaultMenu];
+	return retval;
+}
+
 - (void)viewDidMoveToWindow {
 	[super viewDidMoveToWindow];
 	
@@ -166,39 +206,6 @@
 			[path strokeInside];
 		}];
 	}
-	
-	/*
-	if ([[self findRanges] count]) {
-		[[[NSColor blackColor] colorWithAlphaComponent:0.5] setFill];
-		NSRectFillUsingOperation(rect, NSCompositeSourceOver);
-		
-		NSShadow *shadow = [[[NSShadow alloc] init] autorelease];
-		[shadow setShadowBlurRadius:2.0];
-		[shadow setShadowColor:[[NSColor blackColor] colorWithAlphaComponent:0.65]];
-		[shadow setShadowOffset:NSMakeSize(1.0, -1.0)];
-		
-		[[NSGraphicsContext currentContext] saveGraphicsState];
-		[shadow set];
-		
-		[[self findRanges] enumerateRangesInRange:[self visibleRange] options:0 usingBlock:^(NSRange range, BOOL *stop) {
-			NSUInteger rectCount;
-			NSRectArray rects = [[self layoutManager] rectArrayForCharacterRange:range withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[self textContainer] rectCount:&rectCount];
-			
-			if (!rectCount)
-				return;
-			
-			NSRect findRect = rects[0];
-			
-			if (!NSIntersectsRect(findRect, rect) || ![self needsToDrawRect:findRect])
-				return;
-			
-			[[self backgroundColor] setFill];
-			NSRectFill(findRect);
-		}];
-		
-		[[NSGraphicsContext currentContext] restoreGraphicsState];
-	}
-	 */
 }
 
 - (NSRange)rangeForUserCompletion {
@@ -357,41 +364,6 @@
 	return [super writeSelectionToPasteboard:pboard types:types];
 }
 
-+ (NSMenu *)defaultMenu; {
-	static NSMenu *retval;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		retval = [[NSMenu alloc] initWithTitle:@""];
-		
-		[retval addItemWithTitle:NSLocalizedString(@"Cut", @"Cut") action:@selector(cut:) keyEquivalent:@""];
-		[retval addItemWithTitle:NSLocalizedString(@"Copy", @"Copy") action:@selector(copy:) keyEquivalent:@""];
-		[retval addItemWithTitle:NSLocalizedString(@"Paste", @"Paste") action:@selector(paste:) keyEquivalent:@""];
-		[retval addItem:[NSMenuItem separatorItem]];
-		[retval addItemWithTitle:NSLocalizedString(@"Jump to Definition", @"Jump to Definition") action:@selector(jumpToDefinition:) keyEquivalent:@""];
-		[retval addItem:[NSMenuItem separatorItem]];
-		[retval addItemWithTitle:NSLocalizedString(@"Shift Left", @"Shift Left") action:@selector(shiftLeft:) keyEquivalent:@""];
-		[retval addItemWithTitle:NSLocalizedString(@"Shift Right", @"Shift Right") action:@selector(shiftRight:) keyEquivalent:@""];
-		[retval addItem:[NSMenuItem separatorItem]];
-		[retval addItemWithTitle:NSLocalizedString(@"Comment/Uncomment Selection", @"Comment/Uncomment Selection") action:@selector(commentUncommentSelection:) keyEquivalent:@""];
-		[retval addItem:[NSMenuItem separatorItem]];
-		[retval addItemWithTitle:@"" action:@selector(toggleBookmarkAtCurrentLine:) keyEquivalent:@""];
-		[retval addItem:[NSMenuItem separatorItem]];
-		[retval addItemWithTitle:NSLocalizedString(@"Reveal in Project Navigator", @"Reveal in Project Navigator") action:@selector(revealInProjectNavigator:) keyEquivalent:@""];
-		[retval addItemWithTitle:NSLocalizedString(@"Show in Finder", @"Show in Finder") action:@selector(showInFinder:) keyEquivalent:@""];
-		[retval addItem:[NSMenuItem separatorItem]];
-		[retval addItemWithTitle:NSLocalizedString(@"Open in Separate Editor", @"Open in Separate Editor") action:@selector(openInSeparateEditor:) keyEquivalent:@""];
-		
-	});
-	return retval;
-}
-
-- (NSMenu *)menuForEvent:(NSEvent *)event {
-	NSMenu *retval = [super menuForEvent:event];
-	if (retval)
-		retval = [[self class] defaultMenu];
-	return retval;
-}
-
 #pragma mark IBActions
 - (IBAction)complete:(id)sender {
 	[[WCCompletionWindowController sharedWindowController] showCompletionWindowControllerForSourceTextView:self];
@@ -536,7 +508,7 @@
 		[menuItem setTitle:[NSString stringWithFormat:NSLocalizedString(@"Jump in \"%@\"", @"jump in file menu item title format string"),[[sourceScanner delegate] fileDisplayNameForSourceScanner:sourceScanner]]];
 	}
 	else if ([menuItem action] == @selector(toggleBookmarkAtCurrentLine:)) {
-		if ([(WCSourceTextStorage *)[self textStorage] bookmarkAtLineNumber:[[self string] lineNumberForRange:[self selectedRange]]])
+		if ([[self sourceTextStorage] bookmarkAtLineNumber:[[self string] lineNumberForRange:[self selectedRange]]])
 			[menuItem setTitle:NSLocalizedString(@"Remove Bookmark at Current Line", @"Remove Bookmark at Current Line")];
 		else
 			[menuItem setTitle:NSLocalizedString(@"Add Bookmark at Current Line", @"Add Bookmark at Current Line")];
@@ -545,7 +517,18 @@
 		if (![[self delegate] projectDocumentForSourceTextView:self])
 			return NO;
 	}
-	return YES;
+	else if ([menuItem action] == @selector(findSelectedTextInProject:)) {
+		NSRange selectedRange = [self selectedRange];
+		
+		if (selectedRange.length) {
+			[menuItem setTitle:[NSString stringWithFormat:NSLocalizedString(@"Find \"%@\" in Project\u2026", @"Find Selected Text in Project menu item title format string"),[[self string] substringWithRange:selectedRange]]];
+		}
+		else {
+			[menuItem setTitle:NSLocalizedString(@"Find Selected Text in Project\u2026", @"Find Selected Text in Project with ellipsis")];
+			return NO;
+		}
+	}
+	return [super validateMenuItem:menuItem];
 }
 
 #pragma mark NSUserInterfaceValidations
@@ -614,6 +597,15 @@
 	}
 	
 	[self setSelectedRange:placeholderRange];
+}
+- (IBAction)findSelectedTextInProject:(id)sender; {
+	WCProjectDocument *projectDocument = [[self delegate] projectDocumentForSourceTextView:self];
+	WCSearchNavigatorViewController *viewController = [[projectDocument projectWindowController] searchNavigatorViewController];
+	NSString *searchString = [[self string] substringWithRange:[self selectedRange]];
+	
+	[[[projectDocument projectWindowController] navigatorControl] setSelectedItemIdentifier:@"search"];
+	[viewController setSearchString:searchString];
+	[viewController search:nil];
 }
 - (IBAction)jumpToLine:(id)sender; {
 	[[WCJumpToLineWindowController sharedWindowController] showJumpToLineWindowForTextView:self];

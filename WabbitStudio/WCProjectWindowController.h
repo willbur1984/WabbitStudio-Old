@@ -35,4 +35,7 @@
 - (IBAction)showBreakpointNavigator:(id)sender;
 - (IBAction)showDebugNavigator:(id)sender;
 - (IBAction)showBookmarkNavigator:(id)sender;
+
+- (IBAction)selectNextTab:(id)sender;
+- (IBAction)selectPreviousTab:(id)sender;
 @end

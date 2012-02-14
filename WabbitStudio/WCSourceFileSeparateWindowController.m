@@ -50,7 +50,7 @@
 - (WCProjectDocument *)projectDocumentForTabViewController:(WCTabViewController *)tabViewController {
 	return [self projectDocument];
 }
-
+#pragma mark *** Public Methods ***
 - (id)initWithSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument; {
 	if (!(self = [super initWithWindowNibName:[self windowNibName]]))
 		return nil;
@@ -65,7 +65,32 @@
 	
 	return self;
 }
-
+#pragma mark IBActions
+- (IBAction)selectNextTab:(id)sender; {
+	NSArray *tabViewItems = [[[self tabViewController] tabBarControl] representedTabViewItems];
+	NSTabViewItem *selectedTabViewItem = [[[self tabViewController] tabView] selectedTabViewItem];
+	NSUInteger indexOfTabViewItemToSelect;
+	
+	if (selectedTabViewItem == [tabViewItems lastObject])
+		indexOfTabViewItemToSelect = 0;
+	else
+		indexOfTabViewItemToSelect = [tabViewItems indexOfObject:selectedTabViewItem] + 1;
+	
+	[[[self tabViewController] tabView] selectTabViewItemAtIndex:indexOfTabViewItemToSelect];
+}
+- (IBAction)selectPreviousTab:(id)sender; {
+	NSArray *tabViewItems = [[[self tabViewController] tabBarControl] representedTabViewItems];
+	NSTabViewItem *selectedTabViewItem = [[[self tabViewController] tabView] selectedTabViewItem];
+	NSUInteger indexOfTabViewItemToSelect;
+	
+	if (selectedTabViewItem == [tabViewItems objectAtIndex:0])
+		indexOfTabViewItemToSelect = [tabViewItems count] - 1;
+	else
+		indexOfTabViewItemToSelect = [tabViewItems indexOfObject:selectedTabViewItem] - 1;
+	
+	[[[self tabViewController] tabView] selectTabViewItemAtIndex:indexOfTabViewItemToSelect];
+}
+#pragma mark Properties
 @synthesize tabViewController=_tabViewController;
 @dynamic projectDocument;
 - (WCProjectDocument *)projectDocument {
@@ -73,6 +98,9 @@
 }
 @synthesize sourceFileDocument=_sourceFileDocument;
 
+#pragma mark *** Private Methods ***
+
+#pragma mark Notifications
 - (void)_tabViewControllerDidCloseTab:(NSNotification *)note {
 	[self synchronizeWindowTitleWithDocumentName];
 }

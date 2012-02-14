@@ -126,6 +126,7 @@
 
 static NSString *const kIconColumnIdentifier = @"icon";
 static NSString *const kNameColumnIdentifier = @"name";
+static NSString *const kOutputTypeColumnIdentifier = @"outputType";
 
 - (IBAction)newBuildTarget:(id)sender; {
 	WCBuildTarget *newBuildTarget = [WCBuildTarget buildTargetWithName:NSLocalizedString(@"New Target", @"New Target") outputType:WCBuildTargetOutputTypeBinary projectDocument:[self projectDocument]];
@@ -136,7 +137,7 @@ static NSString *const kNameColumnIdentifier = @"name";
 	
 	[[self arrayController] insertObject:newBuildTarget atArrangedObjectIndex:selectionIndex];
 	
-	[[self tableView] editColumn:[[self tableView] columnWithIdentifier:kNameColumnIdentifier] row:selectionIndex withEvent:nil select:YES];
+	[[self tableView] editColumn:[[self tableView] columnWithIdentifier:kNameColumnIdentifier] row:[[[self arrayController] arrangedObjects] indexOfObjectIdenticalTo:newBuildTarget] withEvent:nil select:YES];
 }
 - (IBAction)newBuildTargetFromTemplate:(id)sender; {
 	
@@ -174,7 +175,7 @@ static NSString *const kNameColumnIdentifier = @"name";
 	
 	[[self arrayController] insertObject:newBuildTarget atArrangedObjectIndex:insertIndex];
 	
-	[[self tableView] editColumn:[[self tableView] columnWithIdentifier:kNameColumnIdentifier] row:insertIndex withEvent:nil select:YES];
+	[[self tableView] editColumn:[[self tableView] columnWithIdentifier:kNameColumnIdentifier] row:[[[self arrayController] arrangedObjects] indexOfObjectIdenticalTo:newBuildTarget] withEvent:nil select:YES];
 }
 - (IBAction)renameBuildTarget:(id)sender; {
 	NSInteger clickedRow = [[self tableView] clickedRow];

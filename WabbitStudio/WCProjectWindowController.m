@@ -176,6 +176,31 @@ static const CGFloat kRightSubviewMinWidth = 400.0;
 - (IBAction)showBookmarkNavigator:(id)sender; {
 	[[self navigatorControl] setSelectedItemIdentifier:@"bookmark"];
 }
+
+- (IBAction)selectNextTab:(id)sender; {
+	NSArray *tabViewItems = [[[self tabViewController] tabBarControl] representedTabViewItems];
+	NSTabViewItem *selectedTabViewItem = [[[self tabViewController] tabView] selectedTabViewItem];
+	NSUInteger indexOfTabViewItemToSelect;
+	
+	if (selectedTabViewItem == [tabViewItems lastObject])
+		indexOfTabViewItemToSelect = 0;
+	else
+		indexOfTabViewItemToSelect = [tabViewItems indexOfObject:selectedTabViewItem] + 1;
+	
+	[[[self tabViewController] tabView] selectTabViewItemAtIndex:indexOfTabViewItemToSelect];
+}
+- (IBAction)selectPreviousTab:(id)sender; {
+	NSArray *tabViewItems = [[[self tabViewController] tabBarControl] representedTabViewItems];
+	NSTabViewItem *selectedTabViewItem = [[[self tabViewController] tabView] selectedTabViewItem];
+	NSUInteger indexOfTabViewItemToSelect;
+	
+	if (selectedTabViewItem == [tabViewItems objectAtIndex:0])
+		indexOfTabViewItemToSelect = [tabViewItems count] - 1;
+	else
+		indexOfTabViewItemToSelect = [tabViewItems indexOfObject:selectedTabViewItem] - 1;
+	
+	[[[self tabViewController] tabView] selectTabViewItemAtIndex:indexOfTabViewItemToSelect];
+}
 #pragma mark Properties
 @synthesize navigatorControl=_navigatorControl;
 @synthesize splitView=_splitView;

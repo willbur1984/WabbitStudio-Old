@@ -70,6 +70,42 @@
 				<true/>
 			</dict>
 		</dict>
+		<key>findInProject:</key>
+		<dict>
+			<key>keyCode</key>
+			<integer>3</integer>
+			<key>modifierFlags</key>
+			<dict>
+				<key>command</key>
+				<true/>
+				<key>shift</key>
+				<true/>
+			</dict>
+		</dict>
+		<key>selectNextTab:</key>
+		<dict>
+			<key>keyCode</key>
+			<integer>30</integer>
+			<key>modifierFlags</key>
+			<dict>
+				<key>command</key>
+				<true/>
+				<key>shift</key>
+				<true/>
+			</dict>
+		</dict>
+		<key>selectPreviousTab:</key>
+		<dict>
+			<key>keyCode</key>
+			<integer>33</integer>
+			<key>modifierFlags</key>
+			<dict>
+				<key>command</key>
+				<true/>
+				<key>shift</key>
+				<true/>
+			</dict>
+		</dict>
 		<key>openDocument:</key>
 		<dict>
 			<key>keyCode</key>

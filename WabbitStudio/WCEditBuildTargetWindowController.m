@@ -111,7 +111,7 @@ static NSString *const kIconColumnIdentifier = @"icon";
 	
 	[[self definesArrayController] insertObject:newBuildDefine atArrangedObjectIndex:insertIndex];
 	
-	[[self definesTableView] editColumn:[[self definesTableView] columnWithIdentifier:kNameColumnIdentifier] row:insertIndex withEvent:nil select:YES];
+	[[self definesTableView] editColumn:[[self definesTableView] columnWithIdentifier:kNameColumnIdentifier] row:[[[self definesArrayController] arrangedObjects] indexOfObjectIdenticalTo:newBuildDefine] withEvent:nil select:YES];
 }
 - (IBAction)deleteBuildDefine:(id)sender; {
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCAlertsWarnBeforeDeletingBuildDefinesKey]) {

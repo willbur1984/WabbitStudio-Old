@@ -29,6 +29,7 @@
 #import "WCManageBuildTargetsWindowController.h"
 #import "WCBuildController.h"
 #import "WCEditBuildTargetWindowController.h"
+#import "WCSearchNavigatorViewController.h"
 
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
@@ -246,6 +247,20 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	if (selectedTabViewItem && [[selectedTabViewItem identifier] isDocumentEdited])
 		[[selectedTabViewItem identifier] saveDocument:nil];
 }
+#pragma mark NSMenuValidation
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
+	if ([menuItem action] == @selector(editActiveBuildTarget:)) {
+		WCBuildTarget *buildTarget = [self activeBuildTarget];
+		
+		if (buildTarget)
+			[menuItem setTitle:[NSString stringWithFormat:NSLocalizedString(@"Edit Active Build Target \"%@\"\u2026", @"Edit Active Build Target menu item title format string"),[buildTarget name]]];
+		else {
+			[menuItem setTitle:NSLocalizedString(@"Edit Active Build Target\u2026", @"Edit Active Build Target with ellipsis")];
+			return NO;
+		}
+	}
+	return [super validateMenuItem:menuItem];
+}
 #pragma mark WCOpenQuicklyDataSource
 - (NSArray *)openQuicklyItems {
 	NSMutableArray *retval = [NSMutableArray arrayWithCapacity:0];
@@ -345,6 +360,11 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	WCManageBuildTargetsWindowController *windowController = [WCManageBuildTargetsWindowController manageBuildTargetsWindowControllerWithProjectDocument:self];
 	
 	[windowController showManageBuildTargetsWindow];
+}
+
+- (IBAction)findInProject:(id)sender; {
+	[[[self projectWindowController] navigatorControl] setSelectedItemIdentifier:@"search"];
+	[[[self projectWindowController] window] makeFirstResponder:[[[self projectWindowController] searchNavigatorViewController] searchField]];
 }
 #pragma mark Properties
 @synthesize projectContainer=_projectContainer;
