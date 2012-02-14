@@ -33,4 +33,5 @@
 - (IBAction)deleteBuildTarget:(id)sender;
 - (IBAction)duplicateBuildTarget:(id)sender;
 - (IBAction)renameBuildTarget:(id)sender;
+- (IBAction)makeActiveBuildTarget:(id)sender;
 @end

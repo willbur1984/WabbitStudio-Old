@@ -183,7 +183,7 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	NSMapTable *filesToFileContainers = [NSMapTable mapTableWithWeakToWeakObjects];
 	NSMapTable *filesToSourceFileDocuments = [NSMapTable mapTableWithWeakToStrongObjects];
 	NSMapTable *sourceFileDocumentsToFiles = [NSMapTable mapTableWithWeakToWeakObjects];
-	NSMutableDictionary *UUIDsToObjects = [NSMutableDictionary dictionaryWithCapacity:0];
+	NSMutableDictionary *UUIDsToFiles = [NSMutableDictionary dictionaryWithCapacity:0];
 	NDMutableTrie *fileCompletions = [NDMutableTrie trie];
 	
 	for (WCFileContainer *fileContainer in [projectContainer descendantNodesInclusive]) {
@@ -205,13 +205,13 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 		if ([fileContainer isLeafNode])
 			[fileCompletions setObject:[fileContainer representedObject] forKey:[[[fileContainer representedObject] fileName] lowercaseString]];
 			
-		[UUIDsToObjects setObject:[fileContainer representedObject] forKey:[[fileContainer representedObject] UUID]];
+		[UUIDsToFiles setObject:[fileContainer representedObject] forKey:[[fileContainer representedObject] UUID]];
 	}
 	
 	[self setFilesToFileContainers:filesToFileContainers];
 	[self setFilesToSourceFileDocuments:filesToSourceFileDocuments];
 	[self setSourceFileDocumentsToFiles:sourceFileDocumentsToFiles];
-	[self setUUIDsToFiles:UUIDsToObjects];
+	[self setUUIDsToFiles:UUIDsToFiles];
 	[self setFileCompletions:fileCompletions];
 	
 	NSMutableArray *buildTargets = [NSMutableArray arrayWithCapacity:0];

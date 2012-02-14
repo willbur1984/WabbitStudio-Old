@@ -67,6 +67,21 @@
 		if (buildTarget)
 			[menuItem setTitle:[NSString stringWithFormat:NSLocalizedString(@"Rename \"%@\"", @"rename single build target menu item title format string"),[buildTarget name]]];
 	}
+	else if ([menuItem action] == @selector(makeActiveBuildTarget:)) {
+		WCBuildTarget *buildTarget = [[self selectedBuildTargets] firstObject];
+		
+		if (buildTarget) {
+			[menuItem setTitle:[NSString stringWithFormat:NSLocalizedString(@"Make \"%@\" Active", @"make active build target menu item title format string"),[buildTarget name]]];
+			
+			if ([[self projectDocument] activeBuildTarget] == buildTarget)
+				return NO;
+		}
+		else {
+			[menuItem setTitle:NSLocalizedString(@"Make Active Build Target", @"Make Active Build Target")];
+			
+			return NO;
+		}
+	}
 	return YES;
 }
 
@@ -81,9 +96,7 @@
 	[self newBuildTarget:nil];
 }
 - (void)handleSpacePressedForTableView:(RSTableView *)tableView {
-	WCBuildTarget *selectedBuildTarget = [[[self arrayController] selectedObjects] firstObject];
-	
-	[[self projectDocument] setActiveBuildTarget:selectedBuildTarget];
+	[self makeActiveBuildTarget:nil];
 }
 
 + (id)manageBuildTargetsWindowControllerWithProjectDocument:(WCProjectDocument *)projectDocument; {
@@ -175,6 +188,11 @@ static NSString *const kNameColumnIdentifier = @"name";
 	}
 	
 	[[self tableView] editColumn:clickedColumn row:clickedRow withEvent:nil select:YES];
+}
+- (IBAction)makeActiveBuildTarget:(id)sender; {
+	WCBuildTarget *buildTarget = [[self selectedBuildTargets] firstObject];
+	
+	[[self projectDocument] setActiveBuildTarget:buildTarget];
 }
 
 @synthesize tableView=_tableView;

@@ -139,6 +139,9 @@ static NSString *const WCBuildTargetSymbolsAreCaseSensitiveKey = @"symbolsAreCas
 	_projectDocument = projectDocument;
 	
 	// TODO: set our input file
+	WCFile *inputFile = [[projectDocument UUIDsToFiles] objectForKey:_inputFileUUID];
+	
+	[self setInputFile:inputFile];
 }
 @synthesize outputType=_outputType;
 @synthesize name=_name;
