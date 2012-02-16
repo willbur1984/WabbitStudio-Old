@@ -11,6 +11,7 @@
 #import "NSImage+RSExtensions.h"
 #import "WCFile.h"
 #import "WCBuildDefine.h"
+#import "WCBuildInclude.h"
 
 static NSString *const WCBuildTargetOutputTypeKey = @"outputType";
 static NSString *const WCBuildTargetNameKey = @"name";
@@ -73,7 +74,10 @@ static NSString *const WCBuildTargetSymbolsAreCaseSensitiveKey = @"symbolsAreCas
 	
 	_includes = [[NSMutableArray alloc] initWithCapacity:0];
 	for (NSDictionary *includePlist in [plistRepresentation objectForKey:WCBuildTargetIncludesKey]) {
+		WCBuildInclude *include = [[[WCBuildInclude alloc] initWithPlistRepresentation:includePlist] autorelease];
 		
+		if (include)
+			[_includes addObject:include];
 	}
 	
 	_buildTargetFlags.active = [[plistRepresentation objectForKey:WCBuildTargetActiveKey] boolValue];
@@ -109,8 +113,10 @@ static NSString *const WCBuildTargetSymbolsAreCaseSensitiveKey = @"symbolsAreCas
 		[defines addObject:[[define copy] autorelease]];
 	copy->_defines = defines;
 	
-	copy->_includes = [[NSMutableArray alloc] initWithCapacity:[_includes count]];
-	// TODO: copy each include
+	NSMutableArray *includes = [[NSMutableArray alloc] initWithCapacity:[_includes count]];
+	for (WCBuildInclude *include in [self includes])
+		[includes addObject:[[include copy] autorelease]];
+	copy->_includes = includes;
 	
 	copy->_buildTargetFlags = _buildTargetFlags;
 	copy->_buildTargetFlags.active = NO;

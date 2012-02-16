@@ -12,6 +12,7 @@ NSString *const WCAlertsWarnBeforeDeletingFontAndColorThemesKey = @"alertsWarnBe
 NSString *const WCAlertsWarnBeforeDeletingKeyBindingCommandSetsKey = @"alertsWarnBeforeDeletingKeyBindingCommandSets";
 NSString *const WCAlertsWarnBeforeDeletingBuildDefinesKey = @"alertsWarnBeforeDeletingBuildDefines";
 NSString *const WCAlertsWarnBeforeDeletingBuildTargetsKey = @"alertsWarnBeforeDeletingBuildTargets";
+NSString *const WCAlertsWarnBeforeDeletingBuildIncludesKey = @"alertsWarnBeforeDeletingBuildIncludes";
 
 @implementation WCAlertsViewController
 
@@ -37,7 +38,7 @@ NSString *const WCAlertsWarnBeforeDeletingBuildTargetsKey = @"alertsWarnBeforeDe
 }
 #pragma mark RSUserDefaultsProvider
 + (NSDictionary *)userDefaults {
-	return [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],WCAlertsWarnBeforeDeletingFontAndColorThemesKey,[NSNumber numberWithBool:YES],WCAlertsWarnBeforeDeletingKeyBindingCommandSetsKey,[NSNumber numberWithBool:YES],WCAlertsWarnBeforeDeletingBuildDefinesKey,[NSNumber numberWithBool:YES],WCAlertsWarnBeforeDeletingBuildTargetsKey, nil];
+	return [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],WCAlertsWarnBeforeDeletingFontAndColorThemesKey,[NSNumber numberWithBool:YES],WCAlertsWarnBeforeDeletingKeyBindingCommandSetsKey,[NSNumber numberWithBool:YES],WCAlertsWarnBeforeDeletingBuildDefinesKey,[NSNumber numberWithBool:YES],WCAlertsWarnBeforeDeletingBuildTargetsKey,[NSNumber numberWithBool:YES],WCAlertsWarnBeforeDeletingBuildIncludesKey, nil];
 }
 
 @end

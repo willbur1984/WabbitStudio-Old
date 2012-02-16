@@ -14,6 +14,7 @@ extern NSString *const WCAlertsWarnBeforeDeletingFontAndColorThemesKey;
 extern NSString *const WCAlertsWarnBeforeDeletingKeyBindingCommandSetsKey;
 extern NSString *const WCAlertsWarnBeforeDeletingBuildDefinesKey;
 extern NSString *const WCAlertsWarnBeforeDeletingBuildTargetsKey;
+extern NSString *const WCAlertsWarnBeforeDeletingBuildIncludesKey;
 
 @interface WCAlertsViewController : NSViewController <RSPreferencesModule,RSUserDefaultsProvider>
 

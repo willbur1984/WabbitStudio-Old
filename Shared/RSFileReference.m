@@ -21,6 +21,7 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 @implementation RSFileReference
 #pragma mark *** Subclass Overrides ***
 - (void)dealloc {
+	[NSFileCoordinator removeFilePresenter:self];
 	[_operationQueue release];
 	[_fileURLLock release];
 	[_fileURL release];
@@ -81,6 +82,13 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 		[[self delegate] fileReferenceWasWrittenTo:self];
 	});
 }
+#pragma mark NSCopying
+- (id)copyWithZone:(NSZone *)zone {
+	RSFileReference *copy = [[RSFileReference alloc] initWithFileURL:[self fileURL]];
+	
+	return copy;
+}
+
 #pragma mark RSPlistArchiving
 - (NSDictionary *)plistRepresentation {
 	NSMutableDictionary *retval = [NSMutableDictionary dictionaryWithDictionary:[super plistRepresentation]];

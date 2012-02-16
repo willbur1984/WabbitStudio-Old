@@ -12,8 +12,16 @@
 
 @interface WCBuildController : NSObject {
 	__weak WCProjectDocument *_projectDocument;
+	NSTask *_task;
+	NSMutableString *_output;
+	struct {
+		unsigned int building:1;
+		unsigned int runAfterBuilding:1;
+		unsigned int RESERVED:30;		
+	} _buildFlags;
 }
 @property (readonly,nonatomic) WCProjectDocument *projectDocument;
+@property (readonly,assign,nonatomic,getter = isBuilding) BOOL building;
 
 - (id)initWithProjectDocument:(WCProjectDocument *)projectDocument;
 

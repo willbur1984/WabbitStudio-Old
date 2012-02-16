@@ -18,8 +18,10 @@
 @property (readwrite,assign,nonatomic) IBOutlet NSTextField *nameTextField;
 @property (readwrite,assign,nonatomic) IBOutlet NSArrayController *definesArrayController;
 @property (readwrite,assign,nonatomic) IBOutlet NSTableView *definesTableView;
-@property (readwrite,assign,nonatomic) IBOutlet NSButton *chooseInputFileButton;
 @property (readwrite,assign,nonatomic) IBOutlet NSSearchField *definesSearchField;
+@property (readwrite,assign,nonatomic) IBOutlet NSArrayController *includesArrayController;
+@property (readwrite,assign,nonatomic) IBOutlet NSTableView *includesTableView;
+@property (readwrite,assign,nonatomic) IBOutlet NSSearchField *includesSearchField;
 
 @property (readwrite,retain,nonatomic) WCBuildTarget *buildTarget;
 
@@ -33,6 +35,8 @@
 
 - (IBAction)newBuildDefine:(id)sender;
 - (IBAction)deleteBuildDefine:(id)sender;
+- (IBAction)newBuildInclude:(id)sender;
+- (IBAction)deleteBuildInclude:(id)sender;
 
 - (IBAction)chooseInputFile:(id)sender;
 

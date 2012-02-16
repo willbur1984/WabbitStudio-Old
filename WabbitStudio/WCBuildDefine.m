@@ -12,24 +12,25 @@ static NSString *const WCBuildDefineNameKey = @"name";
 static NSString *const WCBuildDefineValueKey = @"value";
 
 @implementation WCBuildDefine
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 	[_name release];
 	[_value release];
 	[super dealloc];
 }
-
+#pragma mark NSCopying
 - (id)copyWithZone:(NSZone *)zone {
 	WCBuildDefine *copy = [[[self class] alloc] initWithName:[self name] value:[self value]];
 	
 	return copy;
 }
-
+#pragma mark NSMutableCopying
 - (id)mutableCopyWithZone:(NSZone *)zone {
 	WCBuildDefine *copy = [[[self class] alloc] initWithName:[self name] value:[self value]];
 	
 	return copy;
 }
-
+#pragma mark RSPlistArchiving
 - (NSDictionary *)plistRepresentation {
 	NSMutableDictionary *retval = [NSMutableDictionary dictionaryWithDictionary:[super plistRepresentation]];
 	
@@ -50,7 +51,7 @@ static NSString *const WCBuildDefineValueKey = @"value";
 	
 	return self;
 }
-
+#pragma mark *** Public Methods ***
 + (id)buildDefine; {
 	return [[[[self class] alloc] initWithName:NSLocalizedString(@"NEW_DEFINE", @"NEW_DEFINE")] autorelease];
 }
@@ -72,7 +73,7 @@ static NSString *const WCBuildDefineValueKey = @"value";
 	
 	return self;
 }
-
+#pragma mark Properties
 @synthesize name=_name;
 @synthesize value=_value;
 

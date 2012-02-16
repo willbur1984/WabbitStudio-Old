@@ -11,11 +11,11 @@
 
 /** Allows referencing a file and tracking its movement/modification.
  
- Anything that wants to reference a file should do so through a RSFileReference instance. Uses the excellent UKKQueue class to watch its path and report changes to the tracked file to its delegate.
+ Anything that wants to reference a file should do so through a RSFileReference instance.
  
  */
 
-@interface RSFileReference : RSObject <RSPlistArchiving,NSFilePresenter> {
+@interface RSFileReference : RSObject <RSPlistArchiving,NSFilePresenter,NSCopying> {
 	__weak id <RSFileReferenceDelegate> _delegate;
 	NSURL *_fileReferenceURL;
 	NSURL *_fileURL;

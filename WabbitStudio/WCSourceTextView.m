@@ -666,7 +666,7 @@
 			NSMenuItem *item = [menu addItemWithTitle:[NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 (%@:%lu)", @"jump to definition contextual menu format string"),[symbol name],fileDisplayName,[symbol lineNumber]+1] action:@selector(_symbolMenuClicked:) keyEquivalent:@""];
 			
 			[item setImage:[symbol icon]];
-			[[item image] setSize:NSMakeSize(14.0, 14.0)];
+			[[item image] setSize:NSSmallSize];
 			[item setTarget:self];
 			[item setRepresentedObject:symbol];
 		}

@@ -31,6 +31,7 @@
 #define LOCALIZED_STRING_CLOSE NSLocalizedString(@"Close",@"Close")
 #define LOCALIZED_STRING_LOAD NSLocalizedString(@"Load",@"Load")
 #define LOCALIZED_STRING_CREATE NSLocalizedString(@"Create",@"Create")
+#define LOCALIZED_STRING_ADD NSLocalizedString(@"Add",@"Add")
 
 #define NSLogObject(objectToLog) NSLog(@"%@",(objectToLog))
 #define NSLogRange(rangeToLog) NSLog(@"%@",NSStringFromRange(rangeToLog))

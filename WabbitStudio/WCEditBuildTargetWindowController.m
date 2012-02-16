@@ -16,6 +16,7 @@
 #import "NSURL+RSExtensions.h"
 #import "WCDocumentController.h"
 #import "WCEditBuildTargetChooseInputFileAccessoryViewController.h"
+#import "WCBuildInclude.h"
 
 @interface WCEditBuildTargetWindowController ()
 @property (readwrite,retain,nonatomic) WCEditBuildTargetChooseInputFileAccessoryViewController *chooseInputFileAccessoryViewController;
@@ -44,6 +45,10 @@
 	[[[self definesSearchField] cell] setPlaceholderString:NSLocalizedString(@"Filter Defines", @"Filter Defines")];
 	[[[[self definesSearchField] cell] searchButtonCell] setImage:[NSImage imageNamed:@"Filter"]];
 	[[[[self definesSearchField] cell] searchButtonCell] setAlternateImage:nil];
+	
+	[[[self includesSearchField] cell] setPlaceholderString:NSLocalizedString(@"Filter Includes", @"Filter Includes")];
+	[[[[self includesSearchField] cell] searchButtonCell] setImage:[NSImage imageNamed:@"Filter"]];
+	[[[[self includesSearchField] cell] searchButtonCell] setAlternateImage:nil];
 }
 
 #pragma mark NSControlTextEditingDelegate
@@ -67,10 +72,14 @@
 - (void)handleDeletePressedForTableView:(RSTableView *)tableView {
 	if (tableView == (RSTableView *)[self definesTableView])
 		[self deleteBuildDefine:nil];
+	else if (tableView == (RSTableView *)[self includesTableView])
+		[self deleteBuildInclude:nil];
 }
 - (void)handleReturnPressedForTableView:(RSTableView *)tableView {
 	if (tableView == (RSTableView *)[self definesTableView])
 		[self newBuildDefine:nil];
+	else if (tableView == (RSTableView *)[self includesTableView])
+		[self newBuildInclude:nil];
 }
 
 + (id)editBuildTargetWindowControllerWithBuildTarget:(WCBuildTarget *)buildTarget; {
@@ -101,6 +110,7 @@
 static NSString *const kNameColumnIdentifier = @"name";
 static NSString *const kValueColumnIdentifier = @"value";
 static NSString *const kIconColumnIdentifier = @"icon";
+static NSString *const kPathColumnIdentifier = @"path";
 
 - (IBAction)newBuildDefine:(id)sender; {
 	WCBuildDefine *newBuildDefine = [WCBuildDefine buildDefine];
@@ -139,6 +149,52 @@ static NSString *const kIconColumnIdentifier = @"icon";
 	else
 		[[self definesArrayController] removeObjectsAtArrangedObjectIndexes:[[self definesArrayController] selectionIndexes]];
 }
+- (IBAction)newBuildInclude:(id)sender; {
+	NSOpenPanel *openPanel = [NSOpenPanel openPanel];
+	
+	[openPanel setCanChooseFiles:NO];
+	[openPanel setCanChooseDirectories:YES];
+	[openPanel setAllowsMultipleSelection:YES];
+	[openPanel setPrompt:LOCALIZED_STRING_ADD];
+	
+	[openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {
+		[openPanel orderOut:nil];
+		if (result == NSFileHandlingPanelCancelButton)
+			return;
+		
+		for (NSURL *directoryURL in [openPanel URLs]) {
+			WCBuildInclude *include = [WCBuildInclude buildIncludeWithDirectoryURL:directoryURL];
+			
+			[[[self buildTarget] mutableIncludes] addObject:include];
+		}
+	}];
+}
+- (IBAction)deleteBuildInclude:(id)sender; {
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCAlertsWarnBeforeDeletingBuildIncludesKey]) {
+		NSString *message;
+		if ([[[self includesArrayController] selectionIndexes] count] == 1)
+			message = [NSString stringWithFormat:NSLocalizedString(@"Delete the Build Include \"%@\"?", @"delete build include alert single include message format string"),[(WCBuildInclude *)[[[self includesArrayController] selectedObjects] lastObject] name]];
+		else
+			message = [NSString stringWithFormat:NSLocalizedString(@"Delete %lu Build Includes?", @"delete build include alert multiple includes message format string"),[[[self includesArrayController] selectionIndexes] count]];
+		
+		NSAlert *deleteBuildIncludesAlert = [NSAlert alertWithMessageText:message defaultButton:LOCALIZED_STRING_DELETE alternateButton:LOCALIZED_STRING_CANCEL otherButton:nil informativeTextWithFormat:NSLocalizedString(@"This operation cannot be undone.", @"This operation cannot be undone.")];
+		
+		[deleteBuildIncludesAlert setShowsSuppressionButton:YES];
+		
+		[[deleteBuildIncludesAlert suppressionButton] bind:NSValueBinding toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:[@"values." stringByAppendingString:WCAlertsWarnBeforeDeletingBuildIncludesKey] options:nil];
+		
+		[deleteBuildIncludesAlert beginSheetModalForWindow:[self window] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
+			[[alert suppressionButton] unbind:NSValueBinding];
+			[[alert window] orderOut:nil];
+			if (returnCode == NSAlertAlternateReturn)
+				return;
+			
+			[[self includesArrayController] removeObjectsAtArrangedObjectIndexes:[[self includesArrayController] selectionIndexes]];
+		}];
+	}
+	else
+		[[self includesArrayController] removeObjectsAtArrangedObjectIndexes:[[self includesArrayController] selectionIndexes]];
+}
 
 - (IBAction)chooseInputFile:(id)sender; {	
 	NSOpenPanel *openPanel = [NSOpenPanel openPanel];
@@ -171,8 +227,10 @@ static NSString *const kIconColumnIdentifier = @"icon";
 @synthesize nameTextField=_nameTextField;
 @synthesize definesArrayController=_definesArrayController;
 @synthesize definesTableView=_definesTableView;
-@synthesize chooseInputFileButton=_chooseInputFileButton;
 @synthesize definesSearchField=_definesSearchField;
+@synthesize includesTableView=_includesTableView;
+@synthesize includesSearchField=_includesSearchField;
+@synthesize includesArrayController=_includesArrayController;
 
 @synthesize buildTarget=_buildTarget;
 @synthesize chooseInputFileAccessoryViewController=_chooseInputFileAccessoryViewController;

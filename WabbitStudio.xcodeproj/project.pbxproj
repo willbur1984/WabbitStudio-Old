@@ -46,6 +46,12 @@
 		0711BB0814E9943C00EC9841 /* WCEditBuildTargetInputFileIconTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0711BB0714E9943C00EC9841 /* WCEditBuildTargetInputFileIconTransformer.m */; };
 		0711BB1014E9BAFB00EC9841 /* WCEditBuildTargetChooseInputFileAccessoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0711BB0E14E9BAFB00EC9841 /* WCEditBuildTargetChooseInputFileAccessoryView.xib */; };
 		0711BB1D14E9D46800EC9841 /* WCEditBuildTargetChooseInputFileAccessoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0711BB1B14E9D46600EC9841 /* WCEditBuildTargetChooseInputFileAccessoryViewController.m */; };
+		0711BB2514EC4A7100EC9841 /* WCBuildInclude.m in Sources */ = {isa = PBXBuildFile; fileRef = 0711BB2414EC4A6E00EC9841 /* WCBuildInclude.m */; };
+		0711BB2714EC570700EC9841 /* spasm in Resources */ = {isa = PBXBuildFile; fileRef = 0711BB2614EC570700EC9841 /* spasm */; };
+		0711BB2A14EC6D0C00EC9841 /* WCBuildIssue.m in Sources */ = {isa = PBXBuildFile; fileRef = 0711BB2914EC6D0A00EC9841 /* WCBuildIssue.m */; };
+		0711BB2D14EC7B0000EC9841 /* WCIssueContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0711BB2C14EC7AFD00EC9841 /* WCIssueContainer.m */; };
+		0711BB3014EC7E6300EC9841 /* WCBuildIssueContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0711BB2F14EC7E6100EC9841 /* WCBuildIssueContainer.m */; };
+		0711BB3414EC7F9100EC9841 /* WCIssueNavigatorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0711BB3314EC7F9100EC9841 /* WCIssueNavigatorViewController.m */; };
 		071306A414C8D0F800862E4D /* RSBookmark.m in Sources */ = {isa = PBXBuildFile; fileRef = 071306A314C8D0F800862E4D /* RSBookmark.m */; };
 		071306AE14C91C4C00862E4D /* DDHotKeyCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 071306AD14C91C4C00862E4D /* DDHotKeyCenter.m */; };
 		071306F114CA92EF00862E4D /* WCGroupContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 071306F014CA92EE00862E4D /* WCGroupContainer.m */; };
@@ -387,6 +393,17 @@
 		0711BB0F14E9BAFB00EC9841 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCEditBuildTargetChooseInputFileAccessoryView.xib; sourceTree = "<group>"; };
 		0711BB1A14E9D46600EC9841 /* WCEditBuildTargetChooseInputFileAccessoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCEditBuildTargetChooseInputFileAccessoryViewController.h; sourceTree = "<group>"; };
 		0711BB1B14E9D46600EC9841 /* WCEditBuildTargetChooseInputFileAccessoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCEditBuildTargetChooseInputFileAccessoryViewController.m; sourceTree = "<group>"; };
+		0711BB2314EC4A6D00EC9841 /* WCBuildInclude.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCBuildInclude.h; sourceTree = "<group>"; };
+		0711BB2414EC4A6E00EC9841 /* WCBuildInclude.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCBuildInclude.m; sourceTree = "<group>"; };
+		0711BB2614EC570700EC9841 /* spasm */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = spasm; sourceTree = "<group>"; };
+		0711BB2814EC6D0900EC9841 /* WCBuildIssue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCBuildIssue.h; sourceTree = "<group>"; };
+		0711BB2914EC6D0A00EC9841 /* WCBuildIssue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCBuildIssue.m; sourceTree = "<group>"; };
+		0711BB2B14EC7AFB00EC9841 /* WCIssueContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCIssueContainer.h; sourceTree = "<group>"; };
+		0711BB2C14EC7AFD00EC9841 /* WCIssueContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCIssueContainer.m; sourceTree = "<group>"; };
+		0711BB2E14EC7E5F00EC9841 /* WCBuildIssueContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCBuildIssueContainer.h; sourceTree = "<group>"; };
+		0711BB2F14EC7E6100EC9841 /* WCBuildIssueContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCBuildIssueContainer.m; sourceTree = "<group>"; };
+		0711BB3214EC7F9100EC9841 /* WCIssueNavigatorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCIssueNavigatorViewController.h; sourceTree = "<group>"; };
+		0711BB3314EC7F9100EC9841 /* WCIssueNavigatorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCIssueNavigatorViewController.m; sourceTree = "<group>"; };
 		071306A214C8D0F800862E4D /* RSBookmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSBookmark.h; sourceTree = "<group>"; };
 		071306A314C8D0F800862E4D /* RSBookmark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSBookmark.m; sourceTree = "<group>"; };
 		071306AC14C91C4C00862E4D /* DDHotKeyCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDHotKeyCenter.h; sourceTree = "<group>"; };
@@ -1078,6 +1095,21 @@
 			path = External;
 			sourceTree = "<group>";
 		};
+		0711BB3114EC7F1800EC9841 /* Issue */ = {
+			isa = PBXGroup;
+			children = (
+				0711BB2814EC6D0900EC9841 /* WCBuildIssue.h */,
+				0711BB2914EC6D0A00EC9841 /* WCBuildIssue.m */,
+				0711BB2B14EC7AFB00EC9841 /* WCIssueContainer.h */,
+				0711BB2C14EC7AFD00EC9841 /* WCIssueContainer.m */,
+				0711BB2E14EC7E5F00EC9841 /* WCBuildIssueContainer.h */,
+				0711BB2F14EC7E6100EC9841 /* WCBuildIssueContainer.m */,
+				0711BB3214EC7F9100EC9841 /* WCIssueNavigatorViewController.h */,
+				0711BB3314EC7F9100EC9841 /* WCIssueNavigatorViewController.m */,
+			);
+			name = Issue;
+			sourceTree = "<group>";
+		};
 		07154F4C14D40AB800F57668 /* Project */ = {
 			isa = PBXGroup;
 			children = (
@@ -1190,6 +1222,7 @@
 		071ECCC914A4233C002409F8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				0711BB2614EC570700EC9841 /* spasm */,
 				07CC8E8F14E7BFF700B303C1 /* Symbol.png */,
 				07CC8E8D14E7B8CA00B303C1 /* Success.pdf */,
 				07CC8E8B14E7B65700B303C1 /* Calculator16x16.png */,
@@ -1494,6 +1527,7 @@
 			isa = PBXGroup;
 			children = (
 				0778853414C49ABB00605F5D /* WCNavigatorModule.h */,
+				0711BB3114EC7F1800EC9841 /* Issue */,
 				0779069F14E0DD05006C16EF /* Search */,
 				0765361214CD107E004D72D1 /* Project */,
 			);
@@ -1733,6 +1767,8 @@
 				07CC8E9E14E8538B00B303C1 /* WCEditBuildTargetIncludesTableView.m */,
 				0711BB0014E9835D00EC9841 /* WCBuildDefine.h */,
 				0711BB0114E9835D00EC9841 /* WCBuildDefine.m */,
+				0711BB2314EC4A6D00EC9841 /* WCBuildInclude.h */,
+				0711BB2414EC4A6E00EC9841 /* WCBuildInclude.m */,
 				0711BAFC14E982E700EC9841 /* WCEditBuildTargetDefinesFormatter.h */,
 				0711BAFD14E982E700EC9841 /* WCEditBuildTargetDefinesFormatter.m */,
 				0711BB0314E98DB000EC9841 /* WCEditBuildTargetDefineValuesFormatter.h */,
@@ -1955,6 +1991,7 @@
 				07CC8E9014E7BFF700B303C1 /* Symbol.png in Resources */,
 				07CC8E9914E849BC00B303C1 /* WCEditBuildTargetWindow.xib in Resources */,
 				0711BB1014E9BAFB00EC9841 /* WCEditBuildTargetChooseInputFileAccessoryView.xib in Resources */,
+				0711BB2714EC570700EC9841 /* spasm in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2160,6 +2197,11 @@
 				0711BB0514E98DB000EC9841 /* WCEditBuildTargetDefineValuesFormatter.m in Sources */,
 				0711BB0814E9943C00EC9841 /* WCEditBuildTargetInputFileIconTransformer.m in Sources */,
 				0711BB1D14E9D46800EC9841 /* WCEditBuildTargetChooseInputFileAccessoryViewController.m in Sources */,
+				0711BB2514EC4A7100EC9841 /* WCBuildInclude.m in Sources */,
+				0711BB2A14EC6D0C00EC9841 /* WCBuildIssue.m in Sources */,
+				0711BB2D14EC7B0000EC9841 /* WCIssueContainer.m in Sources */,
+				0711BB3014EC7E6300EC9841 /* WCBuildIssueContainer.m in Sources */,
+				0711BB3414EC7F9100EC9841 /* WCIssueNavigatorViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
