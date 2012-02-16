@@ -24,6 +24,7 @@ typedef enum _WCBuildIssueType {
 @property (readwrite,assign,nonatomic) NSRange range;
 @property (readonly,nonatomic) NSString *message;
 @property (readonly,nonatomic) NSString *code;
+@property (readonly,nonatomic) NSImage *icon;
 
 + (id)buildIssueOfType:(WCBuildIssueType)type range:(NSRange)range message:(NSString *)message code:(NSString *)code;
 - (id)initWithType:(WCBuildIssueType)type range:(NSRange)range message:(NSString *)message code:(NSString *)code;

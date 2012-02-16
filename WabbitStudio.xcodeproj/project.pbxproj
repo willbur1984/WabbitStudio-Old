@@ -52,6 +52,13 @@
 		0711BB2D14EC7B0000EC9841 /* WCIssueContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0711BB2C14EC7AFD00EC9841 /* WCIssueContainer.m */; };
 		0711BB3014EC7E6300EC9841 /* WCBuildIssueContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0711BB2F14EC7E6100EC9841 /* WCBuildIssueContainer.m */; };
 		0711BB3414EC7F9100EC9841 /* WCIssueNavigatorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0711BB3314EC7F9100EC9841 /* WCIssueNavigatorViewController.m */; };
+		0711BB3714ED6C3D00EC9841 /* WCIssueNavigatorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0711BB3514ED6C3D00EC9841 /* WCIssueNavigatorView.xib */; };
+		0711BB3A14ED6DDF00EC9841 /* WCIssueNavigatorOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0711BB3914ED6DDF00EC9841 /* WCIssueNavigatorOutlineView.m */; };
+		0711BB3D14ED72FC00EC9841 /* WCIssueNavigatorOutlineRowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0711BB3C14ED72FB00EC9841 /* WCIssueNavigatorOutlineRowView.m */; };
+		0711BB4214ED850400EC9841 /* Error.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 0711BB3E14ED850400EC9841 /* Error.pdf */; };
+		0711BB4314ED850400EC9841 /* ErrorMultiple.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 0711BB3F14ED850400EC9841 /* ErrorMultiple.pdf */; };
+		0711BB4414ED850400EC9841 /* Warning.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 0711BB4014ED850400EC9841 /* Warning.pdf */; };
+		0711BB4514ED850400EC9841 /* WarningMultiple.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 0711BB4114ED850400EC9841 /* WarningMultiple.pdf */; };
 		071306A414C8D0F800862E4D /* RSBookmark.m in Sources */ = {isa = PBXBuildFile; fileRef = 071306A314C8D0F800862E4D /* RSBookmark.m */; };
 		071306AE14C91C4C00862E4D /* DDHotKeyCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 071306AD14C91C4C00862E4D /* DDHotKeyCenter.m */; };
 		071306F114CA92EF00862E4D /* WCGroupContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 071306F014CA92EE00862E4D /* WCGroupContainer.m */; };
@@ -404,6 +411,15 @@
 		0711BB2F14EC7E6100EC9841 /* WCBuildIssueContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCBuildIssueContainer.m; sourceTree = "<group>"; };
 		0711BB3214EC7F9100EC9841 /* WCIssueNavigatorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCIssueNavigatorViewController.h; sourceTree = "<group>"; };
 		0711BB3314EC7F9100EC9841 /* WCIssueNavigatorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCIssueNavigatorViewController.m; sourceTree = "<group>"; };
+		0711BB3614ED6C3D00EC9841 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCIssueNavigatorView.xib; sourceTree = "<group>"; };
+		0711BB3814ED6DDE00EC9841 /* WCIssueNavigatorOutlineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCIssueNavigatorOutlineView.h; sourceTree = "<group>"; };
+		0711BB3914ED6DDF00EC9841 /* WCIssueNavigatorOutlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCIssueNavigatorOutlineView.m; sourceTree = "<group>"; };
+		0711BB3B14ED72FB00EC9841 /* WCIssueNavigatorOutlineRowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCIssueNavigatorOutlineRowView.h; sourceTree = "<group>"; };
+		0711BB3C14ED72FB00EC9841 /* WCIssueNavigatorOutlineRowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCIssueNavigatorOutlineRowView.m; sourceTree = "<group>"; };
+		0711BB3E14ED850400EC9841 /* Error.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Error.pdf; sourceTree = "<group>"; };
+		0711BB3F14ED850400EC9841 /* ErrorMultiple.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = ErrorMultiple.pdf; sourceTree = "<group>"; };
+		0711BB4014ED850400EC9841 /* Warning.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Warning.pdf; sourceTree = "<group>"; };
+		0711BB4114ED850400EC9841 /* WarningMultiple.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = WarningMultiple.pdf; sourceTree = "<group>"; };
 		071306A214C8D0F800862E4D /* RSBookmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSBookmark.h; sourceTree = "<group>"; };
 		071306A314C8D0F800862E4D /* RSBookmark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSBookmark.m; sourceTree = "<group>"; };
 		071306AC14C91C4C00862E4D /* DDHotKeyCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDHotKeyCenter.h; sourceTree = "<group>"; };
@@ -946,6 +962,7 @@
 				0718E98714E7530200F9696E /* WCManageBuildTargetsWindow.xib */,
 				07CC8E9714E849BC00B303C1 /* WCEditBuildTargetWindow.xib */,
 				0711BB0E14E9BAFB00EC9841 /* WCEditBuildTargetChooseInputFileAccessoryView.xib */,
+				0711BB3514ED6C3D00EC9841 /* WCIssueNavigatorView.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -1106,6 +1123,10 @@
 				0711BB2F14EC7E6100EC9841 /* WCBuildIssueContainer.m */,
 				0711BB3214EC7F9100EC9841 /* WCIssueNavigatorViewController.h */,
 				0711BB3314EC7F9100EC9841 /* WCIssueNavigatorViewController.m */,
+				0711BB3814ED6DDE00EC9841 /* WCIssueNavigatorOutlineView.h */,
+				0711BB3914ED6DDF00EC9841 /* WCIssueNavigatorOutlineView.m */,
+				0711BB3B14ED72FB00EC9841 /* WCIssueNavigatorOutlineRowView.h */,
+				0711BB3C14ED72FB00EC9841 /* WCIssueNavigatorOutlineRowView.m */,
 			);
 			name = Issue;
 			sourceTree = "<group>";
@@ -1222,6 +1243,10 @@
 		071ECCC914A4233C002409F8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				0711BB3E14ED850400EC9841 /* Error.pdf */,
+				0711BB3F14ED850400EC9841 /* ErrorMultiple.pdf */,
+				0711BB4014ED850400EC9841 /* Warning.pdf */,
+				0711BB4114ED850400EC9841 /* WarningMultiple.pdf */,
 				0711BB2614EC570700EC9841 /* spasm */,
 				07CC8E8F14E7BFF700B303C1 /* Symbol.png */,
 				07CC8E8D14E7B8CA00B303C1 /* Success.pdf */,
@@ -1992,6 +2017,11 @@
 				07CC8E9914E849BC00B303C1 /* WCEditBuildTargetWindow.xib in Resources */,
 				0711BB1014E9BAFB00EC9841 /* WCEditBuildTargetChooseInputFileAccessoryView.xib in Resources */,
 				0711BB2714EC570700EC9841 /* spasm in Resources */,
+				0711BB3714ED6C3D00EC9841 /* WCIssueNavigatorView.xib in Resources */,
+				0711BB4214ED850400EC9841 /* Error.pdf in Resources */,
+				0711BB4314ED850400EC9841 /* ErrorMultiple.pdf in Resources */,
+				0711BB4414ED850400EC9841 /* Warning.pdf in Resources */,
+				0711BB4514ED850400EC9841 /* WarningMultiple.pdf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2202,6 +2232,8 @@
 				0711BB2D14EC7B0000EC9841 /* WCIssueContainer.m in Sources */,
 				0711BB3014EC7E6300EC9841 /* WCBuildIssueContainer.m in Sources */,
 				0711BB3414EC7F9100EC9841 /* WCIssueNavigatorViewController.m in Sources */,
+				0711BB3A14ED6DDF00EC9841 /* WCIssueNavigatorOutlineView.m in Sources */,
+				0711BB3D14ED72FC00EC9841 /* WCIssueNavigatorOutlineRowView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2239,6 +2271,14 @@
 				0711BB0F14E9BAFB00EC9841 /* en */,
 			);
 			name = WCEditBuildTargetChooseInputFileAccessoryView.xib;
+			sourceTree = "<group>";
+		};
+		0711BB3514ED6C3D00EC9841 /* WCIssueNavigatorView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0711BB3614ED6C3D00EC9841 /* en */,
+			);
+			name = WCIssueNavigatorView.xib;
 			sourceTree = "<group>";
 		};
 		07154F5314D40B3C00F57668 /* WCProjectView.xib */ = {

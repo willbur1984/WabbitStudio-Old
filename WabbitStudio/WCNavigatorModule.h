@@ -15,4 +15,9 @@
 
 - (NSArray *)selectedModelObjects;
 - (void)setSelectedModelObjects:(NSArray *)modelObjects;
+
+@optional
+- (NSArray *)selectedObjectsAndClickedObject:(id *)clickedObject;
+
+- (NSArray *)selectedModelObjectsAndClickedObject:(id *)clickedObject;
 @end

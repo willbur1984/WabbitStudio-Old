@@ -315,7 +315,7 @@ static const CGFloat kMainCellHeight = 20.0;
 #pragma mark WCNavigatorModule
 - (NSArray *)selectedObjects {
 	NSInteger clickedRow = [[self outlineView] clickedRow];
-	NSMutableArray *retval = [NSMutableArray array];
+	NSMutableArray *retval = [NSMutableArray arrayWithCapacity:[[[self outlineView] selectedRowIndexes] count]];
 	if (clickedRow == -1 || [[[self outlineView] selectedRowIndexes] containsIndex:clickedRow]) {
 		[retval addObjectsFromArray:[[self treeController] selectedRepresentedObjects]];
 	}
@@ -330,19 +330,7 @@ static const CGFloat kMainCellHeight = 20.0;
 	[[self treeController] setSelectedRepresentedObjects:objects];
 }
 - (NSArray *)selectedModelObjects; {
-	NSInteger clickedRow = [[self outlineView] clickedRow];
-	NSMutableArray *retval = [NSMutableArray arrayWithCapacity:[[[self outlineView] selectedRowIndexes] count]];
-	
-	if (clickedRow == -1 || [[[self outlineView] selectedRowIndexes] containsIndex:clickedRow]) {
-		[retval addObjectsFromArray:[[self treeController] selectedModelObjects]];
-	}
-	else {
-		id clickedModelObject = [[[[self outlineView] itemAtRow:clickedRow] representedObject] representedObject];
-		
-		[retval addObject:clickedModelObject];
-	}
-	
-	return [[retval copy] autorelease];
+	return [[self selectedObjects] valueForKey:@"representedObject"];
 }
 - (void)setSelectedModelObjects:(NSArray *)modelObjects; {
 	[[self treeController] setSelectedModelObjects:modelObjects];

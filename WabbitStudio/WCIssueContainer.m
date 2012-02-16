@@ -9,8 +9,13 @@
 #import "WCIssueContainer.h"
 #import "WCBuildIssue.h"
 #import "WCProject.h"
+#import "WCBuildIssueContainer.h"
 
 @implementation WCIssueContainer
+- (BOOL)isLeafNode {
+	return NO;
+}
+
 + (id)issueContainerWithFile:(WCFile *)file; {
 	return [[(WCIssueContainer *)[[self class] alloc] initWithFile:file] autorelease];
 }
@@ -24,12 +29,35 @@
 @dynamic statusString;
 - (NSString *)statusString {
 	if ([[self representedObject] isKindOfClass:[WCProject class]]) {
-		return nil;
+		NSUInteger errorCount = 0, warningCount = 0;
+		
+		for (id object in [self childNodes]) {
+			if ([object isKindOfClass:[WCIssueContainer class]]) {
+				for (WCBuildIssueContainer *container in [object childNodes]) {
+					WCBuildIssueType type = [(WCBuildIssue *)[container representedObject] type];
+					
+					switch (type) {
+						case WCBuildIssueTypeError:
+							errorCount++;
+							break;
+						case WCBuildIssueTypeWarning:
+							warningCount++;
+							break;
+						default:
+							break;
+					}
+				}
+			}
+			else
+				errorCount++;
+		}
+		
+		return [NSString stringWithFormat:NSLocalizedString(@"%lu error(s) total, %lu warning(s) total", @"issue container project status string format string"),errorCount,warningCount];
 	}
 	else {
 		NSUInteger errorCount = 0, warningCount = 0;
 		
-		for (WCIssueContainer *container in [self childNodes]) {
+		for (WCBuildIssueContainer *container in [self childNodes]) {
 			WCBuildIssueType type = [(WCBuildIssue *)[container representedObject] type];
 			
 			switch (type) {

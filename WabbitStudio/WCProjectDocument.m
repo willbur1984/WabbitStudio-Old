@@ -464,10 +464,12 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 }
 @dynamic buildController;
 - (WCBuildController *)buildController {
-	if (!_buildController)
+	if (!_buildController) {
 		_buildController = [[WCBuildController alloc] initWithProjectDocument:self];
+	}
 	return _buildController;
 }
+
 #pragma mark Notifications
 - (void)_projectNavigatorDidAddNewGroup:(NSNotification *)note {
 	WCGroupContainer *newGroupContainer = [[note userInfo] objectForKey:WCProjectNavigatorDidAddNewGroupNotificationNewGroupUserInfoKey];

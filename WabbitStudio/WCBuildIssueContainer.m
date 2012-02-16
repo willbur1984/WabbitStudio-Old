@@ -9,6 +9,10 @@
 #import "WCBuildIssueContainer.h"
 
 @implementation WCBuildIssueContainer
+- (BOOL)isLeafNode {
+	return YES;
+}
+
 + (id)buildIssueContainerWithBuildIssue:(WCBuildIssue *)buildIssue; {
 	return [[[[self class] alloc] initWithBuildIssue:buildIssue] autorelease];
 }

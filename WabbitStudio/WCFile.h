@@ -25,7 +25,9 @@ extern NSString *const WCFileUUIDKey;
 	RSFileReference *_fileReference;
 	struct {
 		unsigned int edited:1;
-		unsigned int RESERVED:31;
+		unsigned int errors:1;
+		unsigned int warnings:1;
+		unsigned int RESERVED:29;
 	} _fileFlags;
 }
 @property (readwrite,assign,nonatomic) id <WCFileDelegate> delegate;
@@ -39,6 +41,9 @@ extern NSString *const WCFileUUIDKey;
 @property (readonly,nonatomic,getter = isSourceFile) BOOL sourceFile;
 @property (readonly,nonatomic) NSURL *parentDirectoryURL;
 @property (readonly,nonatomic) NSString *UUID;
+@property (readwrite,assign,nonatomic,getter = hasErrors) BOOL errors;
+@property (readwrite,assign,nonatomic,getter = hasWarnings) BOOL warnings;
+@property (readonly,nonatomic) NSImage *issueIcon;
 
 + (id)fileWithFileURL:(NSURL *)fileURL;
 - (id)initWithFileURL:(NSURL *)fileURL;

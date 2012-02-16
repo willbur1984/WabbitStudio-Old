@@ -444,7 +444,6 @@
 								<string key="NSFrame">{{8, 1}, {464, 19}}</string>
 								<reference key="NSSuperview" ref="625945370"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:918</string>
 								<bool key="NSEnabled">YES</bool>
 								<object class="NSSearchFieldCell" key="NSCell" id="596207671">
@@ -527,7 +526,7 @@
 										<string key="NSFrameSize">{480, 178}</string>
 										<reference key="NSSuperview" ref="911953141"/>
 										<reference key="NSWindow"/>
-										<reference key="NSNextKeyView" ref="995375800"/>
+										<reference key="NSNextKeyView" ref="15158038"/>
 										<string key="NSReuseIdentifierKey">_NS:1703</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="_NSCornerView" key="NSCornerView">
@@ -643,7 +642,7 @@
 						<string key="NSFrame">{{0, 23}, {480, 178}}</string>
 						<reference key="NSSuperview" ref="1005"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="15158038"/>
+						<reference key="NSNextKeyView" ref="911953141"/>
 						<string key="NSReuseIdentifierKey">_NS:1699</string>
 						<int key="NSsFlags">133648</int>
 						<reference key="NSVScroller" ref="799003375"/>

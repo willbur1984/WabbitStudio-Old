@@ -14,6 +14,7 @@
 #import "WCProject.h"
 #import "WCTabViewController.h"
 #import "WCSearchNavigatorViewController.h"
+#import "WCIssueNavigatorViewController.h"
 
 #import <PSMTabBarControl/PSMTabBarControl.h>
 #import <Quartz/Quartz.h>
@@ -26,6 +27,7 @@
 #endif
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[_tabViewController release];
+	[_issueNavigatorViewController release];
 	[_searchNavigatorViewController release];
 	[_projectNavigatorViewController release];
 	[_navigatorItemDictionaries release];
@@ -117,6 +119,8 @@ static const CGFloat kRightSubviewMinWidth = 400.0;
 		return [[self projectNavigatorViewController] view];
 	else if ([itemIdentifier isEqualToString:@"search"])
 		return [[self searchNavigatorViewController] view];
+	else if ([itemIdentifier isEqualToString:@"issue"])
+		return [[self issueNavigatorViewController] view];
 	return nil;
 }
 
@@ -219,8 +223,14 @@ static const CGFloat kRightSubviewMinWidth = 400.0;
 	}
 	return _searchNavigatorViewController;
 }
+@dynamic issueNavigatorViewController;
+- (WCIssueNavigatorViewController *)issueNavigatorViewController {
+	if (!_issueNavigatorViewController)
+		_issueNavigatorViewController = [[WCIssueNavigatorViewController alloc] initWithProjectDocument:[self document]];
+	return _issueNavigatorViewController;
+}
 @synthesize tabViewController=_tabViewController;
-
+#pragma mark Notifications
 - (void)_tabViewControllerDidCloseTab:(NSNotification *)note {
 	[self synchronizeWindowTitleWithDocumentName];
 }

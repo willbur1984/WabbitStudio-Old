@@ -13,12 +13,20 @@
 #import "NSAlert-OAExtensions.h"
 #import "WCFile.h"
 #import "NSURL+RSExtensions.h"
+#import "WCSourceFileDocument.h"
+#import "WCSourceTextStorage.h"
+#import "NSString+RSExtensions.h"
+#import "WCBuildIssue.h"
+
+NSString *const WCBuildControllerDidFinishBuildingNotification = @"WCBuildControllerDidFinishBuildingNotification";
 
 @interface WCBuildController ()
 @property (readwrite,assign,nonatomic,getter = isBuilding) BOOL building;
 @property (readwrite,assign,nonatomic) BOOL runAfterBuilding;
 @property (readonly,nonatomic) NSMutableString *output;
 @property (readwrite,retain,nonatomic) NSTask *task;
+@property (readwrite,retain,nonatomic) NSMapTable *filesToBuildIssuesSortedByLocation;
+@property (readwrite,copy,nonatomic) NSArray *filesWithBuildIssuesSortedByName;
 
 - (void)_processOutput;
 @end
@@ -28,6 +36,8 @@
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
+	[_filesToBuildIssuesSortedByLocation release];
+	[_filesWithBuildIssuesSortedByName release];
 	[_task release];
 	[_output release];
 	_projectDocument = nil;
@@ -171,9 +181,93 @@
 }
 @synthesize output=_output;
 @synthesize task=_task;
+@synthesize filesWithBuildIssuesSortedByName=_filesWithBuildIssuesSortedByName;
+@synthesize filesToBuildIssuesSortedByLocation=_filesToBuildIssuesSortedByLocation;
 
-- (void)_processOutput; {
+- (void)_processOutput; {	
+	NSString *output = [[[self output] copy] autorelease];
+	NSDictionary *filePathsToFiles = [[self projectDocument] filePathsToFiles];
+	NSMapTable *filesToSourceFileDocuments = [[self projectDocument] filesToSourceFileDocuments];
 	
+	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+		NSRegularExpression *messageRegex = [[[NSRegularExpression alloc] initWithPattern:@"\\s*([ .A-Za-z0-9_/]+):([0-9]+):\\s*(error|warning)\\s+([A-Za-z0-9]+):\\s*(.*)" options:0 error:NULL] autorelease];
+		NSMutableArray *files = [NSMutableArray arrayWithCapacity:0];
+		NSMapTable *filesToBuildIssues = [NSMapTable mapTableWithWeakToStrongObjects];
+		
+		[output enumerateSubstringsInRange:NSMakeRange(0, [output length]) options:NSStringEnumerationByLines usingBlock:^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
+			NSTextCheckingResult *result = [messageRegex firstMatchInString:substring options:0 range:NSMakeRange(0, [substring length])];
+			
+			if (!result)
+				return;
+			
+			NSString *filePath = [substring substringWithRange:[result rangeAtIndex:1]];
+			WCFile *file = [filePathsToFiles objectForKey:filePath];
+			
+			if (!file)
+				return;
+			
+			NSUInteger lineNumber = [[substring substringWithRange:[result rangeAtIndex:2]] integerValue] - 1;
+			NSTextStorage *textStorage = [[filesToSourceFileDocuments objectForKey:file] textStorage];
+			NSRange range = NSMakeRange([[textStorage string] rangeForLineNumber:lineNumber].location, 0);
+			NSString *issueType = [[substring substringWithRange:[result rangeAtIndex:3]] lowercaseString];
+			NSString *message = [substring substringWithRange:[result rangeAtIndex:5]];
+			NSString *code = [substring substringWithRange:[result rangeAtIndex:4]];
+			WCBuildIssue *buildIssue;
+			
+			if ([issueType isEqualToString:@"error"])
+				buildIssue = [WCBuildIssue buildIssueOfType:WCBuildIssueTypeError range:range message:message code:code];
+			else
+				buildIssue = [WCBuildIssue buildIssueOfType:WCBuildIssueTypeWarning range:range message:message code:code];
+			
+			NSMutableArray *buildIssues = [filesToBuildIssues objectForKey:file];
+			
+			if (!buildIssues) {
+				buildIssues = [NSMutableArray arrayWithCapacity:0];
+				
+				[filesToBuildIssues setObject:buildIssues forKey:file];
+				[files addObject:file];
+			}
+			
+			[buildIssues addObject:buildIssue];
+		}];
+		
+		[files sortUsingDescriptors:[NSArray arrayWithObjects:[NSSortDescriptor sortDescriptorWithKey:@"fileName" ascending:YES selector:@selector(localizedStandardCompare:)], nil]];
+		
+		for (NSMutableArray *buildIssues in [filesToBuildIssues objectEnumerator])
+			[buildIssues sortUsingDescriptors:[NSArray arrayWithObjects:[NSSortDescriptor sortDescriptorWithKey:@"range" ascending:YES comparator:^NSComparisonResult(NSValue *obj1, NSValue *obj2) {
+				if ([obj1 rangeValue].location < [obj2 rangeValue].location)
+					return NSOrderedAscending;
+				else if ([obj1 rangeValue].location > [obj2 rangeValue].location)
+					return NSOrderedDescending;
+				return NSOrderedSame;
+			}], nil]];
+		
+		dispatch_async(dispatch_get_main_queue(), ^{
+			for (WCFile *file in [self filesWithBuildIssuesSortedByName]) {
+				[file setErrors:NO];
+				[file setWarnings:NO];
+			}
+			
+			[self setFilesToBuildIssuesSortedByLocation:filesToBuildIssues];
+			[self setFilesWithBuildIssuesSortedByName:files];
+			
+			for (WCFile *file in [self filesWithBuildIssuesSortedByName]) {
+				for (WCBuildIssue *issue in [[self filesToBuildIssuesSortedByLocation] objectForKey:file]) {
+					if ([issue type] == WCBuildIssueTypeError) {
+						[file setErrors:YES];
+						break;
+					}
+					else if ([issue type] == WCBuildIssueTypeWarning)
+						[file setWarnings:YES];
+				}
+			}
+			
+			[[NSNotificationCenter defaultCenter] postNotificationName:WCBuildControllerDidFinishBuildingNotification object:self];
+		});
+		
+		[pool release];
+	});
 }
 
 - (void)_readDataFromTask:(NSNotification *)note {
@@ -198,6 +292,8 @@
 		}
 		
 		[self setTask:nil];
+		
+		[self _processOutput];
 	}
 }
 

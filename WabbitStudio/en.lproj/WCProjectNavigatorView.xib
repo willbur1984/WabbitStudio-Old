@@ -79,7 +79,6 @@
 								</object>
 								<string key="NSFrame">{{75, 5}, {7, 13}}</string>
 								<reference key="NSSuperview" ref="699294097"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="738087164"/>
 								<bool key="NSEnabled">YES</bool>
 								<object class="NSImageCell" key="NSCell" id="755991209">
@@ -101,7 +100,6 @@
 								<int key="NSvFlags">260</int>
 								<string key="NSFrame">{{25, 0}, {25, 23}}</string>
 								<reference key="NSSuperview" ref="699294097"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="569095477"/>
 								<string key="NSReuseIdentifierKey">_NS:2510</string>
 								<bool key="NSEnabled">YES</bool>
@@ -133,7 +131,6 @@
 								<int key="NSvFlags">260</int>
 								<string key="NSFrame">{{49, -1}, {25, 23}}</string>
 								<reference key="NSSuperview" ref="699294097"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="907033091"/>
 								<string key="NSReuseIdentifierKey">_NS:868</string>
 								<bool key="NSEnabled">YES</bool>
@@ -348,7 +345,6 @@
 								<int key="NSvFlags">260</int>
 								<string key="NSFrameSize">{25, 23}</string>
 								<reference key="NSSuperview" ref="699294097"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="826780712"/>
 								<string key="NSReuseIdentifierKey">_NS:868</string>
 								<bool key="NSEnabled">YES</bool>
@@ -423,7 +419,7 @@
 								<int key="NSvFlags">258</int>
 								<string key="NSFrame">{{90, 1}, {382, 19}}</string>
 								<reference key="NSSuperview" ref="699294097"/>
-								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:918</string>
 								<bool key="NSEnabled">YES</bool>
 								<object class="NSSearchFieldCell" key="NSCell" id="95101385">
@@ -501,7 +497,6 @@
 						</object>
 						<string key="NSFrameSize">{480, 23}</string>
 						<reference key="NSSuperview" ref="1005"/>
-						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="113611251"/>
 						<string key="NSReuseIdentifierKey">_NS:1192</string>
 						<string key="NSClassName">RSTopBorderedGlassGradientView</string>
@@ -521,8 +516,7 @@
 										<int key="NSvFlags">4352</int>
 										<string key="NSFrameSize">{480, 249}</string>
 										<reference key="NSSuperview" ref="957532468"/>
-										<reference key="NSWindow"/>
-										<reference key="NSNextKeyView" ref="1006010904"/>
+										<reference key="NSNextKeyView" ref="747169050"/>
 										<string key="NSReuseIdentifierKey">_NS:1703</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="_NSCornerView" key="NSCornerView">
@@ -617,7 +611,6 @@
 								</object>
 								<string key="NSFrameSize">{480, 249}</string>
 								<reference key="NSSuperview" ref="997623115"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="120782135"/>
 								<string key="NSReuseIdentifierKey">_NS:1701</string>
 								<reference key="NSDocView" ref="120782135"/>
@@ -629,7 +622,6 @@
 								<int key="NSvFlags">-2147483392</int>
 								<string key="NSFrame">{{224, 17}, {15, 102}}</string>
 								<reference key="NSSuperview" ref="997623115"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="699294097"/>
 								<string key="NSReuseIdentifierKey">_NS:1726</string>
 								<reference key="NSTarget" ref="997623115"/>
@@ -641,7 +633,6 @@
 								<int key="NSvFlags">-2147483392</int>
 								<string key="NSFrame">{{-100, -100}, {240, 15}}</string>
 								<reference key="NSSuperview" ref="997623115"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="957532468"/>
 								<string key="NSReuseIdentifierKey">_NS:1728</string>
 								<int key="NSsFlags">1</int>
@@ -652,8 +643,7 @@
 						</object>
 						<string key="NSFrame">{{0, 23}, {480, 249}}</string>
 						<reference key="NSSuperview" ref="1005"/>
-						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="957532468"/>
+						<reference key="NSNextKeyView" ref="1006010904"/>
 						<string key="NSReuseIdentifierKey">_NS:1699</string>
 						<int key="NSsFlags">133648</int>
 						<reference key="NSVScroller" ref="93966950"/>
@@ -664,7 +654,6 @@
 				</object>
 				<string key="NSFrameSize">{480, 272}</string>
 				<reference key="NSSuperview"/>
-				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="997623115"/>
 				<string key="NSClassName">NSView</string>
 			</object>
@@ -1787,312 +1776,7 @@
 			<nil key="sourceID"/>
 			<int key="maxID">103</int>
 		</object>
-		<object class="IBClassDescriber" key="IBDocument.Classes">
-			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
-				<bool key="EncodedWithXMLCoder">YES</bool>
-				<object class="IBPartialClassDescription">
-					<string key="className">JAViewController</string>
-					<string key="superclassName">NSViewController</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/JAViewController.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">NSView</string>
-					<object class="NSMutableDictionary" key="outlets">
-						<string key="NS.key.0">viewController</string>
-						<string key="NS.object.0">NSViewController</string>
-					</object>
-					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<string key="NS.key.0">viewController</string>
-						<object class="IBToOneOutletInfo" key="NS.object.0">
-							<string key="name">viewController</string>
-							<string key="candidateClassName">NSViewController</string>
-						</object>
-					</object>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/NSView.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">RSBorderlessButtonCell</string>
-					<string key="superclassName">NSButtonCell</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/RSBorderlessButtonCell.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">RSBorderlessPopUpButtonCell</string>
-					<string key="superclassName">NSPopUpButtonCell</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/RSBorderlessPopUpButtonCell.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">RSGlassGradientView</string>
-					<string key="superclassName">NSView</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/RSGlassGradientView.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">RSOutlineView</string>
-					<string key="superclassName">NSOutlineView</string>
-					<object class="NSMutableDictionary" key="outlets">
-						<string key="NS.key.0">delegate</string>
-						<string key="NS.object.0">id</string>
-					</object>
-					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<string key="NS.key.0">delegate</string>
-						<object class="IBToOneOutletInfo" key="NS.object.0">
-							<string key="name">delegate</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</object>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/RSOutlineView.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">RSRaisedBackgroundTextFieldCell</string>
-					<string key="superclassName">NSTextFieldCell</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/RSRaisedBackgroundTextFieldCell.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">RSTopBorderedGlassGradientView</string>
-					<string key="superclassName">RSGlassGradientView</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/RSTopBorderedGlassGradientView.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">WCProjectNavigatorCellView</string>
-					<string key="superclassName">NSTableCellView</string>
-					<object class="NSMutableDictionary" key="outlets">
-						<string key="NS.key.0">projectNavigatorViewController</string>
-						<string key="NS.object.0">WCProjectNavigatorViewController</string>
-					</object>
-					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<string key="NS.key.0">projectNavigatorViewController</string>
-						<object class="IBToOneOutletInfo" key="NS.object.0">
-							<string key="name">projectNavigatorViewController</string>
-							<string key="candidateClassName">WCProjectNavigatorViewController</string>
-						</object>
-					</object>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/WCProjectNavigatorCellView.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">WCProjectNavigatorOutlineView</string>
-					<string key="superclassName">RSOutlineView</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/WCProjectNavigatorOutlineView.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">WCProjectNavigatorTreeController</string>
-					<string key="superclassName">NSTreeController</string>
-					<object class="NSMutableDictionary" key="outlets">
-						<string key="NS.key.0">projectNavigatorViewController</string>
-						<string key="NS.object.0">WCProjectNavigatorViewController</string>
-					</object>
-					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<string key="NS.key.0">projectNavigatorViewController</string>
-						<object class="IBToOneOutletInfo" key="NS.object.0">
-							<string key="name">projectNavigatorViewController</string>
-							<string key="candidateClassName">WCProjectNavigatorViewController</string>
-						</object>
-					</object>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/WCProjectNavigatorTreeController.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">WCProjectNavigatorViewController</string>
-					<string key="superclassName">JAViewController</string>
-					<object class="NSMutableDictionary" key="actions">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSArray" key="dict.sortedKeys">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>addFilesToProject:</string>
-							<string>delete:</string>
-							<string>filter:</string>
-							<string>hideFilterOptions:</string>
-							<string>moveFocusToNextArea:</string>
-							<string>moveFocusToPreviousArea:</string>
-							<string>newGroup:</string>
-							<string>newGroupFromSelection:</string>
-							<string>openInSeparateEditor:</string>
-							<string>openWithExternalEditor:</string>
-							<string>rename:</string>
-							<string>showFilterOptions:</string>
-							<string>showInFinder:</string>
-							<string>toggleFilterOptions:</string>
-							<string>ungroupSelection:</string>
-						</object>
-						<object class="NSMutableArray" key="dict.values">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-						</object>
-					</object>
-					<object class="NSMutableDictionary" key="actionInfosByName">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSArray" key="dict.sortedKeys">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>addFilesToProject:</string>
-							<string>delete:</string>
-							<string>filter:</string>
-							<string>hideFilterOptions:</string>
-							<string>moveFocusToNextArea:</string>
-							<string>moveFocusToPreviousArea:</string>
-							<string>newGroup:</string>
-							<string>newGroupFromSelection:</string>
-							<string>openInSeparateEditor:</string>
-							<string>openWithExternalEditor:</string>
-							<string>rename:</string>
-							<string>showFilterOptions:</string>
-							<string>showInFinder:</string>
-							<string>toggleFilterOptions:</string>
-							<string>ungroupSelection:</string>
-						</object>
-						<object class="NSMutableArray" key="dict.values">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<object class="IBActionInfo">
-								<string key="name">addFilesToProject:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">delete:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">filter:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">hideFilterOptions:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">moveFocusToNextArea:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">moveFocusToPreviousArea:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">newGroup:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">newGroupFromSelection:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">openInSeparateEditor:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">openWithExternalEditor:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">rename:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">showFilterOptions:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">showInFinder:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">toggleFilterOptions:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">ungroupSelection:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-						</object>
-					</object>
-					<object class="NSMutableDictionary" key="outlets">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSArray" key="dict.sortedKeys">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>outlineView</string>
-							<string>searchField</string>
-							<string>treeController</string>
-						</object>
-						<object class="NSMutableArray" key="dict.values">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>NSOutlineView</string>
-							<string>NSSearchField</string>
-							<string>NSTreeController</string>
-						</object>
-					</object>
-					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSArray" key="dict.sortedKeys">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>outlineView</string>
-							<string>searchField</string>
-							<string>treeController</string>
-						</object>
-						<object class="NSMutableArray" key="dict.values">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<object class="IBToOneOutletInfo">
-								<string key="name">outlineView</string>
-								<string key="candidateClassName">NSOutlineView</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">searchField</string>
-								<string key="candidateClassName">NSSearchField</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">treeController</string>
-								<string key="candidateClassName">NSTreeController</string>
-							</object>
-						</object>
-					</object>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/WCProjectNavigatorViewController.h</string>
-					</object>
-				</object>
-			</object>
-		</object>
+		<object class="IBClassDescriber" key="IBDocument.Classes"/>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaFramework</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDevelopmentDependencies">

@@ -194,5 +194,30 @@ static NSString *const WCFileReferenceKey = @"fileReference";
 	return [[self fileReference] parentDirectoryURL];
 }
 @synthesize UUID=_UUID;
+@dynamic errors;
+- (BOOL)hasErrors {
+	return _fileFlags.errors;
+}
+- (void)setErrors:(BOOL)errors {
+	_fileFlags.errors = errors;
+}
+@dynamic warnings;
+- (BOOL)hasWarnings {
+	return _fileFlags.warnings;
+}
+- (void)setWarnings:(BOOL)warnings {
+	_fileFlags.warnings = warnings;
+}
+@dynamic issueIcon;
+- (NSImage *)issueIcon {
+	if ([self hasErrors])
+		return [[self fileIcon] badgedImageWithImage:[NSImage imageNamed:@"Error"] badgePosition:WCImageBadgePositionLowerRight];
+	else if ([self hasWarnings])
+		return [[self fileIcon] badgedImageWithImage:[NSImage imageNamed:@"Warning"] badgePosition:WCImageBadgePositionLowerRight];
+	return [self fileIcon];
+}
++ (NSSet *)keyPathsForValuesAffectingIssueIcon {
+	return [NSSet setWithObjects:@"edited",@"errors",@"warnings", nil];
+}
 
 @end

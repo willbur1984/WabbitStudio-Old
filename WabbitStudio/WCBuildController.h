@@ -8,12 +8,16 @@
 
 #import <Foundation/NSObject.h>
 
+extern NSString *const WCBuildControllerDidFinishBuildingNotification;
+
 @class WCProjectDocument;
 
 @interface WCBuildController : NSObject {
 	__weak WCProjectDocument *_projectDocument;
 	NSTask *_task;
 	NSMutableString *_output;
+	NSMapTable *_filesToBuildIssuesSortedByLocation;
+	NSArray *_filesWithBuildIssuesSortedByName;
 	struct {
 		unsigned int building:1;
 		unsigned int runAfterBuilding:1;
@@ -22,6 +26,8 @@
 }
 @property (readonly,nonatomic) WCProjectDocument *projectDocument;
 @property (readonly,assign,nonatomic,getter = isBuilding) BOOL building;
+@property (readonly,copy,nonatomic) NSArray *filesWithBuildIssuesSortedByName;
+@property (readonly,retain,nonatomic) NSMapTable *filesToBuildIssuesSortedByLocation;
 
 - (id)initWithProjectDocument:(WCProjectDocument *)projectDocument;
 

@@ -34,5 +34,16 @@
 @synthesize range=_range;
 @synthesize message=_message;
 @synthesize code=_code;
+@dynamic icon;
+- (NSImage *)icon {
+	switch ([self type]) {
+		case WCBuildIssueTypeError:
+			return [NSImage imageNamed:@"Error"];
+		case WCBuildIssueTypeWarning:
+			return [NSImage imageNamed:@"Warning"];
+		default:
+			return nil;
+	}
+}
 
 @end
