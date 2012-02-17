@@ -52,7 +52,17 @@
 				errorCount++;
 		}
 		
-		return [NSString stringWithFormat:NSLocalizedString(@"%lu error(s) total, %lu warning(s) total", @"issue container project status string format string"),errorCount,warningCount];
+		if (errorCount && warningCount) {
+			if (errorCount == 1 && warningCount == 1)
+				return NSLocalizedString(@"1 error total, 1 warning total", @"1 error total, 1 warning total");
+			else if (errorCount == 1)
+				return [NSString stringWithFormat:NSLocalizedString(@"1 error total, %lu warnings total", @"1 error multiple warnings format string"),warningCount];
+			else if (warningCount == 1)
+				return [NSString stringWithFormat:NSLocalizedString(@"%lu errors total, 1 warning total", @"multiple errors 1 warning format string"),errorCount];
+			else
+				return [NSString stringWithFormat:NSLocalizedString(@"%lu errors total, %lu warnings total", @"multiple errors multiple warnings"),errorCount,warningCount];				
+		}
+		return [NSString stringWithFormat:NSLocalizedString(@"%lu errors total, %lu warnings total", @"multiple errors multiple warnings"),errorCount,warningCount];
 	}
 	else {
 		NSUInteger errorCount = 0, warningCount = 0;

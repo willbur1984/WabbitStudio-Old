@@ -8,9 +8,11 @@
 
 #import <Foundation/NSObject.h>
 
-@class WCSourceRulerView,WCSourceScanner;
+@class WCSourceRulerView,WCSourceScanner,WCProjectDocument;
 
 @protocol WCSourceRulerViewDelegate <NSObject>
 @required
 - (WCSourceScanner *)sourceScannerForSourceRulerView:(WCSourceRulerView *)rulerView;
+- (NSArray *)buildIssuesForSourceRulerView:(WCSourceRulerView *)rulerView;
+- (WCProjectDocument *)projectDocumentForSourceRulerView:(WCSourceRulerView *)rulerView;
 @end

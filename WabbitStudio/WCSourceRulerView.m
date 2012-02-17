@@ -25,10 +25,15 @@
 #import "WCSourceTypesetter.h"
 #import "WCFoldAttachmentCell.h"
 #import "WCSourceTextView.h"
+#import "WCBuildIssue.h"
+#import "WCProjectDocument.h"
+#import "WCBuildController.h"
+#import "RSToolTipManager.h"
 
 @interface WCSourceRulerView ()
 @property (readonly,nonatomic) WCSourceTextStorage *textStorage;
 @property (readwrite,assign,nonatomic) NSUInteger clickedLineNumber;
+@property (readwrite,assign,nonatomic) BOOL drawCurrentLineHighlight;
 
 - (NSUInteger)_lineNumberForPoint:(NSPoint)point;
 - (NSRange)_rangeForPoint:(NSPoint)point;
@@ -169,6 +174,15 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 	[self _updateCodeFoldingTrackingArea];
 }
 
+- (void)viewDidMoveToWindow {
+	[super viewDidMoveToWindow];
+	
+	[[RSToolTipManager sharedManager] removeView:self];
+	
+	if ([self window])
+		[[RSToolTipManager sharedManager] addView:self];
+}
+
 - (CGFloat)minimumThickness {
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey])
 		return [super minimumThickness]+kIconWidthHeight+kIconPaddingLeft+kCodeFoldingRibbonWidth;
@@ -185,7 +199,10 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 	else
 		[super drawRightMarginInRect:rect];
 	
-	[super drawCurrentLineHighlightInRect:rect];
+	[self drawBuildIssuesInRect:rect];
+	
+	if ([self drawCurrentLineHighlight])
+		[super drawCurrentLineHighlightInRect:rect];
 	
 	[self drawBookmarksInRect:rect];
 	
@@ -200,6 +217,21 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 	[keys unionSet:[NSSet setWithObjects:WCEditorShowCodeFoldingRibbonKey, nil]];
 	
 	return keys;
+}
+#pragma mark RSToolTipView
+- (NSArray *)toolTipManager:(RSToolTipManager *)toolTipManager toolTipProvidersForToolTipAtPoint:(NSPoint)toolTipPoint {
+	NSRange range = [self _rangeForPoint:toolTipPoint];	
+	NSArray *buildIssues = [[[self delegate] buildIssuesForSourceRulerView:self] buildIssuesForRange:range];
+	NSMutableArray *actualBuildIssues = [NSMutableArray arrayWithCapacity:[buildIssues count]];
+	
+	for (WCBuildIssue *buildIssue in buildIssues) {
+		if ([buildIssue range].location == range.location)
+			[actualBuildIssues addObject:buildIssue];
+	}
+	
+	if ([actualBuildIssues count])
+		return actualBuildIssues;
+	return nil;
 }
 #pragma mark NSKeyValueObserving
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
@@ -269,6 +301,117 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 	
 	[super drawRightMarginInRect:ribbonRect];
 }
+
+static const CGFloat kBuildIssueWidthHeight = 10.0;
+
+- (void)drawBuildIssuesInRect:(NSRect)buildIssueRect; {
+	NSArray *buildIssues = [[self delegate] buildIssuesForSourceRulerView:self];
+	NSMutableIndexSet *errorIndexes = [NSMutableIndexSet indexSet];
+	NSMutableIndexSet *warningIndexes = [NSMutableIndexSet indexSet];
+	NSRange selectedRange = [[[self textView] string] lineRangeForRange:[[self textView] selectedRange]];
+	
+	[self setDrawCurrentLineHighlight:YES];
+	
+	for (WCBuildIssue *buildIssue in [buildIssues buildIssuesForRange:[[self textView] visibleRange]]) {
+		switch ([buildIssue type]) {
+			case WCBuildIssueTypeError:
+				if ([errorIndexes containsIndex:[buildIssue range].location])
+					continue;
+				else {
+					NSUInteger rectCount;
+					NSRectArray rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[[[self textView] string] lineRangeForRange:[buildIssue range]] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&rectCount];;
+					
+					if (!rectCount)
+						continue;
+					
+					NSRect lineRect;
+					if (rectCount == 1)
+						lineRect = rects[0];
+					else {
+						lineRect = NSZeroRect;
+						NSUInteger rectIndex;
+						for (rectIndex=0; rectIndex<rectCount; rectIndex++)
+							lineRect = NSUnionRect(lineRect, rects[rectIndex]);
+					}
+					
+					lineRect = NSMakeRect(NSMinX([self bounds]), [self convertPoint:lineRect.origin fromView:[self clientView]].y, NSWidth([self bounds]), NSHeight(lineRect));
+					
+					if (!NSIntersectsRect(lineRect, buildIssueRect) || ![self needsToDrawRect:lineRect])
+						continue;
+					
+					if (NSLocationInRange([buildIssue range].location, selectedRange)) {
+						[self setDrawCurrentLineHighlight:NO];
+						[[WCBuildIssue errorSelectedFillGradient] drawInRect:lineRect angle:90.0];
+					}
+					else
+						[[WCBuildIssue errorFillGradient] drawInRect:lineRect angle:90.0];
+					[[WCBuildIssue errorFillColor] setFill];
+					NSRectFill(NSMakeRect(NSMinX(lineRect), NSMinY(lineRect), NSWidth(lineRect), 1.0));
+					NSRectFill(NSMakeRect(NSMinX(lineRect), NSMaxY(lineRect)-1, NSWidth(lineRect), 1.0));
+					
+					rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[buildIssue range] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&rectCount];
+					
+					lineRect = rects[0];
+					
+					lineRect = NSMakeRect(NSMinX(buildIssueRect)+kIconPaddingLeft, [self convertPoint:lineRect.origin fromView:[self clientView]].y+kIconPaddingTop, kBuildIssueWidthHeight, kBuildIssueWidthHeight);
+					
+					[(NSImage *)[NSImage imageNamed:@"Error"] drawInRect:lineRect fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+					
+					[errorIndexes addIndex:[buildIssue range].location];
+				}
+				break;
+			case WCBuildIssueTypeWarning:
+				if ([errorIndexes containsIndex:[buildIssue range].location] ||
+					[warningIndexes containsIndex:[buildIssue range].location])
+					continue;
+				else {
+					NSUInteger rectCount;
+					NSRectArray rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[[[self textView] string] lineRangeForRange:[buildIssue range]] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&rectCount];;
+					
+					if (!rectCount)
+						continue;
+					
+					NSRect lineRect;
+					if (rectCount == 1)
+						lineRect = rects[0];
+					else {
+						lineRect = NSZeroRect;
+						NSUInteger rectIndex;
+						for (rectIndex=0; rectIndex<rectCount; rectIndex++)
+							lineRect = NSUnionRect(lineRect, rects[rectIndex]);
+					}
+					
+					lineRect = NSMakeRect(NSMinX([self bounds]), [self convertPoint:lineRect.origin fromView:[self clientView]].y, NSWidth([self bounds]), NSHeight(lineRect));
+					
+					if (!NSIntersectsRect(lineRect, buildIssueRect) || ![self needsToDrawRect:lineRect])
+						continue;
+					
+					if (NSLocationInRange([buildIssue range].location, selectedRange)) {
+						[self setDrawCurrentLineHighlight:NO];
+						[[WCBuildIssue warningSelectedFillGradient] drawInRect:lineRect angle:90.0];
+					}
+					else
+						[[WCBuildIssue warningFillGradient] drawInRect:lineRect angle:90.0];
+					[[WCBuildIssue warningFillColor] setFill];
+					NSRectFill(NSMakeRect(NSMinX(lineRect), NSMinY(lineRect), NSWidth(lineRect), 1.0));
+					NSRectFill(NSMakeRect(NSMinX(lineRect), NSMaxY(lineRect)-1, NSWidth(lineRect), 1.0));
+					
+					rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[buildIssue range] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&rectCount];
+					
+					lineRect = rects[0];
+					
+					lineRect = NSMakeRect(NSMinX(buildIssueRect)+kIconPaddingLeft, [self convertPoint:lineRect.origin fromView:[self clientView]].y+kIconPaddingTop, kBuildIssueWidthHeight, kBuildIssueWidthHeight);
+					
+					[(NSImage *)[NSImage imageNamed:@"Warning"] drawInRect:lineRect fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+					
+					[warningIndexes addIndex:[buildIssue range].location];
+				}
+				break;
+			default:
+				break;
+		}
+	}
+}
 #pragma mark Properties
 @dynamic textStorage;
 - (WCSourceTextStorage *)textStorage {
@@ -286,17 +429,26 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 	
 	if (_delegate) {
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:WCSourceScannerDidFinishScanningFoldsNotification object:nil];
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:WCBuildControllerDidFinishBuildingNotification object:nil];
 	}
 	
 	_delegate = delegate;
 	
 	if (_delegate) {
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_sourceScannerDidFinishScanningFolds:) name:WCSourceScannerDidFinishScanningFoldsNotification object:[_delegate sourceScannerForSourceRulerView:self]];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_buildControllerDidFinishBuilding:) name:WCBuildControllerDidFinishBuildingNotification object:[[_delegate projectDocumentForSourceRulerView:self] buildController]];
 	}
 }
 @dynamic sourceTextView;
 - (WCSourceTextView *)sourceTextView {
 	return (WCSourceTextView *)[self textView];
+}
+@dynamic drawCurrentLineHighlight;
+- (BOOL)drawCurrentLineHighlight {
+	return _sourceRulerViewFlags.drawCurrentLineHighlight;
+}
+- (void)setDrawCurrentLineHighlight:(BOOL)drawCurrentLineHighlight {
+	_sourceRulerViewFlags.drawCurrentLineHighlight = drawCurrentLineHighlight;
 }
 #pragma mark *** Private Methods ***
 - (NSUInteger)_lineNumberForPoint:(NSPoint)point {
@@ -523,5 +675,8 @@ static const CGFloat kTriangleHeight = 6.0;
 	
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey])
 		[self setNeedsDisplay:YES];
+}
+- (void)_buildControllerDidFinishBuilding:(NSNotification *)note {
+	[self setNeedsDisplay:YES];
 }
 @end

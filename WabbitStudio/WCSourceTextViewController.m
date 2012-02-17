@@ -31,6 +31,7 @@
 #import "WCFoldAttachmentCell.h"
 #import "NSArray+WCExtensions.h"
 #import "WCSourceTypesetter.h"
+#import "WCBuildController.h"
 
 @interface WCSourceTextViewController ()
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
@@ -248,6 +249,15 @@
 	
 	return [[retval copy] autorelease];
 }
+- (NSArray *)buildIssuesForSourceTextView:(WCSourceTextView *)textView {
+	if ([[self sourceFileDocument] projectDocument]) {
+		WCFile *file = [[[[self sourceFileDocument] projectDocument] sourceFileDocumentsToFiles] objectForKey:[self sourceFileDocument]];
+		
+		return [[[[[self sourceFileDocument] projectDocument] buildController] filesToBuildIssuesSortedByLocation] objectForKey:file];
+	}
+	return nil;
+}
+
 - (WCSourceScanner *)sourceScannerForSourceTextView:(WCSourceTextView *)textView {
 	return [self sourceScanner];
 }
@@ -278,6 +288,17 @@
 #pragma mark WCSourceRulerViewDelegate
 - (WCSourceScanner *)sourceScannerForSourceRulerView:(WCSourceRulerView *)rulerView {
 	return [self sourceScanner];
+}
+- (NSArray *)buildIssuesForSourceRulerView:(WCSourceRulerView *)rulerView {
+	if ([[self sourceFileDocument] projectDocument]) {
+		WCFile *file = [[[[self sourceFileDocument] projectDocument] sourceFileDocumentsToFiles] objectForKey:[self sourceFileDocument]];
+		
+		return [[[[[self sourceFileDocument] projectDocument] buildController] filesToBuildIssuesSortedByLocation] objectForKey:file];
+	}
+	return nil;
+}
+- (WCProjectDocument *)projectDocumentForSourceRulerView:(WCSourceRulerView *)rulerView {
+	return [[self sourceFileDocument] projectDocument];
 }
 #pragma mark *** Public Methods ***
 - (id)initWithSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument; {

@@ -103,7 +103,7 @@ static NSString *const WCFileReferenceKey = @"fileReference";
 	return [self fileName];
 }
 #pragma mark RSFileReferenceDelegate
-- (void)fileReference:(RSFileReference *)fileReference wasMovedToURL:(NSURL *)url; {
+- (void)fileReference:(RSFileReference *)fileReference didMoveToURL:(NSURL *)url; {
 	WCSourceFileDocument *sfDocument = [[self delegate] sourceFileDocumentForFile:self];
 	
 	if ([[sfDocument fileURL] isEqual:url]) {

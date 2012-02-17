@@ -17,6 +17,7 @@
 #import "WCSourceTextStorage.h"
 #import "NSString+RSExtensions.h"
 #import "WCBuildIssue.h"
+#import "WCBuildInclude.h"
 
 NSString *const WCBuildControllerDidFinishBuildingNotification = @"WCBuildControllerDidFinishBuildingNotification";
 
@@ -55,6 +56,11 @@ NSString *const WCBuildControllerDidFinishBuildingNotification = @"WCBuildContro
 }
 
 - (void)build; {
+	if ([self isBuilding]) {
+		NSBeep();
+		return;
+	}
+	
 	if (![[[self projectDocument] buildTargets] count]) {
 		NSString *message = NSLocalizedString(@"No Build Targets", @"No Build Targets");
 		NSString *informative = NSLocalizedString(@"Your project does not have any build targets. Would you like to edit your build targets now?", @"no build targets alert informative string");
@@ -119,6 +125,8 @@ NSString *const WCBuildControllerDidFinishBuildingNotification = @"WCBuildContro
 	
 	if ([[activeBuildTarget includes] count]) {
 		// TODO: add processed include directories
+		for (WCBuildInclude *include in [activeBuildTarget includes])
+			[arguments addObject:[NSString stringWithFormat:@"-I%@",[include path]]];
 	}
 	
 	[arguments addObject:inputFilePath];
@@ -241,7 +249,7 @@ NSString *const WCBuildControllerDidFinishBuildingNotification = @"WCBuildContro
 				else if ([obj1 rangeValue].location > [obj2 rangeValue].location)
 					return NSOrderedDescending;
 				return NSOrderedSame;
-			}], nil]];
+			}],[NSSortDescriptor sortDescriptorWithKey:@"type" ascending:YES], nil]];
 		
 		dispatch_async(dispatch_get_main_queue(), ^{
 			for (WCFile *file in [self filesWithBuildIssuesSortedByName]) {

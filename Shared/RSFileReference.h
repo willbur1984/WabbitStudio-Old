@@ -15,12 +15,13 @@
  
  */
 
+@class UKKQueue;
+
 @interface RSFileReference : RSObject <RSPlistArchiving,NSFilePresenter,NSCopying> {
 	__weak id <RSFileReferenceDelegate> _delegate;
 	NSURL *_fileReferenceURL;
 	NSURL *_fileURL;
-	NSLock *_fileURLLock;
-	NSOperationQueue *_operationQueue;
+	UKKQueue *_kqueue;
 	struct {
 		unsigned int ignoreNextFileWatcherNotification:1;
 		unsigned int shouldMonitorFile:1;
@@ -29,7 +30,7 @@
 }
 @property (readwrite,assign,nonatomic) id <RSFileReferenceDelegate> delegate;
 @property (readonly,nonatomic) NSURL *fileReferenceURL;
-@property (readwrite,copy) NSURL *fileURL;
+@property (readwrite,copy,nonatomic) NSURL *fileURL;
 @property (readonly,nonatomic) NSImage *fileIcon;
 @property (readonly,nonatomic) NSString *fileName;
 @property (readonly,nonatomic) NSString *fileUTI;

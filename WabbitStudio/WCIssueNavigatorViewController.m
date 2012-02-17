@@ -154,6 +154,7 @@ static const CGFloat kMainCellHeight = 20.0;
 #pragma mark *** Private Methods ***
 - (void)_updateIssues {
 	[[[self issueContainer] mutableChildNodes] removeObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [[[self issueContainer] childNodes] count])]];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSTextStorageDidProcessEditingNotification object:nil];
 	
 	WCBuildController *buildController = [[self projectDocument] buildController];
 	
@@ -169,6 +170,8 @@ static const CGFloat kMainCellHeight = 20.0;
 		}
 		
 		[[[self issueContainer] mutableChildNodes] addObject:issueContainer];
+		
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidProcessEditing:) name:NSTextStorageDidProcessEditingNotification object:[[[[self projectDocument] filesToSourceFileDocuments] objectForKey:file] textStorage]];
 	}
 	
 	[[self issueContainer] didChangeValueForKey:@"statusString"];
@@ -212,5 +215,40 @@ static const CGFloat kMainCellHeight = 20.0;
 - (void)_buildControllerDidFinishBuilding:(NSNotification *)note {	
 	[self _updateIssues];
 }
-
+- (void)_textStorageDidProcessEditing:(NSNotification *)note {
+	NSTextStorage *textStorage = [note object];
+	
+	if (([textStorage editedMask] & NSTextStorageEditedCharacters) == 0)
+		return;
+	
+	for (WCIssueContainer *container in [[self issueContainer] childNodes]) {
+		WCSourceFileDocument *sfDocument = [[[self projectDocument] filesToSourceFileDocuments] objectForKey:[container representedObject]];
+		
+		if (textStorage == [sfDocument textStorage]) {
+			NSMutableArray *issuesToRemove = [NSMutableArray arrayWithCapacity:0];
+			NSRange editedRange = [textStorage editedRange];
+			NSInteger changeInLength = [textStorage changeInLength];
+			
+			for (WCBuildIssueContainer *buildIssueContainer in [container childNodes]) {
+				NSRange resultRange = [[buildIssueContainer representedObject] range];
+				
+				if (changeInLength < -1 &&
+					NSLocationInRange(resultRange.location, NSMakeRange(editedRange.location, ABS(changeInLength))))
+					[issuesToRemove addObject:buildIssueContainer];
+				else if (NSMaxRange(editedRange) < resultRange.location) {
+					resultRange.location += changeInLength;
+					[[buildIssueContainer representedObject] setRange:resultRange];
+				}
+			}
+			
+			if ([issuesToRemove count]) {
+				[container willChangeValueForKey:@"statusString"];
+				[[container mutableChildNodes] removeObjectsInArray:issuesToRemove];
+				[container didChangeValueForKey:@"statusString"];
+			}
+			
+			break;
+		}
+	}
+}
 @end

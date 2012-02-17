@@ -18,6 +18,8 @@
 
 - (NSArray *)sourceTextView:(WCSourceTextView *)textView sourceSymbolsForSymbolName:(NSString *)name;
 
+- (NSArray *)buildIssuesForSourceTextView:(WCSourceTextView *)textView;
+
 - (WCSourceScanner *)sourceScannerForSourceTextView:(WCSourceTextView *)textView;
 
 - (WCSourceHighlighter *)sourceHighlighterForSourceTextView:(WCSourceTextView *)textView;

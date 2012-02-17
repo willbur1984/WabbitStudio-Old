@@ -130,6 +130,10 @@ static NSString *const kOutputTypeColumnIdentifier = @"outputType";
 
 - (IBAction)newBuildTarget:(id)sender; {
 	WCBuildTarget *newBuildTarget = [WCBuildTarget buildTargetWithName:NSLocalizedString(@"New Target", @"New Target") outputType:WCBuildTargetOutputTypeBinary projectDocument:[self projectDocument]];
+	
+	if (![[[self projectDocument] buildTargets] count])
+		[newBuildTarget setActive:YES];
+	
 	NSUInteger selectionIndex = [[[self arrayController] selectionIndexes] firstIndex];
 	
 	if (selectionIndex == NSNotFound)

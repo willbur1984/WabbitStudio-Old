@@ -12,7 +12,7 @@
 
 @protocol RSFileReferenceDelegate <NSObject>
 @required
-- (void)fileReference:(RSFileReference *)fileReference wasMovedToURL:(NSURL *)url;
+- (void)fileReference:(RSFileReference *)fileReference didMoveToURL:(NSURL *)url;
 - (void)fileReferenceWasDeleted:(RSFileReference *)fileReference;
 @optional
 - (void)fileReferenceWasWrittenTo:(RSFileReference *)fileReference;

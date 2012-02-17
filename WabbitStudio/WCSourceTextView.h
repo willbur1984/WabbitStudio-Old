@@ -22,7 +22,8 @@
 	NSIndexSet *_autoHighlightArgumentsRanges;
 	struct {
 		unsigned int editingArgumentsRanges:1;
-		unsigned int RESERVED:31;
+		unsigned int drawCurrentLineHighlight:1;
+		unsigned int RESERVED:30;
 	} _textViewFlags;
 }
 @property (readwrite,assign,nonatomic) IBOutlet id <WCSourceTextViewDelegate> delegate;

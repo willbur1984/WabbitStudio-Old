@@ -12,6 +12,7 @@
 #import "RSBookmark.h"
 #import "WCFold.h"
 #import "RSDefines.h"
+#import "WCBuildIssue.h"
 
 @implementation NSArray (WCExtensions)
 - (NSUInteger)sourceTokenIndexForRange:(NSRange)range; {
@@ -47,8 +48,6 @@
 	else {
 		NSUInteger startIndex = [self sourceTokenIndexForRange:range];
 		NSMutableArray *retval = [NSMutableArray arrayWithCapacity:[self count]];
-		
-		[retval addObject:[self objectAtIndex:startIndex]];
 		
 		for (WCSourceToken *token in [self subarrayWithRange:NSMakeRange(startIndex, [self count] - startIndex)]) {
 			if ([token range].location > NSMaxRange(range))
@@ -94,8 +93,6 @@
 	else {
 		NSUInteger startIndex = [self sourceTokenIndexForRange:range];
 		NSMutableArray *retval = [NSMutableArray arrayWithCapacity:[self count]];
-		
-		[retval addObject:[self objectAtIndex:startIndex]];
 		
 		for (WCSourceSymbol *symbol in [self subarrayWithRange:NSMakeRange(startIndex, [self count] - startIndex)]) {
 			if ([symbol range].location > NSMaxRange(range))
@@ -195,8 +192,6 @@
 		NSUInteger startIndex = [self foldIndexForRange:range];
 		NSMutableArray *retval = [NSMutableArray arrayWithCapacity:[self count]];
 		
-		[retval addObject:[self objectAtIndex:startIndex]];
-		
 		for (WCFold *fold in [self subarrayWithRange:NSMakeRange(startIndex, [self count] - startIndex)]) {
 			if ([fold range].location > NSMaxRange(range))
 				break;
@@ -220,6 +215,54 @@
 	}
 	
 	return topLevelFold;
+}
+
+- (NSUInteger)buildIssueIndexForRange:(NSRange)range; {
+	if (![self count])
+		return NSNotFound;
+	
+	NSUInteger left = 0, right = [self count], mid, searchLocation;
+	
+    while ((right - left) > 1) {
+        mid = (right + left) / 2;
+		searchLocation = [(WCBuildIssue *)[self objectAtIndex:mid] range].location;
+        
+        if (range.location < searchLocation)
+			right = mid;
+        else if (range.location > searchLocation)
+			left = mid;
+        else
+			return mid;
+    }
+    return left;
+}
+- (WCBuildIssue *)buildIssueForRange:(NSRange)range; {
+	if (![self count])
+		return nil;
+	
+	return [self objectAtIndex:[self buildIssueIndexForRange:range]];
+}
+- (NSArray *)buildIssuesForRange:(NSRange)range; {
+	if (![self count])
+		return nil;
+	else if ([self count] == 1) {
+		if (NSLocationInOrEqualToRange([[self lastObject] range].location, range))
+			return self;
+		return nil;
+	}
+	else {
+		NSUInteger startIndex = [self buildIssueIndexForRange:range];
+		NSMutableArray *retval = [NSMutableArray arrayWithCapacity:[self count]];
+		
+		for (WCBuildIssue *buildIssue in [self subarrayWithRange:NSMakeRange(startIndex, [self count] - startIndex)]) {
+			if ([buildIssue range].location > NSMaxRange(range))
+				break;
+			
+			[retval addObject:buildIssue];
+		}
+		
+		return [[retval copy] autorelease];
+	}
 }
 
 - (NSUInteger)lineNumberForRange:(NSRange)range; {

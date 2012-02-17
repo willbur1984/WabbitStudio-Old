@@ -43,9 +43,12 @@
 #import "WCSearchNavigatorViewController.h"
 #import "WCProjectWindowController.h"
 #import "RSNavigatorControl.h"
+#import "WCBuildIssue.h"
+#import "WCBuildController.h"
 
 @interface WCSourceTextView ()
 @property (readwrite,copy,nonatomic) NSIndexSet *autoHighlightArgumentsRanges;
+@property (readwrite,assign,nonatomic) BOOL drawCurrentLineHighlight;
 
 - (void)_commonInit;
 - (void)_drawCurrentLineHighlightInRect:(NSRect)rect;
@@ -58,6 +61,7 @@
 - (void)_highlightEnclosedMacroArguments;
 - (BOOL)_handleUnfoldForEvent:(NSEvent *)theEvent;
 - (void)_drawVisibleBookmarksInRect:(NSRect)bookmarkRect;
+- (void)_drawVisibleBuildIssuesInRect:(NSRect)buildIssueRect;
 @end
 
 @implementation WCSourceTextView
@@ -179,7 +183,10 @@
 	
 	[self _drawPageGuideInRect:rect];
 	
-	[self _drawCurrentLineHighlightInRect:rect];
+	[self _drawVisibleBuildIssuesInRect:rect];
+	
+	if ([self drawCurrentLineHighlight])
+		[self _drawCurrentLineHighlightInRect:rect];
 	
 	if ([[self autoHighlightArgumentsRanges] count]) {
 		[[self autoHighlightArgumentsRanges] enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
@@ -1029,7 +1036,15 @@
 	if (_delegate == delegate)
 		return;
 	
+	if (_delegate) {
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:WCBuildControllerDidFinishBuildingNotification object:nil];
+	}
+	
 	_delegate = delegate;
+	
+	if (_delegate) {
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_buildControllerDidFinishBuilding:) name:WCBuildControllerDidFinishBuildingNotification object:[[_delegate projectDocumentForSourceTextView:self] buildController]];
+	}
 	
 	[super setDelegate:delegate];
 }
@@ -1076,6 +1091,13 @@
 	
 	if (needsUpdate)
 		[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
+}
+@dynamic drawCurrentLineHighlight;
+- (BOOL)drawCurrentLineHighlight {
+	return _textViewFlags.drawCurrentLineHighlight;
+}
+- (void)setDrawCurrentLineHighlight:(BOOL)drawCurrentLineHighlight {
+	_textViewFlags.drawCurrentLineHighlight = drawCurrentLineHighlight;
 }
 #pragma mark *** Private Methods ***
 - (void)_commonInit; {
@@ -1131,6 +1153,8 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_backgroundColorDidChange:) name:WCFontAndColorThemeManagerBackgroundColorDidChangeNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_currentLineColorDidChange:) name:WCFontAndColorThemeManagerCurrentLineColorDidChangeNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_cursorColorDidChange:) name:WCFontAndColorThemeManagerCursorColorDidChangeNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidFold:) name:WCSourceTextStorageDidFoldNotification object:[self sourceTextStorage]];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidUnfold:) name:WCSourceTextStorageDidUnfoldNotification object:[self sourceTextStorage]];
 }
 
 - (void)_drawCurrentLineHighlightInRect:(NSRect)rect; {
@@ -1562,6 +1586,98 @@
 - (void)_drawVisibleBookmarksInRect:(NSRect)bookmarkRect; {
 	
 }
+- (void)_drawVisibleBuildIssuesInRect:(NSRect)buildIssueRect {
+	NSArray *buildIssues = [[self delegate] buildIssuesForSourceTextView:self];
+	NSMutableIndexSet *errorIndexes = [NSMutableIndexSet indexSet];
+	NSMutableIndexSet *warningIndexes = [NSMutableIndexSet indexSet];
+	NSRange selectedRange = [[self string] lineRangeForRange:[self selectedRange]];
+	
+	[self setDrawCurrentLineHighlight:YES];
+	
+	for (WCBuildIssue *buildIssue in [buildIssues buildIssuesForRange:[self visibleRange]]) {
+		switch ([buildIssue type]) {
+			case WCBuildIssueTypeError:
+				if ([errorIndexes containsIndex:[buildIssue range].location])
+					continue;
+				else {
+					NSUInteger rectCount;
+					NSRectArray rects = [[self layoutManager] rectArrayForCharacterRange:[[self string] lineRangeForRange:[buildIssue range]] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[self textContainer] rectCount:&rectCount];
+					
+					if (!rectCount)
+						continue;
+					
+					NSRect lineRect;
+					if (rectCount == 1)
+						lineRect = rects[0];
+					else {
+						lineRect = NSZeroRect;
+						NSUInteger rectIndex;
+						for (rectIndex=0; rectIndex<rectCount; rectIndex++)
+							lineRect = NSUnionRect(lineRect, rects[rectIndex]);
+					}
+					
+					lineRect = NSMakeRect(NSMinX([self bounds]), NSMinY(lineRect), NSWidth([self bounds]), NSHeight(lineRect));
+					
+					if (!NSIntersectsRect(lineRect, [self bounds]) || ![self needsToDrawRect:lineRect])
+						continue;
+					
+					if (NSLocationInRange([buildIssue range].location, selectedRange)) {
+						[self setDrawCurrentLineHighlight:NO];
+						[[WCBuildIssue errorSelectedFillGradient] drawInRect:lineRect angle:90.0];
+					}
+					else
+						[[WCBuildIssue errorFillGradient] drawInRect:lineRect angle:90.0];
+					[[WCBuildIssue errorFillColor] setFill];
+					NSRectFill(NSMakeRect(NSMinX(lineRect), NSMinY(lineRect), NSWidth(lineRect), 1.0));
+					NSRectFill(NSMakeRect(NSMinX(lineRect), NSMaxY(lineRect)-1, NSWidth(lineRect), 1.0));
+					
+					[errorIndexes addIndex:[buildIssue range].location];
+				}
+				break;
+			case WCBuildIssueTypeWarning:
+				if ([errorIndexes containsIndex:[buildIssue range].location] ||
+					[warningIndexes containsIndex:[buildIssue range].location])
+					continue;
+				else {
+					NSUInteger rectCount;
+					NSRectArray rects = [[self layoutManager] rectArrayForCharacterRange:[[self string] lineRangeForRange:[buildIssue range]] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[self textContainer] rectCount:&rectCount];
+					
+					if (!rectCount)
+						continue;
+					
+					NSRect lineRect;
+					if (rectCount == 1)
+						lineRect = rects[0];
+					else {
+						lineRect = NSZeroRect;
+						NSUInteger rectIndex;
+						for (rectIndex=0; rectIndex<rectCount; rectIndex++)
+							lineRect = NSUnionRect(lineRect, rects[rectIndex]);
+					}
+					
+					lineRect = NSMakeRect(NSMinX([self bounds]), NSMinY(lineRect), NSWidth([self bounds]), NSHeight(lineRect));
+					
+					if (!NSIntersectsRect(lineRect, [self bounds]) || ![self needsToDrawRect:lineRect])
+						continue;
+					
+					if (NSLocationInRange([buildIssue range].location, selectedRange)) {
+						[self setDrawCurrentLineHighlight:NO];
+						[[WCBuildIssue warningSelectedFillGradient] drawInRect:lineRect angle:90.0];
+					}
+					else
+						[[WCBuildIssue warningFillGradient] drawInRect:lineRect angle:90.0];
+					[[WCBuildIssue warningFillColor] setFill];
+					NSRectFill(NSMakeRect(NSMinX(lineRect), NSMinY(lineRect), NSWidth(lineRect), 1.0));
+					NSRectFill(NSMakeRect(NSMinX(lineRect), NSMaxY(lineRect)-1, NSWidth(lineRect), 1.0));
+					
+					[warningIndexes addIndex:[buildIssue range].location];
+				}
+				break;
+			default:
+				break;
+		}
+	}
+}
 #pragma mark IBActions
 - (IBAction)_symbolMenuClicked:(NSMenuItem *)sender {
 	[[self delegate] handleJumpToDefinitionForSourceTextView:self sourceSymbol:[sender representedObject]];
@@ -1612,6 +1728,15 @@
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme];
 	
 	[self setInsertionPointColor:[currentTheme cursorColor]];
+}
+- (void)_textStorageDidFold:(NSNotification *)note {
+	[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
+}
+- (void)_textStorageDidUnfold:(NSNotification *)note {
+	[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
+}
+- (void)_buildControllerDidFinishBuilding:(NSNotification *)note {
+	[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
 }
 #pragma mark Callbacks
 - (void)_completionTimerCallback:(NSTimer *)timer {

@@ -18,7 +18,7 @@ static NSString *const WCBuildIncludeFileReferenceKey = @"fileReference";
 	[super dealloc];
 }
 #pragma mark RSFileReferenceDelegate
-- (void)fileReference:(RSFileReference *)fileReference wasMovedToURL:(NSURL *)url {
+- (void)fileReference:(RSFileReference *)fileReference didMoveToURL:(NSURL *)url {
 	[self willChangeValueForKey:@"name"];
 	[self willChangeValueForKey:@"path"];
 	[self didChangeValueForKey:@"name"];

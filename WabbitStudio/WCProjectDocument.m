@@ -466,6 +466,8 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 - (WCBuildController *)buildController {
 	if (!_buildController) {
 		_buildController = [[WCBuildController alloc] initWithProjectDocument:self];
+		
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_buildControllerDidFinishBuilding:) name:WCBuildControllerDidFinishBuildingNotification object:_buildController];
 	}
 	return _buildController;
 }
@@ -499,7 +501,6 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 		[[self UUIDsToFiles] setObject:[newFileContainer representedObject] forKey:[[newFileContainer representedObject] UUID]];
 	}
 }
-
 - (void)_projectNavigatorDidRemoveNodes:(NSNotification *)note {
 	NSSet *removedFileContainers = [[note userInfo] objectForKey:WCProjectNavigatorDidRemoveNodesNotificationRemovedNodesUserInfoKey];
 	
@@ -512,7 +513,11 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 		[_fileCompletions setObject:[fileContainer representedObject] forKey:[[[fileContainer representedObject] fileName] lowercaseString]];
 }
 - (void)_windowWillClose:(NSNotification *)note {
-	for (WCFile *file in [[self filesToSourceFileDocuments] keyEnumerator])
-		[NSFileCoordinator removeFilePresenter:[file fileReference]];
+	
+}
+- (void)_buildControllerDidFinishBuilding:(NSNotification *)note {
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:WCBuildControllerDidFinishBuildingNotification object:nil];
+	
+	[[[self projectWindowController] navigatorControl] setSelectedItemIdentifier:@"issue"];
 }
 @end

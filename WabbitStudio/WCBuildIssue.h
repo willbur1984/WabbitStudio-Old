@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/NSObject.h>
+#import "RSToolTipProvider.h"
 
 typedef enum _WCBuildIssueType {
 	WCBuildIssueTypeError = 0,
@@ -14,7 +15,7 @@ typedef enum _WCBuildIssueType {
 	
 } WCBuildIssueType;
 
-@interface WCBuildIssue : NSObject {
+@interface WCBuildIssue : NSObject <RSToolTipProvider> {
 	WCBuildIssueType _type;
 	NSRange _range;
 	NSString *_message;
@@ -29,4 +30,10 @@ typedef enum _WCBuildIssueType {
 + (id)buildIssueOfType:(WCBuildIssueType)type range:(NSRange)range message:(NSString *)message code:(NSString *)code;
 - (id)initWithType:(WCBuildIssueType)type range:(NSRange)range message:(NSString *)message code:(NSString *)code;
 
++ (NSGradient *)errorFillGradient;
++ (NSGradient *)errorSelectedFillGradient;
++ (NSColor *)errorFillColor;
++ (NSGradient *)warningFillGradient;
++ (NSGradient *)warningSelectedFillGradient;
++ (NSColor *)warningFillColor;
 @end
