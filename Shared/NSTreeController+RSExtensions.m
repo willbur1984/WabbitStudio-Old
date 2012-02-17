@@ -157,6 +157,9 @@
 	[self setSelectionIndexPaths:indexPaths];
 }
 
+- (id)treeNodeForModelObject:(id)modelObject; {
+	return [[self treeNodesForModelObjects:[NSArray arrayWithObjects:modelObject, nil]] lastObject];
+}
 - (NSArray *)treeNodesForModelObjects:(NSArray *)modelObjects; {
 	NSMutableArray *retval = [NSMutableArray arrayWithCapacity:[modelObjects count]];
 	NSArray *treeNodes = [self treeNodes];

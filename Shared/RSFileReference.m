@@ -52,7 +52,7 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
     NSLog(@"preparing for writing to %@",[[self fileURL] path]);
 #endif
 	
-	dispatch_sync(dispatch_get_main_queue(), ^{
+	dispatch_async(dispatch_get_main_queue(), ^{
 		[self setIgnoreNextFileWatcherNotification:YES];
 	});
 	
@@ -61,7 +61,7 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 		NSLog(@"writing to %@ finished",[[self fileURL] path]);
 #endif
 		
-		dispatch_sync(dispatch_get_main_queue(), ^{
+		dispatch_async(dispatch_get_main_queue(), ^{
 			[self setShouldMonitorFile:YES];
 			[[self delegate] fileReferenceWasWrittenTo:self];
 		});

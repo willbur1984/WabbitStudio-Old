@@ -16,6 +16,7 @@
 #import "WCSearchNavigatorViewController.h"
 #import "WCIssueNavigatorViewController.h"
 #import "WCSymbolNavigatorViewController.h"
+#import "WCTabViewWindow.h"
 
 #import <PSMTabBarControl/PSMTabBarControl.h>
 #import <Quartz/Quartz.h>
@@ -57,6 +58,8 @@
 - (void)windowDidLoad {
     [super windowDidLoad];
 	
+	[(WCTabViewWindow *)[self window] setTabViewController:[self tabViewController]];
+	
 	[[[self tabViewController] view] setFrameSize:[[[[self splitView] subviews] lastObject] frame].size];
 	[[self splitView] replaceSubview:[[[self splitView] subviews] lastObject] with:[[self tabViewController] view]];
 	
@@ -74,6 +77,7 @@
 		return [NSString stringWithFormat:NSLocalizedString(@"%@ - %@",@"project window controller window title format string"),displayName,[[[[[[self tabViewController] tabBarControl] tabView] selectedTabViewItem] identifier] displayName]];
 	return displayName;
 }
+
 #pragma mark NSWindowDelegate
 - (void)windowWillClose:(NSNotification *)notification {
 	while ([[[self tabViewController] tabView] numberOfTabViewItems])

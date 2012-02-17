@@ -229,4 +229,14 @@ static NSString *const WCBuildTargetSymbolsAreCaseSensitiveKey = @"symbolsAreCas
 - (void)setSymbolsAreCaseSensitive:(BOOL)symbolsAreCaseSensitive {
 	_buildTargetFlags.symbolsAreCaseSensitive = symbolsAreCaseSensitive;
 }
+@dynamic outputFileExtension;
+- (NSString *)outputFileExtension {
+	static NSDictionary *outputTypesToFileExtensions;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		outputTypesToFileExtensions = [[NSDictionary alloc] initWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"BuildTargetOutputTypesToFileExtensions" withExtension:@"plist"]];
+	});
+	
+	return [outputTypesToFileExtensions objectForKey:[NSString stringWithFormat:@"%lu",[self outputType]]];
+}
 @end

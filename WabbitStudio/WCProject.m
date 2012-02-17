@@ -69,6 +69,16 @@ static NSString *const WCProjectBuildTargetsKey = @"buildTargets";
 @synthesize document=_document;
 @dynamic fileStatus;
 - (NSString *)fileStatus {
-	return NSLocalizedString(@"This project is fantastic", @"This project is fantastic");
+	NSArray *buildTargets = [[self document] buildTargets];
+	WCBuildTarget *activeBuildTarget = [[self document] activeBuildTarget];
+	
+	if ([buildTargets count] == 1) {
+		if (activeBuildTarget)
+			return [NSString stringWithFormat:NSLocalizedString(@"1 target, \"%@\" is active", @"1 target and active target format string"),[activeBuildTarget name]];
+		return NSLocalizedString(@"1 target, no active target", @"1 target, no active target");
+	}
+	else if (activeBuildTarget)
+		return [NSString stringWithFormat:NSLocalizedString(@"%lu targets, \"%@\" is active", @"multiple targets and active target format string"),[buildTargets count],[activeBuildTarget name]];
+	return [NSString stringWithFormat:NSLocalizedString(@"%lu targets, no active target", @"multiple targets and no active target format string"),[buildTargets count]];
 }
 @end

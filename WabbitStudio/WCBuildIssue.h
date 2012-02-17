@@ -11,7 +11,8 @@
 
 typedef enum _WCBuildIssueType {
 	WCBuildIssueTypeError = 0,
-	WCBuildIssueTypeWarning
+	WCBuildIssueTypeWarning,
+	WCBuildIssueTypeProject
 	
 } WCBuildIssueType;
 

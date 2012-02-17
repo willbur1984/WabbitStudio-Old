@@ -18,6 +18,8 @@
 #import "NSString+RSExtensions.h"
 #import "WCBuildIssue.h"
 #import "WCBuildInclude.h"
+#import "WCBuildDefine.h"
+#import "WCProjectViewController.h"
 
 NSString *const WCBuildControllerDidFinishBuildingNotification = @"WCBuildControllerDidFinishBuildingNotification";
 
@@ -108,11 +110,73 @@ NSString *const WCBuildControllerDidFinishBuildingNotification = @"WCBuildContro
 		return;
 	}
 	
-	NSURL *outputDirectoryURL = [[[self projectDocument] fileURL] parentDirectoryURL];
+	NSURL *outputDirectoryURL = nil;
+	WCProjectBuildProductsLocation buildProductsLocation = [[[NSUserDefaults standardUserDefaults] objectForKey:WCProjectBuildProductsLocationKey] unsignedIntValue];
+	
+	switch (buildProductsLocation) {
+		case WCProjectBuildProductsLocationProjectFolder: {
+			NSURL *projectDirectoryURL = [[[self projectDocument] fileURL] parentDirectoryURL];
+			NSString *buildProductsDirectoryName = NSLocalizedString(@"Build Products", @"Build Products");
+			NSString *buildTargetName = [activeBuildTarget name];
+			
+			outputDirectoryURL = [[projectDirectoryURL URLByAppendingPathComponent:buildProductsDirectoryName isDirectory:YES] URLByAppendingPathComponent:buildTargetName isDirectory:YES];
+		}
+			break;
+		case WCProjectBuildProductsLocationCustom: {
+			NSURL *customDirectoryURL = [NSURL fileURLWithPath:[[NSUserDefaults standardUserDefaults] objectForKey:WCProjectBuildProductsLocationCustomKey] isDirectory:YES];
+			NSString *projectName = [[[self projectDocument] displayName] stringByDeletingPathExtension];
+			NSString *buildTargetName = [activeBuildTarget name];
+			
+			outputDirectoryURL = [[customDirectoryURL URLByAppendingPathComponent:projectName isDirectory:YES] URLByAppendingPathComponent:buildTargetName isDirectory:YES];
+		}
+			break;
+		default:
+			break;
+	}
+	
+#ifdef DEBUG
+    NSAssert(outputDirectoryURL, @"outputDirectoryURL cannot be nil!");
+#endif
+	
+	if (![outputDirectoryURL checkResourceIsReachableAndReturnError:NULL]) {
+		NSError *outError;
+		if (![[NSFileManager defaultManager] createDirectoryAtURL:outputDirectoryURL withIntermediateDirectories:YES attributes:nil error:&outError]) {
+			if (outError) {
+				NSAlert *alert = [NSAlert alertWithError:outError];
+				
+				[alert beginSheetModalForWindow:[[self projectDocument] windowForSheet] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
+					[[alert window] orderOut:nil];
+				}];
+			}
+			return;
+		}
+	}
+	
+	// TODO: how to wait until the saves are finished before continuing with the build?
+	NSArray *unsavedFiles = [[[self projectDocument] unsavedFiles] allObjects];
+	if ([unsavedFiles count]) {
+		WCProjectAutoSave autoSave = [[[NSUserDefaults standardUserDefaults] objectForKey:WCProjectAutoSaveKey] unsignedIntValue];
+		
+		switch (autoSave) {
+			case WCProjectAutoSaveAlways:
+				for (WCFile *file in unsavedFiles) {
+					WCSourceFileDocument *sfDocument = [[[self projectDocument] filesToSourceFileDocuments] objectForKey:file];
+					
+					[sfDocument saveDocument:nil];
+				}
+				break;
+			case WCProjectAutoSavePrompt:
+				break;
+			case WCProjectAutoSaveNever:
+			default:
+				break;
+		}
+	}
+	
 	NSString *outputDirectoryPath = [outputDirectoryURL path];
 	NSString *inputFilePath = [inputFile filePath];
-	NSString *outputFileName = [[[[self projectDocument] fileURL] lastPathComponent] stringByDeletingPathExtension];
-	NSString *outputFileExtension = @"8xk";
+	NSString *outputFileName = [[[self projectDocument] displayName] stringByDeletingPathExtension];
+	NSString *outputFileExtension = [activeBuildTarget outputFileExtension];
 	NSString *outputFilePath = [outputDirectoryPath stringByAppendingPathComponent:[outputFileName stringByAppendingPathExtension:outputFileExtension]];
 	NSMutableArray *arguments = [NSMutableArray arrayWithCapacity:0];
 	
@@ -124,7 +188,6 @@ NSString *const WCBuildControllerDidFinishBuildingNotification = @"WCBuildContro
 		[arguments addObject:@"-A"];
 	
 	if ([[activeBuildTarget includes] count]) {
-		// TODO: add processed include directories
 		for (WCBuildInclude *include in [activeBuildTarget includes])
 			[arguments addObject:[NSString stringWithFormat:@"-I%@",[include path]]];
 	}
@@ -132,7 +195,14 @@ NSString *const WCBuildControllerDidFinishBuildingNotification = @"WCBuildContro
 	[arguments addObject:inputFilePath];
 	
 	if ([[activeBuildTarget defines] count]) {
-		// TODO: add processed defines
+		for (WCBuildDefine *define in [activeBuildTarget defines]) {
+			NSMutableString *temp = [NSMutableString stringWithFormat:@"-D%@",[define name]];
+			
+			if ([[define value] length])
+				[temp appendFormat:@"=%@",[define value]];
+			
+			[arguments addObject:temp];
+		}
 	}
 	
 	[arguments addObject:outputFilePath];

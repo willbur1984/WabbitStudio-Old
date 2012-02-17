@@ -3928,8 +3928,10 @@
 					<dictionary class="NSMutableDictionary" key="actions">
 						<string key="chooseInputFile:">id</string>
 						<string key="deleteBuildDefine:">id</string>
+						<string key="deleteBuildInclude:">id</string>
 						<string key="manageBuildTargets:">id</string>
 						<string key="newBuildDefine:">id</string>
+						<string key="newBuildInclude:">id</string>
 						<string key="ok:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
@@ -3941,6 +3943,10 @@
 							<string key="name">deleteBuildDefine:</string>
 							<string key="candidateClassName">id</string>
 						</object>
+						<object class="IBActionInfo" key="deleteBuildInclude:">
+							<string key="name">deleteBuildInclude:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 						<object class="IBActionInfo" key="manageBuildTargets:">
 							<string key="name">manageBuildTargets:</string>
 							<string key="candidateClassName">id</string>
@@ -3949,23 +3955,25 @@
 							<string key="name">newBuildDefine:</string>
 							<string key="candidateClassName">id</string>
 						</object>
+						<object class="IBActionInfo" key="newBuildInclude:">
+							<string key="name">newBuildInclude:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 						<object class="IBActionInfo" key="ok:">
 							<string key="name">ok:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="chooseInputFileButton">NSButton</string>
 						<string key="definesArrayController">NSArrayController</string>
 						<string key="definesSearchField">NSSearchField</string>
 						<string key="definesTableView">NSTableView</string>
+						<string key="includesArrayController">NSArrayController</string>
+						<string key="includesSearchField">NSSearchField</string>
+						<string key="includesTableView">NSTableView</string>
 						<string key="nameTextField">NSTextField</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<object class="IBToOneOutletInfo" key="chooseInputFileButton">
-							<string key="name">chooseInputFileButton</string>
-							<string key="candidateClassName">NSButton</string>
-						</object>
 						<object class="IBToOneOutletInfo" key="definesArrayController">
 							<string key="name">definesArrayController</string>
 							<string key="candidateClassName">NSArrayController</string>
@@ -3976,6 +3984,18 @@
 						</object>
 						<object class="IBToOneOutletInfo" key="definesTableView">
 							<string key="name">definesTableView</string>
+							<string key="candidateClassName">NSTableView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="includesArrayController">
+							<string key="name">includesArrayController</string>
+							<string key="candidateClassName">NSArrayController</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="includesSearchField">
+							<string key="name">includesSearchField</string>
+							<string key="candidateClassName">NSSearchField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="includesTableView">
+							<string key="name">includesTableView</string>
 							<string key="candidateClassName">NSTableView</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="nameTextField">

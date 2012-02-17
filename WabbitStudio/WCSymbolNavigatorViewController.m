@@ -20,6 +20,7 @@
 #import "WCTabViewController.h"
 #import "WCProjectContainer.h"
 #import "WCSourceScanner.h"
+#import "WCSourceFileDocument.h"
 
 @interface WCSymbolNavigatorViewController ()
 - (void)_updateSymbols;
@@ -144,26 +145,42 @@ static const CGFloat kMainCellHeight = 20.0;
 
 #pragma mark *** Private Methods ***
 - (void)_updateSymbols; {
-	[[self symbolFileContainer] willChangeValueForKey:@"statusString"];
+	[[[self symbolFileContainer] mutableChildNodes] removeObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [[[self symbolFileContainer] childNodes] count])]];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:WCSourceScannerDidFinishScanningSymbolsNotification object:nil];
 	
 	NSMapTable *filesToSourceFileDocuments = [[self projectDocument] filesToSourceFileDocuments];
+	NSArray *files = [[filesToSourceFileDocuments keyEnumerator] allObjects];
 	
-	for (WCFile *file in [filesToSourceFileDocuments keyEnumerator]) {
-		WCSymbolFileContainer *fileContainer = [WCSymbolFileContainer symbolFileContainerWithFile:file];
-		NSArray *symbols = [[[filesToSourceFileDocuments objectForKey:file] sourceScanner] symbolsSortedByName];
+	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+		NSMutableArray *filesSortedByName = [NSMutableArray arrayWithCapacity:0];
 		
-		for (WCSourceSymbol *symbol in symbols) {
-			WCSymbolContainer *symbolContainer = [WCSymbolContainer symbolContainerWithSourceSymbol:symbol];
+		for (WCFile *file in files) {
+			WCSymbolFileContainer *fileContainer = [WCSymbolFileContainer symbolFileContainerWithFile:file];
+			WCSourceScanner *sourceScanner = [[filesToSourceFileDocuments objectForKey:file] sourceScanner];
+			NSArray *symbols = [sourceScanner symbolsSortedByName];
 			
-			[[fileContainer mutableChildNodes] addObject:symbolContainer];
+			dispatch_async(dispatch_get_main_queue(), ^{
+				[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_sourceScannerDidFinishScanningSymbols:) name:WCSourceScannerDidFinishScanningSymbolsNotification object:sourceScanner];
+			});
+			
+			for (WCSourceSymbol *symbol in symbols) {
+				WCSymbolContainer *symbolContainer = [WCSymbolContainer symbolContainerWithSourceSymbol:symbol];
+				
+				[[fileContainer mutableChildNodes] addObject:symbolContainer];
+			}
+			
+			[filesSortedByName addObject:fileContainer];
 		}
 		
-		[[[self symbolFileContainer] mutableChildNodes] addObject:fileContainer];
-	}
-	
-	[[self symbolFileContainer] didChangeValueForKey:@"statusString"];
-	
-	[[self outlineView] expandItem:nil expandChildren:YES];
+		[filesSortedByName sortUsingDescriptors:[NSArray arrayWithObjects:[NSSortDescriptor sortDescriptorWithKey:@"representedObject.fileName" ascending:YES selector:@selector(localizedStandardCompare:)], nil]];
+		
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[[self symbolFileContainer] willChangeValueForKey:@"statusString"];
+			[[[self symbolFileContainer] mutableChildNodes] addObjectsFromArray:filesSortedByName];
+			[[self symbolFileContainer] didChangeValueForKey:@"statusString"];
+			[[self outlineView] expandItem:[[self outlineView] itemAtRow:0] expandChildren:NO];
+		});
+	});
 }
 #pragma mark IBActions
 - (IBAction)_outlineViewDoubleClick:(id)sender; {
@@ -197,5 +214,32 @@ static const CGFloat kMainCellHeight = 20.0;
 }
 
 #pragma mark Notifications
-
+- (void)_sourceScannerDidFinishScanningSymbols:(NSNotification *)note {
+	WCSourceScanner *sourceScanner = [note object];
+	NSTextStorage *textStorage = [sourceScanner textStorage];
+	NSMapTable *filesToSourceFileDocuments = [[self projectDocument] filesToSourceFileDocuments];
+	
+	for (WCSymbolFileContainer *fileContainer in [[self symbolFileContainer] childNodes]) {
+		WCSourceFileDocument *sfDocument = [filesToSourceFileDocuments objectForKey:[fileContainer representedObject]];
+		
+		if (textStorage == (NSTextStorage *)[sfDocument textStorage]) {
+			NSArray *symbols = [sourceScanner symbolsSortedByName];
+			NSMutableArray *symbolContainers = [NSMutableArray arrayWithCapacity:[symbols count]];
+			
+			for (WCSourceSymbol *symbol in symbols) {
+				WCSymbolContainer *symbolContainer = [WCSymbolContainer symbolContainerWithSourceSymbol:symbol];
+				
+				[symbolContainers addObject:symbolContainer];
+			}
+			
+			[fileContainer willChangeValueForKey:@"statusString"];
+			[[fileContainer mutableChildNodes] removeObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [[fileContainer childNodes] count])]];
+			[[fileContainer mutableChildNodes] addObjectsFromArray:symbolContainers];
+			[fileContainer didChangeValueForKey:@"statusString"];
+			[[self outlineView] expandItem:[[self treeController] treeNodeForModelObject:[fileContainer representedObject]]];
+			
+			break;
+		}
+	}
+}
 @end

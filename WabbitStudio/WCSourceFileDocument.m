@@ -141,12 +141,6 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 		if (saveOperation != NSAutosaveInPlaceOperation)
 			[self _updateFileEditedStatus];
 		
-		if ([self projectDocument]) {
-			WCFile *file = [[[self projectDocument] sourceFileDocumentsToFiles] objectForKey:self];
-			
-			[[file fileReference] setShouldMonitorFile:YES];
-		}
-		
 		completionHandler(outError);
 	}];
 }
@@ -243,16 +237,6 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 	
 	if ([self projectDocument])
 		[self _updateFileEditedStatus];
-}
-
-- (void)saveDocument:(id)sender {
-	if ([self projectDocument]) {
-		WCFile *file = [[[self projectDocument] sourceFileDocumentsToFiles] objectForKey:self];
-		
-		[[file fileReference] setIgnoreNextFileWatcherNotification:YES];
-	}
-	
-	[super saveDocument:nil];
 }
 
 #pragma mark NSTextViewDelegate

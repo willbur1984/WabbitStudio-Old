@@ -34,6 +34,9 @@
 		if ([fileURL isPackage] && [[fileURL fileUTI] isEqualToString:WCProjectFileUTI])
 			continue;
 		else if ([fileURL isDirectory]) {
+			if ([[fileURL fileName] isEqualToString:NSLocalizedString(@"Build Products", @"Build Products")])
+				continue;
+			
 			if (copyFiles) {
 				NSURL *newFileURL = [[[[groupContainer representedObject] fileURL] parentDirectoryURL] URLByAppendingPathComponent:[fileURL lastPathComponent]];
 				if (![[NSFileManager defaultManager] copyItemAtURL:fileURL toURL:newFileURL error:outError])
@@ -53,6 +56,9 @@
 				if ([fileURL isPackage] && [[fileURL fileUTI] isEqualToString:WCProjectFileUTI])
 					continue;
 				else if ([fileURL isDirectory]) {
+					if ([[fileURL fileName] isEqualToString:NSLocalizedString(@"Build Products", @"Build Products")])
+						continue;
+					
 					WCGroupContainer *directoryNode = [WCGroupContainer fileContainerWithFile:[WCGroup fileWithFileURL:fileURL]];
 					
 					[directoryPathsToDirectoryNodes setObject:directoryNode forKey:[fileURL path]];

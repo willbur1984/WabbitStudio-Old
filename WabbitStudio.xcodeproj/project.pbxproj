@@ -216,6 +216,9 @@
 		077906B114E1B3CC006C16EF /* WCSearchResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 077906B014E1B3CC006C16EF /* WCSearchResult.m */; };
 		077906B414E1BAAA006C16EF /* WCSearchResultContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 077906B314E1BAA9006C16EF /* WCSearchResultContainer.m */; };
 		077906B714E1CF97006C16EF /* RSLightBackgroundTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 077906B614E1CF97006C16EF /* RSLightBackgroundTextFieldCell.m */; };
+		077D3EE514EECD6C000735EA /* BuildTargetOutputTypesToFileExtensions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 077D3EE414EECD6C000735EA /* BuildTargetOutputTypesToFileExtensions.plist */; };
+		077D3EE914EED0DD000735EA /* RSStringToURLTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 077D3EE814EED0DD000735EA /* RSStringToURLTransformer.m */; };
+		077D3EEC14EEE0C8000735EA /* WCTabViewWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 077D3EEB14EEE0C8000735EA /* WCTabViewWindow.m */; };
 		07862BA614BA33040057EB89 /* WCDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07862BA514BA33040057EB89 /* WCDocumentController.m */; };
 		07862BA914BA46720057EB89 /* WCSplitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07862BA814BA46720057EB89 /* WCSplitView.m */; };
 		07862BAD14BA78010057EB89 /* KBResponderNotifyingWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 07862BAC14BA78010057EB89 /* KBResponderNotifyingWindow.m */; };
@@ -242,7 +245,6 @@
 		0797327C14C5374300A71F54 /* WCTabView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0797327B14C5374300A71F54 /* WCTabView.m */; };
 		07992B5314E59C3B008AD47D /* WCBuildTarget.m in Sources */ = {isa = PBXBuildFile; fileRef = 07992B5214E59C3B008AD47D /* WCBuildTarget.m */; };
 		07A8AF8214BDC7EC008CB9FF /* KeyBindings.png in Resources */ = {isa = PBXBuildFile; fileRef = 07A8AF8014BDC7EC008CB9FF /* KeyBindings.png */; };
-		07A8AF8314BDC7EC008CB9FF /* PBXKeyBindingsPrefsModule.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 07A8AF8114BDC7EC008CB9FF /* PBXKeyBindingsPrefsModule.tiff */; };
 		07A8AF8914BDC82A008CB9FF /* WCKeyBindingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A8AF8714BDC82A008CB9FF /* WCKeyBindingsViewController.m */; };
 		07A8AF8D14BDC93C008CB9FF /* WCKeyBindingsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07A8AF8B14BDC93C008CB9FF /* WCKeyBindingsView.xib */; };
 		07A8AF9914BDCFE4008CB9FF /* MGRecessedPopUpButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A8AF9514BDCFE4008CB9FF /* MGRecessedPopUpButtonCell.m */; };
@@ -709,6 +711,11 @@
 		077906B314E1BAA9006C16EF /* WCSearchResultContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSearchResultContainer.m; sourceTree = "<group>"; };
 		077906B514E1CF97006C16EF /* RSLightBackgroundTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSLightBackgroundTextFieldCell.h; sourceTree = "<group>"; };
 		077906B614E1CF97006C16EF /* RSLightBackgroundTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSLightBackgroundTextFieldCell.m; sourceTree = "<group>"; };
+		077D3EE414EECD6C000735EA /* BuildTargetOutputTypesToFileExtensions.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = BuildTargetOutputTypesToFileExtensions.plist; sourceTree = "<group>"; };
+		077D3EE714EED0DD000735EA /* RSStringToURLTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSStringToURLTransformer.h; sourceTree = "<group>"; };
+		077D3EE814EED0DD000735EA /* RSStringToURLTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSStringToURLTransformer.m; sourceTree = "<group>"; };
+		077D3EEA14EEE0C8000735EA /* WCTabViewWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTabViewWindow.h; sourceTree = "<group>"; };
+		077D3EEB14EEE0C8000735EA /* WCTabViewWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCTabViewWindow.m; sourceTree = "<group>"; };
 		07862BA414BA33040057EB89 /* WCDocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCDocumentController.h; sourceTree = "<group>"; };
 		07862BA514BA33040057EB89 /* WCDocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCDocumentController.m; sourceTree = "<group>"; };
 		07862BA714BA46720057EB89 /* WCSplitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSplitView.h; sourceTree = "<group>"; };
@@ -757,7 +764,6 @@
 		07992B5114E59C3B008AD47D /* WCBuildTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCBuildTarget.h; sourceTree = "<group>"; };
 		07992B5214E59C3B008AD47D /* WCBuildTarget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCBuildTarget.m; sourceTree = "<group>"; };
 		07A8AF8014BDC7EC008CB9FF /* KeyBindings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = KeyBindings.png; sourceTree = "<group>"; };
-		07A8AF8114BDC7EC008CB9FF /* PBXKeyBindingsPrefsModule.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = PBXKeyBindingsPrefsModule.tiff; sourceTree = "<group>"; };
 		07A8AF8614BDC82A008CB9FF /* WCKeyBindingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCKeyBindingsViewController.h; sourceTree = "<group>"; };
 		07A8AF8714BDC82A008CB9FF /* WCKeyBindingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCKeyBindingsViewController.m; sourceTree = "<group>"; };
 		07A8AF8C14BDC93C008CB9FF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCKeyBindingsView.xib; sourceTree = "<group>"; };
@@ -1273,6 +1279,7 @@
 		071ECCC914A4233C002409F8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				077D3EE414EECD6C000735EA /* BuildTargetOutputTypesToFileExtensions.plist */,
 				0711BB3E14ED850400EC9841 /* Error.pdf */,
 				0711BB3F14ED850400EC9841 /* ErrorMultiple.pdf */,
 				0711BB4014ED850400EC9841 /* Warning.pdf */,
@@ -1294,7 +1301,6 @@
 				077884F614C10CB400605F5D /* Group.tiff */,
 				071985FD14C0BC9400C8E91A /* project.icns */,
 				07A8AF8014BDC7EC008CB9FF /* KeyBindings.png */,
-				07A8AF8114BDC7EC008CB9FF /* PBXKeyBindingsPrefsModule.tiff */,
 				07EB8E3814B64D9A00F8A8C6 /* Keyboard.tiff */,
 				07EB8E2914B644A600F8A8C6 /* ReallyAdvanced.png */,
 				07EB8E2714B641B900F8A8C6 /* SplitterHandle.pdf */,
@@ -1618,6 +1624,8 @@
 				0719860514C0BDC900C8E91A /* WCProjectWindowController.m */,
 				07154F5614D5D5E100F57668 /* WCSourceFileSeparateWindowController.h */,
 				07154F5714D5D5E100F57668 /* WCSourceFileSeparateWindowController.m */,
+				077D3EEA14EEE0C8000735EA /* WCTabViewWindow.h */,
+				077D3EEB14EEE0C8000735EA /* WCTabViewWindow.m */,
 			);
 			name = "Window Controllers";
 			sourceTree = "<group>";
@@ -1904,6 +1912,8 @@
 				07B4740714AE3E0A00E3F9D0 /* RSNegateNumberToBoolTransformer.m */,
 				072FCFBB14CBCA6200F76276 /* RSStringToAbbreviatedStringTransformer.h */,
 				072FCFBC14CBCA6200F76276 /* RSStringToAbbreviatedStringTransformer.m */,
+				077D3EE714EED0DD000735EA /* RSStringToURLTransformer.h */,
+				077D3EE814EED0DD000735EA /* RSStringToURLTransformer.m */,
 			);
 			name = Transformers;
 			sourceTree = "<group>";
@@ -2011,7 +2021,6 @@
 				07713F1314B954FC00324F77 /* SelectEncodingsPanel.nib in Resources */,
 				07862BC514BB6F850057EB89 /* WCSourceFileWindow.xib in Resources */,
 				07A8AF8214BDC7EC008CB9FF /* KeyBindings.png in Resources */,
-				07A8AF8314BDC7EC008CB9FF /* PBXKeyBindingsPrefsModule.tiff in Resources */,
 				07A8AF8D14BDC93C008CB9FF /* WCKeyBindingsView.xib in Resources */,
 				07A8AFC614BDF65C008CB9FF /* WCKeyBindingsEditCommandPairWindow.xib in Resources */,
 				07A8AFCF14BDFCCE008CB9FF /* SRRemoveShortcut.tif in Resources */,
@@ -2054,6 +2063,7 @@
 				0711BB4414ED850400EC9841 /* Warning.pdf in Resources */,
 				0711BB4514ED850400EC9841 /* WarningMultiple.pdf in Resources */,
 				0711BB6A14EE078D00EC9841 /* WCSymbolNavigatorView.xib in Resources */,
+				077D3EE514EECD6C000735EA /* BuildTargetOutputTypesToFileExtensions.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2270,6 +2280,8 @@
 				0711BB6414EE037400EC9841 /* WCSymbolFileContainer.m in Sources */,
 				0711BB6714EE038800EC9841 /* WCSymbolContainer.m in Sources */,
 				0711BB6D14EE09D100EC9841 /* WCSymbolNavigatorOutlineView.m in Sources */,
+				077D3EE914EED0DD000735EA /* RSStringToURLTransformer.m in Sources */,
+				077D3EEC14EEE0C8000735EA /* WCTabViewWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

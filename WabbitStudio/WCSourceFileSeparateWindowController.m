@@ -10,6 +10,8 @@
 #import "WCTabViewController.h"
 #import "WCSourceFileDocument.h"
 #import "WCProjectDocument.h"
+#import "WCTabViewWindow.h"
+
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
 @implementation WCSourceFileSeparateWindowController
@@ -26,6 +28,8 @@
 
 - (void)windowDidLoad {
 	[super windowDidLoad];
+	
+	[(WCTabViewWindow *)[self window] setTabViewController:[self tabViewController]];
 	
 	[[[self tabViewController] view] setFrameSize:[[[self window] contentView] frame].size];
 	[[[self window] contentView] addSubview:[[self tabViewController] view]];

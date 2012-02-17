@@ -18,6 +18,7 @@
 #import "WCProjectNavigatorViewController.h"
 #import "WCSourceHighlighter.h"
 #import "NSTextView+WCExtensions.h"
+
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
 NSString *const WCTabViewControllerDidSelectTabNotification = @"WCTabViewControllerDidSelectTabNotification";

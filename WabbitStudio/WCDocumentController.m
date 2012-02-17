@@ -19,7 +19,7 @@ NSString *const WCProjectFileUTI = @"org.revsoft.wabbitstudio.project";
 	if (!(self = [super init]))
 		return nil;
 	
-	[self setAutosavingDelay:30.0];
+	[self setAutosavingDelay:15.0];
 	
 	return self;
 }

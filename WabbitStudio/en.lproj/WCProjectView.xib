@@ -2,10 +2,10 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1070</int>
-		<string key="IBDocument.SystemVersion">11C74</string>
+		<string key="IBDocument.SystemVersion">11D50b</string>
 		<string key="IBDocument.InterfaceBuilderVersion">1938</string>
-		<string key="IBDocument.AppKitVersion">1138.23</string>
-		<string key="IBDocument.HIToolboxVersion">567.00</string>
+		<string key="IBDocument.AppKitVersion">1138.32</string>
+		<string key="IBDocument.HIToolboxVersion">568.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
 			<string key="NS.object.0">1938</string>
@@ -15,6 +15,7 @@
 			<string>NSTextField</string>
 			<string>NSCustomObject</string>
 			<string>NSMatrix</string>
+			<string>NSUserDefaultsController</string>
 			<string>NSCustomView</string>
 			<string>NSButtonCell</string>
 			<string>NSPathCell</string>
@@ -56,7 +57,7 @@
 						<string key="NSReuseIdentifierKey">_NS:161</string>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSButtonCell" key="NSCell" id="353999110">
-							<int key="NSCellFlags">604110336</int>
+							<int key="NSCellFlags">67239424</int>
 							<int key="NSCellFlags2">134348800</int>
 							<string key="NSContents">Choose…</string>
 							<object class="NSFont" key="NSSupport">
@@ -92,7 +93,7 @@
 						<string key="NSReuseIdentifierKey">_NS:3161</string>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSPathCell" key="NSCell" id="715022584">
-							<int key="NSCellFlags">606207489</int>
+							<int key="NSCellFlags">69336577</int>
 							<int key="NSCellFlags2">33554432</int>
 							<object class="NSURL" key="NSContents">
 								<nil key="NS.base"/>
@@ -108,7 +109,7 @@
 							<object class="NSMutableArray" key="NSPathComponentCells">
 								<bool key="EncodedWithXMLCoder">YES</bool>
 								<object class="NSPathComponentCell">
-									<int key="NSCellFlags">604110400</int>
+									<int key="NSCellFlags">67239488</int>
 									<int key="NSCellFlags2">1024</int>
 									<string key="NSContents">Leopard</string>
 									<reference key="NSSupport" ref="27379760"/>
@@ -137,7 +138,7 @@
 									</object>
 								</object>
 								<object class="NSPathComponentCell">
-									<int key="NSCellFlags">604110400</int>
+									<int key="NSCellFlags">67239488</int>
 									<int key="NSCellFlags2">1024</int>
 									<string key="NSContents">Applications</string>
 									<reference key="NSSupport" ref="27379760"/>
@@ -161,12 +162,13 @@
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="865893414"/>
 						<string key="NSReuseIdentifierKey">_NS:266</string>
+						<bool key="NSEnabled">YES</bool>
 						<int key="NSNumRows">2</int>
 						<int key="NSNumCols">1</int>
 						<object class="NSMutableArray" key="NSCells">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="NSButtonCell" id="134901356">
-								<int key="NSCellFlags">-1543373312</int>
+								<int key="NSCellFlags">-2080244224</int>
 								<int key="NSCellFlags2">0</int>
 								<string key="NSContents">Project folder</string>
 								<reference key="NSSupport" ref="27379760"/>
@@ -182,7 +184,7 @@
 								<int key="NSPeriodicInterval">25</int>
 							</object>
 							<object class="NSButtonCell" id="1016628078">
-								<int key="NSCellFlags">604110336</int>
+								<int key="NSCellFlags">67239424</int>
 								<int key="NSCellFlags2">0</int>
 								<string key="NSContents">Custom</string>
 								<reference key="NSSupport" ref="27379760"/>
@@ -244,7 +246,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<int key="NSMatrixFlags">1151868928</int>
 						<string key="NSCellClass">NSActionCell</string>
 						<object class="NSButtonCell" key="NSProtoCell" id="607725446">
-							<int key="NSCellFlags">604110336</int>
+							<int key="NSCellFlags">67239424</int>
 							<int key="NSCellFlags2">0</int>
 							<string key="NSContents">Radio</string>
 							<reference key="NSSupport" ref="27379760"/>
@@ -347,7 +349,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 								<string key="NSContents">Always</string>
 								<reference key="NSSupport" ref="27379760"/>
 								<reference key="NSControlView" ref="26174259"/>
-								<int key="NSTag">1</int>
 								<int key="NSButtonFlags">1211912703</int>
 								<int key="NSButtonFlags2">0</int>
 								<reference key="NSAlternateImage" ref="208449646"/>
@@ -362,6 +363,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 								<string key="NSContents">Prompt</string>
 								<reference key="NSSupport" ref="27379760"/>
 								<reference key="NSControlView" ref="26174259"/>
+								<int key="NSTag">1</int>
 								<int key="NSButtonFlags">1211912703</int>
 								<int key="NSButtonFlags2">0</int>
 								<object class="NSImage" key="NSNormalImage">
@@ -415,6 +417,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 								<string key="NSContents">Never</string>
 								<reference key="NSSupport" ref="27379760"/>
 								<reference key="NSControlView" ref="26174259"/>
+								<int key="NSTag">2</int>
 								<int key="NSButtonFlags">1211912703</int>
 								<int key="NSButtonFlags2">0</int>
 								<reference key="NSAlternateImage" ref="208449646"/>
@@ -510,6 +513,9 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				<reference key="NSNextKeyView" ref="803249036"/>
 				<string key="NSClassName">NSView</string>
 			</object>
+			<object class="NSUserDefaultsController" id="1066330681">
+				<bool key="NSSharedInstance">YES</bool>
+			</object>
 		</object>
 		<object class="IBObjectContainer" key="IBDocument.Objects">
 			<object class="NSMutableArray" key="connectionRecords">
@@ -521,6 +527,106 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<reference key="destination" ref="1005"/>
 					</object>
 					<int key="connectionID">9</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">chooseCustomBuildProductsLocation:</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="889023737"/>
+					</object>
+					<int key="connectionID">38</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">selectedTag: values.projectAutoSave</string>
+						<reference key="source" ref="26174259"/>
+						<reference key="destination" ref="1066330681"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="26174259"/>
+							<reference key="NSDestination" ref="1066330681"/>
+							<string key="NSLabel">selectedTag: values.projectAutoSave</string>
+							<string key="NSBinding">selectedTag</string>
+							<string key="NSKeyPath">values.projectAutoSave</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">29</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">selectedTag: values.projectBuildProductsLocation</string>
+						<reference key="source" ref="645122352"/>
+						<reference key="destination" ref="1066330681"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="645122352"/>
+							<reference key="NSDestination" ref="1066330681"/>
+							<string key="NSLabel">selectedTag: values.projectBuildProductsLocation</string>
+							<string key="NSBinding">selectedTag</string>
+							<string key="NSKeyPath">values.projectBuildProductsLocation</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">30</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: values.projectBuildProductsLocationCustom</string>
+						<reference key="source" ref="865893414"/>
+						<reference key="destination" ref="1066330681"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="865893414"/>
+							<reference key="NSDestination" ref="1066330681"/>
+							<string key="NSLabel">value: values.projectBuildProductsLocationCustom</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">values.projectBuildProductsLocationCustom</string>
+							<object class="NSDictionary" key="NSOptions">
+								<string key="NS.key.0">NSValueTransformerName</string>
+								<string key="NS.object.0">RSStringToURLTransformer</string>
+							</object>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">32</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: values.projectBuildProductsLocation</string>
+						<reference key="source" ref="865893414"/>
+						<reference key="destination" ref="1066330681"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="865893414"/>
+							<reference key="NSDestination" ref="1066330681"/>
+							<string key="NSLabel">enabled: values.projectBuildProductsLocation</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">values.projectBuildProductsLocation</string>
+							<object class="NSDictionary" key="NSOptions">
+								<string key="NS.key.0">NSValueTransformerName</string>
+								<string key="NS.object.0">RSNumberToBoolTransformer</string>
+							</object>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">35</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: values.projectBuildProductsLocation</string>
+						<reference key="source" ref="889023737"/>
+						<reference key="destination" ref="1066330681"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="889023737"/>
+							<reference key="NSDestination" ref="1066330681"/>
+							<string key="NSLabel">enabled: values.projectBuildProductsLocation</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">values.projectBuildProductsLocation</string>
+							<object class="NSDictionary" key="NSOptions">
+								<string key="NS.key.0">NSValueTransformerName</string>
+								<string key="NS.object.0">RSNumberToBoolTransformer</string>
+							</object>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">37</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -680,6 +786,11 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<reference key="object" ref="825328182"/>
 						<reference key="parent" ref="382205753"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">28</int>
+						<reference key="object" ref="1066330681"/>
+						<reference key="parent" ref="1002"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -701,6 +812,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>25.IBPluginDependency</string>
 					<string>26.IBPluginDependency</string>
 					<string>27.IBPluginDependency</string>
+					<string>28.IBPluginDependency</string>
 					<string>3.IBPluginDependency</string>
 					<string>4.IBPluginDependency</string>
 					<string>5.IBPluginDependency</string>
@@ -710,6 +822,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -745,7 +858,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				<reference key="dict.values" ref="1002"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">27</int>
+			<int key="maxID">38</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -771,6 +884,17 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				<object class="IBPartialClassDescription">
 					<string key="className">WCProjectViewController</string>
 					<string key="superclassName">NSViewController</string>
+					<object class="NSMutableDictionary" key="actions">
+						<string key="NS.key.0">chooseCustomBuildProductsLocation:</string>
+						<string key="NS.object.0">id</string>
+					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<string key="NS.key.0">chooseCustomBuildProductsLocation:</string>
+						<object class="IBActionInfo" key="NS.object.0">
+							<string key="name">chooseCustomBuildProductsLocation:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/WCProjectViewController.h</string>

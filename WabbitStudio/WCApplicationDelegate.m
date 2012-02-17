@@ -17,6 +17,7 @@
 #import "WCDocumentController.h"
 #import "WCNewProjectWindowController.h"
 #import "WCAddToProjectAccessoryViewController.h"
+#import "WCProjectViewController.h"
 
 @implementation WCApplicationDelegate
 #pragma mark *** Subclass Overrides ***
@@ -31,6 +32,7 @@
 	[userDefaults addEntriesFromDictionary:[WCKeyBindingsViewController userDefaults]];
 	[userDefaults addEntriesFromDictionary:[WCGeneralViewController userDefaults]];
 	[userDefaults addEntriesFromDictionary:[WCAddToProjectAccessoryViewController userDefaults]];
+	[userDefaults addEntriesFromDictionary:[WCProjectViewController userDefaults]];
 	
 	[[NSUserDefaults standardUserDefaults] registerDefaults:userDefaults];
 }

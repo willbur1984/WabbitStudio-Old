@@ -51,6 +51,7 @@ typedef enum _WCBuildTargetOutputType {
 @property (readwrite,assign,nonatomic) BOOL generateCodeListing;
 @property (readwrite,assign,nonatomic) BOOL generateLabelFile;
 @property (readwrite,assign,nonatomic) BOOL symbolsAreCaseSensitive;
+@property (readonly,nonatomic) NSString *outputFileExtension;
 
 + (WCBuildTarget *)buildTargetWithName:(NSString *)name outputType:(WCBuildTargetOutputType)outputType projectDocument:(WCProjectDocument *)projectDocument;
 - (id)initWithName:(NSString *)name outputType:(WCBuildTargetOutputType)outputType projectDocument:(WCProjectDocument *)projectDocument;
