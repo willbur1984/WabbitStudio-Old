@@ -2,10 +2,10 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1070</int>
-		<string key="IBDocument.SystemVersion">11C74</string>
+		<string key="IBDocument.SystemVersion">11D50b</string>
 		<string key="IBDocument.InterfaceBuilderVersion">1938</string>
-		<string key="IBDocument.AppKitVersion">1138.23</string>
-		<string key="IBDocument.HIToolboxVersion">567.00</string>
+		<string key="IBDocument.AppKitVersion">1138.32</string>
+		<string key="IBDocument.HIToolboxVersion">568.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
 			<string key="NS.object.0">1938</string>
@@ -58,6 +58,7 @@
 										<string key="NSFrameSize">{454, 299}</string>
 										<reference key="NSSuperview" ref="150813763"/>
 										<reference key="NSWindow"/>
+										<reference key="NSNextKeyView" ref="612878804"/>
 										<string key="NSReuseIdentifierKey">_NS:404</string>
 									</object>
 								</object>
@@ -84,6 +85,7 @@
 								<string key="NSFrame">{{469, 0}, {15, 314}}</string>
 								<reference key="NSSuperview" ref="524437688"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:408</string>
 								<reference key="NSTarget" ref="524437688"/>
 								<string key="NSAction">_doScroller:</string>
@@ -96,6 +98,7 @@
 								<string key="NSFrame">{{-100, -100}, {168, 15}}</string>
 								<reference key="NSSuperview" ref="524437688"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView" ref="150813763"/>
 								<string key="NSReuseIdentifierKey">_NS:412</string>
 								<int key="NSsFlags">1</int>
 								<reference key="NSTarget" ref="524437688"/>
@@ -106,7 +109,7 @@
 						<string key="NSFrameSize">{484, 314}</string>
 						<reference key="NSSuperview" ref="902315585"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="150813763"/>
+						<reference key="NSNextKeyView" ref="218206028"/>
 						<string key="NSReuseIdentifierKey">_NS:400</string>
 						<int key="NSsFlags">133136</int>
 						<reference key="NSVScroller" ref="612878804"/>
@@ -117,7 +120,7 @@
 				<string key="NSFrameSize">{484, 314}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
-				<reference key="NSNextKeyView"/>
+				<reference key="NSNextKeyView" ref="524437688"/>
 				<string key="NSReuseIdentifierKey">_NS:1192</string>
 				<string key="NSClassName">NSView</string>
 			</object>
@@ -215,9 +218,11 @@
 					<string>-1.IBPluginDependency</string>
 					<string>-2.IBPluginDependency</string>
 					<string>-3.IBPluginDependency</string>
+					<string>12.CustomClassName</string>
 					<string>12.IBPluginDependency</string>
 					<string>13.IBPluginDependency</string>
 					<string>14.IBPluginDependency</string>
+					<string>15.CustomClassName</string>
 					<string>15.IBPluginDependency</string>
 					<string>8.IBPluginDependency</string>
 				</object>
@@ -226,9 +231,11 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>WCSourceScrollView</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>WCSourceScroller</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 				</object>
@@ -285,26 +292,83 @@
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
+					<string key="className">WCSourceScrollView</string>
+					<string key="superclassName">NSScrollView</string>
+					<object class="NSMutableDictionary" key="outlets">
+						<string key="NS.key.0">delegate</string>
+						<string key="NS.object.0">id</string>
+					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<string key="NS.key.0">delegate</string>
+						<object class="IBToOneOutletInfo" key="NS.object.0">
+							<string key="name">delegate</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/WCSourceScrollView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">WCSourceScroller</string>
+					<string key="superclassName">NSScroller</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/WCSourceScroller.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
 					<string key="className">WCSourceTextView</string>
 					<string key="superclassName">WCFindableTextView</string>
 					<object class="NSMutableDictionary" key="actions">
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>addBookmarkAtCurrentLine:</string>
 							<string>commentSelection:</string>
 							<string>commentUncommentSelection:</string>
+							<string>editAllMacroArgumentsInScope:</string>
+							<string>findSelectedTextInProject:</string>
+							<string>fold:</string>
+							<string>foldAll:</string>
+							<string>foldCommentBlocks:</string>
 							<string>jumpInFile:</string>
 							<string>jumpToDefinition:</string>
 							<string>jumpToLine:</string>
+							<string>jumpToNextBookmark:</string>
 							<string>jumpToNextPlaceholder:</string>
+							<string>jumpToPreviousBookmark:</string>
 							<string>jumpToPreviousPlaceholder:</string>
 							<string>jumpToSelection:</string>
+							<string>openInSeparateEditor:</string>
+							<string>removeAllBookmarks:</string>
+							<string>removeBookmarkAtCurrentLine:</string>
 							<string>shiftLeft:</string>
 							<string>shiftRight:</string>
+							<string>toggleBookmarkAtCurrentLine:</string>
 							<string>uncommentSelection:</string>
+							<string>unfold:</string>
+							<string>unfoldAll:</string>
+							<string>unfoldCommentBlocks:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -322,26 +386,65 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>addBookmarkAtCurrentLine:</string>
 							<string>commentSelection:</string>
 							<string>commentUncommentSelection:</string>
+							<string>editAllMacroArgumentsInScope:</string>
+							<string>findSelectedTextInProject:</string>
+							<string>fold:</string>
+							<string>foldAll:</string>
+							<string>foldCommentBlocks:</string>
 							<string>jumpInFile:</string>
 							<string>jumpToDefinition:</string>
 							<string>jumpToLine:</string>
+							<string>jumpToNextBookmark:</string>
 							<string>jumpToNextPlaceholder:</string>
+							<string>jumpToPreviousBookmark:</string>
 							<string>jumpToPreviousPlaceholder:</string>
 							<string>jumpToSelection:</string>
+							<string>openInSeparateEditor:</string>
+							<string>removeAllBookmarks:</string>
+							<string>removeBookmarkAtCurrentLine:</string>
 							<string>shiftLeft:</string>
 							<string>shiftRight:</string>
+							<string>toggleBookmarkAtCurrentLine:</string>
 							<string>uncommentSelection:</string>
+							<string>unfold:</string>
+							<string>unfoldAll:</string>
+							<string>unfoldCommentBlocks:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBActionInfo">
+								<string key="name">addBookmarkAtCurrentLine:</string>
+								<string key="candidateClassName">id</string>
+							</object>
 							<object class="IBActionInfo">
 								<string key="name">commentSelection:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
 								<string key="name">commentUncommentSelection:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">editAllMacroArgumentsInScope:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">findSelectedTextInProject:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">fold:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">foldAll:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">foldCommentBlocks:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
@@ -357,7 +460,15 @@
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
+								<string key="name">jumpToNextBookmark:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
 								<string key="name">jumpToNextPlaceholder:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">jumpToPreviousBookmark:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
@@ -369,6 +480,18 @@
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
+								<string key="name">openInSeparateEditor:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">removeAllBookmarks:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">removeBookmarkAtCurrentLine:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
 								<string key="name">shiftLeft:</string>
 								<string key="candidateClassName">id</string>
 							</object>
@@ -377,7 +500,23 @@
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
+								<string key="name">toggleBookmarkAtCurrentLine:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
 								<string key="name">uncommentSelection:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">unfold:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">unfoldAll:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">unfoldCommentBlocks:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 						</object>
@@ -406,15 +545,23 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>addAssistantEditor:</string>
+							<string>moveFocusToNextArea:</string>
+							<string>moveFocusToPreviousArea:</string>
 							<string>removeAssistantEditor:</string>
+							<string>revealInProjectNavigator:</string>
 							<string>showAssistantEditor:</string>
 							<string>showDocumentItems:</string>
 							<string>showGroupItems:</string>
+							<string>showInFinder:</string>
 							<string>showStandardEditor:</string>
 							<string>showTopLevelItems:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -429,10 +576,14 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>addAssistantEditor:</string>
+							<string>moveFocusToNextArea:</string>
+							<string>moveFocusToPreviousArea:</string>
 							<string>removeAssistantEditor:</string>
+							<string>revealInProjectNavigator:</string>
 							<string>showAssistantEditor:</string>
 							<string>showDocumentItems:</string>
 							<string>showGroupItems:</string>
+							<string>showInFinder:</string>
 							<string>showStandardEditor:</string>
 							<string>showTopLevelItems:</string>
 						</object>
@@ -443,7 +594,19 @@
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
+								<string key="name">moveFocusToNextArea:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">moveFocusToPreviousArea:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
 								<string key="name">removeAssistantEditor:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">revealInProjectNavigator:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
@@ -456,6 +619,10 @@
 							</object>
 							<object class="IBActionInfo">
 								<string key="name">showGroupItems:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">showInFinder:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">

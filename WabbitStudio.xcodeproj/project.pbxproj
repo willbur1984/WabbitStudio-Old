@@ -290,6 +290,8 @@
 		07CC8E9C14E850EC00B303C1 /* WCEditBuildTargetDefinesTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CC8E9B14E850EC00B303C1 /* WCEditBuildTargetDefinesTableView.m */; };
 		07CC8E9F14E8538C00B303C1 /* WCEditBuildTargetIncludesTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CC8E9E14E8538B00B303C1 /* WCEditBuildTargetIncludesTableView.m */; };
 		07CC8F3F14B7DBDB0081EE69 /* WCJumpInCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CC8F3E14B7DBDB0081EE69 /* WCJumpInCellView.m */; };
+		07CEA93A14EF01B3002A5240 /* WCSourceScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CEA93914EF01B3002A5240 /* WCSourceScroller.m */; };
+		07CEA93E14EF0360002A5240 /* WCSourceScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CEA93D14EF0360002A5240 /* WCSourceScrollView.m */; };
 		07E91DF814C8020800B166E3 /* WCLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 07E91DF714C8020700B166E3 /* WCLayoutManager.m */; };
 		07EB8E2214B63C4F00F8A8C6 /* BGHUDAppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0791BE5314ADA3B80004AC16 /* BGHUDAppKit.framework */; };
 		07EB8E2314B63C5600F8A8C6 /* BGHUDAppKit.framework in Copy Private Frameworks */ = {isa = PBXBuildFile; fileRef = 0791BE5314ADA3B80004AC16 /* BGHUDAppKit.framework */; };
@@ -844,6 +846,11 @@
 		07CC8E9E14E8538B00B303C1 /* WCEditBuildTargetIncludesTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCEditBuildTargetIncludesTableView.m; sourceTree = "<group>"; };
 		07CC8F3D14B7DBDB0081EE69 /* WCJumpInCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCJumpInCellView.h; sourceTree = "<group>"; };
 		07CC8F3E14B7DBDB0081EE69 /* WCJumpInCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCJumpInCellView.m; sourceTree = "<group>"; };
+		07CEA93814EF01B3002A5240 /* WCSourceScroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSourceScroller.h; sourceTree = "<group>"; };
+		07CEA93914EF01B3002A5240 /* WCSourceScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSourceScroller.m; sourceTree = "<group>"; };
+		07CEA93C14EF0360002A5240 /* WCSourceScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSourceScrollView.h; sourceTree = "<group>"; };
+		07CEA93D14EF0360002A5240 /* WCSourceScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSourceScrollView.m; sourceTree = "<group>"; };
+		07CEA93F14EF03B2002A5240 /* WCSourceScrollViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSourceScrollViewDelegate.h; sourceTree = "<group>"; };
 		07E91DF614C8020600B166E3 /* WCLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCLayoutManager.h; sourceTree = "<group>"; };
 		07E91DF714C8020700B166E3 /* WCLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCLayoutManager.m; sourceTree = "<group>"; };
 		07EB8E2514B63EB800F8A8C6 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCAdvancedView.xib; sourceTree = "<group>"; };
@@ -1025,6 +1032,11 @@
 				0706D64F14A8F45B0092F880 /* WCSourceTextViewController.m */,
 				076B7F8614BC15B600CC10E3 /* WCStandardSourceTextViewController.h */,
 				076B7F8714BC15B600CC10E3 /* WCStandardSourceTextViewController.m */,
+				07CEA93814EF01B3002A5240 /* WCSourceScroller.h */,
+				07CEA93914EF01B3002A5240 /* WCSourceScroller.m */,
+				07CEA93C14EF0360002A5240 /* WCSourceScrollView.h */,
+				07CEA93D14EF0360002A5240 /* WCSourceScrollView.m */,
+				07CEA93F14EF03B2002A5240 /* WCSourceScrollViewDelegate.h */,
 				073B5A9B14B6A45400FCDC0F /* Storage */,
 				0731614414D32C72002F0F55 /* Layout */,
 				0706AFBD14CF2D9A00A0F93C /* Folding */,
@@ -2288,6 +2300,8 @@
 				077D3EE914EED0DD000735EA /* RSStringToURLTransformer.m in Sources */,
 				077D3EEC14EEE0C8000735EA /* WCTabViewWindow.m in Sources */,
 				078FDADB14EEF2760019321E /* WCSymbolNavigatorOutlineRowView.m in Sources */,
+				07CEA93A14EF01B3002A5240 /* WCSourceScroller.m in Sources */,
+				07CEA93E14EF0360002A5240 /* WCSourceScrollView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

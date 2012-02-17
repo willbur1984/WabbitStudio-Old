@@ -32,6 +32,7 @@
 #import "NSArray+WCExtensions.h"
 #import "WCSourceTypesetter.h"
 #import "WCBuildController.h"
+#import "WCSourceScrollView.h"
 
 @interface WCSourceTextViewController ()
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
@@ -64,6 +65,7 @@
 	[[self sourceHighlighter] performFullHighlightIfNeeded];
 	
 	[[[self scrollView] contentView] setAutoresizesSubviews:YES];
+	[(WCSourceScrollView *)[self scrollView] setDelegate:self];
 	
 	WCSourceLayoutManager *layoutManager = [[[WCSourceLayoutManager alloc] init] autorelease];
 	
@@ -300,6 +302,19 @@
 - (WCProjectDocument *)projectDocumentForSourceRulerView:(WCSourceRulerView *)rulerView {
 	return [[self sourceFileDocument] projectDocument];
 }
+#pragma mark WCSourceScrollViewDelegate
+- (WCProjectDocument *)projectDocumentForSourceScrollView:(WCSourceScrollView *)scrollView {
+	return [[self sourceFileDocument] projectDocument];
+}
+- (NSArray *)buildIssuesForSourceScrollView:(WCSourceScrollView *)scrollView {
+	if ([[self sourceFileDocument] projectDocument]) {
+		WCFile *file = [[[[self sourceFileDocument] projectDocument] sourceFileDocumentsToFiles] objectForKey:[self sourceFileDocument]];
+		
+		return [[[[[self sourceFileDocument] projectDocument] buildController] filesToBuildIssuesSortedByLocation] objectForKey:file];
+	}
+	return nil;
+}
+
 #pragma mark *** Public Methods ***
 - (id)initWithSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument; {
 	return [self initWithSourceFileDocument:sourceFileDocument standardSourceTextViewController:nil];
