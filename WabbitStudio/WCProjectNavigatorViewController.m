@@ -73,6 +73,7 @@ static NSString *const WCProjectNavigatorSelectedItemsKey = @"selectedItems";
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
+	_projectDocument = nil;
 	[_projectFilePaths release];
 	[_addToProjectAccessoryViewController release];
 	[_selectedItemsAfterFilterOperation release];
@@ -335,6 +336,10 @@ static const CGFloat kMainCellHeight = 20.0;
 - (void)setSelectedModelObjects:(NSArray *)modelObjects; {
 	[[self treeController] setSelectedModelObjects:modelObjects];
 }
+
+- (NSResponder *)initialFirstResponder; {
+	return [self outlineView];
+}
 #pragma mark WCProjectDocumentSettingsProvider
 - (NSString *)projectDocumentSettingsKey {
 	return [self className];
@@ -376,15 +381,17 @@ static const NSInteger WCProjectNavigatorFileAlreadyExistsInProjectErrorCode = 1
 }
 
 #pragma mark *** Public Methods ***
-- (id)initWithProjectContainer:(WCProjectContainer *)projectContainer; {
+- (id)initWithProjectDocument:(WCProjectDocument *)projectDocument; {
 	if (!(self = [super initWithNibName:[self nibName] bundle:nil]))
 		return nil;
 	
-	_projectContainer = [projectContainer retain];
+	_projectDocument = projectDocument;
+	
+	_projectContainer = [[projectDocument projectContainer] retain];
 	_projectNavigatorFlags.switchTreeControllerContentBinding = YES;
 	_projectNavigatorFlags.ignoreChangesToProjectDocumentSettings = YES;
 	
-	[[[[projectContainer project] document] projectSettingsProviders] addObject:self];
+	[[projectDocument projectSettingsProviders] addObject:self];
 	
 	return self;
 }
@@ -744,10 +751,7 @@ static const NSInteger WCProjectNavigatorFileAlreadyExistsInProjectErrorCode = 1
 @synthesize expandedItemsBeforeFilterOperation=_expandedItemsBeforeFilterOperation;
 @synthesize selectedItemsBeforeFilterOperation=_selectedItemsBeforeFilterOperation;
 @synthesize selectedItemsAfterFilterOperation=_selectedItemsAfterFilterOperation;
-@dynamic projectDocument;
-- (WCProjectDocument *)projectDocument {
-	return [[[self projectContainer] project] document];
-}
+@synthesize projectDocument=_projectDocument;
 @synthesize addToProjectAccessoryViewController;
 - (WCAddToProjectAccessoryViewController *)addToProjectAccessoryViewController {
 	if (!_addToProjectAccessoryViewController) {

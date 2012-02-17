@@ -37,6 +37,7 @@ extern NSString *const WCProjectNavigatorDidMoveNodesNotificationMovedNodesUserI
 @class WCProjectContainer,RSFindOptionsViewController,WCProjectDocument,WCAddToProjectAccessoryViewController;
 
 @interface WCProjectNavigatorViewController : JAViewController <WCProjectDocumentSettingsProvider,WCNavigatorModule,RSOutlineViewDelegate,RSFindOptionsViewControllerDelegate,QLPreviewPanelDataSource,QLPreviewPanelDelegate,NSOpenSavePanelDelegate> {
+	__weak WCProjectDocument *_projectDocument;
 	WCProjectContainer *_projectContainer;
 	WCProjectContainer *_filteredProjectContainer;
 	NSString *_filterString;
@@ -60,7 +61,7 @@ extern NSString *const WCProjectNavigatorDidMoveNodesNotificationMovedNodesUserI
 @property (readwrite,copy,nonatomic) NSString *filterString;
 @property (readonly,nonatomic) WCProjectDocument *projectDocument;
 
-- (id)initWithProjectContainer:(WCProjectContainer *)projectContainer;
+- (id)initWithProjectDocument:(WCProjectDocument *)projectDocument;
 
 - (IBAction)filter:(id)sender;
 - (IBAction)toggleFilterOptions:(id)sender;

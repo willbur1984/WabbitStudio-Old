@@ -27,7 +27,7 @@ typedef enum _WCSearchNavigatorSearchScope {
 @class WCProjectContainer,WCSearchContainer,RSFindOptionsViewController,WCProjectDocument;
 
 @interface WCSearchNavigatorViewController : JAViewController <WCNavigatorModule,RSFindOptionsViewControllerDelegate,RSOutlineViewDelegate,NSControlTextEditingDelegate,NSAnimationDelegate> {
-	WCProjectContainer *_projectContainer;
+	__weak WCProjectDocument *_projectDocument;
 	WCSearchContainer *_searchContainer;
 	WCSearchContainer *_filteredSearchContainer;
 	NSString *_filterString;
@@ -72,7 +72,7 @@ typedef enum _WCSearchNavigatorSearchScope {
 @property (readonly,nonatomic) RSFindOptionsViewController *searchOptionsViewController;
 @property (readonly,retain,nonatomic) NSRegularExpression *searchRegularExpression;
 
-- (id)initWithProjectContainer:(WCProjectContainer *)projectContainer;
+- (id)initWithProjectDocument:(WCProjectDocument *)projectDocument;
 
 - (IBAction)filter:(id)sender;
 - (IBAction)search:(id)sender;

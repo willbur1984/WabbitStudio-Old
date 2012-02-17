@@ -139,6 +139,19 @@ static const CGFloat kRightSubviewMinWidth = 400.0;
 		
 		[[QLPreviewPanel sharedPreviewPanel] orderOut:nil];
 	}
+	
+	NSResponder *firstResponder = [[self window] firstResponder];
+	
+	if ([firstResponder isKindOfClass:[NSWindow class]]) {
+		if ([[navigatorControl selectedItemIdentifier] isEqualToString:@"project"])
+			[[self window] makeFirstResponder:[[self projectNavigatorViewController] initialFirstResponder]];
+		else if ([[navigatorControl selectedItemIdentifier] isEqualToString:@"symbol"])
+			[[self window] makeFirstResponder:[[self symbolNavigatorViewController] initialFirstResponder]];
+		else if ([[navigatorControl selectedItemIdentifier] isEqualToString:@"search"])
+			[[self window] makeFirstResponder:[[self searchNavigatorViewController] initialFirstResponder]];
+		else if ([[navigatorControl selectedItemIdentifier] isEqualToString:@"issue"])
+			[[self window] makeFirstResponder:[[self issueNavigatorViewController] initialFirstResponder]];
+	}
 }
 #pragma mark WCProjectDocumentSettingsProvider
 - (NSDictionary *)projectDocumentSettings {
@@ -219,16 +232,14 @@ static const CGFloat kRightSubviewMinWidth = 400.0;
 
 @dynamic projectNavigatorViewController;
 - (WCProjectNavigatorViewController *)projectNavigatorViewController {
-	if (!_projectNavigatorViewController) {
-		_projectNavigatorViewController = [[WCProjectNavigatorViewController alloc] initWithProjectContainer:[[self document] projectContainer]];
-	}
+	if (!_projectNavigatorViewController)
+		_projectNavigatorViewController = [[WCProjectNavigatorViewController alloc] initWithProjectDocument:[self document]];
 	return _projectNavigatorViewController;
 }
 @dynamic searchNavigatorViewController;
 - (WCSearchNavigatorViewController *)searchNavigatorViewController {
-	if (!_searchNavigatorViewController) {
-		_searchNavigatorViewController = [[WCSearchNavigatorViewController alloc] initWithProjectContainer:[[self document] projectContainer]];
-	}
+	if (!_searchNavigatorViewController)
+		_searchNavigatorViewController = [[WCSearchNavigatorViewController alloc] initWithProjectDocument:[self document]];
 	return _searchNavigatorViewController;
 }
 @dynamic issueNavigatorViewController;

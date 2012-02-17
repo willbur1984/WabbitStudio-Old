@@ -374,14 +374,6 @@
 					<int key="connectionID">39</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">dataSource</string>
-						<reference key="source" ref="279689890"/>
-						<reference key="destination" ref="145328163"/>
-					</object>
-					<int key="connectionID">40</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
 						<string key="label">content: arrangedObjects</string>
 						<reference key="source" ref="279689890"/>
@@ -413,6 +405,14 @@
 						</object>
 					</object>
 					<int key="connectionID">42</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">dataSource</string>
+						<reference key="source" ref="279689890"/>
+						<reference key="destination" ref="145328163"/>
+					</object>
+					<int key="connectionID">52</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -614,7 +614,7 @@
 									<int key="NSvFlags">266</int>
 									<string key="NSFrame">{{20, 1}, {460, 14}}</string>
 									<reference key="NSSuperview" ref="865568524"/>
-									<reference key="NSNextKeyView" ref="574724381"/>
+									<reference key="NSNextKeyView" ref="738352982"/>
 									<string key="NSReuseIdentifierKey">_NS:3944</string>
 									<bool key="NSEnabled">YES</bool>
 									<object class="NSTextFieldCell" key="NSCell" id="247194098">
@@ -776,6 +776,14 @@
 							<reference ref="1046515261"/>
 							<reference ref="929100743"/>
 							<reference ref="865568524"/>
+							<object class="NSCustomView" id="738352982">
+								<nil key="NSNextResponder"/>
+								<int key="NSvFlags">268</int>
+								<string key="NSFrame">{{1, 50}, {477, 30}}</string>
+								<reference key="NSNextKeyView" ref="574724381"/>
+								<string key="NSReuseIdentifierKey">_NS:1192</string>
+								<string key="NSClassName">WCSymbolNavigatorOutlineRowView</string>
+							</object>
 						</object>
 						<reference key="parent" ref="279689890"/>
 					</object>
@@ -898,6 +906,11 @@
 						<reference key="object" ref="481676686"/>
 						<reference key="parent" ref="423004988"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">51</int>
+						<reference key="object" ref="738352982"/>
+						<reference key="parent" ref="447595721"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -932,6 +945,8 @@
 					<string>5.CustomClassName</string>
 					<string>5.IBPluginDependency</string>
 					<string>5.ibExternalAutomaticallyCalculatesRowSizeFromViewHeight</string>
+					<string>51.IBPluginDependency</string>
+					<string>51.userInterfaceItemIdentifier</string>
 					<string>6.IBPluginDependency</string>
 					<string>8.IBPluginDependency</string>
 					<string>9.IBPluginDependency</string>
@@ -969,6 +984,8 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>NSTableViewRowViewKey</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
@@ -976,6 +993,7 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<reference ref="929100743"/>
 						<reference ref="865568524"/>
+						<reference ref="738352982"/>
 					</object>
 				</object>
 			</object>
@@ -991,7 +1009,7 @@
 				<reference key="dict.values" ref="1002"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">50</int>
+			<int key="maxID">52</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1002,6 +1020,14 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/JAViewController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSTableRowView</string>
+					<string key="superclassName">NSView</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/NSTableRowView.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -1063,6 +1089,25 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/RSTopBorderedGlassGradientView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">WCSymbolNavigatorOutlineRowView</string>
+					<string key="superclassName">NSTableRowView</string>
+					<object class="NSMutableDictionary" key="outlets">
+						<string key="NS.key.0">outlineView</string>
+						<string key="NS.object.0">NSOutlineView</string>
+					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<string key="NS.key.0">outlineView</string>
+						<object class="IBToOneOutletInfo" key="NS.object.0">
+							<string key="name">outlineView</string>
+							<string key="candidateClassName">NSOutlineView</string>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/WCSymbolNavigatorOutlineRowView.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

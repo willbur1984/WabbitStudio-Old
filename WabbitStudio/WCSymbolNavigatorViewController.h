@@ -7,10 +7,11 @@
 //
 
 #import "JAViewController.h"
+#import "WCNavigatorModule.h"
 
 @class WCProjectDocument,WCSymbolFileContainer;
 
-@interface WCSymbolNavigatorViewController : JAViewController {
+@interface WCSymbolNavigatorViewController : JAViewController <WCNavigatorModule> {
 	__weak WCProjectDocument *_projectDocument;
 	WCSymbolFileContainer *_symbolFileContainer;
 	WCSymbolFileContainer *_filteredSymbolFileContainer;

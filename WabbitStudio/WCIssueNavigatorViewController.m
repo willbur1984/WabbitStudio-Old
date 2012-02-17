@@ -130,6 +130,10 @@ static const CGFloat kMainCellHeight = 20.0;
 	
 	return [self selectedModelObjects];
 }
+
+- (NSResponder *)initialFirstResponder; {
+	return [self outlineView];
+}
 #pragma mark *** Public Methods ***
 - (id)initWithProjectDocument:(WCProjectDocument *)projectDocument; {
 	if (!(self = [super initWithNibName:[self nibName] bundle:nil]))

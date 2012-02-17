@@ -18,6 +18,7 @@
 
 @optional
 - (NSArray *)selectedObjectsAndClickedObject:(id *)clickedObject;
-
 - (NSArray *)selectedModelObjectsAndClickedObject:(id *)clickedObject;
+
+- (NSResponder *)initialFirstResponder;
 @end

@@ -236,6 +236,7 @@
 		078F041314AD736A0080ADBC /* RSFindOptionsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 078F041114AD736A0080ADBC /* RSFindOptionsView.xib */; };
 		078F041814AD784E0080ADBC /* RSFindBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F041614AD784E0080ADBC /* RSFindBarViewController.m */; };
 		078F041C14AD78640080ADBC /* RSFindBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 078F041A14AD78640080ADBC /* RSFindBarView.xib */; };
+		078FDADB14EEF2760019321E /* WCSymbolNavigatorOutlineRowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 078FDADA14EEF2760019321E /* WCSymbolNavigatorOutlineRowView.m */; };
 		0791BE5214AD7F530004AC16 /* RSFindBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0791BE5114AD7F530004AC16 /* RSFindBarView.m */; };
 		0797326514C52EBE00A71F54 /* PSMTabBarControl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0797326414C52EBE00A71F54 /* PSMTabBarControl.framework */; };
 		0797326614C52ED100A71F54 /* PSMTabBarControl.framework in Copy Private Frameworks */ = {isa = PBXBuildFile; fileRef = 0797326414C52EBE00A71F54 /* PSMTabBarControl.framework */; };
@@ -749,6 +750,8 @@
 		078F041514AD784E0080ADBC /* RSFindBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSFindBarViewController.h; sourceTree = "<group>"; };
 		078F041614AD784E0080ADBC /* RSFindBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSFindBarViewController.m; sourceTree = "<group>"; };
 		078F041B14AD78640080ADBC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = RSFindBarView.xib; sourceTree = "<group>"; };
+		078FDAD914EEF2760019321E /* WCSymbolNavigatorOutlineRowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSymbolNavigatorOutlineRowView.h; sourceTree = "<group>"; };
+		078FDADA14EEF2760019321E /* WCSymbolNavigatorOutlineRowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSymbolNavigatorOutlineRowView.m; sourceTree = "<group>"; };
 		0791BE5014AD7F530004AC16 /* RSFindBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSFindBarView.h; sourceTree = "<group>"; };
 		0791BE5114AD7F530004AC16 /* RSFindBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSFindBarView.m; sourceTree = "<group>"; };
 		0791BE5314ADA3B80004AC16 /* BGHUDAppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BGHUDAppKit.framework; sourceTree = "<group>"; };
@@ -1163,6 +1166,8 @@
 				0711BB6614EE038700EC9841 /* WCSymbolContainer.m */,
 				0711BB6B14EE09D000EC9841 /* WCSymbolNavigatorOutlineView.h */,
 				0711BB6C14EE09D000EC9841 /* WCSymbolNavigatorOutlineView.m */,
+				078FDAD914EEF2760019321E /* WCSymbolNavigatorOutlineRowView.h */,
+				078FDADA14EEF2760019321E /* WCSymbolNavigatorOutlineRowView.m */,
 			);
 			name = Symbol;
 			sourceTree = "<group>";
@@ -2282,6 +2287,7 @@
 				0711BB6D14EE09D100EC9841 /* WCSymbolNavigatorOutlineView.m in Sources */,
 				077D3EE914EED0DD000735EA /* RSStringToURLTransformer.m in Sources */,
 				077D3EEC14EEE0C8000735EA /* WCTabViewWindow.m in Sources */,
+				078FDADB14EEF2760019321E /* WCSymbolNavigatorOutlineRowView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

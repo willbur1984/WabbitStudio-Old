@@ -44,6 +44,7 @@
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
+	_projectDocument = nil;
 	[_replaceString release];
 	[_showReplaceControlsAnimation release];
 	[_hideReplaceControlsAnimation release];
@@ -56,7 +57,6 @@
 	[_filterString release];
 	[_filteredSearchContainer release];
 	[_searchContainer release];
-	[_projectContainer release];
 	[super dealloc];
 }
 
@@ -211,13 +211,18 @@ static const CGFloat kMainCellHeight = 20.0;
 - (void)setSelectedModelObjects:(NSArray *)modelObjects; {
 	[[self treeController] setSelectedModelObjects:modelObjects];
 }
+
+- (NSResponder *)initialFirstResponder; {
+	return [self searchField];
+}
 #pragma mark *** Public Methods ***
-- (id)initWithProjectContainer:(WCProjectContainer *)projectContainer; {
+
+- (id)initWithProjectDocument:(WCProjectDocument *)projectDocument; {
 	if (!(self = [super initWithNibName:[self nibName] bundle:nil]))
 		return nil;
 	
-	_projectContainer = [projectContainer retain];
-	_searchContainer = [[WCSearchContainer alloc] initWithFile:[_projectContainer project]];
+	_projectDocument = projectDocument;
+	_searchContainer = [[WCSearchContainer alloc] initWithFile:[[projectDocument projectContainer] representedObject]];
 	_operationQueue = [[NSOperationQueue alloc] init];
 	[_operationQueue setMaxConcurrentOperationCount:1];
 	_searchNavigatorFlags.switchTreeControllerContentBinding = YES;
@@ -495,11 +500,11 @@ static const CGFloat kReplaceControlsHeight = (19.0+17.0+4.0+4.0);
 - (void)setSearching:(BOOL)searching {
 	_searchNavigatorFlags.searching = searching;
 }
-@dynamic projectDocument;
-- (WCProjectDocument *)projectDocument {
-	return [[[self projectContainer] project] document];
+@synthesize projectDocument=_projectDocument;
+@dynamic projectContainer;
+- (WCProjectContainer *)projectContainer {
+	return [[self projectDocument] projectContainer];
 }
-@synthesize projectContainer=_projectContainer;
 @synthesize searchRegularExpression=_searchRegularExpression;
 @dynamic switchTreeControllerContentBinding;
 - (BOOL)switchTreeControllerContentBinding {
