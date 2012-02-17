@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Revolution Software. All rights reserved.
 //
 
-#import "JAViewController.h"
+#import <AppKit/NSViewController.h>
 #import "WCProjectDocumentSettingsProvider.h"
 #import "WCTabViewControllerDelegate.h"
 
@@ -15,7 +15,7 @@ extern NSString *const WCTabViewControllerDidCloseTabNotification;
 
 @class PSMTabBarControl,WCSourceFileDocument,WCSourceTextViewController;
 
-@interface WCTabViewController : JAViewController <WCProjectDocumentSettingsProvider,NSTabViewDelegate> {
+@interface WCTabViewController : NSViewController <WCProjectDocumentSettingsProvider,NSTabViewDelegate> {
 	__weak id <WCTabViewControllerDelegate> _delegate;
 	NSMapTable *_sourceFileDocumentsToSourceTextViewControllers;
 	NSTabViewItem *_clickedTabViewItem;

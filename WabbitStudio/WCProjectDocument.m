@@ -30,6 +30,7 @@
 #import "WCBuildController.h"
 #import "WCEditBuildTargetWindowController.h"
 #import "WCSearchNavigatorViewController.h"
+#import "WCBuildInclude.h"
 
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
@@ -513,7 +514,13 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 		[_fileCompletions setObject:[fileContainer representedObject] forKey:[[[fileContainer representedObject] fileName] lowercaseString]];
 }
 - (void)_windowWillClose:(NSNotification *)note {
+	for (WCFile *file in [[self filesToSourceFileDocuments] keyEnumerator])
+		[NSFileCoordinator removeFilePresenter:[file fileReference]];
 	
+	for (WCBuildTarget *buildTarget in [self buildTargets]) {
+		for (WCBuildInclude *buildInclude in [buildTarget includes])
+			[NSFileCoordinator removeFilePresenter:[buildInclude fileReference]];
+	}
 }
 - (void)_buildControllerDidFinishBuilding:(NSNotification *)note {
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:WCBuildControllerDidFinishBuildingNotification object:nil];

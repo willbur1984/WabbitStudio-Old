@@ -15,6 +15,7 @@
 #import "WCTabViewController.h"
 #import "WCSearchNavigatorViewController.h"
 #import "WCIssueNavigatorViewController.h"
+#import "WCSymbolNavigatorViewController.h"
 
 #import <PSMTabBarControl/PSMTabBarControl.h>
 #import <Quartz/Quartz.h>
@@ -27,6 +28,7 @@
 #endif
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[_tabViewController release];
+	[_symbolNavigatorViewController release];
 	[_issueNavigatorViewController release];
 	[_searchNavigatorViewController release];
 	[_projectNavigatorViewController release];
@@ -121,6 +123,8 @@ static const CGFloat kRightSubviewMinWidth = 400.0;
 		return [[self searchNavigatorViewController] view];
 	else if ([itemIdentifier isEqualToString:@"issue"])
 		return [[self issueNavigatorViewController] view];
+	else if ([itemIdentifier isEqualToString:@"symbol"])
+		return [[self symbolNavigatorViewController] view];
 	return nil;
 }
 
@@ -228,6 +232,12 @@ static const CGFloat kRightSubviewMinWidth = 400.0;
 	if (!_issueNavigatorViewController)
 		_issueNavigatorViewController = [[WCIssueNavigatorViewController alloc] initWithProjectDocument:[self document]];
 	return _issueNavigatorViewController;
+}
+@dynamic symbolNavigatorViewController;
+- (WCSymbolNavigatorViewController *)symbolNavigatorViewController {
+	if (!_symbolNavigatorViewController)
+		_symbolNavigatorViewController = [[WCSymbolNavigatorViewController alloc] initWithProjectDocument:[self document]];
+	return _symbolNavigatorViewController;
 }
 @synthesize tabViewController=_tabViewController;
 #pragma mark Notifications

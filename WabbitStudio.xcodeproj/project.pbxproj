@@ -59,6 +59,11 @@
 		0711BB4314ED850400EC9841 /* ErrorMultiple.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 0711BB3F14ED850400EC9841 /* ErrorMultiple.pdf */; };
 		0711BB4414ED850400EC9841 /* Warning.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 0711BB4014ED850400EC9841 /* Warning.pdf */; };
 		0711BB4514ED850400EC9841 /* WarningMultiple.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 0711BB4114ED850400EC9841 /* WarningMultiple.pdf */; };
+		0711BB6114EE028400EC9841 /* WCSymbolNavigatorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0711BB6014EE028400EC9841 /* WCSymbolNavigatorViewController.m */; };
+		0711BB6414EE037400EC9841 /* WCSymbolFileContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0711BB6314EE037400EC9841 /* WCSymbolFileContainer.m */; };
+		0711BB6714EE038800EC9841 /* WCSymbolContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0711BB6614EE038700EC9841 /* WCSymbolContainer.m */; };
+		0711BB6A14EE078D00EC9841 /* WCSymbolNavigatorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0711BB6814EE078D00EC9841 /* WCSymbolNavigatorView.xib */; };
+		0711BB6D14EE09D100EC9841 /* WCSymbolNavigatorOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0711BB6C14EE09D000EC9841 /* WCSymbolNavigatorOutlineView.m */; };
 		071306A414C8D0F800862E4D /* RSBookmark.m in Sources */ = {isa = PBXBuildFile; fileRef = 071306A314C8D0F800862E4D /* RSBookmark.m */; };
 		071306AE14C91C4C00862E4D /* DDHotKeyCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 071306AD14C91C4C00862E4D /* DDHotKeyCenter.m */; };
 		071306F114CA92EF00862E4D /* WCGroupContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 071306F014CA92EE00862E4D /* WCGroupContainer.m */; };
@@ -420,6 +425,15 @@
 		0711BB3F14ED850400EC9841 /* ErrorMultiple.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = ErrorMultiple.pdf; sourceTree = "<group>"; };
 		0711BB4014ED850400EC9841 /* Warning.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Warning.pdf; sourceTree = "<group>"; };
 		0711BB4114ED850400EC9841 /* WarningMultiple.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = WarningMultiple.pdf; sourceTree = "<group>"; };
+		0711BB5F14EE028400EC9841 /* WCSymbolNavigatorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSymbolNavigatorViewController.h; sourceTree = "<group>"; };
+		0711BB6014EE028400EC9841 /* WCSymbolNavigatorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSymbolNavigatorViewController.m; sourceTree = "<group>"; };
+		0711BB6214EE037400EC9841 /* WCSymbolFileContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSymbolFileContainer.h; sourceTree = "<group>"; };
+		0711BB6314EE037400EC9841 /* WCSymbolFileContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSymbolFileContainer.m; sourceTree = "<group>"; };
+		0711BB6514EE038700EC9841 /* WCSymbolContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSymbolContainer.h; sourceTree = "<group>"; };
+		0711BB6614EE038700EC9841 /* WCSymbolContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSymbolContainer.m; sourceTree = "<group>"; };
+		0711BB6914EE078D00EC9841 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCSymbolNavigatorView.xib; sourceTree = "<group>"; };
+		0711BB6B14EE09D000EC9841 /* WCSymbolNavigatorOutlineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSymbolNavigatorOutlineView.h; sourceTree = "<group>"; };
+		0711BB6C14EE09D000EC9841 /* WCSymbolNavigatorOutlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSymbolNavigatorOutlineView.m; sourceTree = "<group>"; };
 		071306A214C8D0F800862E4D /* RSBookmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSBookmark.h; sourceTree = "<group>"; };
 		071306A314C8D0F800862E4D /* RSBookmark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSBookmark.m; sourceTree = "<group>"; };
 		071306AC14C91C4C00862E4D /* DDHotKeyCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDHotKeyCenter.h; sourceTree = "<group>"; };
@@ -963,6 +977,7 @@
 				07CC8E9714E849BC00B303C1 /* WCEditBuildTargetWindow.xib */,
 				0711BB0E14E9BAFB00EC9841 /* WCEditBuildTargetChooseInputFileAccessoryView.xib */,
 				0711BB3514ED6C3D00EC9841 /* WCIssueNavigatorView.xib */,
+				0711BB6814EE078D00EC9841 /* WCSymbolNavigatorView.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -1129,6 +1144,21 @@
 				0711BB3C14ED72FB00EC9841 /* WCIssueNavigatorOutlineRowView.m */,
 			);
 			name = Issue;
+			sourceTree = "<group>";
+		};
+		0711BB5E14EE020C00EC9841 /* Symbol */ = {
+			isa = PBXGroup;
+			children = (
+				0711BB5F14EE028400EC9841 /* WCSymbolNavigatorViewController.h */,
+				0711BB6014EE028400EC9841 /* WCSymbolNavigatorViewController.m */,
+				0711BB6214EE037400EC9841 /* WCSymbolFileContainer.h */,
+				0711BB6314EE037400EC9841 /* WCSymbolFileContainer.m */,
+				0711BB6514EE038700EC9841 /* WCSymbolContainer.h */,
+				0711BB6614EE038700EC9841 /* WCSymbolContainer.m */,
+				0711BB6B14EE09D000EC9841 /* WCSymbolNavigatorOutlineView.h */,
+				0711BB6C14EE09D000EC9841 /* WCSymbolNavigatorOutlineView.m */,
+			);
+			name = Symbol;
 			sourceTree = "<group>";
 		};
 		07154F4C14D40AB800F57668 /* Project */ = {
@@ -1552,6 +1582,7 @@
 			isa = PBXGroup;
 			children = (
 				0778853414C49ABB00605F5D /* WCNavigatorModule.h */,
+				0711BB5E14EE020C00EC9841 /* Symbol */,
 				0711BB3114EC7F1800EC9841 /* Issue */,
 				0779069F14E0DD05006C16EF /* Search */,
 				0765361214CD107E004D72D1 /* Project */,
@@ -2022,6 +2053,7 @@
 				0711BB4314ED850400EC9841 /* ErrorMultiple.pdf in Resources */,
 				0711BB4414ED850400EC9841 /* Warning.pdf in Resources */,
 				0711BB4514ED850400EC9841 /* WarningMultiple.pdf in Resources */,
+				0711BB6A14EE078D00EC9841 /* WCSymbolNavigatorView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2234,6 +2266,10 @@
 				0711BB3414EC7F9100EC9841 /* WCIssueNavigatorViewController.m in Sources */,
 				0711BB3A14ED6DDF00EC9841 /* WCIssueNavigatorOutlineView.m in Sources */,
 				0711BB3D14ED72FC00EC9841 /* WCIssueNavigatorOutlineRowView.m in Sources */,
+				0711BB6114EE028400EC9841 /* WCSymbolNavigatorViewController.m in Sources */,
+				0711BB6414EE037400EC9841 /* WCSymbolFileContainer.m in Sources */,
+				0711BB6714EE038800EC9841 /* WCSymbolContainer.m in Sources */,
+				0711BB6D14EE09D100EC9841 /* WCSymbolNavigatorOutlineView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2279,6 +2315,14 @@
 				0711BB3614ED6C3D00EC9841 /* en */,
 			);
 			name = WCIssueNavigatorView.xib;
+			sourceTree = "<group>";
+		};
+		0711BB6814EE078D00EC9841 /* WCSymbolNavigatorView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0711BB6914EE078D00EC9841 /* en */,
+			);
+			name = WCSymbolNavigatorView.xib;
 			sourceTree = "<group>";
 		};
 		07154F5314D40B3C00F57668 /* WCProjectView.xib */ = {

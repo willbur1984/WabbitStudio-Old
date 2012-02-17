@@ -1,52 +1,46 @@
 //
-//  WCIssueNavigatorViewController.m
+//  WCSymbolNavigatorViewController.m
 //  WabbitStudio
 //
-//  Created by William Towe on 2/15/12.
+//  Created by William Towe on 2/16/12.
 //  Copyright (c) 2012 Revolution Software. All rights reserved.
 //
 
-#import "WCIssueNavigatorViewController.h"
+#import "WCSymbolNavigatorViewController.h"
 #import "WCProjectDocument.h"
-#import "WCIssueContainer.h"
-#import "WCBuildIssue.h"
-#import "WCBuildIssueContainer.h"
-#import "WCProjectContainer.h"
+#import "WCSourceSymbol.h"
 #import "WCProject.h"
-#import "NSTreeController+RSExtensions.h"
-#import "WCBuildController.h"
-#import "WCProjectWindowController.h"
-#import "RSNavigatorControl.h"
-#import "WCSourceFileSeparateWindowController.h"
 #import "WCSourceTextViewController.h"
-#import "WCSourceTextView.h"
-#import "WCTabViewController.h"
+#import "WCProjectWindowController.h"
 #import "RSOutlineView.h"
+#import "NSTreeController+RSExtensions.h"
+#import "WCSymbolFileContainer.h"
+#import "WCSymbolContainer.h"
+#import "WCSourceFileSeparateWindowController.h"
+#import "WCTabViewController.h"
+#import "WCProjectContainer.h"
+#import "WCSourceScanner.h"
 
-@interface WCIssueNavigatorViewController ()
-@property (readwrite,retain,nonatomic) WCIssueContainer *filteredIssueContainer;
-
-- (void)_updateIssues;
+@interface WCSymbolNavigatorViewController ()
+- (void)_updateSymbols;
 @end
 
-@implementation WCIssueNavigatorViewController
+@implementation WCSymbolNavigatorViewController
 #pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	_projectDocument = nil;
-	[_filteredIssueContainer release];
-	[_issueContainer release];
 	[super dealloc];
 }
 
 - (NSString *)nibName {
-	return @"WCIssueNavigatorView";
+	return @"WCSymbolNavigatorView";
 }
 
 - (void)loadView {
 	[super loadView];
 	
-	[[[self searchField] cell] setPlaceholderString:NSLocalizedString(@"Filter Issues", @"Filter Issues")];
+	[[[self searchField] cell] setPlaceholderString:NSLocalizedString(@"Filter Symbols", @"Filter Symbols")];
 	[[[[self searchField] cell] searchButtonCell] setImage:[NSImage imageNamed:@"Filter"]];
 	[[[[self searchField] cell] searchButtonCell] setAlternateImage:nil];
 	
@@ -54,7 +48,7 @@
 	[[self outlineView] setDoubleAction:@selector(_outlineViewDoubleClick:)];
 	[[self outlineView] setAction:@selector(_outlineViewSingleClick:)];
 	
-	[self _updateIssues];
+	[self _updateSymbols];
 }
 #pragma mark NSOutlineViewDelegate
 static NSString *const kProjectCellIdentifier = @"ProjectCell";
@@ -136,9 +130,7 @@ static const CGFloat kMainCellHeight = 20.0;
 		return nil;
 	
 	_projectDocument = projectDocument;
-	_issueContainer = [[WCIssueContainer alloc] initWithFile:[[projectDocument projectContainer] representedObject]];
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_buildControllerDidFinishBuilding:) name:WCBuildControllerDidFinishBuildingNotification object:[projectDocument buildController]];
+	_symbolFileContainer = [[WCSymbolFileContainer alloc] initWithFile:[[projectDocument projectContainer] representedObject]];
 	
 	return self;
 }
@@ -148,44 +140,37 @@ static const CGFloat kMainCellHeight = 20.0;
 @synthesize searchField=_searchField;
 
 @synthesize projectDocument=_projectDocument;
-@synthesize issueContainer=_issueContainer;
-@synthesize filteredIssueContainer=_filteredIssueContainer;
+@synthesize symbolFileContainer=_symbolFileContainer;
 
 #pragma mark *** Private Methods ***
-- (void)_updateIssues {
-	[[[self issueContainer] mutableChildNodes] removeObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [[[self issueContainer] childNodes] count])]];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSTextStorageDidProcessEditingNotification object:nil];
+- (void)_updateSymbols; {
+	[[self symbolFileContainer] willChangeValueForKey:@"statusString"];
 	
-	WCBuildController *buildController = [[self projectDocument] buildController];
+	NSMapTable *filesToSourceFileDocuments = [[self projectDocument] filesToSourceFileDocuments];
 	
-	[[self issueContainer] willChangeValueForKey:@"statusString"];
-	
-	for (WCFile *file in [buildController filesWithBuildIssuesSortedByName]) {
-		WCIssueContainer *issueContainer = [WCIssueContainer issueContainerWithFile:file];
+	for (WCFile *file in [filesToSourceFileDocuments keyEnumerator]) {
+		WCSymbolFileContainer *fileContainer = [WCSymbolFileContainer symbolFileContainerWithFile:file];
+		NSArray *symbols = [[[filesToSourceFileDocuments objectForKey:file] sourceScanner] symbolsSortedByName];
 		
-		for (WCBuildIssue *buildIssue in [[buildController filesToBuildIssuesSortedByLocation] objectForKey:file]) {
-			WCBuildIssueContainer *buildIssueContainer = [WCBuildIssueContainer buildIssueContainerWithBuildIssue:buildIssue];
+		for (WCSourceSymbol *symbol in symbols) {
+			WCSymbolContainer *symbolContainer = [WCSymbolContainer symbolContainerWithSourceSymbol:symbol];
 			
-			[[issueContainer mutableChildNodes] addObject:buildIssueContainer];
+			[[fileContainer mutableChildNodes] addObject:symbolContainer];
 		}
 		
-		[[[self issueContainer] mutableChildNodes] addObject:issueContainer];
-		
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidProcessEditing:) name:NSTextStorageDidProcessEditingNotification object:[[[[self projectDocument] filesToSourceFileDocuments] objectForKey:file] textStorage]];
+		[[[self symbolFileContainer] mutableChildNodes] addObject:fileContainer];
 	}
 	
-	[[self issueContainer] didChangeValueForKey:@"statusString"];
+	[[self symbolFileContainer] didChangeValueForKey:@"statusString"];
 	
 	[[self outlineView] expandItem:nil expandChildren:YES];
-	
-	[[[[self projectDocument] projectWindowController] navigatorControl] setSelectedItemIdentifier:@"issue"];
 }
 #pragma mark IBActions
 - (IBAction)_outlineViewDoubleClick:(id)sender; {
 	for (id container in [self selectedObjects]) {
 		id result = [container representedObject];
 		
-		if (![result isKindOfClass:[WCBuildIssue class]])
+		if (![result isKindOfClass:[WCSourceSymbol class]])
 			continue;
 		
 		WCFile *file = [[container parentNode] representedObject];
@@ -200,7 +185,7 @@ static const CGFloat kMainCellHeight = 20.0;
 	for (id container in [self selectedObjects]) {
 		id result = [container representedObject];
 		
-		if (![result isKindOfClass:[WCBuildIssue class]])
+		if (![result isKindOfClass:[WCSourceSymbol class]])
 			continue;
 		
 		WCFile *file = [[container parentNode] representedObject];
@@ -212,43 +197,5 @@ static const CGFloat kMainCellHeight = 20.0;
 }
 
 #pragma mark Notifications
-- (void)_buildControllerDidFinishBuilding:(NSNotification *)note {	
-	[self _updateIssues];
-}
-- (void)_textStorageDidProcessEditing:(NSNotification *)note {
-	NSTextStorage *textStorage = [note object];
-	
-	if (([textStorage editedMask] & NSTextStorageEditedCharacters) == 0)
-		return;
-	
-	for (WCIssueContainer *container in [[self issueContainer] childNodes]) {
-		WCSourceFileDocument *sfDocument = [[[self projectDocument] filesToSourceFileDocuments] objectForKey:[container representedObject]];
-		
-		if (textStorage == [sfDocument textStorage]) {
-			NSMutableArray *issuesToRemove = [NSMutableArray arrayWithCapacity:0];
-			NSRange editedRange = [textStorage editedRange];
-			NSInteger changeInLength = [textStorage changeInLength];
-			
-			for (WCBuildIssueContainer *buildIssueContainer in [container childNodes]) {
-				NSRange resultRange = [[buildIssueContainer representedObject] range];
-				
-				if (changeInLength < -1 &&
-					NSLocationInRange(resultRange.location, NSMakeRange(editedRange.location, ABS(changeInLength))))
-					[issuesToRemove addObject:buildIssueContainer];
-				else if (NSMaxRange(editedRange) < resultRange.location) {
-					resultRange.location += changeInLength;
-					[[buildIssueContainer representedObject] setRange:resultRange];
-				}
-			}
-			
-			if ([issuesToRemove count]) {
-				[container willChangeValueForKey:@"statusString"];
-				[[container mutableChildNodes] removeObjectsInArray:issuesToRemove];
-				[container didChangeValueForKey:@"statusString"];
-			}
-			
-			break;
-		}
-	}
-}
+
 @end

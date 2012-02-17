@@ -135,6 +135,14 @@ NSString *const WCSourceSymbolTypeAttributeName = @"WCSourceSymbolTypeAttributeN
 - (NSUInteger)lineNumber {
 	return [[[[self sourceScanner] textStorage] string] lineNumberForRange:[self range]];
 }
+@dynamic nameAndLineNumber;
+- (NSString *)nameAndLineNumber {
+	return [NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 line %lu", @"source symbol name and line number format string"),[self name],[self lineNumber]+1];
+}
+@dynamic toolTip;
+- (NSString *)toolTip {
+	return [[self attributedToolTip] string];
+}
 
 + (NSImage *)_sourceSymbolIconForSourceSymbolType:(WCSourceSymbolType)sourceSymbolType; {
 	static NSMapTable *typesToIcons;

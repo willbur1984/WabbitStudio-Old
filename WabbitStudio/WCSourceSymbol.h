@@ -38,6 +38,8 @@ extern NSString *const WCSourceSymbolTypeAttributeName;
 @property (readonly,nonatomic) NSString *typeDescription;
 @property (readonly,nonatomic) NSImage *icon;
 @property (readonly,nonatomic) NSUInteger lineNumber;
+@property (readonly,nonatomic) NSString *nameAndLineNumber;
+@property (readonly,nonatomic) NSString *toolTip;
 
 + (id)sourceSymbolOfType:(WCSourceSymbolType)type range:(NSRange)range name:(NSString *)name;
 - (id)initWithType:(WCSourceSymbolType)type range:(NSRange)range name:(NSString *)name;

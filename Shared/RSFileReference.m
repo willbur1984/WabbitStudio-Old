@@ -16,12 +16,13 @@ static NSString *const RSFileReferenceFileReferenceURLKey = @"fileReferenceURL";
 static NSString *const RSFileReferenceFilePathKey = @"filePath";
 
 @interface RSFileReference ()
-
+@property (readonly,nonatomic) NSOperationQueue *operationQueue;
 @end
 
 @implementation RSFileReference
 #pragma mark *** Subclass Overrides ***
 - (void)dealloc {
+	[_operationQueue release];
 	[_kqueue release];
 	[_fileURL release];
 	[_fileReferenceURL release];
@@ -38,7 +39,35 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 	
 	return copy;
 }
+#pragma mark NSFilePresenter
+- (NSURL *)presentedItemURL {
+	return [self fileURL];
+}
+- (NSOperationQueue *)presentedItemOperationQueue {
+	return [self operationQueue];
+}
 
+- (void)relinquishPresentedItemToWriter:(void (^)(void (^)(void)))writer {
+#ifdef DEBUG
+    NSLog(@"preparing for writing to %@",[[self fileURL] path]);
+#endif
+	
+	dispatch_sync(dispatch_get_main_queue(), ^{
+		[self setIgnoreNextFileWatcherNotification:YES];
+	});
+	
+	writer(^{
+#ifdef DEBUG
+		NSLog(@"writing to %@ finished",[[self fileURL] path]);
+#endif
+		
+		dispatch_sync(dispatch_get_main_queue(), ^{
+			[self setShouldMonitorFile:YES];
+			[[self delegate] fileReferenceWasWrittenTo:self];
+		});
+	});
+}
+#pragma mark UKFileWatcherDelegate
 - (void)watcher:(id<UKFileWatcher>)kq receivedNotification:(NSString *)nm forPath:(NSString *)fpath {
 	if ([nm isEqualToString:UKFileWatcherRenameNotification]) {
 		if ([[self fileReferenceURL] checkResourceIsReachableAndReturnError:NULL]) {
@@ -161,6 +190,13 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 	_fileReferenceFlags.shouldMonitorFile = shouldMonitorFile;
 	
 	if (shouldMonitorFile) {
+		if (!_operationQueue) {
+			_operationQueue = [[NSOperationQueue alloc] init];
+			[_operationQueue setMaxConcurrentOperationCount:1];
+			
+			[NSFileCoordinator addFilePresenter:self];
+		}
+		
 		if (_kqueue) {
 			[_kqueue removeAllPaths];
 			[_kqueue release];
@@ -177,5 +213,6 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 		}
 	}
 }
+@synthesize operationQueue=_operationQueue;
 
 @end
