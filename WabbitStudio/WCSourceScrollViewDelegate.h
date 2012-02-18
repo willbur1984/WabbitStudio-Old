@@ -8,10 +8,11 @@
 
 #import <Foundation/NSObject.h>
 
-@class WCSourceScrollView,WCProjectDocument;
+@class WCSourceScrollView,WCProjectDocument,WCSourceTextStorage;
 
 @protocol WCSourceScrollViewDelegate <NSObject>
 @required
 - (NSArray *)buildIssuesForSourceScrollView:(WCSourceScrollView *)scrollView;
 - (WCProjectDocument *)projectDocumentForSourceScrollView:(WCSourceScrollView *)scrollView;
+- (WCSourceTextStorage *)sourceTextStorageForSourceScrollView:(WCSourceScrollView *)scrollView;
 @end

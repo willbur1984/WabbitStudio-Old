@@ -27,6 +27,5 @@
 @property (readonly,nonatomic) WCSourceTextView *sourceTextView;
 
 - (void)drawCodeFoldingRibbonInRect:(NSRect)ribbonRect;
-- (void)drawBookmarksInRect:(NSRect)rect;
 - (void)drawBuildIssuesInRect:(NSRect)buildIssueRect;
 @end

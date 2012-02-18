@@ -1032,11 +1032,6 @@
 				0706D64F14A8F45B0092F880 /* WCSourceTextViewController.m */,
 				076B7F8614BC15B600CC10E3 /* WCStandardSourceTextViewController.h */,
 				076B7F8714BC15B600CC10E3 /* WCStandardSourceTextViewController.m */,
-				07CEA93814EF01B3002A5240 /* WCSourceScroller.h */,
-				07CEA93914EF01B3002A5240 /* WCSourceScroller.m */,
-				07CEA93C14EF0360002A5240 /* WCSourceScrollView.h */,
-				07CEA93D14EF0360002A5240 /* WCSourceScrollView.m */,
-				07CEA93F14EF03B2002A5240 /* WCSourceScrollViewDelegate.h */,
 				073B5A9B14B6A45400FCDC0F /* Storage */,
 				0731614414D32C72002F0F55 /* Layout */,
 				0706AFBD14CF2D9A00A0F93C /* Folding */,
@@ -1479,6 +1474,11 @@
 		073B5A9A14B6A43900FCDC0F /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				07CEA93814EF01B3002A5240 /* WCSourceScroller.h */,
+				07CEA93914EF01B3002A5240 /* WCSourceScroller.m */,
+				07CEA93C14EF0360002A5240 /* WCSourceScrollView.h */,
+				07CEA93D14EF0360002A5240 /* WCSourceScrollView.m */,
+				07CEA93F14EF03B2002A5240 /* WCSourceScrollViewDelegate.h */,
 				071ECD0014A46BEA002409F8 /* WCSourceTextView.h */,
 				071ECD0114A46BEA002409F8 /* WCSourceTextView.m */,
 				07F5F76514A5732100F1F326 /* WCSourceTextViewDelegate.h */,

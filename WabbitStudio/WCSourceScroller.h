@@ -10,8 +10,8 @@
 
 @interface WCSourceScroller : NSScroller {
 	NSArray *_buildIssues;
+	NSArray *_bookmarks;
 }
-@property (readwrite,assign,nonatomic) IBOutlet NSScrollView *scrollView;
-
-@property (readwrite,copy,nonatomic) NSArray *buildIssues;
+@property (readwrite,retain,nonatomic) NSArray *buildIssues;
+@property (readwrite,retain,nonatomic) NSArray *bookmarks;
 @end

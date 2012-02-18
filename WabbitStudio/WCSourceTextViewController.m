@@ -314,7 +314,9 @@
 	}
 	return nil;
 }
-
+- (WCSourceTextStorage *)sourceTextStorageForSourceScrollView:(WCSourceScrollView *)scrollView {
+	return [[self sourceFileDocument] textStorage];
+}
 #pragma mark *** Public Methods ***
 - (id)initWithSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument; {
 	return [self initWithSourceFileDocument:sourceFileDocument standardSourceTextViewController:nil];
