@@ -9,6 +9,20 @@
 #import "WCEditBuildTargetDefinesTableView.h"
 
 @implementation WCEditBuildTargetDefinesTableView
+- (NSDragOperation)draggingSession:(NSDraggingSession *)session sourceOperationMaskForDraggingContext:(NSDraggingContext)context {
+	if (context == NSDraggingContextWithinApplication)
+		return NSDragOperationMove;
+	return NSDragOperationCopy;
+}
+
+- (BOOL)ignoreModifierKeysForDraggingSession:(NSDraggingSession *)session {
+	return YES;
+}
+
+- (BOOL)verticalMotionCanBeginDrag {
+	return YES;
+}
+
 - (NSString *)emptyContentString {
 	return NSLocalizedString(@"No Defines", @"No Defines");
 }

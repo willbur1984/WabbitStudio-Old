@@ -40,6 +40,9 @@
 		0708965514A6CE900017BBE4 /* WCCompletionChoice.m in Sources */ = {isa = PBXBuildFile; fileRef = 0708965414A6CE900017BBE4 /* WCCompletionChoice.m */; };
 		0708965714A6F1360017BBE4 /* PreProcessorCompletions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0708965614A6F1360017BBE4 /* PreProcessorCompletions.plist */; };
 		0708A5BF14D9031600BE60EE /* Bookmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 0708A5BE14D9031600BE60EE /* Bookmark.png */; };
+		070EC24D14EF56F600982CA8 /* WCEditBuildTargetIncludesArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 070EC24C14EF56F600982CA8 /* WCEditBuildTargetIncludesArrayController.m */; };
+		070EC25014EF588E00982CA8 /* RSRTVArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 070EC24F14EF588E00982CA8 /* RSRTVArrayController.m */; };
+		070EC25314EF5E4E00982CA8 /* WCEditBuildTargetDefinesArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 070EC25214EF5E4D00982CA8 /* WCEditBuildTargetDefinesArrayController.m */; };
 		0711BAFE14E982E700EC9841 /* WCEditBuildTargetDefinesFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0711BAFD14E982E700EC9841 /* WCEditBuildTargetDefinesFormatter.m */; };
 		0711BB0214E9835E00EC9841 /* WCBuildDefine.m in Sources */ = {isa = PBXBuildFile; fileRef = 0711BB0114E9835D00EC9841 /* WCBuildDefine.m */; };
 		0711BB0514E98DB000EC9841 /* WCEditBuildTargetDefineValuesFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0711BB0414E98DB000EC9841 /* WCEditBuildTargetDefineValuesFormatter.m */; };
@@ -399,6 +402,12 @@
 		0708965414A6CE900017BBE4 /* WCCompletionChoice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCCompletionChoice.m; sourceTree = "<group>"; };
 		0708965614A6F1360017BBE4 /* PreProcessorCompletions.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PreProcessorCompletions.plist; sourceTree = "<group>"; };
 		0708A5BE14D9031600BE60EE /* Bookmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Bookmark.png; sourceTree = "<group>"; };
+		070EC24B14EF56F600982CA8 /* WCEditBuildTargetIncludesArrayController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCEditBuildTargetIncludesArrayController.h; sourceTree = "<group>"; };
+		070EC24C14EF56F600982CA8 /* WCEditBuildTargetIncludesArrayController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCEditBuildTargetIncludesArrayController.m; sourceTree = "<group>"; };
+		070EC24E14EF588E00982CA8 /* RSRTVArrayController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSRTVArrayController.h; sourceTree = "<group>"; };
+		070EC24F14EF588E00982CA8 /* RSRTVArrayController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSRTVArrayController.m; sourceTree = "<group>"; };
+		070EC25114EF5E4D00982CA8 /* WCEditBuildTargetDefinesArrayController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCEditBuildTargetDefinesArrayController.h; sourceTree = "<group>"; };
+		070EC25214EF5E4D00982CA8 /* WCEditBuildTargetDefinesArrayController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCEditBuildTargetDefinesArrayController.m; sourceTree = "<group>"; };
 		0711BAFC14E982E700EC9841 /* WCEditBuildTargetDefinesFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCEditBuildTargetDefinesFormatter.h; sourceTree = "<group>"; };
 		0711BAFD14E982E700EC9841 /* WCEditBuildTargetDefinesFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCEditBuildTargetDefinesFormatter.m; sourceTree = "<group>"; };
 		0711BB0014E9835D00EC9841 /* WCBuildDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCBuildDefine.h; sourceTree = "<group>"; };
@@ -1844,8 +1853,12 @@
 				0711BB1B14E9D46600EC9841 /* WCEditBuildTargetChooseInputFileAccessoryViewController.m */,
 				07CC8E9A14E850EC00B303C1 /* WCEditBuildTargetDefinesTableView.h */,
 				07CC8E9B14E850EC00B303C1 /* WCEditBuildTargetDefinesTableView.m */,
+				070EC25114EF5E4D00982CA8 /* WCEditBuildTargetDefinesArrayController.h */,
+				070EC25214EF5E4D00982CA8 /* WCEditBuildTargetDefinesArrayController.m */,
 				07CC8E9D14E8538B00B303C1 /* WCEditBuildTargetIncludesTableView.h */,
 				07CC8E9E14E8538B00B303C1 /* WCEditBuildTargetIncludesTableView.m */,
+				070EC24B14EF56F600982CA8 /* WCEditBuildTargetIncludesArrayController.h */,
+				070EC24C14EF56F600982CA8 /* WCEditBuildTargetIncludesArrayController.m */,
 				0711BB0014E9835D00EC9841 /* WCBuildDefine.h */,
 				0711BB0114E9835D00EC9841 /* WCBuildDefine.m */,
 				0711BB2314EC4A6D00EC9841 /* WCBuildInclude.h */,
@@ -1881,6 +1894,8 @@
 		07A8AFBD14BDF2E2008CB9FF /* External */ = {
 			isa = PBXGroup;
 			children = (
+				070EC24E14EF588E00982CA8 /* RSRTVArrayController.h */,
+				070EC24F14EF588E00982CA8 /* RSRTVArrayController.m */,
 				07154F5D14D5EDA400F57668 /* NSWindow+ULIZoomEffect.h */,
 				07154F5E14D5EDA400F57668 /* NSWindow+ULIZoomEffect.m */,
 				0706AFD414CF357300A0F93C /* AIMathCompatibility.h */,
@@ -2302,6 +2317,9 @@
 				078FDADB14EEF2760019321E /* WCSymbolNavigatorOutlineRowView.m in Sources */,
 				07CEA93A14EF01B3002A5240 /* WCSourceScroller.m in Sources */,
 				07CEA93E14EF0360002A5240 /* WCSourceScrollView.m in Sources */,
+				070EC24D14EF56F600982CA8 /* WCEditBuildTargetIncludesArrayController.m in Sources */,
+				070EC25014EF588E00982CA8 /* RSRTVArrayController.m in Sources */,
+				070EC25314EF5E4E00982CA8 /* WCEditBuildTargetDefinesArrayController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

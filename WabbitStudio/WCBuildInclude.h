@@ -11,7 +11,7 @@
 
 @class RSFileReference;
 
-@interface WCBuildInclude : RSObject <RSFileReferenceDelegate,RSPlistArchiving,NSCopying,NSMutableCopying> {
+@interface WCBuildInclude : RSObject <RSFileReferenceDelegate,RSPlistArchiving,NSCopying,NSMutableCopying,NSPasteboardReading> {
 	RSFileReference *_fileReference;
 }
 @property (readonly,nonatomic) NSString *name;

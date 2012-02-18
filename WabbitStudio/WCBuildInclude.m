@@ -17,6 +17,24 @@ static NSString *const WCBuildIncludeFileReferenceKey = @"fileReference";
 	[_fileReference release];
 	[super dealloc];
 }
+#pragma mark NSPasteboardReading
++ (NSArray *)readableTypesForPasteboard:(NSPasteboard *)pasteboard; {
+	return [NSArray arrayWithObjects:(NSString *)kUTTypeFileURL,nil];
+}
++ (NSPasteboardReadingOptions)readingOptionsForType:(NSString *)type pasteboard:(NSPasteboard *)pasteboard {
+	if ([type isEqualToString:(NSString *)kUTTypeFileURL])
+		return NSPasteboardReadingAsPropertyList;
+	return NSPasteboardReadingAsData;
+}
+- (id)initWithPasteboardPropertyList:(id)propertyList ofType:(NSString *)type {
+	[self release];
+	self = nil;
+	if ([type isEqualToString:(NSString *)kUTTypeFileURL]) {
+		self = [[WCBuildInclude alloc] initWithDirectoryURL:[NSURL URLWithString:propertyList]];
+	}
+	return self;
+}
+
 #pragma mark RSFileReferenceDelegate
 - (void)fileReference:(RSFileReference *)fileReference didMoveToURL:(NSURL *)url {
 	[self willChangeValueForKey:@"name"];

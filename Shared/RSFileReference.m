@@ -67,6 +67,7 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 		});
 	});
 }
+
 #pragma mark UKFileWatcherDelegate
 - (void)watcher:(id<UKFileWatcher>)kq receivedNotification:(NSString *)nm forPath:(NSString *)fpath {
 	if ([nm isEqualToString:UKFileWatcherRenameNotification]) {
