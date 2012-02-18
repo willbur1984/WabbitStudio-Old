@@ -15,6 +15,7 @@ extern NSString *const WCAlertsWarnBeforeDeletingKeyBindingCommandSetsKey;
 extern NSString *const WCAlertsWarnBeforeDeletingBuildDefinesKey;
 extern NSString *const WCAlertsWarnBeforeDeletingBuildTargetsKey;
 extern NSString *const WCAlertsWarnBeforeDeletingBuildIncludesKey;
+extern NSString *const WCAlertsWarnBeforeDeletingBreakpointsKey;
 
 @interface WCAlertsViewController : NSViewController <RSPreferencesModule,RSUserDefaultsProvider>
 

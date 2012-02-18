@@ -10,17 +10,19 @@
 #import "WCSourceRulerViewDelegate.h"
 #import "RSToolTipView.h"
 
-@class WCFold,WCSourceTextView;
+@class WCFold,WCSourceTextView,WCFileBreakpoint,WCBuildIssue;
 
 @interface WCSourceRulerView : WCLineNumberRulerView <RSToolTipView> {
 	__weak id <WCSourceRulerViewDelegate> _delegate;
 	NSUInteger _clickedLineNumber;
 	NSTrackingArea *_codeFoldingTrackingArea;
 	WCFold *_foldToHighlight;
-	NSRect _rectForFoldHighlight;
+	WCFileBreakpoint *_clickedFileBreakpoint;
+	WCBuildIssue *_clickedBuildIssue;
 	struct {
 		unsigned int drawCurrentLineHighlight:1;
-		unsigned int RESERVED:31;
+		unsigned int clickedFileBreakpointHasMoved:1;
+		unsigned int RESERVED:30;
 	} _sourceRulerViewFlags;
 }
 @property (readwrite,assign,nonatomic) id <WCSourceRulerViewDelegate> delegate;

@@ -529,6 +529,8 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 		for (WCBuildInclude *buildInclude in [buildTarget includes])
 			[NSFileCoordinator removeFilePresenter:[buildInclude fileReference]];
 	}
+	
+	[[self breakpointManager] performCleanup];
 }
 - (void)_buildControllerDidFinishBuilding:(NSNotification *)note {
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:WCBuildControllerDidFinishBuildingNotification object:nil];

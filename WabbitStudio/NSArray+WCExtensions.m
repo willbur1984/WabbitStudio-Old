@@ -241,7 +241,10 @@
 	if (![self count])
 		return nil;
 	
-	return [self objectAtIndex:[self buildIssueIndexForRange:range]];
+	WCBuildIssue *buildIssue = [self objectAtIndex:[self buildIssueIndexForRange:range]];
+	if (NSLocationInOrEqualToRange([buildIssue range].location, range))
+		return buildIssue;
+	return nil;
 }
 - (NSArray *)buildIssuesForRange:(NSRange)range; {
 	if (![self count])
@@ -290,7 +293,7 @@
 		return nil;
 	
 	WCFileBreakpoint *fileBreakpoint = [self objectAtIndex:[self fileBreakpointIndexForRange:range]];
-	if ([fileBreakpoint range].location == range.location)
+	if (NSLocationInOrEqualToRange([fileBreakpoint range].location, range))
 		return fileBreakpoint;
 	return nil;
 }

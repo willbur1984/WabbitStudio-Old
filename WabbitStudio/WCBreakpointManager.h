@@ -15,6 +15,7 @@ extern NSString *const WCBreakpointManagerDidRemoveBreakpointNotification;
 extern NSString *const WCBreakpointManagerDidRemoveBreakpointOldBreakpointUserInfoKey;
 
 extern NSString *const WCBreakpointManagerDidChangeBreakpointActiveNotification;
+extern NSString *const WCBreakpointManagerDidChangeBreakpointActiveChangedBreakpointUserInfoKey;
 
 @class WCProjectDocument,WCFileBreakpoint;
 
@@ -22,6 +23,7 @@ extern NSString *const WCBreakpointManagerDidChangeBreakpointActiveNotification;
 	__weak WCProjectDocument *_projectDocument;
 	NSMapTable *_filesToFileBreakpointsSortedByLocation;
 	NSMutableArray *_filesWithFileBreakpointsSortedByName;
+	NSMutableSet *_fileBreakpoints;
 }
 @property (readonly,nonatomic) WCProjectDocument *projectDocument;
 @property (readonly,nonatomic) NSMapTable *filesToFileBreakpointsSortedByLocation;
@@ -32,4 +34,5 @@ extern NSString *const WCBreakpointManagerDidChangeBreakpointActiveNotification;
 - (void)addFileBreakpoint:(WCFileBreakpoint *)fileBreakpoint;
 - (void)removeFileBreakpoint:(WCFileBreakpoint *)fileBreakpoint;
 
+- (void)performCleanup;
 @end

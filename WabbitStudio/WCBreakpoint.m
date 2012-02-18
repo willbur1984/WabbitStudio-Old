@@ -80,7 +80,8 @@ static NSString *const WCBreakpointActiveKey = @"active";
 	static NSGradient *retval;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		retval = [[NSGradient alloc] initWithColorsAndLocations:[NSColor colorWithCalibratedHue:212.0/360.0 saturation:0.45 brightness:0.9 alpha:1.0],0.0,[NSColor colorWithCalibratedHue:212.0/360.0 saturation:0.45 brightness:0.8 alpha:1.0],0.5,[NSColor colorWithCalibratedHue:212.0/360.0 saturation:0.45 brightness:0.75 alpha:1.0],0.5,[NSColor colorWithCalibratedHue:212.0/360.0 saturation:0.45 brightness:0.65 alpha:1.0],1.0, nil];
+		//retval = [[NSGradient alloc] initWithColorsAndLocations:[NSColor colorWithCalibratedHue:212.0/360.0 saturation:0.45 brightness:0.9 alpha:1.0],0.0,[NSColor colorWithCalibratedHue:212.0/360.0 saturation:0.45 brightness:0.8 alpha:1.0],0.5,[NSColor colorWithCalibratedHue:212.0/360.0 saturation:0.45 brightness:0.75 alpha:1.0],0.5,[NSColor colorWithCalibratedHue:212.0/360.0 saturation:0.45 brightness:0.65 alpha:1.0],1.0, nil];
+		retval = [[NSGradient alloc] initWithStartingColor:[NSColor colorWithCalibratedRed:0.44 green:0.61 blue:0.8 alpha:1.0] endingColor:[NSColor colorWithCalibratedRed:0.33 green:0.53 blue:0.76 alpha:1.0]];
 	});
 	return retval;
 }

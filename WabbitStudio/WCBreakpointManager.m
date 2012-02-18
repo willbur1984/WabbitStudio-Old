@@ -18,13 +18,27 @@ NSString *const WCBreakpointManagerDidRemoveBreakpointNotification = @"WCBreakpo
 NSString *const WCBreakpointManagerDidRemoveBreakpointOldBreakpointUserInfoKey = @"WCBreakpointManagerDidRemoveBreakpointOldBreakpointUserInfoKey";
 
 NSString *const WCBreakpointManagerDidChangeBreakpointActiveNotification = @"WCBreakpointManagerDidChangeBreakpointActiveNotification";
+NSString *const WCBreakpointManagerDidChangeBreakpointActiveChangedBreakpointUserInfoKey = @"WCBreakpointManagerDidChangeBreakpointActiveChangedBreakpointUserInfoKey";
+
+@interface WCBreakpointManager ()
+@property (readonly,nonatomic) NSMutableSet *fileBreakpoints;
+@end
 
 @implementation WCBreakpointManager
 - (void)dealloc {
 	_projectDocument = nil;
+	[_fileBreakpoints release];
 	[_filesToFileBreakpointsSortedByLocation release];
 	[_filesWithFileBreakpointsSortedByName release];
 	[super dealloc];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+	if (context == self && [keyPath isEqualToString:@"active"]) {
+		[[NSNotificationCenter defaultCenter] postNotificationName:WCBreakpointManagerDidChangeBreakpointActiveNotification object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:object,WCBreakpointManagerDidChangeBreakpointActiveChangedBreakpointUserInfoKey, nil]];
+	}
+	else
+		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
 
 - (id)initWithProjectDocument:(WCProjectDocument *)projectDocument; {
@@ -34,6 +48,7 @@ NSString *const WCBreakpointManagerDidChangeBreakpointActiveNotification = @"WCB
 	_projectDocument = projectDocument;
 	_filesToFileBreakpointsSortedByLocation = [[NSMapTable mapTableWithWeakToStrongObjects] retain];
 	_filesWithFileBreakpointsSortedByName = [[NSMutableArray alloc] initWithCapacity:0];
+	_fileBreakpoints = [[NSMutableSet alloc] initWithCapacity:0];
 	
 	return self;
 }
@@ -49,7 +64,10 @@ NSString *const WCBreakpointManagerDidChangeBreakpointActiveNotification = @"WCB
 		[_filesWithFileBreakpointsSortedByName sortUsingDescriptors:[NSArray arrayWithObjects:[NSSortDescriptor sortDescriptorWithKey:@"fileName" ascending:YES selector:@selector(localizedStandardCompare:)], nil]];
 	}
 	
+	[fileBreakpoint addObserver:self forKeyPath:@"active" options:NSKeyValueObservingOptionNew context:self];
+	
 	[fileBreakpoints addObject:fileBreakpoint];
+	[[self fileBreakpoints] addObject:fileBreakpoint];
 	
 	[fileBreakpoints sortUsingDescriptors:[NSArray arrayWithObjects:[NSSortDescriptor sortDescriptorWithKey:@"range" ascending:YES comparator:^NSComparisonResult(NSValue *obj1, NSValue *obj2) {
 		if ([obj1 rangeValue].location < [obj2 rangeValue].location)
@@ -66,7 +84,10 @@ NSString *const WCBreakpointManagerDidChangeBreakpointActiveNotification = @"WCB
 	
 	[[fileBreakpoint retain] autorelease];
 	
+	[fileBreakpoint removeObserver:self forKeyPath:@"active" context:self];
+	
 	[fileBreakpoints removeObject:fileBreakpoint];
+	[[self fileBreakpoints] removeObject:fileBreakpoint];
 	
 	if (![fileBreakpoints count]) {
 		[[self filesToFileBreakpointsSortedByLocation] removeObjectForKey:[fileBreakpoint file]];
@@ -76,8 +97,14 @@ NSString *const WCBreakpointManagerDidChangeBreakpointActiveNotification = @"WCB
 	[[NSNotificationCenter defaultCenter] postNotificationName:WCBreakpointManagerDidRemoveBreakpointNotification object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:fileBreakpoint,WCBreakpointManagerDidRemoveBreakpointOldBreakpointUserInfoKey, nil]];
 }
 
+- (void)performCleanup; {
+	for (WCFileBreakpoint *fileBreakpoint in [self fileBreakpoints])
+		[fileBreakpoint removeObserver:self forKeyPath:@"active" context:self];
+}
+
 @synthesize projectDocument=_projectDocument;
 @synthesize filesToFileBreakpointsSortedByLocation=_filesToFileBreakpointsSortedByLocation;
 @synthesize filesWithFileBreakpointsSortedByName=_filesWithFileBreakpointsSortedByName;
+@synthesize fileBreakpoints=_fileBreakpoints;
 
 @end

@@ -31,11 +31,20 @@
 #import "RSToolTipManager.h"
 #import "WCFileBreakpoint.h"
 #import "WCBreakpointManager.h"
+#import "WCAlertsViewController.h"
+#import "NSAlert-OAExtensions.h"
+#import "WCProjectWindowController.h"
+#import "RSNavigatorControl.h"
+#import "WCIssueNavigatorViewController.h"
 
 @interface WCSourceRulerView ()
 @property (readonly,nonatomic) WCSourceTextStorage *textStorage;
 @property (readwrite,assign,nonatomic) NSUInteger clickedLineNumber;
 @property (readwrite,assign,nonatomic) BOOL drawCurrentLineHighlight;
+@property (readwrite,assign,nonatomic) WCFold *foldToHighlight;
+@property (readwrite,assign,nonatomic) WCFileBreakpoint *clickedFileBreakpoint;
+@property (readwrite,assign,nonatomic) WCBuildIssue *clickedBuildIssue;
+@property (readwrite,assign,nonatomic) BOOL clickedFileBreakpointHasMoved;
 
 - (NSUInteger)_lineNumberForPoint:(NSPoint)point;
 - (NSRange)_rangeForPoint:(NSPoint)point;
@@ -60,8 +69,16 @@
 	dispatch_once(&onceToken, ^{
 		retval = [[NSMenu alloc] initWithTitle:@""];
 		
-		[retval addItemWithTitle:@"" action:@selector(_toggleBookmark:) keyEquivalent:@""];
+		[retval addItemWithTitle:NSLocalizedString(@"Enable Bookmark", @"Enable Bookmark") action:@selector(_toggleBookmark:) keyEquivalent:@""];
 		[retval addItemWithTitle:NSLocalizedString(@"Remove All Bookmarks\u2026", @"Remove All Bookmarks with ellipsis") action:@selector(removeAllBookmarks:) keyEquivalent:@""];
+		[retval addItem:[NSMenuItem separatorItem]];
+		[retval addItemWithTitle:NSLocalizedString(@"Edit Breakpoint\u2026", @"Edit Breakpoint with ellipsis") action:@selector(_editBreakpoint:) keyEquivalent:@""];
+		[retval addItemWithTitle:NSLocalizedString(@"Enable Breakpoint", @"Enable Breakpoint") action:@selector(_toggleBreakpoint:) keyEquivalent:@""];
+		[retval addItem:[NSMenuItem separatorItem]];
+		[retval addItemWithTitle:NSLocalizedString(@"Delete Breakpoint", @"Delete Breakpoint") action:@selector(_deleteBreakpoint:) keyEquivalent:@""];
+		[retval addItem:[NSMenuItem separatorItem]];
+		[retval addItemWithTitle:NSLocalizedString(@"Reveal in Breakpoint Navigator", @"Reveal in Breakpoint Navigator") action:@selector(_revealInBreakpointNavigator:) keyEquivalent:@""];
+		[retval addItemWithTitle:NSLocalizedString(@"Reveal in Issue Navigator", @"Reveal in Issue Navigator") action:@selector(_revealInIssueNavigator:) keyEquivalent:@""];
 	});
 	return retval;
 }
@@ -70,9 +87,15 @@
 	NSMenu *retval = [super menuForEvent:event];
 	
 	if (retval) {
-		NSUInteger lineNumber = [self _lineNumberForPoint:[self convertPointFromBase:[event locationInWindow]]];
+		NSPoint point = [self convertPointFromBase:[event locationInWindow]];
+		NSUInteger lineNumber = [self _lineNumberForPoint:point];
+		NSRange range = [self _rangeForPoint:point];
+		WCFileBreakpoint *fileBreakpoint = [[[self delegate] fileBreakpointsForSourceRulerView:self] fileBreakpointForRange:range];
+		WCBuildIssue *buildIssue = [[[self delegate] buildIssuesForSourceRulerView:self] buildIssueForRange:range];
 		
 		[self setClickedLineNumber:lineNumber];
+		[self setClickedFileBreakpoint:fileBreakpoint];
+		[self setClickedBuildIssue:buildIssue];
 	}
 	
 	return retval;
@@ -113,40 +136,25 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 	NSRange range = [self _rangeForPoint:[self convertPointFromBase:[theEvent locationInWindow]]];
 	WCFold *fold = [[[[self delegate] sourceScannerForSourceRulerView:self] folds] deepestFoldForRange:range];
 	
-	_foldToHighlight = fold;
-	if (_foldToHighlight) {
-		//[[self textView] showFindIndicatorForRange:[fold contentRange]];
-		[self setNeedsDisplay:YES];
-	}
+	[self setFoldToHighlight:fold];
 }
 - (void)mouseExited:(NSEvent *)theEvent {
-	_foldToHighlight = nil;
-	[self setNeedsDisplay:YES];
+	[self setFoldToHighlight:nil];
 }
 
 - (void)mouseMoved:(NSEvent *)theEvent {
 	NSRange range = [self _rangeForPoint:[self convertPointFromBase:[theEvent locationInWindow]]];
 	WCFold *fold = [[[[self delegate] sourceScannerForSourceRulerView:self] folds] deepestFoldForRange:range];
 	
-	if (fold) {
-		if (_foldToHighlight != fold) {
-			_foldToHighlight = fold;
-			//[[self textView] showFindIndicatorForRange:[fold contentRange]];
-			[self setNeedsDisplay:YES];
-		}
-	}
-	else if (_foldToHighlight) {
-		_foldToHighlight = nil;
-		[self setNeedsDisplay:YES];
-	}
+	[self setFoldToHighlight:fold];
 }
 
 - (void)mouseDown:(NSEvent *)theEvent {
-	if (_foldToHighlight) {
-		NSRange foldRange = [[self textStorage] foldRangeForRange:[_foldToHighlight contentRange]];
+	if ([self foldToHighlight]) {
+		NSRange foldRange = [[self textStorage] foldRangeForRange:[[self foldToHighlight] contentRange]];
 		// the range is folded, unfold it
 		if (foldRange.location == NSNotFound)
-			[[self textStorage] foldRange:[_foldToHighlight contentRange]];
+			[[self textStorage] foldRange:[[self foldToHighlight] contentRange]];
 		// otherwise the range isn't folded, fold it
 		else
 			[[self textStorage] unfoldRange:foldRange effectiveRange:NULL];
@@ -155,22 +163,62 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 		NSRange range = [self _rangeForPoint:[self convertPointFromBase:[theEvent locationInWindow]]];
 		WCFileBreakpoint *fileBreakpoint = [[[self delegate] fileBreakpointsForSourceRulerView:self] fileBreakpointForRange:range];
 		
-		if (fileBreakpoint)
-			[[[[self delegate] projectDocumentForSourceRulerView:self] breakpointManager] removeFileBreakpoint:fileBreakpoint];
-		else {
+		if (!fileBreakpoint) {
 			WCProjectDocument *projectDocument = [[self delegate] projectDocumentForSourceRulerView:self];
 			WCFile *file = [[self delegate] fileForSourceRulerView:self];
 			WCFileBreakpoint *fileBreakpoint = [WCFileBreakpoint fileBreakpointWithRange:range file:file projectDocument:projectDocument];
 			
 			[[projectDocument breakpointManager] addFileBreakpoint:fileBreakpoint];
 		}
+		
+		[self setClickedFileBreakpoint:fileBreakpoint];
+		[self setClickedFileBreakpointHasMoved:NO];
 	}
 }
 - (void)mouseDragged:(NSEvent *)theEvent {
-	
+	if ([self clickedFileBreakpoint]) {
+		NSPoint point = [self convertPointFromBase:[theEvent locationInWindow]];
+		NSRange range = [self _rangeForPoint:point];
+		WCFileBreakpoint *fileBreakpoint = [[[self delegate] fileBreakpointsForSourceRulerView:self] fileBreakpointForRange:range];
+		
+		if (!NSMouseInRect(point, [self bounds], [self isFlipped])) {
+			[[NSCursor disappearingItemCursor] set];
+			return;
+		}
+		
+		[[NSCursor arrowCursor] set];
+		
+		if (fileBreakpoint == [self clickedFileBreakpoint])
+			return;
+		else if (fileBreakpoint)
+			return;
+		else {
+			[self setClickedFileBreakpointHasMoved:YES];
+			
+			[[[self clickedFileBreakpoint] retain] autorelease];
+			
+			WCBreakpointManager *breakpointManager = [[[self delegate] projectDocumentForSourceRulerView:self] breakpointManager];
+			
+			[breakpointManager removeFileBreakpoint:[self clickedFileBreakpoint]];
+			
+			[[self clickedFileBreakpoint] setRange:range];
+			
+			[breakpointManager addFileBreakpoint:[self clickedFileBreakpoint]];
+		}
+	}
 }
 - (void)mouseUp:(NSEvent *)theEvent {
+	NSPoint point = [self convertPointFromBase:[theEvent locationInWindow]];
+	NSRange range = [self _rangeForPoint:point];
+	WCFileBreakpoint *fileBreakpoint = [[[self delegate] fileBreakpointsForSourceRulerView:self] fileBreakpointForRange:range];
 	
+	if (fileBreakpoint == [self clickedFileBreakpoint] && !NSMouseInRect(point, [self bounds], [self isFlipped]))
+		NSShowAnimationEffect(NSAnimationEffectDisappearingItemDefault, [[self window] convertBaseToScreen:[theEvent locationInWindow]], NSZeroSize, self, @selector(_animationEffectDidEnd:), NULL);
+	else if (fileBreakpoint == [self clickedFileBreakpoint] && ![self clickedFileBreakpointHasMoved])
+		[fileBreakpoint setActive:(![fileBreakpoint isActive])];
+}
+- (void)_animationEffectDidEnd:(void *)contextInfo {
+	[[[[self delegate] projectDocumentForSourceRulerView:self] breakpointManager] removeFileBreakpoint:[self clickedFileBreakpoint]];
 }
 
 - (void)updateTrackingAreas {
@@ -272,6 +320,36 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 		if ([self clickedLineNumber] == NSNotFound)
 			return NO;
 	}
+	else if ([menuItem action] == @selector(_toggleBreakpoint:)) {
+		if ([[self clickedFileBreakpoint] isActive])
+			[menuItem setTitle:NSLocalizedString(@"Disable Breakpoint", @"Disable Breakpoint")];
+		else
+			[menuItem setTitle:NSLocalizedString(@"Enable Breakpoint", @"Enable Breakpoint")];
+		
+		if (![self clickedFileBreakpoint])
+			return NO;
+	}
+	else if ([menuItem action] == @selector(_editBreakpoint:)) {
+		if (![self clickedFileBreakpoint])
+			return NO;
+	}
+	else if ([menuItem action] == @selector(_deleteBreakpoint:)) {
+		if ([[NSUserDefaults standardUserDefaults] boolForKey:WCAlertsWarnBeforeDeletingBreakpointsKey])
+			[menuItem setTitle:NSLocalizedString(@"Delete Breakpoint\u2026", @"Delete Breakpoint with ellipsis")];
+		else
+			[menuItem setTitle:NSLocalizedString(@"Delete Breakpoint", @"Delete Breakpoint")];
+		
+		if (![self clickedFileBreakpoint])
+			return NO;
+	}
+	else if ([menuItem action] == @selector(_revealInBreakpointNavigator:)) {
+		if (![self clickedFileBreakpoint])
+			return NO;
+	}
+	else if ([menuItem action] == @selector(_revealInIssueNavigator:)) {
+		if (![self clickedBuildIssue])
+			return NO;
+	}
 	return YES;
 }
 #pragma mark *** Public Methods ***
@@ -299,7 +377,7 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 		[self _drawFoldsForFold:fold inRect:ribbonRect topLevelFoldColor:topLevelFoldColor stepAmount:0.08 level:0];
 	}
 	
-	if (_foldToHighlight)
+	if ([self foldToHighlight])
 		[self _drawFoldHighlightInRect:ribbonRect];
 	
 	[super drawRightMarginInRect:ribbonRect];
@@ -468,6 +546,7 @@ static const CGFloat kBuildIssueWidthHeight = 10.0;
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_breakpointManagerDidAddFileBreakpoint:) name:WCBreakpointManagerDidAddBreakpointNotification object:[[_delegate projectDocumentForSourceRulerView:self] breakpointManager]];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_breakpointManagerDidRemoveFileBreakpoint:) name:WCBreakpointManagerDidRemoveBreakpointNotification object:[[_delegate projectDocumentForSourceRulerView:self] breakpointManager]];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_breakpointManagerDidChangeBreakpointActive:) name:WCBreakpointManagerDidChangeBreakpointActiveNotification object:[[_delegate projectDocumentForSourceRulerView:self] breakpointManager]];
 	}
 }
 @dynamic sourceTextView;
@@ -480,6 +559,24 @@ static const CGFloat kBuildIssueWidthHeight = 10.0;
 }
 - (void)setDrawCurrentLineHighlight:(BOOL)drawCurrentLineHighlight {
 	_sourceRulerViewFlags.drawCurrentLineHighlight = drawCurrentLineHighlight;
+}
+@synthesize foldToHighlight=_foldToHighlight;
+- (void)setFoldToHighlight:(WCFold *)foldToHighlight {
+	if (_foldToHighlight == foldToHighlight)
+		return;
+	
+	_foldToHighlight = foldToHighlight;
+	
+	[self setNeedsDisplay:YES];
+}
+@synthesize clickedFileBreakpoint=_clickedFileBreakpoint;
+@synthesize clickedBuildIssue=_clickedBuildIssue;
+@dynamic clickedFileBreakpointHasMoved;
+- (BOOL)clickedFileBreakpointHasMoved {
+	return _sourceRulerViewFlags.clickedFileBreakpointHasMoved;
+}
+- (void)setClickedFileBreakpointHasMoved:(BOOL)clickedFileBreakpointHasMoved {
+	_sourceRulerViewFlags.clickedFileBreakpointHasMoved = clickedFileBreakpointHasMoved;
 }
 #pragma mark *** Private Methods ***
 - (NSUInteger)_lineNumberForPoint:(NSPoint)point {
@@ -590,7 +687,7 @@ static const CGFloat kTriangleHeight = 6.0;
     NSAssert(_foldToHighlight, @"_foldToHighlight cannot be nil!");
 #endif
 	
-	NSRect foldHighlightRect = [self _rectForFold:_foldToHighlight inRect:ribbonRect];
+	NSRect foldHighlightRect = [self _rectForFold:[self foldToHighlight] inRect:ribbonRect];
 	
 	[[NSColor whiteColor] setFill];
 	NSRectFill(foldHighlightRect);
@@ -619,7 +716,7 @@ static const CGFloat kTriangleHeight = 6.0;
 		[[NSColor darkGrayColor] setFill];
 		[path fill];
 		
-		[self _drawFoldsForFold:_foldToHighlight inRect:ribbonRect topLevelFoldColor:[NSColor whiteColor] stepAmount:0.12 level:0];
+		[self _drawFoldsForFold:[self foldToHighlight] inRect:ribbonRect topLevelFoldColor:[NSColor whiteColor] stepAmount:0.12 level:0];
 	}
 	else {
 		[path moveToPoint:NSMakePoint(NSMinX(foldHighlightRect), NSMinY(foldHighlightRect))];
@@ -679,6 +776,41 @@ static const CGFloat kTriangleHeight = 6.0;
 		[[self textStorage] addBookmark:bookmark];
 	}
 }
+- (IBAction)_editBreakpoint:(id)sender {
+	// TODO: edit the clicked file breakpoint (use NSPopover and NSViewController subclass)
+}
+- (IBAction)_toggleBreakpoint:(id)sender {
+	[[self clickedFileBreakpoint] setActive:(![[self clickedFileBreakpoint] isActive])];
+}
+- (IBAction)_deleteBreakpoint:(id)sender {
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCAlertsWarnBeforeDeletingBreakpointsKey]) {
+		NSAlert *deleteBreakpointAlert = [NSAlert alertWithMessageText:NSLocalizedString(@"Delete Breakpoint?", @"Delete Breakpoint?") defaultButton:LOCALIZED_STRING_DELETE alternateButton:LOCALIZED_STRING_CANCEL otherButton:nil informativeTextWithFormat:NSLocalizedString(@"Are you sure you want to delete the selected breakpoint? This operation cannot be undone.", @"Are you sure you want to delete the selected breakpoint? This operation cannot be undone.")];
+		
+		[deleteBreakpointAlert setShowsSuppressionButton:YES];
+		
+		[[deleteBreakpointAlert suppressionButton] bind:NSValueBinding toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:[@"values." stringByAppendingString:WCAlertsWarnBeforeDeletingBreakpointsKey] options:[NSDictionary dictionaryWithObjectsAndKeys:NSNegateBooleanTransformerName,NSValueTransformerNameBindingOption, nil]];
+		
+		[deleteBreakpointAlert beginSheetModalForWindow:[self window] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
+			[[alert suppressionButton] unbind:NSValueBinding];
+			[[alert window] orderOut:nil];
+			if (returnCode == NSAlertAlternateReturn)
+				return;
+			
+			[[[[self delegate] projectDocumentForSourceRulerView:self] breakpointManager] removeFileBreakpoint:[self clickedFileBreakpoint]];
+		}];
+	}
+	else
+		[[[[self delegate] projectDocumentForSourceRulerView:self] breakpointManager] removeFileBreakpoint:[self clickedFileBreakpoint]];
+}
+- (IBAction)_revealInBreakpointNavigator:(id)sender {
+	// TODO: reveal the clicked file breakpoint in the breakpoint navigator
+}
+- (IBAction)_revealInIssueNavigator:(id)sender {
+	WCProjectDocument *projectDocument = [[self delegate] projectDocumentForSourceRulerView:self];
+	
+	[[[projectDocument projectWindowController] navigatorControl] setSelectedItemIdentifier:@"issue"];
+	[[[projectDocument projectWindowController] issueNavigatorViewController] setSelectedModelObjects:[NSArray arrayWithObjects:[self clickedBuildIssue], nil]];
+}
 #pragma mark Notifications
 - (void)_sourceScannerDidFinishScanningFolds:(NSNotification *)note {
 	if (![[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey])
@@ -687,16 +819,10 @@ static const CGFloat kTriangleHeight = 6.0;
 	[self setNeedsDisplay:YES];
 }
 - (void)_textStorageDidFold:(NSNotification *)note {
-	_foldToHighlight = nil;
-	
-	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey])
-		[self setNeedsDisplay:YES];
+	[self setFoldToHighlight:nil];
 }
 - (void)_textStorageDidUnfold:(NSNotification *)note {
-	_foldToHighlight = nil;
-	
-	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey])
-		[self setNeedsDisplay:YES];
+	[self setFoldToHighlight:nil];
 }
 - (void)_buildControllerDidFinishBuilding:(NSNotification *)note {
 	[self setNeedsDisplay:YES];
@@ -705,6 +831,9 @@ static const CGFloat kTriangleHeight = 6.0;
 	[self setNeedsDisplay:YES];
 }
 - (void)_breakpointManagerDidRemoveFileBreakpoint:(NSNotification *)note {
+	[self setNeedsDisplay:YES];
+}
+- (void)_breakpointManagerDidChangeBreakpointActive:(NSNotification *)note {
 	[self setNeedsDisplay:YES];
 }
 @end
