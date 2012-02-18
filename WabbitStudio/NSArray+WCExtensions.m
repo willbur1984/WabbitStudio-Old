@@ -13,6 +13,7 @@
 #import "WCFold.h"
 #import "RSDefines.h"
 #import "WCBuildIssue.h"
+#import "WCFileBreakpoint.h"
 
 @implementation NSArray (WCExtensions)
 - (NSUInteger)sourceTokenIndexForRange:(NSRange)range; {
@@ -259,6 +260,57 @@
 				break;
 			
 			[retval addObject:buildIssue];
+		}
+		
+		return [[retval copy] autorelease];
+	}
+}
+
+- (NSUInteger)fileBreakpointIndexForRange:(NSRange)range; {
+	if (![self count])
+		return NSNotFound;
+	
+	NSUInteger left = 0, right = [self count], mid, searchLocation;
+	
+    while ((right - left) > 1) {
+        mid = (right + left) / 2;
+		searchLocation = [(WCFileBreakpoint *)[self objectAtIndex:mid] range].location;
+        
+        if (range.location < searchLocation)
+			right = mid;
+        else if (range.location > searchLocation)
+			left = mid;
+        else
+			return mid;
+    }
+    return left;
+}
+- (WCFileBreakpoint *)fileBreakpointForRange:(NSRange)range; {
+	if (![self count])
+		return nil;
+	
+	WCFileBreakpoint *fileBreakpoint = [self objectAtIndex:[self fileBreakpointIndexForRange:range]];
+	if ([fileBreakpoint range].location == range.location)
+		return fileBreakpoint;
+	return nil;
+}
+- (NSArray *)fileBreakpointsForRange:(NSRange)range; {
+	if (![self count])
+		return nil;
+	else if ([self count] == 1) {
+		if (NSLocationInOrEqualToRange([[self lastObject] range].location, range))
+			return self;
+		return nil;
+	}
+	else {
+		NSUInteger startIndex = [self fileBreakpointIndexForRange:range];
+		NSMutableArray *retval = [NSMutableArray arrayWithCapacity:[self count]];
+		
+		for (WCFileBreakpoint *fileBreakpoint in [self subarrayWithRange:NSMakeRange(startIndex, [self count] - startIndex)]) {
+			if ([fileBreakpoint range].location > NSMaxRange(range))
+				break;
+			
+			[retval addObject:fileBreakpoint];
 		}
 		
 		return [[retval copy] autorelease];

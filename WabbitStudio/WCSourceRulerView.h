@@ -28,4 +28,5 @@
 
 - (void)drawCodeFoldingRibbonInRect:(NSRect)ribbonRect;
 - (void)drawBuildIssuesInRect:(NSRect)buildIssueRect;
+- (void)drawFileBreakpointsInRect:(NSRect)breakpointRect;
 @end

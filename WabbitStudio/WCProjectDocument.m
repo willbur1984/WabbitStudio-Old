@@ -31,6 +31,7 @@
 #import "WCEditBuildTargetWindowController.h"
 #import "WCSearchNavigatorViewController.h"
 #import "WCBuildInclude.h"
+#import "WCBreakpointManager.h"
 
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
@@ -61,6 +62,7 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
+	[_breakpointManager release];
 	[_buildController release];
 	[_buildTargets release];
 	[_fileCompletions release];
@@ -471,6 +473,12 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_buildControllerDidFinishBuilding:) name:WCBuildControllerDidFinishBuildingNotification object:_buildController];
 	}
 	return _buildController;
+}
+@dynamic breakpointManager;
+- (WCBreakpointManager *)breakpointManager {
+	if (!_breakpointManager)
+		_breakpointManager = [[WCBreakpointManager alloc] initWithProjectDocument:self];
+	return _breakpointManager;
 }
 
 #pragma mark Notifications

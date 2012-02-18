@@ -33,6 +33,7 @@
 #import "WCSourceTypesetter.h"
 #import "WCBuildController.h"
 #import "WCSourceScrollView.h"
+#import "WCBreakpointManager.h"
 
 @interface WCSourceTextViewController ()
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
@@ -301,6 +302,19 @@
 }
 - (WCProjectDocument *)projectDocumentForSourceRulerView:(WCSourceRulerView *)rulerView {
 	return [[self sourceFileDocument] projectDocument];
+}
+- (NSArray *)fileBreakpointsForSourceRulerView:(WCSourceRulerView *)rulerView; {
+	if ([[self sourceFileDocument] projectDocument]) {
+		WCFile *file = [[[[self sourceFileDocument] projectDocument] sourceFileDocumentsToFiles] objectForKey:[self sourceFileDocument]];
+		
+		return [[[[[self sourceFileDocument] projectDocument] breakpointManager] filesToFileBreakpointsSortedByLocation] objectForKey:file];
+	}
+	return nil;
+}
+- (WCFile *)fileForSourceRulerView:(WCSourceRulerView *)rulerView {
+	if ([[self sourceFileDocument] projectDocument])
+		return [[[[self sourceFileDocument] projectDocument] sourceFileDocumentsToFiles] objectForKey:[self sourceFileDocument]];
+	return nil;
 }
 #pragma mark WCSourceScrollViewDelegate
 - (WCProjectDocument *)projectDocumentForSourceScrollView:(WCSourceScrollView *)scrollView {

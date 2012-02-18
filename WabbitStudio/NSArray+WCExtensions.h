@@ -8,7 +8,7 @@
 
 #import <Foundation/NSArray.h>
 
-@class WCSourceToken,WCSourceSymbol,RSBookmark,WCFold,WCBuildIssue;
+@class WCSourceToken,WCSourceSymbol,RSBookmark,WCFold,WCBuildIssue,WCFileBreakpoint;
 
 @interface NSArray (WCExtensions)
 - (NSUInteger)sourceTokenIndexForRange:(NSRange)range;
@@ -31,6 +31,10 @@
 - (NSUInteger)buildIssueIndexForRange:(NSRange)range;
 - (WCBuildIssue *)buildIssueForRange:(NSRange)range;
 - (NSArray *)buildIssuesForRange:(NSRange)range;
+
+- (NSUInteger)fileBreakpointIndexForRange:(NSRange)range;
+- (WCFileBreakpoint *)fileBreakpointForRange:(NSRange)range;
+- (NSArray *)fileBreakpointsForRange:(NSRange)range;
 
 - (NSUInteger)lineNumberForRange:(NSRange)range;
 

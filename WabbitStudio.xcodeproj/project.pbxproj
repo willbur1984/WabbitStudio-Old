@@ -43,6 +43,9 @@
 		070EC24D14EF56F600982CA8 /* WCEditBuildTargetIncludesArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 070EC24C14EF56F600982CA8 /* WCEditBuildTargetIncludesArrayController.m */; };
 		070EC25014EF588E00982CA8 /* RSRTVArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 070EC24F14EF588E00982CA8 /* RSRTVArrayController.m */; };
 		070EC25314EF5E4E00982CA8 /* WCEditBuildTargetDefinesArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 070EC25214EF5E4D00982CA8 /* WCEditBuildTargetDefinesArrayController.m */; };
+		070EC25814EF8E6900982CA8 /* WCBreakpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 070EC25714EF8E6900982CA8 /* WCBreakpoint.m */; };
+		070EC25B14EF91CA00982CA8 /* WCFileBreakpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 070EC25A14EF91CA00982CA8 /* WCFileBreakpoint.m */; };
+		070EC25E14EF963500982CA8 /* WCBreakpointManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 070EC25D14EF963500982CA8 /* WCBreakpointManager.m */; };
 		0711BAFE14E982E700EC9841 /* WCEditBuildTargetDefinesFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0711BAFD14E982E700EC9841 /* WCEditBuildTargetDefinesFormatter.m */; };
 		0711BB0214E9835E00EC9841 /* WCBuildDefine.m in Sources */ = {isa = PBXBuildFile; fileRef = 0711BB0114E9835D00EC9841 /* WCBuildDefine.m */; };
 		0711BB0514E98DB000EC9841 /* WCEditBuildTargetDefineValuesFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0711BB0414E98DB000EC9841 /* WCEditBuildTargetDefineValuesFormatter.m */; };
@@ -408,6 +411,12 @@
 		070EC24F14EF588E00982CA8 /* RSRTVArrayController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSRTVArrayController.m; sourceTree = "<group>"; };
 		070EC25114EF5E4D00982CA8 /* WCEditBuildTargetDefinesArrayController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCEditBuildTargetDefinesArrayController.h; sourceTree = "<group>"; };
 		070EC25214EF5E4D00982CA8 /* WCEditBuildTargetDefinesArrayController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCEditBuildTargetDefinesArrayController.m; sourceTree = "<group>"; };
+		070EC25614EF8E6900982CA8 /* WCBreakpoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCBreakpoint.h; sourceTree = "<group>"; };
+		070EC25714EF8E6900982CA8 /* WCBreakpoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCBreakpoint.m; sourceTree = "<group>"; };
+		070EC25914EF91CA00982CA8 /* WCFileBreakpoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCFileBreakpoint.h; sourceTree = "<group>"; };
+		070EC25A14EF91CA00982CA8 /* WCFileBreakpoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCFileBreakpoint.m; sourceTree = "<group>"; };
+		070EC25C14EF963500982CA8 /* WCBreakpointManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCBreakpointManager.h; sourceTree = "<group>"; };
+		070EC25D14EF963500982CA8 /* WCBreakpointManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCBreakpointManager.m; sourceTree = "<group>"; };
 		0711BAFC14E982E700EC9841 /* WCEditBuildTargetDefinesFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCEditBuildTargetDefinesFormatter.h; sourceTree = "<group>"; };
 		0711BAFD14E982E700EC9841 /* WCEditBuildTargetDefinesFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCEditBuildTargetDefinesFormatter.m; sourceTree = "<group>"; };
 		0711BB0014E9835D00EC9841 /* WCBuildDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCBuildDefine.h; sourceTree = "<group>"; };
@@ -1152,6 +1161,26 @@
 			path = External;
 			sourceTree = "<group>";
 		};
+		070EC25414EF8DCB00982CA8 /* Breakpoint */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Breakpoint;
+			sourceTree = "<group>";
+		};
+		070EC25514EF8E5100982CA8 /* Breakpoints */ = {
+			isa = PBXGroup;
+			children = (
+				070EC25614EF8E6900982CA8 /* WCBreakpoint.h */,
+				070EC25714EF8E6900982CA8 /* WCBreakpoint.m */,
+				070EC25914EF91CA00982CA8 /* WCFileBreakpoint.h */,
+				070EC25A14EF91CA00982CA8 /* WCFileBreakpoint.m */,
+				070EC25C14EF963500982CA8 /* WCBreakpointManager.h */,
+				070EC25D14EF963500982CA8 /* WCBreakpointManager.m */,
+			);
+			name = Breakpoints;
+			sourceTree = "<group>";
+		};
 		0711BB3114EC7F1800EC9841 /* Issue */ = {
 			isa = PBXGroup;
 			children = (
@@ -1220,6 +1249,7 @@
 		071985F914C0B3BA00C8E91A /* Project */ = {
 			isa = PBXGroup;
 			children = (
+				070EC25514EF8E5100982CA8 /* Breakpoints */,
 				0765361714CD44EE004D72D1 /* View Controllers */,
 				07018B0C14C5FD4500C5A7AC /* Open Quickly */,
 				0797327614C536C800A71F54 /* Tabs */,
@@ -1614,6 +1644,7 @@
 			isa = PBXGroup;
 			children = (
 				0778853414C49ABB00605F5D /* WCNavigatorModule.h */,
+				070EC25414EF8DCB00982CA8 /* Breakpoint */,
 				0711BB5E14EE020C00EC9841 /* Symbol */,
 				0711BB3114EC7F1800EC9841 /* Issue */,
 				0779069F14E0DD05006C16EF /* Search */,
@@ -2320,6 +2351,9 @@
 				070EC24D14EF56F600982CA8 /* WCEditBuildTargetIncludesArrayController.m in Sources */,
 				070EC25014EF588E00982CA8 /* RSRTVArrayController.m in Sources */,
 				070EC25314EF5E4E00982CA8 /* WCEditBuildTargetDefinesArrayController.m in Sources */,
+				070EC25814EF8E6900982CA8 /* WCBreakpoint.m in Sources */,
+				070EC25B14EF91CA00982CA8 /* WCFileBreakpoint.m in Sources */,
+				070EC25E14EF963500982CA8 /* WCBreakpointManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

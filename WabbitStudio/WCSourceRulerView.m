@@ -29,6 +29,8 @@
 #import "WCProjectDocument.h"
 #import "WCBuildController.h"
 #import "RSToolTipManager.h"
+#import "WCFileBreakpoint.h"
+#import "WCBreakpointManager.h"
 
 @interface WCSourceRulerView ()
 @property (readonly,nonatomic) WCSourceTextStorage *textStorage;
@@ -149,20 +151,26 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 		else
 			[[self textStorage] unfoldRange:foldRange effectiveRange:NULL];
 	}
-	/*
 	else {
-		NSUInteger lineNumber = [self _lineNumberForPoint:[self convertPointFromBase:[theEvent locationInWindow]]];
+		NSRange range = [self _rangeForPoint:[self convertPointFromBase:[theEvent locationInWindow]]];
+		WCFileBreakpoint *fileBreakpoint = [[[self delegate] fileBreakpointsForSourceRulerView:self] fileBreakpointForRange:range];
 		
-		if (lineNumber != NSNotFound) {
-			RSBookmark *bookmark = [[[self sourceTextView] sourceTextStorage] bookmarkAtLineNumber:lineNumber];
+		if (fileBreakpoint)
+			[[[[self delegate] projectDocumentForSourceRulerView:self] breakpointManager] removeFileBreakpoint:fileBreakpoint];
+		else {
+			WCProjectDocument *projectDocument = [[self delegate] projectDocumentForSourceRulerView:self];
+			WCFile *file = [[self delegate] fileForSourceRulerView:self];
+			WCFileBreakpoint *fileBreakpoint = [WCFileBreakpoint fileBreakpointWithRange:range file:file projectDocument:projectDocument];
 			
-			if (bookmark)
-				[[[self sourceTextView] sourceTextStorage] removeBookmark:bookmark];
-			else
-				[[[self sourceTextView] sourceTextStorage] addBookmark:[RSBookmark bookmarkWithRange:NSMakeRange([[[self textView] string] rangeForLineNumber:lineNumber].location, 0) visibleRange:NSEmptyRange textStorage:[self textStorage]]];
+			[[projectDocument breakpointManager] addFileBreakpoint:fileBreakpoint];
 		}
 	}
-	 */
+}
+- (void)mouseDragged:(NSEvent *)theEvent {
+	
+}
+- (void)mouseUp:(NSEvent *)theEvent {
+	
 }
 
 - (void)updateTrackingAreas {
@@ -186,6 +194,20 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 	return [super minimumThickness]+kIconWidthHeight+kIconPaddingLeft;
 }
 
+- (NSDictionary *)textAttributesForLineNumber:(NSUInteger)lineNumber selectedLineNumbers:(NSIndexSet *)selectedLineNumbers {
+	NSUInteger lineStartIndex = [[[self lineStartIndexes] objectAtIndex:lineNumber] unsignedIntegerValue];
+	WCFileBreakpoint *fileBreakpoint = [[[self delegate] fileBreakpointsForSourceRulerView:self] fileBreakpointForRange:NSMakeRange(lineStartIndex, 0)];
+	
+	if (fileBreakpoint) {
+		NSMutableDictionary *textAttributes = [[[self textAttributes] mutableCopy] autorelease];
+		
+		[textAttributes setObject:[NSColor whiteColor] forKey:NSForegroundColorAttributeName];
+		
+		return textAttributes;
+	}
+	return [super textAttributesForLineNumber:lineNumber selectedLineNumbers:selectedLineNumbers];
+}
+
 - (void)drawHashMarksAndLabelsInRect:(NSRect)rect {
 	[super drawBackgroundInRect:rect];
 	
@@ -195,6 +217,8 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 		[super drawRightMarginInRect:NSMakeRect(NSMinX(rect), NSMinY(rect), NSWidth(rect)-kCodeFoldingRibbonWidth, NSHeight(rect))];
 	else
 		[super drawRightMarginInRect:rect];
+	
+	[self drawFileBreakpointsInRect:rect];
 	
 	[self drawBuildIssuesInRect:rect];
 	
@@ -391,6 +415,31 @@ static const CGFloat kBuildIssueWidthHeight = 10.0;
 		}
 	}
 }
+
+- (void)drawFileBreakpointsInRect:(NSRect)breakpointRect; {
+	NSArray *fileBreakpoints = [[self delegate] fileBreakpointsForSourceRulerView:self];
+	
+	for (WCFileBreakpoint *fileBreakpoint in [fileBreakpoints fileBreakpointsForRange:[[self textView] visibleRange]]) {
+		NSUInteger rectCount;
+		NSRectArray rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[fileBreakpoint range] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&rectCount];;
+		
+		if (!rectCount)
+			continue;
+		
+		NSRect lineRect = rects[0];
+		
+		lineRect = NSMakeRect(NSMinX([self bounds]), [self convertPoint:lineRect.origin fromView:[self clientView]].y, NSWidth([self bounds]), NSHeight(lineRect));
+		
+		if (!NSIntersectsRect(lineRect, breakpointRect) || ![self needsToDrawRect:lineRect])
+			continue;
+		
+		lineRect = NSInsetRect(lineRect, 2.0, 0.0);
+		
+		NSImage *breakpointIcon = [WCBreakpoint breakpointIconWithSize:NSMakeSize(NSWidth(lineRect), NSHeight(lineRect)) type:[fileBreakpoint type] active:[fileBreakpoint isActive]];
+		
+		[breakpointIcon drawInRect:lineRect fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+	}
+}
 #pragma mark Properties
 @dynamic textStorage;
 - (WCSourceTextStorage *)textStorage {
@@ -416,6 +465,9 @@ static const CGFloat kBuildIssueWidthHeight = 10.0;
 	if (_delegate) {
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_sourceScannerDidFinishScanningFolds:) name:WCSourceScannerDidFinishScanningFoldsNotification object:[_delegate sourceScannerForSourceRulerView:self]];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_buildControllerDidFinishBuilding:) name:WCBuildControllerDidFinishBuildingNotification object:[[_delegate projectDocumentForSourceRulerView:self] buildController]];
+		
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_breakpointManagerDidAddFileBreakpoint:) name:WCBreakpointManagerDidAddBreakpointNotification object:[[_delegate projectDocumentForSourceRulerView:self] breakpointManager]];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_breakpointManagerDidRemoveFileBreakpoint:) name:WCBreakpointManagerDidRemoveBreakpointNotification object:[[_delegate projectDocumentForSourceRulerView:self] breakpointManager]];
 	}
 }
 @dynamic sourceTextView;
@@ -647,6 +699,12 @@ static const CGFloat kTriangleHeight = 6.0;
 		[self setNeedsDisplay:YES];
 }
 - (void)_buildControllerDidFinishBuilding:(NSNotification *)note {
+	[self setNeedsDisplay:YES];
+}
+- (void)_breakpointManagerDidAddFileBreakpoint:(NSNotification *)note {
+	[self setNeedsDisplay:YES];
+}
+- (void)_breakpointManagerDidRemoveFileBreakpoint:(NSNotification *)note {
 	[self setNeedsDisplay:YES];
 }
 @end
