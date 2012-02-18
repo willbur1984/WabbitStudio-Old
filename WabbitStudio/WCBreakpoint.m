@@ -8,6 +8,7 @@
 
 #import "WCBreakpoint.h"
 #import "NSBezierPath+StrokeExtensions.h"
+#import "WCEditorViewController.h"
 
 static NSString *const WCBreakpointTypeKey = @"type";
 static NSString *const WCBreakpointAddressKey = @"address";
@@ -80,8 +81,7 @@ static NSString *const WCBreakpointActiveKey = @"active";
 	static NSGradient *retval;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		//retval = [[NSGradient alloc] initWithColorsAndLocations:[NSColor colorWithCalibratedHue:212.0/360.0 saturation:0.45 brightness:0.9 alpha:1.0],0.0,[NSColor colorWithCalibratedHue:212.0/360.0 saturation:0.45 brightness:0.8 alpha:1.0],0.5,[NSColor colorWithCalibratedHue:212.0/360.0 saturation:0.45 brightness:0.75 alpha:1.0],0.5,[NSColor colorWithCalibratedHue:212.0/360.0 saturation:0.45 brightness:0.65 alpha:1.0],1.0, nil];
-		retval = [[NSGradient alloc] initWithStartingColor:[NSColor colorWithCalibratedRed:0.44 green:0.61 blue:0.8 alpha:1.0] endingColor:[NSColor colorWithCalibratedRed:0.33 green:0.53 blue:0.76 alpha:1.0]];
+		retval = [[NSGradient alloc] initWithStartingColor:[NSColor colorWithCalibratedRed:84.0/255.0 green:138.0/255.0 blue:192.0/255.0 alpha:1.0] endingColor:[NSColor colorWithCalibratedRed:56.0/255.0 green:118.0/255.0 blue:179.0/255.0 alpha:1.0]];
 	});
 	return retval;
 }
@@ -89,20 +89,20 @@ static NSString *const WCBreakpointActiveKey = @"active";
 	static NSGradient *retval;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		retval = [[NSGradient alloc] initWithColorsAndLocations:[NSColor colorWithCalibratedHue:212.0/360.0 saturation:0.45 brightness:0.9 alpha:0.5],0.0,[NSColor colorWithCalibratedHue:212.0/360.0 saturation:0.45 brightness:0.8 alpha:0.5],0.5,[NSColor colorWithCalibratedHue:212.0/360.0 saturation:0.45 brightness:0.75 alpha:0.5],0.5,[NSColor colorWithCalibratedHue:212.0/360.0 saturation:0.45 brightness:0.65 alpha:0.5],1.0, nil];
+		retval = [[NSGradient alloc] initWithStartingColor:[NSColor colorWithCalibratedRed:84.0/255.0 green:138.0/255.0 blue:192.0/255.0 alpha:0.5] endingColor:[NSColor colorWithCalibratedRed:56.0/255.0 green:118.0/255.0 blue:179.0/255.0 alpha:0.5]];
 	});
 	return retval;
 }
 + (NSColor *)activeBreakpointFillColor; {
-	return [NSColor colorWithCalibratedHue:212.0/360.0 saturation:0.45 brightness:0.55 alpha:1.0];
+	return [NSColor colorWithCalibratedRed:32.0/255.0 green:94.0/255.0 blue:160.0/255.0 alpha:1.0];
 }
 + (NSColor *)inactiveBreakpointFillColor; {
-	return [NSColor colorWithCalibratedHue:212.0/360.0 saturation:0.45 brightness:0.55 alpha:0.5];
+	return [NSColor colorWithCalibratedRed:32.0/255.0 green:94.0/255.0 blue:160.0/255.0 alpha:0.5];
 }
 
 + (NSImage *)breakpointIconWithSize:(NSSize)size type:(WCBreakpointType)type active:(BOOL)active; {
 	static const CGFloat kCornerRadius = 3.0;
-	static const CGFloat kTriangleInset = 6.0;
+	const CGFloat kTriangleInset = ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey])?6.0:3.0;
 	NSImage *retval = [[[NSImage alloc] initWithSize:size] autorelease];
 	NSBezierPath *path = [NSBezierPath bezierPath];
 	

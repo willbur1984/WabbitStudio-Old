@@ -246,7 +246,7 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 	NSUInteger lineStartIndex = [[[self lineStartIndexes] objectAtIndex:lineNumber] unsignedIntegerValue];
 	WCFileBreakpoint *fileBreakpoint = [[[self delegate] fileBreakpointsForSourceRulerView:self] fileBreakpointForRange:NSMakeRange(lineStartIndex, 0)];
 	
-	if (fileBreakpoint) {
+	if (fileBreakpoint && ![selectedLineNumbers containsIndex:lineNumber]) {
 		NSMutableDictionary *textAttributes = [[[self textAttributes] mutableCopy] autorelease];
 		
 		[textAttributes setObject:[NSColor whiteColor] forKey:NSForegroundColorAttributeName];
