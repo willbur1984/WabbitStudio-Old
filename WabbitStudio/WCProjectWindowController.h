@@ -13,7 +13,7 @@
 #import "WCTabViewControllerDelegate.h"
 #import "WCTabViewContext.h"
 
-@class WCProjectNavigatorViewController,WCTabViewController,WCSearchNavigatorViewController,WCIssueNavigatorViewController,WCSymbolNavigatorViewController;
+@class WCProjectNavigatorViewController,WCTabViewController,WCSearchNavigatorViewController,WCIssueNavigatorViewController,WCSymbolNavigatorViewController,WCBreakpointNavigatorViewController;
 
 @interface WCProjectWindowController : NSWindowController <WCTabViewControllerDelegate,WCProjectDocumentSettingsProvider,RSNavigatorControlDataSource,RSNavigatorControlDelegate,WCTabViewContext,NSSplitViewDelegate,NSWindowDelegate> {
 	NSArray *_navigatorItemDictionaries;
@@ -21,6 +21,7 @@
 	WCSearchNavigatorViewController *_searchNavigatorViewController;
 	WCIssueNavigatorViewController *_issueNavigatorViewController;
 	WCSymbolNavigatorViewController *_symbolNavigatorViewController;
+	WCBreakpointNavigatorViewController *_breakpointNavigatorViewController;
 	WCTabViewController *_tabViewController;
 }
 @property (readwrite,assign,nonatomic) IBOutlet RSNavigatorControl *navigatorControl;
@@ -31,6 +32,7 @@
 @property (readonly,nonatomic) WCSearchNavigatorViewController *searchNavigatorViewController;
 @property (readonly,nonatomic) WCIssueNavigatorViewController *issueNavigatorViewController;
 @property (readonly,nonatomic) WCSymbolNavigatorViewController *symbolNavigatorViewController;
+@property (readonly,nonatomic) WCBreakpointNavigatorViewController *breakpointNavigatorViewController;
 
 - (IBAction)showProjectNavigator:(id)sender;
 - (IBAction)showSymbolNavigator:(id)sender;

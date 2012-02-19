@@ -46,6 +46,13 @@
 		070EC25814EF8E6900982CA8 /* WCBreakpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 070EC25714EF8E6900982CA8 /* WCBreakpoint.m */; };
 		070EC25B14EF91CA00982CA8 /* WCFileBreakpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 070EC25A14EF91CA00982CA8 /* WCFileBreakpoint.m */; };
 		070EC25E14EF963500982CA8 /* WCBreakpointManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 070EC25D14EF963500982CA8 /* WCBreakpointManager.m */; };
+		070EC26114F074A400982CA8 /* WCBreakpointNavigatorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 070EC26014F074A400982CA8 /* WCBreakpointNavigatorViewController.m */; };
+		070EC26414F0773E00982CA8 /* WCBreakpointFileContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 070EC26314F0773D00982CA8 /* WCBreakpointFileContainer.m */; };
+		070EC26714F078AE00982CA8 /* WCBreakpointContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 070EC26614F078AE00982CA8 /* WCBreakpointContainer.m */; };
+		070EC26A14F079D300982CA8 /* WCBreakpointNavigatorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 070EC26814F079D300982CA8 /* WCBreakpointNavigatorView.xib */; };
+		070EC26D14F0875C00982CA8 /* WCBreakpointNavigatorOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 070EC26C14F0875B00982CA8 /* WCBreakpointNavigatorOutlineView.m */; };
+		070EC27014F087AC00982CA8 /* WCBreakpointNavigatorOutlineRowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 070EC26F14F087AB00982CA8 /* WCBreakpointNavigatorOutlineRowView.m */; };
+		070EC27314F08FC500982CA8 /* WCBreakpointNavigatorFileBreakpointOutlineCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 070EC27214F08FC400982CA8 /* WCBreakpointNavigatorFileBreakpointOutlineCellView.m */; };
 		0711BAFE14E982E700EC9841 /* WCEditBuildTargetDefinesFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0711BAFD14E982E700EC9841 /* WCEditBuildTargetDefinesFormatter.m */; };
 		0711BB0214E9835E00EC9841 /* WCBuildDefine.m in Sources */ = {isa = PBXBuildFile; fileRef = 0711BB0114E9835D00EC9841 /* WCBuildDefine.m */; };
 		0711BB0514E98DB000EC9841 /* WCEditBuildTargetDefineValuesFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0711BB0414E98DB000EC9841 /* WCEditBuildTargetDefineValuesFormatter.m */; };
@@ -417,6 +424,19 @@
 		070EC25A14EF91CA00982CA8 /* WCFileBreakpoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCFileBreakpoint.m; sourceTree = "<group>"; };
 		070EC25C14EF963500982CA8 /* WCBreakpointManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCBreakpointManager.h; sourceTree = "<group>"; };
 		070EC25D14EF963500982CA8 /* WCBreakpointManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCBreakpointManager.m; sourceTree = "<group>"; };
+		070EC25F14F074A400982CA8 /* WCBreakpointNavigatorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCBreakpointNavigatorViewController.h; sourceTree = "<group>"; };
+		070EC26014F074A400982CA8 /* WCBreakpointNavigatorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCBreakpointNavigatorViewController.m; sourceTree = "<group>"; };
+		070EC26214F0773D00982CA8 /* WCBreakpointFileContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCBreakpointFileContainer.h; sourceTree = "<group>"; };
+		070EC26314F0773D00982CA8 /* WCBreakpointFileContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCBreakpointFileContainer.m; sourceTree = "<group>"; };
+		070EC26514F078AE00982CA8 /* WCBreakpointContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCBreakpointContainer.h; sourceTree = "<group>"; };
+		070EC26614F078AE00982CA8 /* WCBreakpointContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCBreakpointContainer.m; sourceTree = "<group>"; };
+		070EC26914F079D300982CA8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCBreakpointNavigatorView.xib; sourceTree = "<group>"; };
+		070EC26B14F0875B00982CA8 /* WCBreakpointNavigatorOutlineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCBreakpointNavigatorOutlineView.h; sourceTree = "<group>"; };
+		070EC26C14F0875B00982CA8 /* WCBreakpointNavigatorOutlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCBreakpointNavigatorOutlineView.m; sourceTree = "<group>"; };
+		070EC26E14F087AB00982CA8 /* WCBreakpointNavigatorOutlineRowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCBreakpointNavigatorOutlineRowView.h; sourceTree = "<group>"; };
+		070EC26F14F087AB00982CA8 /* WCBreakpointNavigatorOutlineRowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCBreakpointNavigatorOutlineRowView.m; sourceTree = "<group>"; };
+		070EC27114F08FC300982CA8 /* WCBreakpointNavigatorFileBreakpointOutlineCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCBreakpointNavigatorFileBreakpointOutlineCellView.h; sourceTree = "<group>"; };
+		070EC27214F08FC400982CA8 /* WCBreakpointNavigatorFileBreakpointOutlineCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCBreakpointNavigatorFileBreakpointOutlineCellView.m; sourceTree = "<group>"; };
 		0711BAFC14E982E700EC9841 /* WCEditBuildTargetDefinesFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCEditBuildTargetDefinesFormatter.h; sourceTree = "<group>"; };
 		0711BAFD14E982E700EC9841 /* WCEditBuildTargetDefinesFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCEditBuildTargetDefinesFormatter.m; sourceTree = "<group>"; };
 		0711BB0014E9835D00EC9841 /* WCBuildDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCBuildDefine.h; sourceTree = "<group>"; };
@@ -1012,6 +1032,7 @@
 				0711BB0E14E9BAFB00EC9841 /* WCEditBuildTargetChooseInputFileAccessoryView.xib */,
 				0711BB3514ED6C3D00EC9841 /* WCIssueNavigatorView.xib */,
 				0711BB6814EE078D00EC9841 /* WCSymbolNavigatorView.xib */,
+				070EC26814F079D300982CA8 /* WCBreakpointNavigatorView.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -1164,6 +1185,18 @@
 		070EC25414EF8DCB00982CA8 /* Breakpoint */ = {
 			isa = PBXGroup;
 			children = (
+				070EC25F14F074A400982CA8 /* WCBreakpointNavigatorViewController.h */,
+				070EC26014F074A400982CA8 /* WCBreakpointNavigatorViewController.m */,
+				070EC26214F0773D00982CA8 /* WCBreakpointFileContainer.h */,
+				070EC26314F0773D00982CA8 /* WCBreakpointFileContainer.m */,
+				070EC26514F078AE00982CA8 /* WCBreakpointContainer.h */,
+				070EC26614F078AE00982CA8 /* WCBreakpointContainer.m */,
+				070EC26B14F0875B00982CA8 /* WCBreakpointNavigatorOutlineView.h */,
+				070EC26C14F0875B00982CA8 /* WCBreakpointNavigatorOutlineView.m */,
+				070EC26E14F087AB00982CA8 /* WCBreakpointNavigatorOutlineRowView.h */,
+				070EC26F14F087AB00982CA8 /* WCBreakpointNavigatorOutlineRowView.m */,
+				070EC27114F08FC300982CA8 /* WCBreakpointNavigatorFileBreakpointOutlineCellView.h */,
+				070EC27214F08FC400982CA8 /* WCBreakpointNavigatorFileBreakpointOutlineCellView.m */,
 			);
 			name = Breakpoint;
 			sourceTree = "<group>";
@@ -2127,6 +2160,7 @@
 				0711BB4514ED850400EC9841 /* WarningMultiple.pdf in Resources */,
 				0711BB6A14EE078D00EC9841 /* WCSymbolNavigatorView.xib in Resources */,
 				077D3EE514EECD6C000735EA /* BuildTargetOutputTypesToFileExtensions.plist in Resources */,
+				070EC26A14F079D300982CA8 /* WCBreakpointNavigatorView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2354,6 +2388,12 @@
 				070EC25814EF8E6900982CA8 /* WCBreakpoint.m in Sources */,
 				070EC25B14EF91CA00982CA8 /* WCFileBreakpoint.m in Sources */,
 				070EC25E14EF963500982CA8 /* WCBreakpointManager.m in Sources */,
+				070EC26114F074A400982CA8 /* WCBreakpointNavigatorViewController.m in Sources */,
+				070EC26414F0773E00982CA8 /* WCBreakpointFileContainer.m in Sources */,
+				070EC26714F078AE00982CA8 /* WCBreakpointContainer.m in Sources */,
+				070EC26D14F0875C00982CA8 /* WCBreakpointNavigatorOutlineView.m in Sources */,
+				070EC27014F087AC00982CA8 /* WCBreakpointNavigatorOutlineRowView.m in Sources */,
+				070EC27314F08FC500982CA8 /* WCBreakpointNavigatorFileBreakpointOutlineCellView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2383,6 +2423,14 @@
 			);
 			name = WCCompletionWindow.xib;
 			path = ..;
+			sourceTree = "<group>";
+		};
+		070EC26814F079D300982CA8 /* WCBreakpointNavigatorView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				070EC26914F079D300982CA8 /* en */,
+			);
+			name = WCBreakpointNavigatorView.xib;
 			sourceTree = "<group>";
 		};
 		0711BB0E14E9BAFB00EC9841 /* WCEditBuildTargetChooseInputFileAccessoryView.xib */ = {

@@ -1,52 +1,50 @@
 //
-//  WCIssueNavigatorViewController.m
+//  WCBreakpointNavigatorViewController.m
 //  WabbitStudio
 //
-//  Created by William Towe on 2/15/12.
+//  Created by William Towe on 2/18/12.
 //  Copyright (c) 2012 Revolution Software. All rights reserved.
 //
 
-#import "WCIssueNavigatorViewController.h"
-#import "WCProjectDocument.h"
-#import "WCIssueContainer.h"
-#import "WCBuildIssue.h"
-#import "WCBuildIssueContainer.h"
-#import "WCProjectContainer.h"
+#import "WCBreakpointNavigatorViewController.h"
 #import "WCProject.h"
+#import "WCProjectDocument.h"
+#import "RSOutlineView.h"
 #import "NSTreeController+RSExtensions.h"
-#import "WCBuildController.h"
-#import "WCProjectWindowController.h"
-#import "RSNavigatorControl.h"
+#import "WCBreakpointContainer.h"
+#import "WCBreakpointFileContainer.h"
+#import "WCFileBreakpoint.h"
+#import "WCProjectContainer.h"
+#import "WCBreakpointManager.h"
+#import "RSDefines.h"
 #import "WCSourceFileSeparateWindowController.h"
 #import "WCSourceTextViewController.h"
-#import "WCSourceTextView.h"
+#import "WCProjectWindowController.h"
 #import "WCTabViewController.h"
-#import "RSOutlineView.h"
 
-@interface WCIssueNavigatorViewController ()
-@property (readwrite,retain,nonatomic) WCIssueContainer *filteredIssueContainer;
+@interface WCBreakpointNavigatorViewController ()
+@property (readwrite,retain,nonatomic) WCBreakpointFileContainer *filteredBreakpointFileContainer;
 
-- (void)_updateIssues;
+- (void)_updateBreakpoints;
 @end
 
-@implementation WCIssueNavigatorViewController
+@implementation WCBreakpointNavigatorViewController
 #pragma mark *** Subclass Overrides ***
 - (void)dealloc {
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	_projectDocument = nil;
-	[_filteredIssueContainer release];
-	[_issueContainer release];
+	[_breakpointFileContainer release];
+	[_filteredBreakpointFileContainer release];
 	[super dealloc];
 }
 
 - (NSString *)nibName {
-	return @"WCIssueNavigatorView";
+	return @"WCBreakpointNavigatorView";
 }
 
 - (void)loadView {
 	[super loadView];
 	
-	[[[self searchField] cell] setPlaceholderString:NSLocalizedString(@"Filter Issues", @"Filter Issues")];
+	[[[self searchField] cell] setPlaceholderString:NSLocalizedString(@"Filter Breakpoints", @"Filter Breakpoints")];
 	[[[[self searchField] cell] searchButtonCell] setImage:[NSImage imageNamed:@"Filter"]];
 	[[[[self searchField] cell] searchButtonCell] setAlternateImage:nil];
 	
@@ -54,7 +52,7 @@
 	[[self outlineView] setDoubleAction:@selector(_outlineViewDoubleClick:)];
 	[[self outlineView] setAction:@selector(_outlineViewSingleClick:)];
 	
-	[self _updateIssues];
+	[self _updateBreakpoints];
 }
 #pragma mark NSOutlineViewDelegate
 static NSString *const kProjectCellIdentifier = @"ProjectCell";
@@ -90,7 +88,6 @@ static const CGFloat kMainCellHeight = 20.0;
 - (void)handleReturnPressedForOutlineView:(RSOutlineView *)outlineView {
 	[[self outlineView] sendAction:[[self outlineView] action] to:[[self outlineView] target]];
 }
-
 #pragma mark WCNavigatorModule
 - (NSArray *)selectedObjects {
 	NSMutableArray *retval = [NSMutableArray arrayWithCapacity:0];
@@ -140,56 +137,49 @@ static const CGFloat kMainCellHeight = 20.0;
 		return nil;
 	
 	_projectDocument = projectDocument;
-	_issueContainer = [[WCIssueContainer alloc] initWithFile:[[projectDocument projectContainer] representedObject]];
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_buildControllerDidFinishBuilding:) name:WCBuildControllerDidFinishBuildingNotification object:[projectDocument buildController]];
+	_breakpointFileContainer = [[WCBreakpointFileContainer alloc] initWithFile:[[projectDocument projectContainer] representedObject]];
 	
 	return self;
 }
+#pragma mark IBActions
+
 #pragma mark Properties
-@synthesize outlineView=_outlineView;
 @synthesize treeController=_treeController;
+@synthesize outlineView=_outlineView;
 @synthesize searchField=_searchField;
 
 @synthesize projectDocument=_projectDocument;
-@synthesize issueContainer=_issueContainer;
-@synthesize filteredIssueContainer=_filteredIssueContainer;
-
+@synthesize breakpointFileContainer=_breakpointFileContainer;
+@synthesize filteredBreakpointFileContainer=_filteredBreakpointFileContainer;
 #pragma mark *** Private Methods ***
-- (void)_updateIssues {
-	[[[self issueContainer] mutableChildNodes] removeObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [[[self issueContainer] childNodes] count])]];
+- (void)_updateBreakpoints; {
+	[[[self breakpointFileContainer] mutableChildNodes] removeObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [[[self breakpointFileContainer] childNodes] count])]];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSTextStorageDidProcessEditingNotification object:nil];
 	
-	WCBuildController *buildController = [[self projectDocument] buildController];
+	[[self breakpointFileContainer] willChangeValueForKey:@"statusString"];
 	
-	[[self issueContainer] willChangeValueForKey:@"statusString"];
-	
-	for (WCFile *file in [buildController filesWithBuildIssuesSortedByName]) {
-		WCIssueContainer *issueContainer = [WCIssueContainer issueContainerWithFile:file];
+	for (WCFile *file in [[[self projectDocument] breakpointManager] filesWithFileBreakpointsSortedByName]) {
+		WCBreakpointFileContainer *fileContainer = [WCBreakpointFileContainer breakpointFileContainerWithFile:file];
 		
-		for (WCBuildIssue *buildIssue in [[buildController filesToBuildIssuesSortedByLocation] objectForKey:file]) {
-			WCBuildIssueContainer *buildIssueContainer = [WCBuildIssueContainer buildIssueContainerWithBuildIssue:buildIssue];
+		for (WCFileBreakpoint *fileBreakpoint in [[[[self projectDocument] breakpointManager] filesToFileBreakpointsSortedByLocation] objectForKey:file]) {
+			WCBreakpointContainer *breakpointContainer = [WCBreakpointContainer breakpointContainerWithFileBreakpoint:fileBreakpoint];
 			
-			[[issueContainer mutableChildNodes] addObject:buildIssueContainer];
+			[[fileContainer mutableChildNodes] addObject:breakpointContainer];
 		}
 		
-		[[[self issueContainer] mutableChildNodes] addObject:issueContainer];
-		
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidProcessEditing:) name:NSTextStorageDidProcessEditingNotification object:[[[[self projectDocument] filesToSourceFileDocuments] objectForKey:file] textStorage]];
+		[[[self breakpointFileContainer] mutableChildNodes] addObject:fileContainer];
 	}
 	
-	[[self issueContainer] didChangeValueForKey:@"statusString"];
+	[[self breakpointFileContainer] didChangeValueForKey:@"statusString"];
 	
 	[[self outlineView] expandItem:nil expandChildren:YES];
-	
-	[[[[self projectDocument] projectWindowController] navigatorControl] setSelectedItemIdentifier:@"issue"];
 }
 #pragma mark IBActions
-- (IBAction)_outlineViewSingleClick:(id)sender; {
+- (IBAction)_outlineViewSingleClick:(id)sender {
 	for (id container in [self selectedObjects]) {
 		id result = [container representedObject];
 		
-		if (![result isKindOfClass:[WCBuildIssue class]])
+		if (![result isKindOfClass:[WCFileBreakpoint class]])
 			continue;
 		
 		WCFile *file = [[container parentNode] representedObject];
@@ -198,12 +188,13 @@ static const CGFloat kMainCellHeight = 20.0;
 		[[stvController textView] setSelectedRange:[result range]];
 		[[stvController textView] centerSelectionInVisibleArea:nil];
 	}
+	
 }
-- (IBAction)_outlineViewDoubleClick:(id)sender; {
+- (IBAction)_outlineViewDoubleClick:(id)sender {
 	for (id container in [self selectedObjects]) {
 		id result = [container representedObject];
 		
-		if (![result isKindOfClass:[WCBuildIssue class]])
+		if (![result isKindOfClass:[WCFileBreakpoint class]])
 			continue;
 		
 		WCFile *file = [[container parentNode] representedObject];
@@ -215,44 +206,4 @@ static const CGFloat kMainCellHeight = 20.0;
 	}
 }
 
-#pragma mark Notifications
-- (void)_buildControllerDidFinishBuilding:(NSNotification *)note {	
-	[self _updateIssues];
-}
-- (void)_textStorageDidProcessEditing:(NSNotification *)note {
-	NSTextStorage *textStorage = [note object];
-	
-	if (([textStorage editedMask] & NSTextStorageEditedCharacters) == 0)
-		return;
-	
-	for (WCIssueContainer *container in [[self issueContainer] childNodes]) {
-		WCSourceFileDocument *sfDocument = [[[self projectDocument] filesToSourceFileDocuments] objectForKey:[container representedObject]];
-		
-		if (textStorage == [sfDocument textStorage]) {
-			NSMutableArray *issuesToRemove = [NSMutableArray arrayWithCapacity:0];
-			NSRange editedRange = [textStorage editedRange];
-			NSInteger changeInLength = [textStorage changeInLength];
-			
-			for (WCBuildIssueContainer *buildIssueContainer in [container childNodes]) {
-				NSRange resultRange = [[buildIssueContainer representedObject] range];
-				
-				if (changeInLength < -1 &&
-					NSLocationInRange(resultRange.location, NSMakeRange(editedRange.location, ABS(changeInLength))))
-					[issuesToRemove addObject:buildIssueContainer];
-				else if (NSMaxRange(editedRange) < resultRange.location) {
-					resultRange.location += changeInLength;
-					[[buildIssueContainer representedObject] setRange:resultRange];
-				}
-			}
-			
-			if ([issuesToRemove count]) {
-				[container willChangeValueForKey:@"statusString"];
-				[[container mutableChildNodes] removeObjectsInArray:issuesToRemove];
-				[container didChangeValueForKey:@"statusString"];
-			}
-			
-			break;
-		}
-	}
-}
 @end

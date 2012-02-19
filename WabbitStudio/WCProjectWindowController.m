@@ -18,6 +18,7 @@
 #import "WCSymbolNavigatorViewController.h"
 #import "WCTabViewWindow.h"
 #import "WCBreakpoint.h"
+#import "WCBreakpointNavigatorViewController.h"
 
 #import <PSMTabBarControl/PSMTabBarControl.h>
 #import <Quartz/Quartz.h>
@@ -30,6 +31,7 @@
 #endif
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[_tabViewController release];
+	[_breakpointNavigatorViewController release];
 	[_symbolNavigatorViewController release];
 	[_issueNavigatorViewController release];
 	[_searchNavigatorViewController release];
@@ -139,6 +141,8 @@ static const CGFloat kRightSubviewMinWidth = 400.0;
 		return [[self issueNavigatorViewController] view];
 	else if ([itemIdentifier isEqualToString:@"symbol"])
 		return [[self symbolNavigatorViewController] view];
+	else if ([itemIdentifier isEqualToString:@"breakpoint"])
+		return [[self breakpointNavigatorViewController] view];
 	return nil;
 }
 
@@ -263,6 +267,12 @@ static const CGFloat kRightSubviewMinWidth = 400.0;
 	if (!_symbolNavigatorViewController)
 		_symbolNavigatorViewController = [[WCSymbolNavigatorViewController alloc] initWithProjectDocument:[self document]];
 	return _symbolNavigatorViewController;
+}
+@dynamic breakpointNavigatorViewController;
+- (WCBreakpointNavigatorViewController *)breakpointNavigatorViewController {
+	if (!_breakpointNavigatorViewController)
+		_breakpointNavigatorViewController = [[WCBreakpointNavigatorViewController alloc] initWithProjectDocument:[self document]];
+	return _breakpointNavigatorViewController;
 }
 @synthesize tabViewController=_tabViewController;
 #pragma mark Notifications
