@@ -8,14 +8,9 @@
 
 #import "RSTreeNode.h"
 
-@class WCSourceSymbol,WCFileBreakpoint;
+@class WCFileBreakpoint;
 
-@interface WCBreakpointContainer : RSTreeNode {
-	WCSourceSymbol *_symbol;
-	NSString *_name;
-}
-@property (readonly,nonatomic) WCSourceSymbol *symbol;
-@property (readonly,nonatomic) NSString *name;
+@interface WCBreakpointContainer : RSTreeNode
 
 + (id)breakpointContainerWithFileBreakpoint:(WCFileBreakpoint *)fileBreakpoint;
 - (id)initWithFileBreakpoint:(WCFileBreakpoint *)fileBreakpoint;

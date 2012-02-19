@@ -17,6 +17,11 @@ static NSString *const WCBreakpointActiveKey = @"active";
 
 @implementation WCBreakpoint
 
+- (void)dealloc {
+	[_name release];
+	[super dealloc];
+}
+
 - (id)copyWithZone:(NSZone *)zone {
 	WCBreakpoint *copy = [[WCBreakpoint alloc] init];
 	
@@ -53,7 +58,7 @@ static NSString *const WCBreakpointActiveKey = @"active";
 }
 
 - (id)initWithPlistRepresentation:(NSDictionary *)plistRepresentation {
-	if (!(self = [super initWithPlistRepresentation:plistRepresentation]))
+	if (!(self = [super init]))
 		return nil;
 	
 	_type = [[plistRepresentation objectForKey:WCBreakpointTypeKey] unsignedIntValue];
@@ -188,5 +193,6 @@ static NSString *const WCBreakpointActiveKey = @"active";
 	return [NSSet setWithObjects:@"active", nil];
 }
 @synthesize name=_name;
+@dynamic fileNameAndLineNumber;
 
 @end

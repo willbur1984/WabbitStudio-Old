@@ -31,7 +31,8 @@ typedef enum _WCBreakpointType {
 @property (readwrite,assign,nonatomic) uint8_t page;
 @property (readwrite,assign,nonatomic,getter = isActive) BOOL active;
 @property (readonly,nonatomic) NSImage *icon;
-@property (readonly,nonatomic) NSString *name;
+@property (readwrite,copy,nonatomic) NSString *name;
+@property (readonly,nonatomic) NSString *fileNameAndLineNumber;
 
 + (id)breakpointOfType:(WCBreakpointType)type address:(uint16_t)address page:(uint8_t)page;
 - (id)initWithType:(WCBreakpointType)type address:(uint16_t)address page:(uint8_t)page;

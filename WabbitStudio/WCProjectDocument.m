@@ -32,12 +32,14 @@
 #import "WCSearchNavigatorViewController.h"
 #import "WCBuildInclude.h"
 #import "WCBreakpointManager.h"
+#import "WCFileBreakpoint.h"
 
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
 NSString *const WCProjectDocumentFileReferencesKey = @"fileReferences";
 NSString *const WCProjectDocumentProjectContainerKey = @"projectContainer";
 NSString *const WCProjectDocumentBuildTargetsKey = @"buildTargets";
+NSString *const WCProjectDocumentFileBreakpointsKey = @"fileBreakpoints";
 
 NSString *const WCProjectDataFileName = @"project.wstudioprojdata";
 NSString *const WCProjectSettingsFileExtension = @"plist";
@@ -130,7 +132,8 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 - (NSFileWrapper *)fileWrapperOfType:(NSString *)typeName error:(NSError **)outError {
 	NSMutableDictionary *projectPlist = [[[[self projectContainer] plistRepresentation] mutableCopy] autorelease];
 	
-	[projectPlist setObject:[[self buildTargets] valueForKey:@"plistRepresentation"] forKey:WCProjectDocumentBuildTargetsKey];
+	[projectPlist setObject:[[self buildTargets] valueForKey:RSPlistArchivingPlistRepresentationKey] forKey:WCProjectDocumentBuildTargetsKey];
+	[projectPlist setObject:[[[self breakpointManager] allFileBreakpoints] valueForKey:RSPlistArchivingPlistRepresentationKey] forKey:WCProjectDocumentFileBreakpointsKey];
 	
 	NSMutableDictionary *projectSettings = [NSMutableDictionary dictionaryWithDictionary:[self projectSettings]];
 	
@@ -230,6 +233,16 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	}
 	
 	[self setBuildTargets:buildTargets];
+	
+	for (NSDictionary *fileBreakpointPlist in [projectDataPlist objectForKey:WCProjectDocumentFileBreakpointsKey]) {
+		WCFileBreakpoint *fileBreakpoint = [[[WCFileBreakpoint alloc] initWithPlistRepresentation:fileBreakpointPlist] autorelease];
+		
+		if (fileBreakpoint) {
+			[fileBreakpoint setProjectDocument:self];
+			
+			[[self breakpointManager] addFileBreakpoint:fileBreakpoint];
+		}
+	}
 	
 	NSFileWrapper *settingsDataWrapper = [[fileWrapper fileWrappers] objectForKey:[NSUserName() stringByAppendingPathExtension:WCProjectSettingsFileExtension]];
 	if (!settingsDataWrapper)

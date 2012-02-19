@@ -18,11 +18,6 @@
 #import "NSString+RSExtensions.h"
 
 @implementation WCBreakpointContainer
-- (void)dealloc {
-	[_symbol release];
-	[_name release];
-	[super dealloc];
-}
 
 - (BOOL)isLeafNode {
 	return YES;
@@ -36,29 +31,6 @@
 		return nil;
 	
 	return self;
-}
-
-@dynamic symbol;
-- (WCSourceSymbol *)symbol {
-	if (!_symbol) {
-		WCFileBreakpoint *fileBreakpoint = [self representedObject];
-		WCSourceFileDocument *sfDocument = [[[fileBreakpoint projectDocument] filesToSourceFileDocuments] objectForKey:[fileBreakpoint file]];
-		NSArray *symbols = [[sfDocument sourceScanner] symbols];
-		
-		_symbol = [[symbols sourceSymbolForRange:[fileBreakpoint range]] retain];
-	}
-	return _symbol;
-}
-@dynamic name;
-- (NSString *)name {
-	if (![_name length]) {
-		WCFileBreakpoint *fileBreakpoint = [self representedObject];
-		WCSourceFileDocument *sfDocument = [[[fileBreakpoint projectDocument] filesToSourceFileDocuments] objectForKey:[fileBreakpoint file]];
-		NSString *string = [[sfDocument textStorage] string];
-		
-		_name = [[NSString stringWithFormat:NSLocalizedString(@"%@ - line %lu", @"breakpoint container name format string"),[[self symbol] name],[string lineNumberForRange:[fileBreakpoint range]]+1] copy];
-	}
-	return _name;
 }
 
 @end

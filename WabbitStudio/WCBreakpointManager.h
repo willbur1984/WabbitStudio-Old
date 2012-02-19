@@ -35,6 +35,7 @@ extern NSString *const WCBreakpointManagerDidChangeBreakpointsEnabledNotificatio
 @property (readonly,nonatomic) NSMapTable *filesToFileBreakpointsSortedByLocation;
 @property (readonly,nonatomic) NSArray *filesWithFileBreakpointsSortedByName;
 @property (readwrite,assign,nonatomic) BOOL breakpointsEnabled;
+@property (readonly,nonatomic) NSArray *allFileBreakpoints;
 
 - (id)initWithProjectDocument:(WCProjectDocument *)projectDocument;
 

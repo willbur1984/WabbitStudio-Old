@@ -13,6 +13,7 @@
 extern NSString *const WCProjectDocumentFileReferencesKey;
 extern NSString *const WCProjectDocumentProjectContainerKey;
 extern NSString *const WCProjectDocumentBuildTargetsKey;
+extern NSString *const WCProjectDocumentFileBreakpointsKey;
 
 extern NSString *const WCProjectDataFileName;
 extern NSString *const WCProjectSettingsFileExtension;

@@ -799,35 +799,35 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: objectValue.symbol.icon</string>
+						<string key="label">value: objectValue.representedObject.symbol.icon</string>
 						<reference key="source" ref="846523168"/>
 						<reference key="destination" ref="228731709"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="846523168"/>
 							<reference key="NSDestination" ref="228731709"/>
-							<string key="NSLabel">value: objectValue.symbol.icon</string>
+							<string key="NSLabel">value: objectValue.representedObject.symbol.icon</string>
 							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">objectValue.symbol.icon</string>
+							<string key="NSKeyPath">objectValue.representedObject.symbol.icon</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
-					<int key="connectionID">75</int>
+					<int key="connectionID">94</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: objectValue.name</string>
+						<string key="label">value: objectValue.representedObject.name</string>
 						<reference key="source" ref="404441287"/>
 						<reference key="destination" ref="228731709"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="404441287"/>
 							<reference key="NSDestination" ref="228731709"/>
-							<string key="NSLabel">value: objectValue.name</string>
+							<string key="NSLabel">value: objectValue.representedObject.name</string>
 							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">objectValue.name</string>
+							<string key="NSKeyPath">objectValue.representedObject.name</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
-					<int key="connectionID">76</int>
+					<int key="connectionID">93</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -1522,7 +1522,7 @@
 				<reference key="dict.values" ref="1002"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">92</int>
+			<int key="maxID">94</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

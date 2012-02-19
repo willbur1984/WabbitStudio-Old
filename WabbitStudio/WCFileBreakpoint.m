@@ -13,14 +13,22 @@
 #import "WCSourceFileDocument.h"
 #import "WCSourceTextStorage.h"
 #import "NSString+RSExtensions.h"
+#import "WCSourceSymbol.h"
+#import "WCSourceScanner.h"
+#import "NSArray+WCExtensions.h"
 
 static NSString *const WCFileBreakpointRangeKey = @"range";
 static NSString *const WCFileBreakpointFileUUIDKey = @"fileUUID";
+
+@interface WCFileBreakpoint ()
+@property (readwrite,retain,nonatomic) WCSourceSymbol *symbol;
+@end
 
 @implementation WCFileBreakpoint
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	_projectDocument = nil;
+	[_symbol release];
 	[_file release];
 	[_fileUUID release];
 	[super dealloc];
@@ -32,6 +40,7 @@ static NSString *const WCFileBreakpointFileUUIDKey = @"fileUUID";
 	copy->_range = _range;
 	copy->_file = [_file retain];
 	copy->_projectDocument = _projectDocument;
+	copy->_symbol = [_symbol retain];
 	
 	return copy;
 }
@@ -42,6 +51,7 @@ static NSString *const WCFileBreakpointFileUUIDKey = @"fileUUID";
 	copy->_range = _range;
 	copy->_file = [_file retain];
 	copy->_projectDocument = _projectDocument;
+	copy->_symbol = [_symbol retain];
 	
 	return copy;
 }
@@ -68,13 +78,13 @@ static NSString *const WCFileBreakpointFileUUIDKey = @"fileUUID";
 - (NSImage *)icon {
 	return [[self class] breakpointIconWithSize:NSMakeSize(24.0, 12.0) type:[self type] active:[self isActive] enabled:[[[self projectDocument] breakpointManager] breakpointsEnabled]];
 }
-- (NSString *)name {
+- (NSString *)fileNameAndLineNumber {
 	WCSourceFileDocument *sfDocument = [[[self projectDocument] filesToSourceFileDocuments] objectForKey:[self file]];
 	NSString *string = [[sfDocument textStorage] string];
 	
-	return [NSString stringWithFormat:NSLocalizedString(@"%@ - line %lu", @"file breakpoint name format string"),[[self file] fileName],[string lineNumberForRange:[self range]]+1];
+	return [NSString stringWithFormat:NSLocalizedString(@"%@ - line %lu", @"file breakpoint file name and line number format string"),[[self file] fileName],[string lineNumberForRange:[self range]]+1];
 }
-+ (NSSet *)keyPathsForValuesAffectingName {
++ (NSSet *)keyPathsForValuesAffectingFileNameAndLineNumber {
 	return [NSSet setWithObjects:@"range", nil];
 }
 
@@ -82,14 +92,22 @@ static NSString *const WCFileBreakpointFileUUIDKey = @"fileUUID";
 	return [[[[self class] alloc] initWithRange:range file:file projectDocument:projectDocument] autorelease];
 }
 - (id)initWithRange:(NSRange)range file:(WCFile *)file projectDocument:(WCProjectDocument *)projectDocument; {
-	if (!(self = [super initWithType:WCBreakpointTypeFile address:0 page:0]))
+	if (!(self = [super initWithType:WCBreakpointTypeFile address:UINT16_MAX page:UINT8_MAX]))
 		return nil;
 	
 	_range = range;
 	_file = [file retain];
 	_projectDocument = projectDocument;
 	
+	WCSourceFileDocument *sfDocument = [[projectDocument filesToSourceFileDocuments] objectForKey:[self file]];
+	NSArray *symbols = [[sfDocument sourceScanner] symbols];
+	NSString *string = [[sfDocument textStorage] string];
+	
+	_symbol = [[symbols sourceSymbolForRange:range] retain];
+	_name = [[NSString stringWithFormat:NSLocalizedString(@"%@ - line %lu", @"file breakpoint name format string"),[_symbol name],[string lineNumberForRange:range]+1] copy];
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_breakpointManagerDidChangeBreakpointsEnabled:) name:WCBreakpointManagerDidChangeBreakpointsEnabledNotification object:[projectDocument breakpointManager]];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_sourceScannerDidFinishScanningSymbols:) name:WCSourceScannerDidFinishScanningSymbolsNotification object:[sfDocument sourceScanner]];
 	
 	return self;
 }
@@ -98,14 +116,42 @@ static NSString *const WCFileBreakpointFileUUIDKey = @"fileUUID";
 - (void)setProjectDocument:(WCProjectDocument *)projectDocument {
 	_projectDocument = projectDocument;
 	
+	WCFile *file = [[projectDocument UUIDsToFiles] objectForKey:_fileUUID];
+	
+	_file = [file retain];
+	
+	WCSourceFileDocument *sfDocument = [[projectDocument filesToSourceFileDocuments] objectForKey:[self file]];
+	NSArray *symbols = [[sfDocument sourceScanner] symbols];
+	NSString *string = [[sfDocument textStorage] string];
+	
+	_symbol = [[symbols sourceSymbolForRange:[self range]] retain];
+	_name = [[NSString stringWithFormat:NSLocalizedString(@"%@ - line %lu", @"file breakpoint name format string"),[_symbol name],[string lineNumberForRange:[self range]]+1] copy];
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_breakpointManagerDidChangeBreakpointsEnabled:) name:WCBreakpointManagerDidChangeBreakpointsEnabledNotification object:[projectDocument breakpointManager]];
 }
 @synthesize file=_file;
 @synthesize range=_range;
+- (void)setRange:(NSRange)range {
+	_range = range;
+	
+	WCSourceFileDocument *sfDocument = [[[self projectDocument] filesToSourceFileDocuments] objectForKey:[self file]];
+	NSArray *symbols = [[sfDocument sourceScanner] symbols];
+	NSString *string = [[sfDocument textStorage] string];
+	
+	[self setSymbol:[symbols sourceSymbolForRange:range]];
+	[self setName:[NSString stringWithFormat:NSLocalizedString(@"%@ - line %lu", @"file breakpoint name format string"),[[self symbol] name],[string lineNumberForRange:range]+1]];
+}
+@synthesize symbol=_symbol;
 
 - (void)_breakpointManagerDidChangeBreakpointsEnabled:(NSNotification *)note {
 	[self willChangeValueForKey:@"icon"];
 	[self didChangeValueForKey:@"icon"];
+}
+- (void)_sourceScannerDidFinishScanningSymbols:(NSNotification *)note {
+	WCSourceFileDocument *sfDocument = [[[self projectDocument] filesToSourceFileDocuments] objectForKey:[self file]];
+	NSArray *symbols = [[sfDocument sourceScanner] symbols];
+	
+	[self setSymbol:[symbols sourceSymbolForRange:[self range]]];
 }
 
 @end

@@ -10,6 +10,7 @@
 #import "WCProjectDocument.h"
 #import "WCFile.h"
 #import "WCFileBreakpoint.h"
+#import "WCSourceFileDocument.h"
 
 NSString *const WCBreakpointManagerDidAddFileBreakpointNotification = @"WCBreakpointManagerDidAddFileBreakpointNotification";
 NSString *const WCBreakpointManagerDidAddFileBreakpointNewFileBreakpointUserInfoKey = @"WCBreakpointManagerDidAddFileBreakpointNewFileBreakpointUserInfoKey";
@@ -28,6 +29,7 @@ NSString *const WCBreakpointManagerDidChangeBreakpointsEnabledNotification = @"W
 
 @implementation WCBreakpointManager
 - (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	_projectDocument = nil;
 	[_fileBreakpoints release];
 	[_filesToFileBreakpointsSortedByLocation release];
@@ -65,6 +67,10 @@ NSString *const WCBreakpointManagerDidChangeBreakpointsEnabledNotification = @"W
 		[[self filesToFileBreakpointsSortedByLocation] setObject:fileBreakpoints forKey:[fileBreakpoint file]];
 		[_filesWithFileBreakpointsSortedByName addObject:[fileBreakpoint file]];
 		[_filesWithFileBreakpointsSortedByName sortUsingDescriptors:[NSArray arrayWithObjects:[NSSortDescriptor sortDescriptorWithKey:@"fileName" ascending:YES selector:@selector(localizedStandardCompare:)], nil]];
+		
+		WCSourceFileDocument *sfDocument = [[[self projectDocument] filesToSourceFileDocuments] objectForKey:[fileBreakpoint file]];
+		
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidProcessEditing:) name:NSTextStorageDidProcessEditingNotification object:[sfDocument textStorage]];
 	}
 	
 	[fileBreakpoint addObserver:self forKeyPath:@"active" options:NSKeyValueObservingOptionNew context:self];
@@ -95,6 +101,10 @@ NSString *const WCBreakpointManagerDidChangeBreakpointsEnabledNotification = @"W
 	if (![fileBreakpoints count]) {
 		[[self filesToFileBreakpointsSortedByLocation] removeObjectForKey:[fileBreakpoint file]];
 		[_filesWithFileBreakpointsSortedByName removeObject:[fileBreakpoint file]];
+		
+		WCSourceFileDocument *sfDocument = [[[self projectDocument] filesToSourceFileDocuments] objectForKey:[fileBreakpoint file]];
+		
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:NSTextStorageDidProcessEditingNotification object:[sfDocument textStorage]];
 	}
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:WCBreakpointManagerDidRemoveFileBreakpointNotification object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:fileBreakpoint,WCBreakpointManagerDidRemoveFileBreakpointOldFileBreakpointUserInfoKey, nil]];
@@ -117,6 +127,44 @@ NSString *const WCBreakpointManagerDidChangeBreakpointsEnabledNotification = @"W
 	_breakpointManagerFlags.breakpointsEnabled = breakpointsEnabled;
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:WCBreakpointManagerDidChangeBreakpointsEnabledNotification object:self];
+}
+@dynamic allFileBreakpoints;
+- (NSArray *)allFileBreakpoints {
+	return [_fileBreakpoints allObjects];
+}
+
+- (void)_textStorageDidProcessEditing:(NSNotification *)note {
+	NSTextStorage *textStorage = [note object];
+	
+	if (([textStorage editedMask] & NSTextStorageEditedCharacters) == 0)
+		return;
+	
+	for (WCFile *file in [[self projectDocument] openFiles]) {
+		WCSourceFileDocument *sfDocument = [[[self projectDocument] filesToSourceFileDocuments] objectForKey:file];
+		
+		if (textStorage == (NSTextStorage *)[sfDocument textStorage]) {
+			NSMutableArray *fileBreakpointsToRemove = [NSMutableArray arrayWithCapacity:0];
+			NSRange editedRange = [textStorage editedRange];
+			NSInteger changeInLength = [textStorage changeInLength];
+			
+			for (WCFileBreakpoint *fileBreakpoint in [[self filesToFileBreakpointsSortedByLocation] objectForKey:file]) {
+				NSRange breakpointRange = [fileBreakpoint range];
+				
+				if (changeInLength < -1 &&
+					NSLocationInRange(breakpointRange.location, NSMakeRange(editedRange.location, ABS(changeInLength))))
+					[fileBreakpointsToRemove addObject:fileBreakpoint];
+				else if (NSMaxRange(editedRange) < breakpointRange.location) {
+					breakpointRange.location += changeInLength;
+					[fileBreakpoint setRange:breakpointRange];
+				}
+			}
+			
+			for (WCFileBreakpoint *fileBreakpoint in fileBreakpointsToRemove)
+				[self removeFileBreakpoint:fileBreakpoint];
+			
+			break;
+		}
+	}
 }
 
 @end
