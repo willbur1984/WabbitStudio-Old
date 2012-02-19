@@ -36,6 +36,7 @@
 #import "WCProjectWindowController.h"
 #import "RSNavigatorControl.h"
 #import "WCIssueNavigatorViewController.h"
+#import "WCEditBreakpointViewController.h"
 
 @interface WCSourceRulerView ()
 @property (readonly,nonatomic) WCSourceTextStorage *textStorage;
@@ -45,6 +46,7 @@
 @property (readwrite,assign,nonatomic) WCFileBreakpoint *clickedFileBreakpoint;
 @property (readwrite,assign,nonatomic) WCBuildIssue *clickedBuildIssue;
 @property (readwrite,assign,nonatomic) BOOL clickedFileBreakpointHasMoved;
+@property (readonly,nonatomic) WCEditBreakpointViewController *editBreakpointViewController;
 
 - (NSUInteger)_lineNumberForPoint:(NSPoint)point;
 - (NSRange)_rangeForPoint:(NSPoint)point;
@@ -59,6 +61,9 @@
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	_foldToHighlight = nil;
+	_clickedBuildIssue = nil;
+	_clickedFileBreakpoint = nil;
+	[_editBreakpointViewController release];
 	[_codeFoldingTrackingArea release];
 	[super dealloc];
 }
@@ -72,7 +77,7 @@
 		[retval addItemWithTitle:NSLocalizedString(@"Enable Bookmark", @"Enable Bookmark") action:@selector(_toggleBookmark:) keyEquivalent:@""];
 		[retval addItemWithTitle:NSLocalizedString(@"Remove All Bookmarks\u2026", @"Remove All Bookmarks with ellipsis") action:@selector(removeAllBookmarks:) keyEquivalent:@""];
 		[retval addItem:[NSMenuItem separatorItem]];
-		[retval addItemWithTitle:NSLocalizedString(@"Edit Breakpoint\u2026", @"Edit Breakpoint with ellipsis") action:@selector(_editBreakpoint:) keyEquivalent:@""];
+		[retval addItemWithTitle:NSLocalizedString(@"Edit Breakpoint", @"Edit Breakpoint") action:@selector(_editBreakpoint:) keyEquivalent:@""];
 		[retval addItemWithTitle:NSLocalizedString(@"Enable Breakpoint", @"Enable Breakpoint") action:@selector(_toggleBreakpoint:) keyEquivalent:@""];
 		[retval addItem:[NSMenuItem separatorItem]];
 		[retval addItemWithTitle:NSLocalizedString(@"Delete Breakpoint", @"Delete Breakpoint") action:@selector(_deleteBreakpoint:) keyEquivalent:@""];
@@ -568,6 +573,12 @@ static const CGFloat kBuildIssueWidthHeight = 10.0;
 - (void)setClickedFileBreakpointHasMoved:(BOOL)clickedFileBreakpointHasMoved {
 	_sourceRulerViewFlags.clickedFileBreakpointHasMoved = clickedFileBreakpointHasMoved;
 }
+@dynamic editBreakpointViewController;
+- (WCEditBreakpointViewController *)editBreakpointViewController {
+	if (!_editBreakpointViewController)
+		_editBreakpointViewController = [[WCEditBreakpointViewController alloc] initWithBreakpoint:nil];
+	return _editBreakpointViewController;
+}
 #pragma mark *** Private Methods ***
 - (NSUInteger)_lineNumberForPoint:(NSPoint)point {
 	NSLayoutManager *layoutManager = [[self textView] layoutManager];
@@ -767,7 +778,13 @@ static const CGFloat kTriangleHeight = 6.0;
 	}
 }
 - (IBAction)_editBreakpoint:(id)sender {
-	// TODO: edit the clicked file breakpoint (use NSPopover and NSViewController subclass)
+	NSLayoutManager *layoutManager = [[self textView] layoutManager];
+	NSRect lineRect = [layoutManager lineFragmentRectForGlyphAtIndex:[layoutManager glyphIndexForCharacterAtIndex:[[self clickedFileBreakpoint] range].location] effectiveRange:NULL];
+	
+	lineRect = NSMakeRect(NSMinX([self bounds]), [self convertPoint:lineRect.origin fromView:[self clientView]].y, NSWidth([self bounds]), NSHeight(lineRect));
+	
+	[[self editBreakpointViewController] setBreakpoint:[self clickedFileBreakpoint]];
+	[[self editBreakpointViewController] showEditBreakpointViewRelativeToRect:lineRect ofView:self preferredEdge:NSMaxXEdge];	
 }
 - (IBAction)_toggleBreakpoint:(id)sender {
 	[[self clickedFileBreakpoint] setActive:(![[self clickedFileBreakpoint] isActive])];

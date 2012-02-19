@@ -9,6 +9,20 @@
 #import "WCBreakpointNavigatorOutlineView.h"
 
 @implementation WCBreakpointNavigatorOutlineView
++ (NSMenu *)defaultMenu {
+	static NSMenu *retval;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		retval = [[NSMenu alloc] initWithTitle:@""];
+		
+		[retval addItemWithTitle:NSLocalizedString(@"Edit Breakpoint", @"Edit Breakpoint") action:@selector(editBreakpoint:) keyEquivalent:@""];
+		[retval addItemWithTitle:NSLocalizedString(@"Disable Breakpoint", @"Disable Breakpoint") action:@selector(toggleBreakpoint:) keyEquivalent:@""];
+		[retval addItem:[NSMenuItem separatorItem]];
+		[retval addItemWithTitle:NSLocalizedString(@"Delete Breakpoint", @"Delete Breakpoint") action:@selector(deleteBreakpoint:) keyEquivalent:@""];
+	});
+	return retval;
+}
+
 - (NSString *)emptyContentString {
 	return NSLocalizedString(@"No Breakpoints", @"No Breakpoints");
 }

@@ -21,9 +21,14 @@
 #import "WCSourceTextViewController.h"
 #import "WCProjectWindowController.h"
 #import "WCTabViewController.h"
+#import "WCAlertsViewController.h"
+#import "NSAlert-OAExtensions.h"
+#import "WCBreakpointNavigatorFileBreakpointOutlineCellView.h"
+#import "WCEditBreakpointViewController.h"
 
 @interface WCBreakpointNavigatorViewController ()
 @property (readwrite,retain,nonatomic) WCBreakpointFileContainer *filteredBreakpointFileContainer;
+@property (readonly,nonatomic) WCEditBreakpointViewController *editBreakpointViewController;
 
 - (void)_updateBreakpoints;
 @end
@@ -32,6 +37,7 @@
 #pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[_editBreakpointViewController release];
 	_projectDocument = nil;
 	[_breakpointFileContainer release];
 	[_filteredBreakpointFileContainer release];
@@ -55,6 +61,64 @@
 	
 	[self _updateBreakpoints];
 }
+#pragma mark NSMenuValidation
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
+	if ([menuItem action] == @selector(editBreakpoint:)) {
+		NSArray *selectedObjects = [self selectedObjects];
+		
+		if ([selectedObjects count] != 1)
+			return NO;
+		else if (![[[selectedObjects lastObject] representedObject] isKindOfClass:[WCBreakpoint class]])
+			return NO;
+	}
+	else if ([menuItem action] == @selector(toggleBreakpoint:)) {
+		NSArray *selectedObjects = [self selectedObjects];
+		
+		if (![selectedObjects count])
+			return NO;
+		
+		NSArray *selectedBreakpointContainers = [selectedObjects valueForKeyPath:@"@unionOfArrays.descendantLeafNodes"];
+		
+		for (WCBreakpointContainer *breakpointContainer in selectedBreakpointContainers) {
+			if ([[breakpointContainer representedObject] isActive]) {
+				if ([selectedBreakpointContainers count] == 1)
+					[menuItem setTitle:NSLocalizedString(@"Disable Breakpoint", @"Disable Breakpoint")];
+				else
+					[menuItem setTitle:NSLocalizedString(@"Disable Breakpoints", @"Disable Breakpoints")];
+				
+				return YES;
+			}
+		}
+		
+		if ([selectedBreakpointContainers count] == 1)
+			[menuItem setTitle:NSLocalizedString(@"Enable Breakpoint", @"Enable Breakpoint")];
+		else
+			[menuItem setTitle:NSLocalizedString(@"Enable Breakpoints", @"Enable Breakpoints")];
+	}
+	else if ([menuItem action] == @selector(deleteBreakpoint:)) {
+		NSArray *selectedObjects = [self selectedObjects];
+		
+		if (![selectedObjects count])
+			return NO;
+		
+		NSArray *selectedBreakpointContainers = [selectedObjects valueForKeyPath:@"@unionOfArrays.descendantLeafNodes"];
+		
+		if ([selectedBreakpointContainers count] == 1) {
+			if ([[NSUserDefaults standardUserDefaults] boolForKey:WCAlertsWarnBeforeDeletingBreakpointsKey])
+				[menuItem setTitle:NSLocalizedString(@"Delete Breakpoint\u2026", @"Delete Breakpoint with ellipsis")];
+			else
+				[menuItem setTitle:NSLocalizedString(@"Delete Breakpoint", @"Delete Breakpoint")];
+		}
+		else {
+			if ([[NSUserDefaults standardUserDefaults] boolForKey:WCAlertsWarnBeforeDeletingBreakpointsKey])
+				[menuItem setTitle:NSLocalizedString(@"Delete Breakpoints\u2026", @"Delete Breakpoints with ellipsis")];
+			else
+				[menuItem setTitle:NSLocalizedString(@"Delete Breakpoints", @"Delete Breakpoints")];
+		}
+	}
+	return YES;
+}
+
 #pragma mark NSOutlineViewDelegate
 static NSString *const kProjectCellIdentifier = @"ProjectCell";
 static NSString *const kMainCellIdentifier = @"MainCell";
@@ -146,7 +210,60 @@ static const CGFloat kMainCellHeight = 20.0;
 	return self;
 }
 #pragma mark IBActions
-
+- (IBAction)editBreakpoint:(id)sender; {
+	WCBreakpointContainer *breakpointContainer = [[self selectedObjects] lastObject];
+	NSTreeNode *breakpointContainerNode = [[self treeController] treeNodeForRepresentedObject:breakpointContainer];
+	WCBreakpointNavigatorFileBreakpointOutlineCellView *cellView = [[self outlineView] viewAtColumn:[[self outlineView] columnWithIdentifier:[[[self outlineView] outlineTableColumn] identifier]] row:[[self outlineView] rowForItem:breakpointContainerNode] makeIfNecessary:NO];
+	WCEditBreakpointViewController *editBreakpointViewController = [self editBreakpointViewController];
+	
+	[editBreakpointViewController setBreakpoint:[breakpointContainer representedObject]];
+	[editBreakpointViewController showEditBreakpointViewRelativeToRect:[[cellView breakpointButton] bounds] ofView:[cellView breakpointButton] preferredEdge:NSMaxYEdge];
+}
+- (IBAction)toggleBreakpoint:(id)sender; {
+	NSArray *selectedBreakpointContainers = [[self selectedObjects] valueForKeyPath:@"@unionOfArrays.descendantLeafNodes"];
+	
+	for (WCBreakpointContainer *breakpointContainer in selectedBreakpointContainers) {
+		WCBreakpoint *breakpoint = [breakpointContainer representedObject];
+		
+		[breakpoint setActive:(![breakpoint isActive])];
+	}
+}
+- (IBAction)deleteBreakpoint:(id)sender; {
+	NSArray *selectedBreakpointContainers = [[self selectedObjects] valueForKeyPath:@"@unionOfArrays.descendantLeafNodes"];
+	
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCAlertsWarnBeforeDeletingBreakpointsKey]) {
+		NSString *message;
+		NSString *informative;
+		if ([selectedBreakpointContainers count] == 1) {
+			message = NSLocalizedString(@"Delete Breakpoint?", @"Delete Breakpoint?");
+			informative = NSLocalizedString(@"Are you sure you want to delete the selected breakpoint? This operation cannot be undone.", @"Are you sure you want to delete the selected breakpoint? This operation cannot be undone.");
+		}
+		else {
+			message = [NSString stringWithFormat:NSLocalizedString(@"Delete %lu Breakpoints?", @"delete multiple breakpoints format string"),[selectedBreakpointContainers count]];
+			informative = NSLocalizedString(@"Are you sure you want to delete the selected breakpoints? This operation cannot be undone.", @"Are you sure you want to delete the selected breakpoints? This operation cannot be undone.");
+		}
+		
+		NSAlert *deleteBreakpointAlert = [NSAlert alertWithMessageText:message defaultButton:LOCALIZED_STRING_DELETE alternateButton:LOCALIZED_STRING_CANCEL otherButton:nil informativeTextWithFormat:informative];
+		
+		[deleteBreakpointAlert setShowsSuppressionButton:YES];
+		
+		[[deleteBreakpointAlert suppressionButton] bind:NSValueBinding toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:[@"values." stringByAppendingString:WCAlertsWarnBeforeDeletingBreakpointsKey] options:[NSDictionary dictionaryWithObjectsAndKeys:NSNegateBooleanTransformerName,NSValueTransformerNameBindingOption, nil]];
+		
+		[deleteBreakpointAlert beginSheetModalForWindow:[[self view] window] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
+			[[alert suppressionButton] unbind:NSValueBinding];
+			[[alert window] orderOut:nil];
+			if (returnCode == NSAlertAlternateReturn)
+				return;
+			
+			for (WCBreakpointContainer *breakpointContainer in selectedBreakpointContainers)
+				[[[self projectDocument] breakpointManager] removeFileBreakpoint:[breakpointContainer representedObject]];
+		}];
+	}
+	else {
+		for (WCBreakpointContainer *breakpointContainer in selectedBreakpointContainers)
+			[[[self projectDocument] breakpointManager] removeFileBreakpoint:[breakpointContainer representedObject]];
+	}
+}
 #pragma mark Properties
 @synthesize treeController=_treeController;
 @synthesize outlineView=_outlineView;
@@ -155,6 +272,12 @@ static const CGFloat kMainCellHeight = 20.0;
 @synthesize projectDocument=_projectDocument;
 @synthesize breakpointFileContainer=_breakpointFileContainer;
 @synthesize filteredBreakpointFileContainer=_filteredBreakpointFileContainer;
+@dynamic editBreakpointViewController;
+- (WCEditBreakpointViewController *)editBreakpointViewController {
+	if (!_editBreakpointViewController)
+		_editBreakpointViewController = [[WCEditBreakpointViewController alloc] initWithBreakpoint:nil];
+	return _editBreakpointViewController;
+}
 #pragma mark *** Private Methods ***
 - (void)_updateBreakpoints; {
 	[[[self breakpointFileContainer] mutableChildNodes] removeObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [[[self breakpointFileContainer] childNodes] count])]];

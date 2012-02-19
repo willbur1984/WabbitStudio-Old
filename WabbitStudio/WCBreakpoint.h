@@ -20,6 +20,7 @@ typedef enum _WCBreakpointType {
 	WCBreakpointType _type;
 	uint16_t _address;
 	uint8_t _page;
+	NSString *_name;
 	struct {
 		unsigned int active:1;
 		unsigned int RESERVED:31;
@@ -30,6 +31,7 @@ typedef enum _WCBreakpointType {
 @property (readwrite,assign,nonatomic) uint8_t page;
 @property (readwrite,assign,nonatomic,getter = isActive) BOOL active;
 @property (readonly,nonatomic) NSImage *icon;
+@property (readonly,nonatomic) NSString *name;
 
 + (id)breakpointOfType:(WCBreakpointType)type address:(uint16_t)address page:(uint8_t)page;
 - (id)initWithType:(WCBreakpointType)type address:(uint16_t)address page:(uint8_t)page;

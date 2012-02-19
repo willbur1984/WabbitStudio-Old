@@ -10,6 +10,9 @@
 #import "WCProjectDocument.h"
 #import "WCFile.h"
 #import "WCBreakpointManager.h"
+#import "WCSourceFileDocument.h"
+#import "WCSourceTextStorage.h"
+#import "NSString+RSExtensions.h"
 
 static NSString *const WCFileBreakpointRangeKey = @"range";
 static NSString *const WCFileBreakpointFileUUIDKey = @"fileUUID";
@@ -64,6 +67,15 @@ static NSString *const WCFileBreakpointFileUUIDKey = @"fileUUID";
 
 - (NSImage *)icon {
 	return [[self class] breakpointIconWithSize:NSMakeSize(24.0, 12.0) type:[self type] active:[self isActive] enabled:[[[self projectDocument] breakpointManager] breakpointsEnabled]];
+}
+- (NSString *)name {
+	WCSourceFileDocument *sfDocument = [[[self projectDocument] filesToSourceFileDocuments] objectForKey:[self file]];
+	NSString *string = [[sfDocument textStorage] string];
+	
+	return [NSString stringWithFormat:NSLocalizedString(@"%@ - line %lu", @"file breakpoint name format string"),[[self file] fileName],[string lineNumberForRange:[self range]]+1];
+}
++ (NSSet *)keyPathsForValuesAffectingName {
+	return [NSSet setWithObjects:@"range", nil];
 }
 
 + (id)fileBreakpointWithRange:(NSRange)range file:(WCFile *)file projectDocument:(WCProjectDocument *)projectDocument; {

@@ -10,12 +10,13 @@
 #import "WCNavigatorModule.h"
 #import "RSOutlineViewDelegate.h"
 
-@class WCProjectDocument,WCBreakpointFileContainer;
+@class WCProjectDocument,WCBreakpointFileContainer,WCEditBreakpointViewController;
 
 @interface WCBreakpointNavigatorViewController : JAViewController <WCNavigatorModule,RSOutlineViewDelegate> {
 	__weak WCProjectDocument *_projectDocument;
 	WCBreakpointFileContainer *_breakpointFileContainer;
 	WCBreakpointFileContainer *_filteredBreakpointFileContainer;
+	WCEditBreakpointViewController *_editBreakpointViewController;
 }
 @property (readwrite,assign,nonatomic) IBOutlet NSTreeController *treeController;
 @property (readwrite,assign,nonatomic) IBOutlet NSOutlineView *outlineView;
@@ -26,4 +27,7 @@
 
 - (id)initWithProjectDocument:(WCProjectDocument *)projectDocument;
 
+- (IBAction)editBreakpoint:(id)sender;
+- (IBAction)toggleBreakpoint:(id)sender;
+- (IBAction)deleteBreakpoint:(id)sender;
 @end

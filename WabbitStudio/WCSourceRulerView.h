@@ -10,7 +10,7 @@
 #import "WCSourceRulerViewDelegate.h"
 #import "RSToolTipView.h"
 
-@class WCFold,WCSourceTextView,WCFileBreakpoint,WCBuildIssue;
+@class WCFold,WCSourceTextView,WCFileBreakpoint,WCBuildIssue,WCEditBreakpointViewController;
 
 @interface WCSourceRulerView : WCLineNumberRulerView <RSToolTipView> {
 	__weak id <WCSourceRulerViewDelegate> _delegate;
@@ -19,6 +19,7 @@
 	WCFold *_foldToHighlight;
 	WCFileBreakpoint *_clickedFileBreakpoint;
 	WCBuildIssue *_clickedBuildIssue;
+	WCEditBreakpointViewController *_editBreakpointViewController;
 	struct {
 		unsigned int drawCurrentLineHighlight:1;
 		unsigned int clickedFileBreakpointHasMoved:1;

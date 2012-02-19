@@ -15,4 +15,7 @@
 	
 	[fileBreakpoint setActive:(![fileBreakpoint isActive])];
 }
+
+@synthesize breakpointButton=_breakpointButton;
+
 @end

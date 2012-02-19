@@ -524,16 +524,9 @@
 		if (![[self delegate] projectDocumentForSourceTextView:self])
 			return NO;
 	}
-	else if ([menuItem action] == @selector(findSelectedTextInProject:)) {
-		NSRange selectedRange = [self selectedRange];
-		
-		if (selectedRange.length) {
-			[menuItem setTitle:[NSString stringWithFormat:NSLocalizedString(@"Find \"%@\" in Project\u2026", @"Find Selected Text in Project menu item title format string"),[[self string] substringWithRange:selectedRange]]];
-		}
-		else {
-			[menuItem setTitle:NSLocalizedString(@"Find Selected Text in Project\u2026", @"Find Selected Text in Project with ellipsis")];
+	else if ([menuItem action] == @selector(findSelectedTextInProject:)) {		
+		if (![self selectedRange].length)
 			return NO;
-		}
 	}
 	return [super validateMenuItem:menuItem];
 }

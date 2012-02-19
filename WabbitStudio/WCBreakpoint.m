@@ -24,6 +24,7 @@ static NSString *const WCBreakpointActiveKey = @"active";
 	copy->_address = _address;
 	copy->_page = _page;
 	copy->_breakpointFlags = _breakpointFlags;
+	copy->_name = [_name copy];
 	
 	return copy;
 }
@@ -35,6 +36,7 @@ static NSString *const WCBreakpointActiveKey = @"active";
 	copy->_address = _address;
 	copy->_page = _page;
 	copy->_breakpointFlags = _breakpointFlags;
+	copy->_name = [_name copy];
 	
 	return copy;
 }
@@ -185,5 +187,6 @@ static NSString *const WCBreakpointActiveKey = @"active";
 + (NSSet *)keyPathsForValuesAffectingIcon {
 	return [NSSet setWithObjects:@"active", nil];
 }
+@synthesize name=_name;
 
 @end

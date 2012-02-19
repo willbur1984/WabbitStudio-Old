@@ -9,6 +9,7 @@
 #import <AppKit/NSTableCellView.h>
 
 @interface WCBreakpointNavigatorFileBreakpointOutlineCellView : NSTableCellView
+@property (readwrite,assign,nonatomic) IBOutlet NSButton *breakpointButton;
 
 - (IBAction)breakpointButtonClicked:(id)sender;
 @end
