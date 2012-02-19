@@ -2050,7 +2050,7 @@
 		071ECCB514A4233C002409F8 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 				ORGANIZATIONNAME = "Revolution Software";
 			};
 			buildConfigurationList = 071ECCB814A4233C002409F8 /* Build configuration list for PBXProject "WabbitStudio" */;
@@ -2728,10 +2728,10 @@
 		071ECCDD14A4233D002409F8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = "$SRCROOT/Frameworks/\n$SRCROOT/Frameworks";
+				FRAMEWORK_SEARCH_PATHS = $SRCROOT/Frameworks;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -2755,11 +2755,11 @@
 		071ECCDE14A4233D002409F8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = "$SRCROOT/Frameworks/\n$SRCROOT/Frameworks";
+				FRAMEWORK_SEARCH_PATHS = $SRCROOT/Frameworks;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_VERSION = "";
@@ -2775,10 +2775,7 @@
 		071ECCE014A4233D002409F8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)\"",
-				);
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WabbitStudio/WabbitStudio-Prefix.pch";
 				GCC_VERSION = "";
@@ -2792,10 +2789,7 @@
 		071ECCE114A4233D002409F8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)\"",
-				);
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WabbitStudio/WabbitStudio-Prefix.pch";
 				GCC_VERSION = "";

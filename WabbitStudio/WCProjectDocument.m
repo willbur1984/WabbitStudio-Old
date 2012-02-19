@@ -262,6 +262,12 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 			return NO;
 		}
 	}
+	else if ([menuItem action] == @selector(toggleBreakpoints:)) {
+		if ([[self breakpointManager] breakpointsEnabled])
+			[menuItem setTitle:NSLocalizedString(@"Disable Breakpoints", @"Disable Breakpoints")];
+		else
+			[menuItem setTitle:NSLocalizedString(@"Enable Breakpoints", @"Enable Breakpoints")];
+	}
 	return [super validateMenuItem:menuItem];
 }
 #pragma mark WCOpenQuicklyDataSource
@@ -368,6 +374,10 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 - (IBAction)findInProject:(id)sender; {
 	[[[self projectWindowController] navigatorControl] setSelectedItemIdentifier:@"search"];
 	[[[self projectWindowController] window] makeFirstResponder:[[[self projectWindowController] searchNavigatorViewController] searchField]];
+}
+
+- (IBAction)toggleBreakpoints:(id)sender; {
+	[[self breakpointManager] setBreakpointsEnabled:(![[self breakpointManager] breakpointsEnabled])];
 }
 #pragma mark Properties
 @synthesize projectContainer=_projectContainer;

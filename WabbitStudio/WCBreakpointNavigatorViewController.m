@@ -31,6 +31,7 @@
 @implementation WCBreakpointNavigatorViewController
 #pragma mark *** Subclass Overrides ***
 - (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	_projectDocument = nil;
 	[_breakpointFileContainer release];
 	[_filteredBreakpointFileContainer release];
@@ -139,6 +140,9 @@ static const CGFloat kMainCellHeight = 20.0;
 	_projectDocument = projectDocument;
 	_breakpointFileContainer = [[WCBreakpointFileContainer alloc] initWithFile:[[projectDocument projectContainer] representedObject]];
 	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_breakpointManagerDidAddFileBreakpoint:) name:WCBreakpointManagerDidAddFileBreakpointNotification object:[projectDocument breakpointManager]];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_breakpointManagerDidRemoveFileBreakpoint:) name:WCBreakpointManagerDidRemoveFileBreakpointNotification object:[projectDocument breakpointManager]];
+	
 	return self;
 }
 #pragma mark IBActions
@@ -205,5 +209,81 @@ static const CGFloat kMainCellHeight = 20.0;
 		[[stvController textView] centerSelectionInVisibleArea:nil];
 	}
 }
-
+#pragma mark Notifications
+- (void)_breakpointManagerDidAddFileBreakpoint:(NSNotification *)note {
+	WCFileBreakpoint *newFileBreakpoint = [[note userInfo] objectForKey:WCBreakpointManagerDidAddFileBreakpointNewFileBreakpointUserInfoKey];
+	WCBreakpointFileContainer *parentFileContainer = nil;
+	
+	for (WCBreakpointFileContainer *fileContainer in [[self breakpointFileContainer] childNodes]) {
+		if ([newFileBreakpoint file] == [fileContainer representedObject]) {
+			parentFileContainer = fileContainer;
+			break;
+		}
+	}
+	
+	if (!parentFileContainer) {
+		parentFileContainer = [WCBreakpointFileContainer breakpointFileContainerWithFile:[newFileBreakpoint file]];
+		
+		NSUInteger insertIndex = [[[self breakpointFileContainer] childNodes] indexOfObject:parentFileContainer inSortedRange:NSMakeRange(0, [[[self breakpointFileContainer] childNodes] count]) options:NSBinarySearchingInsertionIndex usingComparator:^NSComparisonResult(WCBreakpointFileContainer *obj1, WCBreakpointFileContainer *obj2) {
+			return [[[obj1 representedObject] fileName] localizedStandardCompare:[[obj2 representedObject] fileName]];
+		}];
+		
+		[[[self breakpointFileContainer] mutableChildNodes] insertObject:parentFileContainer atIndex:insertIndex];
+		
+		[[self outlineView] expandItem:[[self treeController] treeNodeForRepresentedObject:parentFileContainer]];
+	}
+	
+	WCBreakpointContainer *breakpointContainer = [WCBreakpointContainer breakpointContainerWithFileBreakpoint:newFileBreakpoint];
+	NSUInteger insertIndex = [[parentFileContainer childNodes] indexOfObject:breakpointContainer inSortedRange:NSMakeRange(0, [[parentFileContainer childNodes] count]) options:NSBinarySearchingInsertionIndex usingComparator:^NSComparisonResult(WCBreakpointContainer *obj1, WCBreakpointContainer *obj2) {
+		NSRange range1 = [[obj1 representedObject] range];
+		NSRange range2 = [[obj2 representedObject] range];
+		
+		if (range1.location < range2.location)
+			return NSOrderedAscending;
+		else if (range1.location > range2.location)
+			return NSOrderedDescending;
+		return NSOrderedSame;
+	}];
+	
+	[[self breakpointFileContainer] willChangeValueForKey:@"statusString"];
+	[parentFileContainer willChangeValueForKey:@"statusString"];
+	[[parentFileContainer mutableChildNodes] insertObject:breakpointContainer atIndex:insertIndex];
+	[parentFileContainer didChangeValueForKey:@"statusString"];
+	[[self breakpointFileContainer] didChangeValueForKey:@"statusString"];
+}
+- (void)_breakpointManagerDidRemoveFileBreakpoint:(NSNotification *)note {
+	WCFileBreakpoint *oldFileBreakpoint = [[note userInfo] objectForKey:WCBreakpointManagerDidRemoveFileBreakpointOldFileBreakpointUserInfoKey];
+	WCBreakpointFileContainer *parentFileContainer = nil;
+	
+	for (WCBreakpointFileContainer *fileContainer in [[self breakpointFileContainer] childNodes]) {
+		if ([oldFileBreakpoint file] == [fileContainer representedObject]) {
+			parentFileContainer = fileContainer;
+			break;
+		}
+	}
+	
+    NSAssert(parentFileContainer, @"parentFileContainer cannot be nil!");
+	
+	WCBreakpointContainer *oldBreakpointContainer = nil;
+	
+	for (WCBreakpointContainer *breakpointContainer in [parentFileContainer childNodes]) {
+		if (oldFileBreakpoint == [breakpointContainer representedObject]) {
+			oldBreakpointContainer = breakpointContainer;
+			break;
+		}
+	}
+	
+	NSAssert(oldBreakpointContainer, @"oldBreakpointContainer cannot be nil!");
+	
+	[[self breakpointFileContainer] willChangeValueForKey:@"statusString"];
+	[parentFileContainer willChangeValueForKey:@"statusString"];
+	
+	[[parentFileContainer mutableChildNodes] removeObjectIdenticalTo:oldBreakpointContainer];
+	
+	[parentFileContainer didChangeValueForKey:@"statusString"];
+	[[self breakpointFileContainer] didChangeValueForKey:@"statusString"];
+	
+	if (![[parentFileContainer childNodes] count])
+		[[[self breakpointFileContainer] mutableChildNodes] removeObjectIdenticalTo:parentFileContainer];
+}
 @end

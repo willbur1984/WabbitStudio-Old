@@ -7,6 +7,7 @@
 //
 
 #import "WCBreakpointFileContainer.h"
+#import "WCProject.h"
 
 @implementation WCBreakpointFileContainer
 - (BOOL)isLeafNode {
@@ -25,6 +26,17 @@
 
 @dynamic statusString;
 - (NSString *)statusString {
-	return @"some boring status string";
+	if ([[self representedObject] isKindOfClass:[WCProject class]]) {
+		NSArray *nodes = [self descendantLeafNodes];
+		
+		if ([nodes count] == 1)
+			return NSLocalizedString(@"1 breakpoint", @"1 breakpoint");
+		return [NSString stringWithFormat:NSLocalizedString(@"%lu breakpoints", @"breakpoints total format string"),[nodes count]];
+	}
+	else {
+		if ([[self childNodes] count] == 1)
+			return NSLocalizedString(@"1 breakpoint", @"1 breakpoint");
+		return [NSString stringWithFormat:NSLocalizedString(@"%lu breakpoints", @"breakpoints total format string"),[[self childNodes] count]];
+	}
 }
 @end

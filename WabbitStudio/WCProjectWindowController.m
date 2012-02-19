@@ -19,6 +19,7 @@
 #import "WCTabViewWindow.h"
 #import "WCBreakpoint.h"
 #import "WCBreakpointNavigatorViewController.h"
+#import "WCBreakpointManager.h"
 
 #import <PSMTabBarControl/PSMTabBarControl.h>
 #import <Quartz/Quartz.h>
@@ -40,15 +41,16 @@
 	[super dealloc];
 }
 
-static const NSSize kBreakpointImageSize = {.width = 18.0, .height = 10.0};
+static const NSSize kBreakpointImageSize = {.width = 20.0, .height = 10.0};
 
 - (id)init {
 	if (!(self = [super initWithWindowNibName:[self windowNibName]]))
 		return nil;
 	
-	NSImage *breakpointImage = [WCBreakpoint breakpointIconWithSize:kBreakpointImageSize type:WCBreakpointTypeFile active:YES];
+	NSImage *breakpointImage = [WCBreakpoint breakpointIconWithSize:kBreakpointImageSize type:WCBreakpointTypeFile active:YES enabled:YES];
 	
-	_navigatorItemDictionaries = [[NSArray alloc] initWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"project",@"identifier",[NSImage imageNamed:@"project"],@"image",NSLocalizedString(@"Show the Project navigator", @"Show the Project navigator"),@"toolTip", nil],[NSDictionary dictionaryWithObjectsAndKeys:@"symbol",@"identifier",[NSImage imageNamed:@"Symbol"],@"image",NSLocalizedString(@"Show the Symbol navigator", @"Show the Symbol navigator"),@"toolTip", nil],[NSDictionary dictionaryWithObjectsAndKeys:@"search",@"identifier",[NSImage imageNamed:@"Search"],@"image",NSLocalizedString(@"Show the Search navigator", @"Show the Search navigator"),@"toolTip", nil],[NSDictionary dictionaryWithObjectsAndKeys:@"issue",@"identifier",[NSImage imageNamed:@"Issue"],@"image",NSLocalizedString(@"Show the Issue navigator", @"Show the Issue navigator"),@"toolTip", nil],[NSDictionary dictionaryWithObjectsAndKeys:@"debug",@"identifier",[NSImage imageNamed:@"Debug"],@"image",NSLocalizedString(@"Show the Debug navigator", @"Show the Debug navigator"),@"toolTip", nil],[NSDictionary dictionaryWithObjectsAndKeys:@"breakpoint",@"identifier",breakpointImage,@"image",NSLocalizedString(@"Show the Breakpoint navigator", @"Show the Breakpoint navigator"),@"toolTip", nil],[NSDictionary dictionaryWithObjectsAndKeys:@"bookmark",@"identifier",[NSImage imageNamed:@"Bookmarks"],@"image",NSLocalizedString(@"Show the Bookmark navigator", @"Show the Bookmark navigator"),@"toolTip", nil], nil];
+	_navigatorItemDictionaries = [[NSMutableArray alloc] initWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"project",@"identifier",[NSImage imageNamed:@"project"],@"image",NSLocalizedString(@"Show the Project navigator", @"Show the Project navigator"),@"toolTip", nil],[NSDictionary dictionaryWithObjectsAndKeys:@"symbol",@"identifier",[NSImage imageNamed:@"Symbol"],@"image",NSLocalizedString(@"Show the Symbol navigator", @"Show the Symbol navigator"),@"toolTip", nil],[NSDictionary dictionaryWithObjectsAndKeys:@"search",@"identifier",[NSImage imageNamed:@"Search"],@"image",NSLocalizedString(@"Show the Search navigator", @"Show the Search navigator"),@"toolTip", nil],[NSDictionary dictionaryWithObjectsAndKeys:@"issue",@"identifier",[NSImage imageNamed:@"Issue"],@"image",NSLocalizedString(@"Show the Issue navigator", @"Show the Issue navigator"),@"toolTip", nil],[NSDictionary dictionaryWithObjectsAndKeys:@"debug",@"identifier",[NSImage imageNamed:@"Debug"],@"image",NSLocalizedString(@"Show the Debug navigator", @"Show the Debug navigator"),@"toolTip", nil],[NSDictionary dictionaryWithObjectsAndKeys:@"breakpoint",@"identifier",breakpointImage,@"image",NSLocalizedString(@"Show the Breakpoint navigator", @"Show the Breakpoint navigator"),@"toolTip", nil],[NSDictionary dictionaryWithObjectsAndKeys:@"bookmark",@"identifier",[NSImage imageNamed:@"Bookmarks"],@"image",NSLocalizedString(@"Show the Bookmark navigator", @"Show the Bookmark navigator"),@"toolTip", nil], nil];
+	
 	_tabViewController = [[WCTabViewController alloc] init];
 	[_tabViewController setDelegate:self];
 	

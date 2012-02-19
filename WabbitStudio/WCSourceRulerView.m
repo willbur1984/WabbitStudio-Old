@@ -513,7 +513,7 @@ static const CGFloat kBuildIssueWidthHeight = 10.0;
 		
 		lineRect = NSInsetRect(lineRect, 2.0, 0.0);
 		
-		NSImage *breakpointIcon = [WCBreakpoint breakpointIconWithSize:NSMakeSize(NSWidth(lineRect), NSHeight(lineRect)) type:[fileBreakpoint type] active:[fileBreakpoint isActive]];
+		NSImage *breakpointIcon = [WCBreakpoint breakpointIconWithSize:NSMakeSize(NSWidth(lineRect), NSHeight(lineRect)) type:[fileBreakpoint type] active:[fileBreakpoint isActive] enabled:[[[fileBreakpoint projectDocument] breakpointManager] breakpointsEnabled]];
 		
 		[breakpointIcon drawInRect:lineRect fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
 	}
@@ -525,18 +525,10 @@ static const CGFloat kBuildIssueWidthHeight = 10.0;
 }
 
 @synthesize clickedLineNumber=_clickedLineNumber;
-@dynamic delegate;
-- (id<WCSourceRulerViewDelegate>)delegate {
-	return _delegate;
-}
+@synthesize delegate=_delegate;
 - (void)setDelegate:(id<WCSourceRulerViewDelegate>)delegate {
 	if (_delegate == delegate)
 		return;
-	
-	if (_delegate) {
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:WCSourceScannerDidFinishScanningFoldsNotification object:nil];
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:WCBuildControllerDidFinishBuildingNotification object:nil];
-	}
 	
 	_delegate = delegate;
 	
@@ -544,9 +536,10 @@ static const CGFloat kBuildIssueWidthHeight = 10.0;
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_sourceScannerDidFinishScanningFolds:) name:WCSourceScannerDidFinishScanningFoldsNotification object:[_delegate sourceScannerForSourceRulerView:self]];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_buildControllerDidFinishBuilding:) name:WCBuildControllerDidFinishBuildingNotification object:[[_delegate projectDocumentForSourceRulerView:self] buildController]];
 		
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_breakpointManagerDidAddFileBreakpoint:) name:WCBreakpointManagerDidAddBreakpointNotification object:[[_delegate projectDocumentForSourceRulerView:self] breakpointManager]];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_breakpointManagerDidRemoveFileBreakpoint:) name:WCBreakpointManagerDidRemoveBreakpointNotification object:[[_delegate projectDocumentForSourceRulerView:self] breakpointManager]];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_breakpointManagerDidAddFileBreakpoint:) name:WCBreakpointManagerDidAddFileBreakpointNotification object:[[_delegate projectDocumentForSourceRulerView:self] breakpointManager]];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_breakpointManagerDidRemoveFileBreakpoint:) name:WCBreakpointManagerDidRemoveFileBreakpointNotification object:[[_delegate projectDocumentForSourceRulerView:self] breakpointManager]];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_breakpointManagerDidChangeBreakpointActive:) name:WCBreakpointManagerDidChangeBreakpointActiveNotification object:[[_delegate projectDocumentForSourceRulerView:self] breakpointManager]];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_breakpointManagerDidChangeBreakpointsEnabled:) name:WCBreakpointManagerDidChangeBreakpointsEnabledNotification object:[[_delegate projectDocumentForSourceRulerView:self] breakpointManager]];
 	}
 }
 @dynamic sourceTextView;
@@ -562,9 +555,6 @@ static const CGFloat kBuildIssueWidthHeight = 10.0;
 }
 @synthesize foldToHighlight=_foldToHighlight;
 - (void)setFoldToHighlight:(WCFold *)foldToHighlight {
-	if (_foldToHighlight == foldToHighlight)
-		return;
-	
 	_foldToHighlight = foldToHighlight;
 	
 	[self setNeedsDisplay:YES];
@@ -803,7 +793,10 @@ static const CGFloat kTriangleHeight = 6.0;
 		[[[[self delegate] projectDocumentForSourceRulerView:self] breakpointManager] removeFileBreakpoint:[self clickedFileBreakpoint]];
 }
 - (IBAction)_revealInBreakpointNavigator:(id)sender {
-	// TODO: reveal the clicked file breakpoint in the breakpoint navigator
+	WCProjectDocument *projectDocument = [[self delegate] projectDocumentForSourceRulerView:self];
+	
+	[[[projectDocument projectWindowController] navigatorControl] setSelectedItemIdentifier:@"breakpoint"];
+	[[[projectDocument projectWindowController] breakpointNavigatorViewController] setSelectedModelObjects:[NSArray arrayWithObjects:[self clickedFileBreakpoint], nil]];
 }
 - (IBAction)_revealInIssueNavigator:(id)sender {
 	WCProjectDocument *projectDocument = [[self delegate] projectDocumentForSourceRulerView:self];
@@ -834,6 +827,9 @@ static const CGFloat kTriangleHeight = 6.0;
 	[self setNeedsDisplay:YES];
 }
 - (void)_breakpointManagerDidChangeBreakpointActive:(NSNotification *)note {
+	[self setNeedsDisplay:YES];
+}
+- (void)_breakpointManagerDidChangeBreakpointsEnabled:(NSNotification *)note {
 	[self setNeedsDisplay:YES];
 }
 @end

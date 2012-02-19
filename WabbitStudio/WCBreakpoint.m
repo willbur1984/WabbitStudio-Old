@@ -77,7 +77,7 @@ static NSString *const WCBreakpointActiveKey = @"active";
 	return self;
 }
 
-+ (NSGradient *)activeBreakpointFillGradient; {
++ (NSGradient *)enabledActiveBreakpointFillGradient; {
 	static NSGradient *retval;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
@@ -85,7 +85,7 @@ static NSString *const WCBreakpointActiveKey = @"active";
 	});
 	return retval;
 }
-+ (NSGradient *)inactiveBreakpointFillGradient; {
++ (NSGradient *)enabledInactiveBreakpointFillGradient; {
 	static NSGradient *retval;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
@@ -93,14 +93,37 @@ static NSString *const WCBreakpointActiveKey = @"active";
 	});
 	return retval;
 }
-+ (NSColor *)activeBreakpointFillColor; {
++ (NSColor *)enabledActiveBreakpointFillColor; {
 	return [NSColor colorWithCalibratedRed:32.0/255.0 green:94.0/255.0 blue:160.0/255.0 alpha:1.0];
 }
-+ (NSColor *)inactiveBreakpointFillColor; {
++ (NSColor *)enabledInactiveBreakpointFillColor; {
 	return [NSColor colorWithCalibratedRed:32.0/255.0 green:94.0/255.0 blue:160.0/255.0 alpha:0.5];
 }
 
-+ (NSImage *)breakpointIconWithSize:(NSSize)size type:(WCBreakpointType)type active:(BOOL)active; {
++ (NSGradient *)disabledActiveBreakpointFillGradient; {
+	static NSGradient *retval;
+	static dispatch_once_t onceToken;		
+	dispatch_once(&onceToken, ^{
+		retval = [[NSGradient alloc] initWithStartingColor:[NSColor colorWithCalibratedRed:166.0/255.0 green:168.0/255.0 blue:171.0/255.0 alpha:1.0] endingColor:[NSColor colorWithCalibratedRed:141.0/255.0 green:144.0/255.0 blue:147.0/255.0 alpha:1.0]];
+	});
+	return retval;
+}
++ (NSGradient *)disabledInactiveBreakpointFillGradient; {
+	static NSGradient *retval;
+	static dispatch_once_t onceToken;		
+	dispatch_once(&onceToken, ^{
+		retval = [[NSGradient alloc] initWithStartingColor:[NSColor colorWithCalibratedRed:166.0/255.0 green:168.0/255.0 blue:171.0/255.0 alpha:0.5] endingColor:[NSColor colorWithCalibratedRed:141.0/255.0 green:144.0/255.0 blue:147.0/255.0 alpha:0.5]];
+	});
+	return retval;
+}
++ (NSColor *)disabledActiveBreakpointFillColor; {
+	return [NSColor colorWithCalibratedRed:118.0/255.0 green:118.0/255.0 blue:118.0/255.0 alpha:1.0];
+}
++ (NSColor *)disabledInactiveBreakpointFillColor; {
+	return [NSColor colorWithCalibratedRed:118.0/255.0 green:118.0/255.0 blue:118.0/255.0 alpha:0.5];
+}
+
++ (NSImage *)breakpointIconWithSize:(NSSize)size type:(WCBreakpointType)type active:(BOOL)active enabled:(BOOL)enabled; {
 	static const CGFloat kCornerRadius = 3.0;
 	const CGFloat kTriangleInset = ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey])?6.0:3.0;
 	NSImage *retval = [[[NSImage alloc] initWithSize:size] autorelease];
@@ -112,18 +135,31 @@ static NSString *const WCBreakpointActiveKey = @"active";
 	[path appendBezierPathWithArcWithCenter:NSMakePoint(kCornerRadius, kCornerRadius) radius:kCornerRadius startAngle:180.0 endAngle:270.0];
 	[path lineToPoint:NSMakePoint(size.width-kTriangleInset, 0.0)];
 	[path closePath];
-	
+		
 	[retval lockFocus];
 	
-	if (active)
-		[[self activeBreakpointFillGradient] drawInBezierPath:path angle:270.0];
-	else
-		[[self inactiveBreakpointFillGradient] drawInBezierPath:path angle:270.0];
+	static const CGFloat kGradientFillAngle = 270.0;
 	
-	if (active)
-		[[self activeBreakpointFillColor] setStroke];
-	else
-		[[self inactiveBreakpointFillColor] setStroke];
+	if (enabled) {
+		if (active) {
+			[[self enabledActiveBreakpointFillGradient] drawInBezierPath:path angle:kGradientFillAngle];
+			[[self enabledActiveBreakpointFillColor] setStroke];
+		}
+		else {
+			[[self enabledInactiveBreakpointFillGradient] drawInBezierPath:path angle:kGradientFillAngle];
+			[[self enabledInactiveBreakpointFillColor] setStroke];
+		}
+	}
+	else {
+		if (active) {
+			[[self disabledActiveBreakpointFillGradient] drawInBezierPath:path angle:kGradientFillAngle];
+			[[self disabledActiveBreakpointFillColor] setStroke];
+		}
+		else {
+			[[self disabledInactiveBreakpointFillGradient] drawInBezierPath:path angle:kGradientFillAngle];
+			[[self disabledInactiveBreakpointFillColor] setStroke];
+		}
+	}
 	
 	[path strokeInside];
 	
@@ -144,7 +180,7 @@ static NSString *const WCBreakpointActiveKey = @"active";
 }
 @dynamic icon;
 - (NSImage *)icon {
-	return [[self class] breakpointIconWithSize:NSMakeSize(24.0, 12.0) type:[self type] active:[self isActive]];
+	return [[self class] breakpointIconWithSize:NSMakeSize(24.0, 12.0) type:[self type] active:[self isActive] enabled:YES];
 }
 + (NSSet *)keyPathsForValuesAffectingIcon {
 	return [NSSet setWithObjects:@"active", nil];

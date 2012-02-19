@@ -8,14 +8,16 @@
 
 #import <Foundation/NSObject.h>
 
-extern NSString *const WCBreakpointManagerDidAddBreakpointNotification;
-extern NSString *const WCBreakpointManagerDidAddBreakpointNewBreakpointUserInfoKey;
+extern NSString *const WCBreakpointManagerDidAddFileBreakpointNotification;
+extern NSString *const WCBreakpointManagerDidAddFileBreakpointNewFileBreakpointUserInfoKey;
 
-extern NSString *const WCBreakpointManagerDidRemoveBreakpointNotification;
-extern NSString *const WCBreakpointManagerDidRemoveBreakpointOldBreakpointUserInfoKey;
+extern NSString *const WCBreakpointManagerDidRemoveFileBreakpointNotification;
+extern NSString *const WCBreakpointManagerDidRemoveFileBreakpointOldFileBreakpointUserInfoKey;
 
 extern NSString *const WCBreakpointManagerDidChangeBreakpointActiveNotification;
 extern NSString *const WCBreakpointManagerDidChangeBreakpointActiveChangedBreakpointUserInfoKey;
+
+extern NSString *const WCBreakpointManagerDidChangeBreakpointsEnabledNotification;
 
 @class WCProjectDocument,WCFileBreakpoint;
 
@@ -24,10 +26,15 @@ extern NSString *const WCBreakpointManagerDidChangeBreakpointActiveChangedBreakp
 	NSMapTable *_filesToFileBreakpointsSortedByLocation;
 	NSMutableArray *_filesWithFileBreakpointsSortedByName;
 	NSMutableSet *_fileBreakpoints;
+	struct {
+		unsigned int breakpointsEnabled:1;
+		unsigned int RESERVED:31;
+	} _breakpointManagerFlags;
 }
 @property (readonly,nonatomic) WCProjectDocument *projectDocument;
 @property (readonly,nonatomic) NSMapTable *filesToFileBreakpointsSortedByLocation;
 @property (readonly,nonatomic) NSArray *filesWithFileBreakpointsSortedByName;
+@property (readwrite,assign,nonatomic) BOOL breakpointsEnabled;
 
 - (id)initWithProjectDocument:(WCProjectDocument *)projectDocument;
 

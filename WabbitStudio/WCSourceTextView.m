@@ -1458,6 +1458,15 @@
 			return;
 		}
 	}
+	// also don't complete when we are inside a comment
+	id attributeValue = [[self textStorage] attribute:WCSourceTokenTypeAttributeName atIndex:completionRange.location effectiveRange:NULL];
+	if ([attributeValue unsignedIntValue] == WCSourceTokenTypeComment ||
+		[attributeValue unsignedIntValue] == WCSourceTokenTypeMultilineComment) {
+		
+		[_completionTimer invalidate];
+		_completionTimer = nil;
+		return;
+	}
 	
 	NSTimeInterval completionDelay = [[NSUserDefaults standardUserDefaults] floatForKey:WCEditorSuggestCompletionsWhileTypingDelayKey];
 	
@@ -1733,7 +1742,7 @@
 	[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
 }
 - (void)_textStorageDidUnfold:(NSNotification *)note {
-	[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
+	[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:NO];
 }
 - (void)_buildControllerDidFinishBuilding:(NSNotification *)note {
 	[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];

@@ -34,10 +34,15 @@ typedef enum _WCBreakpointType {
 + (id)breakpointOfType:(WCBreakpointType)type address:(uint16_t)address page:(uint8_t)page;
 - (id)initWithType:(WCBreakpointType)type address:(uint16_t)address page:(uint8_t)page;
 
-+ (NSGradient *)activeBreakpointFillGradient;
-+ (NSGradient *)inactiveBreakpointFillGradient;
-+ (NSColor *)activeBreakpointFillColor;
-+ (NSColor *)inactiveBreakpointFillColor;
++ (NSGradient *)disabledActiveBreakpointFillGradient;
++ (NSGradient *)disabledInactiveBreakpointFillGradient;
++ (NSColor *)disabledActiveBreakpointFillColor;
++ (NSColor *)disabledInactiveBreakpointFillColor;
 
-+ (NSImage *)breakpointIconWithSize:(NSSize)size type:(WCBreakpointType)type active:(BOOL)active;
++ (NSGradient *)enabledActiveBreakpointFillGradient;
++ (NSGradient *)enabledInactiveBreakpointFillGradient;
++ (NSColor *)enabledActiveBreakpointFillColor;
++ (NSColor *)enabledInactiveBreakpointFillColor;
+
++ (NSImage *)breakpointIconWithSize:(NSSize)size type:(WCBreakpointType)type active:(BOOL)active enabled:(BOOL)enabled;
 @end

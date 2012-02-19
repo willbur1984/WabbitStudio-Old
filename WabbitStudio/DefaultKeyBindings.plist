@@ -70,6 +70,16 @@
 				<true/>
 			</dict>
 		</dict>
+		<key>toggleBreakpoints:</key>
+		<dict>
+			<key>keyCode</key>
+			<integer>16</integer>
+			<key>modifierFlags</key>
+			<dict>
+				<key>command</key>
+				<true/>
+			</dict>
+		</dict>
 		<key>findInProject:</key>
 		<dict>
 			<key>keyCode</key>

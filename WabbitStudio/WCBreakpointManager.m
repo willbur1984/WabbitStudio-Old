@@ -11,14 +11,16 @@
 #import "WCFile.h"
 #import "WCFileBreakpoint.h"
 
-NSString *const WCBreakpointManagerDidAddBreakpointNotification = @"WCBreakpointManagerDidAddBreakpointNotification";
-NSString *const WCBreakpointManagerDidAddBreakpointNewBreakpointUserInfoKey = @"WCBreakpointManagerDidAddBreakpointNewBreakpointUserInfoKey";
+NSString *const WCBreakpointManagerDidAddFileBreakpointNotification = @"WCBreakpointManagerDidAddFileBreakpointNotification";
+NSString *const WCBreakpointManagerDidAddFileBreakpointNewFileBreakpointUserInfoKey = @"WCBreakpointManagerDidAddFileBreakpointNewFileBreakpointUserInfoKey";
 
-NSString *const WCBreakpointManagerDidRemoveBreakpointNotification = @"WCBreakpointManagerDidRemoveBreakpointNotification";
-NSString *const WCBreakpointManagerDidRemoveBreakpointOldBreakpointUserInfoKey = @"WCBreakpointManagerDidRemoveBreakpointOldBreakpointUserInfoKey";
+NSString *const WCBreakpointManagerDidRemoveFileBreakpointNotification = @"WCBreakpointManagerDidRemoveFileBreakpointNotification";
+NSString *const WCBreakpointManagerDidRemoveFileBreakpointOldFileBreakpointUserInfoKey = @"WCBreakpointManagerDidRemoveFileBreakpointOldFileBreakpointUserInfoKey";
 
 NSString *const WCBreakpointManagerDidChangeBreakpointActiveNotification = @"WCBreakpointManagerDidChangeBreakpointActiveNotification";
 NSString *const WCBreakpointManagerDidChangeBreakpointActiveChangedBreakpointUserInfoKey = @"WCBreakpointManagerDidChangeBreakpointActiveChangedBreakpointUserInfoKey";
+
+NSString *const WCBreakpointManagerDidChangeBreakpointsEnabledNotification = @"WCBreakpointManagerDidChangeBreakpointsEnabledNotification";
 
 @interface WCBreakpointManager ()
 @property (readonly,nonatomic) NSMutableSet *fileBreakpoints;
@@ -49,6 +51,7 @@ NSString *const WCBreakpointManagerDidChangeBreakpointActiveChangedBreakpointUse
 	_filesToFileBreakpointsSortedByLocation = [[NSMapTable mapTableWithWeakToStrongObjects] retain];
 	_filesWithFileBreakpointsSortedByName = [[NSMutableArray alloc] initWithCapacity:0];
 	_fileBreakpoints = [[NSMutableSet alloc] initWithCapacity:0];
+	_breakpointManagerFlags.breakpointsEnabled = YES;
 	
 	return self;
 }
@@ -77,7 +80,7 @@ NSString *const WCBreakpointManagerDidChangeBreakpointActiveChangedBreakpointUse
 		return NSOrderedSame;
 	}], nil]];
 	
-	[[NSNotificationCenter defaultCenter] postNotificationName:WCBreakpointManagerDidAddBreakpointNotification object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:fileBreakpoint,WCBreakpointManagerDidAddBreakpointNewBreakpointUserInfoKey, nil]];
+	[[NSNotificationCenter defaultCenter] postNotificationName:WCBreakpointManagerDidAddFileBreakpointNotification object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:fileBreakpoint,WCBreakpointManagerDidAddFileBreakpointNewFileBreakpointUserInfoKey, nil]];
 }
 - (void)removeFileBreakpoint:(WCFileBreakpoint *)fileBreakpoint {
 	NSMutableArray *fileBreakpoints = [[self filesToFileBreakpointsSortedByLocation] objectForKey:[fileBreakpoint file]];
@@ -94,7 +97,7 @@ NSString *const WCBreakpointManagerDidChangeBreakpointActiveChangedBreakpointUse
 		[_filesWithFileBreakpointsSortedByName removeObject:[fileBreakpoint file]];
 	}
 	
-	[[NSNotificationCenter defaultCenter] postNotificationName:WCBreakpointManagerDidRemoveBreakpointNotification object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:fileBreakpoint,WCBreakpointManagerDidRemoveBreakpointOldBreakpointUserInfoKey, nil]];
+	[[NSNotificationCenter defaultCenter] postNotificationName:WCBreakpointManagerDidRemoveFileBreakpointNotification object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:fileBreakpoint,WCBreakpointManagerDidRemoveFileBreakpointOldFileBreakpointUserInfoKey, nil]];
 }
 
 - (void)performCleanup; {
@@ -106,5 +109,14 @@ NSString *const WCBreakpointManagerDidChangeBreakpointActiveChangedBreakpointUse
 @synthesize filesToFileBreakpointsSortedByLocation=_filesToFileBreakpointsSortedByLocation;
 @synthesize filesWithFileBreakpointsSortedByName=_filesWithFileBreakpointsSortedByName;
 @synthesize fileBreakpoints=_fileBreakpoints;
+@dynamic breakpointsEnabled;
+- (BOOL)breakpointsEnabled {
+	return _breakpointManagerFlags.breakpointsEnabled;
+}
+- (void)setBreakpointsEnabled:(BOOL)breakpointsEnabled {
+	_breakpointManagerFlags.breakpointsEnabled = breakpointsEnabled;
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:WCBreakpointManagerDidChangeBreakpointsEnabledNotification object:self];
+}
 
 @end

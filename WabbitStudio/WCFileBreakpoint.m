@@ -9,12 +9,14 @@
 #import "WCFileBreakpoint.h"
 #import "WCProjectDocument.h"
 #import "WCFile.h"
+#import "WCBreakpointManager.h"
 
 static NSString *const WCFileBreakpointRangeKey = @"range";
 static NSString *const WCFileBreakpointFileUUIDKey = @"fileUUID";
 
 @implementation WCFileBreakpoint
 - (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	_projectDocument = nil;
 	[_file release];
 	[_fileUUID release];
@@ -60,6 +62,10 @@ static NSString *const WCFileBreakpointFileUUIDKey = @"fileUUID";
 	return self;
 }
 
+- (NSImage *)icon {
+	return [[self class] breakpointIconWithSize:NSMakeSize(24.0, 12.0) type:[self type] active:[self isActive] enabled:[[[self projectDocument] breakpointManager] breakpointsEnabled]];
+}
+
 + (id)fileBreakpointWithRange:(NSRange)range file:(WCFile *)file projectDocument:(WCProjectDocument *)projectDocument; {
 	return [[[[self class] alloc] initWithRange:range file:file projectDocument:projectDocument] autorelease];
 }
@@ -71,11 +77,23 @@ static NSString *const WCFileBreakpointFileUUIDKey = @"fileUUID";
 	_file = [file retain];
 	_projectDocument = projectDocument;
 	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_breakpointManagerDidChangeBreakpointsEnabled:) name:WCBreakpointManagerDidChangeBreakpointsEnabledNotification object:[projectDocument breakpointManager]];
+	
 	return self;
 }
 
 @synthesize projectDocument=_projectDocument;
+- (void)setProjectDocument:(WCProjectDocument *)projectDocument {
+	_projectDocument = projectDocument;
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_breakpointManagerDidChangeBreakpointsEnabled:) name:WCBreakpointManagerDidChangeBreakpointsEnabledNotification object:[projectDocument breakpointManager]];
+}
 @synthesize file=_file;
 @synthesize range=_range;
+
+- (void)_breakpointManagerDidChangeBreakpointsEnabled:(NSNotification *)note {
+	[self willChangeValueForKey:@"icon"];
+	[self didChangeValueForKey:@"icon"];
+}
 
 @end

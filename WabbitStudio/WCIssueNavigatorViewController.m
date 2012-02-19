@@ -196,7 +196,8 @@ static const CGFloat kMainCellHeight = 20.0;
 		WCSourceTextViewController *stvController = [[self projectDocument] openTabForFile:file tabViewContext:nil];
 		
 		[[stvController textView] setSelectedRange:[result range]];
-		[[stvController textView] centerSelectionInVisibleArea:nil];
+		//[[stvController textView] centerSelectionInVisibleArea:nil];
+		[[stvController textView] scrollRangeToVisible:[result range]];
 	}
 }
 - (IBAction)_outlineViewDoubleClick:(id)sender; {
