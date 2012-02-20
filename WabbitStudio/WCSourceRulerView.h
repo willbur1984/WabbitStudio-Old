@@ -21,9 +21,8 @@
 	WCBuildIssue *_clickedBuildIssue;
 	WCEditBreakpointViewController *_editBreakpointViewController;
 	struct {
-		unsigned int drawCurrentLineHighlight:1;
 		unsigned int clickedFileBreakpointHasMoved:1;
-		unsigned int RESERVED:30;
+		unsigned int RESERVED:31;
 	} _sourceRulerViewFlags;
 }
 @property (readwrite,assign,nonatomic) id <WCSourceRulerViewDelegate> delegate;

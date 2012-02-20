@@ -10,6 +10,9 @@
 
 extern NSString *const WCBuildControllerDidFinishBuildingNotification;
 
+extern NSString *const WCBuildControllerDidChangeBuildIssueVisibleNotification;
+extern NSString *const WCBuildControllerDidChangeBuildIssueVisibleChangedBuildIssueUserInfoKey;
+
 @class WCProjectDocument;
 
 @interface WCBuildController : NSObject {
@@ -18,6 +21,7 @@ extern NSString *const WCBuildControllerDidFinishBuildingNotification;
 	NSMutableString *_output;
 	NSMapTable *_filesToBuildIssuesSortedByLocation;
 	NSArray *_filesWithBuildIssuesSortedByName;
+	NSSet *_buildIssues;
 	struct {
 		unsigned int building:1;
 		unsigned int runAfterBuilding:1;
@@ -33,4 +37,6 @@ extern NSString *const WCBuildControllerDidFinishBuildingNotification;
 
 - (void)build;
 - (void)buildAndRun;
+
+- (void)performCleanup;
 @end

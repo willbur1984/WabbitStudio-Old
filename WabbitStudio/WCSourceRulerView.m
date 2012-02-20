@@ -41,7 +41,6 @@
 @interface WCSourceRulerView ()
 @property (readonly,nonatomic) WCSourceTextStorage *textStorage;
 @property (readwrite,assign,nonatomic) NSUInteger clickedLineNumber;
-@property (readwrite,assign,nonatomic) BOOL drawCurrentLineHighlight;
 @property (readwrite,assign,nonatomic) WCFold *foldToHighlight;
 @property (readwrite,assign,nonatomic) WCFileBreakpoint *clickedFileBreakpoint;
 @property (readwrite,assign,nonatomic) WCBuildIssue *clickedBuildIssue;
@@ -81,6 +80,8 @@
 		[retval addItemWithTitle:NSLocalizedString(@"Enable Breakpoint", @"Enable Breakpoint") action:@selector(_toggleBreakpoint:) keyEquivalent:@""];
 		[retval addItem:[NSMenuItem separatorItem]];
 		[retval addItemWithTitle:NSLocalizedString(@"Delete Breakpoint", @"Delete Breakpoint") action:@selector(_deleteBreakpoint:) keyEquivalent:@""];
+		[retval addItem:[NSMenuItem separatorItem]];
+		[retval addItemWithTitle:NSLocalizedString(@"Hide Issue", @"Hide Issue") action:@selector(_toggleIssue:) keyEquivalent:@""];
 		[retval addItem:[NSMenuItem separatorItem]];
 		[retval addItemWithTitle:NSLocalizedString(@"Reveal in Breakpoint Navigator", @"Reveal in Breakpoint Navigator") action:@selector(_revealInBreakpointNavigator:) keyEquivalent:@""];
 		[retval addItemWithTitle:NSLocalizedString(@"Reveal in Issue Navigator", @"Reveal in Issue Navigator") action:@selector(_revealInIssueNavigator:) keyEquivalent:@""];
@@ -136,6 +137,7 @@ static const CGFloat kIconWidthHeight = 12.0;
 static const CGFloat kIconPaddingLeft = 1.0;
 static const CGFloat kIconPaddingTop = 1.0;
 static const CGFloat kCodeFoldingRibbonWidth = 8.0;
+static const CGFloat kBuildIssueWidthHeight = 10.0;
 
 - (void)mouseEntered:(NSEvent *)theEvent {
 	NSRange range = [self _rangeForPoint:[self convertPointFromBase:[theEvent locationInWindow]]];
@@ -165,7 +167,23 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 			[[self textStorage] unfoldRange:foldRange effectiveRange:NULL];
 	}
 	else {
-		NSRange range = [self _rangeForPoint:[self convertPointFromBase:[theEvent locationInWindow]]];
+		NSPoint point = [self convertPointFromBase:[theEvent locationInWindow]];
+		NSRange range = [self _rangeForPoint:point];
+		WCBuildIssue *buildIssue = [[[self delegate] buildIssuesForSourceRulerView:self] buildIssueForRange:range];
+		
+		if (buildIssue) {
+			NSLayoutManager *layoutManager = [[self textView] layoutManager];
+			NSRect lineRect = [layoutManager lineFragmentRectForGlyphAtIndex:[layoutManager glyphIndexForCharacterAtIndex:range.location] effectiveRange:NULL];
+			NSRect buildIssueRect = NSMakeRect(NSMinX([self bounds]), [self convertPoint:lineRect.origin fromView:[self clientView]].y, kBuildIssueWidthHeight, kBuildIssueWidthHeight);
+			
+			if (NSMouseInRect(point, buildIssueRect, [self isFlipped])) {
+
+				[self setClickedBuildIssue:buildIssue];
+				[self setClickedFileBreakpoint:nil];
+				return;
+			}
+		}
+		
 		WCFileBreakpoint *fileBreakpoint = [[[self delegate] fileBreakpointsForSourceRulerView:self] fileBreakpointForRange:range];
 		
 		if (!fileBreakpoint) {
@@ -176,6 +194,7 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 			[[projectDocument breakpointManager] addFileBreakpoint:fileBreakpoint];
 		}
 		
+		[self setClickedBuildIssue:nil];
 		[self setClickedFileBreakpoint:fileBreakpoint];
 		[self setClickedFileBreakpointHasMoved:NO];
 	}
@@ -216,10 +235,13 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 	NSPoint point = [self convertPointFromBase:[theEvent locationInWindow]];
 	NSRange range = [self _rangeForPoint:point];
 	WCFileBreakpoint *fileBreakpoint = [[[self delegate] fileBreakpointsForSourceRulerView:self] fileBreakpointForRange:range];
+	WCBuildIssue *buildIssue = [[[self delegate] buildIssuesForSourceRulerView:self] buildIssueForRange:range];
 	
-	if (fileBreakpoint == [self clickedFileBreakpoint] && !NSMouseInRect(point, [self bounds], [self isFlipped]))
+	if (buildIssue && buildIssue == [self clickedBuildIssue])
+		[buildIssue setVisible:(![buildIssue isVisible])];
+	else if (fileBreakpoint && fileBreakpoint == [self clickedFileBreakpoint] && !NSMouseInRect(point, [self bounds], [self isFlipped]))
 		NSShowAnimationEffect(NSAnimationEffectDisappearingItemDefault, [[self window] convertBaseToScreen:[theEvent locationInWindow]], NSZeroSize, self, @selector(_animationEffectDidEnd:), NULL);
-	else if (fileBreakpoint == [self clickedFileBreakpoint] && ![self clickedFileBreakpointHasMoved])
+	else if (fileBreakpoint && fileBreakpoint == [self clickedFileBreakpoint] && ![self clickedFileBreakpointHasMoved])
 		[fileBreakpoint setActive:(![fileBreakpoint isActive])];
 }
 - (void)_animationEffectDidEnd:(void *)contextInfo {
@@ -271,12 +293,11 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 	else
 		[super drawRightMarginInRect:rect];
 	
+	[super drawCurrentLineHighlightInRect:rect];
+	
 	[self drawFileBreakpointsInRect:rect];
 	
 	[self drawBuildIssuesInRect:rect];
-	
-	if ([self drawCurrentLineHighlight])
-		[super drawCurrentLineHighlightInRect:rect];
 	
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey])
 		[super drawLineNumbersInRect:NSMakeRect(NSMinX(rect), NSMinY(rect), NSWidth(rect)-kCodeFoldingRibbonWidth, NSHeight(rect))];
@@ -335,8 +356,13 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 			return NO;
 	}
 	else if ([menuItem action] == @selector(_editBreakpoint:)) {
-		if (![self clickedFileBreakpoint])
+		if (![[self delegate] projectDocumentForSourceRulerView:self])
 			return NO;
+		
+		if ([self clickedFileBreakpoint])
+			[menuItem setTitle:NSLocalizedString(@"Edit Breakpoint", @"Edit Breakpoint")];
+		else
+			[menuItem setTitle:NSLocalizedString(@"Add Breakpoint", @"Add Breakpoint")];
 	}
 	else if ([menuItem action] == @selector(_deleteBreakpoint:)) {
 		if ([[NSUserDefaults standardUserDefaults] boolForKey:WCAlertsWarnBeforeDeletingBreakpointsKey])
@@ -352,6 +378,15 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 			return NO;
 	}
 	else if ([menuItem action] == @selector(_revealInIssueNavigator:)) {
+		if (![self clickedBuildIssue])
+			return NO;
+	}
+	else if ([menuItem action] == @selector(_toggleIssue:)) {
+		if ([[self clickedBuildIssue] isVisible])
+			[menuItem setTitle:NSLocalizedString(@"Hide Build Issue", @"Hide Build Issue")];
+		else
+			[menuItem setTitle:NSLocalizedString(@"Show Build Issue", @"Show Build Issue")];
+		
 		if (![self clickedBuildIssue])
 			return NO;
 	}
@@ -388,21 +423,16 @@ static const CGFloat kCodeFoldingRibbonWidth = 8.0;
 	[super drawRightMarginInRect:ribbonRect];
 }
 
-static const CGFloat kBuildIssueWidthHeight = 10.0;
-
 - (void)drawBuildIssuesInRect:(NSRect)buildIssueRect; {
 	NSArray *buildIssues = [[self delegate] buildIssuesForSourceRulerView:self];
 	NSMutableIndexSet *errorIndexes = [NSMutableIndexSet indexSet];
 	NSMutableIndexSet *warningIndexes = [NSMutableIndexSet indexSet];
-	NSRange selectedRange = [[[self textView] string] lineRangeForRange:[[self textView] selectedRange]];
-	
-	[self setDrawCurrentLineHighlight:YES];
 	
 	for (WCBuildIssue *buildIssue in [buildIssues buildIssuesForRange:[[self textView] visibleRange]]) {
 		switch ([buildIssue type]) {
 			case WCBuildIssueTypeError:
 				if ([errorIndexes containsIndex:[buildIssue range].location])
-					continue;
+					continue; 
 				else {
 					NSUInteger rectCount;
 					NSRectArray rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[[[self textView] string] lineRangeForRange:[buildIssue range]] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&rectCount];;
@@ -411,29 +441,27 @@ static const CGFloat kBuildIssueWidthHeight = 10.0;
 						continue;
 					
 					NSRect lineRect;
-					if (rectCount == 1)
-						lineRect = rects[0];
-					else {
-						lineRect = NSZeroRect;
-						NSUInteger rectIndex;
-						for (rectIndex=0; rectIndex<rectCount; rectIndex++)
-							lineRect = NSUnionRect(lineRect, rects[rectIndex]);
-					}
 					
-					lineRect = NSMakeRect(NSMinX([self bounds]), [self convertPoint:lineRect.origin fromView:[self clientView]].y, NSWidth([self bounds]), NSHeight(lineRect));
-					
-					if (!NSIntersectsRect(lineRect, buildIssueRect) || ![self needsToDrawRect:lineRect])
-						continue;
-					
-					if (NSLocationInRange([buildIssue range].location, selectedRange)) {
-						[self setDrawCurrentLineHighlight:NO];
+					if ([buildIssue isVisible]) {
+						if (rectCount == 1)
+							lineRect = rects[0];
+						else {
+							lineRect = NSZeroRect;
+							NSUInteger rectIndex;
+							for (rectIndex=0; rectIndex<rectCount; rectIndex++)
+								lineRect = NSUnionRect(lineRect, rects[rectIndex]);
+						}
+						
+						lineRect = NSMakeRect(NSMinX([self bounds]), [self convertPoint:lineRect.origin fromView:[self clientView]].y, NSWidth([self bounds]), NSHeight(lineRect));
+						
+						if (!NSIntersectsRect(lineRect, buildIssueRect) || ![self needsToDrawRect:lineRect])
+							continue;
+						
 						[[WCBuildIssue errorSelectedFillGradient] drawInRect:lineRect angle:90.0];
+						[[WCBuildIssue errorFillColor] setFill];
+						NSRectFill(NSMakeRect(NSMinX(lineRect), NSMinY(lineRect), NSWidth(lineRect), 1.0));
+						NSRectFill(NSMakeRect(NSMinX(lineRect), NSMaxY(lineRect)-1, NSWidth(lineRect), 1.0));
 					}
-					else
-						[[WCBuildIssue errorFillGradient] drawInRect:lineRect angle:90.0];
-					[[WCBuildIssue errorFillColor] setFill];
-					NSRectFill(NSMakeRect(NSMinX(lineRect), NSMinY(lineRect), NSWidth(lineRect), 1.0));
-					NSRectFill(NSMakeRect(NSMinX(lineRect), NSMaxY(lineRect)-1, NSWidth(lineRect), 1.0));
 					
 					rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[buildIssue range] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&rectCount];
 					
@@ -458,29 +486,27 @@ static const CGFloat kBuildIssueWidthHeight = 10.0;
 						continue;
 					
 					NSRect lineRect;
-					if (rectCount == 1)
-						lineRect = rects[0];
-					else {
-						lineRect = NSZeroRect;
-						NSUInteger rectIndex;
-						for (rectIndex=0; rectIndex<rectCount; rectIndex++)
-							lineRect = NSUnionRect(lineRect, rects[rectIndex]);
-					}
 					
-					lineRect = NSMakeRect(NSMinX([self bounds]), [self convertPoint:lineRect.origin fromView:[self clientView]].y, NSWidth([self bounds]), NSHeight(lineRect));
-					
-					if (!NSIntersectsRect(lineRect, buildIssueRect) || ![self needsToDrawRect:lineRect])
-						continue;
-					
-					if (NSLocationInRange([buildIssue range].location, selectedRange)) {
-						[self setDrawCurrentLineHighlight:NO];
+					if ([buildIssue isVisible]) {
+						if (rectCount == 1)
+							lineRect = rects[0];
+						else {
+							lineRect = NSZeroRect;
+							NSUInteger rectIndex;
+							for (rectIndex=0; rectIndex<rectCount; rectIndex++)
+								lineRect = NSUnionRect(lineRect, rects[rectIndex]);
+						}
+						
+						lineRect = NSMakeRect(NSMinX([self bounds]), [self convertPoint:lineRect.origin fromView:[self clientView]].y, NSWidth([self bounds]), NSHeight(lineRect));
+						
+						if (!NSIntersectsRect(lineRect, buildIssueRect) || ![self needsToDrawRect:lineRect])
+							continue;
+						
 						[[WCBuildIssue warningSelectedFillGradient] drawInRect:lineRect angle:90.0];
+						[[WCBuildIssue warningFillColor] setFill];
+						NSRectFill(NSMakeRect(NSMinX(lineRect), NSMinY(lineRect), NSWidth(lineRect), 1.0));
+						NSRectFill(NSMakeRect(NSMinX(lineRect), NSMaxY(lineRect)-1, NSWidth(lineRect), 1.0));
 					}
-					else
-						[[WCBuildIssue warningFillGradient] drawInRect:lineRect angle:90.0];
-					[[WCBuildIssue warningFillColor] setFill];
-					NSRectFill(NSMakeRect(NSMinX(lineRect), NSMinY(lineRect), NSWidth(lineRect), 1.0));
-					NSRectFill(NSMakeRect(NSMinX(lineRect), NSMaxY(lineRect)-1, NSWidth(lineRect), 1.0));
 					
 					rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[buildIssue range] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&rectCount];
 					
@@ -516,7 +542,7 @@ static const CGFloat kBuildIssueWidthHeight = 10.0;
 		if (!NSIntersectsRect(lineRect, breakpointRect) || ![self needsToDrawRect:lineRect])
 			continue;
 		
-		lineRect = NSInsetRect(lineRect, 2.0, 0.0);
+		lineRect = NSInsetRect(lineRect, 1.0, 0.0);
 		
 		NSImage *breakpointIcon = [WCBreakpoint breakpointIconWithSize:NSMakeSize(NSWidth(lineRect), NSHeight(lineRect)) type:[fileBreakpoint type] active:[fileBreakpoint isActive] enabled:[[[fileBreakpoint projectDocument] breakpointManager] breakpointsEnabled]];
 		
@@ -539,24 +565,23 @@ static const CGFloat kBuildIssueWidthHeight = 10.0;
 	
 	if (_delegate) {
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_sourceScannerDidFinishScanningFolds:) name:WCSourceScannerDidFinishScanningFoldsNotification object:[_delegate sourceScannerForSourceRulerView:self]];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_buildControllerDidFinishBuilding:) name:WCBuildControllerDidFinishBuildingNotification object:[[_delegate projectDocumentForSourceRulerView:self] buildController]];
 		
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_breakpointManagerDidAddFileBreakpoint:) name:WCBreakpointManagerDidAddFileBreakpointNotification object:[[_delegate projectDocumentForSourceRulerView:self] breakpointManager]];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_breakpointManagerDidRemoveFileBreakpoint:) name:WCBreakpointManagerDidRemoveFileBreakpointNotification object:[[_delegate projectDocumentForSourceRulerView:self] breakpointManager]];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_breakpointManagerDidChangeBreakpointActive:) name:WCBreakpointManagerDidChangeBreakpointActiveNotification object:[[_delegate projectDocumentForSourceRulerView:self] breakpointManager]];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_breakpointManagerDidChangeBreakpointsEnabled:) name:WCBreakpointManagerDidChangeBreakpointsEnabledNotification object:[[_delegate projectDocumentForSourceRulerView:self] breakpointManager]];
+		WCProjectDocument *projectDocument = [_delegate projectDocumentForSourceRulerView:self];
+		
+		if (projectDocument) {
+			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_buildControllerDidFinishBuilding:) name:WCBuildControllerDidFinishBuildingNotification object:[projectDocument buildController]];
+			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_buildControllerDidChangeBuildIssueVisible:) name:WCBuildControllerDidChangeBuildIssueVisibleNotification object:[projectDocument buildController]];
+			
+			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_breakpointManagerDidAddFileBreakpoint:) name:WCBreakpointManagerDidAddFileBreakpointNotification object:[projectDocument breakpointManager]];
+			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_breakpointManagerDidRemoveFileBreakpoint:) name:WCBreakpointManagerDidRemoveFileBreakpointNotification object:[projectDocument breakpointManager]];
+			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_breakpointManagerDidChangeBreakpointActive:) name:WCBreakpointManagerDidChangeBreakpointActiveNotification object:[projectDocument breakpointManager]];
+			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_breakpointManagerDidChangeBreakpointsEnabled:) name:WCBreakpointManagerDidChangeBreakpointsEnabledNotification object:[projectDocument breakpointManager]];
+		}
 	}
 }
 @dynamic sourceTextView;
 - (WCSourceTextView *)sourceTextView {
 	return (WCSourceTextView *)[self textView];
-}
-@dynamic drawCurrentLineHighlight;
-- (BOOL)drawCurrentLineHighlight {
-	return _sourceRulerViewFlags.drawCurrentLineHighlight;
-}
-- (void)setDrawCurrentLineHighlight:(BOOL)drawCurrentLineHighlight {
-	_sourceRulerViewFlags.drawCurrentLineHighlight = drawCurrentLineHighlight;
 }
 @synthesize foldToHighlight=_foldToHighlight;
 - (void)setFoldToHighlight:(WCFold *)foldToHighlight {
@@ -778,13 +803,21 @@ static const CGFloat kTriangleHeight = 6.0;
 	}
 }
 - (IBAction)_editBreakpoint:(id)sender {
-	NSLayoutManager *layoutManager = [[self textView] layoutManager];
-	NSRect lineRect = [layoutManager lineFragmentRectForGlyphAtIndex:[layoutManager glyphIndexForCharacterAtIndex:[[self clickedFileBreakpoint] range].location] effectiveRange:NULL];
-	
-	lineRect = NSMakeRect(NSMinX([self bounds]), [self convertPoint:lineRect.origin fromView:[self clientView]].y, NSWidth([self bounds]), NSHeight(lineRect));
-	
-	[[self editBreakpointViewController] setBreakpoint:[self clickedFileBreakpoint]];
-	[[self editBreakpointViewController] showEditBreakpointViewRelativeToRect:lineRect ofView:self preferredEdge:NSMaxXEdge];	
+	if ([self clickedFileBreakpoint]) {
+		NSLayoutManager *layoutManager = [[self textView] layoutManager];
+		NSRect lineRect = [layoutManager lineFragmentRectForGlyphAtIndex:[layoutManager glyphIndexForCharacterAtIndex:[[self clickedFileBreakpoint] range].location] effectiveRange:NULL];
+		
+		lineRect = NSMakeRect(NSMinX([self bounds]), [self convertPoint:lineRect.origin fromView:[self clientView]].y, NSWidth([self bounds]), NSHeight(lineRect));
+		
+		[[self editBreakpointViewController] setBreakpoint:[self clickedFileBreakpoint]];
+		[[self editBreakpointViewController] showEditBreakpointViewRelativeToRect:lineRect ofView:self preferredEdge:NSMaxXEdge];
+	}
+	else {
+		NSUInteger lineStartIndex = [[[self lineStartIndexes] objectAtIndex:[self clickedLineNumber]] unsignedIntegerValue];
+		WCFileBreakpoint *fileBreakpoint = [WCFileBreakpoint fileBreakpointWithRange:NSMakeRange(lineStartIndex, 0) file:[[self delegate] fileForSourceRulerView:self] projectDocument:[[self delegate] projectDocumentForSourceRulerView:self]];
+		
+		[[[[self delegate] projectDocumentForSourceRulerView:self] breakpointManager] addFileBreakpoint:fileBreakpoint];
+	}
 }
 - (IBAction)_toggleBreakpoint:(id)sender {
 	[[self clickedFileBreakpoint] setActive:(![[self clickedFileBreakpoint] isActive])];
@@ -808,6 +841,9 @@ static const CGFloat kTriangleHeight = 6.0;
 	}
 	else
 		[[[[self delegate] projectDocumentForSourceRulerView:self] breakpointManager] removeFileBreakpoint:[self clickedFileBreakpoint]];
+}
+- (IBAction)_toggleIssue:(id)sender {
+	[[self clickedBuildIssue] setVisible:(![[self clickedBuildIssue] isVisible])];
 }
 - (IBAction)_revealInBreakpointNavigator:(id)sender {
 	WCProjectDocument *projectDocument = [[self delegate] projectDocumentForSourceRulerView:self];
@@ -837,14 +873,29 @@ static const CGFloat kTriangleHeight = 6.0;
 - (void)_buildControllerDidFinishBuilding:(NSNotification *)note {
 	[self setNeedsDisplay:YES];
 }
+- (void)_buildControllerDidChangeBuildIssueVisible:(NSNotification *)note {
+	WCBuildIssue *buildIssue = [[note userInfo] objectForKey:WCBuildControllerDidChangeBuildIssueVisibleChangedBuildIssueUserInfoKey];
+	
+	if (NSLocationInOrEqualToRange([buildIssue range].location, [[self textView] visibleRange]))
+		[self setNeedsDisplay:YES];
+}
 - (void)_breakpointManagerDidAddFileBreakpoint:(NSNotification *)note {
-	[self setNeedsDisplay:YES];
+	WCFileBreakpoint *fileBreakpoint = [[note userInfo] objectForKey:WCBreakpointManagerDidAddFileBreakpointNewFileBreakpointUserInfoKey];
+	
+	if (NSLocationInOrEqualToRange([fileBreakpoint range].location, [[self textView] visibleRange]))
+		[self setNeedsDisplay:YES];
 }
 - (void)_breakpointManagerDidRemoveFileBreakpoint:(NSNotification *)note {
-	[self setNeedsDisplay:YES];
+	WCFileBreakpoint *fileBreakpoint = [[note userInfo] objectForKey:WCBreakpointManagerDidRemoveFileBreakpointOldFileBreakpointUserInfoKey];
+	
+	if (NSLocationInOrEqualToRange([fileBreakpoint range].location, [[self textView] visibleRange]))
+		[self setNeedsDisplay:YES];
 }
 - (void)_breakpointManagerDidChangeBreakpointActive:(NSNotification *)note {
-	[self setNeedsDisplay:YES];
+	WCFileBreakpoint *fileBreakpoint = [[note userInfo] objectForKey:WCBreakpointManagerDidChangeBreakpointActiveChangedBreakpointUserInfoKey];
+	
+	if (NSLocationInOrEqualToRange([fileBreakpoint range].location, [[self textView] visibleRange]))
+		[self setNeedsDisplay:YES];
 }
 - (void)_breakpointManagerDidChangeBreakpointsEnabled:(NSNotification *)note {
 	[self setNeedsDisplay:YES];

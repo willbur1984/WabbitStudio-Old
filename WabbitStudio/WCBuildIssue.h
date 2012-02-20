@@ -21,12 +21,17 @@ typedef enum _WCBuildIssueType {
 	NSRange _range;
 	NSString *_message;
 	NSString *_code;
+	struct {
+		unsigned int visible:1;
+		unsigned int RESERVED:31;
+	} _buildIssueFlags;
 }
 @property (readonly,nonatomic) WCBuildIssueType type;
 @property (readwrite,assign,nonatomic) NSRange range;
 @property (readonly,nonatomic) NSString *message;
 @property (readonly,nonatomic) NSString *code;
 @property (readonly,nonatomic) NSImage *icon;
+@property (readwrite,assign,nonatomic,getter = isVisible) BOOL visible;
 
 + (id)buildIssueOfType:(WCBuildIssueType)type range:(NSRange)range message:(NSString *)message code:(NSString *)code;
 - (id)initWithType:(WCBuildIssueType)type range:(NSRange)range message:(NSString *)message code:(NSString *)code;

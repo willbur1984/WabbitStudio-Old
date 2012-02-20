@@ -23,6 +23,9 @@
 
 NSString *const WCBuildControllerDidFinishBuildingNotification = @"WCBuildControllerDidFinishBuildingNotification";
 
+NSString *const WCBuildControllerDidChangeBuildIssueVisibleNotification = @"WCBuildControllerDidChangeBuildIssueVisibleNotification";
+NSString *const WCBuildControllerDidChangeBuildIssueVisibleChangedBuildIssueUserInfoKey = @"WCBuildControllerDidChangeBuildIssueVisibleChangedBuildIssueUserInfoKey";
+
 @interface WCBuildController ()
 @property (readwrite,assign,nonatomic,getter = isBuilding) BOOL building;
 @property (readwrite,assign,nonatomic) BOOL runAfterBuilding;
@@ -30,6 +33,7 @@ NSString *const WCBuildControllerDidFinishBuildingNotification = @"WCBuildContro
 @property (readwrite,retain,nonatomic) NSTask *task;
 @property (readwrite,retain,nonatomic) NSMapTable *filesToBuildIssuesSortedByLocation;
 @property (readwrite,copy,nonatomic) NSArray *filesWithBuildIssuesSortedByName;
+@property (readwrite,copy,nonatomic) NSSet *buildIssues;
 
 - (void)_processOutput;
 @end
@@ -41,10 +45,22 @@ NSString *const WCBuildControllerDidFinishBuildingNotification = @"WCBuildContro
 #endif
 	[_filesToBuildIssuesSortedByLocation release];
 	[_filesWithBuildIssuesSortedByName release];
+	[_buildIssues release];
 	[_task release];
 	[_output release];
 	_projectDocument = nil;
 	[super dealloc];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+	if (context == self) {
+		if ([keyPath isEqualToString:@"visible"]) {
+			[[NSNotificationCenter defaultCenter] postNotificationName:WCBuildControllerDidChangeBuildIssueVisibleNotification object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:object,WCBuildControllerDidChangeBuildIssueVisibleChangedBuildIssueUserInfoKey, nil]];
+		}
+	}
+	else {
+		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+	}
 }
 
 - (id)initWithProjectDocument:(WCProjectDocument *)projectDocument; {
@@ -242,6 +258,11 @@ NSString *const WCBuildControllerDidFinishBuildingNotification = @"WCBuildContro
 	[self build];
 }
 
+- (void)performCleanup; {
+	for (WCBuildIssue *issue in [self buildIssues])
+		[issue removeObserver:self forKeyPath:@"visible" context:self];
+}
+
 @synthesize projectDocument=_projectDocument;
 @dynamic building;
 - (BOOL)isBuilding {
@@ -261,6 +282,7 @@ NSString *const WCBuildControllerDidFinishBuildingNotification = @"WCBuildContro
 @synthesize task=_task;
 @synthesize filesWithBuildIssuesSortedByName=_filesWithBuildIssuesSortedByName;
 @synthesize filesToBuildIssuesSortedByLocation=_filesToBuildIssuesSortedByLocation;
+@synthesize buildIssues=_buildIssues;
 
 - (void)_processOutput; {	
 	NSString *output = [[[self output] copy] autorelease];
@@ -272,6 +294,7 @@ NSString *const WCBuildControllerDidFinishBuildingNotification = @"WCBuildContro
 		NSRegularExpression *messageRegex = [[[NSRegularExpression alloc] initWithPattern:@"\\s*([ .A-Za-z0-9_/]+):([0-9]+):\\s*(error|warning)\\s+([A-Za-z0-9]+):\\s*(.*)" options:0 error:NULL] autorelease];
 		NSMutableArray *files = [NSMutableArray arrayWithCapacity:0];
 		NSMapTable *filesToBuildIssues = [NSMapTable mapTableWithWeakToStrongObjects];
+		NSMutableSet *allBuildIssues = [NSMutableSet setWithCapacity:0];
 		
 		[output enumerateSubstringsInRange:NSMakeRange(0, [output length]) options:NSStringEnumerationByLines usingBlock:^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
 			NSTextCheckingResult *result = [messageRegex firstMatchInString:substring options:0 range:NSMakeRange(0, [substring length])];
@@ -308,11 +331,12 @@ NSString *const WCBuildControllerDidFinishBuildingNotification = @"WCBuildContro
 			}
 			
 			[buildIssues addObject:buildIssue];
+			[allBuildIssues addObject:buildIssue];
 		}];
 		
 		[files sortUsingDescriptors:[NSArray arrayWithObjects:[NSSortDescriptor sortDescriptorWithKey:@"fileName" ascending:YES selector:@selector(localizedStandardCompare:)], nil]];
 		
-		for (NSMutableArray *buildIssues in [filesToBuildIssues objectEnumerator])
+		for (NSMutableArray *buildIssues in [filesToBuildIssues objectEnumerator]) {
 			[buildIssues sortUsingDescriptors:[NSArray arrayWithObjects:[NSSortDescriptor sortDescriptorWithKey:@"range" ascending:YES comparator:^NSComparisonResult(NSValue *obj1, NSValue *obj2) {
 				if ([obj1 rangeValue].location < [obj2 rangeValue].location)
 					return NSOrderedAscending;
@@ -320,15 +344,23 @@ NSString *const WCBuildControllerDidFinishBuildingNotification = @"WCBuildContro
 					return NSOrderedDescending;
 				return NSOrderedSame;
 			}],[NSSortDescriptor sortDescriptorWithKey:@"type" ascending:YES], nil]];
-		
+		}
+			
 		dispatch_async(dispatch_get_main_queue(), ^{
 			for (WCFile *file in [self filesWithBuildIssuesSortedByName]) {
 				[file setErrors:NO];
 				[file setWarnings:NO];
 			}
 			
+			for (WCBuildIssue *issue in [self buildIssues])
+				[issue removeObserver:self forKeyPath:@"visible" context:self];
+			
+			[self setBuildIssues:allBuildIssues];
 			[self setFilesToBuildIssuesSortedByLocation:filesToBuildIssues];
 			[self setFilesWithBuildIssuesSortedByName:files];
+			
+			for (WCBuildIssue *issue in [self buildIssues])
+				[issue addObserver:self forKeyPath:@"visible" options:0 context:self];
 			
 			for (WCFile *file in [self filesWithBuildIssuesSortedByName]) {
 				for (WCBuildIssue *issue in [[self filesToBuildIssuesSortedByLocation] objectForKey:file]) {

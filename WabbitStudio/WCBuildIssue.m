@@ -48,6 +48,7 @@
 	_range = range;
 	_message = [message copy];
 	_code = [code copy];
+	_buildIssueFlags.visible = YES;
 	
 	return self;
 }
@@ -56,7 +57,7 @@
 	static NSGradient *retval;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		retval = [[NSGradient alloc] initWithStartingColor:[[NSColor redColor] colorWithAlphaComponent:0.2] endingColor:[[NSColor redColor] colorWithAlphaComponent:0.45]];
+		retval = [[NSGradient alloc] initWithStartingColor:[[NSColor redColor] colorWithAlphaComponent:0.1] endingColor:[[NSColor redColor] colorWithAlphaComponent:0.35]];
 	});
 	return retval;
 }
@@ -75,7 +76,7 @@
 	static NSGradient *retval;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		retval = [[NSGradient alloc] initWithStartingColor:[[NSColor yellowColor] colorWithAlphaComponent:0.2] endingColor:[[NSColor yellowColor] colorWithAlphaComponent:0.45]];
+		retval = [[NSGradient alloc] initWithStartingColor:[[NSColor yellowColor] colorWithAlphaComponent:0.1] endingColor:[[NSColor yellowColor] colorWithAlphaComponent:0.35]];
 	});
 	return retval;
 }
@@ -105,6 +106,13 @@
 		default:
 			return nil;
 	}
+}
+@dynamic visible;
+- (BOOL)isVisible {
+	return _buildIssueFlags.visible;
+}
+- (void)setVisible:(BOOL)visible {
+	_buildIssueFlags.visible = visible;
 }
 
 @end

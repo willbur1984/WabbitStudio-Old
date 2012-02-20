@@ -42,9 +42,11 @@
 #define DEBUG_LOG_THREAD_LIFETIME		1
 #define DEBUG_DETAILED_MESSAGES			1
 
-#ifndef MAC_OS_X_VERSION_MAX_ALLOWED //<= MAC_OS_X_VERSION_10_4
+/*
+#ifndef MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
 #define NSUInteger		unsigned
 #endif
+ */
 
 // -----------------------------------------------------------------------------
 //  Helper class:

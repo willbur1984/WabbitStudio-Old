@@ -70,6 +70,16 @@
 				<true/>
 			</dict>
 		</dict>
+		<key>toggleBreakpointAtCurrentLine:</key>
+		<dict>
+			<key>keyCode</key>
+			<integer>42</integer>
+			<key>modifierFlags</key>
+			<dict>
+				<key>command</key>
+				<true/>
+			</dict>
+		</dict>
 		<key>toggleBreakpoints:</key>
 		<dict>
 			<key>keyCode</key>

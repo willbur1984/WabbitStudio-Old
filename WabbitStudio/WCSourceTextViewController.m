@@ -260,6 +260,19 @@
 	}
 	return nil;
 }
+- (NSArray *)fileBreakpointsForSourceTextView:(WCSourceTextView *)textView {
+	if ([[self sourceFileDocument] projectDocument]) {
+		WCFile *file = [[[[self sourceFileDocument] projectDocument] sourceFileDocumentsToFiles] objectForKey:[self sourceFileDocument]];
+		
+		return [[[[[self sourceFileDocument] projectDocument] breakpointManager] filesToFileBreakpointsSortedByLocation] objectForKey:file];
+	}
+	return nil;
+}
+- (WCFile *)fileForSourceTextView:(WCSourceTextView *)textView {
+	if ([[self sourceFileDocument] projectDocument])
+		return [[[[self sourceFileDocument] projectDocument] sourceFileDocumentsToFiles] objectForKey:[self sourceFileDocument]];
+	return nil;
+}
 
 - (WCSourceScanner *)sourceScannerForSourceTextView:(WCSourceTextView *)textView {
 	return [self sourceScanner];

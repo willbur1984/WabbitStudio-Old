@@ -554,6 +554,7 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	}
 	
 	[[self breakpointManager] performCleanup];
+	[[self buildController] performCleanup];
 }
 - (void)_buildControllerDidFinishBuilding:(NSNotification *)note {
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:WCBuildControllerDidFinishBuildingNotification object:nil];

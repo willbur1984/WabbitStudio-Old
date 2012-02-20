@@ -132,7 +132,7 @@ static NSString *const WCBreakpointActiveKey = @"active";
 
 + (NSImage *)breakpointIconWithSize:(NSSize)size type:(WCBreakpointType)type active:(BOOL)active enabled:(BOOL)enabled; {
 	static const CGFloat kCornerRadius = 3.0;
-	const CGFloat kTriangleInset = ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey])?6.0:3.0;
+	const CGFloat kTriangleInset = ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey])?8.0:3.0;
 	NSImage *retval = [[[NSImage alloc] initWithSize:size] autorelease];
 	NSBezierPath *path = [NSBezierPath bezierPath];
 	

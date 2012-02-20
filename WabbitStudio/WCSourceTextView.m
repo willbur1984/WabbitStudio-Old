@@ -45,10 +45,12 @@
 #import "RSNavigatorControl.h"
 #import "WCBuildIssue.h"
 #import "WCBuildController.h"
+#import "NSParagraphStyle+RSExtensions.h"
+#import "WCBreakpointManager.h"
+#import "WCFileBreakpoint.h"
 
 @interface WCSourceTextView ()
 @property (readwrite,copy,nonatomic) NSIndexSet *autoHighlightArgumentsRanges;
-@property (readwrite,assign,nonatomic) BOOL drawCurrentLineHighlight;
 
 - (void)_commonInit;
 - (void)_drawCurrentLineHighlightInRect:(NSRect)rect;
@@ -139,6 +141,8 @@
 		[retval addItem:[NSMenuItem separatorItem]];
 		[retval addItemWithTitle:@"" action:@selector(toggleBookmarkAtCurrentLine:) keyEquivalent:@""];
 		[retval addItem:[NSMenuItem separatorItem]];
+		[retval addItemWithTitle:NSLocalizedString(@"Add Breakpoint at Current Line", @"Add Breakpoint at Current Line") action:@selector(toggleBreakpointAtCurrentLine:) keyEquivalent:@""];
+		[retval addItem:[NSMenuItem separatorItem]];
 		[retval addItemWithTitle:NSLocalizedString(@"Reveal in Project Navigator", @"Reveal in Project Navigator") action:@selector(revealInProjectNavigator:) keyEquivalent:@""];
 		[retval addItemWithTitle:NSLocalizedString(@"Show in Finder", @"Show in Finder") action:@selector(showInFinder:) keyEquivalent:@""];
 		[retval addItem:[NSMenuItem separatorItem]];
@@ -183,10 +187,9 @@
 	
 	[self _drawPageGuideInRect:rect];
 	
-	[self _drawVisibleBuildIssuesInRect:rect];
+	[self _drawCurrentLineHighlightInRect:rect];
 	
-	if ([self drawCurrentLineHighlight])
-		[self _drawCurrentLineHighlightInRect:rect];
+	[self _drawVisibleBuildIssuesInRect:rect];
 	
 	if ([[self autoHighlightArgumentsRanges] count]) {
 		[[self autoHighlightArgumentsRanges] enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
@@ -527,6 +530,21 @@
 	else if ([menuItem action] == @selector(findSelectedTextInProject:)) {		
 		if (![self selectedRange].length)
 			return NO;
+	}
+	else if ([menuItem action] == @selector(toggleBreakpointAtCurrentLine:)) {
+		WCProjectDocument *projectDocument = [[self delegate] projectDocumentForSourceTextView:self];
+		
+		if (!projectDocument)
+			return NO;
+		
+		NSRange lineRange = [[self string] lineRangeForRange:[self selectedRange]];
+		
+		WCFileBreakpoint *fileBreakpoint = [[[self delegate] fileBreakpointsForSourceTextView:self] fileBreakpointForRange:NSMakeRange(lineRange.location, 0)];
+		
+		if (fileBreakpoint)
+			[menuItem setTitle:NSLocalizedString(@"Remove Breakpoint at Current Line", @"Remove Breakpoint at Current Line")];
+		else
+			[menuItem setTitle:NSLocalizedString(@"Add Breakpoint at Current Line", @"Add Breakpoint at Current Line")];
 	}
 	return [super validateMenuItem:menuItem];
 }
@@ -958,6 +976,19 @@
 		NSBeep();
 }
 
+- (IBAction)toggleBreakpointAtCurrentLine:(id)sender; {
+	NSRange lineRange = [[self string] lineRangeForRange:[self selectedRange]];
+	WCFileBreakpoint *fileBreakpoint = [[[self delegate] fileBreakpointsForSourceTextView:self] fileBreakpointForRange:NSMakeRange(lineRange.location, 0)];
+	
+	if (fileBreakpoint)
+		[[[[self delegate] projectDocumentForSourceTextView:self] breakpointManager] removeFileBreakpoint:fileBreakpoint];
+	else {
+		fileBreakpoint = [WCFileBreakpoint fileBreakpointWithRange:NSMakeRange(lineRange.location, 0) file:[[self delegate] fileForSourceTextView:self] projectDocument:[[self delegate] projectDocumentForSourceTextView:self]];
+		
+		[[[[self delegate] projectDocumentForSourceTextView:self] breakpointManager] addFileBreakpoint:fileBreakpoint];
+	}
+}
+
 - (IBAction)fold:(id)sender; {
 	WCFold *fold = [[[[self delegate] sourceScannerForSourceTextView:self] folds] deepestFoldForRange:[self selectedRange]];
 	
@@ -1021,25 +1052,20 @@
 	[projectDocument openSeparateEditorForSourceFileDocument:[[self delegate] sourceFileDocumentForSourceTextView:self]];
 }
 #pragma mark Properties
-@dynamic delegate;
-- (id<WCSourceTextViewDelegate>)delegate {
-	return _delegate;
-}
+@synthesize delegate=_delegate;
 - (void)setDelegate:(id<WCSourceTextViewDelegate>)delegate {
-	if (_delegate == delegate)
-		return;
-	
-	if (_delegate) {
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:WCBuildControllerDidFinishBuildingNotification object:nil];
-	}
+	[super setDelegate:delegate];
 	
 	_delegate = delegate;
 	
 	if (_delegate) {
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_buildControllerDidFinishBuilding:) name:WCBuildControllerDidFinishBuildingNotification object:[[_delegate projectDocumentForSourceTextView:self] buildController]];
+		WCProjectDocument *projectDocument = [_delegate projectDocumentForSourceTextView:self];
+		
+		if (projectDocument) {
+			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_buildControllerDidFinishBuilding:) name:WCBuildControllerDidFinishBuildingNotification object:[projectDocument buildController]];
+			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_buildControllerDidChangeBuildIssueVisible:) name:WCBuildControllerDidChangeBuildIssueVisibleNotification object:[projectDocument buildController]];
+		}
 	}
-	
-	[super setDelegate:delegate];
 }
 @dynamic wrapLines;
 - (BOOL)wrapLines {
@@ -1084,13 +1110,6 @@
 	
 	if (needsUpdate)
 		[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
-}
-@dynamic drawCurrentLineHighlight;
-- (BOOL)drawCurrentLineHighlight {
-	return _textViewFlags.drawCurrentLineHighlight;
-}
-- (void)setDrawCurrentLineHighlight:(BOOL)drawCurrentLineHighlight {
-	_textViewFlags.drawCurrentLineHighlight = drawCurrentLineHighlight;
 }
 #pragma mark *** Private Methods ***
 - (void)_commonInit; {
@@ -1588,15 +1607,19 @@
 - (void)_drawVisibleBookmarksInRect:(NSRect)bookmarkRect; {
 	
 }
+
+static const NSSize kIconSize = {.width = 9.0, .height = 9.0};
+static const CGFloat kTriangleHeight = 4.0;
+
 - (void)_drawVisibleBuildIssuesInRect:(NSRect)buildIssueRect {
 	NSArray *buildIssues = [[self delegate] buildIssuesForSourceTextView:self];
 	NSMutableIndexSet *errorIndexes = [NSMutableIndexSet indexSet];
 	NSMutableIndexSet *warningIndexes = [NSMutableIndexSet indexSet];
-	NSRange selectedRange = [[self string] lineRangeForRange:[self selectedRange]];
-	
-	[self setDrawCurrentLineHighlight:YES];
 	
 	for (WCBuildIssue *buildIssue in [buildIssues buildIssuesForRange:[self visibleRange]]) {
+		if (![buildIssue isVisible])
+			continue;
+		
 		switch ([buildIssue type]) {
 			case WCBuildIssueTypeError:
 				if ([errorIndexes containsIndex:[buildIssue range].location])
@@ -1623,15 +1646,35 @@
 					if (!NSIntersectsRect(lineRect, [self bounds]) || ![self needsToDrawRect:lineRect])
 						continue;
 					
-					if (NSLocationInRange([buildIssue range].location, selectedRange)) {
-						[self setDrawCurrentLineHighlight:NO];
-						[[WCBuildIssue errorSelectedFillGradient] drawInRect:lineRect angle:90.0];
-					}
-					else
-						[[WCBuildIssue errorFillGradient] drawInRect:lineRect angle:90.0];
+					[[WCBuildIssue errorSelectedFillGradient] drawInRect:lineRect angle:90.0];
 					[[WCBuildIssue errorFillColor] setFill];
 					NSRectFill(NSMakeRect(NSMinX(lineRect), NSMinY(lineRect), NSWidth(lineRect), 1.0));
-					NSRectFill(NSMakeRect(NSMinX(lineRect), NSMaxY(lineRect)-1, NSWidth(lineRect), 1.0));
+					NSRectFill(NSMakeRect(NSMinX(lineRect), NSMaxY(lineRect)-1.0, NSWidth(lineRect), 1.0));
+					
+					NSAttributedString *string = [[[NSAttributedString alloc] initWithString:[buildIssue message] attributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSMiniControlSize]],NSFontAttributeName,[[self typingAttributes] objectForKey:NSForegroundColorAttributeName],NSForegroundColorAttributeName,[NSParagraphStyle rightAlignedParagraphStyle],NSParagraphStyleAttributeName, nil]] autorelease];
+					NSSize stringSize = [string size];
+					NSRect stringRect = NSCenteredRectWithSize(NSMakeSize(NSWidth(lineRect), stringSize.height), lineRect);
+					NSBezierPath *path = [NSBezierPath bezierPath];
+					
+					[path moveToPoint:NSMakePoint(NSMaxX(lineRect)-stringSize.width-kIconSize.width, NSMinY(lineRect))];
+					[path lineToPoint:NSMakePoint(NSMaxX(lineRect)-stringSize.width-kIconSize.width-kTriangleHeight, NSMinY(lineRect)+ceil(NSHeight(lineRect)/2.0))];
+					[path lineToPoint:NSMakePoint(NSMaxX(lineRect)-stringSize.width-kIconSize.width, NSMaxY(lineRect))];
+					
+					[[WCBuildIssue errorFillColor] setStroke];
+					[path stroke];
+					
+					[path lineToPoint:NSMakePoint(NSMaxX(lineRect), NSMaxY(lineRect))];
+					[path lineToPoint:NSMakePoint(NSMaxX(lineRect), NSMinY(lineRect))];
+					[path lineToPoint:NSMakePoint(NSMaxX(lineRect)-stringSize.width-kIconSize.width, NSMinY(lineRect))];
+					[path closePath];
+					
+					[[WCBuildIssue errorFillGradient] drawInBezierPath:path angle:90.0];
+					
+					[string drawInRect:stringRect];
+					
+					NSImage *image = [NSImage imageNamed:@"Error"];
+					
+					[image drawInRect:NSMakeRect(NSMaxX(lineRect)-stringSize.width-kIconSize.width, NSMinY(lineRect)+floor((NSHeight(lineRect)-kIconSize.height)/2.0), kIconSize.width, kIconSize.height) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
 					
 					[errorIndexes addIndex:[buildIssue range].location];
 				}
@@ -1662,15 +1705,35 @@
 					if (!NSIntersectsRect(lineRect, [self bounds]) || ![self needsToDrawRect:lineRect])
 						continue;
 					
-					if (NSLocationInRange([buildIssue range].location, selectedRange)) {
-						[self setDrawCurrentLineHighlight:NO];
-						[[WCBuildIssue warningSelectedFillGradient] drawInRect:lineRect angle:90.0];
-					}
-					else
-						[[WCBuildIssue warningFillGradient] drawInRect:lineRect angle:90.0];
+					[[WCBuildIssue warningSelectedFillGradient] drawInRect:lineRect angle:90.0];
 					[[WCBuildIssue warningFillColor] setFill];
 					NSRectFill(NSMakeRect(NSMinX(lineRect), NSMinY(lineRect), NSWidth(lineRect), 1.0));
 					NSRectFill(NSMakeRect(NSMinX(lineRect), NSMaxY(lineRect)-1, NSWidth(lineRect), 1.0));
+					
+					NSAttributedString *string = [[[NSAttributedString alloc] initWithString:[buildIssue message] attributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSMiniControlSize]],NSFontAttributeName,[[self typingAttributes] objectForKey:NSForegroundColorAttributeName],NSForegroundColorAttributeName,[NSParagraphStyle rightAlignedParagraphStyle],NSParagraphStyleAttributeName, nil]] autorelease];
+					NSSize stringSize = [string size];
+					NSRect stringRect = NSCenteredRectWithSize(NSMakeSize(NSWidth(lineRect), stringSize.height), lineRect);
+					NSBezierPath *path = [NSBezierPath bezierPath];
+					
+					[path moveToPoint:NSMakePoint(NSMaxX(lineRect)-stringSize.width-kIconSize.width, NSMinY(lineRect))];
+					[path lineToPoint:NSMakePoint(NSMaxX(lineRect)-stringSize.width-kIconSize.width-kTriangleHeight, NSMinY(lineRect)+ceil(NSHeight(lineRect)/2.0))];
+					[path lineToPoint:NSMakePoint(NSMaxX(lineRect)-stringSize.width-kIconSize.width, NSMaxY(lineRect))];
+					
+					[[WCBuildIssue warningFillColor] setStroke];
+					[path stroke];
+					
+					[path lineToPoint:NSMakePoint(NSMaxX(lineRect), NSMaxY(lineRect))];
+					[path lineToPoint:NSMakePoint(NSMaxX(lineRect), NSMinY(lineRect))];
+					[path lineToPoint:NSMakePoint(NSMaxX(lineRect)-stringSize.width-kIconSize.width, NSMinY(lineRect))];
+					[path closePath];
+					
+					[[WCBuildIssue warningFillGradient] drawInBezierPath:path angle:90.0];
+					
+					[string drawInRect:stringRect];
+					
+					NSImage *image = [NSImage imageNamed:@"Warning"];
+					
+					[image drawInRect:NSMakeRect(NSMaxX(lineRect)-stringSize.width-kIconSize.width, NSMinY(lineRect)+floor((NSHeight(lineRect)-kIconSize.height)/2.0), kIconSize.width, kIconSize.height) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
 					
 					[warningIndexes addIndex:[buildIssue range].location];
 				}
@@ -1739,6 +1802,12 @@
 }
 - (void)_buildControllerDidFinishBuilding:(NSNotification *)note {
 	[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
+}
+- (void)_buildControllerDidChangeBuildIssueVisible:(NSNotification *)note {
+	WCBuildIssue *buildIssue = [[note userInfo] objectForKey:WCBuildControllerDidChangeBuildIssueVisibleChangedBuildIssueUserInfoKey];
+	
+	if (NSLocationInOrEqualToRange([buildIssue range].location, [self visibleRange]))
+		[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
 }
 #pragma mark Callbacks
 - (void)_completionTimerCallback:(NSTimer *)timer {

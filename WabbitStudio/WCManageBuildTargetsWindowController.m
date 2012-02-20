@@ -16,13 +16,23 @@
 #import "WCAlertsViewController.h"
 #import "NSAlert-OAExtensions.h"
 
+@interface WCManageBuildTargetsWindowController ()
+- (void)_startObservingBuildTarget:(WCBuildTarget *)buildTarget;
+- (void)_stopObservingBuildTarget:(WCBuildTarget *)buildTarget;
+@end
+
 @implementation WCManageBuildTargetsWindowController
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
 	_projectDocument = nil;
 	[super dealloc];
+}
+
+- (NSString *)windowNibName {
+	return @"WCManageBuildTargetsWindow";
 }
 
 - (void)windowDidLoad {
@@ -35,11 +45,7 @@
 	[[self tableView] setTarget:self];
 	[[self tableView] setDoubleAction:@selector(_tableViewDoubleClick:)];
 }
-
-- (NSString *)windowNibName {
-	return @"WCManageBuildTargetsWindow";
-}
-
+#pragma mark NSMenuValidation
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
 	if ([menuItem action] == @selector(delete:) ||
 		[menuItem action] == @selector(deleteBuildTarget:)) {
@@ -84,11 +90,49 @@
 	}
 	return YES;
 }
+#pragma mark NSKeyValueObserving
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+	if (context == self) {
+		if ([keyPath isEqualToString:@"buildTargets"]) {
+			NSKeyValueChange changeKind = [[change objectForKey:NSKeyValueChangeKindKey] unsignedIntegerValue];
+			
+			if (changeKind == NSKeyValueChangeInsertion) {
+				NSArray *buildTargets = [change objectForKey:NSKeyValueChangeNewKey];
+				NSIndexSet *indexes = [change objectForKey:NSKeyValueChangeIndexesKey];
+				
+				for (WCBuildTarget *buildTarget in [buildTargets objectsAtIndexes:indexes])
+					[self _startObservingBuildTarget:buildTarget];
+			}
+			else if (changeKind == NSKeyValueChangeRemoval) {
+				NSArray *buildTargets = [change objectForKey:NSKeyValueChangeOldKey];
+				NSIndexSet *indexes = [change objectForKey:NSKeyValueChangeIndexesKey];
+				
+				for (WCBuildTarget *buildTarget in [buildTargets objectsAtIndexes:indexes])
+					[self _stopObservingBuildTarget:buildTarget];
+			}
+			
+			[[self projectDocument] updateChangeCount:NSChangeDone];
+		}
+		else if ([keyPath isEqualToString:@"name"]) {
+			[[self projectDocument] updateChangeCount:NSChangeDone];
+		}
+		else if ([keyPath isEqualToString:@"active"]) {
+			[[self projectDocument] updateChangeCount:NSChangeDone];
+		}
+		else if ([keyPath isEqualToString:@"outputType"]) {
+			[[self projectDocument] updateChangeCount:NSChangeDone];
+		}
+	}
+	else {
+		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+	}
+}
 
+#pragma mark NSControlTextEditingDelegate
 - (BOOL)control:(NSControl *)control textShouldEndEditing:(NSText *)fieldEditor {
 	return ([[fieldEditor string] length]);
 }
-
+#pragma mark RSTableViewDelegate
 - (void)handleDeletePressedForTableView:(RSTableView *)tableView {
 	[self deleteBuildTarget:nil];
 }
@@ -98,7 +142,7 @@
 - (void)handleSpacePressedForTableView:(RSTableView *)tableView {
 	[self makeActiveBuildTarget:nil];
 }
-
+#pragma mark *** Public Methods ***
 + (id)manageBuildTargetsWindowControllerWithProjectDocument:(WCProjectDocument *)projectDocument; {
 	return [[[[self class] alloc] initWithProjectDocument:projectDocument] autorelease];
 }
@@ -108,6 +152,11 @@
 	
 	_projectDocument = projectDocument;
 	
+	[projectDocument addObserver:self forKeyPath:@"buildTargets" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:self];
+	
+	for (WCBuildTarget *buildTarget in [projectDocument buildTargets])
+		[self _startObservingBuildTarget:buildTarget];
+	
 	return self;
 }
 
@@ -116,7 +165,7 @@
 	
 	[[NSApplication sharedApplication] beginSheet:[self window] modalForWindow:[[self projectDocument] windowForSheet] modalDelegate:self didEndSelector:@selector(_sheetDidEnd:code:context:) contextInfo:NULL];
 }
-
+#pragma mark IBActions
 - (IBAction)ok:(id)sender; {
 	[[NSApplication sharedApplication] endSheet:[self window] returnCode:NSCancelButton];
 }
@@ -169,8 +218,9 @@ static NSString *const kOutputTypeColumnIdentifier = @"outputType";
 			[[self arrayController] removeObjectsAtArrangedObjectIndexes:[[self arrayController] selectionIndexes]];
 		}];
 	}
-	else
+	else {
 		[[self arrayController] removeObjectsAtArrangedObjectIndexes:[[self arrayController] selectionIndexes]];
+	}
 }
 - (IBAction)duplicateBuildTarget:(id)sender; {
 	WCBuildTarget *buildTarget = [[[self arrayController] selectedObjects] firstObject];
@@ -196,10 +246,16 @@ static NSString *const kOutputTypeColumnIdentifier = @"outputType";
 }
 - (IBAction)makeActiveBuildTarget:(id)sender; {
 	WCBuildTarget *buildTarget = [[self selectedBuildTargets] firstObject];
+	WCBuildTarget *activeBuildTarget = [[self projectDocument] activeBuildTarget];
+	
+	if (buildTarget == activeBuildTarget) {
+		NSBeep();
+		return;
+	}
 	
 	[[self projectDocument] setActiveBuildTarget:buildTarget];
 }
-
+#pragma mark Properties
 @synthesize tableView=_tableView;
 @synthesize arrayController=_arrayController;
 @synthesize searchField=_searchField;
@@ -223,20 +279,18 @@ static NSString *const kOutputTypeColumnIdentifier = @"outputType";
 - (void)setSelectedBuildTargets:(NSArray *)selectedBuildTargets {
 	[[self arrayController] setSelectedObjects:selectedBuildTargets];
 }
-
-- (void)_sheetDidEnd:(NSWindow *)sheet code:(NSInteger)code context:(void *)context {
-	[self autorelease];
-	[sheet orderOut:nil];
-	
-	if (code == NSCancelButton)
-		return;
-	
-	WCBuildTarget *buildTarget = [[[self arrayController] selectedObjects] firstObject];
-	WCEditBuildTargetWindowController *windowController = [WCEditBuildTargetWindowController editBuildTargetWindowControllerWithBuildTarget:buildTarget];
-	
-	[windowController showEditBuildTargetWindow];
+#pragma mark *** Private Methods ***
+- (void)_startObservingBuildTarget:(WCBuildTarget *)buildTarget; {
+	[buildTarget addObserver:self forKeyPath:@"name" options:0 context:self];
+	[buildTarget addObserver:self forKeyPath:@"outputType" options:0 context:self];
+	[buildTarget addObserver:self forKeyPath:@"active" options:0 context:self];
 }
-
+- (void)_stopObservingBuildTarget:(WCBuildTarget *)buildTarget; {
+	[buildTarget removeObserver:self forKeyPath:@"name" context:self];
+	[buildTarget removeObserver:self forKeyPath:@"outputType" context:self];
+	[buildTarget removeObserver:self forKeyPath:@"active" context:self];
+}
+#pragma mark IBActions
 - (IBAction)_tableViewDoubleClick:(id)sender; {
 	NSInteger clickedRow = [[self tableView] clickedRow];
 	NSInteger clickedColumn = [[self tableView] clickedColumn];
@@ -247,6 +301,23 @@ static NSString *const kOutputTypeColumnIdentifier = @"outputType";
 	}
 	
 	[[self tableView] editColumn:clickedColumn row:clickedRow withEvent:nil select:YES];
+}
+
+#pragma mark Callbacks
+- (void)_sheetDidEnd:(NSWindow *)sheet code:(NSInteger)code context:(void *)context {
+	[self autorelease];
+	[sheet orderOut:nil];
+	[[self projectDocument] removeObserver:self forKeyPath:@"buildTargets" context:self];
+	for (WCBuildTarget *buildTarget in [[self projectDocument] buildTargets])
+		[self _stopObservingBuildTarget:buildTarget];
+	
+	if (code == NSCancelButton)
+		return;
+	
+	WCBuildTarget *buildTarget = [[[self arrayController] selectedObjects] firstObject];
+	WCEditBuildTargetWindowController *windowController = [WCEditBuildTargetWindowController editBuildTargetWindowControllerWithBuildTarget:buildTarget];
+	
+	[windowController showEditBuildTargetWindow];
 }
 
 @end

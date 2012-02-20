@@ -47,7 +47,7 @@ NSString *const WCProjectFileUTI = @"org.revsoft.wabbitstudio.project";
 				[type isEqualToString:WCIncludeFileUTI] ||
 				[type isEqualToString:WCActiveServerIncludeFileUTI]) {
 				
-				// this should only be called on the main thread, but our public method explicitStringEncodingForDocumentURL: can be called from background threads while opening multiple documents (even moreso inside of a project)
+				// explicitStringEncodingForDocumentURL: can be called from anywhere, have to lock it up
 				[_documentURLsToStringEncodingsLock lock];
 				[_documentURLsToStringEncodings setObject:stringEncoding forKey:url];
 				[_documentURLsToStringEncodingsLock unlock];

@@ -20,6 +20,9 @@
 
 - (NSArray *)buildIssuesForSourceTextView:(WCSourceTextView *)textView;
 
+- (NSArray *)fileBreakpointsForSourceTextView:(WCSourceTextView *)textView;
+- (WCFile *)fileForSourceTextView:(WCSourceTextView *)textView;
+
 - (WCSourceScanner *)sourceScannerForSourceTextView:(WCSourceTextView *)textView;
 
 - (WCSourceHighlighter *)sourceHighlighterForSourceTextView:(WCSourceTextView *)textView;

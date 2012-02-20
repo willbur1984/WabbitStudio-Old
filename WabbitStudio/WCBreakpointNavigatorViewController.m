@@ -313,7 +313,7 @@ static const CGFloat kMainCellHeight = 20.0;
 		WCSourceTextViewController *stvController = [[self projectDocument] openTabForFile:file tabViewContext:nil];
 		
 		[[stvController textView] setSelectedRange:[result range]];
-		[[stvController textView] centerSelectionInVisibleArea:nil];
+		[[stvController textView] scrollRangeToVisible:[result range]];
 	}
 	
 }
@@ -329,7 +329,7 @@ static const CGFloat kMainCellHeight = 20.0;
 		WCSourceTextViewController *stvController = [[[[[windowController tabViewController] sourceFileDocumentsToSourceTextViewControllers] objectEnumerator] allObjects] lastObject];
 		
 		[[stvController textView] setSelectedRange:[result range]];
-		[[stvController textView] centerSelectionInVisibleArea:nil];
+		[[stvController textView] scrollRangeToVisible:[result range]];
 	}
 }
 #pragma mark Notifications

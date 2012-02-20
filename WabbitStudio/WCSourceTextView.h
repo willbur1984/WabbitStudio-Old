@@ -22,8 +22,7 @@
 	NSIndexSet *_autoHighlightArgumentsRanges;
 	struct {
 		unsigned int editingArgumentsRanges:1;
-		unsigned int drawCurrentLineHighlight:1;
-		unsigned int RESERVED:30;
+		unsigned int RESERVED:31;
 	} _textViewFlags;
 }
 @property (readwrite,assign,nonatomic) IBOutlet id <WCSourceTextViewDelegate> delegate;
@@ -52,6 +51,8 @@
 - (IBAction)addBookmarkAtCurrentLine:(id)sender;
 - (IBAction)removeBookmarkAtCurrentLine:(id)sender;
 - (IBAction)removeAllBookmarks:(id)sender;
+
+- (IBAction)toggleBreakpointAtCurrentLine:(id)sender;
 
 - (IBAction)jumpToNextBookmark:(id)sender;
 - (IBAction)jumpToPreviousBookmark:(id)sender;
