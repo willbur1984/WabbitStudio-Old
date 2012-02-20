@@ -205,6 +205,8 @@
 		075D2F7514F1FFA9007F8951 /* WCRoundedBorderImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 075D2F7414F1FFA8007F8951 /* WCRoundedBorderImageView.m */; };
 		075D2F7814F203F7007F8951 /* WCRoundedBorderTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 075D2F7714F203F7007F8951 /* WCRoundedBorderTextField.m */; };
 		075D2F7A14F20D40007F8951 /* Include Files in Resources */ = {isa = PBXBuildFile; fileRef = 075D2F7914F20D40007F8951 /* Include Files */; };
+		075D2F8114F21BDC007F8951 /* WCOpenPanelAccessoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 075D2F8014F21BDC007F8951 /* WCOpenPanelAccessoryViewController.m */; };
+		075D2F8514F21BED007F8951 /* WCOpenPanelAccessoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 075D2F8314F21BED007F8951 /* WCOpenPanelAccessoryView.xib */; };
 		0765361514CD10DF004D72D1 /* WCProjectNavigatorTreeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0765361414CD10DF004D72D1 /* WCProjectNavigatorTreeController.m */; };
 		0765361B14CD4525004D72D1 /* WCAddToProjectAccessoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0765361914CD4525004D72D1 /* WCAddToProjectAccessoryViewController.m */; };
 		0765361F14CD459E004D72D1 /* WCAddToProjectAccessoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0765361D14CD459E004D72D1 /* WCAddToProjectAccessoryView.xib */; };
@@ -732,6 +734,9 @@
 		075D2F7614F203F7007F8951 /* WCRoundedBorderTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCRoundedBorderTextField.h; sourceTree = "<group>"; };
 		075D2F7714F203F7007F8951 /* WCRoundedBorderTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCRoundedBorderTextField.m; sourceTree = "<group>"; };
 		075D2F7914F20D40007F8951 /* Include Files */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Include Files"; sourceTree = "<group>"; };
+		075D2F7F14F21BDC007F8951 /* WCOpenPanelAccessoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCOpenPanelAccessoryViewController.h; sourceTree = "<group>"; };
+		075D2F8014F21BDC007F8951 /* WCOpenPanelAccessoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCOpenPanelAccessoryViewController.m; sourceTree = "<group>"; };
+		075D2F8414F21BED007F8951 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCOpenPanelAccessoryView.xib; sourceTree = "<group>"; };
 		0765361014CCB91C004D72D1 /* WCTabViewControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTabViewControllerDelegate.h; sourceTree = "<group>"; };
 		0765361314CD10DF004D72D1 /* WCProjectNavigatorTreeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCProjectNavigatorTreeController.h; sourceTree = "<group>"; };
 		0765361414CD10DF004D72D1 /* WCProjectNavigatorTreeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCProjectNavigatorTreeController.m; sourceTree = "<group>"; };
@@ -1080,6 +1085,7 @@
 				070EC26814F079D300982CA8 /* WCBreakpointNavigatorView.xib */,
 				0746EE5C14F1729000354643 /* WCEditBreakpointView.xib */,
 				072427F714F1DAB500DC920B /* WCTemplateCollectionView.xib */,
+				075D2F8314F21BED007F8951 /* WCOpenPanelAccessoryView.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -1396,6 +1402,8 @@
 				072BBC5014AA68B80044ECC2 /* WCApplicationDelegate.m */,
 				07862BA414BA33040057EB89 /* WCDocumentController.h */,
 				07862BA514BA33040057EB89 /* WCDocumentController.m */,
+				075D2F7F14F21BDC007F8951 /* WCOpenPanelAccessoryViewController.h */,
+				075D2F8014F21BDC007F8951 /* WCOpenPanelAccessoryViewController.m */,
 				071985F914C0B3BA00C8E91A /* Project */,
 				071985F814C0B36600C8E91A /* Performers */,
 				072BBC3F14AA66730044ECC2 /* Preferences */,
@@ -2255,6 +2263,7 @@
 				072427EE14F1B9E000DC920B /* Project Templates in Resources */,
 				072427F914F1DAB500DC920B /* WCTemplateCollectionView.xib in Resources */,
 				075D2F7A14F20D40007F8951 /* Include Files in Resources */,
+				075D2F8514F21BED007F8951 /* WCOpenPanelAccessoryView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2500,6 +2509,7 @@
 				075D2F7114F1FB94007F8951 /* WCRoundedBorderImageCell.m in Sources */,
 				075D2F7514F1FFA9007F8951 /* WCRoundedBorderImageView.m in Sources */,
 				075D2F7814F203F7007F8951 /* WCRoundedBorderTextField.m in Sources */,
+				075D2F8114F21BDC007F8951 /* WCOpenPanelAccessoryViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2706,6 +2716,14 @@
 				0746EE5D14F1729000354643 /* en */,
 			);
 			name = WCEditBreakpointView.xib;
+			sourceTree = "<group>";
+		};
+		075D2F8314F21BED007F8951 /* WCOpenPanelAccessoryView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				075D2F8414F21BED007F8951 /* en */,
+			);
+			name = WCOpenPanelAccessoryView.xib;
 			sourceTree = "<group>";
 		};
 		0765361D14CD459E004D72D1 /* WCAddToProjectAccessoryView.xib */ = {

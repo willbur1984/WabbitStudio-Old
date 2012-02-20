@@ -30,6 +30,7 @@
 #import "NSImage+RSExtensions.h"
 #import "RSDefines.h"
 #import "RSFileReference.h"
+#import "EncodingManager.h"
 
 NSString *const WCSourceFileDocumentWindowFrameKey = @"org.revsoft.wabbitstudio.windowframe";
 NSString *const WCSourceFileDocumentSelectedRangeKey = @"org.revsoft.wabbitstudio.selectedrange";
@@ -187,14 +188,24 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 }
 
 - (BOOL)readFromURL:(NSURL *)url ofType:(NSString *)typeName error:(NSError **)outError {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	NSStringEncoding stringEncoding = [[NSUserDefaults standardUserDefaults] unsignedIntegerForKey:WCEditorDefaultTextEncodingKey];
+	NSStringEncoding stringEncoding = [[WCDocumentController sharedDocumentController] explicitStringEncodingForDocumentURL:url];
+	NSString *string;
 	
-	NSString *string = [NSString stringWithContentsOfURL:url encoding:stringEncoding error:outError];
+	// we weren't given an explicit encoding
+	if (stringEncoding == NoStringEncoding)
+	// let NSString determine the encoding if it is able to (usually NSUTF8StringEncoding for code)
+		string = [NSString stringWithContentsOfURL:url usedEncoding:&stringEncoding error:outError];
+	else
+		// otherwise use the encoding the user provided
+		string = [NSString stringWithContentsOfURL:url encoding:stringEncoding error:outError];
 	
 	if (!string) {
-		[pool release];
-		return NO;
+		// try the explicit encoding the user set in Editor preferences
+		stringEncoding = [[NSUserDefaults standardUserDefaults] unsignedIntegerForKey:WCEditorDefaultTextEncodingKey];
+		string = [NSString stringWithContentsOfURL:url encoding:stringEncoding error:outError];
+		
+		if (!string)
+			return NO;
 	}
 	
 	[self setFileEncoding:stringEncoding];
@@ -207,8 +218,6 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 	[self setSourceHighlighter:[[[WCSourceHighlighter alloc] initWithSourceScanner:[self sourceScanner]] autorelease]];
 	[[self sourceHighlighter] setDelegate:self];
 	[[self sourceScanner] scanTokens];
-	
-	[pool release];
 	
 	return YES;
 }

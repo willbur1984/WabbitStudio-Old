@@ -7,11 +7,17 @@
 //
 
 #import "WCDocumentController.h"
+#import "WCOpenPanelAccessoryViewController.h"
+#import "EncodingManager.h"
 
 NSString *const WCAssemblyFileUTI = @"org.revsoft.wabbitcode.assembly";
 NSString *const WCIncludeFileUTI = @"org.revsoft.wabbitcode.include";
 NSString *const WCActiveServerIncludeFileUTI = @"com.panic.coda.active-server-include-file";
 NSString *const WCProjectFileUTI = @"org.revsoft.wabbitstudio.project";
+
+@interface WCDocumentController ()
+@property (readwrite,retain,nonatomic) WCOpenPanelAccessoryViewController *openPanelAccessoryViewController;
+@end
 
 @implementation WCDocumentController
 #pragma mark *** Subclass Overrides ***
@@ -19,13 +25,54 @@ NSString *const WCProjectFileUTI = @"org.revsoft.wabbitstudio.project";
 	if (!(self = [super init]))
 		return nil;
 	
+	_documentURLsToStringEncodings = [[NSMutableDictionary alloc] initWithCapacity:0];
+	_documentURLsToStringEncodingsLock = [[NSLock alloc] init];
+	
 	[self setAutosavingDelay:15.0];
 	
 	return self;
 }
 
-#pragma mark *** Public Methods ***
+- (NSInteger)runModalOpenPanel:(NSOpenPanel *)openPanel forTypes:(NSArray *)types {
+	[openPanel setAccessoryView:[[self openPanelAccessoryViewController] view]];
+	
+	NSInteger result = [super runModalOpenPanel:openPanel forTypes:types];
+	
+	if (result == NSOKButton) {
+		NSNumber *stringEncoding = [[[[self openPanelAccessoryViewController] popUpButton] selectedItem] representedObject];
+		
+		for (NSURL *url in [openPanel URLs]) {
+			NSString *type = [self typeForContentsOfURL:url error:NULL];
+			if ([type isEqualToString:WCAssemblyFileUTI] ||
+				[type isEqualToString:WCIncludeFileUTI] ||
+				[type isEqualToString:WCActiveServerIncludeFileUTI]) {
+				
+				// this should only be called on the main thread, but our public method explicitStringEncodingForDocumentURL: can be called from background threads while opening multiple documents (even moreso inside of a project)
+				[_documentURLsToStringEncodingsLock lock];
+				[_documentURLsToStringEncodings setObject:stringEncoding forKey:url];
+				[_documentURLsToStringEncodingsLock unlock];
+			}
+		}
+	}
+	
+	[self setOpenPanelAccessoryViewController:nil];
+	
+	return result;
+}
 
+#pragma mark *** Public Methods ***
+- (NSStringEncoding)explicitStringEncodingForDocumentURL:(NSURL *)documentURL; {
+	NSNumber *stringEncoding;
+	
+	// have to lock to make sure background document opening works correctly
+	[_documentURLsToStringEncodingsLock lock];
+	stringEncoding = [_documentURLsToStringEncodings objectForKey:documentURL];
+	[_documentURLsToStringEncodingsLock unlock];
+	
+	if (!stringEncoding)
+		return NoStringEncoding;
+	return [stringEncoding unsignedIntegerValue];
+}
 #pragma mark Properties
 @dynamic recentProjectURLs;
 - (NSArray *)recentProjectURLs {
@@ -47,4 +94,11 @@ NSString *const WCProjectFileUTI = @"org.revsoft.wabbitstudio.project";
 	});
 	return retval;
 }
+@synthesize openPanelAccessoryViewController=_openPanelAccessoryViewController;
+- (WCOpenPanelAccessoryViewController *)openPanelAccessoryViewController {
+	if (!_openPanelAccessoryViewController)
+		_openPanelAccessoryViewController = [[WCOpenPanelAccessoryViewController alloc] init];
+	return _openPanelAccessoryViewController;
+}
+
 @end
