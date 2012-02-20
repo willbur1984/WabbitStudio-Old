@@ -17,6 +17,8 @@
 
 @property (readonly,nonatomic) NSURL *userKeyBindingCommandSetsDirectoryURL;
 
+@property (readonly,nonatomic) NSURL *applicationProjectTemplatesDirectoryURL;
+
 + (WCMiscellaneousPerformer *)sharedPerformer;
 
 @end

@@ -79,4 +79,9 @@
 	}
 	return directoryURL;
 }
+
+@dynamic applicationProjectTemplatesDirectoryURL;
+- (NSURL *)applicationProjectTemplatesDirectoryURL {
+	return [[NSBundle mainBundle] URLForResource:@"Project Templates" withExtension:@""];
+}
 @end

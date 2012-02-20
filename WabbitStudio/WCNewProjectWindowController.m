@@ -16,6 +16,10 @@
 #import "WCProjectDocument.h"
 #import "GTMNSData+zlib.h"
 #import "WCInterfacePerformer.h"
+#import "WCProjectTemplate.h"
+#import "WCTemplateCategory.h"
+#import "WCMiscellaneousPerformer.h"
+#import "KBResponderNotifyingWindow.h"
 
 @implementation WCNewProjectWindowController
 #pragma mark *** Subclass Overrides ***
@@ -23,6 +27,7 @@
 	if (!(self = [super initWithWindowNibName:[self windowNibName]]))
 		return nil;
 	
+	_categories = [[NSMutableArray alloc] initWithCapacity:0];
 	
 	return self;
 }
@@ -30,6 +35,73 @@
 - (NSString *)windowNibName {
 	return @"WCNewProjectWindow";
 }
+
+- (void)windowWillLoad {
+	[super windowWillLoad];
+	
+	WCTemplateCategory *applicationCategories = [WCTemplateCategory templateCategoryWithURL:nil header:YES];
+	[applicationCategories setName:NSLocalizedString(@"Built-in Templates", @"Built-in Templates")];
+	[applicationCategories setIcon:[NSImage imageNamed:NSImageNameComputer]];
+	
+	[_categories addObject:applicationCategories];
+	
+	NSDirectoryEnumerator *categoryEnumerator = [[NSFileManager defaultManager] enumeratorAtURL:[[WCMiscellaneousPerformer sharedPerformer] applicationProjectTemplatesDirectoryURL] includingPropertiesForKeys:[NSArray array] options:NSDirectoryEnumerationSkipsHiddenFiles|NSDirectoryEnumerationSkipsSubdirectoryDescendants|NSDirectoryEnumerationSkipsPackageDescendants errorHandler:^BOOL(NSURL *url, NSError *error) {
+		return YES;
+	}];
+	
+	for (NSURL *categoryURL in categoryEnumerator) {
+		WCTemplateCategory *category = [WCTemplateCategory templateCategoryWithURL:categoryURL];
+		
+		[_categories addObject:category];
+		
+		NSDirectoryEnumerator *templateEnumerator = [[NSFileManager defaultManager] enumeratorAtURL:categoryURL includingPropertiesForKeys:[NSArray array] options:NSDirectoryEnumerationSkipsHiddenFiles|NSDirectoryEnumerationSkipsPackageDescendants|NSDirectoryEnumerationSkipsSubdirectoryDescendants errorHandler:^BOOL(NSURL *url, NSError *error) {
+			return YES;
+		}];
+		
+		for (NSURL *templateURL in templateEnumerator) {
+			WCProjectTemplate *template = [WCProjectTemplate projectTemplateWithURL:templateURL];
+			
+			if (template) {
+				[template setIcon:[NSImage imageNamed:@"project"]];
+				[[category mutableChildNodes] addObject:template];
+			}
+		}
+	}
+}
+
+- (void)windowDidLoad {
+	[super windowDidLoad];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_firstResponderDidChange:) name:KBWindowFirstResponderDidChangeNotification object:[self window]];
+}
+#pragma mark NSTableViewDelegate
+- (CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row {
+	WCTemplateCategory *category = [[[self categoriesArrayController] arrangedObjects] objectAtIndex:row];
+	
+	if ([category isHeader])
+		return floor([tableView rowHeight]*2);
+	return [tableView rowHeight];
+}
+- (NSIndexSet *)tableView:(NSTableView *)tableView selectionIndexesForProposedSelection:(NSIndexSet *)proposedSelectionIndexes {
+	if ([proposedSelectionIndexes containsIndex:0]) {
+		if ([[tableView selectedRowIndexes] count])
+			return [tableView selectedRowIndexes];
+		return [NSIndexSet indexSetWithIndex:1];
+	}
+	return proposedSelectionIndexes;
+}
+
+static NSString *const kMainCellIdentifier = @"MainCell";
+static NSString *const kHeaderCellIdentifier = @"HeaderCell";
+
+- (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
+	WCTemplateCategory *category = [[[self categoriesArrayController] arrangedObjects] objectAtIndex:row];
+	
+	if ([category isHeader])
+		return [tableView makeViewWithIdentifier:kHeaderCellIdentifier owner:self];
+	return [tableView makeViewWithIdentifier:kMainCellIdentifier owner:self];
+}
+
 #pragma mark *** Public Methods ***
 + (WCNewProjectWindowController *)sharedWindowController; {
 	static id sharedInstance;
@@ -95,5 +167,36 @@
 }
 - (IBAction)next:(id)sender; {
 	
+}
+#pragma mark Properties
+@synthesize categoriesArrayController=_categoriesArrayController;
+@synthesize collectionView=_collectionView;
+
+@synthesize categories=_categories;
+@dynamic mutableCategories;
+- (NSMutableArray *)mutableCategories {
+	return [self mutableArrayValueForKey:@"categories"];
+}
+- (NSUInteger)countOfCategories {
+	return [_categories count];
+}
+- (NSArray *)categoriesAtIndexes:(NSIndexSet *)indexes {
+	return [_categories objectsAtIndexes:indexes];
+}
+- (void)insertCategories:(NSArray *)array atIndexes:(NSIndexSet *)indexes {
+	[_categories insertObjects:array atIndexes:indexes];
+}
+- (void)removeCategoriesAtIndexes:(NSIndexSet *)indexes {
+	[_categories removeObjectsAtIndexes:indexes];
+}
+- (void)replaceCategoriesAtIndexes:(NSIndexSet *)indexes withCategories:(NSArray *)array {
+	[_categories replaceObjectsAtIndexes:indexes withObjects:array];
+}
+
+#pragma mark *** Private Methods ***
+
+#pragma mark Notifications
+- (void)_firstResponderDidChange:(NSNotification *)note {
+	[[self collectionView] setNeedsDisplay:YES];
 }
 @end

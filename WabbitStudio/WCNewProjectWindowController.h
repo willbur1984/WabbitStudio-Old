@@ -8,7 +8,15 @@
 
 #import <AppKit/NSWindowController.h>
 
-@interface WCNewProjectWindowController : NSWindowController
+@interface WCNewProjectWindowController : NSWindowController <NSTableViewDelegate> {
+	NSMutableArray *_categories;
+}
+@property (readwrite,assign,nonatomic) IBOutlet NSArrayController *categoriesArrayController;
+@property (readwrite,assign,nonatomic) IBOutlet NSCollectionView *collectionView;
+
+@property (readonly,nonatomic) NSArray *categories;
+@property (readonly,nonatomic) NSMutableArray *mutableCategories;
+
 + (WCNewProjectWindowController *)sharedWindowController;
 
 - (IBAction)cancel:(id)sender;
