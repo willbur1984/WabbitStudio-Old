@@ -6,11 +6,8 @@
 //  Copyright (c) 2012 Revolution Software. All rights reserved.
 //
 
-#import <AppKit/NSTextFieldCell.h>
+#import "RSVerticallyCenteredTextFieldCell.h"
 
-@class RSVerticallyCenteredTextFieldCell;
+@interface WCRoundedBorderTextFieldCell : RSVerticallyCenteredTextFieldCell
 
-@interface WCRoundedBorderTextFieldCell : NSTextFieldCell {
-	RSVerticallyCenteredTextFieldCell *_titleCell;
-}
 @end

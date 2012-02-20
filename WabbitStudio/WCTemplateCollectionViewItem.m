@@ -18,4 +18,11 @@
 	return @"WCTemplateCollectionView";
 }
 
+- (void)setSelected:(BOOL)selected {
+	[super setSelected:selected];
+	
+	[[self imageView] setNeedsDisplay:YES];
+	[[self textField] setNeedsDisplay:YES];
+}
+
 @end

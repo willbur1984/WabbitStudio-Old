@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>outputType</key>
-	<integer>0</integer>
+	<integer>1</integer>
 	<key>summary</key>
 	<string>Standard binary output, and some other magical things.</string>
 </dict>

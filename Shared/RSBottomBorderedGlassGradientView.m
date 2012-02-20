@@ -11,7 +11,7 @@
 @implementation RSBottomBorderedGlassGradientView
 #pragma mark *** Subclass Overrides ***
 - (BOOL)shouldDrawLeftEdge {
-	return YES;
+	return NO;
 }
 - (BOOL)shouldDrawRightEdge {
 	return NO;
@@ -20,6 +20,6 @@
 	return YES;
 }
 - (BOOL)shouldDrawTopEdge {
-	return NO;
+	return YES;
 }
 @end

@@ -12,6 +12,9 @@
 NSString *const WCTemplateInfoPlistName = @"templateInfo";
 NSString *const WCTemplateInfoPlistExtension = @"plist";
 
+NSString *const WCTemplateInfoSummaryKey = @"summary";
+NSString *const WCTemplateInfoMainFileNameKey = @"mainFileName";
+
 @implementation WCTemplate
 - (void)dealloc {
 	[_name release];
@@ -54,5 +57,13 @@ NSString *const WCTemplateInfoPlistExtension = @"plist";
 @synthesize info=_info;
 @synthesize icon=_icon;
 @synthesize name=_name;
+@dynamic summary;
+- (NSString *)summary {
+	return [[self info] objectForKey:WCTemplateInfoSummaryKey];
+}
+@dynamic mainFileName;
+- (NSString *)mainFileName {
+	return [[self info] objectForKey:WCTemplateInfoMainFileNameKey];
+}
 
 @end

@@ -11,6 +11,9 @@
 extern NSString *const WCTemplateInfoPlistName;
 extern NSString *const WCTemplateInfoPlistExtension;
 
+extern NSString *const WCTemplateInfoSummaryKey;
+extern NSString *const WCTemplateInfoMainFileNameKey;
+
 @interface WCTemplate : RSTreeNode {
 	NSURL *_URL;
 	NSDictionary *_info;
@@ -21,6 +24,8 @@ extern NSString *const WCTemplateInfoPlistExtension;
 @property (readonly,nonatomic) NSDictionary *info;
 @property (readwrite,retain,nonatomic) NSImage *icon;
 @property (readonly,nonatomic) NSString *name;
+@property (readonly,nonatomic) NSString *summary;
+@property (readonly,nonatomic) NSString *mainFileName;
 
 + (id)templateWithURL:(NSURL *)url error:(NSError **)outError;
 - (id)initWithURL:(NSURL *)url error:(NSError **)outError;

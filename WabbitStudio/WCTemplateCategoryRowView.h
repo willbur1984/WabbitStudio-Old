@@ -9,5 +9,5 @@
 #import <AppKit/NSTableRowView.h>
 
 @interface WCTemplateCategoryRowView : NSTableRowView
-
+@property (readwrite,assign,nonatomic) IBOutlet NSTableView *tableView;
 @end

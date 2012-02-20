@@ -72,6 +72,8 @@
 - (void)windowDidLoad {
 	[super windowDidLoad];
 	
+	[[self categoriesArrayController] setSelectionIndexes:[NSIndexSet indexSetWithIndex:1]];
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_firstResponderDidChange:) name:KBWindowFirstResponderDidChangeNotification object:[self window]];
 }
 #pragma mark NSTableViewDelegate
@@ -100,6 +102,27 @@ static NSString *const kHeaderCellIdentifier = @"HeaderCell";
 	if ([category isHeader])
 		return [tableView makeViewWithIdentifier:kHeaderCellIdentifier owner:self];
 	return [tableView makeViewWithIdentifier:kMainCellIdentifier owner:self];
+}
+
+- (void)tableView:(NSTableView *)tableView didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row {
+	if ([rowView respondsToSelector:@selector(setTableView:)])
+		[(id)rowView setTableView:tableView];
+}
+- (void)tableView:(NSTableView *)tableView didRemoveRowView:(NSTableRowView *)rowView forRow:(NSInteger)row {
+	if ([rowView respondsToSelector:@selector(setTableView:)])
+		[(id)rowView setTableView:nil];
+}
+#pragma mark NSSplitViewDelegate
+- (NSRect)splitView:(NSSplitView *)splitView additionalEffectiveRectOfDividerAtIndex:(NSInteger)dividerIndex {
+	return [splitView convertRect:[[self splitterHandleImageView] bounds] fromView:[self splitterHandleImageView]];
+}
+static const CGFloat kLeftSubviewMinimumWidth = 150.0;
+static const CGFloat kRightSubviewMinimumWidth = 350.0;
+- (CGFloat)splitView:(NSSplitView *)splitView constrainMaxCoordinate:(CGFloat)proposedMaximumPosition ofSubviewAt:(NSInteger)dividerIndex {
+	return proposedMaximumPosition-kRightSubviewMinimumWidth;
+}
+- (CGFloat)splitView:(NSSplitView *)splitView constrainMinCoordinate:(CGFloat)proposedMinimumPosition ofSubviewAt:(NSInteger)dividerIndex {
+	return proposedMinimumPosition+kLeftSubviewMinimumWidth;
 }
 
 #pragma mark *** Public Methods ***
@@ -171,6 +194,7 @@ static NSString *const kHeaderCellIdentifier = @"HeaderCell";
 #pragma mark Properties
 @synthesize categoriesArrayController=_categoriesArrayController;
 @synthesize collectionView=_collectionView;
+@synthesize splitterHandleImageView=_splitterHandleImageView;
 
 @synthesize categories=_categories;
 @dynamic mutableCategories;

@@ -9,5 +9,7 @@
 #import "WCTemplate.h"
 
 @interface WCProjectTemplate : WCTemplate
+@property (readonly,nonatomic) NSArray *includeFiles;
+
 + (id)projectTemplateWithURL:(NSURL *)url;
 @end

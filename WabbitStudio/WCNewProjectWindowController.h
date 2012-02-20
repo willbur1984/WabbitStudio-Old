@@ -8,11 +8,12 @@
 
 #import <AppKit/NSWindowController.h>
 
-@interface WCNewProjectWindowController : NSWindowController <NSTableViewDelegate> {
+@interface WCNewProjectWindowController : NSWindowController <NSTableViewDelegate,NSSplitViewDelegate> {
 	NSMutableArray *_categories;
 }
 @property (readwrite,assign,nonatomic) IBOutlet NSArrayController *categoriesArrayController;
 @property (readwrite,assign,nonatomic) IBOutlet NSCollectionView *collectionView;
+@property (readwrite,assign,nonatomic) IBOutlet NSImageView *splitterHandleImageView;
 
 @property (readonly,nonatomic) NSArray *categories;
 @property (readonly,nonatomic) NSMutableArray *mutableCategories;

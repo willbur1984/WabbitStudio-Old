@@ -25,9 +25,13 @@
 		
 		[gradient drawInRect:dirtyRect angle:90.0];
 		[[NSColor gridColor] setFill];
-		NSRectFill(NSMakeRect(NSMinX(dirtyRect), NSMinY(dirtyRect), NSWidth(dirtyRect), 1.0));
+		
+		if ([[(NSArrayController *)[[self tableView] dataSource] arrangedObjects] indexOfObjectIdenticalTo:category] != 0)
+			NSRectFill(NSMakeRect(NSMinX(dirtyRect), NSMinY(dirtyRect), NSWidth(dirtyRect), 1.0));
 		NSRectFill(NSMakeRect(NSMinX(dirtyRect), NSMaxY(dirtyRect)-1.0, NSWidth(dirtyRect), 1.0));
 	}
 }
+
+@synthesize tableView=_tableView;
 
 @end

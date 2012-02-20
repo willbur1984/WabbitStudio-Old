@@ -124,7 +124,6 @@
 		072427F114F1CC5100DC920B /* WCTemplateCategoryRowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 072427F014F1CC5100DC920B /* WCTemplateCategoryRowView.m */; };
 		072427F614F1DA6E00DC920B /* WCTemplateCollectionViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 072427F514F1DA6D00DC920B /* WCTemplateCollectionViewItem.m */; };
 		072427F914F1DAB500DC920B /* WCTemplateCollectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 072427F714F1DAB500DC920B /* WCTemplateCollectionView.xib */; };
-		072427FC14F1DED200DC920B /* WCBoolToColorTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 072427FB14F1DED100DC920B /* WCBoolToColorTransformer.m */; };
 		072427FF14F1DFD700DC920B /* WCRoundedBorderTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 072427FE14F1DFD700DC920B /* WCRoundedBorderTextFieldCell.m */; };
 		0724280214F1E7C300DC920B /* RSCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0724280114F1E7C300DC920B /* RSCollectionView.m */; };
 		0725432C14A70B3B00C961B7 /* RegisterCompletions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0725432B14A70B3B00C961B7 /* RegisterCompletions.plist */; };
@@ -202,6 +201,10 @@
 		0746EE5A14F1726B00354643 /* WCEditBreakpointViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0746EE5914F1726B00354643 /* WCEditBreakpointViewController.m */; };
 		0746EE5E14F1729000354643 /* WCEditBreakpointView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0746EE5C14F1729000354643 /* WCEditBreakpointView.xib */; };
 		0746EE6214F17C1200354643 /* RSHexadecimalFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0746EE6114F177E800354643 /* RSHexadecimalFormatter.m */; };
+		075D2F7114F1FB94007F8951 /* WCRoundedBorderImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 075D2F7014F1FB93007F8951 /* WCRoundedBorderImageCell.m */; };
+		075D2F7514F1FFA9007F8951 /* WCRoundedBorderImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 075D2F7414F1FFA8007F8951 /* WCRoundedBorderImageView.m */; };
+		075D2F7814F203F7007F8951 /* WCRoundedBorderTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 075D2F7714F203F7007F8951 /* WCRoundedBorderTextField.m */; };
+		075D2F7A14F20D40007F8951 /* Include Files in Resources */ = {isa = PBXBuildFile; fileRef = 075D2F7914F20D40007F8951 /* Include Files */; };
 		0765361514CD10DF004D72D1 /* WCProjectNavigatorTreeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0765361414CD10DF004D72D1 /* WCProjectNavigatorTreeController.m */; };
 		0765361B14CD4525004D72D1 /* WCAddToProjectAccessoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0765361914CD4525004D72D1 /* WCAddToProjectAccessoryViewController.m */; };
 		0765361F14CD459E004D72D1 /* WCAddToProjectAccessoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0765361D14CD459E004D72D1 /* WCAddToProjectAccessoryView.xib */; };
@@ -584,8 +587,6 @@
 		072427F414F1DA6D00DC920B /* WCTemplateCollectionViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTemplateCollectionViewItem.h; sourceTree = "<group>"; };
 		072427F514F1DA6D00DC920B /* WCTemplateCollectionViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCTemplateCollectionViewItem.m; sourceTree = "<group>"; };
 		072427F814F1DAB500DC920B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCTemplateCollectionView.xib; sourceTree = "<group>"; };
-		072427FA14F1DED100DC920B /* WCBoolToColorTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCBoolToColorTransformer.h; sourceTree = "<group>"; };
-		072427FB14F1DED100DC920B /* WCBoolToColorTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCBoolToColorTransformer.m; sourceTree = "<group>"; };
 		072427FD14F1DFD600DC920B /* WCRoundedBorderTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCRoundedBorderTextFieldCell.h; sourceTree = "<group>"; };
 		072427FE14F1DFD700DC920B /* WCRoundedBorderTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCRoundedBorderTextFieldCell.m; sourceTree = "<group>"; };
 		0724280014F1E7C300DC920B /* RSCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSCollectionView.h; sourceTree = "<group>"; };
@@ -724,6 +725,13 @@
 		0746EE5D14F1729000354643 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCEditBreakpointView.xib; sourceTree = "<group>"; };
 		0746EE6014F177E800354643 /* RSHexadecimalFormatter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSHexadecimalFormatter.h; sourceTree = "<group>"; };
 		0746EE6114F177E800354643 /* RSHexadecimalFormatter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RSHexadecimalFormatter.m; sourceTree = "<group>"; };
+		075D2F6F14F1FB93007F8951 /* WCRoundedBorderImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCRoundedBorderImageCell.h; sourceTree = "<group>"; };
+		075D2F7014F1FB93007F8951 /* WCRoundedBorderImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCRoundedBorderImageCell.m; sourceTree = "<group>"; };
+		075D2F7314F1FFA8007F8951 /* WCRoundedBorderImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCRoundedBorderImageView.h; sourceTree = "<group>"; };
+		075D2F7414F1FFA8007F8951 /* WCRoundedBorderImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCRoundedBorderImageView.m; sourceTree = "<group>"; };
+		075D2F7614F203F7007F8951 /* WCRoundedBorderTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCRoundedBorderTextField.h; sourceTree = "<group>"; };
+		075D2F7714F203F7007F8951 /* WCRoundedBorderTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCRoundedBorderTextField.m; sourceTree = "<group>"; };
+		075D2F7914F20D40007F8951 /* Include Files */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Include Files"; sourceTree = "<group>"; };
 		0765361014CCB91C004D72D1 /* WCTabViewControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTabViewControllerDelegate.h; sourceTree = "<group>"; };
 		0765361314CD10DF004D72D1 /* WCProjectNavigatorTreeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCProjectNavigatorTreeController.h; sourceTree = "<group>"; };
 		0765361414CD10DF004D72D1 /* WCProjectNavigatorTreeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCProjectNavigatorTreeController.m; sourceTree = "<group>"; };
@@ -1404,6 +1412,7 @@
 		071ECCC914A4233C002409F8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				075D2F7914F20D40007F8951 /* Include Files */,
 				072427ED14F1B9E000DC920B /* Project Templates */,
 				077D3EE414EECD6C000735EA /* BuildTargetOutputTypesToFileExtensions.plist */,
 				0711BB3E14ED850400EC9841 /* Error.pdf */,
@@ -1465,10 +1474,14 @@
 				072427F014F1CC5100DC920B /* WCTemplateCategoryRowView.m */,
 				072427F414F1DA6D00DC920B /* WCTemplateCollectionViewItem.h */,
 				072427F514F1DA6D00DC920B /* WCTemplateCollectionViewItem.m */,
-				072427FA14F1DED100DC920B /* WCBoolToColorTransformer.h */,
-				072427FB14F1DED100DC920B /* WCBoolToColorTransformer.m */,
+				075D2F7614F203F7007F8951 /* WCRoundedBorderTextField.h */,
+				075D2F7714F203F7007F8951 /* WCRoundedBorderTextField.m */,
 				072427FD14F1DFD600DC920B /* WCRoundedBorderTextFieldCell.h */,
 				072427FE14F1DFD700DC920B /* WCRoundedBorderTextFieldCell.m */,
+				075D2F7314F1FFA8007F8951 /* WCRoundedBorderImageView.h */,
+				075D2F7414F1FFA8007F8951 /* WCRoundedBorderImageView.m */,
+				075D2F6F14F1FB93007F8951 /* WCRoundedBorderImageCell.h */,
+				075D2F7014F1FB93007F8951 /* WCRoundedBorderImageCell.m */,
 				0778853214C386CD00605F5D /* New Project */,
 			);
 			name = Templates;
@@ -2241,6 +2254,7 @@
 				0746EE5E14F1729000354643 /* WCEditBreakpointView.xib in Resources */,
 				072427EE14F1B9E000DC920B /* Project Templates in Resources */,
 				072427F914F1DAB500DC920B /* WCTemplateCollectionView.xib in Resources */,
+				075D2F7A14F20D40007F8951 /* Include Files in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2481,9 +2495,11 @@
 				072427EC14F1AF9300DC920B /* WCTemplateCategory.m in Sources */,
 				072427F114F1CC5100DC920B /* WCTemplateCategoryRowView.m in Sources */,
 				072427F614F1DA6E00DC920B /* WCTemplateCollectionViewItem.m in Sources */,
-				072427FC14F1DED200DC920B /* WCBoolToColorTransformer.m in Sources */,
 				072427FF14F1DFD700DC920B /* WCRoundedBorderTextFieldCell.m in Sources */,
 				0724280214F1E7C300DC920B /* RSCollectionView.m in Sources */,
+				075D2F7114F1FB94007F8951 /* WCRoundedBorderImageCell.m in Sources */,
+				075D2F7514F1FFA9007F8951 /* WCRoundedBorderImageView.m in Sources */,
+				075D2F7814F203F7007F8951 /* WCRoundedBorderTextField.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
