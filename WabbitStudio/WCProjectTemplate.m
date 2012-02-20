@@ -8,8 +8,16 @@
 
 #import "WCProjectTemplate.h"
 
+NSString *const WCProjectTemplateInfoIncludeFilesKey = @"includeFiles";
+
 @implementation WCProjectTemplate
 + (id)projectTemplateWithURL:(NSURL *)url; {
 	return [self templateWithURL:url error:NULL];
 }
+
+@dynamic includeFiles;
+- (NSArray *)includeFiles {
+	return [[self info] objectForKey:WCProjectTemplateInfoIncludeFilesKey];
+}
+
 @end
