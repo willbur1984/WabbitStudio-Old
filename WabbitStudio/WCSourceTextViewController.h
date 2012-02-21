@@ -13,7 +13,7 @@
 
 @class WCSourceTextView,WCSourceTextStorage,WCSourceHighlighter,WCJumpBarViewController,WCSourceFileDocument,WCStandardSourceTextViewController;
 
-@interface WCSourceTextViewController : JAViewController <WCSourceTextViewDelegate,WCSourceRulerViewDelegate,WCSourceScrollViewDelegate> {
+@interface WCSourceTextViewController : JAViewController <WCSourceTextViewDelegate,WCSourceRulerViewDelegate,WCSourceScrollViewDelegate,NSLayoutManagerDelegate> {
 	__weak WCStandardSourceTextViewController *_standardSourceTextViewController;
 	__weak WCSourceFileDocument *_sourceFileDocument;
 	WCJumpBarViewController *_jumpBarViewController;

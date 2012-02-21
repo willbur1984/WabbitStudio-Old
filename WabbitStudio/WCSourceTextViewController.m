@@ -70,6 +70,8 @@
 	
 	WCSourceLayoutManager *layoutManager = [[[WCSourceLayoutManager alloc] init] autorelease];
 	
+	[layoutManager setDelegate:self];
+	
 	[[self textStorage] addLayoutManager:layoutManager];
 	
 	NSSize contentSize = [[self scrollView] contentSize];
@@ -139,7 +141,10 @@
 	}
 	return [[self standardSourceTextViewController] validateMenuItem:menuItem];
 }
+#pragma mark NSLayoutManagerDelegate
+- (void)layoutManagerDidInvalidateLayout:(NSLayoutManager *)sender {
 
+}
 #pragma mark NSTextViewDelegate
 - (BOOL)textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector {
 	if (commandSelector == @selector(insertNewline:)) {

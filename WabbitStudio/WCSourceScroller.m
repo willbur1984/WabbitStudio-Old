@@ -21,30 +21,42 @@
 	[super dealloc];
 }
 
+- (void)setNeedsDisplayInRect:(NSRect)invalidRect {
+	if ([[self buildIssues] count] || [[self bookmarks] count])
+		[super setNeedsDisplayInRect:[self bounds]];
+	else
+		[super setNeedsDisplayInRect:invalidRect];
+}
+
 - (void)drawKnobSlotInRect:(NSRect)slotRect highlight:(BOOL)flag {
 	[super drawKnobSlotInRect:slotRect highlight:flag];
 	
 	if ([[self buildIssues] count] || [[self bookmarks] count]) {
 		NSTextView *textView = (NSTextView *)[(NSScrollView *)[self superview] documentView];
 		NSLayoutManager *layoutManager = [textView layoutManager];
-		CGFloat yposScale = NSHeight([textView frame])/NSHeight(slotRect);
+		CGFloat yposScale = NSHeight([textView frame])/NSHeight([self bounds]);
 		
 		for (WCBuildIssue *buildIssue in [self buildIssues]) {
 			NSRect lineRect = [layoutManager lineFragmentRectForGlyphAtIndex:[layoutManager glyphIndexForCharacterAtIndex:[buildIssue range].location] effectiveRange:NULL];
+			
+			lineRect = NSInsetRect(NSMakeRect(NSMinX(slotRect), NSMinY(slotRect)+floor(NSMinY(lineRect)/yposScale), NSWidth(slotRect), 1.0), 1.0, 0.0);
+			
+			if (!NSIntersectsRect(lineRect, slotRect) || ![self needsToDrawRect:lineRect])
+				continue;
 			
 			if ([buildIssue type] == WCBuildIssueTypeError)
 				[[NSColor redColor] setFill];
 			else if ([buildIssue type] == WCBuildIssueTypeWarning)
 				[[NSColor colorWithCalibratedRed:246.0/255.0 green:176.0/255.0 blue:30.0/255.0 alpha:1.0] setFill];
 
-			NSRectFill(NSInsetRect(NSMakeRect(NSMinX(slotRect), /*NSMinY(slotRect)+*/floor(NSMinY(lineRect)/yposScale), NSWidth(slotRect), 1.0), 1.0, 0.0));
+			NSRectFill(lineRect);
 		}
 		
 		for (RSBookmark *bookmark in [self bookmarks]) {
 			NSRect lineRect = [layoutManager lineFragmentRectForGlyphAtIndex:[layoutManager glyphIndexForCharacterAtIndex:[bookmark range].location] effectiveRange:NULL];
 			
 			[[NSColor blueColor] setFill];
-			NSRectFill(NSInsetRect(NSMakeRect(NSMinX(slotRect), /*NSMinY(slotRect)+*/floor(NSMinY(lineRect)/yposScale), NSWidth(slotRect), 1.0), 1.0, 0.0));
+			NSRectFill(NSInsetRect(NSMakeRect(NSMinX(slotRect), NSMinY(slotRect)+floor(NSMinY(lineRect)/yposScale), NSWidth(slotRect), 1.0), 1.0, 0.0));
 		}
 	}
 }
