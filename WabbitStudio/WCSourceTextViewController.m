@@ -446,11 +446,15 @@
 #pragma mark Notifications
 
 static const NSTimeInterval kScrollingHighlightTimerDelay = 0.1;
-- (void)_viewBoundsDidChange:(NSNotification *)note {	
+- (void)_viewBoundsDidChange:(NSNotification *)note {
+	[[self sourceHighlighter] highlightSymbolsInRange:[[self textView] visibleRange]];
+	
+	/*
 	if (_scrollingHighlightTimer)
 		[_scrollingHighlightTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:kScrollingHighlightTimerDelay]];
 	else
 		_scrollingHighlightTimer = [NSTimer scheduledTimerWithTimeInterval:kScrollingHighlightTimerDelay target:self selector:@selector(_scrollingHighlightTimerCallback:) userInfo:nil repeats:NO];
+	 */
 }
 #pragma mark Callbacks
 - (void)_scrollingHighlightTimerCallback:(NSTimer *)timer {

@@ -207,6 +207,13 @@
 		075D2F7A14F20D40007F8951 /* Include Files in Resources */ = {isa = PBXBuildFile; fileRef = 075D2F7914F20D40007F8951 /* Include Files */; };
 		075D2F8114F21BDC007F8951 /* WCOpenPanelAccessoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 075D2F8014F21BDC007F8951 /* WCOpenPanelAccessoryViewController.m */; };
 		075D2F8514F21BED007F8951 /* WCOpenPanelAccessoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 075D2F8314F21BED007F8951 /* WCOpenPanelAccessoryView.xib */; };
+		075D2FBA14F36779007F8951 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 071ECCC214A4233C002409F8 /* Cocoa.framework */; };
+		075D2FC014F36779007F8951 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 075D2FBE14F36779007F8951 /* InfoPlist.strings */; };
+		075D2FC214F36779007F8951 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 075D2FC114F36779007F8951 /* main.m */; };
+		075D2FC614F36779007F8951 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 075D2FC414F36779007F8951 /* Credits.rtf */; };
+		075D2FC914F36779007F8951 /* WEDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 075D2FC814F36779007F8951 /* WEDocument.m */; };
+		075D2FCC14F36779007F8951 /* WEDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 075D2FCA14F36779007F8951 /* WEDocument.xib */; };
+		075D2FCF14F3677A007F8951 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 075D2FCD14F3677A007F8951 /* MainMenu.xib */; };
 		0765361514CD10DF004D72D1 /* WCProjectNavigatorTreeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0765361414CD10DF004D72D1 /* WCProjectNavigatorTreeController.m */; };
 		0765361B14CD4525004D72D1 /* WCAddToProjectAccessoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0765361914CD4525004D72D1 /* WCAddToProjectAccessoryViewController.m */; };
 		0765361F14CD459E004D72D1 /* WCAddToProjectAccessoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0765361D14CD459E004D72D1 /* WCAddToProjectAccessoryView.xib */; };
@@ -737,6 +744,16 @@
 		075D2F7F14F21BDC007F8951 /* WCOpenPanelAccessoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCOpenPanelAccessoryViewController.h; sourceTree = "<group>"; };
 		075D2F8014F21BDC007F8951 /* WCOpenPanelAccessoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCOpenPanelAccessoryViewController.m; sourceTree = "<group>"; };
 		075D2F8414F21BED007F8951 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCOpenPanelAccessoryView.xib; sourceTree = "<group>"; };
+		075D2FB814F36779007F8951 /* WabbitEmu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WabbitEmu.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		075D2FBD14F36779007F8951 /* WabbitEmu-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "WabbitEmu-Info.plist"; sourceTree = "<group>"; };
+		075D2FBF14F36779007F8951 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		075D2FC114F36779007F8951 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		075D2FC314F36779007F8951 /* WabbitEmu-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WabbitEmu-Prefix.pch"; sourceTree = "<group>"; };
+		075D2FC514F36779007F8951 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		075D2FC714F36779007F8951 /* WEDocument.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WEDocument.h; sourceTree = "<group>"; };
+		075D2FC814F36779007F8951 /* WEDocument.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WEDocument.m; sourceTree = "<group>"; };
+		075D2FCB14F36779007F8951 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/WEDocument.xib; sourceTree = "<group>"; };
+		075D2FCE14F3677A007F8951 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		0765361014CCB91C004D72D1 /* WCTabViewControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTabViewControllerDelegate.h; sourceTree = "<group>"; };
 		0765361314CD10DF004D72D1 /* WCProjectNavigatorTreeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCProjectNavigatorTreeController.h; sourceTree = "<group>"; };
 		0765361414CD10DF004D72D1 /* WCProjectNavigatorTreeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCProjectNavigatorTreeController.m; sourceTree = "<group>"; };
@@ -991,6 +1008,14 @@
 				07EB8E2214B63C4F00F8A8C6 /* BGHUDAppKit.framework in Frameworks */,
 				077884EC14C0CE6A00605F5D /* Sparkle.framework in Frameworks */,
 				0797326514C52EBE00A71F54 /* PSMTabBarControl.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		075D2FB514F36779007F8951 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				075D2FBA14F36779007F8951 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1355,6 +1380,7 @@
 			children = (
 				0725433C14A7998200C961B7 /* Shared */,
 				071ECCC814A4233C002409F8 /* WabbitStudio */,
+				075D2FBB14F36779007F8951 /* WabbitEmu */,
 				071ECCC114A4233C002409F8 /* Frameworks */,
 				071ECCBF14A4233C002409F8 /* Products */,
 			);
@@ -1364,6 +1390,7 @@
 			isa = PBXGroup;
 			children = (
 				071ECCBE14A4233C002409F8 /* WabbitStudio.app */,
+				075D2FB814F36779007F8951 /* WabbitEmu.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1707,6 +1734,30 @@
 				075D2F8014F21BDC007F8951 /* WCOpenPanelAccessoryViewController.m */,
 			);
 			name = "Document Controller";
+			sourceTree = "<group>";
+		};
+		075D2FBB14F36779007F8951 /* WabbitEmu */ = {
+			isa = PBXGroup;
+			children = (
+				075D2FC714F36779007F8951 /* WEDocument.h */,
+				075D2FC814F36779007F8951 /* WEDocument.m */,
+				075D2FCA14F36779007F8951 /* WEDocument.xib */,
+				075D2FCD14F3677A007F8951 /* MainMenu.xib */,
+				075D2FBC14F36779007F8951 /* Supporting Files */,
+			);
+			path = WabbitEmu;
+			sourceTree = "<group>";
+		};
+		075D2FBC14F36779007F8951 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				075D2FBD14F36779007F8951 /* WabbitEmu-Info.plist */,
+				075D2FBE14F36779007F8951 /* InfoPlist.strings */,
+				075D2FC114F36779007F8951 /* main.m */,
+				075D2FC314F36779007F8951 /* WabbitEmu-Prefix.pch */,
+				075D2FC414F36779007F8951 /* Credits.rtf */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		0765361214CD107E004D72D1 /* Project */ = {
@@ -2132,9 +2183,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		071ECCBD14A4233C002409F8 /* WabbitStudio */ = {
+		071ECCBD14A4233C002409F8 /* WabbitCode */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 071ECCDF14A4233D002409F8 /* Build configuration list for PBXNativeTarget "WabbitStudio" */;
+			buildConfigurationList = 071ECCDF14A4233D002409F8 /* Build configuration list for PBXNativeTarget "WabbitCode" */;
 			buildPhases = (
 				071ECCBA14A4233C002409F8 /* Sources */,
 				071ECCBB14A4233C002409F8 /* Frameworks */,
@@ -2145,9 +2196,26 @@
 			);
 			dependencies = (
 			);
-			name = WabbitStudio;
+			name = WabbitCode;
 			productName = WabbitEdit;
 			productReference = 071ECCBE14A4233C002409F8 /* WabbitStudio.app */;
+			productType = "com.apple.product-type.application";
+		};
+		075D2FB714F36779007F8951 /* WabbitEmu */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 075D2FD214F3677A007F8951 /* Build configuration list for PBXNativeTarget "WabbitEmu" */;
+			buildPhases = (
+				075D2FB414F36779007F8951 /* Sources */,
+				075D2FB514F36779007F8951 /* Frameworks */,
+				075D2FB614F36779007F8951 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WabbitEmu;
+			productName = WabbitEmu;
+			productReference = 075D2FB814F36779007F8951 /* WabbitEmu.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -2171,7 +2239,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				071ECCBD14A4233C002409F8 /* WabbitStudio */,
+				071ECCBD14A4233C002409F8 /* WabbitCode */,
+				075D2FB714F36779007F8951 /* WabbitEmu */,
 			);
 		};
 /* End PBXProject section */
@@ -2272,6 +2341,17 @@
 				072427F914F1DAB500DC920B /* WCTemplateCollectionView.xib in Resources */,
 				075D2F7A14F20D40007F8951 /* Include Files in Resources */,
 				075D2F8514F21BED007F8951 /* WCOpenPanelAccessoryView.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		075D2FB614F36779007F8951 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				075D2FC014F36779007F8951 /* InfoPlist.strings in Resources */,
+				075D2FC614F36779007F8951 /* Credits.rtf in Resources */,
+				075D2FCC14F36779007F8951 /* WEDocument.xib in Resources */,
+				075D2FCF14F3677A007F8951 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2521,6 +2601,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		075D2FB414F36779007F8951 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				075D2FC214F36779007F8951 /* main.m in Sources */,
+				075D2FC914F36779007F8951 /* WEDocument.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
@@ -2732,6 +2821,38 @@
 				075D2F8414F21BED007F8951 /* en */,
 			);
 			name = WCOpenPanelAccessoryView.xib;
+			sourceTree = "<group>";
+		};
+		075D2FBE14F36779007F8951 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				075D2FBF14F36779007F8951 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		075D2FC414F36779007F8951 /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				075D2FC514F36779007F8951 /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		075D2FCA14F36779007F8951 /* WEDocument.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				075D2FCB14F36779007F8951 /* en */,
+			);
+			name = WEDocument.xib;
+			sourceTree = "<group>";
+		};
+		075D2FCD14F3677A007F8951 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				075D2FCE14F3677A007F8951 /* en */,
+			);
+			name = MainMenu.xib;
 			sourceTree = "<group>";
 		};
 		0765361D14CD459E004D72D1 /* WCAddToProjectAccessoryView.xib */ = {
@@ -2948,6 +3069,32 @@
 			};
 			name = Release;
 		};
+		075D2FD014F3677A007F8951 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "WabbitEmu/WabbitEmu-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				INFOPLIST_FILE = "WabbitEmu/WabbitEmu-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		075D2FD114F3677A007F8951 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "WabbitEmu/WabbitEmu-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				INFOPLIST_FILE = "WabbitEmu/WabbitEmu-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2960,7 +3107,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		071ECCDF14A4233D002409F8 /* Build configuration list for PBXNativeTarget "WabbitStudio" */ = {
+		071ECCDF14A4233D002409F8 /* Build configuration list for PBXNativeTarget "WabbitCode" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				071ECCE014A4233D002409F8 /* Debug */,
@@ -2968,6 +3115,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		075D2FD214F3677A007F8951 /* Build configuration list for PBXNativeTarget "WabbitEmu" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				075D2FD014F3677A007F8951 /* Debug */,
+				075D2FD114F3677A007F8951 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
