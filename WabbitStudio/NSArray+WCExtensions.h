@@ -37,6 +37,7 @@
 - (NSArray *)fileBreakpointsForRange:(NSRange)range;
 
 - (NSUInteger)lineNumberForRange:(NSRange)range;
+- (NSUInteger)lineStartIndexForRange:(NSRange)range;
 
 - (id)firstObject;
 @end

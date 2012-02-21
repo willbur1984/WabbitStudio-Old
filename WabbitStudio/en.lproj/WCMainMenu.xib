@@ -1126,6 +1126,34 @@
 									<reference key="NSOnImage" ref="1033313550"/>
 									<reference key="NSMixedImage" ref="310636482"/>
 								</object>
+								<object class="NSMenuItem" id="797620435">
+									<reference key="NSMenu" ref="287866681"/>
+									<bool key="NSIsDisabled">YES</bool>
+									<bool key="NSIsSeparator">YES</bool>
+									<string key="NSTitle"/>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="1033313550"/>
+									<reference key="NSMixedImage" ref="310636482"/>
+								</object>
+								<object class="NSMenuItem" id="41506560">
+									<reference key="NSMenu" ref="287866681"/>
+									<string key="NSTitle">Jump to Next Issue</string>
+									<string key="NSKeyEquiv">'</string>
+									<int key="NSKeyEquivModMask">1048576</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="1033313550"/>
+									<reference key="NSMixedImage" ref="310636482"/>
+								</object>
+								<object class="NSMenuItem" id="805505118">
+									<reference key="NSMenu" ref="287866681"/>
+									<string key="NSTitle">Jump to Previous Issue</string>
+									<string key="NSKeyEquiv">'</string>
+									<int key="NSKeyEquivModMask">1179648</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="1033313550"/>
+									<reference key="NSMixedImage" ref="310636482"/>
+								</object>
 								<object class="NSMenuItem" id="60080058">
 									<reference key="NSMenu" ref="287866681"/>
 									<bool key="NSIsDisabled">YES</bool>
@@ -1440,7 +1468,7 @@
 									<reference key="NSOnImage" ref="1033313550"/>
 									<reference key="NSMixedImage" ref="310636482"/>
 								</object>
-								<object class="NSMenuItem" id="893758288">
+								<object class="NSMenuItem" id="371775060">
 									<reference key="NSMenu" ref="640650906"/>
 									<string key="NSTitle">Toggle Breakpoint at Current Line</string>
 									<string key="NSKeyEquiv">\</string>
@@ -2412,9 +2440,25 @@
 					<object class="IBActionConnection" key="connection">
 						<string key="label">toggleBreakpointAtCurrentLine:</string>
 						<reference key="source" ref="1014"/>
-						<reference key="destination" ref="893758288"/>
+						<reference key="destination" ref="371775060"/>
 					</object>
 					<int key="connectionID">718</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">jumpToNextIssue:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="41506560"/>
+					</object>
+					<int key="connectionID">722</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">jumpToPreviousIssue:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="805505118"/>
+					</object>
+					<int key="connectionID">723</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
@@ -2980,6 +3024,9 @@
 							<reference ref="392085205"/>
 							<reference ref="796373508"/>
 							<reference ref="268251296"/>
+							<reference ref="41506560"/>
+							<reference ref="797620435"/>
+							<reference ref="805505118"/>
 						</array>
 						<reference key="parent" ref="1059282136"/>
 					</object>
@@ -3343,7 +3390,7 @@
 							<reference ref="999534563"/>
 							<reference ref="116264543"/>
 							<reference ref="493878076"/>
-							<reference ref="893758288"/>
+							<reference ref="371775060"/>
 						</array>
 						<reference key="parent" ref="801420772"/>
 					</object>
@@ -3601,8 +3648,23 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">717</int>
-						<reference key="object" ref="893758288"/>
+						<reference key="object" ref="371775060"/>
 						<reference key="parent" ref="640650906"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">719</int>
+						<reference key="object" ref="41506560"/>
+						<reference key="parent" ref="287866681"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">720</int>
+						<reference key="object" ref="797620435"/>
+						<reference key="parent" ref="287866681"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">721</int>
+						<reference key="object" ref="805505118"/>
+						<reference key="parent" ref="287866681"/>
 					</object>
 				</array>
 			</object>
@@ -3777,7 +3839,10 @@
 				<string key="714.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="715.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="717.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="719.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="72.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="720.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="721.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="73.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="74.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="75.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3793,7 +3858,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">718</int>
+			<int key="maxID">723</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -4354,8 +4419,10 @@
 						<string key="jumpToDefinition:">id</string>
 						<string key="jumpToLine:">id</string>
 						<string key="jumpToNextBookmark:">id</string>
+						<string key="jumpToNextIssue:">id</string>
 						<string key="jumpToNextPlaceholder:">id</string>
 						<string key="jumpToPreviousBookmark:">id</string>
+						<string key="jumpToPreviousIssue:">id</string>
 						<string key="jumpToPreviousPlaceholder:">id</string>
 						<string key="jumpToSelection:">id</string>
 						<string key="openInSeparateEditor:">id</string>
@@ -4419,12 +4486,20 @@
 							<string key="name">jumpToNextBookmark:</string>
 							<string key="candidateClassName">id</string>
 						</object>
+						<object class="IBActionInfo" key="jumpToNextIssue:">
+							<string key="name">jumpToNextIssue:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 						<object class="IBActionInfo" key="jumpToNextPlaceholder:">
 							<string key="name">jumpToNextPlaceholder:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="jumpToPreviousBookmark:">
 							<string key="name">jumpToPreviousBookmark:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="jumpToPreviousIssue:">
+							<string key="name">jumpToPreviousIssue:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="jumpToPreviousPlaceholder:">

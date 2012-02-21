@@ -57,6 +57,9 @@
 - (IBAction)jumpToNextBookmark:(id)sender;
 - (IBAction)jumpToPreviousBookmark:(id)sender;
 
+- (IBAction)jumpToNextIssue:(id)sender;
+- (IBAction)jumpToPreviousIssue:(id)sender;
+
 - (IBAction)fold:(id)sender;
 - (IBAction)foldAll:(id)sender;
 - (IBAction)unfold:(id)sender;

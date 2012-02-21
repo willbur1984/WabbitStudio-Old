@@ -216,7 +216,7 @@
 		07713F1614B9551400324F77 /* EncodingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 07713F1514B9551400324F77 /* EncodingManager.m */; };
 		07713F1914B9586400324F77 /* NSUserDefaults+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07713F1814B9586400324F77 /* NSUserDefaults+RSExtensions.m */; };
 		0773AA1C14D67FB3004612D9 /* Bookmarks.png in Resources */ = {isa = PBXBuildFile; fileRef = 0773AA1B14D67FB3004612D9 /* Bookmarks.png */; };
-		0773AA2014D680B8004612D9 /* Debug.png in Resources */ = {isa = PBXBuildFile; fileRef = 0773AA1E14D680B8004612D9 /* Debug.png */; };
+		0773AA2014D680B8004612D9 /* Breakpoint.png in Resources */ = {isa = PBXBuildFile; fileRef = 0773AA1E14D680B8004612D9 /* Breakpoint.png */; };
 		0773AA2114D680B8004612D9 /* Issue.png in Resources */ = {isa = PBXBuildFile; fileRef = 0773AA1F14D680B8004612D9 /* Issue.png */; };
 		077884EC14C0CE6A00605F5D /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 077884EB14C0CE6A00605F5D /* Sparkle.framework */; };
 		077884EF14C0CE9F00605F5D /* Sparkle.framework in Copy Private Frameworks */ = {isa = PBXBuildFile; fileRef = 077884EB14C0CE6A00605F5D /* Sparkle.framework */; };
@@ -753,7 +753,7 @@
 		07713F1714B9586400324F77 /* NSUserDefaults+RSExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSUserDefaults+RSExtensions.h"; sourceTree = "<group>"; };
 		07713F1814B9586400324F77 /* NSUserDefaults+RSExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSUserDefaults+RSExtensions.m"; sourceTree = "<group>"; };
 		0773AA1B14D67FB3004612D9 /* Bookmarks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Bookmarks.png; sourceTree = "<group>"; };
-		0773AA1E14D680B8004612D9 /* Debug.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Debug.png; sourceTree = "<group>"; };
+		0773AA1E14D680B8004612D9 /* Breakpoint.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Breakpoint.png; sourceTree = "<group>"; };
 		0773AA1F14D680B8004612D9 /* Issue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Issue.png; sourceTree = "<group>"; };
 		077884EB14C0CE6A00605F5D /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		077884F014C1019E00605F5D /* RSObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSObject.h; sourceTree = "<group>"; };
@@ -1400,10 +1400,7 @@
 				07BB432D14B83E800062AD00 /* WCDefines.h */,
 				072BBC4F14AA68B80044ECC2 /* WCApplicationDelegate.h */,
 				072BBC5014AA68B80044ECC2 /* WCApplicationDelegate.m */,
-				07862BA414BA33040057EB89 /* WCDocumentController.h */,
-				07862BA514BA33040057EB89 /* WCDocumentController.m */,
-				075D2F7F14F21BDC007F8951 /* WCOpenPanelAccessoryViewController.h */,
-				075D2F8014F21BDC007F8951 /* WCOpenPanelAccessoryViewController.m */,
+				075D2FA014F34C8E007F8951 /* Document Controller */,
 				071985F914C0B3BA00C8E91A /* Project */,
 				071985F814C0B36600C8E91A /* Performers */,
 				072BBC3F14AA66730044ECC2 /* Preferences */,
@@ -1432,7 +1429,7 @@
 				07CC8E8D14E7B8CA00B303C1 /* Success.pdf */,
 				07CC8E8B14E7B65700B303C1 /* Calculator16x16.png */,
 				0708A5BE14D9031600BE60EE /* Bookmark.png */,
-				0773AA1E14D680B8004612D9 /* Debug.png */,
+				0773AA1E14D680B8004612D9 /* Breakpoint.png */,
 				0773AA1F14D680B8004612D9 /* Issue.png */,
 				0773AA1B14D67FB3004612D9 /* Bookmarks.png */,
 				072FCFB914CBBD9700F76276 /* wabbitstudio.icns */,
@@ -1699,6 +1696,17 @@
 				0746EE6114F177E800354643 /* RSHexadecimalFormatter.m */,
 			);
 			name = Formatters;
+			sourceTree = "<group>";
+		};
+		075D2FA014F34C8E007F8951 /* Document Controller */ = {
+			isa = PBXGroup;
+			children = (
+				07862BA414BA33040057EB89 /* WCDocumentController.h */,
+				07862BA514BA33040057EB89 /* WCDocumentController.m */,
+				075D2F7F14F21BDC007F8951 /* WCOpenPanelAccessoryViewController.h */,
+				075D2F8014F21BDC007F8951 /* WCOpenPanelAccessoryViewController.m */,
+			);
+			name = "Document Controller";
 			sourceTree = "<group>";
 		};
 		0765361214CD107E004D72D1 /* Project */ = {
@@ -2240,7 +2248,7 @@
 				07154F5514D40B3C00F57668 /* WCProjectView.xib in Resources */,
 				07154F5C14D5D88000F57668 /* WCSourceFileSeparateWindow.xib in Resources */,
 				0773AA1C14D67FB3004612D9 /* Bookmarks.png in Resources */,
-				0773AA2014D680B8004612D9 /* Debug.png in Resources */,
+				0773AA2014D680B8004612D9 /* Breakpoint.png in Resources */,
 				0773AA2114D680B8004612D9 /* Issue.png in Resources */,
 				0708A5BF14D9031600BE60EE /* Bookmark.png in Resources */,
 				077906A514E0DE08006C16EF /* WCSearchNavigatorView.xib in Resources */,

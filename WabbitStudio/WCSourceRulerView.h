@@ -20,6 +20,7 @@
 	WCFileBreakpoint *_clickedFileBreakpoint;
 	WCBuildIssue *_clickedBuildIssue;
 	WCEditBreakpointViewController *_editBreakpointViewController;
+	NSIndexSet *_lineStartIndexesWithBuildIssues;
 	struct {
 		unsigned int clickedFileBreakpointHasMoved:1;
 		unsigned int RESERVED:31;
@@ -31,4 +32,5 @@
 - (void)drawCodeFoldingRibbonInRect:(NSRect)ribbonRect;
 - (void)drawBuildIssuesInRect:(NSRect)buildIssueRect;
 - (void)drawFileBreakpointsInRect:(NSRect)breakpointRect;
+- (void)drawBookmarksInRect:(NSRect)bookmarkRect;
 @end

@@ -57,7 +57,7 @@
 	static NSGradient *retval;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		retval = [[NSGradient alloc] initWithStartingColor:[[NSColor redColor] colorWithAlphaComponent:0.1] endingColor:[[NSColor redColor] colorWithAlphaComponent:0.35]];
+		retval = [[NSGradient alloc] initWithStartingColor:[[NSColor redColor] colorWithAlphaComponent:0.15] endingColor:[[NSColor redColor] colorWithAlphaComponent:0.4]];
 	});
 	return retval;
 }
@@ -76,7 +76,7 @@
 	static NSGradient *retval;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		retval = [[NSGradient alloc] initWithStartingColor:[[NSColor yellowColor] colorWithAlphaComponent:0.1] endingColor:[[NSColor yellowColor] colorWithAlphaComponent:0.35]];
+		retval = [[NSGradient alloc] initWithStartingColor:[[NSColor yellowColor] colorWithAlphaComponent:0.15] endingColor:[[NSColor yellowColor] colorWithAlphaComponent:0.4]];
 	});
 	return retval;
 }

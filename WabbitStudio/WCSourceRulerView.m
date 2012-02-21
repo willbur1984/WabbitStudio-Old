@@ -46,6 +46,7 @@
 @property (readwrite,assign,nonatomic) WCBuildIssue *clickedBuildIssue;
 @property (readwrite,assign,nonatomic) BOOL clickedFileBreakpointHasMoved;
 @property (readonly,nonatomic) WCEditBreakpointViewController *editBreakpointViewController;
+@property (readwrite,copy,nonatomic) NSIndexSet *lineStartIndexesWithBuildIssues;
 
 - (NSUInteger)_lineNumberForPoint:(NSPoint)point;
 - (NSRange)_rangeForPoint:(NSPoint)point;
@@ -133,7 +134,7 @@
 	return [[self textStorage] lineStartIndexes];
 }
 
-static const CGFloat kIconWidthHeight = 12.0;
+static const CGFloat kIconWidthHeight = 11.0;
 static const CGFloat kIconPaddingLeft = 1.0;
 static const CGFloat kIconPaddingTop = 1.0;
 static const CGFloat kCodeFoldingRibbonWidth = 8.0;
@@ -264,7 +265,12 @@ static const CGFloat kBuildIssueWidthHeight = 10.0;
 }
 
 - (CGFloat)minimumThickness {
-	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey])
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey] &&
+		[[self delegate] projectDocumentForSourceRulerView:self])
+		return [super minimumThickness]+kIconWidthHeight+kBuildIssueWidthHeight+kIconPaddingLeft+kCodeFoldingRibbonWidth;
+	else if ([[self delegate] projectDocumentForSourceRulerView:self])
+		return [super minimumThickness]+kIconWidthHeight+kBuildIssueWidthHeight+kIconPaddingLeft;
+	else if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey])
 		return [super minimumThickness]+kIconWidthHeight+kIconPaddingLeft+kCodeFoldingRibbonWidth;
 	return [super minimumThickness]+kIconWidthHeight+kIconPaddingLeft;
 }
@@ -293,16 +299,18 @@ static const CGFloat kBuildIssueWidthHeight = 10.0;
 	else
 		[super drawRightMarginInRect:rect];
 	
-	[super drawCurrentLineHighlightInRect:rect];
+	[self drawCurrentLineHighlightInRect:rect];
 	
 	[self drawFileBreakpointsInRect:rect];
 	
 	[self drawBuildIssuesInRect:rect];
 	
+	[self drawBookmarksInRect:rect];
+	
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey])
-		[super drawLineNumbersInRect:NSMakeRect(NSMinX(rect), NSMinY(rect), NSWidth(rect)-kCodeFoldingRibbonWidth, NSHeight(rect))];
+		[self drawLineNumbersInRect:NSMakeRect(NSMinX(rect), NSMinY(rect), NSWidth(rect)-kCodeFoldingRibbonWidth, NSHeight(rect))];
 	else
-		[super drawLineNumbersInRect:rect];
+		[self drawLineNumbersInRect:rect];
 }
 - (NSSet *)userDefaultsKeyPathsToObserve {
 	NSMutableSet *keys = [[[super userDefaultsKeyPathsToObserve] mutableCopy] autorelease];
@@ -523,19 +531,20 @@ static const CGFloat kBuildIssueWidthHeight = 10.0;
 				break;
 		}
 	}
+	
+	NSMutableIndexSet *buildIssueLineStartIndexes = [NSMutableIndexSet indexSet];
+	
+	[buildIssueLineStartIndexes addIndexes:errorIndexes];
+	[buildIssueLineStartIndexes addIndexes:warningIndexes];
+	
+	[self setLineStartIndexesWithBuildIssues:buildIssueLineStartIndexes];
 }
 
 - (void)drawFileBreakpointsInRect:(NSRect)breakpointRect; {
 	NSArray *fileBreakpoints = [[self delegate] fileBreakpointsForSourceRulerView:self];
 	
-	for (WCFileBreakpoint *fileBreakpoint in [fileBreakpoints fileBreakpointsForRange:[[self textView] visibleRange]]) {
-		NSUInteger rectCount;
-		NSRectArray rects = [[[self textView] layoutManager] rectArrayForCharacterRange:[fileBreakpoint range] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[[self textView] textContainer] rectCount:&rectCount];;
-		
-		if (!rectCount)
-			continue;
-		
-		NSRect lineRect = rects[0];
+	for (WCFileBreakpoint *fileBreakpoint in [fileBreakpoints fileBreakpointsForRange:[[self textView] visibleRange]]) {		
+		NSRect lineRect = [[[self textView] layoutManager] lineFragmentRectForGlyphAtIndex:[[[self textView] layoutManager] glyphIndexForCharacterAtIndex:[fileBreakpoint range].location] effectiveRange:NULL];
 		
 		lineRect = NSMakeRect(NSMinX([self bounds]), [self convertPoint:lineRect.origin fromView:[self clientView]].y, NSWidth([self bounds]), NSHeight(lineRect));
 		
@@ -547,6 +556,27 @@ static const CGFloat kBuildIssueWidthHeight = 10.0;
 		NSImage *breakpointIcon = [WCBreakpoint breakpointIconWithSize:NSMakeSize(NSWidth(lineRect), NSHeight(lineRect)) type:[fileBreakpoint type] active:[fileBreakpoint isActive] enabled:[[[fileBreakpoint projectDocument] breakpointManager] breakpointsEnabled]];
 		
 		[breakpointIcon drawInRect:lineRect fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+	}
+}
+
+- (void)drawBookmarksInRect:(NSRect)bookmarkRect; {
+	for (RSBookmark *bookmark in [[self textStorage] bookmarksForRange:[[self textView] visibleRange]]) {
+		NSRect lineRect = [[[self textView] layoutManager] lineFragmentRectForGlyphAtIndex:[[[self textView] layoutManager] glyphIndexForCharacterAtIndex:[bookmark range].location] effectiveRange:NULL];
+		
+		lineRect = NSMakeRect(NSMinX([self bounds]), [self convertPoint:lineRect.origin fromView:[self clientView]].y, NSWidth([self bounds]), NSHeight(lineRect));
+		
+		if (!NSIntersectsRect(lineRect, bookmarkRect) || ![self needsToDrawRect:lineRect])
+			continue;
+		
+		NSImage *bookmarkImage = [NSImage imageNamed:@"Bookmark"];
+		NSRect bookmarkRect;
+		
+		if ([[self lineStartIndexesWithBuildIssues] containsIndex:[[self lineStartIndexes] lineStartIndexForRange:[bookmark range]]])
+			bookmarkRect = NSMakeRect(NSMinX(lineRect)+kBuildIssueWidthHeight+kIconPaddingLeft+kIconPaddingLeft, NSMinY(lineRect)+kIconPaddingTop, kIconWidthHeight, kIconWidthHeight);
+		else
+			bookmarkRect = NSMakeRect(NSMinX(lineRect)+kIconPaddingLeft, NSMinY(lineRect)+kIconPaddingTop, kIconWidthHeight, kIconWidthHeight);
+		
+		[bookmarkImage drawInRect:bookmarkRect fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
 	}
 }
 #pragma mark Properties
@@ -604,6 +634,7 @@ static const CGFloat kBuildIssueWidthHeight = 10.0;
 		_editBreakpointViewController = [[WCEditBreakpointViewController alloc] initWithBreakpoint:nil];
 	return _editBreakpointViewController;
 }
+@synthesize lineStartIndexesWithBuildIssues=_lineStartIndexesWithBuildIssues;
 #pragma mark *** Private Methods ***
 - (NSUInteger)_lineNumberForPoint:(NSPoint)point {
 	NSLayoutManager *layoutManager = [[self textView] layoutManager];

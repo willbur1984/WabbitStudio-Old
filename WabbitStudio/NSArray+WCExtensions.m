@@ -336,6 +336,26 @@
     }
     return left;
 }
+- (NSUInteger)lineStartIndexForRange:(NSRange)range; {
+	if (![self count])
+		return 0;
+	
+	NSUInteger left = 0, right = [self count], mid, lineStart;
+	
+    while ((right - left) > 1) {
+        mid = (right + left) / 2;
+        lineStart = [[self objectAtIndex:mid] unsignedIntegerValue];
+        
+        if (range.location < lineStart)
+			right = mid;
+        else if (range.location > lineStart)
+			left = mid;
+        else
+			return [[self objectAtIndex:mid] unsignedIntegerValue];
+    }
+    return [[self objectAtIndex:left] unsignedIntegerValue];
+}
+
 - (id)firstObject {
 	if ([self count])
 		return [self objectAtIndex:0];

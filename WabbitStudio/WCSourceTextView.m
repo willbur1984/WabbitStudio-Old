@@ -954,6 +954,8 @@
 	if ([bookmarks count] && !NSEqualRanges([[bookmarks firstObject] range], [self selectedRange])) {
 		[self setSelectedRange:[[bookmarks firstObject] range]];
 		[self scrollRangeToVisible:[[bookmarks firstObject] range]];
+		
+		[[RSBezelWidgetManager sharedWindowController] showImage:[NSImage imageNamed:@"FindWrapIndicator"] centeredInView:[self enclosingScrollView]];
 	}
 	else
 		NSBeep();
@@ -971,6 +973,49 @@
 	if ([bookmarks count] && !NSEqualRanges([[bookmarks lastObject] range], [self selectedRange])) {
 		[self setSelectedRange:[[bookmarks lastObject] range]];
 		[self scrollRangeToVisible:[[bookmarks lastObject] range]];
+		
+		[[RSBezelWidgetManager sharedWindowController] showImage:[NSImage imageNamed:@"FindWrapIndicatorReverse"] centeredInView:[self enclosingScrollView]];
+	}
+	else
+		NSBeep();
+}
+
+- (IBAction)jumpToNextIssue:(id)sender; {
+	NSArray *buildIssues = [[self delegate] buildIssuesForSourceTextView:self];
+	
+	for (WCBuildIssue *buildIssue in buildIssues) {
+		if ([buildIssue range].location > [self selectedRange].location) {
+			[self setSelectedRange:[buildIssue range]];
+			[self scrollRangeToVisible:[buildIssue range]];
+			return;
+		}
+	}
+	
+	if ([buildIssues count] && !NSEqualRanges([[buildIssues firstObject] range], [self selectedRange])) {
+		[self setSelectedRange:[[buildIssues firstObject] range]];
+		[self scrollRangeToVisible:[[buildIssues firstObject] range]];
+		
+		[[RSBezelWidgetManager sharedWindowController] showImage:[NSImage imageNamed:@"FindWrapIndicator"] centeredInView:[self enclosingScrollView]];
+	}
+	else
+		NSBeep();
+}
+- (IBAction)jumpToPreviousIssue:(id)sender; {
+	NSArray *buildIssues = [[self delegate] buildIssuesForSourceTextView:self];
+	
+	for (WCBuildIssue *buildIssue in [buildIssues reverseObjectEnumerator]) {
+		if ([buildIssue range].location < [self selectedRange].location) {
+			[self setSelectedRange:[buildIssue range]];
+			[self scrollRangeToVisible:[buildIssue range]];
+			return;
+		}
+	}
+	
+	if ([buildIssues count] && !NSEqualRanges([[buildIssues lastObject] range], [self selectedRange])) {
+		[self setSelectedRange:[[buildIssues lastObject] range]];
+		[self scrollRangeToVisible:[[buildIssues lastObject] range]];
+		
+		[[RSBezelWidgetManager sharedWindowController] showImage:[NSImage imageNamed:@"FindWrapIndicatorReverse"] centeredInView:[self enclosingScrollView]];
 	}
 	else
 		NSBeep();
@@ -1605,16 +1650,31 @@
 	return NO;
 }
 - (void)_drawVisibleBookmarksInRect:(NSRect)bookmarkRect; {
-	
+	// TODO: draw the bookmarks at all?
 }
 
 static const NSSize kIconSize = {.width = 9.0, .height = 9.0};
 static const CGFloat kTriangleHeight = 4.0;
 
 - (void)_drawVisibleBuildIssuesInRect:(NSRect)buildIssueRect {
+	static NSTextStorage *buildIssuesTextStorage;
+	static NSLayoutManager *buildIssuesLayoutManager;
+	static NSTextContainer *buildIssuesTextContainer;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		buildIssuesTextStorage = [[NSTextStorage alloc] initWithString:@"somestring"];
+		buildIssuesLayoutManager = [[[NSLayoutManager alloc] init] autorelease];
+		buildIssuesTextContainer = [[[NSTextContainer alloc] initWithContainerSize:NSMakeSize(CGFLOAT_MAX, CGFLOAT_MAX)] autorelease];
+		
+		[buildIssuesTextStorage addLayoutManager:buildIssuesLayoutManager];
+		[buildIssuesLayoutManager addTextContainer:buildIssuesTextContainer];
+	});
+	
 	NSArray *buildIssues = [[self delegate] buildIssuesForSourceTextView:self];
 	NSMutableIndexSet *errorIndexes = [NSMutableIndexSet indexSet];
 	NSMutableIndexSet *warningIndexes = [NSMutableIndexSet indexSet];
+	
+	[buildIssuesTextStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSMiniControlSize]],NSFontAttributeName,[[self typingAttributes] objectForKey:NSForegroundColorAttributeName],NSForegroundColorAttributeName, nil] range:NSMakeRange(0, [buildIssuesTextStorage length])];
 	
 	for (WCBuildIssue *buildIssue in [buildIssues buildIssuesForRange:[self visibleRange]]) {
 		if (![buildIssue isVisible])
@@ -1651,9 +1711,14 @@ static const CGFloat kTriangleHeight = 4.0;
 					NSRectFill(NSMakeRect(NSMinX(lineRect), NSMinY(lineRect), NSWidth(lineRect), 1.0));
 					NSRectFill(NSMakeRect(NSMinX(lineRect), NSMaxY(lineRect)-1.0, NSWidth(lineRect), 1.0));
 					
-					NSAttributedString *string = [[[NSAttributedString alloc] initWithString:[buildIssue message] attributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSMiniControlSize]],NSFontAttributeName,[[self typingAttributes] objectForKey:NSForegroundColorAttributeName],NSForegroundColorAttributeName,[NSParagraphStyle rightAlignedParagraphStyle],NSParagraphStyleAttributeName, nil]] autorelease];
-					NSSize stringSize = [string size];
-					NSRect stringRect = NSCenteredRectWithSize(NSMakeSize(NSWidth(lineRect), stringSize.height), lineRect);
+					[buildIssuesTextStorage replaceCharactersInRange:NSMakeRange(0, [buildIssuesTextStorage length]) withString:[buildIssue message]];
+					[buildIssuesLayoutManager ensureLayoutForCharacterRange:NSMakeRange(0, [buildIssuesTextStorage length])];
+					
+					NSSize stringSize = [buildIssuesLayoutManager usedRectForTextContainer:buildIssuesTextContainer].size;
+					NSRect stringRect = NSCenteredRectWithSize(stringSize, lineRect);
+					
+					stringRect.origin.x = NSMaxX(lineRect)-stringSize.width;
+					
 					NSBezierPath *path = [NSBezierPath bezierPath];
 					
 					[path moveToPoint:NSMakePoint(NSMaxX(lineRect)-stringSize.width-kIconSize.width, NSMinY(lineRect))];
@@ -1670,7 +1735,13 @@ static const CGFloat kTriangleHeight = 4.0;
 					
 					[[WCBuildIssue errorFillGradient] drawInBezierPath:path angle:90.0];
 					
-					[string drawInRect:stringRect];
+					[[NSGraphicsContext currentContext] saveGraphicsState];
+					
+					NSRectClip(stringRect);
+					
+					[buildIssuesLayoutManager drawGlyphsForGlyphRange:[buildIssuesLayoutManager glyphRangeForCharacterRange:NSMakeRange(0, [buildIssuesTextStorage length]) actualCharacterRange:NULL] atPoint:stringRect.origin];
+					
+					[[NSGraphicsContext currentContext] restoreGraphicsState];
 					
 					NSImage *image = [NSImage imageNamed:@"Error"];
 					
@@ -1710,9 +1781,14 @@ static const CGFloat kTriangleHeight = 4.0;
 					NSRectFill(NSMakeRect(NSMinX(lineRect), NSMinY(lineRect), NSWidth(lineRect), 1.0));
 					NSRectFill(NSMakeRect(NSMinX(lineRect), NSMaxY(lineRect)-1, NSWidth(lineRect), 1.0));
 					
-					NSAttributedString *string = [[[NSAttributedString alloc] initWithString:[buildIssue message] attributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSMiniControlSize]],NSFontAttributeName,[[self typingAttributes] objectForKey:NSForegroundColorAttributeName],NSForegroundColorAttributeName,[NSParagraphStyle rightAlignedParagraphStyle],NSParagraphStyleAttributeName, nil]] autorelease];
-					NSSize stringSize = [string size];
-					NSRect stringRect = NSCenteredRectWithSize(NSMakeSize(NSWidth(lineRect), stringSize.height), lineRect);
+					[buildIssuesTextStorage replaceCharactersInRange:NSMakeRange(0, [buildIssuesTextStorage length]) withString:[buildIssue message]];
+					[buildIssuesLayoutManager ensureLayoutForCharacterRange:NSMakeRange(0, [buildIssuesTextStorage length])];
+					
+					NSSize stringSize = [buildIssuesLayoutManager usedRectForTextContainer:buildIssuesTextContainer].size;
+					NSRect stringRect = NSCenteredRectWithSize(stringSize, lineRect);
+					
+					stringRect.origin.x = NSMaxX(lineRect)-stringSize.width;
+					
 					NSBezierPath *path = [NSBezierPath bezierPath];
 					
 					[path moveToPoint:NSMakePoint(NSMaxX(lineRect)-stringSize.width-kIconSize.width, NSMinY(lineRect))];
@@ -1729,7 +1805,13 @@ static const CGFloat kTriangleHeight = 4.0;
 					
 					[[WCBuildIssue warningFillGradient] drawInBezierPath:path angle:90.0];
 					
-					[string drawInRect:stringRect];
+					[[NSGraphicsContext currentContext] saveGraphicsState];
+					
+					NSRectClip(stringRect);
+					
+					[buildIssuesLayoutManager drawGlyphsForGlyphRange:[buildIssuesLayoutManager glyphRangeForCharacterRange:NSMakeRange(0, [buildIssuesTextStorage length]) actualCharacterRange:NULL] atPoint:stringRect.origin];
+					
+					[[NSGraphicsContext currentContext] restoreGraphicsState];
 					
 					NSImage *image = [NSImage imageNamed:@"Warning"];
 					

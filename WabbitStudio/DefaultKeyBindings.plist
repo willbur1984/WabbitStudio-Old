@@ -70,6 +70,28 @@
 				<true/>
 			</dict>
 		</dict>
+		<key>jumpToNextIssue:</key>
+		<dict>
+			<key>keyCode</key>
+			<integer>39</integer>
+			<key>modifierFlags</key>
+			<dict>
+				<key>command</key>
+				<true/>
+			</dict>
+		</dict>
+		<key>jumpToPreviousIssue:</key>
+		<dict>
+			<key>keyCode</key>
+			<integer>39</integer>
+			<key>modifierFlags</key>
+			<dict>
+				<key>command</key>
+				<true/>
+				<key>shift</key>
+				<true/>
+			</dict>
+		</dict>
 		<key>toggleBreakpointAtCurrentLine:</key>
 		<dict>
 			<key>keyCode</key>
