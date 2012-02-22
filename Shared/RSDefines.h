@@ -39,7 +39,7 @@
 #define NSLogInteger(intToLog) NSLog(@"%ld",(intToLog))
 #define NSLogUnsignedInteger(uintToLog) NSLog(@"%lu",(uintToLog))
 #define NSLogSize(sizeToLog) NSLog(@"%@",NSStringFromSize(sizeToLog))
-#define NSLogFloat(floatToLog) NSLog(@"%f",(floatToLog))
+#define NSLogFloat(floatToLog) NSLog(@"%f",floatToLog)
 
 #define RSLogObject(objectToLog) RSLog(@"%@",(objectToLog))
 #define RSLogRange(rangeToLog) RSLog(@"%@",NSStringFromRange(rangeToLog))
@@ -47,7 +47,8 @@
 #define RSLogInteger(intToLog) RSLog(@"%ld",(intToLog))
 #define RSLogUnsignedInteger(uintToLog) RSLog(@"%lu",(uintToLog))
 #define RSLogSize(sizeToLog) RSLog(@"%@",NSStringFromSize(sizeToLog))
-#define RSLogFloat(floatToLog) RSLog(@"%f",(floatToLog))
+#define RSLogFloat(floatToLog) RSLog(@"%f",floatToLog)
+#define RSLogPoint(pointToLog) RSLog(@"%@",NSStringFromPoint(pointToLog))
 
 #define NSNumberWithBool(boolForNumber) [NSNumber numberWithBool:(boolForNumber)]
 #define NSNumberWithInteger(integerForNumber) [NSNumber numberWithInteger:(integerForNumber)]

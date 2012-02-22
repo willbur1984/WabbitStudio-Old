@@ -142,16 +142,68 @@ const NSInteger RSCalculatorErrorCodeMaximumNumberOfCalculators = 1002;
 }
 @dynamic model;
 - (RSCalculatorModel)model {
-	return [self calculator]->model;
+	if ([self isActive])
+		return [self calculator]->model;
+	return defaultValue;
 }
 @synthesize lastLoadedURL=_lastLoadedURL;
+@dynamic skinImage;
+- (NSImage *)skinImage {
+	switch ([self model]) {
+		case RSCalculatorModelTI_73:
+			return [NSImage imageNamed:@"ti-73"];
+		case RSCalculatorModelTI_81:
+			return [NSImage imageNamed:@"ti-81"];
+		case RSCalculatorModelTI_82:
+			return [NSImage imageNamed:@"ti-82"];
+		case RSCalculatorModelTI_83:
+			return [NSImage imageNamed:@"ti-83"];
+		case RSCalculatorModelTI_83P:
+			return [NSImage imageNamed:@"ti-83+"];
+		case RSCalculatorModelTI_83PSE:
+			return [NSImage imageNamed:@"ti-83+se"];
+		case RSCalculatorModelTI_84P:
+			return [NSImage imageNamed:@"ti-84+"];
+		case RSCalculatorModelTI_84PSE:
+			return [NSImage imageNamed:@"ti-84+se"];
+		case RSCalculatorModelTI_85:
+			return [NSImage imageNamed:@"ti-85"];
+		case RSCalculatorModelTI_86:
+			return [NSImage imageNamed:@"ti-86"];
+		default:
+			return nil;
+	}
+}
+@dynamic keymapImage;
+- (NSImage *)keymapImage {
+	switch ([self model]) {
+		case RSCalculatorModelTI_73:
+		case RSCalculatorModelTI_83P:
+		case RSCalculatorModelTI_83PSE:
+			return [NSImage imageNamed:@"ti-83+keymap"];
+		case RSCalculatorModelTI_81:
+		case RSCalculatorModelTI_82:
+			return [NSImage imageNamed:@"ti-82keymap"];
+		case RSCalculatorModelTI_83:
+			return [NSImage imageNamed:@"ti-83keymap"];
+		case RSCalculatorModelTI_84P:
+		case RSCalculatorModelTI_84PSE:
+			return [NSImage imageNamed:@"ti-84se+keymap"];
+		case RSCalculatorModelTI_85:
+			return [NSImage imageNamed:@"ti-85keymap"];
+		case RSCalculatorModelTI_86:
+			return [NSImage imageNamed:@"ti-86keymap"];
+		default:
+			return nil;
+	}
+}
 #pragma mark Registers
-static const uint16_t registerDefaultValue = 0;
+static const uint32_t defaultValue = 0;
 @dynamic programCounter;
 - (uint16_t)programCounter {
 	if ([self isActive])
 		return [self calculator]->cpu.pc;
-	return registerDefaultValue;
+	return defaultValue;
 }
 - (void)setProgramCounter:(uint16_t)programCounter {
 	if ([self isActive])
@@ -161,7 +213,7 @@ static const uint16_t registerDefaultValue = 0;
 - (uint16_t)stackPointer {
 	if ([self isActive])
 		return [self calculator]->cpu.sp;
-	return registerDefaultValue;
+	return defaultValue;
 }
 - (void)setStackPointer:(uint16_t)stackPointer {
 	if ([self isActive])
@@ -171,7 +223,7 @@ static const uint16_t registerDefaultValue = 0;
 - (uint16_t)registerAF {
 	if ([self isActive])
 		return [self calculator]->cpu.af;
-	return registerDefaultValue;
+	return defaultValue;
 }
 - (void)setRegisterAF:(uint16_t)registerAF {
 	if ([self isActive])
@@ -181,7 +233,7 @@ static const uint16_t registerDefaultValue = 0;
 - (uint16_t)registerAFPrime {
 	if ([self isActive])
 		return [self calculator]->cpu.afp;
-	return registerDefaultValue;
+	return defaultValue;
 }
 - (void)setRegisterAFPrime:(uint16_t)registerAFPrime {
 	if ([self isActive])
@@ -191,7 +243,7 @@ static const uint16_t registerDefaultValue = 0;
 - (uint16_t)registerBC {
 	if ([self isActive])
 		return [self calculator]->cpu.bc;
-	return registerDefaultValue;
+	return defaultValue;
 }
 - (void)setRegisterBC:(uint16_t)registerBC {
 	if ([self isActive])
@@ -201,7 +253,7 @@ static const uint16_t registerDefaultValue = 0;
 - (uint16_t)registerBCPrime {
 	if ([self isActive])
 		return [self calculator]->cpu.bcp;
-	return registerDefaultValue;
+	return defaultValue;
 }
 - (void)setRegisterBCPrime:(uint16_t)registerBCPrime {
 	if ([self isActive])
@@ -211,7 +263,7 @@ static const uint16_t registerDefaultValue = 0;
 - (uint16_t)registerDE {
 	if ([self isActive])
 		return [self calculator]->cpu.de;
-	return registerDefaultValue;
+	return defaultValue;
 }
 - (void)setRegisterDE:(uint16_t)registerDE {
 	if ([self isActive])
@@ -221,7 +273,7 @@ static const uint16_t registerDefaultValue = 0;
 - (uint16_t)registerDEPrime {
 	if ([self isActive])
 		return [self calculator]->cpu.dep;
-	return registerDefaultValue;
+	return defaultValue;
 }
 - (void)setRegisterDEPrime:(uint16_t)registerDEPrime {
 	if ([self isActive])
@@ -231,7 +283,7 @@ static const uint16_t registerDefaultValue = 0;
 - (uint16_t)registerHL {
 	if ([self isActive])
 		return [self calculator]->cpu.hl;
-	return registerDefaultValue;
+	return defaultValue;
 }
 - (void)setRegisterHL:(uint16_t)registerHL {
 	if ([self isActive])
@@ -241,7 +293,7 @@ static const uint16_t registerDefaultValue = 0;
 - (uint16_t)registerHLPrime {
 	if ([self isActive])
 		return [self calculator]->cpu.hlp;
-	return registerDefaultValue;
+	return defaultValue;
 }
 - (void)setRegisterHLPrime:(uint16_t)registerHLPrime {
 	if ([self isActive])
@@ -251,7 +303,7 @@ static const uint16_t registerDefaultValue = 0;
 - (uint16_t)registerIX {
 	if ([self isActive])
 		return [self calculator]->cpu.ix;
-	return registerDefaultValue;
+	return defaultValue;
 }
 - (void)setRegisterIX:(uint16_t)registerIX {
 	if ([self isActive])
@@ -261,7 +313,7 @@ static const uint16_t registerDefaultValue = 0;
 - (uint16_t)registerIY {
 	if ([self isActive])
 		return [self calculator]->cpu.iy;
-	return registerDefaultValue;
+	return defaultValue;
 }
 - (void)setRegisterIY:(uint16_t)registerIY {
 	if ([self isActive])
@@ -329,7 +381,7 @@ static const uint16_t registerDefaultValue = 0;
 - (uint8_t)CPUBus {
 	if ([self isActive])
 		return [self calculator]->cpu.bus;
-	return registerDefaultValue;
+	return defaultValue;
 }
 - (void)setCPUBus:(uint8_t)CPUBus {
 	if ([self isActive])
@@ -339,7 +391,7 @@ static const uint16_t registerDefaultValue = 0;
 - (uint32_t)CPUFrequency {
 	if ([self isActive])
 		return [self calculator]->timer_c.freq;
-	return registerDefaultValue;
+	return defaultValue;
 }
 - (void)setCPUFrequency:(uint32_t)CPUFrequency {
 	if ([self isActive])
@@ -350,7 +402,7 @@ static const uint16_t registerDefaultValue = 0;
 - (uint8_t)memoryMapBank0Page {
 	if ([self isActive])
 		return [self calculator]->mem_c.banks[0].page;
-	return registerDefaultValue;
+	return defaultValue;
 }
 - (void)setMemoryMapBank0Page:(uint8_t)memoryMapBank0Page {
 	if ([self isActive])
@@ -376,7 +428,7 @@ static const uint16_t registerDefaultValue = 0;
 - (uint8_t)memoryMapBank1Page {
 	if ([self isActive])
 		return [self calculator]->mem_c.banks[1].page;
-	return registerDefaultValue;
+	return defaultValue;
 }
 - (void)setMemoryMapBank1Page:(uint8_t)memoryMapBank1Page {
 	if ([self isActive])
@@ -402,7 +454,7 @@ static const uint16_t registerDefaultValue = 0;
 - (uint8_t)memoryMapBank2Page {
 	if ([self isActive])
 		return [self calculator]->mem_c.banks[2].page;
-	return registerDefaultValue;
+	return defaultValue;
 }
 - (void)setMemoryMapBank2Page:(uint8_t)memoryMapBank2Page {
 	if ([self isActive])
@@ -428,7 +480,7 @@ static const uint16_t registerDefaultValue = 0;
 - (uint8_t)memoryMapBank3Page {
 	if ([self isActive])
 		return [self calculator]->mem_c.banks[3].page;
-	return registerDefaultValue;
+	return defaultValue;
 }
 - (void)setMemoryMapBank3Page:(uint8_t)memoryMapBank3Page {
 	if ([self isActive])
@@ -471,25 +523,25 @@ static const uint16_t registerDefaultValue = 0;
 - (double)interruptsNextTimer1 {
 	if ([self isActive])
 		return ([self calculator]->timer_c.elapsed - [self calculator]->cpu.pio.stdint->lastchk1);
-	return registerDefaultValue;
+	return defaultValue;
 }
 @dynamic interruptsNextTimer2;
 - (double)interruptsNextTimer2 {
 	if ([self isActive])
 		return ([self calculator]->timer_c.elapsed - [self calculator]->cpu.pio.stdint->lastchk2);
-	return registerDefaultValue;
+	return defaultValue;
 }
 @dynamic interruptsTimer1Duration;
 - (double)interruptsTimer1Duration {
 	if ([self isActive])
 		return [self calculator]->cpu.pio.stdint->timermax1;
-	return registerDefaultValue;
+	return defaultValue;
 }
 @dynamic interruptsTimer2Duration;
 - (double)interruptsTimer2Duration {
 	if ([self isActive])
 		return [self calculator]->cpu.pio.stdint->timermax2;
-	return registerDefaultValue;
+	return defaultValue;
 }
 #pragma mark Display
 @dynamic displayActive;
@@ -504,7 +556,7 @@ static const uint16_t registerDefaultValue = 0;
 - (uint32_t)displayContrast {
 	if ([self isActive])
 		return [self calculator]->cpu.pio.lcd->contrast;
-	return registerDefaultValue;
+	return defaultValue;
 }
 - (void)setDisplayContrast:(uint32_t)displayContrast {
 	if ([self isActive])
@@ -514,7 +566,7 @@ static const uint16_t registerDefaultValue = 0;
 - (int32_t)displayX {
 	if ([self isActive])
 		return [self calculator]->cpu.pio.lcd->x;
-	return registerDefaultValue;
+	return defaultValue;
 }
 - (void)setDisplayX:(int32_t)displayX {
 	if ([self isActive])
@@ -524,7 +576,7 @@ static const uint16_t registerDefaultValue = 0;
 - (int32_t)displayY {
 	if ([self isActive])
 		return [self calculator]->cpu.pio.lcd->y;
-	return registerDefaultValue;
+	return defaultValue;
 }
 - (void)setDisplayY:(int32_t)displayY {
 	if ([self isActive])
@@ -534,7 +586,7 @@ static const uint16_t registerDefaultValue = 0;
 - (int32_t)displayZ {
 	if ([self isActive])
 		return [self calculator]->cpu.pio.lcd->z;
-	return registerDefaultValue;
+	return defaultValue;
 }
 - (void)setDisplayZ:(int32_t)displayZ {
 	if ([self isActive])
@@ -544,7 +596,7 @@ static const uint16_t registerDefaultValue = 0;
 - (LCD_CURSOR_MODE)displayCursorMode {
 	if ([self isActive])
 		return [self calculator]->cpu.pio.lcd->cursor_mode;
-	return registerDefaultValue;
+	return defaultValue;
 }
 - (void)setDisplayCursorMode:(LCD_CURSOR_MODE)displayCursorMode {
 	if ([self isActive])

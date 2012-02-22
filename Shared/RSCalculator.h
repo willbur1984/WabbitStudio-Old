@@ -62,6 +62,8 @@ extern const NSInteger RSCalculatorErrorCodeMaximumNumberOfCalculators;
 @property (readwrite,assign,nonatomic,getter = isActive) BOOL active;
 @property (readwrite,assign,nonatomic,getter = isRunning) BOOL running;
 @property (readonly,nonatomic) RSCalculatorModel model;
+@property (readonly,nonatomic) NSImage *skinImage;
+@property (readonly,nonatomic) NSImage *keymapImage;
 
 @property (readwrite,assign,nonatomic) uint16_t programCounter;
 @property (readwrite,assign,nonatomic) uint16_t stackPointer;
