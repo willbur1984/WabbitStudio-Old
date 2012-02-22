@@ -106,7 +106,7 @@ NSString *const WCFontsAndColorsUserThemeIdentifiersKey = @"WCFontsAndColorsUser
 }
 #pragma mark RSPreferencesModule
 - (NSString *)identifier {
-	return @"org.revsoft.wabbitstudio.fontsandcolors";
+	return @"org.revsoft.wabbitcode.fontsandcolors";
 }
 
 - (NSString *)label {

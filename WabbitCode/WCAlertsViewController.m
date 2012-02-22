@@ -27,7 +27,7 @@ NSString *const WCAlertsWarnBeforeDeletingBreakpointsKey = @"alertsWarnBeforeDel
 }
 #pragma mark RSPreferencesModule
 - (NSString *)identifier {
-	return @"org.revsoft.wabbitstudio.advanced.alerts";
+	return @"org.revsoft.wabbitcode.advanced.alerts";
 }
 
 - (NSString *)label {

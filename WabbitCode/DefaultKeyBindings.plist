@@ -890,6 +890,6 @@
 	<key>name</key>
 	<string>Default</string>
 	<key>identifier</key>
-	<string>org.revsoft.wabbitstudio.keybindingcommandset.default</string>
+	<string>org.revsoft.wabbitcode.keybindingcommandset.default</string>
 </dict>
 </plist>

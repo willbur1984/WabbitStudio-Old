@@ -29,7 +29,7 @@ NSString *const WCProjectBuildProductsLocationCustomKey = @"projectBuildProducts
 
 #pragma mark RSPreferencesModule
 - (NSString *)identifier {
-	return @"org.revsoft.wabbitstudio.project";
+	return @"org.revsoft.wabbitcode.project";
 }
 
 - (NSString *)label {

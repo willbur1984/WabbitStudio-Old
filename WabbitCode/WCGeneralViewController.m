@@ -25,7 +25,7 @@ NSString *const WCGeneralOnStartupKey = @"generalOnStartup";
 
 #pragma mark RSPreferencesModule
 - (NSString *)identifier {
-	return @"org.revsoft.wabbitstudio.general";
+	return @"org.revsoft.wabbitcode.general";
 }
 
 - (NSString *)label {

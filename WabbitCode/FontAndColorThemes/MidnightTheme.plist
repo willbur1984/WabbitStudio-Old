@@ -5,7 +5,7 @@
 	<key>name</key>
 	<string>Midnight Love</string>
 	<key>identifier</key>
-	<string>org.revsoft.wabbitstudio.fontandcolortheme.midnight</string>
+	<string>org.revsoft.wabbitcode.fontandcolortheme.midnight</string>
 	<key>plainTextFont</key>
 	<string>Menlo - 11.0</string>
 	<key>plainTextColor</key>

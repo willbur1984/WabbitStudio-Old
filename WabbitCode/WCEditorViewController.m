@@ -59,7 +59,7 @@ NSString *const WCEditorDefaultTextEncodingKey = @"editorDefaultTextEncoding";
 }
 #pragma mark RSPreferencesModule
 - (NSString *)identifier {
-	return @"org.revsoft.wabbitstudio.editor";
+	return @"org.revsoft.wabbitcode.editor";
 }
 
 - (NSString *)label {

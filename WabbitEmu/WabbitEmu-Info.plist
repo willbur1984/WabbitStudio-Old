@@ -10,19 +10,152 @@
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>rom</string>
+				<string>ROM</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string></string>
 			<key>CFBundleTypeName</key>
-			<string>DocumentType</string>
-			<key>CFBundleTypeOSTypes</key>
-			<array>
-				<string>????</string>
-			</array>
+			<string>TI-83 Series Rom Image</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.revsoft.wabbitemu.rom</string>
+			</array>
 			<key>NSDocumentClass</key>
-			<string>WEDocument</string>
+			<string>WECalculatorDocument</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>lab</string>
+				<string>LAB</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>WabbitEmu Label File</string>
+			<key>CFBundleTypeRole</key>
+			<string>None</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.revsoft.wabbitemu.label</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>8xg</string>
+				<string>8XG</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>TI-83+ Series Group File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.revsoft.wabbitemu.group</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>sav</string>
+				<string>SAV</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>WabbitEmu Save State</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.revsoft.wabbitemu.savestate</string>
+			</array>
+			<key>NSDocumentClass</key>
+			<string>WECalculatorDocument</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>73p</string>
+				<string>73P</string>
+				<string>bin</string>
+				<string>BIN</string>
+				<string>83p</string>
+				<string>83P</string>
+				<string>8xp</string>
+				<string>8XP</string>
+				<string>85p</string>
+				<string>85P</string>
+				<string>86p</string>
+				<string>86P</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>TI-83 Series Program File</string>
+			<key>CFBundleTypeRole</key>
+			<string>None</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.revsoft.wabbitemu.program</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>8xk</string>
+				<string>8XK</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>TI-83+ Series Application File</string>
+			<key>CFBundleTypeRole</key>
+			<string>None</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.revsoft.wabbitemu.application</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>86s</string>
+				<string>86S</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>TI-86 Strings File</string>
+			<key>CFBundleTypeRole</key>
+			<string>None</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.revsoft.wabbitemu.strings86</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>85s</string>
+				<string>85S</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>TI-85 Strings File</string>
+			<key>CFBundleTypeRole</key>
+			<string>None</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.revsoft.wabbitemu.strings85</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>8xi</string>
+				<string>8XI</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>TI-83 Series Picture File</string>
+			<key>CFBundleTypeRole</key>
+			<string>None</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.revsoft.wabbitemu.picture</string>
+			</array>
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
@@ -30,7 +163,7 @@
 	<key>CFBundleIconFile</key>
 	<string></string>
 	<key>CFBundleIdentifier</key>
-	<string>org.revsoft.${PRODUCT_NAME:rfc1034identifier}</string>
+	<string>org.revsoft.WabbitEmu</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -38,18 +171,195 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>2.1</string>
 	<key>CFBundleSignature</key>
-	<string>????</string>
+	<string>WEMU</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.developer-tools</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>${MACOSX_DEPLOYMENT_TARGET}</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2012 __MyCompanyName__. All rights reserved.</string>
+	<string>Copyright © 2012 Revolution Software. All rights reserved.</string>
 	<key>NSMainNibFile</key>
-	<string>MainMenu</string>
+	<string>WEMainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>TI-83 Series Rom Image</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.revsoft.wabbitemu.rom</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>rom</string>
+					<string>ROM</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>WabbitEmu Label File</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.revsoft.wabbitemu.label</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>lab</string>
+					<string>LAB</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>WabbitEmu Save State</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.revsoft.wabbitemu.savestate</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>sav</string>
+					<string>SAV</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>TI-83+ Series Application File</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.revsoft.wabbitemu.application</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>8xk</string>
+					<string>8XK</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>TI-83 Series Program File</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.revsoft.wabbitemu.program</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>73p</string>
+					<string>73P</string>
+					<string>bin</string>
+					<string>BIN</string>
+					<string>83p</string>
+					<string>83P</string>
+					<string>8xp</string>
+					<string>8XP</string>
+					<string>85p</string>
+					<string>85P</string>
+					<string>86p</string>
+					<string>86P</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>TI-85 Strings File</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.revsoft.wabbitemu.strings85</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>85s</string>
+					<string>85S</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>TI-86 Strings File</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.revsoft.wabbitemu.strings86</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>86s</string>
+					<string>86S</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>TI-83 Series Picture File</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.revsoft.wabbitemu.picture</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>8xi</string>
+					<string>8XI</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>TI-83 Series Group File</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.revsoft.wabbitemu.group</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>8xg</string>
+					<string>8XG</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
 </dict>
 </plist>

@@ -23,7 +23,7 @@ NSString *const WCKeyboardHomeAndEndKeysBehaviorKey = @"keyboardHomeAndEndKeysBe
 }
 #pragma mark RSPreferencesModule
 - (NSString *)identifier {
-	return @"org.revsoft.wabbitstudio.advanced.keyboard";
+	return @"org.revsoft.wabbitcode.advanced.keyboard";
 }
 
 - (NSString *)label {

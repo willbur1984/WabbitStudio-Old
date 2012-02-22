@@ -76,7 +76,7 @@ static const CGFloat kMaxLeftSubviewWidth = 250.0;
 
 #pragma mark RSPreferencesModule
 - (NSString *)identifier {
-	return @"org.revsoft.wabbitstudio.advanced";
+	return @"org.revsoft.wabbitcode.advanced";
 }
 
 - (NSString *)label {

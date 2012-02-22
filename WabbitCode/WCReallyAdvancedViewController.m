@@ -24,7 +24,7 @@ NSString *const WCReallyAdvancedJumpInFileSearchUsingCurrentEditorSelectionKey =
 }
 #pragma mark RSPreferencesModule
 - (NSString *)identifier {
-	return @"org.revsoft.wabbitstudio.advanced.reallyadvanced";
+	return @"org.revsoft.wabbitcode.advanced.reallyadvanced";
 }
 
 - (NSString *)label {

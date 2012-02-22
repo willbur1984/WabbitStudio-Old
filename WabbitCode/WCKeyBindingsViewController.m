@@ -79,7 +79,7 @@ NSString *const WCKeyBindingsUserCommandSetIdentifiersKey = @"WCKeyBindingsUserC
 }
 #pragma mark RSPreferencesModule
 - (NSString *)identifier {
-	return @"org.revsoft.wabbitstudio.keybindings";
+	return @"org.revsoft.wabbitcode.keybindings";
 }
 
 - (NSString *)label {

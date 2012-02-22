@@ -68,17 +68,17 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
-				<string>wstudioproj</string>
+				<string>wcodeproject</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string>project</string>
 			<key>CFBundleTypeName</key>
-			<string>WabbitStudio Project File</string>
+			<string>WabbitCode Project File</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>org.revsoft.wabbitstudio.project</string>
+				<string>org.revsoft.wabbitcode.project</string>
 			</array>
 			<key>LSTypeIsPackage</key>
 			<true/>
@@ -91,7 +91,7 @@
 	<key>CFBundleIconFile</key>
 	<string>wabbitstudio</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.revsoft.wabbitstudio</string>
+	<string>org.revsoft.WabbitCode</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -99,9 +99,9 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>2.2</string>
 	<key>CFBundleSignature</key>
-	<string>????</string>
+	<string>WCOD</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>LSApplicationCategoryType</key>
@@ -122,16 +122,16 @@
 				<string>com.apple.package</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>WabbitStudio Project File</string>
+			<string>WabbitCode Project File</string>
 			<key>UTTypeIconFile</key>
 			<string>project</string>
 			<key>UTTypeIdentifier</key>
-			<string>org.revsoft.wabbitstudio.project</string>
+			<string>org.revsoft.wabbitcode.project</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
 				<array>
-					<string>wstudioproj</string>
+					<string>wcodeproj</string>
 				</array>
 			</dict>
 			<key>public.filename-extension</key>
@@ -139,9 +139,6 @@
 				<string>wstudioproj</string>
 			</array>
 		</dict>
-	</array>
-	<key>UTImportedTypeDeclarations</key>
-	<array>
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array>
@@ -150,7 +147,7 @@
 			<key>UTTypeDescription</key>
 			<string>Z80 Assembly File</string>
 			<key>UTTypeIconFile</key>
-			<string>assembly.icns</string>
+			<string>assembly</string>
 			<key>UTTypeIdentifier</key>
 			<string>org.revsoft.wabbitcode.assembly</string>
 			<key>UTTypeTagSpecification</key>
@@ -163,13 +160,6 @@
 					<string>ASM</string>
 				</array>
 			</dict>
-			<key>public.filename-extension</key>
-			<array>
-				<string>z80</string>
-				<string>Z80</string>
-				<string>asm</string>
-				<string>ASM</string>
-			</array>
 		</dict>
 		<dict>
 			<key>UTTypeConformsTo</key>
@@ -179,7 +169,7 @@
 			<key>UTTypeDescription</key>
 			<string>Z80 Include File</string>
 			<key>UTTypeIconFile</key>
-			<string>include.icns</string>
+			<string>include</string>
 			<key>UTTypeIdentifier</key>
 			<string>org.revsoft.wabbitcode.include</string>
 			<key>UTTypeTagSpecification</key>
@@ -190,12 +180,10 @@
 					<string>INC</string>
 				</array>
 			</dict>
-			<key>public.filename-extension</key>
-			<array>
-				<string>inc</string>
-				<string>INC</string>
-			</array>
 		</dict>
+	</array>
+	<key>UTImportedTypeDeclarations</key>
+	<array>
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array>

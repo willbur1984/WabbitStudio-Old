@@ -40,6 +40,8 @@
 		0708965514A6CE900017BBE4 /* WCCompletionChoice.m in Sources */ = {isa = PBXBuildFile; fileRef = 0708965414A6CE900017BBE4 /* WCCompletionChoice.m */; };
 		0708965714A6F1360017BBE4 /* PreProcessorCompletions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0708965614A6F1360017BBE4 /* PreProcessorCompletions.plist */; };
 		0708A5BF14D9031600BE60EE /* Bookmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 0708A5BE14D9031600BE60EE /* Bookmark.png */; };
+		070D808614F4761700C289A3 /* RSTopBorderedGlassGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0778851E14C23F9700605F5D /* RSTopBorderedGlassGradientView.m */; };
+		070D808714F4762A00C289A3 /* RSGlassGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 072BBC5B14AA6D190044ECC2 /* RSGlassGradientView.m */; };
 		070EC24D14EF56F600982CA8 /* WCEditBuildTargetIncludesArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 070EC24C14EF56F600982CA8 /* WCEditBuildTargetIncludesArrayController.m */; };
 		070EC25014EF588E00982CA8 /* RSRTVArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 070EC24F14EF588E00982CA8 /* RSRTVArrayController.m */; };
 		070EC25314EF5E4E00982CA8 /* WCEditBuildTargetDefinesArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 070EC25214EF5E4D00982CA8 /* WCEditBuildTargetDefinesArrayController.m */; };
@@ -211,9 +213,7 @@
 		075D2FC014F36779007F8951 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 075D2FBE14F36779007F8951 /* InfoPlist.strings */; };
 		075D2FC214F36779007F8951 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 075D2FC114F36779007F8951 /* main.m */; };
 		075D2FC614F36779007F8951 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 075D2FC414F36779007F8951 /* Credits.rtf */; };
-		075D2FC914F36779007F8951 /* WEDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 075D2FC814F36779007F8951 /* WEDocument.m */; };
-		075D2FCC14F36779007F8951 /* WEDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 075D2FCA14F36779007F8951 /* WEDocument.xib */; };
-		075D2FCF14F3677A007F8951 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 075D2FCD14F3677A007F8951 /* MainMenu.xib */; };
+		075D2FCF14F3677A007F8951 /* WEMainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 075D2FCD14F3677A007F8951 /* WEMainMenu.xib */; };
 		075D30C114F408E2007F8951 /* alu.c in Sources */ = {isa = PBXBuildFile; fileRef = 075D2FD914F408E1007F8951 /* alu.c */; };
 		075D30C214F408E2007F8951 /* alu.c in Sources */ = {isa = PBXBuildFile; fileRef = 075D2FD914F408E1007F8951 /* alu.c */; };
 		075D30C314F408E2007F8951 /* alu_reverse.c in Sources */ = {isa = PBXBuildFile; fileRef = 075D2FDB14F408E1007F8951 /* alu_reverse.c */; };
@@ -306,6 +306,16 @@
 		075D31D214F408E2007F8951 /* var.c in Sources */ = {isa = PBXBuildFile; fileRef = 075D30BA14F408E2007F8951 /* var.c */; };
 		075D31E514F41379007F8951 /* RSCalculator.m in Sources */ = {isa = PBXBuildFile; fileRef = 075D31E414F41370007F8951 /* RSCalculator.m */; };
 		075D31E614F41379007F8951 /* RSCalculator.m in Sources */ = {isa = PBXBuildFile; fileRef = 075D31E414F41370007F8951 /* RSCalculator.m */; };
+		075D31EB14F43E4A007F8951 /* WECalculatorDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 075D31E914F43E4A007F8951 /* WECalculatorDocument.m */; };
+		075D31F014F43E88007F8951 /* WECalculatorWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 075D31EE14F43E88007F8951 /* WECalculatorWindow.xib */; };
+		075D31F314F43EA9007F8951 /* WECalculatorWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 075D31F214F43EA9007F8951 /* WECalculatorWindowController.m */; };
+		075D31F614F440F5007F8951 /* RSLCDView.m in Sources */ = {isa = PBXBuildFile; fileRef = 075D31F514F440EF007F8951 /* RSLCDView.m */; };
+		075D31F714F440F5007F8951 /* RSLCDView.m in Sources */ = {isa = PBXBuildFile; fileRef = 075D31F514F440EF007F8951 /* RSLCDView.m */; };
+		075D31F914F44121007F8951 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 075D31F814F4411F007F8951 /* OpenGL.framework */; };
+		075D31FA14F4412D007F8951 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 075D31F814F4411F007F8951 /* OpenGL.framework */; };
+		075D31FD14F44C81007F8951 /* RSLCDViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 075D31FC14F44C7C007F8951 /* RSLCDViewManager.m */; };
+		075D31FE14F44C81007F8951 /* RSLCDViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 075D31FC14F44C7C007F8951 /* RSLCDViewManager.m */; };
+		075D320114F452A7007F8951 /* WEApplicationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 075D320014F452A7007F8951 /* WEApplicationDelegate.m */; };
 		0765361514CD10DF004D72D1 /* WCProjectNavigatorTreeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0765361414CD10DF004D72D1 /* WCProjectNavigatorTreeController.m */; };
 		0765361B14CD4525004D72D1 /* WCAddToProjectAccessoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0765361914CD4525004D72D1 /* WCAddToProjectAccessoryViewController.m */; };
 		0765361F14CD459E004D72D1 /* WCAddToProjectAccessoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0765361D14CD459E004D72D1 /* WCAddToProjectAccessoryView.xib */; };
@@ -842,10 +852,7 @@
 		075D2FC114F36779007F8951 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		075D2FC314F36779007F8951 /* WabbitEmu-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WabbitEmu-Prefix.pch"; sourceTree = "<group>"; };
 		075D2FC514F36779007F8951 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
-		075D2FC714F36779007F8951 /* WEDocument.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WEDocument.h; sourceTree = "<group>"; };
-		075D2FC814F36779007F8951 /* WEDocument.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WEDocument.m; sourceTree = "<group>"; };
-		075D2FCB14F36779007F8951 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/WEDocument.xib; sourceTree = "<group>"; };
-		075D2FCE14F3677A007F8951 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		075D2FCE14F3677A007F8951 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/WEMainMenu.xib; sourceTree = "<group>"; };
 		075D2FD914F408E1007F8951 /* alu.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = alu.c; sourceTree = "<group>"; };
 		075D2FDA14F408E1007F8951 /* alu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = alu.h; sourceTree = "<group>"; };
 		075D2FDB14F408E1007F8951 /* alu_reverse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = alu_reverse.c; sourceTree = "<group>"; };
@@ -928,6 +935,19 @@
 		075D31E214F40F99007F8951 /* dbreg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = dbreg.h; sourceTree = "<group>"; };
 		075D31E314F4136A007F8951 /* RSCalculator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSCalculator.h; sourceTree = "<group>"; };
 		075D31E414F41370007F8951 /* RSCalculator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSCalculator.m; sourceTree = "<group>"; };
+		075D31E714F41493007F8951 /* RSCalculatorDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSCalculatorDelegate.h; sourceTree = "<group>"; };
+		075D31E814F43E4A007F8951 /* WECalculatorDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WECalculatorDocument.h; sourceTree = "<group>"; };
+		075D31E914F43E4A007F8951 /* WECalculatorDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WECalculatorDocument.m; sourceTree = "<group>"; };
+		075D31EF14F43E88007F8951 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WECalculatorWindow.xib; sourceTree = "<group>"; };
+		075D31F114F43EA9007F8951 /* WECalculatorWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WECalculatorWindowController.h; sourceTree = "<group>"; };
+		075D31F214F43EA9007F8951 /* WECalculatorWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WECalculatorWindowController.m; sourceTree = "<group>"; };
+		075D31F414F440EA007F8951 /* RSLCDView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSLCDView.h; sourceTree = "<group>"; };
+		075D31F514F440EF007F8951 /* RSLCDView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSLCDView.m; sourceTree = "<group>"; };
+		075D31F814F4411F007F8951 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		075D31FB14F44C76007F8951 /* RSLCDViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSLCDViewManager.h; sourceTree = "<group>"; };
+		075D31FC14F44C7C007F8951 /* RSLCDViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSLCDViewManager.m; sourceTree = "<group>"; };
+		075D31FF14F452A7007F8951 /* WEApplicationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WEApplicationDelegate.h; sourceTree = "<group>"; };
+		075D320014F452A7007F8951 /* WEApplicationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WEApplicationDelegate.m; sourceTree = "<group>"; };
 		0765361014CCB91C004D72D1 /* WCTabViewControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTabViewControllerDelegate.h; sourceTree = "<group>"; };
 		0765361314CD10DF004D72D1 /* WCProjectNavigatorTreeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCProjectNavigatorTreeController.h; sourceTree = "<group>"; };
 		0765361414CD10DF004D72D1 /* WCProjectNavigatorTreeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCProjectNavigatorTreeController.m; sourceTree = "<group>"; };
@@ -1174,6 +1194,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				075D31F914F44121007F8951 /* OpenGL.framework in Frameworks */,
 				071E6ACC14CC07C200F2888B /* libz.dylib in Frameworks */,
 				0778853614C49F0300605F5D /* Quartz.framework in Frameworks */,
 				07A8AFB914BDEE9C008CB9FF /* Carbon.framework in Frameworks */,
@@ -1190,6 +1211,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				075D2FBA14F36779007F8951 /* Cocoa.framework in Frameworks */,
+				075D31FA14F4412D007F8951 /* OpenGL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1573,6 +1595,7 @@
 			isa = PBXGroup;
 			children = (
 				071E6ACB14CC07C200F2888B /* libz.dylib */,
+				075D31F814F4411F007F8951 /* OpenGL.framework */,
 				0797326414C52EBE00A71F54 /* PSMTabBarControl.framework */,
 				0778853514C49F0300605F5D /* Quartz.framework */,
 				077884EB14C0CE6A00605F5D /* Sparkle.framework */,
@@ -1914,10 +1937,13 @@
 		075D2FBB14F36779007F8951 /* WabbitEmu */ = {
 			isa = PBXGroup;
 			children = (
-				075D2FC714F36779007F8951 /* WEDocument.h */,
-				075D2FC814F36779007F8951 /* WEDocument.m */,
-				075D2FCA14F36779007F8951 /* WEDocument.xib */,
-				075D2FCD14F3677A007F8951 /* MainMenu.xib */,
+				075D31E814F43E4A007F8951 /* WECalculatorDocument.h */,
+				075D31E914F43E4A007F8951 /* WECalculatorDocument.m */,
+				075D31F114F43EA9007F8951 /* WECalculatorWindowController.h */,
+				075D31F214F43EA9007F8951 /* WECalculatorWindowController.m */,
+				075D31FF14F452A7007F8951 /* WEApplicationDelegate.h */,
+				075D320014F452A7007F8951 /* WEApplicationDelegate.m */,
+				075D31ED14F43E60007F8951 /* Xibs */,
 				075D2FBC14F36779007F8951 /* Supporting Files */,
 			);
 			path = WabbitEmu;
@@ -1940,6 +1966,11 @@
 			children = (
 				075D31E314F4136A007F8951 /* RSCalculator.h */,
 				075D31E414F41370007F8951 /* RSCalculator.m */,
+				075D31E714F41493007F8951 /* RSCalculatorDelegate.h */,
+				075D31F414F440EA007F8951 /* RSLCDView.h */,
+				075D31F514F440EF007F8951 /* RSLCDView.m */,
+				075D31FB14F44C76007F8951 /* RSLCDViewManager.h */,
+				075D31FC14F44C7C007F8951 /* RSLCDViewManager.m */,
 				075D2FD714F408E1007F8951 /* wabbitemu core */,
 			);
 			name = Emulator;
@@ -2078,6 +2109,16 @@
 				075D30BB14F408E2007F8951 /* var.h */,
 			);
 			path = utilities;
+			sourceTree = "<group>";
+		};
+		075D31ED14F43E60007F8951 /* Xibs */ = {
+			isa = PBXGroup;
+			children = (
+				075D2FCD14F3677A007F8951 /* WEMainMenu.xib */,
+				075D31EE14F43E88007F8951 /* WECalculatorWindow.xib */,
+			);
+			name = Xibs;
+			path = en.lproj;
 			sourceTree = "<group>";
 		};
 		0765361214CD107E004D72D1 /* Project */ = {
@@ -2544,6 +2585,7 @@
 		071ECCB514A4233C002409F8 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = "";
 				LastUpgradeCheck = 0430;
 				ORGANIZATIONNAME = "Revolution Software";
 			};
@@ -2689,8 +2731,7 @@
 			files = (
 				075D2FC014F36779007F8951 /* InfoPlist.strings in Resources */,
 				075D2FC614F36779007F8951 /* Credits.rtf in Resources */,
-				075D2FCC14F36779007F8951 /* WEDocument.xib in Resources */,
-				075D2FCF14F3677A007F8951 /* MainMenu.xib in Resources */,
+				075D2FCF14F3677A007F8951 /* WEMainMenu.xib in Resources */,
 				075D314814F408E2007F8951 /* TI-73.png in Resources */,
 				075D314A14F408E2007F8951 /* ti-81.png in Resources */,
 				075D314C14F408E2007F8951 /* TI-82.png in Resources */,
@@ -2710,6 +2751,7 @@
 				075D316814F408E2007F8951 /* TI-Icons.bmp in Resources */,
 				075D316A14F408E2007F8951 /* TI83P.bmp in Resources */,
 				075D316C14F408E2007F8951 /* TI83PSE.bmp in Resources */,
+				075D31F014F43E88007F8951 /* WECalculatorWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2983,6 +3025,8 @@
 				075D31C714F408E2007F8951 /* savestate.c in Sources */,
 				075D31D114F408E2007F8951 /* var.c in Sources */,
 				075D31E514F41379007F8951 /* RSCalculator.m in Sources */,
+				075D31F614F440F5007F8951 /* RSLCDView.m in Sources */,
+				075D31FD14F44C81007F8951 /* RSLCDViewManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2991,7 +3035,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				075D2FC214F36779007F8951 /* main.m in Sources */,
-				075D2FC914F36779007F8951 /* WEDocument.m in Sources */,
 				075D30C214F408E2007F8951 /* alu.c in Sources */,
 				075D30C414F408E2007F8951 /* alu_reverse.c in Sources */,
 				075D30C614F408E2007F8951 /* control.c in Sources */,
@@ -3019,6 +3062,13 @@
 				075D31C814F408E2007F8951 /* savestate.c in Sources */,
 				075D31D214F408E2007F8951 /* var.c in Sources */,
 				075D31E614F41379007F8951 /* RSCalculator.m in Sources */,
+				075D31EB14F43E4A007F8951 /* WECalculatorDocument.m in Sources */,
+				075D31F314F43EA9007F8951 /* WECalculatorWindowController.m in Sources */,
+				075D31F714F440F5007F8951 /* RSLCDView.m in Sources */,
+				075D31FE14F44C81007F8951 /* RSLCDViewManager.m in Sources */,
+				075D320114F452A7007F8951 /* WEApplicationDelegate.m in Sources */,
+				070D808614F4761700C289A3 /* RSTopBorderedGlassGradientView.m in Sources */,
+				070D808714F4762A00C289A3 /* RSGlassGradientView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3251,20 +3301,21 @@
 			name = Credits.rtf;
 			sourceTree = "<group>";
 		};
-		075D2FCA14F36779007F8951 /* WEDocument.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				075D2FCB14F36779007F8951 /* en */,
-			);
-			name = WEDocument.xib;
-			sourceTree = "<group>";
-		};
-		075D2FCD14F3677A007F8951 /* MainMenu.xib */ = {
+		075D2FCD14F3677A007F8951 /* WEMainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				075D2FCE14F3677A007F8951 /* en */,
 			);
-			name = MainMenu.xib;
+			name = WEMainMenu.xib;
+			path = ..;
+			sourceTree = "<group>";
+		};
+		075D31EE14F43E88007F8951 /* WECalculatorWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				075D31EF14F43E88007F8951 /* en */,
+			);
+			name = WECalculatorWindow.xib;
 			sourceTree = "<group>";
 		};
 		0765361D14CD459E004D72D1 /* WCAddToProjectAccessoryView.xib */ = {
@@ -3543,6 +3594,7 @@
 				075D2FD114F3677A007F8951 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
