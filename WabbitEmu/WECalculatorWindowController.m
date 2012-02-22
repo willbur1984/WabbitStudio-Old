@@ -16,6 +16,7 @@
 
 @interface WECalculatorWindowController ()
 @property (readwrite,assign,nonatomic) RSLCDView *LCDView;
+@property (readwrite,copy,nonatomic) NSString *statusString;
 @end
 
 @implementation WECalculatorWindowController
@@ -92,16 +93,18 @@
 			break;
 	}
 	
-	RSLogPoint(point);
-	RSLogPoint(endPoint);
-	
-	[lcdView setFrameOrigin:point];
+	[lcdView setFrame:NSMakeRect(point.x, point.y, endPoint.x-point.x, endPoint.y-point.y)];
 	
 	[[RSLCDViewManager sharedManager] addLCDView:lcdView];
 	[self setLCDView:lcdView];
+	
+	_FPSTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(_FPSTimerCallback:) userInfo:nil repeats:YES];
 }
 
 - (void)windowWillClose:(NSNotification *)notification {
+	[_FPSTimer invalidate];
+	_FPSTimer = nil;
+	
 	[[RSLCDViewManager sharedManager] removeLCDView:[self LCDView]];
 }
 
@@ -116,5 +119,13 @@
 
 @synthesize calculatorDocument=_calculatorDocument;
 @synthesize LCDView=_LCDView;
+@synthesize statusString=_statusString;
+
+- (void)_FPSTimerCallback:(NSTimer *)timer {
+	RSCalculator *calculator = [[self calculatorDocument] calculator];
+	
+	if ([calculator isActive] && [calculator isRunning])
+		[self setStatusString:[NSString stringWithFormat:NSLocalizedString(@"%@, FPS: %.2f", @"calculator status format string"),[calculator modelString],[calculator calculator]->cpu.pio.lcd->ufps]];
+}
 
 @end

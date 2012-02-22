@@ -375,6 +375,13 @@
 		07A8AFE214BE2C2B008CB9FF /* NSTreeNode+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A8AFE114BE2C2B008CB9FF /* NSTreeNode+RSExtensions.m */; };
 		07A8AFE514BE2CE9008CB9FF /* WCKeyBindingsOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A8AFE414BE2CE9008CB9FF /* WCKeyBindingsOutlineView.m */; };
 		07A8AFF014BE5ED8008CB9FF /* DefaultKeyBindings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 07A8AFEF14BE5ED8008CB9FF /* DefaultKeyBindings.plist */; };
+		07AB504F14F54425005AA724 /* RSTransferFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 07AB504E14F54425005AA724 /* RSTransferFile.m */; };
+		07AB505014F54425005AA724 /* RSTransferFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 07AB504E14F54425005AA724 /* RSTransferFile.m */; };
+		07AB505414F5475C005AA724 /* RSTransferFileWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07AB505314F5475C005AA724 /* RSTransferFileWindowController.m */; };
+		07AB505514F5475C005AA724 /* RSTransferFileWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07AB505314F5475C005AA724 /* RSTransferFileWindowController.m */; };
+		07AB505714F54D31005AA724 /* NSURL+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 071985E514C01F5D00C8E91A /* NSURL+RSExtensions.m */; };
+		07AB505A14F5577A005AA724 /* RSTransferFileWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07AB505814F5577A005AA724 /* RSTransferFileWindow.xib */; };
+		07AB505B14F5577A005AA724 /* RSTransferFileWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07AB505814F5577A005AA724 /* RSTransferFileWindow.xib */; };
 		07AEB77E14CE037000A0BA1C /* WCArgumentPlaceholderWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07AEB77D14CE037000A0BA1C /* WCArgumentPlaceholderWindowController.m */; };
 		07AEB78214CE03C300A0BA1C /* WCArgumentPlaceholderWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07AEB78014CE03C300A0BA1C /* WCArgumentPlaceholderWindow.xib */; };
 		07B4740514AE3CAA00E3F9D0 /* RSNumberToBoolTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B4740414AE3CAA00E3F9D0 /* RSNumberToBoolTransformer.m */; };
@@ -1093,6 +1100,12 @@
 		07A8AFE314BE2CE8008CB9FF /* WCKeyBindingsOutlineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCKeyBindingsOutlineView.h; sourceTree = "<group>"; };
 		07A8AFE414BE2CE9008CB9FF /* WCKeyBindingsOutlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCKeyBindingsOutlineView.m; sourceTree = "<group>"; };
 		07A8AFEF14BE5ED8008CB9FF /* DefaultKeyBindings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DefaultKeyBindings.plist; sourceTree = "<group>"; };
+		07AB504D14F54425005AA724 /* RSTransferFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSTransferFile.h; sourceTree = "<group>"; };
+		07AB504E14F54425005AA724 /* RSTransferFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSTransferFile.m; sourceTree = "<group>"; };
+		07AB505214F5475C005AA724 /* RSTransferFileWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSTransferFileWindowController.h; sourceTree = "<group>"; };
+		07AB505314F5475C005AA724 /* RSTransferFileWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSTransferFileWindowController.m; sourceTree = "<group>"; };
+		07AB505614F5478E005AA724 /* RSTransferFileWindowControllerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSTransferFileWindowControllerDelegate.h; sourceTree = "<group>"; };
+		07AB505914F5577A005AA724 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = RSTransferFileWindow.xib; sourceTree = "<group>"; };
 		07AEB77C14CE037000A0BA1C /* WCArgumentPlaceholderWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCArgumentPlaceholderWindowController.h; sourceTree = "<group>"; };
 		07AEB77D14CE037000A0BA1C /* WCArgumentPlaceholderWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCArgumentPlaceholderWindowController.m; sourceTree = "<group>"; };
 		07AEB78114CE03C300A0BA1C /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCArgumentPlaceholderWindow.xib; sourceTree = "<group>"; };
@@ -1968,6 +1981,11 @@
 				075D31FC14F44C7C007F8951 /* RSLCDViewManager.m */,
 				07ED2C5814F49A0E0097C5B6 /* RSSkinView.h */,
 				07ED2C5914F49A0E0097C5B6 /* RSSkinView.m */,
+				07AB504D14F54425005AA724 /* RSTransferFile.h */,
+				07AB504E14F54425005AA724 /* RSTransferFile.m */,
+				07AB505214F5475C005AA724 /* RSTransferFileWindowController.h */,
+				07AB505314F5475C005AA724 /* RSTransferFileWindowController.m */,
+				07AB505614F5478E005AA724 /* RSTransferFileWindowControllerDelegate.h */,
 				075D2FD714F408E1007F8951 /* wabbitemu core */,
 			);
 			name = Emulator;
@@ -2266,6 +2284,7 @@
 				078F041114AD736A0080ADBC /* RSFindOptionsView.xib */,
 				078F041A14AD78640080ADBC /* RSFindBarView.xib */,
 				072880CC14B4F9030082DE4C /* RSBezelWindow.xib */,
+				07AB505814F5577A005AA724 /* RSTransferFileWindow.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -2713,6 +2732,7 @@
 				07ED2C8714F4A1070097C5B6 /* ti-85keymap.png in Resources */,
 				07ED2C8914F4A1070097C5B6 /* ti-86.png in Resources */,
 				07ED2C8B14F4A1070097C5B6 /* ti-86keymap.png in Resources */,
+				07AB505A14F5577A005AA724 /* RSTransferFileWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2740,6 +2760,7 @@
 				07ED2C8814F4A1070097C5B6 /* ti-85keymap.png in Resources */,
 				07ED2C8A14F4A1070097C5B6 /* ti-86.png in Resources */,
 				07ED2C8C14F4A1070097C5B6 /* ti-86keymap.png in Resources */,
+				07AB505B14F5577A005AA724 /* RSTransferFileWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3016,6 +3037,8 @@
 				075D31F614F440F5007F8951 /* RSLCDView.m in Sources */,
 				075D31FD14F44C81007F8951 /* RSLCDViewManager.m in Sources */,
 				07ED2C5A14F49A0E0097C5B6 /* RSSkinView.m in Sources */,
+				07AB504F14F54425005AA724 /* RSTransferFile.m in Sources */,
+				07AB505414F5475C005AA724 /* RSTransferFileWindowController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3059,6 +3082,9 @@
 				070D808614F4761700C289A3 /* RSTopBorderedGlassGradientView.m in Sources */,
 				070D808714F4762A00C289A3 /* RSGlassGradientView.m in Sources */,
 				07ED2C5B14F49A0E0097C5B6 /* RSSkinView.m in Sources */,
+				07AB505014F54425005AA724 /* RSTransferFile.m in Sources */,
+				07AB505514F5475C005AA724 /* RSTransferFileWindowController.m in Sources */,
+				07AB505714F54D31005AA724 /* NSURL+RSExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3394,6 +3420,14 @@
 				07A8AFC514BDF65C008CB9FF /* en */,
 			);
 			name = WCKeyBindingsEditCommandPairWindow.xib;
+			sourceTree = "<group>";
+		};
+		07AB505814F5577A005AA724 /* RSTransferFileWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				07AB505914F5577A005AA724 /* en */,
+			);
+			name = RSTransferFileWindow.xib;
 			sourceTree = "<group>";
 		};
 		07AEB78014CE03C300A0BA1C /* WCArgumentPlaceholderWindow.xib */ = {

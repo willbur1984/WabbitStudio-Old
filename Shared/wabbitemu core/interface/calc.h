@@ -221,6 +221,7 @@ GLOBAL BOOL sync_cores;
 GLOBAL link_t *link_hub[MAX_CALCS + 1];
 GLOBAL int link_hub_count;
 GLOBAL int calc_waiting_link;
+GLOBAL BOOL never_forceload_apps;
 
 
 GLOBAL const TCHAR *CalcModelTxt[]

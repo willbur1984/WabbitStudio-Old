@@ -42,13 +42,6 @@
 	return self;
 }
 
-+ (BOOL)canConcurrentlyReadDocumentsOfType:(NSString *)typeName {
-	if ([typeName isEqualToString:RSCalculatorRomUTI] ||
-		[typeName isEqualToString:RSCalculatorSavestateUTI])
-		return YES;
-	return NO;
-}
-
 - (BOOL)readFromURL:(NSURL *)url ofType:(NSString *)typeName error:(NSError **)outError {
 	RSCalculator *calculator = [[[RSCalculator alloc] initWithRomOrSavestateURL:url error:outError] autorelease];
 	

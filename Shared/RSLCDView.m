@@ -9,6 +9,7 @@
 #import "RSLCDView.h"
 #import "RSCalculator.h"
 #import "RSDefines.h"
+#import "RSTransferFileWindowController.h"
 
 @interface RSLCDView ()
 @property (readonly,nonatomic) NSBitmapImageRep *LCDBitmap;
@@ -17,7 +18,7 @@
 @end
 
 @implementation RSLCDView
-
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
@@ -219,29 +220,45 @@
 	glLoadIdentity();
 	glViewport(0.0,0.0,NSWidth([self bounds]),NSHeight([self bounds]));
 }
-
+#pragma mark NSDraggingDestination
 - (NSDragOperation)draggingEntered:(id<NSDraggingInfo>)info {
 	if ([info draggingSource] == self)
 		return NSDragOperationNone;
 	
-	return NSDragOperationCopy;
+	NSArray *fileURLs = [[info draggingPasteboard] readObjectsForClasses:[NSArray arrayWithObjects:[NSURL class], nil] options:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],NSPasteboardURLReadingFileURLsOnlyKey, nil]];
+	NSArray *acceptedFileURLs = [RSTransferFileWindowController filterTransferFileURLs:fileURLs];
+	
+	if ([acceptedFileURLs count])
+		return NSDragOperationCopy;
+	return NSDragOperationNone;
 }
 
 - (BOOL)performDragOperation:(id<NSDraggingInfo>)info {
+	NSArray *fileURLs = [[info draggingPasteboard] readObjectsForClasses:[NSArray arrayWithObjects:[NSURL class], nil] options:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],NSPasteboardURLReadingFileURLsOnlyKey, nil]];
+	RSTransferFileWindowController *transferFileWindowController = [[[RSTransferFileWindowController alloc] initWithCalculator:[self calculator]] autorelease];
+	
+	[transferFileWindowController setDelegate:self];
+	
+	[transferFileWindowController showTransferFileWindowForTransferFileURLs:[RSTransferFileWindowController filterTransferFileURLs:fileURLs]];
+	
 	return YES;
 }
 
 - (void)draggingEnded:(id<NSDraggingInfo>)info {
 	
 }
-
+#pragma mark NSDraggingSource
 - (NSDragOperation)draggingSession:(NSDraggingSession *)session sourceOperationMaskForDraggingContext:(NSDraggingContext)context; {
 	return NSDragOperationCopy;
 }
 - (void)draggingSession:(NSDraggingSession *)session endedAtPoint:(NSPoint)screenPoint operation:(NSDragOperation)operation {
 	
 }
-
+#pragma mark RSTransferFileWindowControllerDelegate
+- (NSWindow *)windowForTransferFileWindowControllerSheet:(RSTransferFileWindowController *)transferFileWindowController {
+	return [self window];
+}
+#pragma mark *** Public Methods ***
 - (id)initWithFrame:(NSRect)frameRect calculator:(RSCalculator *)calculator; {
 	const NSOpenGLPixelFormatAttribute pixelFormatAttributes[] = {
 		NSOpenGLPFAAccelerated,
@@ -265,7 +282,7 @@
 	
 	return self;
 }
-
+#pragma mark IBActions
 - (IBAction)loadRomOrSavestate:(id)sender; {
 	NSOpenPanel *openPanel = [NSOpenPanel openPanel];
 	
@@ -284,12 +301,27 @@
 	}];
 }
 - (IBAction)transferFiles:(id)sender; {
+	NSOpenPanel *openPanel = [NSOpenPanel openPanel];
 	
+	[openPanel setAllowedFileTypes:[NSArray arrayWithObjects:RSCalculatorProgramUTI,RSCalculatorApplicationUTI,RSCalculatorGroupFileUTI,RSCalculatorPictureFileUTI, nil]];
+	[openPanel setPrompt:NSLocalizedString(@"Transfer", @"Transfer")];
+	
+	[openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {
+		[openPanel orderOut:nil];
+		if (result == NSFileHandlingPanelCancelButton)
+			return;
+		
+		RSTransferFileWindowController *transferFileWindowController = [[[RSTransferFileWindowController alloc] initWithCalculator:[self calculator]] autorelease];
+		
+		[transferFileWindowController setDelegate:self];
+		
+		[transferFileWindowController showTransferFileWindowForTransferFileURLs:[RSTransferFileWindowController filterTransferFileURLs:[openPanel URLs]]];
+	}];
 }
 - (IBAction)reloadCurrentRomOrSavestate:(id)sender; {
 	[[self calculator] reloadLastRomOrSavestate];
 }
-
+#pragma mark Properties
 @synthesize calculator=_calculator;
 @dynamic widescreen;
 - (BOOL)isWidescreen {
@@ -317,8 +349,10 @@
 	}
 	return bitmap;
 }
-
+#pragma mark *** Private Methods ***
 - (void)_commonInit {
+	[self registerForDraggedTypes:[NSArray arrayWithObjects:(NSString *)kUTTypeFileURL, nil]];
+	
 	uint16_t row, col;
 	for (row=0; row<LCD_HEIGHT; row++) {
 		for (col=0; col<LCD_NORMAL_WIDTH; col++) {

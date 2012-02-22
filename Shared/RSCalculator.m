@@ -15,6 +15,8 @@ NSString *const RSCalculatorSavestateUTI = @"org.revsoft.wabbitemu.savestate";
 NSString *const RSCalculatorProgramUTI = @"org.revsoft.wabbitemu.program";
 NSString *const RSCalculatorApplicationUTI = @"org.revsoft.wabbitemu.application";
 NSString *const RSCalculatorGroupFileUTI = @"org.revsoft.wabbitemu.group";
+NSString *const RSCalculatorPictureFileUTI = @"org.revsoft.wabbitemu.picture";
+
 NSString *const RSCalculatorLabelFileUTI = @"org.revsoft.wabbitemu.label";
 
 NSString *const RSCalculatorErrorDomain = @"org.revsoft.calculator.error";
@@ -146,7 +148,33 @@ const NSInteger RSCalculatorErrorCodeMaximumNumberOfCalculators = 1002;
 		return [self calculator]->model;
 	return defaultValue;
 }
-@synthesize lastLoadedURL=_lastLoadedURL;
+@dynamic modelString;
+- (NSString *)modelString {
+	switch ([self model]) {
+		case RSCalculatorModelTI_73:
+			return NSLocalizedString(@"TI-73", @"TI-73");
+		case RSCalculatorModelTI_81:
+			return NSLocalizedString(@"TI-81", @"TI-81");
+		case RSCalculatorModelTI_82:
+			return NSLocalizedString(@"TI-82", @"TI-82");
+		case RSCalculatorModelTI_83:
+			return NSLocalizedString(@"TI-83", @"TI-83");
+		case RSCalculatorModelTI_83P:
+			return NSLocalizedString(@"TI-83+", @"TI-83+");
+		case RSCalculatorModelTI_83PSE:
+			return NSLocalizedString(@"TI-83+SE", @"TI-83+SE");
+		case RSCalculatorModelTI_84P:
+			return NSLocalizedString(@"TI-84+", @"TI-84+");
+		case RSCalculatorModelTI_84PSE:
+			return NSLocalizedString(@"TI-84+SE", @"TI-84+SE");
+		case RSCalculatorModelTI_85:
+			return NSLocalizedString(@"TI-85", @"TI-85");
+		case RSCalculatorModelTI_86:
+			return NSLocalizedString(@"TI-86", @"TI-86");
+		default:
+			return nil;
+	}
+}
 @dynamic skinImage;
 - (NSImage *)skinImage {
 	switch ([self model]) {
@@ -188,7 +216,7 @@ const NSInteger RSCalculatorErrorCodeMaximumNumberOfCalculators = 1002;
 			return [NSImage imageNamed:@"ti-83keymap"];
 		case RSCalculatorModelTI_84P:
 		case RSCalculatorModelTI_84PSE:
-			return [NSImage imageNamed:@"ti-84se+keymap"];
+			return [NSImage imageNamed:@"ti-84+sekeymap"];
 		case RSCalculatorModelTI_85:
 			return [NSImage imageNamed:@"ti-85keymap"];
 		case RSCalculatorModelTI_86:
@@ -602,4 +630,8 @@ static const uint32_t defaultValue = 0;
 	if ([self isActive])
 		[self calculator]->cpu.pio.lcd->cursor_mode = displayCursorMode;
 }
+#pragma mark *** Private Methods ***
+
+#pragma mark Properties
+@synthesize lastLoadedURL=_lastLoadedURL;
 @end

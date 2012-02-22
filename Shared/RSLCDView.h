@@ -8,6 +8,7 @@
 
 #import <AppKit/NSOpenGLView.h>
 #import <OpenGL/gl.h>
+#import "RSTransferFileWindowControllerDelegate.h"
 
 #define LCD_NORMAL_WIDTH 96
 #define LCD_WIDESCREEN_WIDTH 128
@@ -18,7 +19,7 @@
 
 @class RSCalculator;
 
-@interface RSLCDView : NSOpenGLView <NSDraggingDestination,NSDraggingSource> {
+@interface RSLCDView : NSOpenGLView <RSTransferFileWindowControllerDelegate,NSDraggingDestination,NSDraggingSource> {
 	uint8_t _buffer[LCD_HEIGHT][LCD_NORMAL_WIDTH][4];
 	uint8_t _lcd_buffer[LCD_HEIGHT_DISPLAY][LCD_WIDTH_DISPLAY][4];
 	uint8_t _wbuffer[LCD_HEIGHT][LCD_WIDESCREEN_WIDTH][4];

@@ -38,6 +38,8 @@ extern NSString *const RSCalculatorSavestateUTI;
 extern NSString *const RSCalculatorProgramUTI;
 extern NSString *const RSCalculatorApplicationUTI;
 extern NSString *const RSCalculatorGroupFileUTI;
+extern NSString *const RSCalculatorPictureFileUTI;
+
 extern NSString *const RSCalculatorLabelFileUTI;
 
 extern NSString *const RSCalculatorErrorDomain;
@@ -62,6 +64,7 @@ extern const NSInteger RSCalculatorErrorCodeMaximumNumberOfCalculators;
 @property (readwrite,assign,nonatomic,getter = isActive) BOOL active;
 @property (readwrite,assign,nonatomic,getter = isRunning) BOOL running;
 @property (readonly,nonatomic) RSCalculatorModel model;
+@property (readonly,nonatomic) NSString *modelString;
 @property (readonly,nonatomic) NSImage *skinImage;
 @property (readonly,nonatomic) NSImage *keymapImage;
 

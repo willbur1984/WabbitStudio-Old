@@ -12,6 +12,7 @@
 
 @interface RSSkinView : NSView {
 	RSCalculator *_calculator;
+	NSPoint _clickedPoint;
 }
 @property (readonly,nonatomic) RSCalculator *calculator;
 

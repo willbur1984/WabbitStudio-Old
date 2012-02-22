@@ -519,7 +519,10 @@ LINK_ERR link_send_var(CPU_t *cpu, TIFILE_t *tifile, SEND_FLAG dest) {
 			case FLASH_TYPE_OS:
 				return forceload_os(cpu, tifile);
 			case FLASH_TYPE_APP:
-				return forceload_app(cpu, tifile);
+				if (never_forceload_apps)
+					return link_send_app(cpu, tifile);
+				else
+					return forceload_app(cpu, tifile);
 		}
 	}
 
