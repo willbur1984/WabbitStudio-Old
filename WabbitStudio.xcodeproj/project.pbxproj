@@ -382,6 +382,12 @@
 		07AB505714F54D31005AA724 /* NSURL+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 071985E514C01F5D00C8E91A /* NSURL+RSExtensions.m */; };
 		07AB505A14F5577A005AA724 /* RSTransferFileWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07AB505814F5577A005AA724 /* RSTransferFileWindow.xib */; };
 		07AB505B14F5577A005AA724 /* RSTransferFileWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07AB505814F5577A005AA724 /* RSTransferFileWindow.xib */; };
+		07AB506014F593A5005AA724 /* RSPreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 072BBC3914AA65AD0044ECC2 /* RSPreferencesWindowController.m */; };
+		07AB506114F593B4005AA724 /* NSEvent+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 072BBC3D14AA65F80044ECC2 /* NSEvent+RSExtensions.m */; };
+		07AB506414F593F3005AA724 /* WEPreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07AB506314F593F3005AA724 /* WEPreferencesWindowController.m */; };
+		07AB506714F5943A005AA724 /* WEPreferencesWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07AB506514F5943A005AA724 /* WEPreferencesWindow.xib */; };
+		07AB506A14F59630005AA724 /* WEGeneralViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07AB506914F59630005AA724 /* WEGeneralViewController.m */; };
+		07AB506D14F5963F005AA724 /* WEGeneralView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07AB506B14F5963F005AA724 /* WEGeneralView.xib */; };
 		07AEB77E14CE037000A0BA1C /* WCArgumentPlaceholderWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07AEB77D14CE037000A0BA1C /* WCArgumentPlaceholderWindowController.m */; };
 		07AEB78214CE03C300A0BA1C /* WCArgumentPlaceholderWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07AEB78014CE03C300A0BA1C /* WCArgumentPlaceholderWindow.xib */; };
 		07B4740514AE3CAA00E3F9D0 /* RSNumberToBoolTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B4740414AE3CAA00E3F9D0 /* RSNumberToBoolTransformer.m */; };
@@ -1106,6 +1112,12 @@
 		07AB505314F5475C005AA724 /* RSTransferFileWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSTransferFileWindowController.m; sourceTree = "<group>"; };
 		07AB505614F5478E005AA724 /* RSTransferFileWindowControllerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSTransferFileWindowControllerDelegate.h; sourceTree = "<group>"; };
 		07AB505914F5577A005AA724 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = RSTransferFileWindow.xib; sourceTree = "<group>"; };
+		07AB506214F593F3005AA724 /* WEPreferencesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WEPreferencesWindowController.h; sourceTree = "<group>"; };
+		07AB506314F593F3005AA724 /* WEPreferencesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WEPreferencesWindowController.m; sourceTree = "<group>"; };
+		07AB506614F5943A005AA724 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WEPreferencesWindow.xib; sourceTree = "<group>"; };
+		07AB506814F59630005AA724 /* WEGeneralViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WEGeneralViewController.h; sourceTree = "<group>"; };
+		07AB506914F59630005AA724 /* WEGeneralViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WEGeneralViewController.m; sourceTree = "<group>"; };
+		07AB506C14F5963F005AA724 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WEGeneralView.xib; sourceTree = "<group>"; };
 		07AEB77C14CE037000A0BA1C /* WCArgumentPlaceholderWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCArgumentPlaceholderWindowController.h; sourceTree = "<group>"; };
 		07AEB77D14CE037000A0BA1C /* WCArgumentPlaceholderWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCArgumentPlaceholderWindowController.m; sourceTree = "<group>"; };
 		07AEB78114CE03C300A0BA1C /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCArgumentPlaceholderWindow.xib; sourceTree = "<group>"; };
@@ -1951,6 +1963,10 @@
 				075D31F214F43EA9007F8951 /* WECalculatorWindowController.m */,
 				075D31FF14F452A7007F8951 /* WEApplicationDelegate.h */,
 				075D320014F452A7007F8951 /* WEApplicationDelegate.m */,
+				07AB506214F593F3005AA724 /* WEPreferencesWindowController.h */,
+				07AB506314F593F3005AA724 /* WEPreferencesWindowController.m */,
+				07AB506814F59630005AA724 /* WEGeneralViewController.h */,
+				07AB506914F59630005AA724 /* WEGeneralViewController.m */,
 				075D31ED14F43E60007F8951 /* Xibs */,
 				075D2FBC14F36779007F8951 /* Supporting Files */,
 			);
@@ -2128,6 +2144,8 @@
 			children = (
 				075D2FCD14F3677A007F8951 /* WEMainMenu.xib */,
 				075D31EE14F43E88007F8951 /* WECalculatorWindow.xib */,
+				07AB506514F5943A005AA724 /* WEPreferencesWindow.xib */,
+				07AB506B14F5963F005AA724 /* WEGeneralView.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -2761,6 +2779,8 @@
 				07ED2C8A14F4A1070097C5B6 /* ti-86.png in Resources */,
 				07ED2C8C14F4A1070097C5B6 /* ti-86keymap.png in Resources */,
 				07AB505B14F5577A005AA724 /* RSTransferFileWindow.xib in Resources */,
+				07AB506714F5943A005AA724 /* WEPreferencesWindow.xib in Resources */,
+				07AB506D14F5963F005AA724 /* WEGeneralView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3085,6 +3105,10 @@
 				07AB505014F54425005AA724 /* RSTransferFile.m in Sources */,
 				07AB505514F5475C005AA724 /* RSTransferFileWindowController.m in Sources */,
 				07AB505714F54D31005AA724 /* NSURL+RSExtensions.m in Sources */,
+				07AB506014F593A5005AA724 /* RSPreferencesWindowController.m in Sources */,
+				07AB506114F593B4005AA724 /* NSEvent+RSExtensions.m in Sources */,
+				07AB506414F593F3005AA724 /* WEPreferencesWindowController.m in Sources */,
+				07AB506A14F59630005AA724 /* WEGeneralViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3428,6 +3452,22 @@
 				07AB505914F5577A005AA724 /* en */,
 			);
 			name = RSTransferFileWindow.xib;
+			sourceTree = "<group>";
+		};
+		07AB506514F5943A005AA724 /* WEPreferencesWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				07AB506614F5943A005AA724 /* en */,
+			);
+			name = WEPreferencesWindow.xib;
+			sourceTree = "<group>";
+		};
+		07AB506B14F5963F005AA724 /* WEGeneralView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				07AB506C14F5963F005AA724 /* en */,
+			);
+			name = WEGeneralView.xib;
 			sourceTree = "<group>";
 		};
 		07AEB78014CE03C300A0BA1C /* WCArgumentPlaceholderWindow.xib */ = {

@@ -19,8 +19,10 @@ NSString *const RSCalculatorPictureFileUTI = @"org.revsoft.wabbitemu.picture";
 
 NSString *const RSCalculatorLabelFileUTI = @"org.revsoft.wabbitemu.label";
 
-NSString *const RSCalculatorErrorDomain = @"org.revsoft.calculator.error";
+NSString *const RSCalculatorWillLoadRomOrSavestateNotification = @"RSCalculatorWillLoadRomOrSavestateNotification";
+NSString *const RSCalculatorDidLoadRomOrSavestateNotification = @"RSCalculatorDidLoadRomOrSavestateNotification";
 
+NSString *const RSCalculatorErrorDomain = @"org.revsoft.calculator.error";
 const NSInteger RSCalculatorErrorCodeUnrecognizedRomOrSavestate = 1001;
 const NSInteger RSCalculatorErrorCodeMaximumNumberOfCalculators = 1002;
 
@@ -76,6 +78,8 @@ const NSInteger RSCalculatorErrorCodeMaximumNumberOfCalculators = 1002;
 	[self setRunning:NO];
 	[self setLoading:YES];
 	
+	[[NSNotificationCenter defaultCenter] postNotificationName:RSCalculatorWillLoadRomOrSavestateNotification object:self];
+	
 	BOOL loaded = rom_load([self calculator], [[romOrSavestateURL path] fileSystemRepresentation]);
 	
 	if (!loaded) {
@@ -95,6 +99,8 @@ const NSInteger RSCalculatorErrorCodeMaximumNumberOfCalculators = 1002;
 	
 	if ([[self delegate] respondsToSelector:@selector(calculator:didLoadRomOrSavestateURL:)])
 		[[self delegate] calculator:self didLoadRomOrSavestateURL:romOrSavestateURL];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:RSCalculatorDidLoadRomOrSavestateNotification object:self];
 	
 	return YES;
 }

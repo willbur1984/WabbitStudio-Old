@@ -34,6 +34,10 @@
 }
 
 - (void)keyDown:(NSEvent *)theEvent {
+#ifdef DEBUG
+	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
+#endif
+	
 	CPU_t *cpu = &([[self calculator] calculator]->cpu);
 	
 	keypad_key_press(cpu, [theEvent keyCode], NULL);
@@ -43,6 +47,12 @@
 	CPU_t *cpu = &([[self calculator] calculator]->cpu);
 	
 	keypad_key_release(cpu, [theEvent keyCode]);
+}
+
+- (void)flagsChanged:(NSEvent *)theEvent {
+#ifdef DEBUG
+	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
+#endif
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent {
@@ -114,11 +124,14 @@
 	glClear(GL_COLOR_BUFFER_BIT);
 	
 	if ([[self calculator] isActive] && [[self calculator] isRunning]) {
+		// enable blend so we can put the lcd pattern over the raw image
+		glEnable(GL_BLEND);
+		
+		// grab the lcd data from wabbit
 		uint8_t *lcdImage = LCD_image([[self calculator] calculator]->cpu.pio.lcd);
 		uint16_t row, col;
 		
-		glEnable(GL_BLEND);
-		
+		// pretty up the colors a bit, this makes the lcd have its green tint
 		if ([self isWidescreen]) {
 			for (row=0; row<LCD_HEIGHT; row++) {
 				for (col=0; col<LCD_WIDESCREEN_WIDTH; col++) {
@@ -145,16 +158,19 @@
 		CGFloat width = ([self isWidescreen])?LCD_WIDESCREEN_WIDTH:LCD_NORMAL_WIDTH;
 		CGFloat height = LCD_HEIGHT;
 		
+		// bind to our texture for the lcd data
 		glBindTexture(GL_TEXTURE_RECTANGLE_EXT, _buffer_texture);
 		glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE);
 		glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glPixelStoref(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
 		
+		// pull from the right buffer depending on widescreen status
 		if ([self isWidescreen])
 			glTexImage2D(GL_TEXTURE_RECTANGLE_EXT, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, _wbuffer);
 		else
 			glTexImage2D(GL_TEXTURE_RECTANGLE_EXT, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, _buffer);
 		
+		// paint our quad covering our entire bounds
 		glBegin(GL_QUADS);
 		glTexCoord2f(0.0f, 0.0f);
 		glVertex2f(-1.0f, 1.0f);
@@ -166,16 +182,19 @@
 		glVertex2f(1.0f, 1.0f);
 		glEnd();
 		
+		// bind to our texture the lcd wire pattern
 		glBindTexture(GL_TEXTURE_RECTANGLE_ARB, _lcd_texture);
 		glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_STORAGE_HINT_APPLE, GL_STORAGE_CACHED_APPLE);
 		glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glPixelStoref(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
 		
+		// pull from the right buffer depending on widescreen status
 		if ([self isWidescreen])
 			glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, GL_RGBA, LCD_WIDESCREEN_WIDTH_DISPLAY, LCD_HEIGHT_DISPLAY, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, _wlcd_buffer);
 		else
 			glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, GL_RGBA, LCD_WIDTH_DISPLAY, LCD_HEIGHT_DISPLAY, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, _lcd_buffer);
 		
+		// paint our quad covering our entire bounds
 		glBegin(GL_QUADS);
 		glTexCoord2f(0.0f, 0.0f);
 		glVertex2f(-1.0f, 1.0f);
@@ -187,8 +206,10 @@
 		glVertex2f(1.0f, 1.0f);
 		glEnd();
 		
+		// blend the wire pattern on top of the lcd image
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		
+		// match the glEnable() call earlier
 		glDisable(GL_BLEND);
 	}
 	
@@ -198,16 +219,21 @@
 - (void)prepareOpenGL {
 	[super prepareOpenGL];
 	
+	// set a color that matches the greenish tint of the calc lcd for our clear color
 	glClearColor(128.0/255.0, 142.0/255.0, 107.0/255.0, 1.0);
 	
+	// enable rectangular textures
 	glEnable(GL_TEXTURE_RECTANGLE_EXT);
 	
+	// disable all the junk we dont need
 	glDisable(GL_DITHER);
 	glDisable(GL_ALPHA_TEST);
 	glDisable(GL_STENCIL_TEST);
 	glDisable(GL_FOG);
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_DEPTH_TEST);
+	
+	// create our two textures, one for the lcd image, another for the lcd wire pattern
 	glGenTextures(1, &_buffer_texture);
 	glGenTextures(1, &_lcd_texture);
 }
@@ -216,6 +242,7 @@
 	// comment this out to see something interesting when you have more than one calc open and resize
 	[[self openGLContext] makeCurrentContext];
 	
+	// reset our viewport to match the view's bounds
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glViewport(0.0,0.0,NSWidth([self bounds]),NSHeight([self bounds]));

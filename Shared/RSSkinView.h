@@ -7,12 +7,12 @@
 //
 
 #import <AppKit/NSView.h>
-
-@class RSCalculator;
+#import "RSCalculator.h"
 
 @interface RSSkinView : NSView {
 	RSCalculator *_calculator;
 	NSPoint _clickedPoint;
+	RSCalculatorModel _model;
 }
 @property (readonly,nonatomic) RSCalculator *calculator;
 

@@ -196,6 +196,13 @@
 	
 	[self setCurrentProgress:[self currentProgress] + currentFileProgress];
 	
+	if ([self currentProgress] >= [self totalSize]) {
+		[[self progressIndicator] setIndeterminate:YES];
+		[[self progressIndicator] startAnimation:nil];
+		[self setStatusString:NSLocalizedString(@"Almost finished\u2026", @"Almost finished with ellipsis")];
+		return;
+	}
+	
 	[[self currentTransferFile] setCurrentProgress:[[self calculator] calculator]->cpu.pio.link->vlink_send];
 }
 

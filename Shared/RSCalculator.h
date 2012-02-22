@@ -42,8 +42,10 @@ extern NSString *const RSCalculatorPictureFileUTI;
 
 extern NSString *const RSCalculatorLabelFileUTI;
 
-extern NSString *const RSCalculatorErrorDomain;
+extern NSString *const RSCalculatorWillLoadRomOrSavestateNotification;
+extern NSString *const RSCalculatorDidLoadRomOrSavestateNotification;
 
+extern NSString *const RSCalculatorErrorDomain;
 extern const NSInteger RSCalculatorErrorCodeUnrecognizedRomOrSavestate;
 extern const NSInteger RSCalculatorErrorCodeMaximumNumberOfCalculators;
 

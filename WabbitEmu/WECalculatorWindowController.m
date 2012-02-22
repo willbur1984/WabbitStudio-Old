@@ -35,13 +35,14 @@
 - (void)windowDidLoad {
 	[super windowDidLoad];
 	
+	NSRect windowFrame = [[self window] frame];
 	NSView *contentView = [[self window] contentView];
 	NSRect contentViewFrame = [contentView frame];
 	RSCalculator *calculator = [[self calculatorDocument] calculator];
 	NSSize skinSize = [[calculator skinImage] size];
 	RSSkinView *skinView = [[[RSSkinView alloc] initWithFrame:NSMakeRect(contentViewFrame.origin.x, contentViewFrame.origin.y, skinSize.width, skinSize.height) calculator:calculator] autorelease];
 	
-	[[self window] setFrame:[[self window] frameRectForContentRect:NSMakeRect(0, 0, skinSize.width, skinSize.height+[[self window] contentBorderThicknessForEdge:NSMinYEdge])] display:YES];
+	[[self window] setFrame:[[self window] frameRectForContentRect:NSMakeRect(NSMinX(windowFrame), NSMinY(windowFrame)+(NSHeight(contentViewFrame)-skinSize.height), skinSize.width, skinSize.height+[[self window] contentBorderThicknessForEdge:NSMinYEdge])] display:YES];
 	
 	[contentView addSubview:skinView];
 	

@@ -9,14 +9,20 @@
 #import "RSSkinView.h"
 #import "RSCalculator.h"
 #import "RSDefines.h"
+#import "RSLCDView.h"
 
 @interface RSSkinView ()
 @property (readwrite,assign,nonatomic) NSPoint clickedPoint;
+@property (readonly,nonatomic) RSLCDView *LCDView;
 @end
 
 @implementation RSSkinView
 
 - (void)dealloc {
+#ifdef DEBUG
+	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
+#endif
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[_calculator release];
 	[super dealloc];
 }
@@ -200,6 +206,9 @@ finalize_buttons:
 	
 	_calculator = [calculator retain];
 	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_calculatorWillLoadRomOrSavestate:) name:RSCalculatorWillLoadRomOrSavestateNotification object:calculator];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_calculatorDidLoadRomOrSavestate:) name:RSCalculatorDidLoadRomOrSavestateNotification object:calculator];
+	
 	return self;
 }
 
@@ -210,6 +219,79 @@ finalize_buttons:
 		return;
 	
 	_clickedPoint = clickedPoint;
+	
+	[self setNeedsDisplay:YES];
+}
+@dynamic LCDView;
+- (RSLCDView *)LCDView {
+	if ([[self subviews] count])
+		return [[self subviews] objectAtIndex:0];
+	return nil;
+}
+
+- (void)_calculatorWillLoadRomOrSavestate:(NSNotification *)note {
+	_model = [[note object] model];
+}
+- (void)_calculatorDidLoadRomOrSavestate:(NSNotification *)note {
+	if (_model == [[note object] model])
+		return;
+	
+#ifdef DEBUG
+	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
+#endif
+	
+	NSSize skinSize = [[[self calculator] skinImage] size];
+	NSRect windowFrame = [[self window] frame];
+	NSRect newWindowFrame = [[self window] frameRectForContentRect:NSMakeRect(windowFrame.origin.x, windowFrame.origin.y, skinSize.width, skinSize.height+[[self window] contentBorderThicknessForEdge:NSMinYEdge])];
+	
+	[[self window] setFrame:newWindowFrame display:YES];
+	
+	NSRect frame = [self frame];
+	
+	frame.origin.x = 0.0;
+	frame.origin.y = [[self window] contentBorderThicknessForEdge:NSMinYEdge];
+	frame.size = skinSize;
+	
+	[self setFrame:frame];
+	
+	NSBitmapImageRep *bitmap = (NSBitmapImageRep *)[[[self calculator] keymapImage] bestRepresentationForRect:NSZeroRect context:nil hints:nil];
+	NSSize size = [bitmap size];
+	NSUInteger width = size.width, height = size.height;
+	NSUInteger i, j;
+	NSUInteger pixels[4];
+	NSPoint point = NSZeroPoint;
+	NSPoint endPoint = NSZeroPoint;
+	
+	for (i = 0; i < width; i++) {
+		for (j = 0; j < height; j++) {
+			[bitmap getPixel:pixels atX:i y:j];
+			
+			// red marks the start of the area for the lcd
+			if (pixels[0] == 255 && pixels[1] == 0 && pixels[2] == 0) {
+				point.x = i;
+				point.y = j;
+				
+				while (pixels[0] == 255 && pixels[1] == 0 && pixels[2] == 0)
+					[bitmap getPixel:pixels atX:i++ y:j];
+				
+				endPoint.x = i;
+				i = point.x;
+				
+				[bitmap getPixel:pixels atX:i y:j];
+				
+				while (pixels[0] == 255 && pixels[1] == 0 && pixels[2] == 0)
+					[bitmap getPixel:pixels atX:i y:j++];
+				
+				endPoint.y = j;
+				break;
+			}
+		}
+		
+		if (!NSEqualPoints(point, NSZeroPoint))
+			break;
+	}
+	
+	[[self LCDView] setFrame:NSMakeRect(point.x, point.y, endPoint.x-point.x, endPoint.y-point.y)];
 	
 	[self setNeedsDisplay:YES];
 }

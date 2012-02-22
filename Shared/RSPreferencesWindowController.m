@@ -121,7 +121,9 @@ NSString *const RSPreferencesWindowControllerLastSelectedToolbarIdentifierKey = 
 }
 
 - (void)setupViewControllers; {
+	NSException *exception = [NSException exceptionWithName:NSGenericException reason:[NSString stringWithFormat:NSLocalizedString(@"%@ not implemented in subclass %@", @"RSPreferencesWindowController setupViewControllers not implemented format string"),NSStringFromSelector(_cmd),[self className]] userInfo:nil];
 	
+	[exception raise];
 }
 
 - (void)addViewController:(id <RSPreferencesModule>)viewController; {

@@ -7,9 +7,14 @@
 //
 
 #import "WEApplicationDelegate.h"
+#import "WEPreferencesWindowController.h"
 
 @implementation WEApplicationDelegate
 - (BOOL)applicationShouldOpenUntitledFile:(NSApplication *)sender {
 	return NO;
+}
+
+- (IBAction)preferences:(id)sender; {
+	[[WEPreferencesWindowController sharedWindowController] showWindow:nil];
 }
 @end
