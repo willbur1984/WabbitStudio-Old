@@ -17,7 +17,7 @@
 #define LCD_WIDESCREEN_WIDTH_DISPLAY 256
 #define LCD_HEIGHT_DISPLAY 128
 
-@class RSCalculator;
+@class RSCalculator,RSEmptyContentCell;
 
 @interface RSLCDView : NSOpenGLView <RSTransferFileWindowControllerDelegate,NSDraggingDestination,NSDraggingSource> {
 	uint8_t _buffer[LCD_HEIGHT][LCD_NORMAL_WIDTH][4];
@@ -29,6 +29,8 @@
 	GLuint _lcd_texture;
 	
 	RSCalculator *_calculator;
+	
+	RSEmptyContentCell *_emptyContentCell;
 }
 @property (readwrite,retain,nonatomic) RSCalculator *calculator;
 @property (readonly,nonatomic,getter = isWidescreen) BOOL widescreen;

@@ -39,6 +39,7 @@
 	
 	if (![[self LCDViews] count]) {
 		_drawTimer = [NSTimer scheduledTimerWithTimeInterval:1.0/FPS target:self selector:@selector(_drawTimerCallback:) userInfo:nil repeats:YES];
+		[[NSRunLoop mainRunLoop] addTimer:_drawTimer forMode:NSEventTrackingRunLoopMode];
 	}
 	
 	[[self LCDViews] addObject:lcdView];
@@ -57,12 +58,10 @@
 - (void)_drawTimerCallback:(NSTimer *)timer {
 	calc_run_all();
 	
-	for (RSLCDView *lcdView in [self LCDViews]) {
-		if ([[lcdView calculator] isRunning])
-			[lcdView setNeedsDisplay:YES];
-	}
-	
 	[timer setFireDate:[NSDate dateWithTimeIntervalSinceNow:1.0/FPS]];
+	
+	for (RSLCDView *lcdView in [self LCDViews])
+		[lcdView setNeedsDisplay:YES];
 }
 
 @end

@@ -10,6 +10,7 @@
 #import "RSCalculator.h"
 #import "RSDefines.h"
 #import "RSTransferFileWindowController.h"
+#import "RSEmptyContentCell.h"
 
 @interface RSLCDView ()
 @property (readonly,nonatomic) NSBitmapImageRep *LCDBitmap;
@@ -23,6 +24,7 @@
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
+	[_emptyContentCell release];
 	[_calculator release];
 	glDeleteTextures(1, &_buffer_texture);
 	glDeleteTextures(1, &_lcd_texture);
@@ -34,10 +36,6 @@
 }
 
 - (void)keyDown:(NSEvent *)theEvent {
-#ifdef DEBUG
-	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
-#endif
-	
 	CPU_t *cpu = &([[self calculator] calculator]->cpu);
 	
 	keypad_key_press(cpu, [theEvent keyCode], NULL);
@@ -47,12 +45,6 @@
 	CPU_t *cpu = &([[self calculator] calculator]->cpu);
 	
 	keypad_key_release(cpu, [theEvent keyCode]);
-}
-
-- (void)flagsChanged:(NSEvent *)theEvent {
-#ifdef DEBUG
-	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
-#endif
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent {
@@ -121,9 +113,8 @@
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
-	glClear(GL_COLOR_BUFFER_BIT);
-	
 	if ([[self calculator] isActive] && [[self calculator] isRunning]) {
+		glClear(GL_COLOR_BUFFER_BIT);
 		// enable blend so we can put the lcd pattern over the raw image
 		glEnable(GL_BLEND);
 		
@@ -211,9 +202,15 @@
 		
 		// match the glEnable() call earlier
 		glDisable(GL_BLEND);
+		
+		glFinish();
 	}
-	
-	glFinish();
+	else {
+		[[NSColor controlBackgroundColor] setFill];
+		NSRectFill([self bounds]);
+		
+		[_emptyContentCell drawWithFrame:[self bounds] inView:self];
+	}
 }
 
 - (void)prepareOpenGL {
@@ -301,7 +298,7 @@
 	if (!(self = [super initWithFrame:frameRect pixelFormat:pixelFormat]))
 		return nil;
 	
-	[self setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
+	[self setAutoresizingMask:NSViewNotSizable];
 	
 	_calculator = [calculator retain];
 	
@@ -379,6 +376,9 @@
 #pragma mark *** Private Methods ***
 - (void)_commonInit {
 	[self registerForDraggedTypes:[NSArray arrayWithObjects:(NSString *)kUTTypeFileURL, nil]];
+	
+	_emptyContentCell = [[RSEmptyContentCell alloc] initTextCell:NSLocalizedString(@"No Calculator", @"No Calculator")];
+	[_emptyContentCell setEmptyContentStringStyle:RSEmptyContentStringStyleNormal];
 	
 	uint16_t row, col;
 	for (row=0; row<LCD_HEIGHT; row++) {

@@ -318,6 +318,16 @@
 		077906B114E1B3CC006C16EF /* WCSearchResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 077906B014E1B3CC006C16EF /* WCSearchResult.m */; };
 		077906B414E1BAAA006C16EF /* WCSearchResultContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 077906B314E1BAA9006C16EF /* WCSearchResultContainer.m */; };
 		077906B714E1CF97006C16EF /* RSLightBackgroundTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 077906B614E1CF97006C16EF /* RSLightBackgroundTextFieldCell.m */; };
+		077CC15814F6DD9C00713ED8 /* Calculator32x32.png in Resources */ = {isa = PBXBuildFile; fileRef = 077CC15714F6DD9C00713ED8 /* Calculator32x32.png */; };
+		077CC15914F6DD9C00713ED8 /* Calculator32x32.png in Resources */ = {isa = PBXBuildFile; fileRef = 077CC15714F6DD9C00713ED8 /* Calculator32x32.png */; };
+		077CC15D14F6DDC400713ED8 /* WEHardwareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 077CC15C14F6DDC400713ED8 /* WEHardwareViewController.m */; };
+		077CC16014F6DE2600713ED8 /* WEHardwareView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 077CC15E14F6DE2600713ED8 /* WEHardwareView.xib */; };
+		077CC16114F6E92200713ED8 /* RSEmptyContentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0725433E14A7999500C961B7 /* RSEmptyContentCell.m */; };
+		077CC16214F6E97A00713ED8 /* NSBezierPath+MCAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0725433714A7996000C961B7 /* NSBezierPath+MCAdditions.m */; };
+		077CC16314F6E98100713ED8 /* NSShadow+MCAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0725433914A7996000C961B7 /* NSShadow+MCAdditions.m */; };
+		077CC16414F6EA3C00713ED8 /* JAViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 071985EF14C0AEAC00C8E91A /* JAViewController.m */; };
+		077CC16514F6EA6600713ED8 /* NSView+JAExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 071985F314C0AEAC00C8E91A /* NSView+JAExtensions.m */; };
+		077CC16614F6EA6C00713ED8 /* NSObject+JAExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 071985F114C0AEAC00C8E91A /* NSObject+JAExtensions.m */; };
 		077D3EE514EECD6C000735EA /* BuildTargetOutputTypesToFileExtensions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 077D3EE414EECD6C000735EA /* BuildTargetOutputTypesToFileExtensions.plist */; };
 		077D3EE914EED0DD000735EA /* RSStringToURLTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 077D3EE814EED0DD000735EA /* RSStringToURLTransformer.m */; };
 		077D3EEC14EEE0C8000735EA /* WCTabViewWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 077D3EEB14EEE0C8000735EA /* WCTabViewWindow.m */; };
@@ -1003,6 +1013,10 @@
 		077906B314E1BAA9006C16EF /* WCSearchResultContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSearchResultContainer.m; sourceTree = "<group>"; };
 		077906B514E1CF97006C16EF /* RSLightBackgroundTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSLightBackgroundTextFieldCell.h; sourceTree = "<group>"; };
 		077906B614E1CF97006C16EF /* RSLightBackgroundTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSLightBackgroundTextFieldCell.m; sourceTree = "<group>"; };
+		077CC15714F6DD9C00713ED8 /* Calculator32x32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Calculator32x32.png; sourceTree = "<group>"; };
+		077CC15B14F6DDC400713ED8 /* WEHardwareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WEHardwareViewController.h; sourceTree = "<group>"; };
+		077CC15C14F6DDC400713ED8 /* WEHardwareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WEHardwareViewController.m; sourceTree = "<group>"; };
+		077CC15F14F6DE2600713ED8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WEHardwareView.xib; sourceTree = "<group>"; };
 		077D3EE414EECD6C000735EA /* BuildTargetOutputTypesToFileExtensions.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = BuildTargetOutputTypesToFileExtensions.plist; sourceTree = "<group>"; };
 		077D3EE714EED0DD000735EA /* RSStringToURLTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSStringToURLTransformer.h; sourceTree = "<group>"; };
 		077D3EE814EED0DD000735EA /* RSStringToURLTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSStringToURLTransformer.m; sourceTree = "<group>"; };
@@ -1781,6 +1795,7 @@
 		072880B914B4F1470082DE4C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				077CC15714F6DD9C00713ED8 /* Calculator32x32.png */,
 				072880BA14B4F16D0082DE4C /* FindNoWrapIndicator.png */,
 				072880BB14B4F16D0082DE4C /* FindNoWrapIndicatorReverse.png */,
 				072880BC14B4F16D0082DE4C /* FindWrapIndicator.tiff */,
@@ -1967,6 +1982,8 @@
 				07AB506314F593F3005AA724 /* WEPreferencesWindowController.m */,
 				07AB506814F59630005AA724 /* WEGeneralViewController.h */,
 				07AB506914F59630005AA724 /* WEGeneralViewController.m */,
+				077CC15B14F6DDC400713ED8 /* WEHardwareViewController.h */,
+				077CC15C14F6DDC400713ED8 /* WEHardwareViewController.m */,
 				075D31ED14F43E60007F8951 /* Xibs */,
 				075D2FBC14F36779007F8951 /* Supporting Files */,
 			);
@@ -2146,6 +2163,7 @@
 				075D31EE14F43E88007F8951 /* WECalculatorWindow.xib */,
 				07AB506514F5943A005AA724 /* WEPreferencesWindow.xib */,
 				07AB506B14F5963F005AA724 /* WEGeneralView.xib */,
+				077CC15E14F6DE2600713ED8 /* WEHardwareView.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -2751,6 +2769,7 @@
 				07ED2C8914F4A1070097C5B6 /* ti-86.png in Resources */,
 				07ED2C8B14F4A1070097C5B6 /* ti-86keymap.png in Resources */,
 				07AB505A14F5577A005AA724 /* RSTransferFileWindow.xib in Resources */,
+				077CC15814F6DD9C00713ED8 /* Calculator32x32.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2781,6 +2800,8 @@
 				07AB505B14F5577A005AA724 /* RSTransferFileWindow.xib in Resources */,
 				07AB506714F5943A005AA724 /* WEPreferencesWindow.xib in Resources */,
 				07AB506D14F5963F005AA724 /* WEGeneralView.xib in Resources */,
+				077CC15914F6DD9C00713ED8 /* Calculator32x32.png in Resources */,
+				077CC16014F6DE2600713ED8 /* WEHardwareView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3109,6 +3130,13 @@
 				07AB506114F593B4005AA724 /* NSEvent+RSExtensions.m in Sources */,
 				07AB506414F593F3005AA724 /* WEPreferencesWindowController.m in Sources */,
 				07AB506A14F59630005AA724 /* WEGeneralViewController.m in Sources */,
+				077CC15D14F6DDC400713ED8 /* WEHardwareViewController.m in Sources */,
+				077CC16114F6E92200713ED8 /* RSEmptyContentCell.m in Sources */,
+				077CC16214F6E97A00713ED8 /* NSBezierPath+MCAdditions.m in Sources */,
+				077CC16314F6E98100713ED8 /* NSShadow+MCAdditions.m in Sources */,
+				077CC16414F6EA3C00713ED8 /* JAViewController.m in Sources */,
+				077CC16514F6EA6600713ED8 /* NSView+JAExtensions.m in Sources */,
+				077CC16614F6EA6C00713ED8 /* NSObject+JAExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3388,6 +3416,14 @@
 				077906A414E0DE08006C16EF /* en */,
 			);
 			name = WCSearchNavigatorView.xib;
+			sourceTree = "<group>";
+		};
+		077CC15E14F6DE2600713ED8 /* WEHardwareView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				077CC15F14F6DE2600713ED8 /* en */,
+			);
+			name = WEHardwareView.xib;
 			sourceTree = "<group>";
 		};
 		07862BC314BB6F850057EB89 /* WCSourceFileWindow.xib */ = {

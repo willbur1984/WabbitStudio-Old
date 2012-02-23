@@ -135,6 +135,10 @@ finalize_buttons:
 	return YES;
 }
 
+- (BOOL)isOpaque {
+	return YES;
+}
+
 - (void)drawRect:(NSRect)dirtyRect {
     [[[self calculator] skinImage] drawInRect:[self bounds] fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
 	
@@ -192,7 +196,7 @@ finalize_buttons:
 		}
 	}
 	
-	NSRect buttonRect = NSMakeRect(xPos, yPos, width, height);
+	NSRect buttonRect = NSInsetRect(NSMakeRect(xPos, yPos, width, height), 1.0, 1.0);
 	
 	[[[NSColor blackColor] colorWithAlphaComponent:0.5] setFill];
 	[[NSBezierPath bezierPathWithRoundedRect:buttonRect xRadius:10.0 yRadius:10.0] fill];

@@ -8,6 +8,7 @@
 
 #import "WEPreferencesWindowController.h"
 #import "WEGeneralViewController.h"
+#import "WEHardwareViewController.h"
 
 @implementation WEPreferencesWindowController
 
@@ -17,6 +18,7 @@
 
 - (void)setupViewControllers {
 	[self addViewController:[[[WEGeneralViewController alloc] init] autorelease]];
+	[self addViewController:[[[WEHardwareViewController alloc] init] autorelease]];
 }
 
 @end
