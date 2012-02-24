@@ -9,10 +9,13 @@
 #import <AppKit/NSViewController.h>
 #import "RSPreferencesModule.h"
 
-@class RSLCDView;
+@class RSLCDView,RSCalculator;
 
 @interface WEHardwareViewController : NSViewController <RSPreferencesModule,NSMenuDelegate>
+
 @property (readwrite,assign,nonatomic) IBOutlet NSView *dummyLCDView;
+@property (readwrite,assign,nonatomic) IBOutlet NSMenu *previewSourceMenu;
 
 @property (readwrite,assign,nonatomic) RSLCDView *LCDView;
+
 @end

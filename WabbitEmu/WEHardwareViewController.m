@@ -12,6 +12,8 @@
 #import "NSURL+RSExtensions.h"
 #import "RSDefines.h"
 #import "WECalculatorDocument.h"
+#import "RSDontSelectPopUpButton.h"
+#import "RSCalculator.h"
 
 @interface WEHardwareViewController ()
 
@@ -37,6 +39,8 @@
 	
 	[[[self dummyLCDView] superview] replaceSubview:[self dummyLCDView] with:lcdView];
 	[self setLCDView:lcdView];
+	
+	[self menuNeedsUpdate:[self previewSourceMenu]];
 }
 
 - (void)menuNeedsUpdate:(NSMenu *)menu {
@@ -44,7 +48,12 @@
 	
 	NSArray *openDocuments = [[NSDocumentController sharedDocumentController] documents];
 	
-	if ([openDocuments count]) {
+	if (![[self LCDView] calculator] || ![openDocuments count]) {
+		NSMenuItem *item = [menu addItemWithTitle:NSLocalizedString(@"No Source", @"No Source") action:@selector(_previewSourceMenuItemClicked:) keyEquivalent:@""];
+		
+		[item setTarget:self];
+	}
+	else {
 		for (NSDocument *document in openDocuments) {
 			NSMenuItem *item = [menu addItemWithTitle:[document displayName] action:@selector(_previewSourceMenuItemClicked:) keyEquivalent:@""];
 			
@@ -54,15 +63,13 @@
 			[item setRepresentedObject:[document fileURL]];
 		}
 	}
-	else {
-		NSMenuItem *item = [menu addItemWithTitle:NSLocalizedString(@"No Source", @"No Source") action:@selector(_previewSourceMenuItemClicked:) keyEquivalent:@""];
-		
-		[item setTarget:self];
-	}
 	
 	[menu addItem:[NSMenuItem separatorItem]];
-	[menu addItemWithTitle:NSLocalizedString(@"Choose Source\u2026", @"Choose Source with ellipsis") action:@selector(_choosePreviewSource:) keyEquivalent:@""];
-	[[[menu itemArray] lastObject] setTarget:self];
+	
+	NSMenuItem *item = [menu addItemWithTitle:NSLocalizedString(@"Choose Source\u2026", @"Choose Source with ellipsis") action:@selector(_choosePreviewSource:) keyEquivalent:@""];
+	
+	[item setTarget:self];
+	[item setTag:RSDontSelectTag];
 }
 - (BOOL)menuHasKeyEquivalent:(NSMenu *)menu forEvent:(NSEvent *)event target:(id *)target action:(SEL *)action {
 	return NO;
@@ -79,6 +86,8 @@
 }
 
 @synthesize dummyLCDView=_dummyLCDView;
+@synthesize previewSourceMenu=_previewSourceMenu;
+
 @synthesize LCDView=_LCDView;
 
 - (IBAction)_previewSourceMenuItemClicked:(id)sender {
@@ -95,7 +104,27 @@
 }
 
 - (IBAction)_choosePreviewSource:(id)sender {
+	NSOpenPanel *openPanel = [NSOpenPanel openPanel];
 	
+	[openPanel setAllowedFileTypes:[NSArray arrayWithObjects:RSCalculatorRomUTI,RSCalculatorSavestateUTI, nil]];
+	[openPanel setPrompt:LOCALIZED_STRING_CHOOSE];
+	
+	[openPanel beginSheetModalForWindow:[[self view] window] completionHandler:^(NSInteger result) {
+		[openPanel orderOut:nil];
+		if (result == NSFileHandlingPanelCancelButton)
+			return;
+		
+		NSError *outError;
+		RSCalculator *calculator = [RSCalculator calculatorWithRomOrSavestateURL:[[openPanel URLs] lastObject] error:&outError];
+		
+		if (!calculator) {
+			[[NSApplication sharedApplication] presentError:outError];
+			return;
+		}
+		
+		[[self LCDView] setCalculator:calculator];
+		[[RSLCDViewManager sharedManager] addLCDView:[self LCDView]];
+	}];
 }
 
 @end

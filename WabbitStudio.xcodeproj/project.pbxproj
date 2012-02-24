@@ -328,6 +328,7 @@
 		077CC16414F6EA3C00713ED8 /* JAViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 071985EF14C0AEAC00C8E91A /* JAViewController.m */; };
 		077CC16514F6EA6600713ED8 /* NSView+JAExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 071985F314C0AEAC00C8E91A /* NSView+JAExtensions.m */; };
 		077CC16614F6EA6C00713ED8 /* NSObject+JAExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 071985F114C0AEAC00C8E91A /* NSObject+JAExtensions.m */; };
+		077CC16C14F7473C00713ED8 /* RSDontSelectPopUpButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 077CC16B14F7473C00713ED8 /* RSDontSelectPopUpButton.m */; };
 		077D3EE514EECD6C000735EA /* BuildTargetOutputTypesToFileExtensions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 077D3EE414EECD6C000735EA /* BuildTargetOutputTypesToFileExtensions.plist */; };
 		077D3EE914EED0DD000735EA /* RSStringToURLTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 077D3EE814EED0DD000735EA /* RSStringToURLTransformer.m */; };
 		077D3EEC14EEE0C8000735EA /* WCTabViewWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 077D3EEB14EEE0C8000735EA /* WCTabViewWindow.m */; };
@@ -1017,6 +1018,8 @@
 		077CC15B14F6DDC400713ED8 /* WEHardwareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WEHardwareViewController.h; sourceTree = "<group>"; };
 		077CC15C14F6DDC400713ED8 /* WEHardwareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WEHardwareViewController.m; sourceTree = "<group>"; };
 		077CC15F14F6DE2600713ED8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WEHardwareView.xib; sourceTree = "<group>"; };
+		077CC16A14F7473C00713ED8 /* RSDontSelectPopUpButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSDontSelectPopUpButton.h; sourceTree = "<group>"; };
+		077CC16B14F7473C00713ED8 /* RSDontSelectPopUpButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSDontSelectPopUpButton.m; sourceTree = "<group>"; };
 		077D3EE414EECD6C000735EA /* BuildTargetOutputTypesToFileExtensions.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = BuildTargetOutputTypesToFileExtensions.plist; sourceTree = "<group>"; };
 		077D3EE714EED0DD000735EA /* RSStringToURLTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSStringToURLTransformer.h; sourceTree = "<group>"; };
 		077D3EE814EED0DD000735EA /* RSStringToURLTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSStringToURLTransformer.m; sourceTree = "<group>"; };
@@ -2408,6 +2411,8 @@
 				0724280014F1E7C300DC920B /* RSCollectionView.h */,
 				0724280114F1E7C300DC920B /* RSCollectionView.m */,
 				0724280314F1E7D800DC920B /* RSCollectionViewDelegate.h */,
+				077CC16A14F7473C00713ED8 /* RSDontSelectPopUpButton.h */,
+				077CC16B14F7473C00713ED8 /* RSDontSelectPopUpButton.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -3137,6 +3142,7 @@
 				077CC16414F6EA3C00713ED8 /* JAViewController.m in Sources */,
 				077CC16514F6EA6600713ED8 /* NSView+JAExtensions.m in Sources */,
 				077CC16614F6EA6C00713ED8 /* NSObject+JAExtensions.m in Sources */,
+				077CC16C14F7473C00713ED8 /* RSDontSelectPopUpButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
