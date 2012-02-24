@@ -8,8 +8,9 @@
 
 #import "WCDebugController.h"
 #import "RSCalculator.h"
-#import "RSTransferFileWindowController.h"'
+#import "RSTransferFileWindowController.h"
 #import "WCFile.h"
+#import "WCProjectDocument.h"
 
 NSString *const WCDebugControllerDebugSessionDidBeginNotification = @"WCDebugControllerDebugSessionDidBeginNotification";
 NSString *const WCDebugControllerDebugSessionDidEndNotification = @"WCDebugControllerDebugSessionDidEndNotification";
@@ -24,6 +25,10 @@ NSString *const WCDebugControllerCurrentLineNumberDidChangeNotification = @"WCDe
 	[_labelFile release];
 	[_currentFile release];
 	[super dealloc];
+}
+
+- (NSWindow *)windowForTransferFileWindowControllerSheet:(RSTransferFileWindowController *)transferFileWindowController {
+	return [[self projectDocument] windowForSheet];
 }
 
 - (id)initWithProjectDocument:(WCProjectDocument *)projectDocument; {

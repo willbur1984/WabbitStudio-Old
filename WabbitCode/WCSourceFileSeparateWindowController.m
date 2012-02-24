@@ -11,6 +11,10 @@
 #import "WCSourceFileDocument.h"
 #import "WCProjectDocument.h"
 #import "WCTabViewWindow.h"
+#import "NSWindow+ULIZoomEffect.h"
+#import "WCProjectWindowController.h"
+#import "WCProjectNavigatorViewController.h"
+#import "NSTreeController+RSExtensions.h"
 
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
@@ -45,6 +49,30 @@
 	return displayName;
 }
 #pragma mark NSWindowDelegate
+- (BOOL)windowShouldClose:(id)sender {
+	if (_windowShouldClose)
+		return YES;
+	
+	_windowShouldClose = YES;
+	
+	NSArray *files = [NSArray arrayWithObjects:[[[self projectDocument] sourceFileDocumentsToFiles] objectForKey:[self sourceFileDocument]], nil];
+	NSTreeNode *item = [[[[[[self projectDocument] projectWindowController] projectNavigatorViewController] treeController] treeNodesForModelObjects:files] lastObject];
+	NSInteger itemRow = [[[[[self projectDocument] projectWindowController] projectNavigatorViewController] outlineView] rowForItem:item];
+	WCProjectNavigatorViewController *projectNavigatorViewController = [[[self projectDocument] projectWindowController] projectNavigatorViewController];
+	NSTableCellView *view = [[projectNavigatorViewController outlineView] viewAtColumn:0 row:itemRow makeIfNecessary:NO];
+	
+	if (view) {
+		NSRect zoomRect = [[view window] convertRectToScreen:[view convertRectToBase:[[view imageView] bounds]]];
+		
+		[[self window] orderOutWithZoomEffectToRect:zoomRect];
+	}
+	else {
+		[[self window] orderOut:nil];
+	}
+	
+	return NO;
+}
+
 - (void)windowWillClose:(NSNotification *)notification {
 	while ([[[self tabViewController] tabView] numberOfTabViewItems])
 		[[[self tabViewController] tabView] removeTabViewItem:[[[self tabViewController] tabView] tabViewItemAtIndex:0]];

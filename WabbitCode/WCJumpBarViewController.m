@@ -516,7 +516,7 @@
 
 - (IBAction)_symbolsMenuClick:(id)sender; {
 	[[self textView] setSelectedRange:[[sender representedObject] range]];
-	[[self textView] centerSelectionInVisibleArea:nil];
+	[[self textView] scrollRangeToVisible:[[sender representedObject] range]];
 }
 
 - (IBAction)_recentFilesMenuItemClicked:(id)sender {

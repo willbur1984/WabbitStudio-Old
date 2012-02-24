@@ -15,6 +15,7 @@
 @interface WCSourceFileSeparateWindowController : NSWindowController <WCTabViewContext,WCTabViewControllerDelegate,NSWindowDelegate> {
 	__weak WCSourceFileDocument *_sourceFileDocument;
 	WCTabViewController *_tabViewController;
+	BOOL _windowShouldClose;
 }
 @property (readonly,nonatomic) WCTabViewController *tabViewController;
 @property (readonly,nonatomic) WCProjectDocument *projectDocument;

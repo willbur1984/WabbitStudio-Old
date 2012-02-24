@@ -294,7 +294,7 @@
 - (void)handleJumpToDefinitionForSourceTextView:(WCSourceTextView *)textView sourceSymbol:(WCSourceSymbol *)symbol {
 	if ([symbol sourceScanner] == [self sourceScanner]) {
 		[textView setSelectedRange:[symbol range]];
-		[textView centerSelectionInVisibleArea:nil];
+		[textView scrollRangeToVisible:[symbol range]];
 	}
 	else {
 		WCSourceTextViewController *stvController = [[[self sourceFileDocument] projectDocument] openTabForSourceFileDocument:[[[symbol sourceScanner] delegate] sourceFileDocumentForSourceScanner:[symbol sourceScanner]] tabViewContext:nil];
