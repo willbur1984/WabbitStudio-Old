@@ -10,11 +10,4 @@
 
 @implementation RSDontSelectPopUpButton
 
-- (void)selectItem:(NSMenuItem *)item {
-	if ([item tag] == RSDontSelectTag)
-		return;
-	
-	[super selectItem:item];
-}
-
 @end

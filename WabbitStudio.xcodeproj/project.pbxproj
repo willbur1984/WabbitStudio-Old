@@ -329,6 +329,8 @@
 		077CC16514F6EA6600713ED8 /* NSView+JAExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 071985F314C0AEAC00C8E91A /* NSView+JAExtensions.m */; };
 		077CC16614F6EA6C00713ED8 /* NSObject+JAExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 071985F114C0AEAC00C8E91A /* NSObject+JAExtensions.m */; };
 		077CC16C14F7473C00713ED8 /* RSDontSelectPopUpButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 077CC16B14F7473C00713ED8 /* RSDontSelectPopUpButton.m */; };
+		077CC16F14F7EA7600713ED8 /* RSDontSelectPopUpButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 077CC16E14F7EA7600713ED8 /* RSDontSelectPopUpButtonCell.m */; };
+		077CC17314F7EEFB00713ED8 /* WCDebugController.m in Sources */ = {isa = PBXBuildFile; fileRef = 077CC17214F7EEFB00713ED8 /* WCDebugController.m */; };
 		077D3EE514EECD6C000735EA /* BuildTargetOutputTypesToFileExtensions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 077D3EE414EECD6C000735EA /* BuildTargetOutputTypesToFileExtensions.plist */; };
 		077D3EE914EED0DD000735EA /* RSStringToURLTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 077D3EE814EED0DD000735EA /* RSStringToURLTransformer.m */; };
 		077D3EEC14EEE0C8000735EA /* WCTabViewWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 077D3EEB14EEE0C8000735EA /* WCTabViewWindow.m */; };
@@ -1020,6 +1022,10 @@
 		077CC15F14F6DE2600713ED8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WEHardwareView.xib; sourceTree = "<group>"; };
 		077CC16A14F7473C00713ED8 /* RSDontSelectPopUpButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSDontSelectPopUpButton.h; sourceTree = "<group>"; };
 		077CC16B14F7473C00713ED8 /* RSDontSelectPopUpButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSDontSelectPopUpButton.m; sourceTree = "<group>"; };
+		077CC16D14F7EA7600713ED8 /* RSDontSelectPopUpButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSDontSelectPopUpButtonCell.h; sourceTree = "<group>"; };
+		077CC16E14F7EA7600713ED8 /* RSDontSelectPopUpButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSDontSelectPopUpButtonCell.m; sourceTree = "<group>"; };
+		077CC17114F7EEFB00713ED8 /* WCDebugController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCDebugController.h; sourceTree = "<group>"; };
+		077CC17214F7EEFB00713ED8 /* WCDebugController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCDebugController.m; sourceTree = "<group>"; };
 		077D3EE414EECD6C000735EA /* BuildTargetOutputTypesToFileExtensions.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = BuildTargetOutputTypesToFileExtensions.plist; sourceTree = "<group>"; };
 		077D3EE714EED0DD000735EA /* RSStringToURLTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSStringToURLTransformer.h; sourceTree = "<group>"; };
 		077D3EE814EED0DD000735EA /* RSStringToURLTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSStringToURLTransformer.m; sourceTree = "<group>"; };
@@ -1595,6 +1601,7 @@
 		071985F914C0B3BA00C8E91A /* Project */ = {
 			isa = PBXGroup;
 			children = (
+				077CC17014F7EEE900713ED8 /* Debugging */,
 				072427E214F1A8AF00DC920B /* Templates */,
 				070EC25514EF8E5100982CA8 /* Breakpoints */,
 				0765361714CD44EE004D72D1 /* View Controllers */,
@@ -2307,6 +2314,15 @@
 			name = Search;
 			sourceTree = "<group>";
 		};
+		077CC17014F7EEE900713ED8 /* Debugging */ = {
+			isa = PBXGroup;
+			children = (
+				077CC17114F7EEFB00713ED8 /* WCDebugController.h */,
+				077CC17214F7EEFB00713ED8 /* WCDebugController.m */,
+			);
+			name = Debugging;
+			sourceTree = "<group>";
+		};
 		07862BAA14BA5E350057EB89 /* Window Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -2385,6 +2401,8 @@
 				0725436F14A85F7000C961B7 /* RSRaisedBackgroundTextFieldCell.m */,
 				077906B514E1CF97006C16EF /* RSLightBackgroundTextFieldCell.h */,
 				077906B614E1CF97006C16EF /* RSLightBackgroundTextFieldCell.m */,
+				077CC16D14F7EA7600713ED8 /* RSDontSelectPopUpButtonCell.h */,
+				077CC16E14F7EA7600713ED8 /* RSDontSelectPopUpButtonCell.m */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -3085,6 +3103,7 @@
 				07ED2C5A14F49A0E0097C5B6 /* RSSkinView.m in Sources */,
 				07AB504F14F54425005AA724 /* RSTransferFile.m in Sources */,
 				07AB505414F5475C005AA724 /* RSTransferFileWindowController.m in Sources */,
+				077CC17314F7EEFB00713ED8 /* WCDebugController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3143,6 +3162,7 @@
 				077CC16514F6EA6600713ED8 /* NSView+JAExtensions.m in Sources */,
 				077CC16614F6EA6C00713ED8 /* NSObject+JAExtensions.m in Sources */,
 				077CC16C14F7473C00713ED8 /* RSDontSelectPopUpButton.m in Sources */,
+				077CC16F14F7EA7600713ED8 /* RSDontSelectPopUpButtonCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

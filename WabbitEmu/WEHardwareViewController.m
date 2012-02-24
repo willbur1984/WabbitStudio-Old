@@ -40,7 +40,17 @@
 	[[[self dummyLCDView] superview] replaceSubview:[self dummyLCDView] with:lcdView];
 	[self setLCDView:lcdView];
 	
+	[(NSPopUpButtonCell *)[[self previewSourcePopUpButton] cell] setAltersStateOfSelectedItem:YES];
 	[self menuNeedsUpdate:[self previewSourceMenu]];
+}
+
+- (void)viewWillMoveToWindow:(NSWindow *)newWindow {
+	[super viewWillMoveToWindow:newWindow];
+	
+	if (newWindow && [[self LCDView] calculator])
+		[[RSLCDViewManager sharedManager] addLCDView:[self LCDView]];
+	else
+		[[RSLCDViewManager sharedManager] removeLCDView:[self LCDView]];
 }
 
 - (void)menuNeedsUpdate:(NSMenu *)menu {
@@ -48,12 +58,7 @@
 	
 	NSArray *openDocuments = [[NSDocumentController sharedDocumentController] documents];
 	
-	if (![[self LCDView] calculator] || ![openDocuments count]) {
-		NSMenuItem *item = [menu addItemWithTitle:NSLocalizedString(@"No Source", @"No Source") action:@selector(_previewSourceMenuItemClicked:) keyEquivalent:@""];
-		
-		[item setTarget:self];
-	}
-	else {
+	if ([openDocuments count]) {
 		for (NSDocument *document in openDocuments) {
 			NSMenuItem *item = [menu addItemWithTitle:[document displayName] action:@selector(_previewSourceMenuItemClicked:) keyEquivalent:@""];
 			
@@ -62,6 +67,11 @@
 			[[item image] setSize:NSSmallSize];
 			[item setRepresentedObject:[document fileURL]];
 		}
+	}
+	else {
+		NSMenuItem *item = [menu addItemWithTitle:NSLocalizedString(@"No Source", @"No Source") action:@selector(_previewSourceMenuItemClicked:) keyEquivalent:@""];
+		
+		[item setTarget:self];
 	}
 	
 	[menu addItem:[NSMenuItem separatorItem]];
@@ -87,6 +97,7 @@
 
 @synthesize dummyLCDView=_dummyLCDView;
 @synthesize previewSourceMenu=_previewSourceMenu;
+@synthesize previewSourcePopUpButton=_previewSourcePopUpButton;
 
 @synthesize LCDView=_LCDView;
 
@@ -108,6 +119,7 @@
 	
 	[openPanel setAllowedFileTypes:[NSArray arrayWithObjects:RSCalculatorRomUTI,RSCalculatorSavestateUTI, nil]];
 	[openPanel setPrompt:LOCALIZED_STRING_CHOOSE];
+	[openPanel setMessage:NSLocalizedString(@"Choose a source rom or savestate for the preview.", @"Choose a source rom or savestate for the preview")];
 	
 	[openPanel beginSheetModalForWindow:[[self view] window] completionHandler:^(NSInteger result) {
 		[openPanel orderOut:nil];

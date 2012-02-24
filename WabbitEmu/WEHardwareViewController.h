@@ -6,15 +6,17 @@
 //  Copyright (c) 2012 Revolution Software. All rights reserved.
 //
 
-#import <AppKit/NSViewController.h>
+#import "JAViewController.h"
 #import "RSPreferencesModule.h"
+#import "RSCalculatorDelegate.h"
 
 @class RSLCDView,RSCalculator;
 
-@interface WEHardwareViewController : NSViewController <RSPreferencesModule,NSMenuDelegate>
+@interface WEHardwareViewController : JAViewController <RSPreferencesModule,RSCalculatorDelegate,NSMenuDelegate>
 
 @property (readwrite,assign,nonatomic) IBOutlet NSView *dummyLCDView;
 @property (readwrite,assign,nonatomic) IBOutlet NSMenu *previewSourceMenu;
+@property (readwrite,assign,nonatomic) IBOutlet NSPopUpButton *previewSourcePopUpButton;
 
 @property (readwrite,assign,nonatomic) RSLCDView *LCDView;
 

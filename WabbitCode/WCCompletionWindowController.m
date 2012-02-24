@@ -91,7 +91,7 @@
 	return sharedInstance;
 }
 - (void)showCompletionWindowControllerForSourceTextView:(WCSourceTextView *)textView; {
-	[[self window] setAnimationBehavior:NSWindowAnimationBehaviorAlertPanel];
+	[[self window] setAnimationBehavior:NSWindowAnimationBehaviorUtilityWindow];
 	
 	if ([self textView])
 		return;
@@ -199,7 +199,6 @@
 
 #pragma mark *** Private Methods ***
 - (void)_closeCompletionWindowControllerAndInsertCompletion:(BOOL)insertCompletion; {
-	[[self window] setAnimationBehavior:NSWindowAnimationBehaviorUtilityWindow];
 	[[[self textView] window] removeChildWindow:[self window]];
 	[[self window] orderOut:nil];
 	

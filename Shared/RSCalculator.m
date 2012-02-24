@@ -66,7 +66,7 @@ const NSInteger RSCalculatorErrorCodeMaximumNumberOfCalculators = 1002;
 	
 	_calculator = calculator;
 	
-	if (![self loadRomOrSavestateAtURL:romOrSavestateURL error:outError]) {
+	if (romOrSavestateURL && ![self loadRomOrSavestateAtURL:romOrSavestateURL error:outError]) {
 		[self release];
 		return nil;
 	}
