@@ -19,6 +19,12 @@ NSString *const WCSourceTokenTypeAttributeName = @"WCSourceTokenTypeAttributeNam
 
 @implementation WCSourceToken
 #pragma mark *** Subclass Overrides ***
++ (void)initialize {
+	if (self == [WCSourceToken class]) {
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_fontAndColorManagerDidChangeCurrentTheme:) name:WCFontAndColorThemeManagerCurrentThemeDidChangeNotification object:nil];
+	}
+}
+
 - (void)dealloc {
 	[_name release];
 	[super dealloc];
@@ -79,8 +85,9 @@ NSString *const WCSourceTokenTypeAttributeName = @"WCSourceTokenTypeAttributeNam
 	return [[self class] _sourceTokenIconForSourceTokenType:[self type]];
 }
 #pragma mark *** Private Methods ***
+static NSMapTable *typesToIcons;
+
 + (NSImage *)_sourceTokenIconForSourceTokenType:(WCSourceTokenType)sourceTokenType; {
-	static NSMapTable *typesToIcons;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
 		typesToIcons = [[NSMapTable alloc] initWithKeyOptions:NSPointerFunctionsIntegerPersonality|NSPointerFunctionsOpaqueMemory valueOptions:NSPointerFunctionsStrongMemory|NSPointerFunctionsObjectPointerPersonality capacity:0];
@@ -170,6 +177,10 @@ NSString *const WCSourceTokenTypeAttributeName = @"WCSourceTokenTypeAttributeNam
 	}
 	
 	return retval;
+}
+
++ (void)_fontAndColorManagerDidChangeCurrentTheme:(NSNotification *)note {
+	[typesToIcons removeAllObjects];
 }
 
 @end

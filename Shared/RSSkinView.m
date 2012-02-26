@@ -140,6 +140,9 @@ finalize_buttons:
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
+	[[NSColor windowBackgroundColor] setFill];
+	NSRectFill([self bounds]);
+	
     [[[self calculator] skinImage] drawInRect:[self bounds] fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
 	
 	NSImage *keymap = [[self calculator] keymapImage];

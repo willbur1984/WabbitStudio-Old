@@ -345,6 +345,23 @@
 - (IBAction)reloadCurrentRomOrSavestate:(id)sender; {
 	[[self calculator] reloadLastRomOrSavestate];
 }
+
+- (IBAction)copy:(id)sender; {
+	if (![[self calculator] isActive]) {
+		NSBeep();
+		return;
+	}
+	
+	char *answerString = GetRealAns(&([[self calculator] calculator]->cpu));
+	if (answerString && strlen(answerString)) {
+		NSPasteboard *pboard = [NSPasteboard pasteboardWithName:NSGeneralPboard];
+		
+		[pboard clearContents];
+		[pboard writeObjects:[NSArray arrayWithObjects:[[[NSString alloc] initWithCString:answerString encoding:NSUTF8StringEncoding] autorelease], nil]];
+		
+		free(answerString);
+	}
+}
 #pragma mark Properties
 @synthesize calculator=_calculator;
 @dynamic widescreen;

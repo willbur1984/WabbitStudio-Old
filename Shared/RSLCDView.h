@@ -41,4 +41,6 @@
 - (IBAction)transferFiles:(id)sender;
 - (IBAction)reloadCurrentRomOrSavestate:(id)sender;
 
+- (IBAction)copy:(id)sender;
+
 @end

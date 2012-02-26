@@ -380,6 +380,7 @@
 			case WCSourceTokenTypeBinary:
 				[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme binaryFont],NSFontAttributeName,[currentTheme binaryColor],NSForegroundColorAttributeName, nil] range:range];
 				break;
+			case WCSourceTokenTypeMultilineComment:
 			case WCSourceTokenTypeComment:
 				[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme commentFont],NSFontAttributeName,[currentTheme commentColor],NSForegroundColorAttributeName, nil] range:range];
 				break;
@@ -394,9 +395,6 @@
 				break;
 			case WCSourceTokenTypeMneumonic:
 				[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme mneumonicFont],NSFontAttributeName,[currentTheme mneumonicColor],NSForegroundColorAttributeName, nil] range:range];
-				break;
-			case WCSourceTokenTypeMultilineComment:
-				[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme commentFont],NSFontAttributeName,[currentTheme commentColor],NSForegroundColorAttributeName, nil] range:range];
 				break;
 			case WCSourceTokenTypeNumber:
 				[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme numberFont],NSFontAttributeName,[currentTheme numberColor],NSForegroundColorAttributeName, nil] range:range];
@@ -420,6 +418,7 @@
 	[textStorage endEditing];
 }
 - (void)_colorDidChange:(NSNotification *)note {
+	/*
 	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme]; 
 	NSTextStorage *textStorage = [[self sourceScanner] textStorage];
 	WCSourceTokenType tokenTypeToChange = [[[note userInfo] objectForKey:WCFontAndColorThemeManagerColorDidChangeColorTypeKey] unsignedIntValue];
@@ -427,13 +426,37 @@
 	
 	[textStorage beginEditing];
 	
-	[textStorage enumerateAttribute:WCSourceTokenTypeAttributeName inRange:NSMakeRange(0, [textStorage length]) options:NSAttributedStringEnumerationLongestEffectiveRangeNotRequired usingBlock:^(id tokenType, NSRange range, BOOL *stop) {
+	[textStorage enumerateAttribute:WCSourceTokenTypeAttributeName inRange:NSMakeRange(0, [textStorage length]) options:0 usingBlock:^(id tokenType, NSRange range, BOOL *stop) {
 		if ([tokenType unsignedIntValue] == tokenTypeToChange)
 			[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme performSelector:colorSelector],NSForegroundColorAttributeName, nil] range:range];
 		else if ([tokenType unsignedIntValue] == WCSourceTokenTypeMultilineComment &&
 				 tokenTypeToChange == WCSourceTokenTypeComment)
 			[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme performSelector:colorSelector],NSForegroundColorAttributeName, nil] range:range];
 	}];
+	
+	[textStorage endEditing];
+	 */
+	WCFontAndColorTheme *currentTheme = [[WCFontAndColorThemeManager sharedManager] currentTheme]; 
+	NSTextStorage *textStorage = [[self sourceScanner] textStorage];
+	WCSourceTokenType tokenTypeToChange = [[[note userInfo] objectForKey:WCFontAndColorThemeManagerColorDidChangeColorTypeKey] unsignedIntValue];
+	SEL colorSelector = NSSelectorFromString([[note userInfo] objectForKey:WCFontAndColorThemeManagerColorDidChangeColorNameKey]);
+	
+	[textStorage beginEditing];
+	
+	NSRange range = NSMakeRange(0, [textStorage length]);
+	NSRange effectiveRange;
+	id tokenType;
+	while (range.length) {
+		if ((tokenType = [textStorage attribute:WCSourceTokenTypeAttributeName atIndex:range.location longestEffectiveRange:&effectiveRange inRange:range])) {
+			if ([tokenType unsignedIntValue] == tokenTypeToChange)
+				[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme performSelector:colorSelector],NSForegroundColorAttributeName, nil] range:effectiveRange];
+			else if ([tokenType unsignedIntValue] == WCSourceTokenTypeMultilineComment &&
+					 tokenTypeToChange == WCSourceTokenTypeComment)
+				[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme performSelector:colorSelector],NSForegroundColorAttributeName, nil] range:effectiveRange];
+		}
+		
+		range = NSMakeRange(NSMaxRange(effectiveRange),NSMaxRange(range)-NSMaxRange(effectiveRange));
+	}
 	
 	[textStorage endEditing];
 	
@@ -447,7 +470,7 @@
 	
 	[textStorage beginEditing];
 	
-	[textStorage enumerateAttribute:WCSourceTokenTypeAttributeName inRange:NSMakeRange(0, [textStorage length]) options:NSAttributedStringEnumerationLongestEffectiveRangeNotRequired usingBlock:^(id tokenType, NSRange range, BOOL *stop) {
+	[textStorage enumerateAttribute:WCSourceTokenTypeAttributeName inRange:NSMakeRange(0, [textStorage length]) options:0 usingBlock:^(id tokenType, NSRange range, BOOL *stop) {
 		if ([tokenType unsignedIntValue] == tokenTypeToChange)
 			[textStorage addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[currentTheme performSelector:fontSelector],NSFontAttributeName, nil] range:range];
 		else if ([tokenType unsignedIntValue] == WCSourceTokenTypeMultilineComment &&

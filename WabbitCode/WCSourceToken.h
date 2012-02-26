@@ -10,8 +10,6 @@
 
 typedef enum _WCSourceTokenType {
 	WCSourceTokenTypeNone = 0,
-	WCSourceTokenTypeComment,
-	WCSourceTokenTypeMultilineComment,
 	WCSourceTokenTypeRegister,
 	WCSourceTokenTypeString,
 	WCSourceTokenTypeMneumonic,
@@ -20,7 +18,9 @@ typedef enum _WCSourceTokenType {
 	WCSourceTokenTypeBinary,
 	WCSourceTokenTypePreProcessor,
 	WCSourceTokenTypeDirective,
-	WCSourceTokenTypeConditional
+	WCSourceTokenTypeConditional,
+	WCSourceTokenTypeComment,
+	WCSourceTokenTypeMultilineComment
 	
 } WCSourceTokenType;
 
