@@ -11,6 +11,8 @@
 #import "RSDefines.h"
 #import "RSTransferFileWindowController.h"
 #import "RSEmptyContentCell.h"
+#import "RSGifRecordingStatusView.h"
+#include "gif.h"
 
 @interface RSLCDView ()
 @property (readonly,nonatomic) NSBitmapImageRep *LCDBitmap;
@@ -200,7 +202,7 @@
 		// blend the wire pattern on top of the lcd image
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		
-		// match the glEnable() call earlier
+		// match the glEnable(GL_BLEND); call earlier
 		glDisable(GL_BLEND);
 		
 		glFinish();
@@ -216,8 +218,7 @@
 - (void)prepareOpenGL {
 	[super prepareOpenGL];
 	
-	// set a color that matches the greenish tint of the calc lcd for our clear color
-	glClearColor(128.0/255.0, 142.0/255.0, 107.0/255.0, 1.0);
+	glClearColor(0.0, 0.0, 0.0, 0.0);
 	
 	// enable rectangular textures
 	glEnable(GL_TEXTURE_RECTANGLE_EXT);
@@ -244,6 +245,17 @@
 	glLoadIdentity();
 	glViewport(0.0,0.0,NSWidth([self bounds]),NSHeight([self bounds]));
 }
+#pragma mark NSMenuValidation
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
+	if ([menuItem action] == @selector(toggleScreenRecording:)) {
+		if (gif_write_state == GIF_IDLE)
+			[menuItem setTitle:NSLocalizedString(@"Start Recording Screen", @"Start Recording Screen")];
+		else
+			[menuItem setTitle:NSLocalizedString(@"Stop Recording Screen", @"Stop Recording Screen")];
+	}
+	return YES;
+}
+
 #pragma mark NSDraggingDestination
 - (NSDragOperation)draggingEntered:(id<NSDraggingInfo>)info {
 	if ([info draggingSource] == self)
@@ -254,6 +266,7 @@
 	
 	if ([acceptedFileURLs count])
 		return NSDragOperationCopy;
+	
 	return NSDragOperationNone;
 }
 
@@ -269,7 +282,7 @@
 }
 
 - (void)draggingEnded:(id<NSDraggingInfo>)info {
-	
+
 }
 #pragma mark NSDraggingSource
 - (NSDragOperation)draggingSession:(NSDraggingSession *)session sourceOperationMaskForDraggingContext:(NSDraggingContext)context; {
@@ -360,6 +373,45 @@
 		[pboard writeObjects:[NSArray arrayWithObjects:[[[NSString alloc] initWithCString:answerString encoding:NSUTF8StringEncoding] autorelease], nil]];
 		
 		free(answerString);
+	}
+}
+
+- (IBAction)toggleScreenRecording:(id)sender; {
+	
+	
+	RSGifRecordingStatusView *gifView = nil;
+	
+	for (id subview in [[[self window] contentView] subviews]) {
+		if ([subview isKindOfClass:[RSGifRecordingStatusView class]]) {
+			gifView = subview;
+			break;
+		}
+	}
+	
+	if (gifView) {
+		NSRect gifViewFrame = [gifView frame];
+		
+		[[gifView animator] setFrameOrigin:NSMakePoint(NSMinX(gifViewFrame), NSMinY(gifViewFrame)+NSHeight(gifViewFrame))];
+		
+		[gifView performSelector:@selector(removeFromSuperviewWithoutNeedingDisplay) withObject:nil afterDelay:0.35];
+		
+		calc_stop_screenshot([[self calculator] calculator]);
+	}
+	else {
+		NSView *contentView = [[self window] contentView];
+		NSRect contentViewFrame = [contentView frame];
+		
+		gifView = [[[RSGifRecordingStatusView alloc] initWithFrame:NSMakeRect(NSMinX(contentViewFrame), NSMaxY(contentViewFrame), NSWidth(contentViewFrame), 23.0)] autorelease];
+		
+		[contentView addSubview:gifView positioned:NSWindowAbove relativeTo:[self superview]];
+		
+		NSRect gifViewFrame = [gifView frame];
+		NSString *screenshotPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Desktop"] stringByAppendingPathComponent:@"screenshot.gif"];
+		
+		[gifView setStatusString:[NSString stringWithFormat:NSLocalizedString(@"Recording (%@)\u2026", @"screenshot status format string"),screenshotPath]];
+		[[gifView animator] setFrameOrigin:NSMakePoint(NSMinX(gifViewFrame), NSMinY(gifViewFrame)-NSHeight(gifViewFrame))];
+		
+		calc_start_screenshot([[self calculator] calculator], [screenshotPath fileSystemRepresentation]);
 	}
 }
 #pragma mark Properties

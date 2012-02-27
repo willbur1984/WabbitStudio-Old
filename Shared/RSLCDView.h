@@ -43,4 +43,6 @@
 
 - (IBAction)copy:(id)sender;
 
+- (IBAction)toggleScreenRecording:(id)sender;
+
 @end
