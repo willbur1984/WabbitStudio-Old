@@ -240,13 +240,15 @@ static const CGFloat kBuildIssueWidthHeight = 10.0;
 	
 	if (buildIssue && buildIssue == [self clickedBuildIssue])
 		[buildIssue setVisible:(![buildIssue isVisible])];
-	else if (fileBreakpoint && fileBreakpoint == [self clickedFileBreakpoint] && !NSMouseInRect(point, [self bounds], [self isFlipped]))
+	else if ([self clickedFileBreakpoint] && !NSMouseInRect(point, [self bounds], [self isFlipped]))
 		NSShowAnimationEffect(NSAnimationEffectDisappearingItemDefault, [[self window] convertBaseToScreen:[theEvent locationInWindow]], NSZeroSize, self, @selector(_animationEffectDidEnd:), NULL);
 	else if (fileBreakpoint && fileBreakpoint == [self clickedFileBreakpoint] && ![self clickedFileBreakpointHasMoved])
 		[fileBreakpoint setActive:(![fileBreakpoint isActive])];
 }
 - (void)_animationEffectDidEnd:(void *)contextInfo {
 	[[[[self delegate] projectDocumentForSourceRulerView:self] breakpointManager] removeFileBreakpoint:[self clickedFileBreakpoint]];
+	
+	[[NSCursor arrowCursor] set];
 }
 
 - (void)updateTrackingAreas {

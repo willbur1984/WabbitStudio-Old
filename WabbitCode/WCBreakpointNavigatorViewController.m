@@ -215,9 +215,12 @@ static const CGFloat kMainCellHeight = 20.0;
 	NSTreeNode *breakpointContainerNode = [[self treeController] treeNodeForRepresentedObject:breakpointContainer];
 	WCBreakpointNavigatorFileBreakpointOutlineCellView *cellView = [[self outlineView] viewAtColumn:[[self outlineView] columnWithIdentifier:[[[self outlineView] outlineTableColumn] identifier]] row:[[self outlineView] rowForItem:breakpointContainerNode] makeIfNecessary:NO];
 	WCEditBreakpointViewController *editBreakpointViewController = [self editBreakpointViewController];
+	NSRect breakpointButtonBounds = [cellView convertRect:[[cellView breakpointButton] bounds] fromView:[cellView breakpointButton]];
+	
+	breakpointButtonBounds.origin.y -= 4.0;
 	
 	[editBreakpointViewController setBreakpoint:[breakpointContainer representedObject]];
-	[editBreakpointViewController showEditBreakpointViewRelativeToRect:[[cellView breakpointButton] bounds] ofView:[cellView breakpointButton] preferredEdge:NSMaxYEdge];
+	[editBreakpointViewController showEditBreakpointViewRelativeToRect:breakpointButtonBounds ofView:cellView preferredEdge:NSMinYEdge];
 }
 - (IBAction)toggleBreakpoint:(id)sender; {
 	NSArray *selectedBreakpointContainers = [[self selectedObjects] valueForKeyPath:@"@unionOfArrays.descendantLeafNodes"];
