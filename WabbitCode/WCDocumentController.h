@@ -15,13 +15,15 @@ extern NSString *const WCProjectFileUTI;
 
 @class WCOpenPanelAccessoryViewController;
 
-@interface WCDocumentController : NSDocumentController {
+@interface WCDocumentController : NSDocumentController <NSOpenSavePanelDelegate> {
 	NSMutableDictionary *_documentURLsToStringEncodings;
 	NSLock *_documentURLsToStringEncodingsLock;
 	WCOpenPanelAccessoryViewController *_openPanelAccessoryViewController;
 }
 @property (readonly,nonatomic) NSArray *recentProjectURLs;
 @property (readonly,nonatomic) NSSet *sourceFileDocumentUTIs;
+@property (readonly,nonatomic) NSArray *projectDocuments;
+@property (readonly,nonatomic) NSArray *sourceFileDocuments;
 
 - (NSStringEncoding)explicitStringEncodingForDocumentURL:(NSURL *)documentURL;
 
