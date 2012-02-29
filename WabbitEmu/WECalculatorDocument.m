@@ -9,9 +9,11 @@
 #import "WECalculatorDocument.h"
 #import "RSCalculator.h"
 #import "WECalculatorWindowController.h"
+#import "WEDebuggerWindowController.h"
 
 @interface WECalculatorDocument ()
 @property (readwrite,retain,nonatomic) RSCalculator *calculator;
+@property (readonly,nonatomic) WEDebuggerWindowController *debuggerWindowController;
 @end
 
 @implementation WECalculatorDocument
@@ -64,6 +66,26 @@
 	[[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:romOrSavestateURL];
 }
 
+- (IBAction)showDebugger:(id)sender; {
+	[[self debuggerWindowController] showWindow:nil];
+}
+
 @synthesize calculator=_calculator;
+@dynamic debuggerWindowController;
+- (WEDebuggerWindowController *)debuggerWindowController {
+	for (id windowController in [self windowControllers]) {
+		if ([windowController isKindOfClass:[WEDebuggerWindowController class]])
+			return windowController;
+	}
+	
+	WEDebuggerWindowController *windowController = [[[WEDebuggerWindowController alloc] init] autorelease];
+	
+	[self addWindowController:windowController];
+	
+	[[self calculator] setRunning:NO];
+	[[self calculator] setDebugging:YES];
+	
+	return windowController;
+}
 
 @end

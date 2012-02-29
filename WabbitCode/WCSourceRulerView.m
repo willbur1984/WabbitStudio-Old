@@ -273,9 +273,9 @@ static const CGFloat kBuildIssueWidthHeight = 10.0;
 - (CGFloat)minimumThickness {
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey] &&
 		[[self delegate] projectDocumentForSourceRulerView:self])
-		return [super minimumThickness]+kIconWidthHeight+kBuildIssueWidthHeight+kIconPaddingLeft+kCodeFoldingRibbonWidth;
+		return [super minimumThickness]+kBuildIssueWidthHeight+kIconPaddingLeft+kCodeFoldingRibbonWidth;
 	else if ([[self delegate] projectDocumentForSourceRulerView:self])
-		return [super minimumThickness]+kIconWidthHeight+kBuildIssueWidthHeight+kIconPaddingLeft;
+		return [super minimumThickness]+kBuildIssueWidthHeight+kIconPaddingLeft;
 	else if ([[NSUserDefaults standardUserDefaults] boolForKey:WCEditorShowCodeFoldingRibbonKey])
 		return [super minimumThickness]+kIconWidthHeight+kIconPaddingLeft+kCodeFoldingRibbonWidth;
 	return [super minimumThickness]+kIconWidthHeight+kIconPaddingLeft;
@@ -567,6 +567,9 @@ static const CGFloat kBuildIssueWidthHeight = 10.0;
 
 - (void)drawBookmarksInRect:(NSRect)bookmarkRect; {
 	for (RSBookmark *bookmark in [[self textStorage] bookmarksForRange:[[self textView] visibleRange]]) {
+		if ([[self lineStartIndexesWithBuildIssues] containsIndex:[[self lineStartIndexes] lineStartIndexForRange:[bookmark range]]])
+			continue;
+		
 		NSRect lineRect = [[[self textView] layoutManager] lineFragmentRectForGlyphAtIndex:[[[self textView] layoutManager] glyphIndexForCharacterAtIndex:[bookmark range].location] effectiveRange:NULL];
 		
 		lineRect = NSMakeRect(NSMinX([self bounds]), [self convertPoint:lineRect.origin fromView:[self clientView]].y, NSWidth([self bounds]), NSHeight(lineRect));
@@ -575,12 +578,7 @@ static const CGFloat kBuildIssueWidthHeight = 10.0;
 			continue;
 		
 		NSImage *bookmarkImage = [NSImage imageNamed:@"Bookmark"];
-		NSRect bookmarkRect;
-		
-		if ([[self lineStartIndexesWithBuildIssues] containsIndex:[[self lineStartIndexes] lineStartIndexForRange:[bookmark range]]])
-			bookmarkRect = NSMakeRect(NSMinX(lineRect)+kBuildIssueWidthHeight+kIconPaddingLeft+kIconPaddingLeft, NSMinY(lineRect)+kIconPaddingTop, kIconWidthHeight, kIconWidthHeight);
-		else
-			bookmarkRect = NSMakeRect(NSMinX(lineRect)+kIconPaddingLeft, NSMinY(lineRect)+kIconPaddingTop, kIconWidthHeight, kIconWidthHeight);
+		NSRect bookmarkRect = NSMakeRect(NSMinX(lineRect)+kIconPaddingLeft, NSMinY(lineRect)+kIconPaddingTop, kIconWidthHeight, kIconWidthHeight);
 		
 		[bookmarkImage drawInRect:bookmarkRect fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
 	}

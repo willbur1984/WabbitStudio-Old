@@ -228,6 +228,9 @@
 		0742294E14FD948700EDA215 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 0742294D14FD948700EDA215 /* main.c */; };
 		0742295414FD964400EDA215 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 071ECCC214A4233C002409F8 /* Cocoa.framework */; };
 		0742295614FDB1C000EDA215 /* WabbitCodeQLPlugin.qlgenerator in Copy QuickLook Plugin */ = {isa = PBXBuildFile; fileRef = 0742293E14FD948700EDA215 /* WabbitCodeQLPlugin.qlgenerator */; };
+		0742295914FDB82F00EDA215 /* WEDebuggerWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0742295814FDB82E00EDA215 /* WEDebuggerWindowController.m */; };
+		0742295C14FDB83E00EDA215 /* WEDebuggerWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0742295A14FDB83E00EDA215 /* WEDebuggerWindow.xib */; };
+		0742295D14FDB86100EDA215 /* KBResponderNotifyingWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 07862BAC14BA78010057EB89 /* KBResponderNotifyingWindow.m */; };
 		0745BE0614AAC4B400F541DC /* RSBorderlessButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0745BE0514AAC4B400F541DC /* RSBorderlessButtonCell.m */; };
 		0745BE0914AAD3DE00F541DC /* RSBorderlessPopUpButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0745BE0814AAD3DE00F541DC /* RSBorderlessPopUpButtonCell.m */; };
 		0745BE0C14AAD51D00F541DC /* RSBorderedGlassGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0745BE0B14AAD51D00F541DC /* RSBorderedGlassGradientView.m */; };
@@ -912,6 +915,9 @@
 		0742294B14FD948700EDA215 /* GeneratePreviewForURL.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GeneratePreviewForURL.m; sourceTree = "<group>"; };
 		0742294D14FD948700EDA215 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		0742294F14FD948700EDA215 /* WabbitCodeQLPlugin-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WabbitCodeQLPlugin-Prefix.pch"; sourceTree = "<group>"; };
+		0742295714FDB82E00EDA215 /* WEDebuggerWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WEDebuggerWindowController.h; sourceTree = "<group>"; };
+		0742295814FDB82E00EDA215 /* WEDebuggerWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WEDebuggerWindowController.m; sourceTree = "<group>"; };
+		0742295B14FDB83E00EDA215 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WEDebuggerWindow.xib; sourceTree = "<group>"; };
 		0745BE0414AAC4B400F541DC /* RSBorderlessButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSBorderlessButtonCell.h; sourceTree = "<group>"; };
 		0745BE0514AAC4B400F541DC /* RSBorderlessButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSBorderlessButtonCell.m; sourceTree = "<group>"; };
 		0745BE0714AAD3DE00F541DC /* RSBorderlessPopUpButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSBorderlessPopUpButtonCell.h; sourceTree = "<group>"; };
@@ -2144,6 +2150,8 @@
 				07AB506914F59630005AA724 /* WEGeneralViewController.m */,
 				077CC15B14F6DDC400713ED8 /* WEHardwareViewController.h */,
 				077CC15C14F6DDC400713ED8 /* WEHardwareViewController.m */,
+				0742295714FDB82E00EDA215 /* WEDebuggerWindowController.h */,
+				0742295814FDB82E00EDA215 /* WEDebuggerWindowController.m */,
 				075D31ED14F43E60007F8951 /* Xibs */,
 				075D2FBC14F36779007F8951 /* Supporting Files */,
 			);
@@ -2324,6 +2332,7 @@
 				07AB506514F5943A005AA724 /* WEPreferencesWindow.xib */,
 				07AB506B14F5963F005AA724 /* WEGeneralView.xib */,
 				077CC15E14F6DE2600713ED8 /* WEHardwareView.xib */,
+				0742295A14FDB83E00EDA215 /* WEDebuggerWindow.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -3052,6 +3061,7 @@
 				07AB506D14F5963F005AA724 /* WEGeneralView.xib in Resources */,
 				077CC15914F6DD9C00713ED8 /* Calculator32x32.png in Resources */,
 				077CC16014F6DE2600713ED8 /* WEHardwareView.xib in Resources */,
+				0742295C14FDB83E00EDA215 /* WEDebuggerWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3453,6 +3463,8 @@
 				077CC16F14F7EA7600713ED8 /* RSDontSelectPopUpButtonCell.m in Sources */,
 				073737A614FC076100B11AFC /* RSGifRecordingStatusView.m in Sources */,
 				073737A814FC0CB300B11AFC /* RSVerticallyCenteredTextFieldCell.m in Sources */,
+				0742295914FDB82F00EDA215 /* WEDebuggerWindowController.m in Sources */,
+				0742295D14FDB86100EDA215 /* KBResponderNotifyingWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3659,6 +3671,14 @@
 				0742294714FD948700EDA215 /* en */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		0742295A14FDB83E00EDA215 /* WEDebuggerWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0742295B14FDB83E00EDA215 /* en */,
+			);
+			name = WEDebuggerWindow.xib;
 			sourceTree = "<group>";
 		};
 		0745BE3114ABF86700F541DC /* WCEditorView.xib */ = {

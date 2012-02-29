@@ -15,4 +15,7 @@
 	RSCalculator *_calculator;
 }
 @property (readonly,retain,nonatomic) RSCalculator *calculator;
+
+- (IBAction)showDebugger:(id)sender;
+
 @end
