@@ -158,7 +158,7 @@
 		}
 		
 		if ([argumentNames containsObject:name])
-			[attributedString addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithUnsignedInteger:NSUnderlineStyleSingle],NSUnderlineStyleAttributeName,[NSColor blackColor],NSForegroundColorAttributeName, nil] range:[result range]];
+			[attributedString addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithUnsignedInteger:NSUnderlineStyleSingle],NSUnderlineStyleAttributeName, nil] range:[result range]];
 	}];
 	
 	[[WCSourceScanner mnemonicRegularExpression] enumerateMatchesInString:[attributedString string] options:0 range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {

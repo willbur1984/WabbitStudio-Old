@@ -96,8 +96,8 @@
 		NSMutableAttributedString *temp = [[[NSMutableAttributedString alloc] initWithString:[self value] attributes:RSToolTipProviderDefaultAttributes()] autorelease];
 		WCSourceHighlighter *highlighter = [[[self sourceScanner] delegate] sourceHighlighterForSourceScanner:[self sourceScanner]];
 		
-		//[highlighter highlightAttributeString:temp withArgumentNames:[NSSet setWithArray:[[self arguments] valueForKey:@"lowercaseString"]]];
-		[highlighter highlightAttributeString:temp];
+		[highlighter highlightAttributeString:temp withArgumentNames:[NSSet setWithArray:[[self arguments] valueForKey:@"lowercaseString"]]];
+		//[highlighter highlightAttributeString:temp];
 		
 		[self setAttributedValueString:temp];
 	}

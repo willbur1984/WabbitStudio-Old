@@ -16,6 +16,9 @@
 
 @implementation WCEditBreakpointViewController
 - (void)dealloc {
+#ifdef DEBUG
+	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
+#endif
 	[_popover release];
 	[_breakpoint release];
 	[super dealloc];
