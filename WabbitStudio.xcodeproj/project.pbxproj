@@ -231,6 +231,8 @@
 		0742295914FDB82F00EDA215 /* WEDebuggerWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0742295814FDB82E00EDA215 /* WEDebuggerWindowController.m */; };
 		0742295C14FDB83E00EDA215 /* WEDebuggerWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0742295A14FDB83E00EDA215 /* WEDebuggerWindow.xib */; };
 		0742295D14FDB86100EDA215 /* KBResponderNotifyingWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 07862BAC14BA78010057EB89 /* KBResponderNotifyingWindow.m */; };
+		0742296D14FDD4E700EDA215 /* wabbitstudio.icns in Resources */ = {isa = PBXBuildFile; fileRef = 072FCFB914CBBD9700F76276 /* wabbitstudio.icns */; };
+		0742296F14FDDBC600EDA215 /* Build.png in Resources */ = {isa = PBXBuildFile; fileRef = 0742296E14FDDBC600EDA215 /* Build.png */; };
 		0745BE0614AAC4B400F541DC /* RSBorderlessButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0745BE0514AAC4B400F541DC /* RSBorderlessButtonCell.m */; };
 		0745BE0914AAD3DE00F541DC /* RSBorderlessPopUpButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0745BE0814AAD3DE00F541DC /* RSBorderlessPopUpButtonCell.m */; };
 		0745BE0C14AAD51D00F541DC /* RSBorderedGlassGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0745BE0B14AAD51D00F541DC /* RSBorderedGlassGradientView.m */; };
@@ -918,6 +920,7 @@
 		0742295714FDB82E00EDA215 /* WEDebuggerWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WEDebuggerWindowController.h; sourceTree = "<group>"; };
 		0742295814FDB82E00EDA215 /* WEDebuggerWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WEDebuggerWindowController.m; sourceTree = "<group>"; };
 		0742295B14FDB83E00EDA215 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WEDebuggerWindow.xib; sourceTree = "<group>"; };
+		0742296E14FDDBC600EDA215 /* Build.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Build.png; sourceTree = "<group>"; };
 		0745BE0414AAC4B400F541DC /* RSBorderlessButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSBorderlessButtonCell.h; sourceTree = "<group>"; };
 		0745BE0514AAC4B400F541DC /* RSBorderlessButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSBorderlessButtonCell.m; sourceTree = "<group>"; };
 		0745BE0714AAD3DE00F541DC /* RSBorderlessPopUpButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSBorderlessPopUpButtonCell.h; sourceTree = "<group>"; };
@@ -1799,6 +1802,7 @@
 		071ECCC914A4233C002409F8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				0742296E14FDDBC600EDA215 /* Build.png */,
 				075D2F7914F20D40007F8951 /* Include Files */,
 				072427ED14F1B9E000DC920B /* Project Templates */,
 				077D3EE414EECD6C000735EA /* BuildTargetOutputTypesToFileExtensions.plist */,
@@ -3013,6 +3017,7 @@
 				07ED2C8B14F4A1070097C5B6 /* ti-86keymap.png in Resources */,
 				07AB505A14F5577A005AA724 /* RSTransferFileWindow.xib in Resources */,
 				077CC15814F6DD9C00713ED8 /* Calculator32x32.png in Resources */,
+				0742296F14FDDBC600EDA215 /* Build.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3062,6 +3067,7 @@
 				077CC15914F6DD9C00713ED8 /* Calculator32x32.png in Resources */,
 				077CC16014F6DE2600713ED8 /* WEHardwareView.xib in Resources */,
 				0742295C14FDB83E00EDA215 /* WEDebuggerWindow.xib in Resources */,
+				0742296D14FDD4E700EDA215 /* wabbitstudio.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

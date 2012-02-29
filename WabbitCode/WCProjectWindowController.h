@@ -13,9 +13,11 @@
 #import "WCTabViewControllerDelegate.h"
 #import "WCTabViewContext.h"
 
+extern NSString *const WCProjectWindowToolbarBuildItemIdentifier;
+
 @class WCProjectNavigatorViewController,WCTabViewController,WCSearchNavigatorViewController,WCIssueNavigatorViewController,WCSymbolNavigatorViewController,WCBreakpointNavigatorViewController;
 
-@interface WCProjectWindowController : NSWindowController <WCTabViewControllerDelegate,WCProjectDocumentSettingsProvider,RSNavigatorControlDataSource,RSNavigatorControlDelegate,WCTabViewContext,NSSplitViewDelegate,NSWindowDelegate> {
+@interface WCProjectWindowController : NSWindowController <WCTabViewControllerDelegate,WCProjectDocumentSettingsProvider,RSNavigatorControlDataSource,RSNavigatorControlDelegate,WCTabViewContext,NSSplitViewDelegate,NSWindowDelegate,NSToolbarDelegate> {
 	NSMutableArray *_navigatorItemDictionaries;
 	WCProjectNavigatorViewController *_projectNavigatorViewController;
 	WCSearchNavigatorViewController *_searchNavigatorViewController;

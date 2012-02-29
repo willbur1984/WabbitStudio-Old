@@ -116,16 +116,17 @@ NSString *const WCProjectFileUTI = @"org.revsoft.wabbitcode.project";
 		[[[self openPanelAccessoryViewController] popUpButton] setEnabled:YES];
 		return;
 	}
-	
-	NSString *documentType = [self typeForContentsOfURL:[URLs lastObject] error:NULL];
-	
-	// if there is only one item selected and its a source file document UTI, enable the pop up
-	if ([documentType isEqualToString:WCAssemblyFileUTI] ||
-		[documentType isEqualToString:WCIncludeFileUTI] ||
-		[documentType isEqualToString:WCActiveServerIncludeFileUTI]) {
+	else if ([URLs count] == 1) {
+		NSString *documentType = [self typeForContentsOfURL:[URLs lastObject] error:NULL];
 		
-		[[[self openPanelAccessoryViewController] popUpButton] setEnabled:YES];
-		return;
+		// if there is only one item selected and its a source file document UTI, enable the pop up
+		if ([documentType isEqualToString:WCAssemblyFileUTI] ||
+			[documentType isEqualToString:WCIncludeFileUTI] ||
+			[documentType isEqualToString:WCActiveServerIncludeFileUTI]) {
+			
+			[[[self openPanelAccessoryViewController] popUpButton] setEnabled:YES];
+			return;
+		}
 	}
 	
 	// text encoding doesnt apply to the selected item, disable the pop up (i.e. for project documents)

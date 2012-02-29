@@ -22,6 +22,10 @@
 #import <PSMTabBarControl/PSMTabBarControl.h>
 #import <Quartz/Quartz.h>
 
+NSString *const WCProjectWindowToolbarBuildItemIdentifier = @"WCProjectWindowToolbarBuildItemIdentifier";
+
+static NSString *const WCProjectWindowToolbarIdentifier = @"WCProjectWindowToolbarIdentifier";
+
 @implementation WCProjectWindowController
 #pragma mark *** Subclass Overrides ***
 - (void)dealloc {
@@ -63,6 +67,19 @@ static const NSSize kBreakpointImageSize = {.width = 20.0, .height = 10.0};
 - (void)windowDidLoad {
     [super windowDidLoad];
 	
+	NSToolbar *toolbar = [[[NSToolbar alloc] initWithIdentifier:WCProjectWindowToolbarIdentifier] autorelease];
+	
+	[toolbar setAllowsUserCustomization:YES];
+	[toolbar setDisplayMode:NSToolbarDisplayModeIconAndLabel];
+	[toolbar setSizeMode:NSToolbarSizeModeRegular];
+	[toolbar setDelegate:self];
+	
+#ifndef DEBUG
+	[toolbar setAutosavesConfiguration:YES];
+#endif
+	
+	[[self window] setToolbar:toolbar];
+	
 	[(WCTabViewWindow *)[self window] setTabViewController:[self tabViewController]];
 	
 	[[[self tabViewController] view] setFrameSize:[[[[self splitView] subviews] lastObject] frame].size];
@@ -81,6 +98,27 @@ static const NSSize kBreakpointImageSize = {.width = 20.0, .height = 10.0};
 	if ([[[[self tabViewController] tabBarControl] tabView] numberOfTabViewItems])
 		return [NSString stringWithFormat:NSLocalizedString(@"%@ - %@",@"project window controller window title format string"),displayName,[[[[[[self tabViewController] tabBarControl] tabView] selectedTabViewItem] identifier] displayName]];
 	return displayName;
+}
+
+#pragma mark NSToolbarDelegate
+- (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar {
+	return [NSArray arrayWithObjects:WCProjectWindowToolbarBuildItemIdentifier,NSToolbarSpaceItemIdentifier,NSToolbarFlexibleSpaceItemIdentifier,NSToolbarSeparatorItemIdentifier, nil];
+}
+- (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar {
+	return [NSArray arrayWithObjects:NSToolbarFlexibleSpaceItemIdentifier,WCProjectWindowToolbarBuildItemIdentifier,NSToolbarFlexibleSpaceItemIdentifier, nil];
+}
+- (NSToolbarItem *)toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag {
+	NSToolbarItem *item = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
+	
+	if ([itemIdentifier isEqualToString:WCProjectWindowToolbarBuildItemIdentifier]) {
+		[item setAction:@selector(build:)];
+		[item setImage:[NSImage imageNamed:@"Build"]];
+		[item setLabel:NSLocalizedString(@"Build", @"Build")];
+		[item setPaletteLabel:[item label]];
+		[item setToolTip:NSLocalizedString(@"Build the Project", @"Build the Project")];
+	}
+	
+	return item;
 }
 
 #pragma mark NSWindowDelegate
