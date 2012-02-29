@@ -1109,6 +1109,7 @@
 		if (projectDocument) {
 			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_buildControllerDidFinishBuilding:) name:WCBuildControllerDidFinishBuildingNotification object:[projectDocument buildController]];
 			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_buildControllerDidChangeBuildIssueVisible:) name:WCBuildControllerDidChangeBuildIssueVisibleNotification object:[projectDocument buildController]];
+			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_buildControllerDidChangeAllBuildIssuesVisible:) name:WCBuildControllerDidChangeAllBuildIssuesVisibleNotification object:[projectDocument buildController]];
 		}
 	}
 }
@@ -1890,6 +1891,9 @@ static const CGFloat kTriangleHeight = 4.0;
 	
 	if (NSLocationInOrEqualToRange([buildIssue range].location, [self visibleRange]))
 		[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
+}
+- (void)_buildControllerDidChangeAllBuildIssuesVisible:(NSNotification *)note {
+	[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
 }
 #pragma mark Callbacks
 - (void)_completionTimerCallback:(NSTimer *)timer {

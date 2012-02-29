@@ -26,6 +26,8 @@ NSString *const WCBuildControllerDidFinishBuildingNotification = @"WCBuildContro
 NSString *const WCBuildControllerDidChangeBuildIssueVisibleNotification = @"WCBuildControllerDidChangeBuildIssueVisibleNotification";
 NSString *const WCBuildControllerDidChangeBuildIssueVisibleChangedBuildIssueUserInfoKey = @"WCBuildControllerDidChangeBuildIssueVisibleChangedBuildIssueUserInfoKey";
 
+NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotification = @"WCBuildControllerDidChangeAllBuildIssuesVisibleNotification";
+
 @interface WCBuildController ()
 @property (readwrite,assign,nonatomic,getter = isBuilding) BOOL building;
 @property (readwrite,assign,nonatomic) BOOL runAfterBuilding;
@@ -34,11 +36,13 @@ NSString *const WCBuildControllerDidChangeBuildIssueVisibleChangedBuildIssueUser
 @property (readwrite,retain,nonatomic) NSMapTable *filesToBuildIssuesSortedByLocation;
 @property (readwrite,copy,nonatomic) NSArray *filesWithBuildIssuesSortedByName;
 @property (readwrite,copy,nonatomic) NSSet *buildIssues;
+@property (readwrite,assign,nonatomic,getter = isChangingVisibilityOfAllBuildIssues) BOOL changingVisibilityOfAllBuildIssues;
 
 - (void)_processOutput;
 @end
 
 @implementation WCBuildController
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
@@ -51,24 +55,32 @@ NSString *const WCBuildControllerDidChangeBuildIssueVisibleChangedBuildIssueUser
 	_projectDocument = nil;
 	[super dealloc];
 }
-
+#pragma mark NSKeyValueObserving
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if (context == self) {
 		if ([keyPath isEqualToString:@"visible"]) {
-			[[NSNotificationCenter defaultCenter] postNotificationName:WCBuildControllerDidChangeBuildIssueVisibleNotification object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:object,WCBuildControllerDidChangeBuildIssueVisibleChangedBuildIssueUserInfoKey, nil]];
+			if ([self isChangingVisibilityOfAllBuildIssues]) {
+				NSNotification *note = [NSNotification notificationWithName:WCBuildControllerDidChangeAllBuildIssuesVisibleNotification object:self userInfo:nil];
+				
+				[[NSNotificationQueue defaultQueue] enqueueNotification:note postingStyle:NSPostWhenIdle coalesceMask:NSNotificationCoalescingOnName|NSNotificationCoalescingOnSender forModes:[NSArray arrayWithObjects:NSRunLoopCommonModes, nil]];
+			}
+			else {
+				[[NSNotificationCenter defaultCenter] postNotificationName:WCBuildControllerDidChangeBuildIssueVisibleNotification object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:object,WCBuildControllerDidChangeBuildIssueVisibleChangedBuildIssueUserInfoKey, nil]];
+			}
 		}
 	}
 	else {
 		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 	}
 }
-
+#pragma mark *** Public Methods ***
 - (id)initWithProjectDocument:(WCProjectDocument *)projectDocument; {
 	if (!(self = [super init]))
 		return nil;
 	
 	_projectDocument = projectDocument;
 	_output = [[NSMutableString alloc] initWithCapacity:0];
+	_buildFlags.issuesEnabled = YES;
 	
 	return self;
 }
@@ -262,7 +274,7 @@ NSString *const WCBuildControllerDidChangeBuildIssueVisibleChangedBuildIssueUser
 	for (WCBuildIssue *issue in [self buildIssues])
 		[issue removeObserver:self forKeyPath:@"visible" context:self];
 }
-
+#pragma mark Properties
 @synthesize projectDocument=_projectDocument;
 @dynamic building;
 - (BOOL)isBuilding {
@@ -283,11 +295,39 @@ NSString *const WCBuildControllerDidChangeBuildIssueVisibleChangedBuildIssueUser
 @synthesize filesWithBuildIssuesSortedByName=_filesWithBuildIssuesSortedByName;
 @synthesize filesToBuildIssuesSortedByLocation=_filesToBuildIssuesSortedByLocation;
 @synthesize buildIssues=_buildIssues;
-
+@dynamic issuesEnabled;
+- (BOOL)issuesEnabled {
+	return _buildFlags.issuesEnabled;
+}
+- (void)setIssuesEnabled:(BOOL)issuesEnabled {
+	_buildFlags.issuesEnabled = issuesEnabled;
+	
+	[self setChangingVisibilityOfAllBuildIssues:YES];
+	
+	if (issuesEnabled) {
+		for (WCBuildIssue *buildIssue in [self buildIssues])
+			[buildIssue setVisible:YES];
+	}
+	else {
+		for (WCBuildIssue *buildIssue in [self buildIssues])
+			[buildIssue setVisible:NO];
+	}
+	
+	[self setChangingVisibilityOfAllBuildIssues:NO];
+}
+@dynamic changingVisibilityOfAllBuildIssues;
+- (BOOL)isChangingVisibilityOfAllBuildIssues {
+	return _buildFlags.changingVisibilityOfAllBuildIssues;
+}
+- (void)setChangingVisibilityOfAllBuildIssues:(BOOL)changingVisibilityOfAllBuildIssues {
+	_buildFlags.changingVisibilityOfAllBuildIssues = changingVisibilityOfAllBuildIssues;
+}
+#pragma mark *** Private Methods ***
 - (void)_processOutput; {	
 	NSString *output = [[[self output] copy] autorelease];
 	NSDictionary *filePathsToFiles = [[self projectDocument] filePathsToFiles];
 	NSMapTable *filesToSourceFileDocuments = [[self projectDocument] filesToSourceFileDocuments];
+	BOOL issuesEnabled = [self issuesEnabled];
 	
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
 		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -320,6 +360,11 @@ NSString *const WCBuildControllerDidChangeBuildIssueVisibleChangedBuildIssueUser
 				buildIssue = [WCBuildIssue buildIssueOfType:WCBuildIssueTypeError range:range message:message code:code];
 			else
 				buildIssue = [WCBuildIssue buildIssueOfType:WCBuildIssueTypeWarning range:range message:message code:code];
+			
+			if (issuesEnabled)
+				[buildIssue setVisible:YES];
+			else
+				[buildIssue setVisible:NO];
 			
 			NSMutableArray *buildIssues = [filesToBuildIssues objectForKey:file];
 			
@@ -379,6 +424,7 @@ NSString *const WCBuildControllerDidChangeBuildIssueVisibleChangedBuildIssueUser
 		[pool release];
 	});
 }
+#pragma mark Notifications
 
 - (void)_readDataFromTask:(NSNotification *)note {
 	NSData *data = [[note userInfo] objectForKey:NSFileHandleNotificationDataItem];

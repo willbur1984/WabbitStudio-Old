@@ -13,6 +13,8 @@ extern NSString *const WCBuildControllerDidFinishBuildingNotification;
 extern NSString *const WCBuildControllerDidChangeBuildIssueVisibleNotification;
 extern NSString *const WCBuildControllerDidChangeBuildIssueVisibleChangedBuildIssueUserInfoKey;
 
+extern NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotification;
+
 @class WCProjectDocument;
 
 @interface WCBuildController : NSObject {
@@ -25,13 +27,16 @@ extern NSString *const WCBuildControllerDidChangeBuildIssueVisibleChangedBuildIs
 	struct {
 		unsigned int building:1;
 		unsigned int runAfterBuilding:1;
-		unsigned int RESERVED:30;		
+		unsigned int issuesEnabled;
+		unsigned int changingVisibilityOfAllBuildIssues:1;
+		unsigned int RESERVED:28;		
 	} _buildFlags;
 }
 @property (readonly,nonatomic) WCProjectDocument *projectDocument;
 @property (readonly,assign,nonatomic,getter = isBuilding) BOOL building;
 @property (readonly,copy,nonatomic) NSArray *filesWithBuildIssuesSortedByName;
 @property (readonly,retain,nonatomic) NSMapTable *filesToBuildIssuesSortedByLocation;
+@property (readwrite,assign,nonatomic) BOOL issuesEnabled;
 
 - (id)initWithProjectDocument:(WCProjectDocument *)projectDocument;
 

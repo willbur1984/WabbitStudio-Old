@@ -13,6 +13,9 @@
 #import "WCSourceTextViewController.h"
 #import "WCOpenQuicklySearchOperation.h"
 #import "WCSourceTextView.h"
+#import "WCProjectWindowController.h"
+#import "RSNavigatorControl.h"
+#import "WCProjectNavigatorViewController.h"
 
 @interface WCOpenQuicklyWindowController ()
 @property (readwrite,copy,nonatomic) NSArray *items;
@@ -110,6 +113,12 @@
 			
 			[[stvController textView] setSelectedRange:[[match item] openQuicklyRange]];
 			[[stvController textView] centerSelectionInVisibleArea:nil];
+		}
+		else {
+			WCProjectDocument *projectDocument = [[self dataSource] openQuicklyProjectDocument];
+			
+			[[[projectDocument projectWindowController] navigatorControl] setSelectedItemIdentifier:WCProjectWindowNavigatorControlProjectItemIdentifier];
+			[[[projectDocument projectWindowController] projectNavigatorViewController] setSelectedModelObjects:[NSArray arrayWithObjects:[match item], nil]];
 		}
 	}
 	

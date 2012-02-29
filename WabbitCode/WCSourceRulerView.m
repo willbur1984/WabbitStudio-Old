@@ -605,6 +605,7 @@ static const CGFloat kBuildIssueWidthHeight = 10.0;
 		if (projectDocument) {
 			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_buildControllerDidFinishBuilding:) name:WCBuildControllerDidFinishBuildingNotification object:[projectDocument buildController]];
 			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_buildControllerDidChangeBuildIssueVisible:) name:WCBuildControllerDidChangeBuildIssueVisibleNotification object:[projectDocument buildController]];
+			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_buildControllerDidChangeAllBuildIssuesVisible:) name:WCBuildControllerDidChangeAllBuildIssuesVisibleNotification object:[projectDocument buildController]];
 			
 			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_breakpointManagerDidAddFileBreakpoint:) name:WCBreakpointManagerDidAddFileBreakpointNotification object:[projectDocument breakpointManager]];
 			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_breakpointManagerDidRemoveFileBreakpoint:) name:WCBreakpointManagerDidRemoveFileBreakpointNotification object:[projectDocument breakpointManager]];
@@ -914,6 +915,10 @@ static const CGFloat kTriangleHeight = 6.0;
 	if (NSLocationInOrEqualToRange([buildIssue range].location, [[self textView] visibleRange]))
 		[self setNeedsDisplay:YES];
 }
+- (void)_buildControllerDidChangeAllBuildIssuesVisible:(NSNotification *)note {
+	[self setNeedsDisplay:YES];
+}
+
 - (void)_breakpointManagerDidAddFileBreakpoint:(NSNotification *)note {
 	WCFileBreakpoint *fileBreakpoint = [[note userInfo] objectForKey:WCBreakpointManagerDidAddFileBreakpointNewFileBreakpointUserInfoKey];
 	

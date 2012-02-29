@@ -8,9 +8,12 @@
 
 #import <Foundation/NSObject.h>
 
+@class WCProjectDocument;
+
 @protocol WCOpenQuicklyDataSource <NSObject>
 @required
 // return an array of id <WCOpenQuicklyItem> objects
 - (NSArray *)openQuicklyItems;
 - (NSString *)openQuicklyProjectName;
+- (WCProjectDocument *)openQuicklyProjectDocument;
 @end

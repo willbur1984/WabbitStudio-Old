@@ -281,6 +281,12 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 		else
 			[menuItem setTitle:NSLocalizedString(@"Enable Breakpoints", @"Enable Breakpoints")];
 	}
+	else if ([menuItem action] == @selector(toggleIssues:)) {
+		if ([[self buildController] issuesEnabled])
+			[menuItem setTitle:NSLocalizedString(@"Hide All Issues", @"Hide All Issues")];
+		else
+			[menuItem setTitle:NSLocalizedString(@"Show All Issues", @"Show All Issues")];
+	}
 	return [super validateMenuItem:menuItem];
 }
 #pragma mark WCOpenQuicklyDataSource
@@ -300,6 +306,9 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 }
 - (NSString *)openQuicklyProjectName {
 	return [self displayName];
+}
+- (WCProjectDocument *)openQuicklyProjectDocument {
+	return self;
 }
 #pragma mark *** Public Methods ***
 
@@ -391,6 +400,9 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 
 - (IBAction)toggleBreakpoints:(id)sender; {
 	[[self breakpointManager] setBreakpointsEnabled:(![[self breakpointManager] breakpointsEnabled])];
+}
+- (IBAction)toggleIssues:(id)sender; {
+	[[self buildController] setIssuesEnabled:(![[self buildController] issuesEnabled])];
 }
 #pragma mark Properties
 @synthesize projectContainer=_projectContainer;

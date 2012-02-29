@@ -1316,6 +1316,25 @@
 									<reference key="NSOnImage" ref="1033313550"/>
 									<reference key="NSMixedImage" ref="310636482"/>
 								</object>
+								<object class="NSMenuItem" id="154086718">
+									<reference key="NSMenu" ref="600456139"/>
+									<string key="NSTitle">Hide All Issues</string>
+									<string key="NSKeyEquiv">m</string>
+									<int key="NSKeyEquivModMask">1310720</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="1033313550"/>
+									<reference key="NSMixedImage" ref="310636482"/>
+								</object>
+								<object class="NSMenuItem" id="819763783">
+									<reference key="NSMenu" ref="600456139"/>
+									<bool key="NSIsDisabled">YES</bool>
+									<bool key="NSIsSeparator">YES</bool>
+									<string key="NSTitle"/>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="1033313550"/>
+									<reference key="NSMixedImage" ref="310636482"/>
+								</object>
 								<object class="NSMenuItem" id="792449506">
 									<reference key="NSMenu" ref="600456139"/>
 									<string key="NSTitle">Fold</string>
@@ -2462,6 +2481,14 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
+						<string key="label">toggleIssues:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="154086718"/>
+					</object>
+					<int key="connectionID">734</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
 						<string key="label">preferences:</string>
 						<reference key="source" ref="968104485"/>
 						<reference key="destination" ref="609285721"/>
@@ -3072,6 +3099,8 @@
 							<reference ref="1072714953"/>
 							<reference ref="955925649"/>
 							<reference ref="488133451"/>
+							<reference ref="154086718"/>
+							<reference ref="819763783"/>
 						</array>
 						<reference key="parent" ref="405799454"/>
 					</object>
@@ -3666,6 +3695,16 @@
 						<reference key="object" ref="864836453"/>
 						<reference key="parent" ref="720053764"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">732</int>
+						<reference key="object" ref="154086718"/>
+						<reference key="parent" ref="600456139"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">733</int>
+						<reference key="object" ref="819763783"/>
+						<reference key="parent" ref="600456139"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -3844,6 +3883,8 @@
 				<string key="721.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="725.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="73.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="732.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="733.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="74.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="75.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="77.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3858,7 +3899,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">731</int>
+			<int key="maxID">734</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -4227,6 +4268,7 @@
 						<string key="manageBuildTargets:">id</string>
 						<string key="openQuickly:">id</string>
 						<string key="toggleBreakpoints:">id</string>
+						<string key="toggleIssues:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
 						<object class="IBActionInfo" key="build:">
@@ -4255,6 +4297,10 @@
 						</object>
 						<object class="IBActionInfo" key="toggleBreakpoints:">
 							<string key="name">toggleBreakpoints:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="toggleIssues:">
+							<string key="name">toggleIssues:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 					</dictionary>

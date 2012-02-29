@@ -46,6 +46,18 @@
 				<true/>
 			</dict>
 		</dict>
+		<key>toggleIssues:</key>
+		<dict>
+			<key>keyCode</key>
+			<integer>46</integer>
+			<key>modifierFlags</key>
+			<dict>
+				<key>command</key>
+				<true/>
+				<key>control</key>
+				<true/>
+			</dict>
+		</dict>
 		<key>hideOtherApplications:</key>
 		<dict>
 			<key>keyCode</key>

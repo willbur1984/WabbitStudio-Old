@@ -76,4 +76,5 @@ extern NSString *const WCProjectSettingsFileExtension;
 - (IBAction)findInProject:(id)sender;
 
 - (IBAction)toggleBreakpoints:(id)sender;
+- (IBAction)toggleIssues:(id)sender;
 @end

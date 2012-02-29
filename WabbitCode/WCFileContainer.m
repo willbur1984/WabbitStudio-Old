@@ -27,7 +27,7 @@
 
 #pragma mark WCFileDelegate
 - (NSURL *)locationURLForFile:(WCFile *)file {
-	return [[self sourceFileDocumentForFile:file] locationURLForSourceScanner:[[self sourceFileDocumentForFile:file] sourceScanner]];
+	return [[[self parentNode] locationURLForFile:[[self parentNode] representedObject]] URLByAppendingPathComponent:[file fileName]];
 }
 - (WCSourceFileDocument *)sourceFileDocumentForFile:(WCFile *)file {
 	return [[[[self project] document] filesToSourceFileDocuments] objectForKey:file];

@@ -7,6 +7,7 @@
 //
 
 #import "WCProjectContainer.h"
+#import "WCFile.h"
 
 @implementation WCProjectContainer
 #pragma mark *** Subclass Overrides ***
@@ -21,6 +22,10 @@
 	[retval setObject:childNodePlists forKey:RSTreeNodeChildNodesKey];
 	
 	return [[retval copy] autorelease];
+}
+
+- (NSURL *)locationURLForFile:(WCFile *)file {
+	return [NSURL URLWithString:[file fileName]];
 }
 
 #pragma mark *** Public Methods ***

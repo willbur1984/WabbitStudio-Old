@@ -24,6 +24,12 @@
 
 NSString *const WCProjectWindowToolbarBuildItemIdentifier = @"WCProjectWindowToolbarBuildItemIdentifier";
 
+NSString *const WCProjectWindowNavigatorControlProjectItemIdentifier = @"project";
+NSString *const WCProjectWindowNavigatorControlSymbolItemIdentifier = @"symbol";
+NSString *const WCProjectWindowNavigatorControlSearchItemIdentifier = @"search";
+NSString *const WCProjectWindowNavigatorControlIssueItemIdentifier = @"issue";
+NSString *const WCProjectWindowNavigatorControlBreakpointItemIdentifier = @"breakpoint";
+
 static NSString *const WCProjectWindowToolbarIdentifier = @"WCProjectWindowToolbarIdentifier";
 
 @implementation WCProjectWindowController
