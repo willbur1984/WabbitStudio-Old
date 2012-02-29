@@ -85,7 +85,12 @@
 	else
 		warningString = NSLocalizedString(@"0 warnings", @"0 warnings");
 	
-	return [NSString stringWithFormat:NSLocalizedString(@"%@, %@", @"errors and warnings format string"),errorString,warningString];
+	if (errorCount && warningCount)
+		return [NSString stringWithFormat:NSLocalizedString(@"%@, %@", @"errors and warnings format string"),errorString,warningString];
+	else if (errorCount)
+		return errorString;
+	else
+		return warningString;
 }
 
 @end
