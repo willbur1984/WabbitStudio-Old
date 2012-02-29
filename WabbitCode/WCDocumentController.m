@@ -64,7 +64,7 @@ NSString *const WCProjectFileUTI = @"org.revsoft.wabbitcode.project";
 	return result;
 }
 
-- (void)openDocumentWithContentsOfURL:(NSURL *)url display:(BOOL)displayDocument completionHandler:(void (^)(NSDocument *document, BOOL documentWasAlreadyOpen, NSError *error))completionHandler {
+- (void)openDocumentWithContentsOfURL:(NSURL *)url display:(BOOL)displayDocument completionHandler:(void (^)(NSDocument *document, BOOL documentWasAlreadyOpen, NSError *error))completionHandler {	
 	NSString *documentType = [self typeForContentsOfURL:url error:NULL];
 	
 	// if the document type is one of the source file document UTIs, we need to take additional action
@@ -107,6 +107,7 @@ NSString *const WCProjectFileUTI = @"org.revsoft.wabbitcode.project";
 	}];
 }
 
+#pragma mark NSOpenSavePanelDelegate
 - (void)panelSelectionDidChange:(id)sender {
 	NSArray *URLs = [sender URLs];
 	
