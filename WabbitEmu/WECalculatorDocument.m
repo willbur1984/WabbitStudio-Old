@@ -56,6 +56,11 @@
 	return YES;
 }
 
+- (BOOL)writeToURL:(NSURL *)url ofType:(NSString *)typeName error:(NSError **)outError {
+	
+	return YES;
+}
+
 + (BOOL)autosavesInPlace {
     return NO;
 }
