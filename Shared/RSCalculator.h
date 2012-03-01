@@ -8,6 +8,7 @@
 
 #import <Foundation/NSObject.h>
 #import "RSCalculatorDelegate.h"
+#import "RSUserDefaultsProvider.h"
 #include "calc.h"
 
 typedef enum _RSCalculatorModel {
@@ -45,11 +46,13 @@ extern NSString *const RSCalculatorLabelFileUTI;
 extern NSString *const RSCalculatorWillLoadRomOrSavestateNotification;
 extern NSString *const RSCalculatorDidLoadRomOrSavestateNotification;
 
+extern NSString *const RSCalculatorAutomaticallyTurnCalculatorOnKey;
+
 extern NSString *const RSCalculatorErrorDomain;
 extern const NSInteger RSCalculatorErrorCodeUnrecognizedRomOrSavestate;
 extern const NSInteger RSCalculatorErrorCodeMaximumNumberOfCalculators;
 
-@interface RSCalculator : NSObject {
+@interface RSCalculator : NSObject <RSUserDefaultsProvider> {
 	__weak id <RSCalculatorDelegate> _delegate;
 	LPCALC _calculator;
 	NSURL *_lastLoadedURL;

@@ -6,7 +6,8 @@
 //  Copyright (c) 2012 Revolution Software. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
+#import <Foundation/NSURL.h>
 
 @class RSCalculator;
 

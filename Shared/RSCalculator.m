@@ -22,6 +22,8 @@ NSString *const RSCalculatorLabelFileUTI = @"org.revsoft.wabbitemu.label";
 NSString *const RSCalculatorWillLoadRomOrSavestateNotification = @"RSCalculatorWillLoadRomOrSavestateNotification";
 NSString *const RSCalculatorDidLoadRomOrSavestateNotification = @"RSCalculatorDidLoadRomOrSavestateNotification";
 
+NSString *const RSCalculatorAutomaticallyTurnCalculatorOnKey = @"calculatorAutomaticallyTurnCalculatorOn";
+
 NSString *const RSCalculatorErrorDomain = @"org.revsoft.calculator.error";
 const NSInteger RSCalculatorErrorCodeUnrecognizedRomOrSavestate = 1001;
 const NSInteger RSCalculatorErrorCodeMaximumNumberOfCalculators = 1002;
@@ -46,6 +48,11 @@ const NSInteger RSCalculatorErrorCodeMaximumNumberOfCalculators = 1002;
 - (id)init {
 	return [self initWithRomOrSavestateURL:nil error:NULL];
 }
+#pragma mark RSUserDefaultsProvider
++ (NSDictionary *)userDefaults {
+	return [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],RSCalculatorAutomaticallyTurnCalculatorOnKey, nil];
+}
+
 #pragma mark *** Public Methods ***
 + (id)calculatorWithRomOrSavestateURL:(NSURL *)romOrSavestateURL error:(NSError **)outError; {
 	return [[[[self class] alloc] initWithRomOrSavestateURL:romOrSavestateURL error:outError] autorelease];
@@ -54,11 +61,11 @@ const NSInteger RSCalculatorErrorCodeMaximumNumberOfCalculators = 1002;
 	if (!(self = [super init]))
 		return nil;
 	
+	// ask wabbit for a new LPCALC pointer
 	LPCALC calculator = calc_slot_new();
 	if (!calculator) {
-		if (outError) {
+		if (outError)
 			*outError = [NSError errorWithDomain:RSCalculatorErrorDomain code:RSCalculatorErrorCodeMaximumNumberOfCalculators userInfo:[NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Maximum Number of Calculators Reached", @"Maximum Number of Calculators Reached"),NSLocalizedDescriptionKey,[NSString stringWithFormat:NSLocalizedString(@"The maximum number of calculators (%d) have already been opened. Please close some calculators and try again.", @"maximum number of calculators recovery suggestion error format string"),MAX_CALCS],NSLocalizedRecoverySuggestionErrorKey, nil]];
-		}
 		
 		[self release];
 		return nil;
@@ -66,6 +73,7 @@ const NSInteger RSCalculatorErrorCodeMaximumNumberOfCalculators = 1002;
 	
 	_calculator = calculator;
 	
+	// if we were given a rom or savestate url, attempt to load it
 	if (romOrSavestateURL && ![self loadRomOrSavestateAtURL:romOrSavestateURL error:outError]) {
 		[self release];
 		return nil;
@@ -75,31 +83,41 @@ const NSInteger RSCalculatorErrorCodeMaximumNumberOfCalculators = 1002;
 }
 
 - (BOOL)loadRomOrSavestateAtURL:(NSURL *)romOrSavestateURL error:(NSError **)outError; {
+	// stop the calculator from running
 	[self setRunning:NO];
 	[self setLoading:YES];
 	
+	// post our will load notification
 	[[NSNotificationCenter defaultCenter] postNotificationName:RSCalculatorWillLoadRomOrSavestateNotification object:self];
 	
+	// call into wabbit to actually load the rom or savestate
 	BOOL loaded = rom_load([self calculator], [[romOrSavestateURL path] fileSystemRepresentation]);
 	
+	// if the load failed, create an error and return NO
 	if (!loaded) {
-		if (outError) {
+		if (outError)
 			*outError = [NSError errorWithDomain:RSCalculatorErrorDomain code:RSCalculatorErrorCodeUnrecognizedRomOrSavestate userInfo:[NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Rom or Savestate Unrecognized", @"Rom or Savestate Unrecognized"),NSLocalizedDescriptionKey,[NSString stringWithFormat:NSLocalizedString(@"The rom or savestate located at %@ was not recognized.", @"rom or savestate unrecognized recovery suggestion error format string"),[[romOrSavestateURL path] stringByAbbreviatingWithTildeInPath]],NSLocalizedRecoverySuggestionErrorKey, nil]];
-		}
 		
 		[self setLoading:NO];
 		return NO;
 	}
 	
-	calc_turn_on([self calculator]);
+	// turn the calc on
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:RSCalculatorAutomaticallyTurnCalculatorOnKey])
+		calc_turn_on([self calculator]);
 	
+	// save the rom or savestate url in reloadLastRomOrSavestate is called
 	[self setLastLoadedURL:romOrSavestateURL];
+	
+	// start running the calculator again
 	[self setRunning:YES];
 	[self setLoading:NO];
 	
+	// check with our delegate and send the calculator:didLoadRomOrSavestateURL: if they respond to it
 	if ([[self delegate] respondsToSelector:@selector(calculator:didLoadRomOrSavestateURL:)])
 		[[self delegate] calculator:self didLoadRomOrSavestateURL:romOrSavestateURL];
 	
+	// post our did load notification
 	[[NSNotificationCenter defaultCenter] postNotificationName:RSCalculatorDidLoadRomOrSavestateNotification object:self];
 	
 	return YES;
