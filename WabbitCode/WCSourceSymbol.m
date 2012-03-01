@@ -72,7 +72,10 @@ NSString *const WCSourceSymbolTypeAttributeName = @"WCSourceSymbolTypeAttributeN
 	return [self name];
 }
 - (NSURL *)jumpInLocationURL {
-	return [[NSURL URLWithString:[self jumpInName]] URLByAppendingPathComponent:[NSString stringWithFormat:NSLocalizedString(@"line %lu", @"jump in location url line format string"),[[[[self sourceScanner] textStorage] string] lineNumberForRange:[self range]]+1]];
+	NSString *displayName = [[[self sourceScanner] delegate] fileDisplayNameForSourceScanner:[self sourceScanner]];
+	NSString *lineString = [NSString stringWithFormat:NSLocalizedString(@"line %lu", @"jump in location url line format string"),[[[[self sourceScanner] textStorage] string] lineNumberForRange:[self range]]+1];
+	
+	return [[NSURL URLWithString:displayName] URLByAppendingPathComponent:lineString];
 }
 #pragma mark WCOpenQuicklyItem
 - (NSString *)openQuicklyName {
