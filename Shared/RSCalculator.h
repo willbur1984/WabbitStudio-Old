@@ -52,6 +52,12 @@ extern NSString *const RSCalculatorErrorDomain;
 extern const NSInteger RSCalculatorErrorCodeUnrecognizedRomOrSavestate;
 extern const NSInteger RSCalculatorErrorCodeMaximumNumberOfCalculators;
 
+/*** This is a wrapper around wabbit's `LPCALC` type.
+ 
+ This provides an interface into the `LPCALC` in wabbit. Any useful information can be retrieved through the properties of this class. If you absolutely must get at the raw `LPCALC` pointer, there is a property to do so.
+ 
+ */
+
 @interface RSCalculator : NSObject <RSUserDefaultsProvider> {
 	__weak id <RSCalculatorDelegate> _delegate;
 	LPCALC _calculator;
@@ -133,5 +139,9 @@ extern const NSInteger RSCalculatorErrorCodeMaximumNumberOfCalculators;
 - (void)step;
 - (void)stepOut;
 - (void)stepOver;
+
+- (void)toggleBreakpointOfType:(RSBreakpointType)type atAddress:(uint16_t)address;
+- (void)setBreakpointOfType:(RSBreakpointType)type atAddress:(uint16_t)address;
+- (void)clearBreakpointOfType:(RSBreakpointType)type atAddress:(uint16_t)address;
 
 @end

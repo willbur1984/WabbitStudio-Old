@@ -2196,12 +2196,12 @@
 				07AB505214F5475C005AA724 /* RSTransferFileWindowController.h */,
 				07AB505314F5475C005AA724 /* RSTransferFileWindowController.m */,
 				07AB505614F5478E005AA724 /* RSTransferFileWindowControllerDelegate.h */,
-				075D2FD714F408E1007F8951 /* wabbitemu core */,
+				075D2FD714F408E1007F8951 /* wabbitemu */,
 			);
 			name = Emulator;
 			sourceTree = "<group>";
 		};
-		075D2FD714F408E1007F8951 /* wabbitemu core */ = {
+		075D2FD714F408E1007F8951 /* wabbitemu */ = {
 			isa = PBXGroup;
 			children = (
 				075D2FD814F408E1007F8951 /* core */,
@@ -2212,6 +2212,7 @@
 				075D309014F408E2007F8951 /* stdafx.h */,
 				075D309114F408E2007F8951 /* utilities */,
 			);
+			name = wabbitemu;
 			path = "wabbitemu core";
 			sourceTree = "<group>";
 		};

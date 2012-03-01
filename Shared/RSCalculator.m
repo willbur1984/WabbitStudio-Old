@@ -9,6 +9,7 @@
 #import "RSCalculator.h"
 #include "alu.h"
 #include "ti_stdint.h"
+#include "disassemble.h"
 
 NSString *const RSCalculatorRomUTI = @"org.revsoft.wabbitemu.rom";
 NSString *const RSCalculatorSavestateUTI = @"org.revsoft.wabbitemu.savestate";
@@ -127,13 +128,151 @@ const NSInteger RSCalculatorErrorCodeMaximumNumberOfCalculators = 1002;
 }
 
 - (void)step; {
+	[self willChangeValueForKey:@"programCounter"];
 	
+	CPU_step(&([self calculator]->cpu));
+	
+	[self didChangeValueForKey:@"programCounter"];
 }
 - (void)stepOut; {
+	CPU_t *cpu = &([self calculator]->cpu);
+	double time = tc_elapsed(cpu->timer_c);
+	uint16_t old_sp = cpu->sp;
 	
+	[self willChangeValueForKey:@"programCounter"];
+	
+	while ((tc_elapsed(cpu->timer_c) - time) < 15.0) {
+		waddr_t old_pc = addr_to_waddr(cpu->mem_c, cpu->pc);
+		CPU_step(cpu);
+		
+		if (cpu->sp > old_sp) {
+			Z80_info_t zinflocal;
+			disassemble([self calculator], REGULAR, addr_to_waddr(&([self calculator]->mem_c), old_pc.addr), 1, &zinflocal);
+			
+			if (zinflocal.index == DA_RET ||
+				zinflocal.index == DA_RET_CC ||
+				zinflocal.index == DA_RETI ||
+				zinflocal.index == DA_RETN)
+				break;
+		}
+	}
+	
+	[self didChangeValueForKey:@"programCounter"];
 }
 - (void)stepOver; {
+	CPU_t *cpu = &([self calculator]->cpu);
+	const int usable_commands[] = { DA_BJUMP, DA_BJUMP_N, DA_BCALL_N, DA_BCALL,
+		DA_BLI, DA_CALL_X, DA_CALL_CC_X, DA_HALT, DA_RST_X};
+	int i;
+	double time = tc_elapsed(cpu->timer_c);
+	Z80_info_t zinflocal;
 	
+	disassemble([self calculator], REGULAR, addr_to_waddr(&([self calculator]->mem_c), cpu->pc), 1, &zinflocal);
+	
+	if (cpu->halt) {
+		[self willChangeValueForKey:@"programCounter"];
+		
+		if (cpu->iff1) {
+			while ((tc_elapsed(cpu->timer_c) - time) < 15.0 && cpu->halt)
+				CPU_step(cpu);
+		}
+		else
+			cpu->halt = FALSE;
+		
+		[self didChangeValueForKey:@"programCounter"];
+	}
+	else if (zinflocal.index == DA_CALL_X || zinflocal.index == DA_CALL_CC_X) {
+		uint16_t old_stack = cpu->sp;
+		
+		[self step];
+		
+		if (cpu->sp != old_stack)
+			[self stepOut];
+	}
+	else {
+		[self willChangeValueForKey:@"programCounter"];
+		
+		for (i = 0; i < NumElm(usable_commands); i++) {
+			if (zinflocal.index == usable_commands[i]) {
+				while ((tc_elapsed(cpu->timer_c) - time) < 15.0 && cpu->pc != (zinflocal.waddr.addr + zinflocal.size))
+					CPU_step(cpu);
+			}
+		}
+		
+		CPU_step(cpu);
+		
+		[self didChangeValueForKey:@"programCounter"];
+	}
+}
+
+- (void)toggleBreakpointOfType:(RSBreakpointType)type atAddress:(uint16_t)address; {
+	waddr_t waddr = addr_to_waddr(&([self calculator]->mem_c), address);
+	memory_context_t *memory_context = &([self calculator]->mem_c);
+	
+	switch (type) {
+		case RSBreakpointTypeNormal:
+		case RSBreakpointTypeFile:
+			if (check_break(memory_context, waddr))
+				clear_break(memory_context, waddr);
+			else
+				set_break(memory_context, waddr);
+			break;
+		case RSBreakpointTypeRead:
+			if (check_mem_read_break(memory_context, waddr))
+				clear_mem_read_break(memory_context, waddr);
+			else
+				set_mem_read_break(memory_context, waddr);
+			break;
+		case RSBreakpointTypeWrite:
+			if (check_mem_write_break(memory_context, waddr))
+				clear_mem_write_break(memory_context, waddr);
+			else
+				set_mem_write_break(memory_context, waddr);
+			break;
+		case RSBreakpointTypeNone:
+		default:
+			break;
+	}
+}
+- (void)setBreakpointOfType:(RSBreakpointType)type atAddress:(uint16_t)address; {
+	waddr_t waddr = addr_to_waddr(&([self calculator]->mem_c), address);
+	memory_context_t *memory_context = &([self calculator]->mem_c);
+	
+	switch (type) {
+		case RSBreakpointTypeNormal:
+		case RSBreakpointTypeFile:
+			set_break(memory_context, waddr);
+			break;
+		case RSBreakpointTypeRead:
+			set_mem_read_break(memory_context, waddr);
+			break;
+		case RSBreakpointTypeWrite:
+			set_mem_write_break(memory_context, waddr);
+			break;
+		case RSBreakpointTypeNone:
+		default:
+			break;
+	}
+}
+- (void)clearBreakpointOfType:(RSBreakpointType)type atAddress:(uint16_t)address; {
+	waddr_t waddr = addr_to_waddr(&([self calculator]->mem_c), address);
+	memory_context_t *memory_context = &([self calculator]->mem_c);
+	
+	switch (type) {
+		case RSBreakpointTypeNormal:
+		case RSBreakpointTypeFile:
+			clear_break(memory_context, waddr);
+			break;
+		case RSBreakpointTypeRead:
+			clear_mem_read_break(memory_context, waddr);
+			break;
+		case RSBreakpointTypeWrite:
+			clear_mem_write_break(memory_context, waddr);
+			break;
+		case RSBreakpointTypeNone:
+		default:
+			break;
+	}
 }
 #pragma mark Properties
 @synthesize delegate=_delegate;
