@@ -453,6 +453,7 @@
 		07B4740B14AE433300E3F9D0 /* RSFindSearchField.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B4740A14AE433300E3F9D0 /* RSFindSearchField.m */; };
 		07BC6CB614B7DE43007ECB3F /* WCJumpToLineWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07BC6CB514B7DE43007ECB3F /* WCJumpToLineWindowController.m */; };
 		07BC6CB914B7E3DD007ECB3F /* WCJumpToLineWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07BC6CB714B7E3DD007ECB3F /* WCJumpToLineWindow.xib */; };
+		07BCB53514FF169400314A25 /* NSURL+WCExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07BCB53414FF169400314A25 /* NSURL+WCExtensions.m */; };
 		07CB619A14E269C700337362 /* WCSearchNavigatorOutlineRowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CB619914E269C700337362 /* WCSearchNavigatorOutlineRowView.m */; };
 		07CC8E8A14E7B3B400B303C1 /* WCManageBuildTargetsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CC8E8914E7B3B400B303C1 /* WCManageBuildTargetsTableView.m */; };
 		07CC8E8C14E7B65700B303C1 /* Calculator16x16.png in Resources */ = {isa = PBXBuildFile; fileRef = 07CC8E8B14E7B65700B303C1 /* Calculator16x16.png */; };
@@ -1245,6 +1246,8 @@
 		07BC6CB414B7DE43007ECB3F /* WCJumpToLineWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCJumpToLineWindowController.h; sourceTree = "<group>"; };
 		07BC6CB514B7DE43007ECB3F /* WCJumpToLineWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCJumpToLineWindowController.m; sourceTree = "<group>"; };
 		07BC6CB814B7E3DD007ECB3F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCJumpToLineWindow.xib; sourceTree = "<group>"; };
+		07BCB53314FF169400314A25 /* NSURL+WCExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+WCExtensions.h"; sourceTree = "<group>"; };
+		07BCB53414FF169400314A25 /* NSURL+WCExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+WCExtensions.m"; sourceTree = "<group>"; };
 		07CB619814E269C700337362 /* WCSearchNavigatorOutlineRowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSearchNavigatorOutlineRowView.h; sourceTree = "<group>"; };
 		07CB619914E269C700337362 /* WCSearchNavigatorOutlineRowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSearchNavigatorOutlineRowView.m; sourceTree = "<group>"; };
 		07CC8E8814E7B3B400B303C1 /* WCManageBuildTargetsTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCManageBuildTargetsTableView.h; sourceTree = "<group>"; };
@@ -1552,6 +1555,8 @@
 				0706D66E14A9C4870092F880 /* NSAttributedString+WCExtensions.m */,
 				0745BE2114ABDAB200F541DC /* NSObject+WCExtensions.h */,
 				0745BE2214ABDAB200F541DC /* NSObject+WCExtensions.m */,
+				07BCB53314FF169400314A25 /* NSURL+WCExtensions.h */,
+				07BCB53414FF169400314A25 /* NSURL+WCExtensions.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -3365,6 +3370,7 @@
 				07AB505414F5475C005AA724 /* RSTransferFileWindowController.m in Sources */,
 				077CC17314F7EEFB00713ED8 /* WCDebugController.m in Sources */,
 				073737A514FC076100B11AFC /* RSGifRecordingStatusView.m in Sources */,
+				07BCB53514FF169400314A25 /* NSURL+WCExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4131,6 +4137,7 @@
 				0742295114FD948700EDA215 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		075D2FD214F3677A007F8951 /* Build configuration list for PBXNativeTarget "WabbitEmu" */ = {
 			isa = XCConfigurationList;

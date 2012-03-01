@@ -126,11 +126,13 @@ static NSString *const WCFileReferenceKey = @"fileReference";
 	[self didChangeValueForKey:@"fileIcon"];
 }
 - (void)fileReferenceWasWrittenTo:(RSFileReference *)fileReference; {
-	WCSourceFileDocument *sfDocument = [[self delegate] sourceFileDocumentForFile:self];
-	NSDate *currentDate = [[fileReference fileURL] modificationDate];
-	
-	if (![currentDate isEqualToDate:[sfDocument fileModificationDate]])
-		[sfDocument reloadDocumentFromDisk];
+	if ([self isSourceFile]) {
+		WCSourceFileDocument *sfDocument = [[self delegate] sourceFileDocumentForFile:self];
+		NSDate *currentDate = [[fileReference fileURL] modificationDate];
+		
+		if (![currentDate isEqualToDate:[sfDocument fileModificationDate]])
+			[sfDocument reloadDocumentFromDisk];
+	}
 }
 #pragma mark *** Public Methods ***
 + (id)fileWithFileURL:(NSURL *)fileURL; {

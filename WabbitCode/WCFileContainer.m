@@ -30,7 +30,9 @@
 	return [[[self parentNode] locationURLForFile:[[self parentNode] representedObject]] URLByAppendingPathComponent:[file fileName]];
 }
 - (WCSourceFileDocument *)sourceFileDocumentForFile:(WCFile *)file {
-	return [[[[self project] document] filesToSourceFileDocuments] objectForKey:file];
+	if ([file isSourceFile])
+		return [[[[self project] document] filesToSourceFileDocuments] objectForKey:file];
+	return nil;
 }
 #pragma mark *** Public Methods ***
 + (id)fileContainerWithFile:(WCFile *)file; {
