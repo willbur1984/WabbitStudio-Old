@@ -49,12 +49,7 @@
 	return displayName;
 }
 #pragma mark NSWindowDelegate
-- (BOOL)windowShouldClose:(id)sender {
-	if (_windowShouldClose)
-		return YES;
-	
-	_windowShouldClose = YES;
-	
+- (BOOL)windowShouldClose:(id)sender {	
 	NSArray *files = [NSArray arrayWithObjects:[[[self projectDocument] sourceFileDocumentsToFiles] objectForKey:[self sourceFileDocument]], nil];
 	NSTreeNode *item = [[[[[[self projectDocument] projectWindowController] projectNavigatorViewController] treeController] treeNodesForModelObjects:files] lastObject];
 	NSInteger itemRow = [[[[[self projectDocument] projectWindowController] projectNavigatorViewController] outlineView] rowForItem:item];
@@ -66,11 +61,8 @@
 		
 		[[self window] orderOutWithZoomEffectToRect:zoomRect];
 	}
-	else {
-		[[self window] orderOut:nil];
-	}
 	
-	return NO;
+	return YES;
 }
 
 - (void)windowWillClose:(NSNotification *)notification {

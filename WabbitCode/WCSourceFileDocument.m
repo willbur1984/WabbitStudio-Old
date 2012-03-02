@@ -127,20 +127,17 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 }
 
 - (void)saveToURL:(NSURL *)url ofType:(NSString *)typeName forSaveOperation:(NSSaveOperationType)saveOperation completionHandler:(void (^)(NSError *))completionHandler {
-	if (saveOperation != NSAutosaveInPlaceOperation) {
-		for (NSLayoutManager *layoutManager in [[self textStorage] layoutManagers]) {
-			for (NSTextContainer *textContainer in [layoutManager textContainers]) {
-				NSTextView *textView = [textContainer textView];
-				
-				if ([textView isCoalescingUndo])
-					[textView breakUndoCoalescing];
-			}
+	for (NSLayoutManager *layoutManager in [[self textStorage] layoutManagers]) {
+		for (NSTextContainer *textContainer in [layoutManager textContainers]) {
+			NSTextView *textView = [textContainer textView];
+			
+			if ([textView isCoalescingUndo])
+				[textView breakUndoCoalescing];
 		}
 	}
 	
 	[super saveToURL:url ofType:typeName forSaveOperation:saveOperation completionHandler:^(NSError *outError) {
-		if (saveOperation != NSAutosaveInPlaceOperation)
-			[self _updateFileEditedStatus];
+		[self _updateFileEditedStatus];
 		
 		completionHandler(outError);
 	}];
