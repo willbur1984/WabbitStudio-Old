@@ -18,6 +18,7 @@
 #import "WCNewProjectWindowController.h"
 #import "WCAddToProjectAccessoryViewController.h"
 #import "WCProjectViewController.h"
+#import "WCNewFileWindowController.h"
 
 @implementation WCApplicationDelegate
 #pragma mark *** Subclass Overrides ***
@@ -68,6 +69,10 @@
 #pragma mark IBActions
 - (IBAction)preferences:(id)sender; {
 	[[WCPreferencesWindowController sharedWindowController] showWindow:nil];
+}
+
+- (IBAction)newFile:(id)sender; {
+	[[WCNewFileWindowController sharedWindowController] showNewFileWindow];
 }
 - (IBAction)newProject:(id)sender; {
 	[[NSApplication sharedApplication] runModalForWindow:[[WCNewProjectWindowController sharedWindowController] window]];

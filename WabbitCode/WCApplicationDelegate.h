@@ -11,5 +11,7 @@
 @interface WCApplicationDelegate : NSObject <NSApplicationDelegate>
 
 - (IBAction)preferences:(id)sender;
+
+- (IBAction)newFile:(id)sender;
 - (IBAction)newProject:(id)sender;
 @end
