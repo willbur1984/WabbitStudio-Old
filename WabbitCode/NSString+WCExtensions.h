@@ -10,4 +10,6 @@
 
 @interface NSString (WCExtensions)
 - (NSRange)symbolRangeForRange:(NSRange)range;
+
+- (NSString *)stringByReplacingFileTemplatePlaceholdersWithValuesDictionary:(NSDictionary *)valuesDictionary;
 @end

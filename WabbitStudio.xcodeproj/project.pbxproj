@@ -387,6 +387,8 @@
 		07862BC814BBA5B00057EB89 /* NSParagraphStyle+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07862BC714BBA5B00057EB89 /* NSParagraphStyle+RSExtensions.m */; };
 		0788E49A14D0AEF90038181F /* WCFoldAttachmentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0788E49914D0AEF90038181F /* WCFoldAttachmentCell.m */; };
 		07892EDA14B81375006FDB52 /* NSString+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07892ED914B81375006FDB52 /* NSString+RSExtensions.m */; };
+		078CF02815011B99001E13E3 /* File Templates in Resources */ = {isa = PBXBuildFile; fileRef = 078CF02715011B99001E13E3 /* File Templates */; };
+		078CF02D15011C7A001E13E3 /* WCFileTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 078CF02C15011C7A001E13E3 /* WCFileTemplate.m */; };
 		078F03FD14AD0D760080ADBC /* RSToolTipBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F03F614AD0D760080ADBC /* RSToolTipBackgroundView.m */; };
 		078F03FE14AD0D760080ADBC /* RSToolTipManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F03F914AD0D760080ADBC /* RSToolTipManager.m */; };
 		078F03FF14AD0D760080ADBC /* RSToolTipPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F03FB14AD0D760080ADBC /* RSToolTipPanel.m */; };
@@ -1138,6 +1140,9 @@
 		0788E49914D0AEF90038181F /* WCFoldAttachmentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCFoldAttachmentCell.m; sourceTree = "<group>"; };
 		07892ED814B81375006FDB52 /* NSString+RSExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+RSExtensions.h"; sourceTree = "<group>"; };
 		07892ED914B81375006FDB52 /* NSString+RSExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+RSExtensions.m"; sourceTree = "<group>"; };
+		078CF02715011B99001E13E3 /* File Templates */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "File Templates"; sourceTree = "<group>"; };
+		078CF02B15011C7A001E13E3 /* WCFileTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCFileTemplate.h; sourceTree = "<group>"; };
+		078CF02C15011C7A001E13E3 /* WCFileTemplate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCFileTemplate.m; sourceTree = "<group>"; };
 		078F03F514AD0D760080ADBC /* RSToolTipBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSToolTipBackgroundView.h; sourceTree = "<group>"; };
 		078F03F614AD0D760080ADBC /* RSToolTipBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSToolTipBackgroundView.m; sourceTree = "<group>"; };
 		078F03F814AD0D760080ADBC /* RSToolTipManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSToolTipManager.h; sourceTree = "<group>"; };
@@ -1807,6 +1812,7 @@
 		071ECCC914A4233C002409F8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				078CF02715011B99001E13E3 /* File Templates */,
 				0742296E14FDDBC600EDA215 /* Build.png */,
 				075D2F7914F20D40007F8951 /* Include Files */,
 				072427ED14F1B9E000DC920B /* Project Templates */,
@@ -1878,6 +1884,7 @@
 				075D2F7414F1FFA8007F8951 /* WCRoundedBorderImageView.m */,
 				075D2F6F14F1FB93007F8951 /* WCRoundedBorderImageCell.h */,
 				075D2F7014F1FB93007F8951 /* WCRoundedBorderImageCell.m */,
+				078CF02A15011C5F001E13E3 /* New File */,
 				0778853214C386CD00605F5D /* New Project */,
 			);
 			name = Templates;
@@ -2501,6 +2508,15 @@
 			name = "Window Controllers";
 			sourceTree = "<group>";
 		};
+		078CF02A15011C5F001E13E3 /* New File */ = {
+			isa = PBXGroup;
+			children = (
+				078CF02B15011C7A001E13E3 /* WCFileTemplate.h */,
+				078CF02C15011C7A001E13E3 /* WCFileTemplate.m */,
+			);
+			name = "New File";
+			sourceTree = "<group>";
+		};
 		078F040114AD0F7A0080ADBC /* Xibs */ = {
 			isa = PBXGroup;
 			children = (
@@ -3024,6 +3040,7 @@
 				07AB505A14F5577A005AA724 /* RSTransferFileWindow.xib in Resources */,
 				077CC15814F6DD9C00713ED8 /* Calculator32x32.png in Resources */,
 				0742296F14FDDBC600EDA215 /* Build.png in Resources */,
+				078CF02815011B99001E13E3 /* File Templates in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3372,6 +3389,7 @@
 				077CC17314F7EEFB00713ED8 /* WCDebugController.m in Sources */,
 				073737A514FC076100B11AFC /* RSGifRecordingStatusView.m in Sources */,
 				07BCB53514FF169400314A25 /* NSURL+WCExtensions.m in Sources */,
+				078CF02D15011C7A001E13E3 /* WCFileTemplate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

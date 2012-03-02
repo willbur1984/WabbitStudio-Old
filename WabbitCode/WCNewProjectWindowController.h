@@ -8,6 +8,8 @@
 
 #import <AppKit/NSWindowController.h>
 
+@class WCProjectTemplate;
+
 @interface WCNewProjectWindowController : NSWindowController <NSTableViewDelegate,NSSplitViewDelegate> {
 	NSMutableArray *_categories;
 }
@@ -22,8 +24,8 @@
 
 - (IBAction)cancel:(id)sender;
 - (IBAction)createFromFolder:(id)sender;
-- (IBAction)previous:(id)sender;
-- (IBAction)next:(id)sender;
+- (IBAction)create:(id)sender;
 
 - (id)createProjectWithContentsOfDirectory:(NSURL *)directoryURL error:(NSError **)outError;
+- (id)createProjectAtURL:(NSURL *)projectURL withProjectTemplate:(WCProjectTemplate *)projectTemplate error:(NSError **)outError;
 @end

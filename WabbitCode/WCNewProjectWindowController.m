@@ -21,6 +21,10 @@
 #import "WCMiscellaneousPerformer.h"
 #import "KBResponderNotifyingWindow.h"
 
+@interface WCNewProjectWindowController ()
+@property (readonly,nonatomic) WCProjectTemplate *selectedProjectTemplate;
+@end
+
 @implementation WCNewProjectWindowController
 #pragma mark *** Subclass Overrides ***
 - (id)init {
@@ -162,6 +166,11 @@ static const CGFloat kRightSubviewMinimumWidth = 350.0;
 	
 	return [[WCDocumentController sharedDocumentController] openDocumentWithContentsOfURL:projectURL display:YES error:outError];
 }
+
+- (id)createProjectAtURL:(NSURL *)projectURL withProjectTemplate:(WCProjectTemplate *)projectTemplate error:(NSError **)outError; {
+	WCProjectContainer *projectNode = [WCProjectContainer projectContainerWithProject:nil];
+	
+}
 #pragma mark IBActions
 - (IBAction)cancel:(id)sender; {
 	[[NSApplication sharedApplication] stopModalWithCode:NSCancelButton];
@@ -181,15 +190,28 @@ static const CGFloat kRightSubviewMinimumWidth = 350.0;
 		if (result == NSFileHandlingPanelCancelButton)
 			return;
 		
-		if ([self createProjectWithContentsOfDirectory:[[openPanel URLs] lastObject] error:NULL])
+		NSError *outError;
+		if ([self createProjectWithContentsOfDirectory:[[openPanel URLs] lastObject] error:&outError])
 			[self cancel:nil];
 	}];
 }
-- (IBAction)previous:(id)sender; {
+- (IBAction)create:(id)sender; {
+	NSSavePanel *savePanel = [NSSavePanel savePanel];
 	
-}
-- (IBAction)next:(id)sender; {
+	[savePanel setAllowedFileTypes:[NSArray arrayWithObjects:WCProjectFileUTI, nil]];
+	[savePanel setCanCreateDirectories:YES];
+	[savePanel setPrompt:LOCALIZED_STRING_CREATE];
+	[savePanel setMessage:NSLocalizedString(@"Choose a name and location for your new project.", @"Choose a name and location for your new project")];
 	
+	[savePanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {
+		[savePanel orderOut:nil];
+		if (result == NSFileHandlingPanelCancelButton)
+			return;
+		
+		NSError *outError;
+		if ([self createProjectAtURL:[savePanel URL] withProjectTemplate:[self selectedProjectTemplate] error:&outError])
+			[self cancel:nil];
+	}];
 }
 #pragma mark Properties
 @synthesize categoriesArrayController=_categoriesArrayController;
