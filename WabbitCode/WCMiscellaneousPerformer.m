@@ -84,4 +84,9 @@
 - (NSURL *)applicationProjectTemplatesDirectoryURL {
 	return [[NSBundle mainBundle] URLForResource:@"Project Templates" withExtension:@""];
 }
+
+@dynamic applicationFileTemplatesDirectoryURL;
+- (NSURL *)applicationFileTemplatesDirectoryURL {
+	return [[NSBundle mainBundle] URLForResource:@"File Templates" withExtension:@""];
+}
 @end

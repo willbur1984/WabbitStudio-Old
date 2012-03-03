@@ -16,6 +16,7 @@
 @property (readwrite,assign,nonatomic) IBOutlet NSArrayController *categoriesArrayController;
 @property (readwrite,assign,nonatomic) IBOutlet NSCollectionView *collectionView;
 @property (readwrite,assign,nonatomic) IBOutlet NSImageView *splitterHandleImageView;
+@property (readwrite,assign,nonatomic) IBOutlet NSArrayController *templatesArrayController;
 
 @property (readonly,nonatomic) NSArray *categories;
 @property (readonly,nonatomic) NSMutableArray *mutableCategories;

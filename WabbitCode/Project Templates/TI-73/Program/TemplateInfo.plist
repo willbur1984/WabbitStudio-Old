@@ -6,5 +6,9 @@
 	<integer>1</integer>
 	<key>summary</key>
 	<string>Standard binary output, and some other magical things.</string>
+	<key>includeFileNames</key>
+	<array>
+		<string>ti73.inc</string>
+	</array>
 </dict>
 </plist>

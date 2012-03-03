@@ -18,6 +18,12 @@ extern NSString *const WCFileTemplateProjectNameValueKey;
 extern NSString *const WCFileTemplateFileNameValueKey;
 extern NSString *const WCFileTemplateIncludeFileNamesValueKey;
 
+extern NSString *const WCFileTemplateAllowedFileTypesInfoKey;
+
 @interface WCFileTemplate : WCTemplate
+
+@property (readonly,nonatomic) NSArray *allowedFileTypes;
+
++ (id)fileTemplateWithURL:(NSURL *)url error:(NSError **)outError;
 
 @end

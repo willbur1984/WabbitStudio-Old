@@ -18,6 +18,17 @@ NSString *const WCFileTemplateProjectNameValueKey = @"WCFileTemplateProjectNameV
 NSString *const WCFileTemplateFileNameValueKey = @"WCFileTemplateFileNameValueKey";
 NSString *const WCFileTemplateIncludeFileNamesValueKey = @"WCFileTemplateIncludeFileNamesValueKey";
 
+NSString *const WCFileTemplateAllowedFileTypesInfoKey = @"allowedFileTypes";
+
 @implementation WCFileTemplate
+
++ (id)fileTemplateWithURL:(NSURL *)url error:(NSError **)outError; {
+	return [self templateWithURL:url error:outError];
+}
+
+@dynamic allowedFileTypes;
+- (NSArray *)allowedFileTypes {
+	return [[self info] objectForKey:WCFileTemplateAllowedFileTypesInfoKey];
+}
 
 @end

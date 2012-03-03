@@ -217,6 +217,7 @@ static const CGFloat kRightSubviewMinimumWidth = 350.0;
 @synthesize categoriesArrayController=_categoriesArrayController;
 @synthesize collectionView=_collectionView;
 @synthesize splitterHandleImageView=_splitterHandleImageView;
+@synthesize templatesArrayController=_templatesArrayController;
 
 @synthesize categories=_categories;
 @dynamic mutableCategories;
@@ -240,6 +241,12 @@ static const CGFloat kRightSubviewMinimumWidth = 350.0;
 }
 
 #pragma mark *** Private Methods ***
+
+#pragma mark Properties
+@dynamic selectedProjectTemplate;
+- (WCProjectTemplate *)selectedProjectTemplate {
+	return [[[self templatesArrayController] selectedObjects] lastObject];
+}
 
 #pragma mark Notifications
 - (void)_firstResponderDidChange:(NSNotification *)note {
