@@ -14,6 +14,7 @@ NSString *const WCTemplateInfoPlistExtension = @"plist";
 
 NSString *const WCTemplateInfoSummaryKey = @"summary";
 NSString *const WCTemplateInfoMainFileNameKey = @"mainFileName";
+NSString *const WCTemplateInfoMainFileEncodingKey = @"mainFileEncoding";
 
 @implementation WCTemplate
 - (void)dealloc {
@@ -64,6 +65,10 @@ NSString *const WCTemplateInfoMainFileNameKey = @"mainFileName";
 @dynamic mainFileName;
 - (NSString *)mainFileName {
 	return [[self info] objectForKey:WCTemplateInfoMainFileNameKey];
+}
+@dynamic mainFileEncoding;
+- (NSStringEncoding)mainFileEncoding {
+	return [[[self info] objectForKey:WCTemplateInfoMainFileEncodingKey] unsignedIntegerValue];
 }
 
 @end

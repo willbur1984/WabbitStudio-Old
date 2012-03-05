@@ -50,17 +50,22 @@
 	
 	[temp replaceOccurrencesOfString:WCFileTemplateDatePlaceholder withString:[dateFormatter stringFromDate:[NSDate date]] options:NSLiteralSearch range:NSMakeRange(0, [temp length])];
 	
-	// replace the include file names placeholder
-	NSMutableString *includeFileNamesString = [NSMutableString stringWithCapacity:0];
-	
-	for (NSString *includeFileName in [valuesDictionary objectForKey:WCFileTemplateIncludeFileNamesValueKey])
-		[includeFileNamesString appendFormat:@"%@\n",includeFileName];
-	
-	// delete the last newline
-	if ([includeFileNamesString length])
-		[includeFileNamesString deleteCharactersInRange:NSMakeRange([includeFileNamesString length]-1, 1)];
-	
-	[temp replaceOccurrencesOfString:WCFileTemplateIncludeFileNamesPlaceholder withString:includeFileNamesString options:NSLiteralSearch range:NSMakeRange(0, [temp length])];
+	if ([[valuesDictionary objectForKey:WCFileTemplateIncludeFileNamesValueKey] count]) {
+		// replace the include file names placeholder
+		NSMutableString *includeFileNamesString = [NSMutableString stringWithCapacity:0];
+		
+		for (NSString *includeFileName in [valuesDictionary objectForKey:WCFileTemplateIncludeFileNamesValueKey])
+			[includeFileNamesString appendFormat:@"%@\n",includeFileName];
+		
+		// delete the last newline
+		if ([includeFileNamesString length])
+			[includeFileNamesString deleteCharactersInRange:NSMakeRange([includeFileNamesString length]-1, 1)];
+		
+		[temp replaceOccurrencesOfString:WCFileTemplateIncludeFileNamesPlaceholder withString:includeFileNamesString options:NSLiteralSearch range:NSMakeRange(0, [temp length])];
+	}
+	else {
+		[temp replaceOccurrencesOfString:WCFileTemplateIncludeFileNamesPlaceholder withString:@"" options:NSLiteralSearch range:NSMakeRange(0, [temp length])];
+	}
 	
 	return [[temp copy] autorelease];
 }

@@ -13,6 +13,7 @@
 @interface WCNewFileWindowController : NSWindowController <NSTableViewDelegate,NSSplitViewDelegate> {
 	__weak WCProjectDocument *_projectDocument;
 	NSMutableArray *_categories;
+	NSURL *_savePanelURL;
 }
 @property (readwrite,assign,nonatomic) IBOutlet NSArrayController *categoriesArrayController;
 @property (readwrite,assign,nonatomic) IBOutlet NSCollectionView *collectionView;
@@ -29,6 +30,8 @@
 - (id)initWithProjectDocument:(WCProjectDocument *)projectDocument;
 
 - (void)showNewFileWindow;
+
+- (BOOL)createFileAtURL:(NSURL *)fileURL withFileTemplate:(WCFileTemplate *)fileTemplate error:(NSError **)outError;
 
 - (IBAction)cancel:(id)sender;
 - (IBAction)create:(id)sender;

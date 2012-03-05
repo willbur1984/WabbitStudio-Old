@@ -13,9 +13,16 @@
 #import "WCMiscellaneousPerformer.h"
 #import "KBResponderNotifyingWindow.h"
 #import "RSDefines.h"
+#import "NSString+WCExtensions.h"
+#import "WCFile.h"
+#import "WCDocumentController.h"
+#import "WCProjectWindowController.h"
+#import "WCProjectNavigatorViewController.h"
 
 @interface WCNewFileWindowController ()
 @property (readonly,nonatomic) WCFileTemplate *selectedFileTemplate;
+@property (readwrite,copy,nonatomic) NSURL *savePanelURL;
+
 @end
 
 @implementation WCNewFileWindowController
@@ -25,6 +32,7 @@
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
 	_projectDocument = nil;
+	[_savePanelURL release];
 	[_categories release];
 	[super dealloc];
 }
@@ -157,10 +165,50 @@ static const CGFloat kRightSubviewMinimumWidth = 350.0;
 	else {
 		NSInteger result = [[NSApplication sharedApplication] runModalForWindow:[self window]];
 		
-		if (result == NSOKButton) {
-			// TODO: create our new file
+		if (result == NSCancelButton)
+			return;
+		
+		NSError *outError;
+		if (![self createFileAtURL:[self savePanelURL] withFileTemplate:[self selectedFileTemplate] error:&outError]) {
+			[[NSApplication sharedApplication] presentError:outError];
+			return;
+		}
+		
+		if ([self projectDocument]) {
+			// TODO: create a new WCFile and add it to the project
+		}
+		else {
+			[[WCDocumentController sharedDocumentController] openDocumentWithContentsOfURL:[self savePanelURL] display:YES completionHandler:^(NSDocument *document, BOOL documentWasAlreadyOpen, NSError *error) {
+				if (error)
+					[[NSApplication sharedApplication] presentError:error];
+			}];
 		}
 	}
+}
+
+- (BOOL)createFileAtURL:(NSURL *)fileURL withFileTemplate:(WCFileTemplate *)fileTemplate error:(NSError **)outError; {
+	NSURL *templateFileURL = [[[fileTemplate URL] URLByAppendingPathComponent:[fileTemplate mainFileName]] URLByAppendingPathExtension:[[fileTemplate allowedFileTypes] objectAtIndex:0]];
+	
+	if (![templateFileURL checkResourceIsReachableAndReturnError:outError])
+		return NO;
+	
+	NSStringEncoding templateFileStringEncoding;
+	NSString *templateFileString = [NSString stringWithContentsOfURL:templateFileURL usedEncoding:&templateFileStringEncoding error:outError];
+	
+	if (!templateFileString) {
+		templateFileStringEncoding = [fileTemplate mainFileEncoding];
+		templateFileString = [NSString stringWithContentsOfURL:templateFileURL encoding:templateFileStringEncoding error:outError];
+		
+		if (!templateFileString)
+			return NO;
+	}
+	
+	templateFileString = [templateFileString stringByReplacingFileTemplatePlaceholdersWithValuesDictionary:[NSDictionary dictionaryWithObjectsAndKeys:[[self projectDocument] displayName],WCFileTemplateProjectNameValueKey,[fileURL lastPathComponent],WCFileTemplateFileNameValueKey, nil]];
+	
+	if (![templateFileString writeToURL:fileURL atomically:YES encoding:templateFileStringEncoding error:outError])
+		return NO;
+	
+	return YES;
 }
 #pragma mark IBActions
 - (IBAction)cancel:(id)sender; {
@@ -176,6 +224,8 @@ static const CGFloat kRightSubviewMinimumWidth = 350.0;
 	WCFileTemplate *fileTemplate = [self selectedFileTemplate];
 	
 	[savePanel setAllowedFileTypes:[fileTemplate allowedFileTypes]];
+	[savePanel setAllowsOtherFileTypes:NO];
+	
 	[savePanel setCanCreateDirectories:YES];
 	[savePanel setPrompt:LOCALIZED_STRING_CREATE];
 	[savePanel setMessage:NSLocalizedString(@"Choose a location and name for your new file.", @"Choose a location and name for your new file.")];
@@ -184,6 +234,8 @@ static const CGFloat kRightSubviewMinimumWidth = 350.0;
 		[savePanel orderOut:nil];
 		if (result == NSFileHandlingPanelCancelButton)
 			return;
+		
+		[self setSavePanelURL:[savePanel URL]];
 		
 		if ([self projectDocument])
 			[[NSApplication sharedApplication] endSheet:[self window] returnCode:NSOKButton];
@@ -199,6 +251,7 @@ static const CGFloat kRightSubviewMinimumWidth = 350.0;
 @synthesize collectionView=_collectionView;
 @synthesize splitterHandleImageView=_splitterHandleImageView;
 @synthesize templatesArrayController=_templatesArrayController;
+@synthesize savePanelURL=_savePanelURL;
 
 @synthesize categories=_categories;
 @dynamic mutableCategories;
