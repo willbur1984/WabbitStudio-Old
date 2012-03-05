@@ -18,6 +18,7 @@
 #import "WCDocumentController.h"
 #import "WCProjectWindowController.h"
 #import "WCProjectNavigatorViewController.h"
+#import "NSURL+RSExtensions.h"
 
 @interface WCNewFileWindowController ()
 @property (readonly,nonatomic) WCFileTemplate *selectedFileTemplate;
@@ -170,7 +171,7 @@ static const CGFloat kRightSubviewMinimumWidth = 350.0;
 		
 		NSError *outError;
 		if (![self createFileAtURL:[self savePanelURL] withFileTemplate:[self selectedFileTemplate] error:&outError]) {
-			[[NSApplication sharedApplication] presentError:outError];
+			
 			return;
 		}
 		
@@ -186,8 +187,8 @@ static const CGFloat kRightSubviewMinimumWidth = 350.0;
 	}
 }
 
-- (BOOL)createFileAtURL:(NSURL *)fileURL withFileTemplate:(WCFileTemplate *)fileTemplate error:(NSError **)outError; {
-	NSURL *templateFileURL = [[[fileTemplate URL] URLByAppendingPathComponent:[fileTemplate mainFileName]] URLByAppendingPathExtension:[[fileTemplate allowedFileTypes] objectAtIndex:0]];
+- (BOOL)createFileAtURL:(NSURL *)fileURL withFileTemplate:(WCFileTemplate *)fileTemplate error:(NSError **)outError; {	
+	NSURL *templateFileURL = [[[fileTemplate URL] parentDirectoryURL] URLByAppendingPathComponent:[fileTemplate mainFileName]];
 	
 	if (![templateFileURL checkResourceIsReachableAndReturnError:outError])
 		return NO;
@@ -203,7 +204,9 @@ static const CGFloat kRightSubviewMinimumWidth = 350.0;
 			return NO;
 	}
 	
-	templateFileString = [templateFileString stringByReplacingFileTemplatePlaceholdersWithValuesDictionary:[NSDictionary dictionaryWithObjectsAndKeys:[[self projectDocument] displayName],WCFileTemplateProjectNameValueKey,[fileURL lastPathComponent],WCFileTemplateFileNameValueKey, nil]];
+	NSString *projectName = ([self projectDocument])?[[self projectDocument] displayName]:NSLocalizedString(@"No Project", @"No Project");
+	
+	templateFileString = [templateFileString stringByReplacingFileTemplatePlaceholdersWithValuesDictionary:[NSDictionary dictionaryWithObjectsAndKeys:projectName,WCFileTemplateProjectNameValueKey,[fileURL lastPathComponent],WCFileTemplateFileNameValueKey, nil]];
 	
 	if (![templateFileString writeToURL:fileURL atomically:YES encoding:templateFileStringEncoding error:outError])
 		return NO;

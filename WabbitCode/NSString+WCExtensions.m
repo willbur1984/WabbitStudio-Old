@@ -64,7 +64,7 @@
 		[temp replaceOccurrencesOfString:WCFileTemplateIncludeFileNamesPlaceholder withString:includeFileNamesString options:NSLiteralSearch range:NSMakeRange(0, [temp length])];
 	}
 	else {
-		[temp replaceOccurrencesOfString:WCFileTemplateIncludeFileNamesPlaceholder withString:@"" options:NSLiteralSearch range:NSMakeRange(0, [temp length])];
+		[temp replaceOccurrencesOfString:[WCFileTemplateIncludeFileNamesPlaceholder stringByAppendingFormat:@"\n"] withString:@"" options:NSLiteralSearch range:NSMakeRange(0, [temp length])];
 	}
 	
 	return [[temp copy] autorelease];

@@ -64,7 +64,9 @@ NSString *const WCTemplateInfoMainFileEncodingKey = @"mainFileEncoding";
 }
 @dynamic mainFileName;
 - (NSString *)mainFileName {
-	return [[self info] objectForKey:WCTemplateInfoMainFileNameKey];
+	if ([[[self info] objectForKey:WCTemplateInfoMainFileNameKey] length])
+		return [[self info] objectForKey:WCTemplateInfoMainFileNameKey];
+	return NSLocalizedString(@"main.z80", @"main.z80");
 }
 @dynamic mainFileEncoding;
 - (NSStringEncoding)mainFileEncoding {
