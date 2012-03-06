@@ -21,6 +21,8 @@
 
 @property (readonly,nonatomic) NSURL *applicationFileTemplatesDirectoryURL;
 
+@property (readonly,nonatomic) NSURL *applicationIncludeFilesDirectoryURL;
+
 + (WCMiscellaneousPerformer *)sharedPerformer;
 
 @end

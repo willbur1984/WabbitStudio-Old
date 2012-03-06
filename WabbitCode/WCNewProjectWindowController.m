@@ -20,6 +20,8 @@
 #import "WCTemplateCategory.h"
 #import "WCMiscellaneousPerformer.h"
 #import "KBResponderNotifyingWindow.h"
+#import "NSString+WCExtensions.h"
+#import "WCFileTemplate.h"
 
 @interface WCNewProjectWindowController ()
 @property (readonly,nonatomic) WCProjectTemplate *selectedProjectTemplate;
@@ -181,8 +183,60 @@ static const CGFloat kRightSubviewMinimumWidth = 350.0;
 }
 
 - (id)createProjectAtURL:(NSURL *)projectURL withProjectTemplate:(WCProjectTemplate *)projectTemplate error:(NSError **)outError; {
-	WCProjectContainer *projectNode = [WCProjectContainer projectContainerWithProject:nil];
+	NSURL *projectDirectoryURL = [projectURL URLByDeletingPathExtension];
+	// create a directory for the project, use the file name as the directory name (chop off the file extension)
+	if (![[NSFileManager defaultManager] createDirectoryAtURL:projectDirectoryURL withIntermediateDirectories:YES attributes:nil error:outError])
+		return nil;
 	
+	NSDirectoryEnumerator *templateDirectoryEnumerator = [[NSFileManager defaultManager] enumeratorAtURL:[[projectTemplate URL] parentDirectoryURL] includingPropertiesForKeys:[NSArray arrayWithObjects:NSURLTypeIdentifierKey, nil] options:NSDirectoryEnumerationSkipsHiddenFiles|NSDirectoryEnumerationSkipsPackageDescendants|NSDirectoryEnumerationSkipsSubdirectoryDescendants errorHandler:^BOOL(NSURL *url, NSError *error) {
+		// ignore any errors and just keep processing
+		return YES;
+	}];
+	
+	NSURL *applicationIncludeFilesDirectoryURL = [[WCMiscellaneousPerformer sharedPerformer] applicationIncludeFilesDirectoryURL];				
+	// first copy any include files that the project template requires
+	for (NSString *includeFileName in [projectTemplate includeFiles]) {
+		NSURL *includeFileURL = [applicationIncludeFilesDirectoryURL URLByAppendingPathComponent:includeFileName];
+		
+		if (![[NSFileManager defaultManager] fileExistsAtPath:[includeFileURL path]])
+			continue;
+		
+		[[NSFileManager defaultManager] copyItemAtURL:includeFileURL toURL:[projectDirectoryURL URLByAppendingPathComponent:includeFileName] error:outError];
+	}
+	
+	static NSString *const kPropertyListUTI = @"com.apple.property-list";
+	NSDictionary *templateValues = [NSDictionary dictionaryWithObjectsAndKeys:[projectURL lastPathComponent],WCFileTemplateProjectNameValueKey,[projectTemplate includeFiles],WCFileTemplateIncludeFileNamesValueKey, nil];
+	// copy everything over that isnt a plist (this ensures the TemplateInfo.plist file is ignored)
+	for (NSURL *fileURL in templateDirectoryEnumerator) {
+		NSString *fileUTI = [fileURL fileUTI];
+		
+		if ([fileUTI isEqualToString:kPropertyListUTI])
+			continue;
+		else if ([fileUTI isEqualToString:WCAssemblyFileUTI] ||
+				 [fileUTI isEqualToString:WCIncludeFileUTI] ||
+				 [fileUTI isEqualToString:WCActiveServerIncludeFileUTI]) {
+			
+			// run any source code files through template processing
+			NSMutableDictionary *fileTemplateValues = [[templateValues mutableCopy] autorelease];
+			
+			[fileTemplateValues setObject:[fileURL lastPathComponent] forKey:WCFileTemplateFileNameValueKey];
+			
+			NSStringEncoding stringEncoding;
+			NSString *fileString = [NSString stringWithContentsOfURL:fileURL usedEncoding:&stringEncoding error:outError];
+			
+			if (!fileString)
+				continue;
+			
+			fileString = [fileString stringByReplacingFileTemplatePlaceholdersWithValuesDictionary:fileTemplateValues];
+			
+			[fileString writeToURL:[projectDirectoryURL URLByAppendingPathComponent:[fileURL lastPathComponent]] atomically:YES encoding:stringEncoding error:outError];
+		}
+		else {
+			[[NSFileManager defaultManager] copyItemAtURL:fileURL toURL:[projectDirectoryURL URLByAppendingPathComponent:[fileURL lastPathComponent]] error:outError];
+		}
+	}
+	
+	return [self createProjectWithContentsOfDirectory:projectDirectoryURL error:outError];
 }
 #pragma mark IBActions
 - (IBAction)cancel:(id)sender; {
@@ -212,7 +266,7 @@ static const CGFloat kRightSubviewMinimumWidth = 350.0;
 	NSSavePanel *savePanel = [NSSavePanel savePanel];
 	
 	[savePanel setAllowedFileTypes:[NSArray arrayWithObjects:WCProjectFileUTI, nil]];
-	[savePanel setCanCreateDirectories:YES];
+	[savePanel setCanCreateDirectories:NO];
 	[savePanel setPrompt:LOCALIZED_STRING_CREATE];
 	[savePanel setMessage:NSLocalizedString(@"Choose a name and location for your new project.", @"Choose a name and location for your new project")];
 	

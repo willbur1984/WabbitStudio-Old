@@ -55,7 +55,7 @@
 		NSMutableString *includeFileNamesString = [NSMutableString stringWithCapacity:0];
 		
 		for (NSString *includeFileName in [valuesDictionary objectForKey:WCFileTemplateIncludeFileNamesValueKey])
-			[includeFileNamesString appendFormat:@"%@\n",includeFileName];
+			[includeFileNamesString appendFormat:NSLocalizedString(@"#include \"%@\"\n", @"include file name format string"),includeFileName];
 		
 		// delete the last newline
 		if ([includeFileNamesString length])

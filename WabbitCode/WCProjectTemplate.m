@@ -8,7 +8,7 @@
 
 #import "WCProjectTemplate.h"
 
-NSString *const WCProjectTemplateInfoIncludeFilesKey = @"includeFiles";
+NSString *const WCProjectTemplateInfoIncludeFileNamesKey = @"includeFileNames";
 
 @implementation WCProjectTemplate
 + (id)projectTemplateWithURL:(NSURL *)url; {
@@ -17,7 +17,7 @@ NSString *const WCProjectTemplateInfoIncludeFilesKey = @"includeFiles";
 
 @dynamic includeFiles;
 - (NSArray *)includeFiles {
-	return [[self info] objectForKey:WCProjectTemplateInfoIncludeFilesKey];
+	return [[self info] objectForKey:WCProjectTemplateInfoIncludeFileNamesKey];
 }
 
 @end

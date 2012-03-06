@@ -8,7 +8,7 @@
 
 #import "WCTemplate.h"
 
-extern NSString *const WCProjectTemplateInfoIncludeFilesKey;
+extern NSString *const WCProjectTemplateInfoIncludeFileNamesKey;
 
 @interface WCProjectTemplate : WCTemplate
 @property (readonly,nonatomic) NSArray *includeFiles;
