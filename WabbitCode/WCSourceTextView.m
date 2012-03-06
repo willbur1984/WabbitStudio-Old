@@ -189,11 +189,11 @@
 	
 	[self _drawPageGuideInRect:rect];
 	
+	[self _drawFocusFollowsCodeRectsInRect:rect];
+	
 	[self _drawCurrentLineHighlightInRect:rect];
 	
 	[self _drawVisibleBuildIssuesInRect:rect];
-	
-	[self _drawFocusFollowsCodeRectsInRect:rect];
 	
 	if ([[self autoHighlightArgumentsRanges] count]) {
 		[[self autoHighlightArgumentsRanges] enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
@@ -1839,12 +1839,16 @@ static const CGFloat kTriangleHeight = 4.0;
 		return;
 	
 	NSRange selectedRange = [self selectedRange];
+	
+	if (selectedRange.length)
+		return;
+	
 	WCFold *fold = [[[[self delegate] sourceScannerForSourceTextView:self] folds] deepestFoldForRange:selectedRange];
 	
 	if (!fold)
 		return;
 	
-	static const CGFloat stepAmount = 0.08;
+	static const CGFloat stepAmount = 0.1;
 	NSColor *baseColor = [self backgroundColor];
 	NSMutableArray *rectsAndColorsDictionaries = [NSMutableArray arrayWithCapacity:0];
 	BOOL baseColorIsDark = [baseColor colorIsDark];
@@ -1880,12 +1884,12 @@ static const CGFloat kTriangleHeight = 4.0;
 	} while (fold);
 	
 	[baseColor setFill];
-	NSRectFill([self bounds]);
+	NSRectFill(focusFollowsCodeRect);
 	
-	for (NSDictionary *dict in [rectsAndColorsDictionaries reverseObjectEnumerator]) {
+	[rectsAndColorsDictionaries enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(NSDictionary *dict, NSUInteger dictIndex, BOOL *stop) {
 		[[dict objectForKey:@"color"] setFill];
 		[[NSBezierPath bezierPathWithRoundedRect:[[dict objectForKey:@"rect"] rectValue] xRadius:5.0 yRadius:5.0] fill];
-	}
+	}];
 }
 #pragma mark IBActions
 - (IBAction)_symbolMenuClicked:(NSMenuItem *)sender {
