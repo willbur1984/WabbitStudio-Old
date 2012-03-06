@@ -48,6 +48,7 @@
 #import "NSParagraphStyle+RSExtensions.h"
 #import "WCBreakpointManager.h"
 #import "WCFileBreakpoint.h"
+#import "AIColorAdditions.h"
 
 @interface WCSourceTextView ()
 @property (readwrite,copy,nonatomic) NSIndexSet *autoHighlightArgumentsRanges;
@@ -64,6 +65,7 @@
 - (BOOL)_handleUnfoldForEvent:(NSEvent *)theEvent;
 - (void)_drawVisibleBookmarksInRect:(NSRect)bookmarkRect;
 - (void)_drawVisibleBuildIssuesInRect:(NSRect)buildIssueRect;
+- (void)_drawFocusFollowsCodeRectsInRect:(NSRect)focusFollowsCodeRect;
 @end
 
 @implementation WCSourceTextView
@@ -190,6 +192,8 @@
 	[self _drawCurrentLineHighlightInRect:rect];
 	
 	[self _drawVisibleBuildIssuesInRect:rect];
+	
+	[self _drawFocusFollowsCodeRectsInRect:rect];
 	
 	if ([[self autoHighlightArgumentsRanges] count]) {
 		[[self autoHighlightArgumentsRanges] enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
@@ -497,14 +501,17 @@
 }
 #pragma mark NSObject+WCExtensions
 - (NSSet *)userDefaultsKeyPathsToObserve {
-	return [NSSet setWithObjects:WCEditorShowCurrentLineHighlightKey,WCEditorWrapLinesToEditorWidthKey,WCEditorPageGuideColumnNumberKey,WCEditorShowPageGuideAtColumnKey, nil];
+	return [NSSet setWithObjects:WCEditorShowCurrentLineHighlightKey,WCEditorWrapLinesToEditorWidthKey,WCEditorPageGuideColumnNumberKey,WCEditorShowPageGuideAtColumnKey,WCEditorFocusFollowsSelectionKey, nil];
 }
 #pragma mark NSKeyValueObserving
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if ([keyPath isEqualToString:[kUserDefaultsKeyPathPrefix stringByAppendingString:WCEditorShowCurrentLineHighlightKey]] ||
 		[keyPath isEqualToString:[kUserDefaultsKeyPathPrefix stringByAppendingString:WCEditorPageGuideColumnNumberKey]] ||
-		[keyPath isEqualToString:[kUserDefaultsKeyPathPrefix stringByAppendingString:WCEditorShowPageGuideAtColumnKey]])
+		[keyPath isEqualToString:[kUserDefaultsKeyPathPrefix stringByAppendingString:WCEditorShowPageGuideAtColumnKey]] ||
+		[keyPath isEqualToString:[kUserDefaultsKeyPathPrefix stringByAppendingString:WCEditorFocusFollowsSelectionKey]]) {
+		
 		[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
+	}
 	else if ([keyPath isEqualToString:[kUserDefaultsKeyPathPrefix stringByAppendingFormat:WCEditorWrapLinesToEditorWidthKey]])
 		[self setWrapLines:[[NSUserDefaults standardUserDefaults] boolForKey:WCEditorWrapLinesToEditorWidthKey]];
 	else
@@ -1824,6 +1831,60 @@ static const CGFloat kTriangleHeight = 4.0;
 			default:
 				break;
 		}
+	}
+}
+
+- (void)_drawFocusFollowsCodeRectsInRect:(NSRect)focusFollowsCodeRect; {
+	if (![[NSUserDefaults standardUserDefaults] boolForKey:WCEditorFocusFollowsSelectionKey])
+		return;
+	
+	NSRange selectedRange = [self selectedRange];
+	WCFold *fold = [[[[self delegate] sourceScannerForSourceTextView:self] folds] deepestFoldForRange:selectedRange];
+	
+	if (!fold)
+		return;
+	
+	static const CGFloat stepAmount = 0.08;
+	NSColor *baseColor = [self backgroundColor];
+	NSMutableArray *rectsAndColorsDictionaries = [NSMutableArray arrayWithCapacity:0];
+	BOOL baseColorIsDark = [baseColor colorIsDark];
+	
+	do {
+		NSUInteger rectCount;
+		NSRectArray rects = [[self layoutManager] rectArrayForCharacterRange:[fold contentRange] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[self textContainer] rectCount:&rectCount];
+		
+		if (!rectCount)
+			return;
+		
+		NSRect contentRangeRect;
+		
+		if (rectCount == 1)
+			contentRangeRect = rects[0];
+		else {
+			contentRangeRect = NSZeroRect;
+			
+			for (NSUInteger rectIndex=0; rectIndex<rectCount; rectIndex++)
+				contentRangeRect = NSUnionRect(contentRangeRect, rects[rectIndex]);
+		}
+		
+		[rectsAndColorsDictionaries addObject:[NSDictionary dictionaryWithObjectsAndKeys:[NSValue valueWithRect:contentRangeRect],@"rect",baseColor,@"color", nil]];
+		
+		fold = [fold parentNode];
+		
+		CGFloat darkenOrLightenAmount = stepAmount*((CGFloat)[fold level]+1);
+		if (baseColorIsDark)
+			baseColor = [baseColor darkenBy:-darkenOrLightenAmount];
+		else
+			baseColor = [baseColor darkenBy:darkenOrLightenAmount];
+		
+	} while (fold);
+	
+	[baseColor setFill];
+	NSRectFill([self bounds]);
+	
+	for (NSDictionary *dict in [rectsAndColorsDictionaries reverseObjectEnumerator]) {
+		[[dict objectForKey:@"color"] setFill];
+		[[NSBezierPath bezierPathWithRoundedRect:[[dict objectForKey:@"rect"] rectValue] xRadius:5.0 yRadius:5.0] fill];
 	}
 }
 #pragma mark IBActions

@@ -12,6 +12,7 @@
 
 NSString *const WCEditorShowCurrentLineHighlightKey = @"editorShowCurrentLineHighlight";
 NSString *const WCEditorShowCodeFoldingRibbonKey = @"editorShowCodeFoldingRibbon";
+NSString *const WCEditorFocusFollowsSelectionKey = @"editorFocusFollowsSelection";
 NSString *const WCEditorShowInvisibleCharactersKey = @"editorShowInvisibleCharacters";
 NSString *const WCEditorShowLineNumbersKey = @"editorShowLineNumbers";
 NSString *const WCEditorShowMatchingBraceHighlightKey = @"editorShowMatchingBraceHighlight";

@@ -12,6 +12,7 @@
 
 extern NSString *const WCEditorShowCurrentLineHighlightKey;
 extern NSString *const WCEditorShowCodeFoldingRibbonKey;
+extern NSString *const WCEditorFocusFollowsSelectionKey;
 extern NSString *const WCEditorShowInvisibleCharactersKey;
 extern NSString *const WCEditorShowLineNumbersKey;
 extern NSString *const WCEditorShowMatchingBraceHighlightKey;

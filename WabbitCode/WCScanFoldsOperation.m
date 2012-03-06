@@ -136,7 +136,7 @@ static NSRegularExpression *endMarkersRegex;
 						// foldRange is the range that will be drawn in the code folding ribbon
 						NSRange foldRange = [[self string] lineRangeForRange:NSUnionRange([startMarker range], [endMarker range])];
 						// get the start index of the line after the start marker
-						NSUInteger firstCharIndex = NSMaxRange([startMarker range]);
+						NSUInteger firstCharIndex = NSMaxRange([startMarker range])+1;
 						// get the end index of the line before the end marker
 						NSUInteger lastCharIndex = [endMarker range].location;
 						// create our new fold, contentRange is everything that falls between the start index of the line after start marker the end index of the line before end marker
@@ -196,7 +196,7 @@ static NSRegularExpression *endMarkersRegex;
 								([startMarker type] == WCFoldMarkerTypeMacroStart && [endMarker type] == WCFoldMarkerTypeMacroEnd)) {
 								
 								NSRange foldRange = [[self string] lineRangeForRange:NSUnionRange([startMarker range], [endMarker range])];
-								NSUInteger firstCharIndex = NSMaxRange([startMarker range]);
+								NSUInteger firstCharIndex = NSMaxRange([startMarker range])+1;
 								NSUInteger lastCharIndex = [endMarker range].location;
 								NSRange contentRange = NSMakeRange(firstCharIndex, lastCharIndex-firstCharIndex);
 								WCFoldType foldType;
