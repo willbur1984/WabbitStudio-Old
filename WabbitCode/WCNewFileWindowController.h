@@ -7,10 +7,11 @@
 //
 
 #import <AppKit/NSWindowController.h>
+#import "RSCollectionViewDelegate.h"
 
 @class WCFileTemplate,WCProjectDocument;
 
-@interface WCNewFileWindowController : NSWindowController <NSTableViewDelegate,NSSplitViewDelegate> {
+@interface WCNewFileWindowController : NSWindowController <RSCollectionViewDelegate,NSTableViewDelegate,NSSplitViewDelegate> {
 	__weak WCProjectDocument *_projectDocument;
 	NSMutableArray *_categories;
 	NSURL *_savePanelURL;

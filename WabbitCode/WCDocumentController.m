@@ -189,6 +189,15 @@ NSString *const WCProjectFileUTI = @"org.revsoft.wabbitcode.project";
 	
 	return [[retval copy] autorelease];
 }
+@dynamic currentProjectDocument;
+- (WCProjectDocument *)currentProjectDocument {
+	id currentDocument = [self currentDocument];
+	
+	if ([currentDocument isKindOfClass:[WCProjectDocument class]])
+		return currentDocument;
+	return nil;
+}
+
 @synthesize openPanelAccessoryViewController=_openPanelAccessoryViewController;
 - (WCOpenPanelAccessoryViewController *)openPanelAccessoryViewController {
 	if (!_openPanelAccessoryViewController)

@@ -19,11 +19,15 @@
 #import "WCProjectWindowController.h"
 #import "WCProjectNavigatorViewController.h"
 #import "NSURL+RSExtensions.h"
+#import "WCFileContainer.h"
+#import "NSArray+WCExtensions.h"
+#import "RSNavigatorControl.h"
 
 @interface WCNewFileWindowController ()
 @property (readonly,nonatomic) WCFileTemplate *selectedFileTemplate;
 @property (readwrite,copy,nonatomic) NSURL *savePanelURL;
 
+- (void)_createFileTemplateAndInsertIntoProjectDocument;
 @end
 
 @implementation WCNewFileWindowController
@@ -122,6 +126,12 @@ static NSString *const kHeaderCellIdentifier = @"HeaderCell";
 		[(id)rowView setTableView:nil];
 }
 #pragma mark NSSplitViewDelegate
+- (BOOL)splitView:(NSSplitView *)splitView shouldAdjustSizeOfSubview:(NSView *)view {
+	if ([[splitView subviews] objectAtIndex:0] == view)
+		return NO;
+	return YES;
+}
+
 - (NSRect)splitView:(NSSplitView *)splitView additionalEffectiveRectOfDividerAtIndex:(NSInteger)dividerIndex {
 	return [splitView convertRect:[[self splitterHandleImageView] bounds] fromView:[self splitterHandleImageView]];
 }
@@ -133,6 +143,14 @@ static const CGFloat kRightSubviewMinimumWidth = 350.0;
 - (CGFloat)splitView:(NSSplitView *)splitView constrainMinCoordinate:(CGFloat)proposedMinimumPosition ofSubviewAt:(NSInteger)dividerIndex {
 	return proposedMinimumPosition+kLeftSubviewMinimumWidth;
 }
+#pragma mark RSCollectionViewDelegate
+- (void)handleReturnPressedForCollectionView:(RSCollectionView *)collectionView {
+	[self create:nil];
+}
+- (void)collectionView:(RSCollectionView *)collectionView handleDoubleClickForItemsAtIndexes:(NSIndexSet *)indexes {
+	[self create:nil];
+}
+
 #pragma mark *** Public Methods ***
 + (WCNewFileWindowController *)sharedWindowController; {
 	static id sharedInstance;
@@ -169,21 +187,7 @@ static const CGFloat kRightSubviewMinimumWidth = 350.0;
 		if (result == NSCancelButton)
 			return;
 		
-		NSError *outError;
-		if (![self createFileAtURL:[self savePanelURL] withFileTemplate:[self selectedFileTemplate] error:&outError]) {
-			
-			return;
-		}
-		
-		if ([self projectDocument]) {
-			// TODO: create a new WCFile and add it to the project
-		}
-		else {
-			[[WCDocumentController sharedDocumentController] openDocumentWithContentsOfURL:[self savePanelURL] display:YES completionHandler:^(NSDocument *document, BOOL documentWasAlreadyOpen, NSError *error) {
-				if (error)
-					[[NSApplication sharedApplication] presentError:error];
-			}];
-		}
+		[self _createFileTemplateAndInsertIntoProjectDocument];
 	}
 }
 
@@ -279,6 +283,54 @@ static const CGFloat kRightSubviewMinimumWidth = 350.0;
 @synthesize projectDocument=_projectDocument;
 
 #pragma mark *** Private Methods ***
+- (void)_createFileTemplateAndInsertIntoProjectDocument {
+	NSError *outError;
+	if (![self createFileAtURL:[self savePanelURL] withFileTemplate:[self selectedFileTemplate] error:&outError]) {
+		[[NSApplication sharedApplication] presentError:outError];
+		return;
+	}
+	
+	if ([self projectDocument]) {
+		WCProjectNavigatorViewController *projectNavigatorViewController = [[[self projectDocument] projectWindowController] projectNavigatorViewController];
+		// grab the first selected node
+		WCFileContainer *selectedFileContainer = [[projectNavigatorViewController selectedObjects] firstObject];
+		NSUInteger insertIndex = 0;
+		
+		// if the node is a leaf node, adjust the insertion index and node appropriately
+		if ([selectedFileContainer isLeafNode]) {
+			insertIndex = [[[selectedFileContainer parentNode] childNodes] indexOfObjectIdenticalTo:selectedFileContainer] + 1;
+			selectedFileContainer = [selectedFileContainer parentNode];
+		}
+		
+		// select the project navigator
+		[[[[self projectDocument] projectWindowController] navigatorControl] setSelectedItemIdentifier:WCProjectWindowNavigatorControlProjectItemIdentifier];
+		
+		// create our new file and file container
+		WCFile *file = [WCFile fileWithFileURL:[self savePanelURL]];
+		WCFileContainer *fileContainer = [WCFileContainer fileContainerWithFile:file];
+		
+		// insert the new file into the outline view
+		[[selectedFileContainer mutableChildNodes] insertObject:fileContainer atIndex:insertIndex];
+		
+		// select the new file
+		[projectNavigatorViewController setSelectedObjects:[NSArray arrayWithObjects:fileContainer, nil]];
+		
+		// post the appropriate notification
+		[[NSNotificationCenter defaultCenter] postNotificationName:WCProjectNavigatorDidAddNodesNotification object:projectNavigatorViewController userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSArray arrayWithObjects:fileContainer, nil],WCProjectNavigatorDidAddNodesNotificationNewNodesUserInfoKey, nil]];
+		
+		// open a new tab for the file
+		[[self projectDocument] openTabForFile:file tabViewContext:nil];
+		
+		// let the document know there was a change
+		[[self projectDocument] updateChangeCount:NSChangeDone];
+	}
+	else {
+		[[WCDocumentController sharedDocumentController] openDocumentWithContentsOfURL:[self savePanelURL] display:YES completionHandler:^(NSDocument *document, BOOL documentWasAlreadyOpen, NSError *error) {
+			if (error)
+				[[NSApplication sharedApplication] presentError:error];
+		}];
+	}
+}
 
 #pragma mark Properties
 @dynamic selectedFileTemplate;
@@ -299,7 +351,7 @@ static const CGFloat kRightSubviewMinimumWidth = 350.0;
 	if (code == NSCancelButton)
 		return;
 	
-	// TODO: create our new file
+	[self _createFileTemplateAndInsertIntoProjectDocument];
 }
 
 @end

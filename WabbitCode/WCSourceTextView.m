@@ -1187,7 +1187,7 @@
 	[self setHorizontallyResizable:NO];
 	[self setImportsGraphics:NO];
 	[self setIncrementalSearchingEnabled:NO];
-	[self setRichText:NO];
+	[self setRichText:YES];
 	[self setSmartInsertDeleteEnabled:NO];
 	[self setVerticallyResizable:YES];
 	[self setMinSize:[[self textContainer] containerSize]];

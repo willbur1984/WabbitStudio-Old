@@ -13,7 +13,7 @@ extern NSString *const WCIncludeFileUTI;
 extern NSString *const WCActiveServerIncludeFileUTI;
 extern NSString *const WCProjectFileUTI;
 
-@class WCOpenPanelAccessoryViewController;
+@class WCOpenPanelAccessoryViewController,WCProjectDocument;
 
 @interface WCDocumentController : NSDocumentController <NSOpenSavePanelDelegate> {
 	NSMutableDictionary *_documentURLsToStringEncodings;
@@ -24,6 +24,7 @@ extern NSString *const WCProjectFileUTI;
 @property (readonly,nonatomic) NSSet *sourceFileDocumentUTIs;
 @property (readonly,nonatomic) NSArray *projectDocuments;
 @property (readonly,nonatomic) NSArray *sourceFileDocuments;
+@property (readonly,nonatomic) WCProjectDocument *currentProjectDocument;
 
 - (NSStringEncoding)explicitStringEncodingForDocumentURL:(NSURL *)documentURL;
 

@@ -72,7 +72,16 @@
 }
 
 - (IBAction)newFile:(id)sender; {
-	[[WCNewFileWindowController sharedWindowController] showNewFileWindow];
+	WCProjectDocument *currentProjectDocument = [[WCDocumentController sharedDocumentController] currentProjectDocument];
+	
+	if (currentProjectDocument) {
+		WCNewFileWindowController *newFileWindowController = [WCNewFileWindowController newFileWindowControllerWithProjectDocument:currentProjectDocument];
+		
+		[newFileWindowController showNewFileWindow];
+	}
+	else {
+		[[WCNewFileWindowController sharedWindowController] showNewFileWindow];
+	}
 }
 - (IBAction)newProject:(id)sender; {
 	[[NSApplication sharedApplication] runModalForWindow:[[WCNewProjectWindowController sharedWindowController] window]];

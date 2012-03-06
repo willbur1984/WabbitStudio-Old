@@ -117,6 +117,12 @@ static NSString *const kHeaderCellIdentifier = @"HeaderCell";
 		[(id)rowView setTableView:nil];
 }
 #pragma mark NSSplitViewDelegate
+- (BOOL)splitView:(NSSplitView *)splitView shouldAdjustSizeOfSubview:(NSView *)view {
+	if ([[splitView subviews] objectAtIndex:0] == view)
+		return NO;
+	return YES;
+}
+
 - (NSRect)splitView:(NSSplitView *)splitView additionalEffectiveRectOfDividerAtIndex:(NSInteger)dividerIndex {
 	return [splitView convertRect:[[self splitterHandleImageView] bounds] fromView:[self splitterHandleImageView]];
 }
@@ -127,6 +133,13 @@ static const CGFloat kRightSubviewMinimumWidth = 350.0;
 }
 - (CGFloat)splitView:(NSSplitView *)splitView constrainMinCoordinate:(CGFloat)proposedMinimumPosition ofSubviewAt:(NSInteger)dividerIndex {
 	return proposedMinimumPosition+kLeftSubviewMinimumWidth;
+}
+#pragma mark RSCollectionViewDelegate
+- (void)handleReturnPressedForCollectionView:(RSCollectionView *)collectionView {
+	[self create:nil];
+}
+- (void)collectionView:(RSCollectionView *)collectionView handleDoubleClickForItemsAtIndexes:(NSIndexSet *)indexes {
+	[self create:nil];
 }
 
 #pragma mark *** Public Methods ***
