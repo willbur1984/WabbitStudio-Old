@@ -128,6 +128,9 @@
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidFold:) name:WCSourceTextStorageDidFoldNotification object:[self textStorage]];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidUnfold:) name:WCSourceTextStorageDidUnfoldNotification object:[self textStorage]];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidAddBookmark:) name:WCSourceTextStorageDidAddBookmarkNotification object:[self textStorage]];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidRemoveBookmark:) name:WCSourceTextStorageDidRemoveBookmarkNotification object:[self textStorage]];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidRemoveAllBookmarks:) name:WCSourceTextStorageDidRemoveAllBookmarksNotification object:[self textStorage]];
 }
 
 - (NSArray *)lineStartIndexes {
@@ -905,6 +908,17 @@ static const CGFloat kTriangleHeight = 6.0;
 }
 - (void)_textStorageDidUnfold:(NSNotification *)note {
 	[self setFoldToHighlight:nil];
+}
+- (void)_textStorageDidAddBookmark:(NSNotification *)note {
+	// TODO: should check to see if the bookmark is in our visibleRect before asking for redisplay
+	[self setNeedsDisplay:YES];
+}
+- (void)_textStorageDidRemoveBookmark:(NSNotification *)note {
+	// TODO: should check to see if the bookmark is in our visibleRect before asking for redisplay
+	[self setNeedsDisplay:YES];
+}
+- (void)_textStorageDidRemoveAllBookmarks:(NSNotification *)note {
+	[self setNeedsDisplay:YES];
 }
 - (void)_buildControllerDidFinishBuilding:(NSNotification *)note {
 	[self setNeedsDisplay:YES];

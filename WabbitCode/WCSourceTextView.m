@@ -1842,15 +1842,13 @@ static const CGFloat kTriangleHeight = 4.0;
 	
 	if (selectedRange.length)
 		return;
-	else if (![self needsToDrawRect:focusFollowsCodeRect])
-		return;
 	
 	WCFold *fold = [[[[self delegate] sourceScannerForSourceTextView:self] folds] deepestFoldForRange:selectedRange];
 	
 	if (!fold)
 		return;
 	
-	static const CGFloat stepAmount = 0.02;
+	static const CGFloat stepAmount = 0.05;
 	NSColor *baseColor = [self backgroundColor];
 	NSMutableArray *rectsAndColorsDictionaries = [NSMutableArray arrayWithCapacity:0];
 	BOOL baseColorIsDark = [baseColor colorIsDark];
@@ -1862,18 +1860,13 @@ static const CGFloat kTriangleHeight = 4.0;
 		if (!rectCount)
 			break;
 		
-		NSRect contentRangeRect;
+		NSMutableArray *contentRangeRects = [NSMutableArray arrayWithCapacity:rectCount];
+		NSUInteger rectIndex;
 		
-		if (rectCount == 1)
-			contentRangeRect = rects[0];
-		else {
-			contentRangeRect = NSZeroRect;
-			
-			for (NSUInteger rectIndex=0; rectIndex<rectCount; rectIndex++)
-				contentRangeRect = NSUnionRect(contentRangeRect, rects[rectIndex]);
-		}
+		for (rectIndex=0; rectIndex<rectCount; rectIndex++)
+			[contentRangeRects addObject:[NSValue valueWithRect:rects[rectIndex]]];
 		
-		[rectsAndColorsDictionaries addObject:[NSDictionary dictionaryWithObjectsAndKeys:[NSValue valueWithRect:contentRangeRect],@"rect",baseColor,@"color", nil]];
+		[rectsAndColorsDictionaries addObject:[NSDictionary dictionaryWithObjectsAndKeys:contentRangeRects,@"rect",baseColor,@"color",fold,@"fold", nil]];
 		
 		CGFloat darkenOrLightenAmount = stepAmount*((CGFloat)[fold level]+1);
 		if (baseColorIsDark)
@@ -1890,7 +1883,9 @@ static const CGFloat kTriangleHeight = 4.0;
 	
 	[rectsAndColorsDictionaries enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(NSDictionary *dict, NSUInteger dictIndex, BOOL *stop) {
 		[[dict objectForKey:@"color"] setFill];
-		[[NSBezierPath bezierPathWithRoundedRect:[[dict objectForKey:@"rect"] rectValue] xRadius:5.0 yRadius:5.0] fill];
+		
+		for (NSValue *rectValue in [dict objectForKey:@"rect"])
+			NSRectFill([rectValue rectValue]);
 	}];
 }
 #pragma mark IBActions
