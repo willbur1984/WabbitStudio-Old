@@ -9,6 +9,7 @@
 #import "WEDebuggerWindowController.h"
 #import "WECalculatorDocument.h"
 #import "RSCalculator.h"
+#import "RSDisassemblyViewController.h"
 
 @interface WEDebuggerWindowController ()
 
@@ -20,6 +21,7 @@
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
+	[_disassemblyViewController release];
 	[super dealloc];
 }
 
@@ -37,6 +39,14 @@
 - (NSString *)windowTitleForDocumentDisplayName:(NSString *)displayName {
 	return [NSString stringWithFormat:NSLocalizedString(@"%@ - Debugger", @"debugger window title format string"),displayName];
 }
+
+- (void)windowDidLoad {
+	[super windowDidLoad];
+	
+	[[[self disassemblyViewController] view] setFrameSize:[[self disassemblyDummyView] frame].size];
+	[[[self disassemblyDummyView] superview] replaceSubview:[self disassemblyDummyView] with:[[self disassemblyViewController] view]];
+}
+
 #pragma mark NSWindowDelegate
 - (void)windowWillClose:(NSNotification *)notification {
 	[[[self calculatorDocument] calculator] setDebugging:NO];
@@ -45,9 +55,17 @@
 #pragma mark *** Public Methods ***
 
 #pragma mark Properties
+@synthesize disassemblyDummyView=_disassemblyDummyView;
+
 @dynamic calculatorDocument;
 - (WECalculatorDocument *)calculatorDocument {
 	return (WECalculatorDocument *)[self document];
+}
+@dynamic disassemblyViewController;
+- (RSDisassemblyViewController *)disassemblyViewController {
+	if (!_disassemblyViewController)
+		_disassemblyViewController = [[RSDisassemblyViewController alloc] initWithCalculator:[[self calculatorDocument] calculator]];
+	return _disassemblyViewController;
 }
 
 @end

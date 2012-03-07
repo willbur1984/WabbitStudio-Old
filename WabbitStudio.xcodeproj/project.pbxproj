@@ -523,10 +523,43 @@
 		07F5F77114A5A91800F1F326 /* NSString+WCExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F5F77014A5A91700F1F326 /* NSString+WCExtensions.m */; };
 		07F5F77414A5BC5700F1F326 /* NDTrie.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F5F77314A5BC5600F1F326 /* NDTrie.m */; };
 		07F6EFF314D7B20A00138231 /* NDKeyboardLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F6EFF214D7B20A00138231 /* NDKeyboardLayout.m */; };
+		07FCEDC51507EAB900595ADA /* RSDisassemblyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07FCEDC41507EAB900595ADA /* RSDisassemblyViewController.m */; };
+		07FCEDC61507EAB900595ADA /* RSDisassemblyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07FCEDC41507EAB900595ADA /* RSDisassemblyViewController.m */; };
+		07FCEDCA1507EACE00595ADA /* RSDisassemblyView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07FCEDC81507EACE00595ADA /* RSDisassemblyView.xib */; };
+		07FCEDCB1507EACE00595ADA /* RSDisassemblyView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07FCEDC81507EACE00595ADA /* RSDisassemblyView.xib */; };
+		07FCEDCC1507EED600595ADA /* VerticalSeparator.png in Resources */ = {isa = PBXBuildFile; fileRef = 0725436714A7F66500C961B7 /* VerticalSeparator.png */; };
+		07FCEDCD1507EFE200595ADA /* RSTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0725434114A79A0000C961B7 /* RSTableView.m */; };
+		07FCEDCE1507F58D00595ADA /* RSHexadecimalFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0746EE6114F177E800354643 /* RSHexadecimalFormatter.m */; };
+		07FCEDCF1507F5B100595ADA /* NSString+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07892ED914B81375006FDB52 /* NSString+RSExtensions.m */; };
+		07FCEDD21507F5CE00595ADA /* RSDisassemblyAddressFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 07FCEDD11507F5CE00595ADA /* RSDisassemblyAddressFormatter.m */; };
+		07FCEDD31507F5CE00595ADA /* RSDisassemblyAddressFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 07FCEDD11507F5CE00595ADA /* RSDisassemblyAddressFormatter.m */; };
+		07FCEDF3150815C600595ADA /* RSDisassemblyFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 07FCEDF2150815C600595ADA /* RSDisassemblyFormatter.m */; };
+		07FCEDF4150815C600595ADA /* RSDisassemblyFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 07FCEDF2150815C600595ADA /* RSDisassemblyFormatter.m */; };
+		07FCEDF715081A8B00595ADA /* RSDisassemblyTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07FCEDF615081A8B00595ADA /* RSDisassemblyTableView.m */; };
+		07FCEDF815081A8B00595ADA /* RSDisassemblyTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07FCEDF615081A8B00595ADA /* RSDisassemblyTableView.m */; };
+		07FCEDF915081B3800595ADA /* RSNoHighlightColorTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0745BE1414AAE2CF00F541DC /* RSNoHighlightColorTextFieldCell.m */; };
+		07FCEDFA15081C3C00595ADA /* NSBezierPath+StrokeExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0708963D14A67D1A0017BBE4 /* NSBezierPath+StrokeExtensions.m */; };
 		07FF7B3F14C763EB000AE014 /* UKFileWatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 07FF7B3C14C763EB000AE014 /* UKFileWatcher.m */; };
 		07FF7B4014C763EB000AE014 /* UKKQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 07FF7B3E14C763EB000AE014 /* UKKQueue.m */; };
 		07FF7B4314C763FC000AE014 /* UKMainThreadProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 07FF7B4214C763FC000AE014 /* UKMainThreadProxy.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		07FCEDEC1508118800595ADA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 071ECCB514A4233C002409F8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0742293D14FD948700EDA215;
+			remoteInfo = WabbitCodeQLPlugin;
+		};
+		07FCEDEE1508118C00595ADA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 071ECCB514A4233C002409F8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 073737AE14FC206C00B11AFC;
+			remoteInfo = WabbitEmuQLPlugin;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		073737EF14FC247900B11AFC /* Copy QuickLook Plugin */ = {
@@ -1327,6 +1360,16 @@
 		07F5F77314A5BC5600F1F326 /* NDTrie.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NDTrie.m; sourceTree = "<group>"; };
 		07F6EFF114D7B20A00138231 /* NDKeyboardLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDKeyboardLayout.h; sourceTree = "<group>"; };
 		07F6EFF214D7B20A00138231 /* NDKeyboardLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NDKeyboardLayout.m; sourceTree = "<group>"; };
+		07FCEDC31507EAB900595ADA /* RSDisassemblyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSDisassemblyViewController.h; sourceTree = "<group>"; };
+		07FCEDC41507EAB900595ADA /* RSDisassemblyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSDisassemblyViewController.m; sourceTree = "<group>"; };
+		07FCEDC91507EACE00595ADA /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = RSDisassemblyView.xib; sourceTree = "<group>"; };
+		07FCEDD01507F5CE00595ADA /* RSDisassemblyAddressFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSDisassemblyAddressFormatter.h; sourceTree = "<group>"; };
+		07FCEDD11507F5CE00595ADA /* RSDisassemblyAddressFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSDisassemblyAddressFormatter.m; sourceTree = "<group>"; };
+		07FCEDDC150810CA00595ADA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		07FCEDF1150815C600595ADA /* RSDisassemblyFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSDisassemblyFormatter.h; sourceTree = "<group>"; };
+		07FCEDF2150815C600595ADA /* RSDisassemblyFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSDisassemblyFormatter.m; sourceTree = "<group>"; };
+		07FCEDF515081A8B00595ADA /* RSDisassemblyTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSDisassemblyTableView.h; sourceTree = "<group>"; };
+		07FCEDF615081A8B00595ADA /* RSDisassemblyTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSDisassemblyTableView.m; sourceTree = "<group>"; };
 		07FF7B3B14C763EB000AE014 /* UKFileWatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UKFileWatcher.h; sourceTree = "<group>"; };
 		07FF7B3C14C763EB000AE014 /* UKFileWatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UKFileWatcher.m; sourceTree = "<group>"; };
 		07FF7B3D14C763EB000AE014 /* UKKQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UKKQueue.h; sourceTree = "<group>"; };
@@ -1780,6 +1823,7 @@
 				073737B214FC206C00B11AFC /* ApplicationServices.framework */,
 				073737B414FC206C00B11AFC /* CoreServices.framework */,
 				073737B614FC206C00B11AFC /* CoreFoundation.framework */,
+				07FCEDDC150810CA00595ADA /* Foundation.framework */,
 				071ECCC414A4233C002409F8 /* Other Frameworks */,
 			);
 			path = Frameworks;
@@ -2209,6 +2253,14 @@
 				07AB505214F5475C005AA724 /* RSTransferFileWindowController.h */,
 				07AB505314F5475C005AA724 /* RSTransferFileWindowController.m */,
 				07AB505614F5478E005AA724 /* RSTransferFileWindowControllerDelegate.h */,
+				07FCEDC31507EAB900595ADA /* RSDisassemblyViewController.h */,
+				07FCEDC41507EAB900595ADA /* RSDisassemblyViewController.m */,
+				07FCEDD01507F5CE00595ADA /* RSDisassemblyAddressFormatter.h */,
+				07FCEDD11507F5CE00595ADA /* RSDisassemblyAddressFormatter.m */,
+				07FCEDF1150815C600595ADA /* RSDisassemblyFormatter.h */,
+				07FCEDF2150815C600595ADA /* RSDisassemblyFormatter.m */,
+				07FCEDF515081A8B00595ADA /* RSDisassemblyTableView.h */,
+				07FCEDF615081A8B00595ADA /* RSDisassemblyTableView.m */,
 				075D2FD714F408E1007F8951 /* wabbitemu */,
 			);
 			name = Emulator;
@@ -2533,6 +2585,7 @@
 				078F041A14AD78640080ADBC /* RSFindBarView.xib */,
 				072880CC14B4F9030082DE4C /* RSBezelWindow.xib */,
 				07AB505814F5577A005AA724 /* RSTransferFileWindow.xib */,
+				07FCEDC81507EACE00595ADA /* RSDisassemblyView.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -2837,10 +2890,12 @@
 				071ECCBC14A4233C002409F8 /* Resources */,
 				0791BE5514ADA3CD0004AC16 /* Copy Private Frameworks */,
 				0742295514FDB1A500EDA215 /* Copy QuickLook Plugin */,
+				07FCEDD415080AF500595ADA /* Internationalize Source Code */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				07FCEDED1508118800595ADA /* PBXTargetDependency */,
 			);
 			name = WabbitCode;
 			productName = WabbitEdit;
@@ -2893,10 +2948,12 @@
 				075D2FB514F36779007F8951 /* Frameworks */,
 				075D2FB614F36779007F8951 /* Resources */,
 				073737EF14FC247900B11AFC /* Copy QuickLook Plugin */,
+				07FCEDF0150814A700595ADA /* Internationalize Source Code */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				07FCEDEF1508118C00595ADA /* PBXTargetDependency */,
 			);
 			name = WabbitEmu;
 			productName = WabbitEmu;
@@ -3050,6 +3107,7 @@
 				0742296F14FDDBC600EDA215 /* Build.png in Resources */,
 				078CF02815011B99001E13E3 /* File Templates in Resources */,
 				078CF0331501480F001E13E3 /* WCNewFileWindow.xib in Resources */,
+				07FCEDCA1507EACE00595ADA /* RSDisassemblyView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3100,6 +3158,8 @@
 				077CC16014F6DE2600713ED8 /* WEHardwareView.xib in Resources */,
 				0742295C14FDB83E00EDA215 /* WEDebuggerWindow.xib in Resources */,
 				0742296D14FDD4E700EDA215 /* wabbitstudio.icns in Resources */,
+				07FCEDCB1507EACE00595ADA /* RSDisassemblyView.xib in Resources */,
+				07FCEDCC1507EED600595ADA /* VerticalSeparator.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3121,6 +3181,37 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXRezBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		07FCEDD415080AF500595ADA /* Internationalize Source Code */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Internationalize Source Code";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/zsh;
+			shellScript = "# -q silences duplicate comments with same key warning\nfind . -name \\*.m -not -path \"./External/*\" -print0 | xargs -0 genstrings -q -o ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/en.lproj -1";
+		};
+		07FCEDF0150814A700595ADA /* Internationalize Source Code */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Internationalize Source Code";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/zsh;
+			shellScript = "# -q silences duplicate comments with same key warning\nfind . -name \\*.m -not -path \"./External/*\" -print0 | xargs -0 genstrings -q -o ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/en.lproj -1";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		071ECCBA14A4233C002409F8 /* Sources */ = {
@@ -3400,6 +3491,10 @@
 				07BCB53514FF169400314A25 /* NSURL+WCExtensions.m in Sources */,
 				078CF02D15011C7A001E13E3 /* WCFileTemplate.m in Sources */,
 				078CF030150147EA001E13E3 /* WCNewFileWindowController.m in Sources */,
+				07FCEDC51507EAB900595ADA /* RSDisassemblyViewController.m in Sources */,
+				07FCEDD21507F5CE00595ADA /* RSDisassemblyAddressFormatter.m in Sources */,
+				07FCEDF3150815C600595ADA /* RSDisassemblyFormatter.m in Sources */,
+				07FCEDF715081A8B00595ADA /* RSDisassemblyTableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3506,10 +3601,32 @@
 				073737A814FC0CB300B11AFC /* RSVerticallyCenteredTextFieldCell.m in Sources */,
 				0742295914FDB82F00EDA215 /* WEDebuggerWindowController.m in Sources */,
 				0742295D14FDB86100EDA215 /* KBResponderNotifyingWindow.m in Sources */,
+				07FCEDC61507EAB900595ADA /* RSDisassemblyViewController.m in Sources */,
+				07FCEDCD1507EFE200595ADA /* RSTableView.m in Sources */,
+				07FCEDCE1507F58D00595ADA /* RSHexadecimalFormatter.m in Sources */,
+				07FCEDCF1507F5B100595ADA /* NSString+RSExtensions.m in Sources */,
+				07FCEDD31507F5CE00595ADA /* RSDisassemblyAddressFormatter.m in Sources */,
+				07FCEDF4150815C600595ADA /* RSDisassemblyFormatter.m in Sources */,
+				07FCEDF815081A8B00595ADA /* RSDisassemblyTableView.m in Sources */,
+				07FCEDF915081B3800595ADA /* RSNoHighlightColorTextFieldCell.m in Sources */,
+				07FCEDFA15081C3C00595ADA /* NSBezierPath+StrokeExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		07FCEDED1508118800595ADA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0742293D14FD948700EDA215 /* WabbitCodeQLPlugin */;
+			targetProxy = 07FCEDEC1508118800595ADA /* PBXContainerItemProxy */;
+		};
+		07FCEDEF1508118C00595ADA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 073737AE14FC206C00B11AFC /* WabbitEmuQLPlugin */;
+			targetProxy = 07FCEDEE1508118C00595ADA /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		07018B1214C6011E00C5A7AC /* WCOpenQuicklyWindow.xib */ = {
@@ -3953,6 +4070,14 @@
 				07EB8E3B14B64DB600F8A8C6 /* en */,
 			);
 			name = WCKeyboardView.xib;
+			sourceTree = "<group>";
+		};
+		07FCEDC81507EACE00595ADA /* RSDisassemblyView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				07FCEDC91507EACE00595ADA /* en */,
+			);
+			name = RSDisassemblyView.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

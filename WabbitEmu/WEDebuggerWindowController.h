@@ -8,10 +8,14 @@
 
 #import <AppKit/NSWindowController.h>
 
-@class WECalculatorDocument;
+@class WECalculatorDocument,RSDisassemblyViewController;
 
-@interface WEDebuggerWindowController : NSWindowController <NSWindowDelegate>
+@interface WEDebuggerWindowController : NSWindowController <NSWindowDelegate> {
+	RSDisassemblyViewController *_disassemblyViewController;
+}
+@property (readwrite,assign,nonatomic) IBOutlet NSView *disassemblyDummyView;
 
 @property (readonly,nonatomic) WECalculatorDocument *calculatorDocument;
+@property (readonly,nonatomic) RSDisassemblyViewController *disassemblyViewController;
 
 @end
