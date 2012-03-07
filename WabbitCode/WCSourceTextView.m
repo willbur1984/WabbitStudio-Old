@@ -1842,13 +1842,15 @@ static const CGFloat kTriangleHeight = 4.0;
 	
 	if (selectedRange.length)
 		return;
+	else if (![self needsToDrawRect:focusFollowsCodeRect])
+		return;
 	
 	WCFold *fold = [[[[self delegate] sourceScannerForSourceTextView:self] folds] deepestFoldForRange:selectedRange];
 	
 	if (!fold)
 		return;
 	
-	static const CGFloat stepAmount = 0.1;
+	static const CGFloat stepAmount = 0.02;
 	NSColor *baseColor = [self backgroundColor];
 	NSMutableArray *rectsAndColorsDictionaries = [NSMutableArray arrayWithCapacity:0];
 	BOOL baseColorIsDark = [baseColor colorIsDark];
@@ -1858,7 +1860,7 @@ static const CGFloat kTriangleHeight = 4.0;
 		NSRectArray rects = [[self layoutManager] rectArrayForCharacterRange:[fold contentRange] withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[self textContainer] rectCount:&rectCount];
 		
 		if (!rectCount)
-			return;
+			break;
 		
 		NSRect contentRangeRect;
 		
@@ -1873,13 +1875,13 @@ static const CGFloat kTriangleHeight = 4.0;
 		
 		[rectsAndColorsDictionaries addObject:[NSDictionary dictionaryWithObjectsAndKeys:[NSValue valueWithRect:contentRangeRect],@"rect",baseColor,@"color", nil]];
 		
-		fold = [fold parentNode];
-		
 		CGFloat darkenOrLightenAmount = stepAmount*((CGFloat)[fold level]+1);
 		if (baseColorIsDark)
 			baseColor = [baseColor darkenBy:-darkenOrLightenAmount];
 		else
 			baseColor = [baseColor darkenBy:darkenOrLightenAmount];
+		
+		fold = [fold parentNode];
 		
 	} while (fold);
 	

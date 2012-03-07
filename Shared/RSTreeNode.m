@@ -149,22 +149,17 @@ static NSString *const RSTreeNodeRepresentedObjectKey = @"representedObject";
 - (NSArray *)childNodesAtIndexes:(NSIndexSet *)indexes {
 	return [_childNodes objectsAtIndexes:indexes];
 }
-- (void)insertChildNodes:(NSArray *)array atIndexes:(NSIndexSet *)indexes {
+- (void)insertChildNodes:(NSArray *)array atIndexes:(NSIndexSet *)indexes {	
 	for (RSTreeNode *node in array)
 		[node setParentNode:self];
 	[_childNodes insertObjects:array atIndexes:indexes];
 }
 - (void)removeChildNodesAtIndexes:(NSIndexSet *)indexes {
-	for (RSTreeNode *node in [_childNodes objectsAtIndexes:indexes])
-		[node setParentNode:nil];
 	[_childNodes removeObjectsAtIndexes:indexes];
 }
 - (void)replaceChildNodesAtIndexes:(NSIndexSet *)indexes withChildNodes:(NSArray *)array {
-	for (RSTreeNode *node in [_childNodes objectsAtIndexes:indexes])
-		[node setParentNode:nil];
 	for (RSTreeNode *node in array)
 		[node setParentNode:self];
-	
 	[_childNodes replaceObjectsAtIndexes:indexes withObjects:array];
 }
 @synthesize representedObject=_representedObject;
