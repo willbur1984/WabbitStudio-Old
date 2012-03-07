@@ -25,6 +25,9 @@
 
 @interface WCNewProjectWindowController ()
 @property (readonly,nonatomic) WCProjectTemplate *selectedProjectTemplate;
+
+- (void)_loadApplicationProjectTemplates;
+- (void)_loadUserProjectTemplates;
 @end
 
 @implementation WCNewProjectWindowController
@@ -45,34 +48,8 @@
 - (void)windowWillLoad {
 	[super windowWillLoad];
 	
-	WCTemplateCategory *applicationCategories = [WCTemplateCategory templateCategoryWithURL:nil header:YES];
-	[applicationCategories setName:NSLocalizedString(@"Built-in Templates", @"Built-in Templates")];
-	[applicationCategories setIcon:[NSImage imageNamed:NSImageNameComputer]];
-	
-	[_categories addObject:applicationCategories];
-	
-	NSDirectoryEnumerator *categoryEnumerator = [[NSFileManager defaultManager] enumeratorAtURL:[[WCMiscellaneousPerformer sharedPerformer] applicationProjectTemplatesDirectoryURL] includingPropertiesForKeys:[NSArray array] options:NSDirectoryEnumerationSkipsHiddenFiles|NSDirectoryEnumerationSkipsSubdirectoryDescendants|NSDirectoryEnumerationSkipsPackageDescendants errorHandler:^BOOL(NSURL *url, NSError *error) {
-		return YES;
-	}];
-	
-	for (NSURL *categoryURL in categoryEnumerator) {
-		WCTemplateCategory *category = [WCTemplateCategory templateCategoryWithURL:categoryURL];
-		
-		[_categories addObject:category];
-		
-		NSDirectoryEnumerator *templateEnumerator = [[NSFileManager defaultManager] enumeratorAtURL:categoryURL includingPropertiesForKeys:[NSArray array] options:NSDirectoryEnumerationSkipsHiddenFiles|NSDirectoryEnumerationSkipsPackageDescendants|NSDirectoryEnumerationSkipsSubdirectoryDescendants errorHandler:^BOOL(NSURL *url, NSError *error) {
-			return YES;
-		}];
-		
-		for (NSURL *templateURL in templateEnumerator) {
-			WCProjectTemplate *template = [WCProjectTemplate projectTemplateWithURL:templateURL];
-			
-			if (template) {
-				[template setIcon:[NSImage imageNamed:@"project"]];
-				[[category mutableChildNodes] addObject:template];
-			}
-		}
-	}
+	[self _loadApplicationProjectTemplates];
+	[self _loadUserProjectTemplates];
 }
 
 - (void)windowDidLoad {
@@ -308,7 +285,72 @@ static const CGFloat kRightSubviewMinimumWidth = 350.0;
 }
 
 #pragma mark *** Private Methods ***
-
+- (void)_loadApplicationProjectTemplates; {
+	WCTemplateCategory *applicationCategories = [WCTemplateCategory templateCategoryWithURL:nil header:YES];
+	[applicationCategories setName:NSLocalizedString(@"Built-in Templates", @"Built-in Templates")];
+	[applicationCategories setIcon:[NSImage imageNamed:NSImageNameComputer]];
+	
+	[_categories addObject:applicationCategories];
+	
+	NSDirectoryEnumerator *categoryEnumerator = [[NSFileManager defaultManager] enumeratorAtURL:[[WCMiscellaneousPerformer sharedPerformer] applicationProjectTemplatesDirectoryURL] includingPropertiesForKeys:[NSArray array] options:NSDirectoryEnumerationSkipsHiddenFiles|NSDirectoryEnumerationSkipsSubdirectoryDescendants|NSDirectoryEnumerationSkipsPackageDescendants errorHandler:^BOOL(NSURL *url, NSError *error) {
+		return YES;
+	}];
+	
+	for (NSURL *categoryURL in categoryEnumerator) {
+		WCTemplateCategory *category = [WCTemplateCategory templateCategoryWithURL:categoryURL];
+		
+		[_categories addObject:category];
+		
+		NSDirectoryEnumerator *templateEnumerator = [[NSFileManager defaultManager] enumeratorAtURL:categoryURL includingPropertiesForKeys:[NSArray array] options:NSDirectoryEnumerationSkipsHiddenFiles|NSDirectoryEnumerationSkipsPackageDescendants|NSDirectoryEnumerationSkipsSubdirectoryDescendants errorHandler:^BOOL(NSURL *url, NSError *error) {
+			return YES;
+		}];
+		
+		for (NSURL *templateURL in templateEnumerator) {
+			WCProjectTemplate *template = [WCProjectTemplate projectTemplateWithURL:templateURL];
+			
+			if (template) {
+				[template setIcon:[NSImage imageNamed:@"project"]];
+				[[category mutableChildNodes] addObject:template];
+			}
+		}
+	}
+}
+- (void)_loadUserProjectTemplates; {
+	NSMutableArray *userTemplates = [NSMutableArray arrayWithCapacity:0];
+	NSDirectoryEnumerator *categoryEnumerator = [[NSFileManager defaultManager] enumeratorAtURL:[[WCMiscellaneousPerformer sharedPerformer] userProjectTemplatesDirectoryURL] includingPropertiesForKeys:[NSArray array] options:NSDirectoryEnumerationSkipsHiddenFiles|NSDirectoryEnumerationSkipsSubdirectoryDescendants|NSDirectoryEnumerationSkipsPackageDescendants errorHandler:^BOOL(NSURL *url, NSError *error) {
+		return YES;
+	}];
+	
+	for (NSURL *categoryURL in categoryEnumerator) {
+		WCTemplateCategory *category = [WCTemplateCategory templateCategoryWithURL:categoryURL];
+		
+		NSDirectoryEnumerator *templateEnumerator = [[NSFileManager defaultManager] enumeratorAtURL:categoryURL includingPropertiesForKeys:[NSArray array] options:NSDirectoryEnumerationSkipsHiddenFiles|NSDirectoryEnumerationSkipsPackageDescendants|NSDirectoryEnumerationSkipsSubdirectoryDescendants errorHandler:^BOOL(NSURL *url, NSError *error) {
+			return YES;
+		}];
+		
+		for (NSURL *templateURL in templateEnumerator) {
+			WCProjectTemplate *template = [WCProjectTemplate projectTemplateWithURL:templateURL];
+			
+			if (template) {
+				[template setIcon:[NSImage imageNamed:@"project"]];
+				[[category mutableChildNodes] addObject:template];
+			}
+		}
+		
+		if ([[category childNodes] count])
+			[userTemplates addObject:category];
+	}
+	
+	if ([userTemplates count]) {
+		WCTemplateCategory *userCategories = [WCTemplateCategory templateCategoryWithURL:nil header:YES];
+		
+		[userCategories setName:NSLocalizedString(@"User Templates", @"User Templates")];
+		[userCategories setIcon:[NSImage imageNamed:NSImageNameUser]];
+		
+		[_categories addObject:userCategories];
+		[_categories addObjectsFromArray:userTemplates];
+	}
+}
 #pragma mark Properties
 @dynamic selectedProjectTemplate;
 - (WCProjectTemplate *)selectedProjectTemplate {

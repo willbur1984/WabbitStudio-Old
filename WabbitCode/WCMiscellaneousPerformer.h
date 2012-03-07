@@ -18,8 +18,10 @@
 @property (readonly,nonatomic) NSURL *userKeyBindingCommandSetsDirectoryURL;
 
 @property (readonly,nonatomic) NSURL *applicationProjectTemplatesDirectoryURL;
+@property (readonly,nonatomic) NSURL *userProjectTemplatesDirectoryURL;
 
 @property (readonly,nonatomic) NSURL *applicationFileTemplatesDirectoryURL;
+@property (readonly,nonatomic) NSURL *userFileTemplatesDirectoryURL;
 
 @property (readonly,nonatomic) NSURL *applicationIncludeFilesDirectoryURL;
 
