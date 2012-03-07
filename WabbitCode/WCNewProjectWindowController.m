@@ -213,7 +213,17 @@ static const CGFloat kRightSubviewMinimumWidth = 350.0;
 		}
 	}
 	
-	return [self createProjectWithContentsOfDirectory:projectDirectoryURL error:outError];
+	WCProjectDocument *projectDocument = [self createProjectWithContentsOfDirectory:projectDirectoryURL error:outError];
+	
+	if (!projectDocument)
+		return nil;
+	
+	WCBuildTarget *buildTarget = [WCBuildTarget buildTargetWithName:NSLocalizedString(@"New Target", @"New Target") outputType:[projectTemplate outputType] projectDocument:projectDocument];
+	
+	[[projectDocument mutableBuildTargets] addObject:buildTarget];
+	[buildTarget setActive:YES];
+	
+	return projectDocument;
 }
 #pragma mark IBActions
 - (IBAction)cancel:(id)sender; {

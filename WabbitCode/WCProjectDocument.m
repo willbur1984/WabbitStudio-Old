@@ -244,6 +244,11 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 		}
 	}
 	
+	// WCProject needs to start observing our build targets and their properties, but it needs to happen on the main thread
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[[projectContainer representedObject] performSetup];
+	});
+	
 	NSFileWrapper *settingsDataWrapper = [[fileWrapper fileWrappers] objectForKey:[NSUserName() stringByAppendingPathExtension:WCProjectSettingsFileExtension]];
 	if (!settingsDataWrapper)
 		return YES;
@@ -567,6 +572,8 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	
 	[[self breakpointManager] performCleanup];
 	[[self buildController] performCleanup];
+	
+	[[[self projectContainer] representedObject] performCleanup];
 }
 - (void)_buildControllerDidFinishBuilding:(NSNotification *)note {
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:WCBuildControllerDidFinishBuildingNotification object:nil];

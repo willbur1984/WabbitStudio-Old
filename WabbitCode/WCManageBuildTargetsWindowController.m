@@ -98,16 +98,14 @@
 			
 			if (changeKind == NSKeyValueChangeInsertion) {
 				NSArray *buildTargets = [change objectForKey:NSKeyValueChangeNewKey];
-				NSIndexSet *indexes = [change objectForKey:NSKeyValueChangeIndexesKey];
 				
-				for (WCBuildTarget *buildTarget in [buildTargets objectsAtIndexes:indexes])
+				for (WCBuildTarget *buildTarget in buildTargets)
 					[self _startObservingBuildTarget:buildTarget];
 			}
 			else if (changeKind == NSKeyValueChangeRemoval) {
 				NSArray *buildTargets = [change objectForKey:NSKeyValueChangeOldKey];
-				NSIndexSet *indexes = [change objectForKey:NSKeyValueChangeIndexesKey];
 				
-				for (WCBuildTarget *buildTarget in [buildTargets objectsAtIndexes:indexes])
+				for (WCBuildTarget *buildTarget in buildTargets)
 					[self _stopObservingBuildTarget:buildTarget];
 			}
 			
@@ -196,6 +194,11 @@ static NSString *const kOutputTypeColumnIdentifier = @"outputType";
 	
 }
 - (IBAction)deleteBuildTarget:(id)sender; {
+	if ([[[self arrayController] selectedObjects] indexOfObjectIdenticalTo:[[self projectDocument] activeBuildTarget]] != NSNotFound) {
+		NSBeep();
+		return;
+	}
+	
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCAlertsWarnBeforeDeletingBuildTargetsKey]) {
 		NSString *message;
 		if ([[[self arrayController] selectionIndexes] count] == 1)

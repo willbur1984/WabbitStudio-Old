@@ -18,4 +18,7 @@
 
 + (id)projectWithDocument:(WCProjectDocument *)document;
 - (id)initWithDocument:(WCProjectDocument *)document;
+
+- (void)performSetup;
+- (void)performCleanup;
 @end

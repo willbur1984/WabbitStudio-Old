@@ -9,6 +9,7 @@
 #import "WCProjectTemplate.h"
 
 NSString *const WCProjectTemplateInfoIncludeFileNamesKey = @"includeFileNames";
+NSString *const WCProjectTemplateInfoOutputTypeKey = @"outputType";
 
 @implementation WCProjectTemplate
 + (id)projectTemplateWithURL:(NSURL *)url; {
@@ -18,6 +19,10 @@ NSString *const WCProjectTemplateInfoIncludeFileNamesKey = @"includeFileNames";
 @dynamic includeFiles;
 - (NSArray *)includeFiles {
 	return [[self info] objectForKey:WCProjectTemplateInfoIncludeFileNamesKey];
+}
+@dynamic outputType;
+- (WCBuildTargetOutputType)outputType {
+	return [[[self info] objectForKey:WCProjectTemplateInfoOutputTypeKey] unsignedIntegerValue];
 }
 
 @end
