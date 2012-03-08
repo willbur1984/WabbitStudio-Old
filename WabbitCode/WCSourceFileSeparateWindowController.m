@@ -15,6 +15,7 @@
 #import "WCProjectWindowController.h"
 #import "WCProjectNavigatorViewController.h"
 #import "NSTreeController+RSExtensions.h"
+#import "RSNavigatorControl.h"
 
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
@@ -56,7 +57,7 @@
 	WCProjectNavigatorViewController *projectNavigatorViewController = [[[self projectDocument] projectWindowController] projectNavigatorViewController];
 	NSTableCellView *view = [[projectNavigatorViewController outlineView] viewAtColumn:0 row:itemRow makeIfNecessary:NO];
 	
-	if (view) {
+	if (view && [[[[[self projectDocument] projectWindowController] navigatorControl] selectedItemIdentifier] isEqualToString:WCProjectWindowNavigatorControlProjectItemIdentifier]) {
 		NSRect zoomRect = [[view window] convertRectToScreen:[view convertRectToBase:[[view imageView] bounds]]];
 		
 		[[self window] orderOutWithZoomEffectToRect:zoomRect];
