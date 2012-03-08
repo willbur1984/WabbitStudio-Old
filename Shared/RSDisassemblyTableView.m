@@ -15,7 +15,7 @@
 - (void)highlightSelectionInClipRect:(NSRect)clipRect {
 	NSColor *programCounterColor = [NSColor colorWithCalibratedRed:0.95 green:0.95 blue:0.0 alpha:1.0];
 	NSColor *programCounterHaltColor = [NSColor orangeColor];
-	NSColor *breakpointColor = [NSColor colorWithCalibratedRed:0.95 green:0.0 blue:0.0 alpha:1.0];
+	//NSColor *breakpointColor = [NSColor colorWithCalibratedRed:0.95 green:0.0 blue:0.0 alpha:1.0];
 	NSGradient *selectedProgramCounterFirstResponderGradient = [[[NSGradient alloc] initWithStartingColor:programCounterColor endingColor:[NSColor alternateSelectedControlColor]] autorelease];
 	NSGradient *selectedProgramCounterHaltFirstResponderGradient = [[[NSGradient alloc] initWithStartingColor:programCounterHaltColor endingColor:[NSColor alternateSelectedControlColor]] autorelease];
 	NSGradient *selectedProgramCounterGradient = [[[NSGradient alloc] initWithStartingColor:programCounterColor endingColor:[NSColor secondarySelectedControlColor]] autorelease];

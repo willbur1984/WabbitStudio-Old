@@ -194,7 +194,19 @@
 	}
 	else {
 		dispatch_async(dispatch_get_main_queue(), ^{
-			[[self searchNavigatorViewController] setStatusString:[NSString stringWithFormat:NSLocalizedString(@"%lu result(s) in %lu file(s)", @"search navigator status format string"),numberOfSearchResults,[[self searchDocuments] count]]];
+			NSString *resultsString;
+			if (numberOfSearchResults == 1)
+				resultsString = NSLocalizedString(@"1 result", @"1 result");
+			else
+				resultsString = [NSString stringWithFormat:NSLocalizedString(@"%lu results", @"%lu results"),numberOfSearchResults];
+			
+			NSString *documentsString;
+			if ([[self searchDocuments] count] == 1)
+				documentsString = NSLocalizedString(@"1 file", @"1 file");
+			else
+				documentsString = [NSString stringWithFormat:NSLocalizedString(@"%lu files", @"%lu files"),[[self searchDocuments] count]];
+			
+			[[self searchNavigatorViewController] setStatusString:[NSString stringWithFormat:NSLocalizedString(@"%@ in %@", @"search navigator status format string"),resultsString,documentsString]];
 			[[self searchNavigatorViewController] setSearching:NO];
 			
 			[[[self searchNavigatorViewController] searchContainer] willChangeValueForKey:@"searchStatus"];
