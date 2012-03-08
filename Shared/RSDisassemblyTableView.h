@@ -8,6 +8,8 @@
 
 #import "RSTableView.h"
 
-@interface RSDisassemblyTableView : RSTableView
+@class RSDisassemblyViewController;
 
+@interface RSDisassemblyTableView : RSTableView 
+@property (readwrite,assign,nonatomic) IBOutlet RSDisassemblyViewController *disassemblyViewController;
 @end

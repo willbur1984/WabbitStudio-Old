@@ -12,7 +12,7 @@
 
 
 @interface RSDisassemblyViewController ()
-
+- (void)_reloadDisassemblyInfos;
 @end
 
 @implementation RSDisassemblyViewController
@@ -20,8 +20,10 @@
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
-	[_calculator release];
+	[_calculator removeObserver:self forKeyPath:@"programCounter" context:self];
+	
 	free(_z80_info);
+	[_calculator release];
 	[super dealloc];
 }
 
@@ -30,11 +32,20 @@
 }
 
 - (void)loadView {
-	_z80_info = calloc(sizeof(Z80_info_t), UINT16_MAX);
-	
-	disassemble([[self calculator] calculator], REGULAR, addr_to_waddr(&([[self calculator] calculator]->mem_c), 0), UINT16_MAX, _z80_info);
+	[self _reloadDisassemblyInfos];
 	
 	[super loadView];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+	if (context == self) {
+		if ([keyPath isEqualToString:@"programCounter"]) {
+			[self _reloadDisassemblyInfos];
+			[self jumpToAddress:[[self calculator] programCounter]];
+		}
+	}
+	else
+		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
 
 static NSString *const kAddressColumnIdentifier = @"address";
@@ -82,9 +93,41 @@ static NSString *const kSizeColumnIdentifier = @"size";
 	
 	_calculator = [calculator retain];
 	
+	[calculator addObserver:self forKeyPath:@"programCounter" options:0 context:self];
+	
 	return self;
 }
 
+- (void)jumpToAddress:(uint16_t)address; {
+	NSUInteger infoIndex;
+	
+	for (infoIndex=0; infoIndex<UINT16_MAX; infoIndex++) {
+		Z80_info_t info = _z80_info[infoIndex];
+		
+		if (info.waddr.addr >= address) {
+			[[self tableView] selectRowIndexes:[NSIndexSet indexSetWithIndex:infoIndex] byExtendingSelection:NO];
+			[[self tableView] scrollRowToVisible:infoIndex];
+			return;
+		}
+	}
+	
+	NSBeep();
+}
+
+@synthesize tableView=_tableView;
+
 @synthesize calculator=_calculator;
+@synthesize Z80_infos=_z80_info;
+
+- (void)_reloadDisassemblyInfos; {
+	if (_z80_info)
+		free(_z80_info);
+	
+	_z80_info = calloc(sizeof(Z80_info_t), UINT16_MAX);
+	
+	disassemble([[self calculator] calculator], REGULAR, addr_to_waddr(&([[self calculator] calculator]->mem_c), 0), UINT16_MAX, _z80_info);
+	
+	[[self tableView] reloadData];
+}
 
 @end

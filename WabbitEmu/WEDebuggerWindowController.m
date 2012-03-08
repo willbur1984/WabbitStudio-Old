@@ -54,6 +54,17 @@
 }
 #pragma mark *** Public Methods ***
 
+#pragma mark IBActions
+- (IBAction)step:(id)sender; {
+	[[[self calculatorDocument] calculator] step];
+}
+- (IBAction)stepOver:(id)sender; {
+	[[[self calculatorDocument] calculator] stepOver];
+}
+- (IBAction)stepOut:(id)sender; {
+	[[[self calculatorDocument] calculator] stepOut];
+}
+
 #pragma mark Properties
 @synthesize disassemblyDummyView=_disassemblyDummyView;
 

@@ -18,4 +18,8 @@
 @property (readonly,nonatomic) WECalculatorDocument *calculatorDocument;
 @property (readonly,nonatomic) RSDisassemblyViewController *disassemblyViewController;
 
+- (IBAction)step:(id)sender;
+- (IBAction)stepOver:(id)sender;
+- (IBAction)stepOut:(id)sender;
+
 @end
