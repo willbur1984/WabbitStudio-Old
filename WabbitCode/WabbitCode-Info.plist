@@ -113,7 +113,7 @@
 	<key>NSMainNibFile</key>
 	<string>WCMainMenu</string>
 	<key>NSPrincipalClass</key>
-	<string>NSApplication</string>
+	<string>WCApplication</string>
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<dict>

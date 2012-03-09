@@ -391,6 +391,7 @@
 		078CF02D15011C7A001E13E3 /* WCFileTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 078CF02C15011C7A001E13E3 /* WCFileTemplate.m */; };
 		078CF030150147EA001E13E3 /* WCNewFileWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 078CF02F150147EA001E13E3 /* WCNewFileWindowController.m */; };
 		078CF0331501480F001E13E3 /* WCNewFileWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 078CF0311501480F001E13E3 /* WCNewFileWindow.xib */; };
+		078D537C150A72F80057428C /* WCApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 078D537B150A72F80057428C /* WCApplication.m */; };
 		078F03FD14AD0D760080ADBC /* RSToolTipBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F03F614AD0D760080ADBC /* RSToolTipBackgroundView.m */; };
 		078F03FE14AD0D760080ADBC /* RSToolTipManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F03F914AD0D760080ADBC /* RSToolTipManager.m */; };
 		078F03FF14AD0D760080ADBC /* RSToolTipPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 078F03FB14AD0D760080ADBC /* RSToolTipPanel.m */; };
@@ -1181,6 +1182,8 @@
 		078CF02E150147EA001E13E3 /* WCNewFileWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCNewFileWindowController.h; sourceTree = "<group>"; };
 		078CF02F150147EA001E13E3 /* WCNewFileWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCNewFileWindowController.m; sourceTree = "<group>"; };
 		078CF0321501480F001E13E3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCNewFileWindow.xib; sourceTree = "<group>"; };
+		078D537A150A72F80057428C /* WCApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCApplication.h; sourceTree = "<group>"; };
+		078D537B150A72F80057428C /* WCApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCApplication.m; sourceTree = "<group>"; };
 		078F03F514AD0D760080ADBC /* RSToolTipBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSToolTipBackgroundView.h; sourceTree = "<group>"; };
 		078F03F614AD0D760080ADBC /* RSToolTipBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSToolTipBackgroundView.m; sourceTree = "<group>"; };
 		078F03F814AD0D760080ADBC /* RSToolTipManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSToolTipManager.h; sourceTree = "<group>"; };
@@ -1843,6 +1846,8 @@
 			isa = PBXGroup;
 			children = (
 				07BB432D14B83E800062AD00 /* WCDefines.h */,
+				078D537A150A72F80057428C /* WCApplication.h */,
+				078D537B150A72F80057428C /* WCApplication.m */,
 				072BBC4F14AA68B80044ECC2 /* WCApplicationDelegate.h */,
 				072BBC5014AA68B80044ECC2 /* WCApplicationDelegate.m */,
 				075D2FA014F34C8E007F8951 /* Document Controller */,
@@ -3495,6 +3500,7 @@
 				07FCEDD21507F5CE00595ADA /* RSDisassemblyAddressFormatter.m in Sources */,
 				07FCEDF3150815C600595ADA /* RSDisassemblyFormatter.m in Sources */,
 				07FCEDF715081A8B00595ADA /* RSDisassemblyTableView.m in Sources */,
+				078D537C150A72F80057428C /* WCApplication.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
