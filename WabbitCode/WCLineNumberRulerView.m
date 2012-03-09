@@ -15,9 +15,10 @@
 #import "NSObject+WCExtensions.h"
 #import "NSArray+WCExtensions.h"
 #import "NSParagraphStyle+RSExtensions.h"
+#import "RSVerticallyCenteredTextFieldCell.h"
 
 #define DEFAULT_THICKNESS	20.0
-#define RULER_MARGIN		8.0
+#define RULER_MARGIN		4.0
 
 @interface WCLineNumberRulerView ()
 @property (readwrite,assign,nonatomic) BOOL shouldRecalculateLineStartIndexes;
@@ -38,6 +39,7 @@
 #endif
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[self cleanUpUserDefaultsObserving];
+	[_labelTextFieldCell release];
 	[_lineStartIndexes release];
 	[super dealloc];
 }
@@ -48,6 +50,7 @@
 	
 	_lineStartIndexes = [[NSMutableArray alloc] initWithObjects:[NSNumber numberWithUnsignedInteger:0], nil];
 	_lineNumberToRecalculateFrom = 0;
+	_labelTextFieldCell = [[RSVerticallyCenteredTextFieldCell alloc] initTextCell:@""];
 	
 	[self setupUserDefaultsObserving];
 	
@@ -185,7 +188,7 @@
 	NSTextContainer	*container = [view textContainer];
 	NSRange	glyphRange = [layoutManager glyphRangeForBoundingRect:[[self clientView] visibleRect] inTextContainer:container];
 	NSRange range = [layoutManager characterRangeForGlyphRange:glyphRange actualGlyphRange:NULL];
-	NSUInteger lineNumber, lineStartIndex, numberOfLines = [[self lineStartIndexes] count], stringLength = [[view string] length];
+	NSUInteger lineNumber, lineStartIndex, numberOfLines = [[self lineStartIndexes] count];
 	NSIndexSet *lineNumbers = [[[self textView] string] lineNumbersForRange:[[self textView] selectedRange]];
 	CGFloat lastLinePositionY = -1.0;
 	
@@ -196,31 +199,39 @@
 	for (lineNumber = [[self lineStartIndexes] lineNumberForRange:range]; lineNumber < numberOfLines; lineNumber++) {
 		lineStartIndex = [[[self lineStartIndexes] objectAtIndex:lineNumber] unsignedIntegerValue];
 		
-		if (NSLocationInRange(lineStartIndex, range)) {
-			NSString *labelText = [NSString stringWithFormat:@"%lu", lineNumber + 1];
+		if (NSLocationInRange(lineStartIndex, range)) {			
+			NSRect labelRect;
+			NSUInteger rectCount;
+			NSRectArray rects = [[[self textView] layoutManager] rectArrayForCharacterRange:NSMakeRange(lineStartIndex, 0) withinSelectedCharacterRange:NSNotFoundRange inTextContainer:container rectCount:&rectCount];
 			
-			NSRect labelRect = NSZeroRect;
-			NSUInteger numRects = 0;
+			if (!rectCount)
+				continue;
 			
-			if (lineStartIndex < stringLength)
-				labelRect = [layoutManager lineFragmentRectForGlyphAtIndex:[[(NSTextView *)[self clientView] layoutManager] glyphIndexForCharacterAtIndex:lineStartIndex] effectiveRange:NULL];
-			else {
-				NSRectArray rects = [layoutManager rectArrayForCharacterRange:NSMakeRange(lineStartIndex, 0) withinSelectedCharacterRange:NSNotFoundRange inTextContainer:[view textContainer] rectCount:&numRects];
-				if (numRects)
-					labelRect = rects[0];
-			}
+			NSUInteger rectIndex;
 			
-			if (lineStartIndex < stringLength || numRects) {
-				if (NSMinY(labelRect) != lastLinePositionY) {
-					NSDictionary *textAttributes = [self textAttributesForLineNumber:lineNumber selectedLineNumbers:lineNumbers];
-					
-					NSSize stringSize = [labelText sizeWithAttributes:textAttributes];
-					
-					[labelText drawInRect:NSMakeRect(NSMinX(bounds), [self convertPoint:labelRect.origin fromView:[self clientView]].y + (floor(NSHeight(labelRect)/2.0)-floor(stringSize.height/2.0)), NSWidth(bounds)-floor(RULER_MARGIN/2.0), NSHeight(labelRect)) withAttributes:textAttributes];
+			for (rectIndex=0; rectIndex<rectCount; rectIndex++) {
+				labelRect = rects[rectIndex];
+				labelRect = NSMakeRect(NSMinX(bounds), [self convertPoint:labelRect.origin fromView:[self clientView]].y, NSWidth(bounds)-floor(RULER_MARGIN/2.0), NSHeight(labelRect));
+				
+				if (lastLinePositionY == NSMinY(labelRect))
+					break;
+				
+				NSString *labelString;
+				NSAttributedString *attributedString;
+				
+				if (rectIndex) {
+					labelString = NSLocalizedString(@".", @".");
 				}
+				else {
+					lastLinePositionY = NSMinY(labelRect);
+					labelString = [NSString stringWithFormat:NSLocalizedString(@"%lu", @"line number format string"), lineNumber+1];
+				}
+				
+				attributedString = [[[NSAttributedString alloc] initWithString:labelString attributes:[self textAttributesForLineNumber:lineNumber selectedLineNumbers:lineNumbers]] autorelease];
+				
+				[_labelTextFieldCell setAttributedStringValue:attributedString];
+				[_labelTextFieldCell drawWithFrame:labelRect inView:self];
 			}
-			
-			lastLinePositionY = NSMinY(labelRect);
 		}
 		
 		if (lineStartIndex > NSMaxRange(range))

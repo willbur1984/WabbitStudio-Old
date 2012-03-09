@@ -15,10 +15,13 @@
  
  */
 
+@class RSVerticallyCenteredTextFieldCell;
+
 @interface WCLineNumberRulerView : NSRulerView {
 	NSMutableArray *_lineStartIndexes;
 	BOOL _shouldRecalculateLineStartIndexes;
 	NSUInteger _lineNumberToRecalculateFrom;
+	RSVerticallyCenteredTextFieldCell *_labelTextFieldCell;
 }
 /** Accessor for the `_lineStartIndexes` array of starting line indexes.
  
