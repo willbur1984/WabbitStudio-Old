@@ -18,6 +18,7 @@
 #import "WCProjectNavigatorViewController.h"
 #import "WCSourceHighlighter.h"
 #import "NSTextView+WCExtensions.h"
+#import "WCSourceFileSeparateWindowController.h"
 
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
@@ -67,7 +68,7 @@ static NSString *const WCTabViewControllerSelectedTabKey = @"selectedTab";
 	[[self tabBarControl] setAutomaticallyAnimates:NO];
 	[[self tabBarControl] setHideForSingleTab:NO];
 	[[self tabBarControl] setCanCloseOnlyTab:YES];
-	[[self tabBarControl] setTearOffStyle:PSMTabBarTearOffMiniwindow];
+	[[self tabBarControl] setTearOffStyle:PSMTabBarTearOffAlphaWindow];
 	[[self tabBarControl] setUseOverflowMenu:YES];
 	
 	if ([[self delegate] respondsToSelector:@selector(projectDocumentSettingsForTabViewController:)]) {
@@ -157,6 +158,7 @@ static NSString *const WCTabViewControllerSelectedTabKey = @"selectedTab";
 - (BOOL)tabView:(NSTabView *)tabView shouldDropTabViewItem:(NSTabViewItem *)tabViewItem inTabBar:(PSMTabBarControl *)tabBarControl {
 	return (tabView == [tabBarControl tabView]);
 }
+
 #pragma mark NSMenuValidation
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
 	if ([menuItem action] == @selector(_closeTab:)) {

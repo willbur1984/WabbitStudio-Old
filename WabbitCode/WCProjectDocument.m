@@ -343,7 +343,7 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	return [self openSeparateEditorForSourceFileDocument:sfDocument];
 }
 - (WCSourceFileSeparateWindowController *)openSeparateEditorForSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument; {
-	WCSourceFileSeparateWindowController *windowController = [self _sourceFileSeparateWindowControllerForSourceFileDocument:sourceFileDocument];
+	WCSourceFileSeparateWindowController *windowController = [self createSeparateEditorForSourceFileDocument:sourceFileDocument];
 	
 	if (windowController) {
 		[windowController showWindow:nil];
@@ -370,6 +370,10 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	}
 	
 	return windowController;
+}
+
+- (WCSourceFileSeparateWindowController *)createSeparateEditorForSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument; {
+	return [self _sourceFileSeparateWindowControllerForSourceFileDocument:sourceFileDocument];
 }
 
 - (WCFileContainer *)fileContainerForFile:(WCFile *)file; {

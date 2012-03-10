@@ -64,6 +64,7 @@ extern NSString *const WCProjectSettingsFileExtension;
 
 - (WCSourceFileSeparateWindowController *)openSeparateEditorForFile:(WCFile *)file;
 - (WCSourceFileSeparateWindowController *)openSeparateEditorForSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument;
+- (WCSourceFileSeparateWindowController *)createSeparateEditorForSourceFileDocument:(WCSourceFileDocument *)sourceFileDocument;
 
 - (IBAction)openQuickly:(id)sender;
 
