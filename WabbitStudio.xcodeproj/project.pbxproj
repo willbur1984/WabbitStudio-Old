@@ -264,6 +264,10 @@
 		074B749E150D2D460096548E /* RSFlagsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 074B749C150D2D460096548E /* RSFlagsViewController.m */; };
 		074B74A1150D2D620096548E /* RSFlagsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 074B749F150D2D620096548E /* RSFlagsView.xib */; };
 		074B74A2150D2D620096548E /* RSFlagsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 074B749F150D2D620096548E /* RSFlagsView.xib */; };
+		074B74A9150D40D40096548E /* RSCPUViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 074B74A8150D40D40096548E /* RSCPUViewController.m */; };
+		074B74AA150D40D40096548E /* RSCPUViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 074B74A8150D40D40096548E /* RSCPUViewController.m */; };
+		074B74AD150D40E40096548E /* RSCPUView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 074B74AB150D40E40096548E /* RSCPUView.xib */; };
+		074B74AE150D40E40096548E /* RSCPUView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 074B74AB150D40E40096548E /* RSCPUView.xib */; };
 		075D2F7114F1FB94007F8951 /* WCRoundedBorderImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 075D2F7014F1FB93007F8951 /* WCRoundedBorderImageCell.m */; };
 		075D2F7514F1FFA9007F8951 /* WCRoundedBorderImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 075D2F7414F1FFA8007F8951 /* WCRoundedBorderImageView.m */; };
 		075D2F7814F203F7007F8951 /* WCRoundedBorderTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 075D2F7714F203F7007F8951 /* WCRoundedBorderTextField.m */; };
@@ -487,6 +491,7 @@
 		07CC8F3F14B7DBDB0081EE69 /* WCJumpInCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CC8F3E14B7DBDB0081EE69 /* WCJumpInCellView.m */; };
 		07CEA93A14EF01B3002A5240 /* WCSourceScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CEA93914EF01B3002A5240 /* WCSourceScroller.m */; };
 		07CEA93E14EF0360002A5240 /* WCSourceScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CEA93D14EF0360002A5240 /* WCSourceScrollView.m */; };
+		07E6189F150D47BE00640880 /* SplitterHandle.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 07EB8E2714B641B900F8A8C6 /* SplitterHandle.pdf */; };
 		07E91DF814C8020800B166E3 /* WCLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 07E91DF714C8020700B166E3 /* WCLayoutManager.m */; };
 		07EB8E2214B63C4F00F8A8C6 /* BGHUDAppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0791BE5314ADA3B80004AC16 /* BGHUDAppKit.framework */; };
 		07EB8E2314B63C5600F8A8C6 /* BGHUDAppKit.framework in Copy Private Frameworks */ = {isa = PBXBuildFile; fileRef = 0791BE5314ADA3B80004AC16 /* BGHUDAppKit.framework */; };
@@ -1018,6 +1023,9 @@
 		074B749B150D2D460096548E /* RSFlagsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSFlagsViewController.h; sourceTree = "<group>"; };
 		074B749C150D2D460096548E /* RSFlagsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSFlagsViewController.m; sourceTree = "<group>"; };
 		074B74A0150D2D620096548E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = RSFlagsView.xib; sourceTree = "<group>"; };
+		074B74A7150D40D40096548E /* RSCPUViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSCPUViewController.h; sourceTree = "<group>"; };
+		074B74A8150D40D40096548E /* RSCPUViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSCPUViewController.m; sourceTree = "<group>"; };
+		074B74AC150D40E40096548E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = RSCPUView.xib; sourceTree = "<group>"; };
 		075D2F6F14F1FB93007F8951 /* WCRoundedBorderImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCRoundedBorderImageCell.h; sourceTree = "<group>"; };
 		075D2F7014F1FB93007F8951 /* WCRoundedBorderImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCRoundedBorderImageCell.m; sourceTree = "<group>"; };
 		075D2F7314F1FFA8007F8951 /* WCRoundedBorderImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCRoundedBorderImageView.h; sourceTree = "<group>"; };
@@ -2300,6 +2308,8 @@
 				074B7483150D23BF0096548E /* RSRegistersViewController.m */,
 				074B749B150D2D460096548E /* RSFlagsViewController.h */,
 				074B749C150D2D460096548E /* RSFlagsViewController.m */,
+				074B74A7150D40D40096548E /* RSCPUViewController.h */,
+				074B74A8150D40D40096548E /* RSCPUViewController.m */,
 				075D2FD714F408E1007F8951 /* wabbitemu */,
 			);
 			name = Emulator;
@@ -2627,6 +2637,7 @@
 				07FCEDC81507EACE00595ADA /* RSDisassemblyView.xib */,
 				074B7487150D23D10096548E /* RSRegistersView.xib */,
 				074B749F150D2D620096548E /* RSFlagsView.xib */,
+				074B74AB150D40E40096548E /* RSCPUView.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -3159,6 +3170,7 @@
 				07FCEDCA1507EACE00595ADA /* RSDisassemblyView.xib in Resources */,
 				074B7489150D23D10096548E /* RSRegistersView.xib in Resources */,
 				074B74A1150D2D620096548E /* RSFlagsView.xib in Resources */,
+				074B74AD150D40E40096548E /* RSCPUView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3213,6 +3225,8 @@
 				07FCEDCC1507EED600595ADA /* VerticalSeparator.png in Resources */,
 				074B748A150D23D10096548E /* RSRegistersView.xib in Resources */,
 				074B74A2150D2D620096548E /* RSFlagsView.xib in Resources */,
+				074B74AE150D40E40096548E /* RSCPUView.xib in Resources */,
+				07E6189F150D47BE00640880 /* SplitterHandle.pdf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3555,6 +3569,7 @@
 				074B7497150D26A30096548E /* JUInspectorViewContainer.m in Sources */,
 				074B7499150D26A30096548E /* JUInspectorViewHeader.m in Sources */,
 				074B749D150D2D460096548E /* RSFlagsViewController.m in Sources */,
+				074B74A9150D40D40096548E /* RSCPUViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3676,6 +3691,7 @@
 				074B7498150D26A30096548E /* JUInspectorViewContainer.m in Sources */,
 				074B749A150D26A30096548E /* JUInspectorViewHeader.m in Sources */,
 				074B749E150D2D460096548E /* RSFlagsViewController.m in Sources */,
+				074B74AA150D40D40096548E /* RSCPUViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3935,6 +3951,14 @@
 				074B74A0150D2D620096548E /* en */,
 			);
 			name = RSFlagsView.xib;
+			sourceTree = "<group>";
+		};
+		074B74AB150D40E40096548E /* RSCPUView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				074B74AC150D40E40096548E /* en */,
+			);
+			name = RSCPUView.xib;
 			sourceTree = "<group>";
 		};
 		075D2F8314F21BED007F8951 /* WCOpenPanelAccessoryView.xib */ = {

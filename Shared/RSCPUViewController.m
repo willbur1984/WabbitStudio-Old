@@ -1,19 +1,19 @@
 //
-//  RSFlagsViewController.m
+//  RSCPUViewController.m
 //  WabbitStudio
 //
 //  Created by William Towe on 3/11/12.
 //  Copyright (c) 2012 Revolution Software. All rights reserved.
 //
 
-#import "RSFlagsViewController.h"
+#import "RSCPUViewController.h"
 #import "RSCalculator.h"
 
-@interface RSFlagsViewController ()
+@interface RSCPUViewController ()
 
 @end
 
-@implementation RSFlagsViewController
+@implementation RSCPUViewController
 
 - (void)dealloc {
 #ifdef DEBUG
@@ -24,7 +24,7 @@
 }
 
 - (NSString *)nibName {
-	return @"RSFlagsView";
+	return @"RSCPUView";
 }
 
 - (id)initWithCalculator:(RSCalculator *)calculator; {
