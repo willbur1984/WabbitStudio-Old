@@ -14,6 +14,7 @@
 #import "WCTabViewController.h"
 #import "WCDocumentController.h"
 #import "WCProjectDocument.h"
+#import "WCSourceFileWindowController.h"
 
 @interface WCApplication ()
 
@@ -32,7 +33,6 @@
 		NSMenuItem *projectMenuItem = [[self windowsMenu] itemAtIndex:itemIndex];
 		WCProjectWindowController *projectWindowController = [window windowController];
 		
-		[projectMenuItem setTitle:[[projectWindowController document] displayName]];
 		[projectMenuItem setImage:[[NSWorkspace sharedWorkspace] iconForFile:[[[projectWindowController document] fileURL] path]]];
 		[[projectMenuItem image] setSize:NSSmallSize];
 	}
@@ -47,6 +47,9 @@
 		WCSourceFileDocument *sourceFileDocument = [[window windowController] sourceFileDocument];
 		
 		[[self windowsMenu] removeItem:sourceFileMenuItem];
+		
+		projectMenuItemIndex = [[self windowsMenu] indexOfItemWithTarget:[[projectDocument projectWindowController] window] andAction:@selector(makeKeyAndOrderFront:)];
+		
 		[[self windowsMenu] insertItem:sourceFileMenuItem atIndex:++projectMenuItemIndex];
 		
 		[sourceFileMenuItem setTitle:[sourceFileDocument displayName]];
@@ -54,7 +57,7 @@
 		[sourceFileMenuItem setImage:[[NSWorkspace sharedWorkspace] iconForFile:[[sourceFileDocument fileURL] path]]];
 		[[sourceFileMenuItem image] setSize:NSSmallSize];
 	}
-	else {
+	else if ([[window windowController] isKindOfClass:[WCSourceFileWindowController class]]) {
 		NSMenuItem *sourceFileMenuItem = [[self windowsMenu] itemAtIndex:itemIndex];
 		WCSourceFileDocument *sourceFileDocument = [[window windowController] document];
 		
@@ -76,7 +79,6 @@
 		NSMenuItem *projectMenuItem = [[self windowsMenu] itemAtIndex:itemIndex];
 		WCProjectWindowController *projectWindowController = [window windowController];
 		
-		[projectMenuItem setTitle:[[projectWindowController document] displayName]];
 		[projectMenuItem setImage:[[NSWorkspace sharedWorkspace] iconForFile:[[[projectWindowController document] fileURL] path]]];
 		[[projectMenuItem image] setSize:NSSmallSize];
 	}
@@ -92,7 +94,7 @@
 		[sourceFileMenuItem setImage:[[NSWorkspace sharedWorkspace] iconForFile:[[sourceFileDocument fileURL] path]]];
 		[[sourceFileMenuItem image] setSize:NSSmallSize];
 	}
-	else {
+	else if ([[window windowController] isKindOfClass:[WCSourceFileWindowController class]]) {
 		NSMenuItem *sourceFileMenuItem = [[self windowsMenu] itemAtIndex:itemIndex];
 		WCSourceFileDocument *sourceFileDocument = [[window windowController] document];
 		
@@ -100,6 +102,11 @@
 		[sourceFileMenuItem setImage:[[NSWorkspace sharedWorkspace] iconForFile:[[sourceFileDocument fileURL] path]]];
 		[[sourceFileMenuItem image] setSize:NSSmallSize];
 	}
+}
+
+- (void)removeWindowsItem:(NSWindow *)window {
+	[super removeWindowsItem:window];
+	
 }
 
 @end
