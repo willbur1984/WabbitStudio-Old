@@ -10,6 +10,9 @@
 #import "WECalculatorDocument.h"
 #import "RSCalculator.h"
 #import "RSDisassemblyViewController.h"
+#import "RSRegistersViewController.h"
+#import "JUInspectorViewContainer.h"
+#import "RSFlagsViewController.h"
 
 @interface WEDebuggerWindowController ()
 
@@ -21,6 +24,9 @@
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
+	[_flagsViewController release];
+	[_registersViewController release];
+	[_inspectorViewContainer release];
 	[_disassemblyViewController release];
 	[super dealloc];
 }
@@ -45,6 +51,12 @@
 	
 	[[[self disassemblyViewController] view] setFrameSize:[[self disassemblyDummyView] frame].size];
 	[[[self disassemblyDummyView] superview] replaceSubview:[self disassemblyDummyView] with:[[self disassemblyViewController] view]];
+	
+	[[self inspectorScrollView] setAutoresizesSubviews:YES];
+	[[self inspectorScrollView] setDocumentView:[self inspectorViewContainer]];
+	
+	[[self inspectorViewContainer] addInspectorView:(JUInspectorView *)[[self registersViewController] view] expanded:YES];
+	[[self inspectorViewContainer] addInspectorView:(JUInspectorView *)[[self flagsViewController] view] expanded:YES];
 }
 
 #pragma mark NSWindowDelegate
@@ -67,6 +79,7 @@
 
 #pragma mark Properties
 @synthesize disassemblyDummyView=_disassemblyDummyView;
+@synthesize inspectorScrollView=_inspectorScrollView;
 
 @dynamic calculatorDocument;
 - (WECalculatorDocument *)calculatorDocument {
@@ -77,6 +90,26 @@
 	if (!_disassemblyViewController)
 		_disassemblyViewController = [[RSDisassemblyViewController alloc] initWithCalculator:[[self calculatorDocument] calculator]];
 	return _disassemblyViewController;
+}
+@dynamic registersViewController;
+- (RSRegistersViewController *)registersViewController {
+	if (!_registersViewController)
+		_registersViewController = [[RSRegistersViewController alloc] initWithCalculator:[[self calculatorDocument] calculator]];
+	return _registersViewController;
+}
+@dynamic flagsViewController;
+- (RSFlagsViewController *)flagsViewController {
+	if (!_flagsViewController)
+		_flagsViewController = [[RSFlagsViewController alloc] initWithCalculator:[[self calculatorDocument] calculator]];
+	return _flagsViewController;
+}
+@dynamic inspectorViewContainer;
+- (JUInspectorViewContainer *)inspectorViewContainer {
+	if (!_inspectorViewContainer) {
+		_inspectorViewContainer = [[JUInspectorViewContainer alloc] initWithFrame:NSMakeRect(0.0, 0.0, 100.0, 100.0)];
+		[_inspectorViewContainer setAutoresizingMask:NSViewWidthSizable];
+	}
+	return _inspectorViewContainer;
 }
 
 @end

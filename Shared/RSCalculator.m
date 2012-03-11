@@ -410,6 +410,9 @@ static const uint32_t defaultValue = 0;
 	if ([self isActive])
 		[self calculator]->cpu.sp = stackPointer;
 }
++ (NSSet *)keyPathsForValuesAffectingStackPointer {
+	return [NSSet setWithObjects:@"programCounter", nil];
+}
 @dynamic registerAF;
 - (uint16_t)registerAF {
 	if ([self isActive])
@@ -419,6 +422,9 @@ static const uint32_t defaultValue = 0;
 - (void)setRegisterAF:(uint16_t)registerAF {
 	if ([self isActive])
 		[self calculator]->cpu.af = registerAF;
+}
++ (NSSet *)keyPathsForValuesAffectingRegisterAF {
+	return [NSSet setWithObjects:@"programCounter",@"flagZ",@"flagS",@"flagC",@"flagHC",@"flagPV",@"flagN", nil];
 }
 @dynamic registerAFPrime;
 - (uint16_t)registerAFPrime {
@@ -430,6 +436,9 @@ static const uint32_t defaultValue = 0;
 	if ([self isActive])
 		[self calculator]->cpu.afp = registerAFPrime;
 }
++ (NSSet *)keyPathsForValuesAffectingRegisterAFPrime {
+	return [NSSet setWithObjects:@"programCounter", nil];
+}
 @dynamic registerBC;
 - (uint16_t)registerBC {
 	if ([self isActive])
@@ -439,6 +448,9 @@ static const uint32_t defaultValue = 0;
 - (void)setRegisterBC:(uint16_t)registerBC {
 	if ([self isActive])
 		[self calculator]->cpu.bc = registerBC;
+}
++ (NSSet *)keyPathsForValuesAffectingRegisterBC {
+	return [NSSet setWithObjects:@"programCounter", nil];
 }
 @dynamic registerBCPrime;
 - (uint16_t)registerBCPrime {
@@ -450,6 +462,9 @@ static const uint32_t defaultValue = 0;
 	if ([self isActive])
 		[self calculator]->cpu.bcp = registerBCPrime;
 }
++ (NSSet *)keyPathsForValuesAffectingRegisterBCPrime {
+	return [NSSet setWithObjects:@"programCounter", nil];
+}
 @dynamic registerDE;
 - (uint16_t)registerDE {
 	if ([self isActive])
@@ -459,6 +474,9 @@ static const uint32_t defaultValue = 0;
 - (void)setRegisterDE:(uint16_t)registerDE {
 	if ([self isActive])
 		[self calculator]->cpu.de = registerDE;
+}
++ (NSSet *)keyPathsForValuesAffectingRegisterDE {
+	return [NSSet setWithObjects:@"programCounter", nil];
 }
 @dynamic registerDEPrime;
 - (uint16_t)registerDEPrime {
@@ -470,6 +488,9 @@ static const uint32_t defaultValue = 0;
 	if ([self isActive])
 		[self calculator]->cpu.dep = registerDEPrime;
 }
++ (NSSet *)keyPathsForValuesAffectingRegisterDEPrime {
+	return [NSSet setWithObjects:@"programCounter", nil];
+}
 @dynamic registerHL;
 - (uint16_t)registerHL {
 	if ([self isActive])
@@ -479,6 +500,9 @@ static const uint32_t defaultValue = 0;
 - (void)setRegisterHL:(uint16_t)registerHL {
 	if ([self isActive])
 		[self calculator]->cpu.hl = registerHL;
+}
++ (NSSet *)keyPathsForValuesAffectingRegisterHL {
+	return [NSSet setWithObjects:@"programCounter", nil];
 }
 @dynamic registerHLPrime;
 - (uint16_t)registerHLPrime {
@@ -490,6 +514,9 @@ static const uint32_t defaultValue = 0;
 	if ([self isActive])
 		[self calculator]->cpu.hlp = registerHLPrime;
 }
++ (NSSet *)keyPathsForValuesAffectingRegisterHLPrime {
+	return [NSSet setWithObjects:@"programCounter", nil];
+}
 @dynamic registerIX;
 - (uint16_t)registerIX {
 	if ([self isActive])
@@ -499,6 +526,9 @@ static const uint32_t defaultValue = 0;
 - (void)setRegisterIX:(uint16_t)registerIX {
 	if ([self isActive])
 		[self calculator]->cpu.ix = registerIX;
+}
++ (NSSet *)keyPathsForValuesAffectingRegisterIX {
+	return [NSSet setWithObjects:@"programCounter", nil];
 }
 @dynamic registerIY;
 - (uint16_t)registerIY {
@@ -510,6 +540,9 @@ static const uint32_t defaultValue = 0;
 	if ([self isActive])
 		[self calculator]->cpu.iy = registerIY;
 }
++ (NSSet *)keyPathsForValuesAffectingRegisterIY {
+	return [NSSet setWithObjects:@"programCounter", nil];
+}
 #pragma mark Flags
 @dynamic flagZ;
 - (BOOL)flagZ {
@@ -519,6 +552,9 @@ static const uint32_t defaultValue = 0;
 	if ([self isActive])
 		[self calculator]->cpu.f ^= ZERO_MASK;
 }
++ (NSSet *)keyPathsForValuesAffectingFlagZ {
+	return [NSSet setWithObjects:@"programCounter",@"registerAF", nil];
+}
 @dynamic flagC;
 - (BOOL)flagC {
 	return ([self isActive] && ([self calculator]->cpu.f & CARRY_MASK) != 0);
@@ -526,6 +562,9 @@ static const uint32_t defaultValue = 0;
 - (void)setFlagC:(BOOL)flagC {
 	if ([self isActive])
 		[self calculator]->cpu.f ^= CARRY_MASK;
+}
++ (NSSet *)keyPathsForValuesAffectingFlagC {
+	return [NSSet setWithObjects:@"programCounter",@"registerAF", nil];
 }
 @dynamic flagS;
 - (BOOL)flagS {
@@ -535,6 +574,9 @@ static const uint32_t defaultValue = 0;
 	if ([self isActive])
 		[self calculator]->cpu.f ^= SIGN_MASK;
 }
++ (NSSet *)keyPathsForValuesAffectingFlagS {
+	return [NSSet setWithObjects:@"programCounter",@"registerAF", nil];
+}
 @dynamic flagPV;
 - (BOOL)flagPV {
 	return ([self isActive] && ([self calculator]->cpu.f & PV_MASK) != 0);
@@ -542,6 +584,9 @@ static const uint32_t defaultValue = 0;
 - (void)setFlagPV:(BOOL)flagPV {
 	if ([self isActive])
 		[self calculator]->cpu.f ^= PV_MASK;
+}
++ (NSSet *)keyPathsForValuesAffectingFlagPV {
+	return [NSSet setWithObjects:@"programCounter",@"registerAF", nil];
 }
 @dynamic flagHC;
 - (BOOL)flagHC {
@@ -551,6 +596,9 @@ static const uint32_t defaultValue = 0;
 	if ([self isActive])
 		[self calculator]->cpu.f ^= HC_MASK;
 }
++ (NSSet *)keyPathsForValuesAffectingFlagHC {
+	return [NSSet setWithObjects:@"programCounter",@"registerAF", nil];
+}
 @dynamic flagN;
 - (BOOL)flagN {
 	return ([self isActive] && ([self calculator]->cpu.f & N_MASK) != 0);
@@ -558,6 +606,9 @@ static const uint32_t defaultValue = 0;
 - (void)setFlagN:(BOOL)flagN {
 	if ([self isActive])
 		[self calculator]->cpu.f ^= N_MASK;
+}
++ (NSSet *)keyPathsForValuesAffectingFlagN {
+	return [NSSet setWithObjects:@"programCounter",@"registerAF", nil];
 }
 #pragma mark CPU
 @dynamic CPUHalt;
@@ -567,6 +618,9 @@ static const uint32_t defaultValue = 0;
 - (void)setCPUHalt:(BOOL)CPUHalt {
 	if ([self isActive])
 		[self calculator]->cpu.halt = CPUHalt;
+}
++ (NSSet *)keyPathsForValuesAffectingCPUHalt {
+	return [NSSet setWithObjects:@"programCounter", nil];
 }
 @dynamic CPUBus;
 - (uint8_t)CPUBus {

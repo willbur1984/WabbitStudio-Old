@@ -248,6 +248,22 @@
 		0746EE5A14F1726B00354643 /* WCEditBreakpointViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0746EE5914F1726B00354643 /* WCEditBreakpointViewController.m */; };
 		0746EE5E14F1729000354643 /* WCEditBreakpointView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0746EE5C14F1729000354643 /* WCEditBreakpointView.xib */; };
 		0746EE6214F17C1200354643 /* RSHexadecimalFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0746EE6114F177E800354643 /* RSHexadecimalFormatter.m */; };
+		074B7484150D23BF0096548E /* RSRegistersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 074B7483150D23BF0096548E /* RSRegistersViewController.m */; };
+		074B7485150D23BF0096548E /* RSRegistersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 074B7483150D23BF0096548E /* RSRegistersViewController.m */; };
+		074B7489150D23D10096548E /* RSRegistersView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 074B7487150D23D10096548E /* RSRegistersView.xib */; };
+		074B748A150D23D10096548E /* RSRegistersView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 074B7487150D23D10096548E /* RSRegistersView.xib */; };
+		074B7493150D26A30096548E /* JUInspectorBaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 074B748C150D26A30096548E /* JUInspectorBaseView.m */; };
+		074B7494150D26A30096548E /* JUInspectorBaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 074B748C150D26A30096548E /* JUInspectorBaseView.m */; };
+		074B7495150D26A30096548E /* JUInspectorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 074B748E150D26A30096548E /* JUInspectorView.m */; };
+		074B7496150D26A30096548E /* JUInspectorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 074B748E150D26A30096548E /* JUInspectorView.m */; };
+		074B7497150D26A30096548E /* JUInspectorViewContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 074B7490150D26A30096548E /* JUInspectorViewContainer.m */; };
+		074B7498150D26A30096548E /* JUInspectorViewContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 074B7490150D26A30096548E /* JUInspectorViewContainer.m */; };
+		074B7499150D26A30096548E /* JUInspectorViewHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 074B7492150D26A30096548E /* JUInspectorViewHeader.m */; };
+		074B749A150D26A30096548E /* JUInspectorViewHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 074B7492150D26A30096548E /* JUInspectorViewHeader.m */; };
+		074B749D150D2D460096548E /* RSFlagsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 074B749C150D2D460096548E /* RSFlagsViewController.m */; };
+		074B749E150D2D460096548E /* RSFlagsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 074B749C150D2D460096548E /* RSFlagsViewController.m */; };
+		074B74A1150D2D620096548E /* RSFlagsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 074B749F150D2D620096548E /* RSFlagsView.xib */; };
+		074B74A2150D2D620096548E /* RSFlagsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 074B749F150D2D620096548E /* RSFlagsView.xib */; };
 		075D2F7114F1FB94007F8951 /* WCRoundedBorderImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 075D2F7014F1FB93007F8951 /* WCRoundedBorderImageCell.m */; };
 		075D2F7514F1FFA9007F8951 /* WCRoundedBorderImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 075D2F7414F1FFA8007F8951 /* WCRoundedBorderImageView.m */; };
 		075D2F7814F203F7007F8951 /* WCRoundedBorderTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 075D2F7714F203F7007F8951 /* WCRoundedBorderTextField.m */; };
@@ -988,6 +1004,20 @@
 		0746EE5D14F1729000354643 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCEditBreakpointView.xib; sourceTree = "<group>"; };
 		0746EE6014F177E800354643 /* RSHexadecimalFormatter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSHexadecimalFormatter.h; sourceTree = "<group>"; };
 		0746EE6114F177E800354643 /* RSHexadecimalFormatter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RSHexadecimalFormatter.m; sourceTree = "<group>"; };
+		074B7482150D23BF0096548E /* RSRegistersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSRegistersViewController.h; sourceTree = "<group>"; };
+		074B7483150D23BF0096548E /* RSRegistersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSRegistersViewController.m; sourceTree = "<group>"; };
+		074B7488150D23D10096548E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = RSRegistersView.xib; sourceTree = "<group>"; };
+		074B748B150D26A30096548E /* JUInspectorBaseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JUInspectorBaseView.h; sourceTree = "<group>"; };
+		074B748C150D26A30096548E /* JUInspectorBaseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JUInspectorBaseView.m; sourceTree = "<group>"; };
+		074B748D150D26A30096548E /* JUInspectorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JUInspectorView.h; sourceTree = "<group>"; };
+		074B748E150D26A30096548E /* JUInspectorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JUInspectorView.m; sourceTree = "<group>"; };
+		074B748F150D26A30096548E /* JUInspectorViewContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JUInspectorViewContainer.h; sourceTree = "<group>"; };
+		074B7490150D26A30096548E /* JUInspectorViewContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JUInspectorViewContainer.m; sourceTree = "<group>"; };
+		074B7491150D26A30096548E /* JUInspectorViewHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JUInspectorViewHeader.h; sourceTree = "<group>"; };
+		074B7492150D26A30096548E /* JUInspectorViewHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JUInspectorViewHeader.m; sourceTree = "<group>"; };
+		074B749B150D2D460096548E /* RSFlagsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSFlagsViewController.h; sourceTree = "<group>"; };
+		074B749C150D2D460096548E /* RSFlagsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSFlagsViewController.m; sourceTree = "<group>"; };
+		074B74A0150D2D620096548E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = RSFlagsView.xib; sourceTree = "<group>"; };
 		075D2F6F14F1FB93007F8951 /* WCRoundedBorderImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCRoundedBorderImageCell.h; sourceTree = "<group>"; };
 		075D2F7014F1FB93007F8951 /* WCRoundedBorderImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCRoundedBorderImageCell.m; sourceTree = "<group>"; };
 		075D2F7314F1FFA8007F8951 /* WCRoundedBorderImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCRoundedBorderImageView.h; sourceTree = "<group>"; };
@@ -2266,6 +2296,10 @@
 				07FCEDF2150815C600595ADA /* RSDisassemblyFormatter.m */,
 				07FCEDF515081A8B00595ADA /* RSDisassemblyTableView.h */,
 				07FCEDF615081A8B00595ADA /* RSDisassemblyTableView.m */,
+				074B7482150D23BF0096548E /* RSRegistersViewController.h */,
+				074B7483150D23BF0096548E /* RSRegistersViewController.m */,
+				074B749B150D2D460096548E /* RSFlagsViewController.h */,
+				074B749C150D2D460096548E /* RSFlagsViewController.m */,
 				075D2FD714F408E1007F8951 /* wabbitemu */,
 			);
 			name = Emulator;
@@ -2591,6 +2625,8 @@
 				072880CC14B4F9030082DE4C /* RSBezelWindow.xib */,
 				07AB505814F5577A005AA724 /* RSTransferFileWindow.xib */,
 				07FCEDC81507EACE00595ADA /* RSDisassemblyView.xib */,
+				074B7487150D23D10096548E /* RSRegistersView.xib */,
+				074B749F150D2D620096548E /* RSFlagsView.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -2801,6 +2837,14 @@
 		07A8AFBD14BDF2E2008CB9FF /* External */ = {
 			isa = PBXGroup;
 			children = (
+				074B748B150D26A30096548E /* JUInspectorBaseView.h */,
+				074B748C150D26A30096548E /* JUInspectorBaseView.m */,
+				074B748D150D26A30096548E /* JUInspectorView.h */,
+				074B748E150D26A30096548E /* JUInspectorView.m */,
+				074B748F150D26A30096548E /* JUInspectorViewContainer.h */,
+				074B7490150D26A30096548E /* JUInspectorViewContainer.m */,
+				074B7491150D26A30096548E /* JUInspectorViewHeader.h */,
+				074B7492150D26A30096548E /* JUInspectorViewHeader.m */,
 				070EC24E14EF588E00982CA8 /* RSRTVArrayController.h */,
 				070EC24F14EF588E00982CA8 /* RSRTVArrayController.m */,
 				07154F5D14D5EDA400F57668 /* NSWindow+ULIZoomEffect.h */,
@@ -3113,6 +3157,8 @@
 				078CF02815011B99001E13E3 /* File Templates in Resources */,
 				078CF0331501480F001E13E3 /* WCNewFileWindow.xib in Resources */,
 				07FCEDCA1507EACE00595ADA /* RSDisassemblyView.xib in Resources */,
+				074B7489150D23D10096548E /* RSRegistersView.xib in Resources */,
+				074B74A1150D2D620096548E /* RSFlagsView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3165,6 +3211,8 @@
 				0742296D14FDD4E700EDA215 /* wabbitstudio.icns in Resources */,
 				07FCEDCB1507EACE00595ADA /* RSDisassemblyView.xib in Resources */,
 				07FCEDCC1507EED600595ADA /* VerticalSeparator.png in Resources */,
+				074B748A150D23D10096548E /* RSRegistersView.xib in Resources */,
+				074B74A2150D2D620096548E /* RSFlagsView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3501,6 +3549,12 @@
 				07FCEDF3150815C600595ADA /* RSDisassemblyFormatter.m in Sources */,
 				07FCEDF715081A8B00595ADA /* RSDisassemblyTableView.m in Sources */,
 				078D537C150A72F80057428C /* WCApplication.m in Sources */,
+				074B7484150D23BF0096548E /* RSRegistersViewController.m in Sources */,
+				074B7493150D26A30096548E /* JUInspectorBaseView.m in Sources */,
+				074B7495150D26A30096548E /* JUInspectorView.m in Sources */,
+				074B7497150D26A30096548E /* JUInspectorViewContainer.m in Sources */,
+				074B7499150D26A30096548E /* JUInspectorViewHeader.m in Sources */,
+				074B749D150D2D460096548E /* RSFlagsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3616,6 +3670,12 @@
 				07FCEDF815081A8B00595ADA /* RSDisassemblyTableView.m in Sources */,
 				07FCEDF915081B3800595ADA /* RSNoHighlightColorTextFieldCell.m in Sources */,
 				07FCEDFA15081C3C00595ADA /* NSBezierPath+StrokeExtensions.m in Sources */,
+				074B7485150D23BF0096548E /* RSRegistersViewController.m in Sources */,
+				074B7494150D26A30096548E /* JUInspectorBaseView.m in Sources */,
+				074B7496150D26A30096548E /* JUInspectorView.m in Sources */,
+				074B7498150D26A30096548E /* JUInspectorViewContainer.m in Sources */,
+				074B749A150D26A30096548E /* JUInspectorViewHeader.m in Sources */,
+				074B749E150D2D460096548E /* RSFlagsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3859,6 +3919,22 @@
 				0746EE5D14F1729000354643 /* en */,
 			);
 			name = WCEditBreakpointView.xib;
+			sourceTree = "<group>";
+		};
+		074B7487150D23D10096548E /* RSRegistersView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				074B7488150D23D10096548E /* en */,
+			);
+			name = RSRegistersView.xib;
+			sourceTree = "<group>";
+		};
+		074B749F150D2D620096548E /* RSFlagsView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				074B74A0150D2D620096548E /* en */,
+			);
+			name = RSFlagsView.xib;
 			sourceTree = "<group>";
 		};
 		075D2F8314F21BED007F8951 /* WCOpenPanelAccessoryView.xib */ = {
