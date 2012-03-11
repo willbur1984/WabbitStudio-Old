@@ -7,25 +7,99 @@
 //
 
 #import "WCApplication.h"
+#import "RSDefines.h"
+#import "WCProjectWindowController.h"
+#import "WCSourceFileSeparateWindowController.h"
+#import "WCSourceFileDocument.h"
+#import "WCTabViewController.h"
+#import "WCDocumentController.h"
+#import "WCProjectDocument.h"
 
 @interface WCApplication ()
-- (void)_updateWindowsMenu;
+
 @end
 
 @implementation WCApplication
-- (void)addWindowsItem:(NSWindow *)win title:(NSString *)aString filename:(BOOL)isFilename {
-	[super addWindowsItem:win title:aString filename:isFilename];
+- (void)addWindowsItem:(NSWindow *)window title:(NSString *)aString filename:(BOOL)isFilename {
+	[super addWindowsItem:window title:aString filename:isFilename];
 	
-	[self _updateWindowsMenu];
+	NSInteger itemIndex = [[self windowsMenu] indexOfItemWithTarget:window andAction:@selector(makeKeyAndOrderFront:)];
+	
+	if (itemIndex == -1)
+		return;
+	
+	if ([[window windowController] isKindOfClass:[WCProjectWindowController class]]) {
+		NSMenuItem *projectMenuItem = [[self windowsMenu] itemAtIndex:itemIndex];
+		WCProjectWindowController *projectWindowController = [window windowController];
+		
+		[projectMenuItem setTitle:[[projectWindowController document] displayName]];
+		[projectMenuItem setImage:[[NSWorkspace sharedWorkspace] iconForFile:[[[projectWindowController document] fileURL] path]]];
+		[[projectMenuItem image] setSize:NSSmallSize];
+	}
+	else if ([[window windowController] isKindOfClass:[WCSourceFileSeparateWindowController class]]) {		
+		WCProjectDocument *projectDocument = [[window windowController] document];
+		NSInteger projectMenuItemIndex = [[self windowsMenu] indexOfItemWithTarget:[[projectDocument projectWindowController] window] andAction:@selector(makeKeyAndOrderFront:)];
+		
+		if (projectMenuItemIndex == -1)
+			return;
+		
+		NSMenuItem *sourceFileMenuItem = [[[[self windowsMenu] itemAtIndex:itemIndex] retain] autorelease];
+		WCSourceFileDocument *sourceFileDocument = [[window windowController] sourceFileDocument];
+		
+		[[self windowsMenu] removeItem:sourceFileMenuItem];
+		[[self windowsMenu] insertItem:sourceFileMenuItem atIndex:++projectMenuItemIndex];
+		
+		[sourceFileMenuItem setTitle:[sourceFileDocument displayName]];
+		[sourceFileMenuItem setIndentationLevel:1];
+		[sourceFileMenuItem setImage:[[NSWorkspace sharedWorkspace] iconForFile:[[sourceFileDocument fileURL] path]]];
+		[[sourceFileMenuItem image] setSize:NSSmallSize];
+	}
+	else {
+		NSMenuItem *sourceFileMenuItem = [[self windowsMenu] itemAtIndex:itemIndex];
+		WCSourceFileDocument *sourceFileDocument = [[window windowController] document];
+		
+		[sourceFileMenuItem setTitle:[sourceFileDocument displayName]];
+		[sourceFileMenuItem setImage:[[NSWorkspace sharedWorkspace] iconForFile:[[sourceFileDocument fileURL] path]]];
+		[[sourceFileMenuItem image] setSize:NSSmallSize];
+	}
 }
 
-- (void)changeWindowsItem:(NSWindow *)win title:(NSString *)aString filename:(BOOL)isFilename {
-	[super changeWindowsItem:win title:aString filename:isFilename];
+- (void)changeWindowsItem:(NSWindow *)window title:(NSString *)aString filename:(BOOL)isFilename {
+	[super changeWindowsItem:window title:aString filename:isFilename];
 	
-	[self _updateWindowsMenu];
+	NSInteger itemIndex = [[self windowsMenu] indexOfItemWithTarget:window andAction:@selector(makeKeyAndOrderFront:)];
+	
+	if (itemIndex == -1)
+		return;
+	
+	if ([[window windowController] isKindOfClass:[WCProjectWindowController class]]) {
+		NSMenuItem *projectMenuItem = [[self windowsMenu] itemAtIndex:itemIndex];
+		WCProjectWindowController *projectWindowController = [window windowController];
+		
+		[projectMenuItem setTitle:[[projectWindowController document] displayName]];
+		[projectMenuItem setImage:[[NSWorkspace sharedWorkspace] iconForFile:[[[projectWindowController document] fileURL] path]]];
+		[[projectMenuItem image] setSize:NSSmallSize];
+	}
+	else if ([[window windowController] isKindOfClass:[WCSourceFileSeparateWindowController class]]) {		
+		NSMenuItem *sourceFileMenuItem = [[[[self windowsMenu] itemAtIndex:itemIndex] retain] autorelease];
+		WCSourceFileDocument *sourceFileDocument = [[[[[window windowController] tabViewController] tabView] selectedTabViewItem] identifier];
+		
+		if (!sourceFileDocument)
+			return;
+		
+		[sourceFileMenuItem setTitle:[sourceFileDocument displayName]];
+		[sourceFileMenuItem setIndentationLevel:1];
+		[sourceFileMenuItem setImage:[[NSWorkspace sharedWorkspace] iconForFile:[[sourceFileDocument fileURL] path]]];
+		[[sourceFileMenuItem image] setSize:NSSmallSize];
+	}
+	else {
+		NSMenuItem *sourceFileMenuItem = [[self windowsMenu] itemAtIndex:itemIndex];
+		WCSourceFileDocument *sourceFileDocument = [[window windowController] document];
+		
+		[sourceFileMenuItem setTitle:[sourceFileDocument displayName]];
+		[sourceFileMenuItem setImage:[[NSWorkspace sharedWorkspace] iconForFile:[[sourceFileDocument fileURL] path]]];
+		[[sourceFileMenuItem image] setSize:NSSmallSize];
+	}
 }
 
-- (void)_updateWindowsMenu; {
-	
-}
 @end
