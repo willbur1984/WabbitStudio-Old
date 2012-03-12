@@ -17,6 +17,7 @@
 #import "RSMemoryMapViewController.h"
 #import "RSInterruptsViewController.h"
 #import "RSDisplayViewController.h"
+#import "RSMemoryViewController.h"
 
 @interface WEDebuggerWindowController ()
 
@@ -28,6 +29,7 @@
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
+	[_memoryViewController release];
 	[_displayViewController release];
 	[_interruptsViewController release];
 	[_memoryMapViewController release];
@@ -57,32 +59,38 @@
 - (void)windowDidLoad {
 	[super windowDidLoad];
 	
+	// disassembly view
 	[[[self disassemblyViewController] view] setFrameSize:[[self disassemblyDummyView] frame].size];
 	[[[self disassemblyDummyView] superview] replaceSubview:[self disassemblyDummyView] with:[[self disassemblyViewController] view]];
 	
+	// memory view
+	[[[self memoryViewController] view] setFrameSize:[[self memoryDummyView] frame].size];
+	[[[self memoryDummyView] superview] replaceSubview:[self memoryDummyView] with:[[self memoryViewController] view]];
+	
+	// inspector view
 	[[self inspectorScrollView] setAutoresizesSubviews:YES];
 	[[self inspectorScrollView] setDocumentView:[self inspectorViewContainer]];
 	
 	[[self inspectorViewContainer] addInspectorView:(JUInspectorView *)[[self registersViewController] view] expanded:YES];
 	[[self inspectorViewContainer] addInspectorView:(JUInspectorView *)[[self flagsViewController] view] expanded:YES];
-	[[self inspectorViewContainer] addInspectorView:(JUInspectorView *)[[self CPUViewController] view] expanded:YES];
-	[[self inspectorViewContainer] addInspectorView:(JUInspectorView *)[[self memoryMapViewController] view] expanded:YES];
-	[[self inspectorViewContainer] addInspectorView:(JUInspectorView *)[[self interruptsViewController] view] expanded:YES];
-	[[self inspectorViewContainer] addInspectorView:(JUInspectorView *)[[self displayViewController] view] expanded:YES];
+	[[self inspectorViewContainer] addInspectorView:(JUInspectorView *)[[self CPUViewController] view] expanded:NO];
+	[[self inspectorViewContainer] addInspectorView:(JUInspectorView *)[[self memoryMapViewController] view] expanded:NO];
+	[[self inspectorViewContainer] addInspectorView:(JUInspectorView *)[[self interruptsViewController] view] expanded:NO];
+	[[self inspectorViewContainer] addInspectorView:(JUInspectorView *)[[self displayViewController] view] expanded:NO];
 }
 #pragma mark NSSplitViewDelegate
 - (BOOL)splitView:(NSSplitView *)splitView shouldAdjustSizeOfSubview:(NSView *)view {
 	if ([splitView isVertical] && [[splitView subviews] lastObject] == view)
 		return NO;
-	else if (![splitView isVertical] && [[splitView subviews] lastObject] == view)
-		return NO;
+	//else if (![splitView isVertical] && [[splitView subviews] lastObject] == view)
+	//	return NO;
 	return YES;
 }
 
 static CGFloat kLeftSubviewMinimumWidth = 350.0;
 static CGFloat kRightSubviewMinimumWidth = 200.0;
 static CGFloat kTopSubviewMinimumWidth = 200.0;
-static CGFloat kBottomSubviewMinimumWidth = 150.0;
+static CGFloat kBottomSubviewMinimumWidth = 125.0;
 
 - (CGFloat)splitView:(NSSplitView *)splitView constrainMaxCoordinate:(CGFloat)proposedMaximumPosition ofSubviewAt:(NSInteger)dividerIndex {
 	if ([splitView isVertical])
@@ -124,6 +132,7 @@ static CGFloat kBottomSubviewMinimumWidth = 150.0;
 @synthesize disassemblyDummyView=_disassemblyDummyView;
 @synthesize inspectorScrollView=_inspectorScrollView;
 @synthesize inspectorSplitterHandleImageView=_inspectorSplitterHandleImageView;
+@synthesize memoryDummyView=_memoryDummyView;
 
 @dynamic calculatorDocument;
 - (WECalculatorDocument *)calculatorDocument {
@@ -178,6 +187,12 @@ static CGFloat kBottomSubviewMinimumWidth = 150.0;
 	if (!_displayViewController)
 		_displayViewController = [[RSDisplayViewController alloc] initWithCalculator:[[self calculatorDocument] calculator]];
 	return _displayViewController;
+}
+@dynamic memoryViewController;
+- (RSMemoryViewController *)memoryViewController {
+	if (!_memoryViewController)
+		_memoryViewController = [[RSMemoryViewController alloc] initWithCalculator:[[self calculatorDocument] calculator]];
+	return _memoryViewController;
 }
 
 @end

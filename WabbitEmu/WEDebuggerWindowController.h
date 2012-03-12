@@ -8,7 +8,7 @@
 
 #import <AppKit/NSWindowController.h>
 
-@class WECalculatorDocument,JUInspectorViewContainer,RSDisassemblyViewController,RSRegistersViewController,RSFlagsViewController,RSCPUViewController,RSMemoryMapViewController,RSInterruptsViewController,RSDisplayViewController;
+@class WECalculatorDocument,JUInspectorViewContainer,RSDisassemblyViewController,RSRegistersViewController,RSFlagsViewController,RSCPUViewController,RSMemoryMapViewController,RSInterruptsViewController,RSDisplayViewController,RSMemoryViewController;
 
 @interface WEDebuggerWindowController : NSWindowController <NSWindowDelegate,NSSplitViewDelegate> {
 	RSDisassemblyViewController *_disassemblyViewController;
@@ -19,10 +19,12 @@
 	RSMemoryMapViewController *_memoryMapViewController;
 	RSInterruptsViewController *_interruptsViewController;
 	RSDisplayViewController *_displayViewController;
+	RSMemoryViewController *_memoryViewController;
 }
 @property (readwrite,assign,nonatomic) IBOutlet NSView *disassemblyDummyView;
 @property (readwrite,assign,nonatomic) IBOutlet NSScrollView *inspectorScrollView;
 @property (readwrite,assign,nonatomic) IBOutlet NSImageView *inspectorSplitterHandleImageView;
+@property (readwrite,assign,nonatomic) IBOutlet NSView *memoryDummyView;
 
 @property (readonly,nonatomic) WECalculatorDocument *calculatorDocument;
 @property (readonly,nonatomic) JUInspectorViewContainer *inspectorViewContainer;
@@ -33,6 +35,7 @@
 @property (readonly,nonatomic) RSMemoryMapViewController *memoryMapViewController;
 @property (readonly,nonatomic) RSInterruptsViewController *interruptsViewController;
 @property (readonly,nonatomic) RSDisplayViewController *displayViewController;
+@property (readonly,nonatomic) RSMemoryViewController *memoryViewController;
 
 - (IBAction)step:(id)sender;
 - (IBAction)stepOver:(id)sender;

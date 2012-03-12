@@ -52,6 +52,21 @@
 		07096F75150DB49F002FE355 /* RSDisplayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07096F73150DB49F002FE355 /* RSDisplayViewController.m */; };
 		07096F78150DB522002FE355 /* RSDisplayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07096F76150DB522002FE355 /* RSDisplayView.xib */; };
 		07096F79150DB522002FE355 /* RSDisplayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07096F76150DB522002FE355 /* RSDisplayView.xib */; };
+		07096F7C150E5DD9002FE355 /* RSMemoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07096F7B150E5DD9002FE355 /* RSMemoryViewController.m */; };
+		07096F7D150E5DD9002FE355 /* RSMemoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07096F7B150E5DD9002FE355 /* RSMemoryViewController.m */; };
+		07096F80150E5EAF002FE355 /* RSMemoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07096F7E150E5EAF002FE355 /* RSMemoryView.xib */; };
+		07096F81150E5EAF002FE355 /* RSMemoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07096F7E150E5EAF002FE355 /* RSMemoryView.xib */; };
+		07096F82150E5F5C002FE355 /* PSMTabBarControl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0797326414C52EBE00A71F54 /* PSMTabBarControl.framework */; };
+		07096F84150E5F7F002FE355 /* PSMTabBarControl.framework in Copy Private Frameworks */ = {isa = PBXBuildFile; fileRef = 0797326414C52EBE00A71F54 /* PSMTabBarControl.framework */; };
+		07096F8B150E98DD002FE355 /* RSMemoryTabView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07096F8A150E98DD002FE355 /* RSMemoryTabView.m */; };
+		07096F8C150E98DD002FE355 /* RSMemoryTabView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07096F8A150E98DD002FE355 /* RSMemoryTabView.m */; };
+		07096F8D150E98E6002FE355 /* RSTabView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0797327414C5368200A71F54 /* RSTabView.m */; };
+		07096F90150E9F19002FE355 /* RSRegularMemoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07096F8F150E9F19002FE355 /* RSRegularMemoryViewController.m */; };
+		07096F91150E9F19002FE355 /* RSRegularMemoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07096F8F150E9F19002FE355 /* RSRegularMemoryViewController.m */; };
+		07096F94150E9FFF002FE355 /* RSRegularMemoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07096F92150E9FFF002FE355 /* RSRegularMemoryView.xib */; };
+		07096F95150E9FFF002FE355 /* RSRegularMemoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07096F92150E9FFF002FE355 /* RSRegularMemoryView.xib */; };
+		07096F98150EA091002FE355 /* RSRegularMemoryTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07096F97150EA090002FE355 /* RSRegularMemoryTableView.m */; };
+		07096F99150EA091002FE355 /* RSRegularMemoryTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07096F97150EA090002FE355 /* RSRegularMemoryTableView.m */; };
 		070D808614F4761700C289A3 /* RSTopBorderedGlassGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0778851E14C23F9700605F5D /* RSTopBorderedGlassGradientView.m */; };
 		070D808714F4762A00C289A3 /* RSGlassGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 072BBC5B14AA6D190044ECC2 /* RSGlassGradientView.m */; };
 		070EC24D14EF56F600982CA8 /* WCEditBuildTargetIncludesArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 070EC24C14EF56F600982CA8 /* WCEditBuildTargetIncludesArrayController.m */; };
@@ -596,6 +611,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		07096F83150E5F67002FE355 /* Copy Private Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				07096F84150E5F7F002FE355 /* PSMTabBarControl.framework in Copy Private Frameworks */,
+			);
+			name = "Copy Private Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		073737EF14FC247900B11AFC /* Copy QuickLook Plugin */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -709,6 +735,16 @@
 		07096F72150DB49F002FE355 /* RSDisplayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSDisplayViewController.h; sourceTree = "<group>"; };
 		07096F73150DB49F002FE355 /* RSDisplayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSDisplayViewController.m; sourceTree = "<group>"; };
 		07096F77150DB522002FE355 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = RSDisplayView.xib; sourceTree = "<group>"; };
+		07096F7A150E5DD9002FE355 /* RSMemoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSMemoryViewController.h; sourceTree = "<group>"; };
+		07096F7B150E5DD9002FE355 /* RSMemoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSMemoryViewController.m; sourceTree = "<group>"; };
+		07096F7F150E5EAF002FE355 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = RSMemoryView.xib; sourceTree = "<group>"; };
+		07096F89150E98DC002FE355 /* RSMemoryTabView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSMemoryTabView.h; sourceTree = "<group>"; };
+		07096F8A150E98DD002FE355 /* RSMemoryTabView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSMemoryTabView.m; sourceTree = "<group>"; };
+		07096F8E150E9F19002FE355 /* RSRegularMemoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSRegularMemoryViewController.h; sourceTree = "<group>"; };
+		07096F8F150E9F19002FE355 /* RSRegularMemoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSRegularMemoryViewController.m; sourceTree = "<group>"; };
+		07096F93150E9FFF002FE355 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = RSRegularMemoryView.xib; sourceTree = "<group>"; };
+		07096F96150EA090002FE355 /* RSRegularMemoryTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSRegularMemoryTableView.h; sourceTree = "<group>"; };
+		07096F97150EA090002FE355 /* RSRegularMemoryTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSRegularMemoryTableView.m; sourceTree = "<group>"; };
 		070EC24B14EF56F600982CA8 /* WCEditBuildTargetIncludesArrayController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCEditBuildTargetIncludesArrayController.h; sourceTree = "<group>"; };
 		070EC24C14EF56F600982CA8 /* WCEditBuildTargetIncludesArrayController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCEditBuildTargetIncludesArrayController.m; sourceTree = "<group>"; };
 		070EC24E14EF588E00982CA8 /* RSRTVArrayController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSRTVArrayController.h; sourceTree = "<group>"; };
@@ -1482,6 +1518,7 @@
 			files = (
 				075D2FBA14F36779007F8951 /* Cocoa.framework in Frameworks */,
 				075D31FA14F4412D007F8951 /* OpenGL.framework in Frameworks */,
+				07096F82150E5F5C002FE355 /* PSMTabBarControl.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2337,6 +2374,14 @@
 				07096F6B150DB1CE002FE355 /* RSInterruptsViewController.m */,
 				07096F72150DB49F002FE355 /* RSDisplayViewController.h */,
 				07096F73150DB49F002FE355 /* RSDisplayViewController.m */,
+				07096F7A150E5DD9002FE355 /* RSMemoryViewController.h */,
+				07096F7B150E5DD9002FE355 /* RSMemoryViewController.m */,
+				07096F89150E98DC002FE355 /* RSMemoryTabView.h */,
+				07096F8A150E98DD002FE355 /* RSMemoryTabView.m */,
+				07096F8E150E9F19002FE355 /* RSRegularMemoryViewController.h */,
+				07096F8F150E9F19002FE355 /* RSRegularMemoryViewController.m */,
+				07096F96150EA090002FE355 /* RSRegularMemoryTableView.h */,
+				07096F97150EA090002FE355 /* RSRegularMemoryTableView.m */,
 				075D2FD714F408E1007F8951 /* wabbitemu */,
 			);
 			name = Emulator;
@@ -2668,6 +2713,8 @@
 				07096F66150D94C7002FE355 /* RSMemoryMapView.xib */,
 				07096F6E150DB1DE002FE355 /* RSInterruptsView.xib */,
 				07096F76150DB522002FE355 /* RSDisplayView.xib */,
+				07096F7E150E5EAF002FE355 /* RSMemoryView.xib */,
+				07096F92150E9FFF002FE355 /* RSRegularMemoryView.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -3038,6 +3085,7 @@
 				075D2FB514F36779007F8951 /* Frameworks */,
 				075D2FB614F36779007F8951 /* Resources */,
 				073737EF14FC247900B11AFC /* Copy QuickLook Plugin */,
+				07096F83150E5F67002FE355 /* Copy Private Frameworks */,
 				07FCEDF0150814A700595ADA /* Internationalize Source Code */,
 			);
 			buildRules = (
@@ -3204,6 +3252,8 @@
 				07096F68150D94C7002FE355 /* RSMemoryMapView.xib in Resources */,
 				07096F70150DB1DE002FE355 /* RSInterruptsView.xib in Resources */,
 				07096F78150DB522002FE355 /* RSDisplayView.xib in Resources */,
+				07096F80150E5EAF002FE355 /* RSMemoryView.xib in Resources */,
+				07096F94150E9FFF002FE355 /* RSRegularMemoryView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3263,6 +3313,8 @@
 				07096F69150D94C7002FE355 /* RSMemoryMapView.xib in Resources */,
 				07096F71150DB1DE002FE355 /* RSInterruptsView.xib in Resources */,
 				07096F79150DB522002FE355 /* RSDisplayView.xib in Resources */,
+				07096F81150E5EAF002FE355 /* RSMemoryView.xib in Resources */,
+				07096F95150E9FFF002FE355 /* RSRegularMemoryView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3609,6 +3661,10 @@
 				07096F63150D9425002FE355 /* RSMemoryMapViewController.m in Sources */,
 				07096F6C150DB1CE002FE355 /* RSInterruptsViewController.m in Sources */,
 				07096F74150DB49F002FE355 /* RSDisplayViewController.m in Sources */,
+				07096F7C150E5DD9002FE355 /* RSMemoryViewController.m in Sources */,
+				07096F8B150E98DD002FE355 /* RSMemoryTabView.m in Sources */,
+				07096F90150E9F19002FE355 /* RSRegularMemoryViewController.m in Sources */,
+				07096F98150EA091002FE355 /* RSRegularMemoryTableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3734,6 +3790,11 @@
 				07096F64150D9425002FE355 /* RSMemoryMapViewController.m in Sources */,
 				07096F6D150DB1CE002FE355 /* RSInterruptsViewController.m in Sources */,
 				07096F75150DB49F002FE355 /* RSDisplayViewController.m in Sources */,
+				07096F7D150E5DD9002FE355 /* RSMemoryViewController.m in Sources */,
+				07096F8C150E98DD002FE355 /* RSMemoryTabView.m in Sources */,
+				07096F8D150E98E6002FE355 /* RSTabView.m in Sources */,
+				07096F91150E9F19002FE355 /* RSRegularMemoryViewController.m in Sources */,
+				07096F99150EA091002FE355 /* RSRegularMemoryTableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3800,6 +3861,22 @@
 				07096F77150DB522002FE355 /* en */,
 			);
 			name = RSDisplayView.xib;
+			sourceTree = "<group>";
+		};
+		07096F7E150E5EAF002FE355 /* RSMemoryView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				07096F7F150E5EAF002FE355 /* en */,
+			);
+			name = RSMemoryView.xib;
+			sourceTree = "<group>";
+		};
+		07096F92150E9FFF002FE355 /* RSRegularMemoryView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				07096F93150E9FFF002FE355 /* en */,
+			);
+			name = RSRegularMemoryView.xib;
 			sourceTree = "<group>";
 		};
 		070EC26814F079D300982CA8 /* WCBreakpointNavigatorView.xib */ = {
@@ -4411,6 +4488,10 @@
 		075D2FD014F3677A007F8951 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Frameworks\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WabbitEmu/WabbitEmu-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -4424,6 +4505,10 @@
 		075D2FD114F3677A007F8951 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Frameworks\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WabbitEmu/WabbitEmu-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;

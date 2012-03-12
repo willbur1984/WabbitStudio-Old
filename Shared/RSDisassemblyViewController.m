@@ -10,7 +10,6 @@
 #import "RSCalculator.h"
 #import "RSTableView.h"
 
-
 @interface RSDisassemblyViewController ()
 - (void)_reloadDisassemblyInfos;
 @end
@@ -21,6 +20,7 @@
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
 	[_calculator removeObserver:self forKeyPath:@"programCounter" context:self];
+	[_calculator removeObserver:self forKeyPath:@"debugging" context:self];
 	
 	free(_z80_info);
 	[_calculator release];
@@ -43,6 +43,9 @@
 			[self _reloadDisassemblyInfos];
 			[self jumpToAddress:[[self calculator] programCounter]];
 		}
+		else if ([keyPath isEqualToString:@"debugging"]) {
+			[[self tableView] reloadData];
+		}
 	}
 	else
 		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
@@ -54,7 +57,7 @@ static NSString *const kDisassemblyColumnIdentifier = @"disassembly";
 static NSString *const kSizeColumnIdentifier = @"size";
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
-	return UINT16_MAX;
+	return ([[self calculator] isDebugging])?UINT16_MAX:0;
 }
 
 - (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
@@ -94,6 +97,7 @@ static NSString *const kSizeColumnIdentifier = @"size";
 	_calculator = [calculator retain];
 	
 	[calculator addObserver:self forKeyPath:@"programCounter" options:0 context:self];
+	[calculator addObserver:self forKeyPath:@"debugging" options:0 context:self];
 	
 	return self;
 }
