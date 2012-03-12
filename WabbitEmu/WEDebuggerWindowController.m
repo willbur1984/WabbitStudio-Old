@@ -14,6 +14,7 @@
 #import "JUInspectorViewContainer.h"
 #import "RSFlagsViewController.h"
 #import "RSCPUViewController.h"
+#import "RSMemoryMapViewController.h"
 
 @interface WEDebuggerWindowController ()
 
@@ -25,6 +26,7 @@
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
+	[_memoryMapViewController release];
 	[_CPUViewController release];
 	[_flagsViewController release];
 	[_registersViewController release];
@@ -60,6 +62,7 @@
 	[[self inspectorViewContainer] addInspectorView:(JUInspectorView *)[[self registersViewController] view] expanded:YES];
 	[[self inspectorViewContainer] addInspectorView:(JUInspectorView *)[[self flagsViewController] view] expanded:YES];
 	[[self inspectorViewContainer] addInspectorView:(JUInspectorView *)[[self CPUViewController] view] expanded:YES];
+	[[self inspectorViewContainer] addInspectorView:(JUInspectorView *)[[self memoryMapViewController] view] expanded:YES];
 }
 #pragma mark NSSplitViewDelegate
 - (BOOL)splitView:(NSSplitView *)splitView shouldAdjustSizeOfSubview:(NSView *)view {
@@ -80,6 +83,7 @@ static CGFloat kBottomSubviewMinimumWidth = 150.0;
 		return proposedMaximumPosition-kRightSubviewMinimumWidth;
 	return proposedMaximumPosition-kBottomSubviewMinimumWidth;
 }
+
 - (CGFloat)splitView:(NSSplitView *)splitView constrainMinCoordinate:(CGFloat)proposedMinimumPosition ofSubviewAt:(NSInteger)dividerIndex {
 	if ([splitView isVertical])
 		return proposedMinimumPosition+kLeftSubviewMinimumWidth;
@@ -142,6 +146,12 @@ static CGFloat kBottomSubviewMinimumWidth = 150.0;
 	if (!_CPUViewController)
 		_CPUViewController = [[RSCPUViewController alloc] initWithCalculator:[[self calculatorDocument] calculator]];
 	return _CPUViewController;
+}
+@dynamic memoryMapViewController;
+- (RSMemoryMapViewController *)memoryMapViewController {
+	if (!_memoryMapViewController)
+		_memoryMapViewController = [[RSMemoryMapViewController alloc] initWithCalculator:[[self calculatorDocument] calculator]];
+	return _memoryMapViewController;
 }
 @dynamic inspectorViewContainer;
 - (JUInspectorViewContainer *)inspectorViewContainer {

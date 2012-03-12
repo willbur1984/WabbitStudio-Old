@@ -40,6 +40,10 @@
 		0708965514A6CE900017BBE4 /* WCCompletionChoice.m in Sources */ = {isa = PBXBuildFile; fileRef = 0708965414A6CE900017BBE4 /* WCCompletionChoice.m */; };
 		0708965714A6F1360017BBE4 /* PreProcessorCompletions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0708965614A6F1360017BBE4 /* PreProcessorCompletions.plist */; };
 		0708A5BF14D9031600BE60EE /* Bookmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 0708A5BE14D9031600BE60EE /* Bookmark.png */; };
+		07096F63150D9425002FE355 /* RSMemoryMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07096F62150D9425002FE355 /* RSMemoryMapViewController.m */; };
+		07096F64150D9425002FE355 /* RSMemoryMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07096F62150D9425002FE355 /* RSMemoryMapViewController.m */; };
+		07096F68150D94C7002FE355 /* RSMemoryMapView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07096F66150D94C7002FE355 /* RSMemoryMapView.xib */; };
+		07096F69150D94C7002FE355 /* RSMemoryMapView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07096F66150D94C7002FE355 /* RSMemoryMapView.xib */; };
 		070D808614F4761700C289A3 /* RSTopBorderedGlassGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0778851E14C23F9700605F5D /* RSTopBorderedGlassGradientView.m */; };
 		070D808714F4762A00C289A3 /* RSGlassGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 072BBC5B14AA6D190044ECC2 /* RSGlassGradientView.m */; };
 		070EC24D14EF56F600982CA8 /* WCEditBuildTargetIncludesArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 070EC24C14EF56F600982CA8 /* WCEditBuildTargetIncludesArrayController.m */; };
@@ -688,6 +692,9 @@
 		0708965414A6CE900017BBE4 /* WCCompletionChoice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCCompletionChoice.m; sourceTree = "<group>"; };
 		0708965614A6F1360017BBE4 /* PreProcessorCompletions.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PreProcessorCompletions.plist; sourceTree = "<group>"; };
 		0708A5BE14D9031600BE60EE /* Bookmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Bookmark.png; sourceTree = "<group>"; };
+		07096F61150D9425002FE355 /* RSMemoryMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSMemoryMapViewController.h; sourceTree = "<group>"; };
+		07096F62150D9425002FE355 /* RSMemoryMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSMemoryMapViewController.m; sourceTree = "<group>"; };
+		07096F67150D94C7002FE355 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = RSMemoryMapView.xib; sourceTree = "<group>"; };
 		070EC24B14EF56F600982CA8 /* WCEditBuildTargetIncludesArrayController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCEditBuildTargetIncludesArrayController.h; sourceTree = "<group>"; };
 		070EC24C14EF56F600982CA8 /* WCEditBuildTargetIncludesArrayController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCEditBuildTargetIncludesArrayController.m; sourceTree = "<group>"; };
 		070EC24E14EF588E00982CA8 /* RSRTVArrayController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSRTVArrayController.h; sourceTree = "<group>"; };
@@ -2310,6 +2317,8 @@
 				074B749C150D2D460096548E /* RSFlagsViewController.m */,
 				074B74A7150D40D40096548E /* RSCPUViewController.h */,
 				074B74A8150D40D40096548E /* RSCPUViewController.m */,
+				07096F61150D9425002FE355 /* RSMemoryMapViewController.h */,
+				07096F62150D9425002FE355 /* RSMemoryMapViewController.m */,
 				075D2FD714F408E1007F8951 /* wabbitemu */,
 			);
 			name = Emulator;
@@ -2638,6 +2647,7 @@
 				074B7487150D23D10096548E /* RSRegistersView.xib */,
 				074B749F150D2D620096548E /* RSFlagsView.xib */,
 				074B74AB150D40E40096548E /* RSCPUView.xib */,
+				07096F66150D94C7002FE355 /* RSMemoryMapView.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -3171,6 +3181,7 @@
 				074B7489150D23D10096548E /* RSRegistersView.xib in Resources */,
 				074B74A1150D2D620096548E /* RSFlagsView.xib in Resources */,
 				074B74AD150D40E40096548E /* RSCPUView.xib in Resources */,
+				07096F68150D94C7002FE355 /* RSMemoryMapView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3227,6 +3238,7 @@
 				074B74A2150D2D620096548E /* RSFlagsView.xib in Resources */,
 				074B74AE150D40E40096548E /* RSCPUView.xib in Resources */,
 				07E6189F150D47BE00640880 /* SplitterHandle.pdf in Resources */,
+				07096F69150D94C7002FE355 /* RSMemoryMapView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3570,6 +3582,7 @@
 				074B7499150D26A30096548E /* JUInspectorViewHeader.m in Sources */,
 				074B749D150D2D460096548E /* RSFlagsViewController.m in Sources */,
 				074B74A9150D40D40096548E /* RSCPUViewController.m in Sources */,
+				07096F63150D9425002FE355 /* RSMemoryMapViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3692,6 +3705,7 @@
 				074B749A150D26A30096548E /* JUInspectorViewHeader.m in Sources */,
 				074B749E150D2D460096548E /* RSFlagsViewController.m in Sources */,
 				074B74AA150D40D40096548E /* RSCPUViewController.m in Sources */,
+				07096F64150D9425002FE355 /* RSMemoryMapViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3734,6 +3748,14 @@
 			);
 			name = WCCompletionWindow.xib;
 			path = ..;
+			sourceTree = "<group>";
+		};
+		07096F66150D94C7002FE355 /* RSMemoryMapView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				07096F67150D94C7002FE355 /* en */,
+			);
+			name = RSMemoryMapView.xib;
 			sourceTree = "<group>";
 		};
 		070EC26814F079D300982CA8 /* WCBreakpointNavigatorView.xib */ = {
