@@ -15,6 +15,7 @@
 #import "RSFlagsViewController.h"
 #import "RSCPUViewController.h"
 #import "RSMemoryMapViewController.h"
+#import "RSInterruptsViewController.h"
 
 @interface WEDebuggerWindowController ()
 
@@ -26,6 +27,7 @@
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
+	[_interruptsViewController release];
 	[_memoryMapViewController release];
 	[_CPUViewController release];
 	[_flagsViewController release];
@@ -63,6 +65,7 @@
 	[[self inspectorViewContainer] addInspectorView:(JUInspectorView *)[[self flagsViewController] view] expanded:YES];
 	[[self inspectorViewContainer] addInspectorView:(JUInspectorView *)[[self CPUViewController] view] expanded:YES];
 	[[self inspectorViewContainer] addInspectorView:(JUInspectorView *)[[self memoryMapViewController] view] expanded:YES];
+	[[self inspectorViewContainer] addInspectorView:(JUInspectorView *)[[self interruptsViewController] view] expanded:YES];
 }
 #pragma mark NSSplitViewDelegate
 - (BOOL)splitView:(NSSplitView *)splitView shouldAdjustSizeOfSubview:(NSView *)view {
@@ -152,6 +155,12 @@ static CGFloat kBottomSubviewMinimumWidth = 150.0;
 	if (!_memoryMapViewController)
 		_memoryMapViewController = [[RSMemoryMapViewController alloc] initWithCalculator:[[self calculatorDocument] calculator]];
 	return _memoryMapViewController;
+}
+@dynamic interruptsViewController;
+- (RSInterruptsViewController *)interruptsViewController {
+	if (!_interruptsViewController)
+		_interruptsViewController = [[RSInterruptsViewController alloc] initWithCalculator:[[self calculatorDocument] calculator]];
+	return _interruptsViewController;
 }
 @dynamic inspectorViewContainer;
 - (JUInspectorViewContainer *)inspectorViewContainer {
