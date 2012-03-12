@@ -342,6 +342,7 @@
 	
 	[openPanel setAllowedFileTypes:[NSArray arrayWithObjects:RSCalculatorProgramUTI,RSCalculatorApplicationUTI,RSCalculatorGroupFileUTI,RSCalculatorPictureFileUTI, nil]];
 	[openPanel setPrompt:NSLocalizedString(@"Transfer", @"Transfer")];
+	[openPanel setAllowsMultipleSelection:YES];
 	
 	[openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {
 		[openPanel orderOut:nil];
