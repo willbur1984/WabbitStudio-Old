@@ -8,7 +8,7 @@
 
 #import <AppKit/NSWindowController.h>
 
-@class WECalculatorDocument,JUInspectorViewContainer,RSDisassemblyViewController,RSRegistersViewController,RSFlagsViewController,RSCPUViewController,RSMemoryMapViewController,RSInterruptsViewController;
+@class WECalculatorDocument,JUInspectorViewContainer,RSDisassemblyViewController,RSRegistersViewController,RSFlagsViewController,RSCPUViewController,RSMemoryMapViewController,RSInterruptsViewController,RSDisplayViewController;
 
 @interface WEDebuggerWindowController : NSWindowController <NSWindowDelegate,NSSplitViewDelegate> {
 	RSDisassemblyViewController *_disassemblyViewController;
@@ -18,6 +18,7 @@
 	RSCPUViewController *_CPUViewController;
 	RSMemoryMapViewController *_memoryMapViewController;
 	RSInterruptsViewController *_interruptsViewController;
+	RSDisplayViewController *_displayViewController;
 }
 @property (readwrite,assign,nonatomic) IBOutlet NSView *disassemblyDummyView;
 @property (readwrite,assign,nonatomic) IBOutlet NSScrollView *inspectorScrollView;
@@ -31,6 +32,7 @@
 @property (readonly,nonatomic) RSCPUViewController *CPUViewController;
 @property (readonly,nonatomic) RSMemoryMapViewController *memoryMapViewController;
 @property (readonly,nonatomic) RSInterruptsViewController *interruptsViewController;
+@property (readonly,nonatomic) RSDisplayViewController *displayViewController;
 
 - (IBAction)step:(id)sender;
 - (IBAction)stepOver:(id)sender;

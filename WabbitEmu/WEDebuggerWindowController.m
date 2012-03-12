@@ -16,6 +16,7 @@
 #import "RSCPUViewController.h"
 #import "RSMemoryMapViewController.h"
 #import "RSInterruptsViewController.h"
+#import "RSDisplayViewController.h"
 
 @interface WEDebuggerWindowController ()
 
@@ -27,6 +28,7 @@
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
+	[_displayViewController release];
 	[_interruptsViewController release];
 	[_memoryMapViewController release];
 	[_CPUViewController release];
@@ -66,6 +68,7 @@
 	[[self inspectorViewContainer] addInspectorView:(JUInspectorView *)[[self CPUViewController] view] expanded:YES];
 	[[self inspectorViewContainer] addInspectorView:(JUInspectorView *)[[self memoryMapViewController] view] expanded:YES];
 	[[self inspectorViewContainer] addInspectorView:(JUInspectorView *)[[self interruptsViewController] view] expanded:YES];
+	[[self inspectorViewContainer] addInspectorView:(JUInspectorView *)[[self displayViewController] view] expanded:YES];
 }
 #pragma mark NSSplitViewDelegate
 - (BOOL)splitView:(NSSplitView *)splitView shouldAdjustSizeOfSubview:(NSView *)view {
@@ -126,6 +129,14 @@ static CGFloat kBottomSubviewMinimumWidth = 150.0;
 - (WECalculatorDocument *)calculatorDocument {
 	return (WECalculatorDocument *)[self document];
 }
+@dynamic inspectorViewContainer;
+- (JUInspectorViewContainer *)inspectorViewContainer {
+	if (!_inspectorViewContainer) {
+		_inspectorViewContainer = [[JUInspectorViewContainer alloc] initWithFrame:NSMakeRect(0.0, 0.0, 100.0, 100.0)];
+		[_inspectorViewContainer setAutoresizingMask:NSViewWidthSizable];
+	}
+	return _inspectorViewContainer;
+}
 @dynamic disassemblyViewController;
 - (RSDisassemblyViewController *)disassemblyViewController {
 	if (!_disassemblyViewController)
@@ -162,13 +173,11 @@ static CGFloat kBottomSubviewMinimumWidth = 150.0;
 		_interruptsViewController = [[RSInterruptsViewController alloc] initWithCalculator:[[self calculatorDocument] calculator]];
 	return _interruptsViewController;
 }
-@dynamic inspectorViewContainer;
-- (JUInspectorViewContainer *)inspectorViewContainer {
-	if (!_inspectorViewContainer) {
-		_inspectorViewContainer = [[JUInspectorViewContainer alloc] initWithFrame:NSMakeRect(0.0, 0.0, 100.0, 100.0)];
-		[_inspectorViewContainer setAutoresizingMask:NSViewWidthSizable];
-	}
-	return _inspectorViewContainer;
+@dynamic displayViewController;
+- (RSDisplayViewController *)displayViewController {
+	if (!_displayViewController)
+		_displayViewController = [[RSDisplayViewController alloc] initWithCalculator:[[self calculatorDocument] calculator]];
+	return _displayViewController;
 }
 
 @end
