@@ -303,6 +303,10 @@
 		074B74AA150D40D40096548E /* RSCPUViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 074B74A8150D40D40096548E /* RSCPUViewController.m */; };
 		074B74AD150D40E40096548E /* RSCPUView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 074B74AB150D40E40096548E /* RSCPUView.xib */; };
 		074B74AE150D40E40096548E /* RSCPUView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 074B74AB150D40E40096548E /* RSCPUView.xib */; };
+		0751684E150FFC2A006AAF27 /* RSStackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0751684D150FFC2A006AAF27 /* RSStackViewController.m */; };
+		0751684F150FFC2A006AAF27 /* RSStackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0751684D150FFC2A006AAF27 /* RSStackViewController.m */; };
+		07516852150FFD21006AAF27 /* RSStackView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07516850150FFD21006AAF27 /* RSStackView.xib */; };
+		07516853150FFD21006AAF27 /* RSStackView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07516850150FFD21006AAF27 /* RSStackView.xib */; };
 		075D2F7114F1FB94007F8951 /* WCRoundedBorderImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 075D2F7014F1FB93007F8951 /* WCRoundedBorderImageCell.m */; };
 		075D2F7514F1FFA9007F8951 /* WCRoundedBorderImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 075D2F7414F1FFA8007F8951 /* WCRoundedBorderImageView.m */; };
 		075D2F7814F203F7007F8951 /* WCRoundedBorderTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 075D2F7714F203F7007F8951 /* WCRoundedBorderTextField.m */; };
@@ -1097,6 +1101,9 @@
 		074B74A8150D40D40096548E /* RSCPUViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSCPUViewController.m; sourceTree = "<group>"; };
 		074B74AC150D40E40096548E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = RSCPUView.xib; sourceTree = "<group>"; };
 		0751684A150FF2CC006AAF27 /* RSCalculatorMemoryView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSCalculatorMemoryView.h; sourceTree = "<group>"; };
+		0751684C150FFC2A006AAF27 /* RSStackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSStackViewController.h; sourceTree = "<group>"; };
+		0751684D150FFC2A006AAF27 /* RSStackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSStackViewController.m; sourceTree = "<group>"; };
+		07516851150FFD21006AAF27 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = RSStackView.xib; sourceTree = "<group>"; };
 		075D2F6F14F1FB93007F8951 /* WCRoundedBorderImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCRoundedBorderImageCell.h; sourceTree = "<group>"; };
 		075D2F7014F1FB93007F8951 /* WCRoundedBorderImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCRoundedBorderImageCell.m; sourceTree = "<group>"; };
 		075D2F7314F1FFA8007F8951 /* WCRoundedBorderImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCRoundedBorderImageView.h; sourceTree = "<group>"; };
@@ -2402,6 +2409,8 @@
 				07096F97150EA090002FE355 /* RSRegularMemoryTableView.m */,
 				07096FA3150FBA7C002FE355 /* RSRegularMemoryTableHeaderView.h */,
 				07096FA4150FBA7D002FE355 /* RSRegularMemoryTableHeaderView.m */,
+				0751684C150FFC2A006AAF27 /* RSStackViewController.h */,
+				0751684D150FFC2A006AAF27 /* RSStackViewController.m */,
 				075D2FD714F408E1007F8951 /* wabbitemu */,
 			);
 			name = Emulator;
@@ -2735,6 +2744,7 @@
 				07096F76150DB522002FE355 /* RSDisplayView.xib */,
 				07096F7E150E5EAF002FE355 /* RSMemoryView.xib */,
 				07096F92150E9FFF002FE355 /* RSRegularMemoryView.xib */,
+				07516850150FFD21006AAF27 /* RSStackView.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -3277,6 +3287,7 @@
 				07096F9D150EDD49002FE355 /* Step Out.png in Resources */,
 				07096F9F150EDD49002FE355 /* Step Over.png in Resources */,
 				07096FA1150EDD49002FE355 /* Step.png in Resources */,
+				07516852150FFD21006AAF27 /* RSStackView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3341,6 +3352,7 @@
 				07096F9E150EDD49002FE355 /* Step Out.png in Resources */,
 				07096FA0150EDD49002FE355 /* Step Over.png in Resources */,
 				07096FA2150EDD49002FE355 /* Step.png in Resources */,
+				07516853150FFD21006AAF27 /* RSStackView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3692,6 +3704,7 @@
 				07096F90150E9F19002FE355 /* RSRegularMemoryViewController.m in Sources */,
 				07096F98150EA091002FE355 /* RSRegularMemoryTableView.m in Sources */,
 				07096FA5150FBA7E002FE355 /* RSRegularMemoryTableHeaderView.m in Sources */,
+				0751684E150FFC2A006AAF27 /* RSStackViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3823,6 +3836,7 @@
 				07096F91150E9F19002FE355 /* RSRegularMemoryViewController.m in Sources */,
 				07096F99150EA091002FE355 /* RSRegularMemoryTableView.m in Sources */,
 				07096FA6150FBA7E002FE355 /* RSRegularMemoryTableHeaderView.m in Sources */,
+				0751684F150FFC2A006AAF27 /* RSStackViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4130,6 +4144,14 @@
 				074B74AC150D40E40096548E /* en */,
 			);
 			name = RSCPUView.xib;
+			sourceTree = "<group>";
+		};
+		07516850150FFD21006AAF27 /* RSStackView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				07516851150FFD21006AAF27 /* en */,
+			);
+			name = RSStackView.xib;
 			sourceTree = "<group>";
 		};
 		075D2F8314F21BED007F8951 /* WCOpenPanelAccessoryView.xib */ = {
