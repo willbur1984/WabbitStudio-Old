@@ -3,12 +3,12 @@
 	<data>
 		<int key="IBDocument.SystemTarget">1070</int>
 		<string key="IBDocument.SystemVersion">11D50b</string>
-		<string key="IBDocument.InterfaceBuilderVersion">2177</string>
+		<string key="IBDocument.InterfaceBuilderVersion">2182</string>
 		<string key="IBDocument.AppKitVersion">1138.32</string>
 		<string key="IBDocument.HIToolboxVersion">568.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">2177</string>
+			<string key="NS.object.0">2182</string>
 		</object>
 		<array key="IBDocument.IntegratedClassDependencies">
 			<string>NSPopUpButton</string>
@@ -89,9 +89,9 @@
 										<array class="NSMutableArray" key="NSTableColumns">
 											<object class="NSTableColumn" id="409190303">
 												<string key="NSIdentifier">address</string>
-												<double key="NSWidth">61.8671875</double>
-												<double key="NSMinWidth">40</double>
-												<double key="NSMaxWidth">1000</double>
+												<double key="NSWidth">50</double>
+												<double key="NSMinWidth">50</double>
+												<double key="NSMaxWidth">50</double>
 												<object class="NSTableHeaderCell" key="NSHeaderCell">
 													<int key="NSCellFlags">75628096</int>
 													<int key="NSCellFlags2">2048</int>
@@ -137,8 +137,6 @@
 														<reference key="NSColor" ref="805985972"/>
 													</object>
 												</object>
-												<int key="NSResizingMask">3</int>
-												<bool key="NSIsResizeable">YES</bool>
 												<reference key="NSTableView" ref="502975358"/>
 											</object>
 											<object class="NSTableColumn" id="1050652341">
@@ -166,8 +164,6 @@
 													<reference key="NSBackgroundColor" ref="955955822"/>
 													<reference key="NSTextColor" ref="444959180"/>
 												</object>
-												<int key="NSResizingMask">3</int>
-												<bool key="NSIsResizeable">YES</bool>
 												<reference key="NSTableView" ref="502975358"/>
 											</object>
 											<object class="NSTableColumn" id="447785423">
@@ -195,15 +191,15 @@
 													<reference key="NSBackgroundColor" ref="955955822"/>
 													<reference key="NSTextColor" ref="444959180"/>
 												</object>
-												<int key="NSResizingMask">3</int>
+												<int key="NSResizingMask">1</int>
 												<bool key="NSIsResizeable">YES</bool>
 												<reference key="NSTableView" ref="502975358"/>
 											</object>
 											<object class="NSTableColumn" id="1036354816">
 												<string key="NSIdentifier">size</string>
-												<double key="NSWidth">70</double>
+												<double key="NSWidth">40</double>
 												<double key="NSMinWidth">40</double>
-												<double key="NSMaxWidth">1000</double>
+												<double key="NSMaxWidth">40</double>
 												<object class="NSTableHeaderCell" key="NSHeaderCell">
 													<int key="NSCellFlags">75628096</int>
 													<int key="NSCellFlags2">2048</int>
@@ -224,8 +220,6 @@
 													<reference key="NSBackgroundColor" ref="955955822"/>
 													<reference key="NSTextColor" ref="444959180"/>
 												</object>
-												<int key="NSResizingMask">3</int>
-												<bool key="NSIsResizeable">YES</bool>
 												<reference key="NSTableView" ref="502975358"/>
 											</object>
 										</array>
@@ -330,6 +324,7 @@
 								<string key="NSFrame">{{43, 1}, {429, 19}}</string>
 								<reference key="NSSuperview" ref="912650272"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="NSEnabled">YES</bool>
 								<object class="NSSearchFieldCell" key="NSCell" id="256757427">

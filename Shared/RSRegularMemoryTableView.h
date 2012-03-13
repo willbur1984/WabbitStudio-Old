@@ -8,6 +8,8 @@
 
 #import "RSTableView.h"
 
-@interface RSRegularMemoryTableView : RSTableView
+@class RSRegularMemoryViewController;
 
+@interface RSRegularMemoryTableView : RSTableView
+@property (readwrite,assign,nonatomic) IBOutlet RSRegularMemoryViewController *regularMemoryViewController;
 @end
