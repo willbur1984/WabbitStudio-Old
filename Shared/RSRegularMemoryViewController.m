@@ -16,6 +16,9 @@
 @implementation RSRegularMemoryViewController
 
 - (void)dealloc {
+#ifdef DEBUG
+	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
+#endif
 	[_calculator release];
 	[super dealloc];
 }

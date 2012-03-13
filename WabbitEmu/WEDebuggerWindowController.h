@@ -10,7 +10,7 @@
 
 @class WECalculatorDocument,JUInspectorViewContainer,RSDisassemblyViewController,RSRegistersViewController,RSFlagsViewController,RSCPUViewController,RSMemoryMapViewController,RSInterruptsViewController,RSDisplayViewController,RSMemoryViewController;
 
-@interface WEDebuggerWindowController : NSWindowController <NSWindowDelegate,NSSplitViewDelegate> {
+@interface WEDebuggerWindowController : NSWindowController <NSWindowDelegate,NSSplitViewDelegate,NSToolbarDelegate> {
 	RSDisassemblyViewController *_disassemblyViewController;
 	JUInspectorViewContainer *_inspectorViewContainer;
 	RSRegistersViewController *_registersViewController;

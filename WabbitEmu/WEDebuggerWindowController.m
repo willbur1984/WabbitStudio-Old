@@ -19,6 +19,12 @@
 #import "RSDisplayViewController.h"
 #import "RSMemoryViewController.h"
 
+static NSString *const WEDebuggerToolbarStepItemIdentifier = @"WEDebuggerToolbarStepItemIdentifier";
+static NSString *const WEDebuggerToolbarStepOutItemIdentifier = @"WEDebuggerToolbarStepOutItemIdentifier";
+static NSString *const WEDebuggerToolbarStepOverItemIdentifier = @"WEDebuggerToolbarStepOverItemIdentifier";
+
+static NSString *const WEDebuggerWindowToolbarItemIdentifier = @"WEDebuggerWindowToolbarItemIdentifier";
+
 @interface WEDebuggerWindowController ()
 
 @end
@@ -59,6 +65,20 @@
 - (void)windowDidLoad {
 	[super windowDidLoad];
 	
+	// toolbar
+	NSToolbar *toolbar = [[[NSToolbar alloc] initWithIdentifier:WEDebuggerWindowToolbarItemIdentifier] autorelease];
+	
+	[toolbar setAllowsUserCustomization:YES];
+	[toolbar setDisplayMode:NSToolbarDisplayModeIconAndLabel];
+	[toolbar setSizeMode:NSToolbarSizeModeRegular];
+	[toolbar setDelegate:self];
+	
+#ifndef DEBUG
+	[toolbar setAutosavesConfiguration:YES];
+#endif
+	
+	[[self window] setToolbar:toolbar];
+	
 	// disassembly view
 	[[[self disassemblyViewController] view] setFrameSize:[[self disassemblyDummyView] frame].size];
 	[[[self disassemblyDummyView] superview] replaceSubview:[self disassemblyDummyView] with:[[self disassemblyViewController] view]];
@@ -78,12 +98,44 @@
 	[[self inspectorViewContainer] addInspectorView:(JUInspectorView *)[[self interruptsViewController] view] expanded:NO];
 	[[self inspectorViewContainer] addInspectorView:(JUInspectorView *)[[self displayViewController] view] expanded:NO];
 }
+#pragma mark NSToolbarDelegate
+- (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar {
+	return [NSArray arrayWithObjects:WEDebuggerToolbarStepItemIdentifier,WEDebuggerToolbarStepOutItemIdentifier,WEDebuggerToolbarStepOverItemIdentifier,NSToolbarSpaceItemIdentifier,NSToolbarFlexibleSpaceItemIdentifier, nil];
+}
+- (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar {
+	return [NSArray arrayWithObjects:NSToolbarFlexibleSpaceItemIdentifier,WEDebuggerToolbarStepItemIdentifier,WEDebuggerToolbarStepOutItemIdentifier,WEDebuggerToolbarStepOverItemIdentifier,NSToolbarFlexibleSpaceItemIdentifier, nil];
+}
+- (NSToolbarItem *)toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag {
+	NSToolbarItem *item = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
+	
+	if ([itemIdentifier isEqualToString:WEDebuggerToolbarStepItemIdentifier]) {
+		[item setLabel:NSLocalizedString(@"Step", @"Step")];
+		[item setPaletteLabel:[item label]];
+		[item setImage:[NSImage imageNamed:@"Step"]];
+		[item setAction:@selector(step:)];
+	}
+	else if ([itemIdentifier isEqualToString:WEDebuggerToolbarStepOutItemIdentifier]) {
+		[item setLabel:NSLocalizedString(@"Step Out", @"Step Out")];
+		[item setPaletteLabel:[item label]];
+		[item setImage:[NSImage imageNamed:@"Step Out"]];
+		[item setAction:@selector(stepOut:)];
+	}
+	else if ([itemIdentifier isEqualToString:WEDebuggerToolbarStepOverItemIdentifier]) {
+		[item setLabel:NSLocalizedString(@"Step Over", @"Step Over")];
+		[item setPaletteLabel:[item label]];
+		[item setImage:[NSImage imageNamed:@"Step Over"]];
+		[item setAction:@selector(stepOver:)];
+	}
+	
+	return item;
+}
+
 #pragma mark NSSplitViewDelegate
 - (BOOL)splitView:(NSSplitView *)splitView shouldAdjustSizeOfSubview:(NSView *)view {
 	if ([splitView isVertical] && [[splitView subviews] lastObject] == view)
 		return NO;
-	//else if (![splitView isVertical] && [[splitView subviews] lastObject] == view)
-	//	return NO;
+	else if (![splitView isVertical] && [[splitView subviews] objectAtIndex:0] == view)
+		return NO;
 	return YES;
 }
 

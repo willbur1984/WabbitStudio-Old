@@ -67,6 +67,12 @@
 		07096F95150E9FFF002FE355 /* RSRegularMemoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07096F92150E9FFF002FE355 /* RSRegularMemoryView.xib */; };
 		07096F98150EA091002FE355 /* RSRegularMemoryTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07096F97150EA090002FE355 /* RSRegularMemoryTableView.m */; };
 		07096F99150EA091002FE355 /* RSRegularMemoryTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07096F97150EA090002FE355 /* RSRegularMemoryTableView.m */; };
+		07096F9D150EDD49002FE355 /* Step Out.png in Resources */ = {isa = PBXBuildFile; fileRef = 07096F9A150EDD49002FE355 /* Step Out.png */; };
+		07096F9E150EDD49002FE355 /* Step Out.png in Resources */ = {isa = PBXBuildFile; fileRef = 07096F9A150EDD49002FE355 /* Step Out.png */; };
+		07096F9F150EDD49002FE355 /* Step Over.png in Resources */ = {isa = PBXBuildFile; fileRef = 07096F9B150EDD49002FE355 /* Step Over.png */; };
+		07096FA0150EDD49002FE355 /* Step Over.png in Resources */ = {isa = PBXBuildFile; fileRef = 07096F9B150EDD49002FE355 /* Step Over.png */; };
+		07096FA1150EDD49002FE355 /* Step.png in Resources */ = {isa = PBXBuildFile; fileRef = 07096F9C150EDD49002FE355 /* Step.png */; };
+		07096FA2150EDD49002FE355 /* Step.png in Resources */ = {isa = PBXBuildFile; fileRef = 07096F9C150EDD49002FE355 /* Step.png */; };
 		070D808614F4761700C289A3 /* RSTopBorderedGlassGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0778851E14C23F9700605F5D /* RSTopBorderedGlassGradientView.m */; };
 		070D808714F4762A00C289A3 /* RSGlassGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 072BBC5B14AA6D190044ECC2 /* RSGlassGradientView.m */; };
 		070EC24D14EF56F600982CA8 /* WCEditBuildTargetIncludesArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 070EC24C14EF56F600982CA8 /* WCEditBuildTargetIncludesArrayController.m */; };
@@ -745,6 +751,9 @@
 		07096F93150E9FFF002FE355 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = RSRegularMemoryView.xib; sourceTree = "<group>"; };
 		07096F96150EA090002FE355 /* RSRegularMemoryTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSRegularMemoryTableView.h; sourceTree = "<group>"; };
 		07096F97150EA090002FE355 /* RSRegularMemoryTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSRegularMemoryTableView.m; sourceTree = "<group>"; };
+		07096F9A150EDD49002FE355 /* Step Out.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Step Out.png"; sourceTree = "<group>"; };
+		07096F9B150EDD49002FE355 /* Step Over.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Step Over.png"; sourceTree = "<group>"; };
+		07096F9C150EDD49002FE355 /* Step.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Step.png; sourceTree = "<group>"; };
 		070EC24B14EF56F600982CA8 /* WCEditBuildTargetIncludesArrayController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCEditBuildTargetIncludesArrayController.h; sourceTree = "<group>"; };
 		070EC24C14EF56F600982CA8 /* WCEditBuildTargetIncludesArrayController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCEditBuildTargetIncludesArrayController.m; sourceTree = "<group>"; };
 		070EC24E14EF588E00982CA8 /* RSRTVArrayController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSRTVArrayController.h; sourceTree = "<group>"; };
@@ -2086,6 +2095,9 @@
 		072880B914B4F1470082DE4C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				07096F9A150EDD49002FE355 /* Step Out.png */,
+				07096F9B150EDD49002FE355 /* Step Over.png */,
+				07096F9C150EDD49002FE355 /* Step.png */,
 				077CC15714F6DD9C00713ED8 /* Calculator32x32.png */,
 				072880BA14B4F16D0082DE4C /* FindNoWrapIndicator.png */,
 				072880BB14B4F16D0082DE4C /* FindNoWrapIndicatorReverse.png */,
@@ -3254,6 +3266,9 @@
 				07096F78150DB522002FE355 /* RSDisplayView.xib in Resources */,
 				07096F80150E5EAF002FE355 /* RSMemoryView.xib in Resources */,
 				07096F94150E9FFF002FE355 /* RSRegularMemoryView.xib in Resources */,
+				07096F9D150EDD49002FE355 /* Step Out.png in Resources */,
+				07096F9F150EDD49002FE355 /* Step Over.png in Resources */,
+				07096FA1150EDD49002FE355 /* Step.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3315,6 +3330,9 @@
 				07096F79150DB522002FE355 /* RSDisplayView.xib in Resources */,
 				07096F81150E5EAF002FE355 /* RSMemoryView.xib in Resources */,
 				07096F95150E9FFF002FE355 /* RSRegularMemoryView.xib in Resources */,
+				07096F9E150EDD49002FE355 /* Step Out.png in Resources */,
+				07096FA0150EDD49002FE355 /* Step Over.png in Resources */,
+				07096FA2150EDD49002FE355 /* Step.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
