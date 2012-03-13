@@ -8,11 +8,12 @@
 
 #import "JAViewController.h"
 #import "RSTableViewDelegate.h"
+#import "RSCalculatorMemoryView.h"
 #include "disassemble.h"
 
 @class RSCalculator;
 
-@interface RSDisassemblyViewController : JAViewController <RSTableViewDelegate,NSTableViewDataSource> {
+@interface RSDisassemblyViewController : JAViewController <RSCalculatorMemoryView,RSTableViewDelegate,NSTableViewDataSource> {
 	RSCalculator *_calculator;
 	Z80_info_t *_z80_info;
 }
@@ -23,5 +24,6 @@
 
 - (id)initWithCalculator:(RSCalculator *)calculator;
 
-- (void)jumpToAddress:(uint16_t)address;
+- (IBAction)jumpToAddress:(id)sender;
+- (IBAction)jumpToProgramCounter:(id)sender;
 @end

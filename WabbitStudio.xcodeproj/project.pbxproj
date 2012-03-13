@@ -1096,6 +1096,7 @@
 		074B74A7150D40D40096548E /* RSCPUViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSCPUViewController.h; sourceTree = "<group>"; };
 		074B74A8150D40D40096548E /* RSCPUViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSCPUViewController.m; sourceTree = "<group>"; };
 		074B74AC150D40E40096548E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = RSCPUView.xib; sourceTree = "<group>"; };
+		0751684A150FF2CC006AAF27 /* RSCalculatorMemoryView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSCalculatorMemoryView.h; sourceTree = "<group>"; };
 		075D2F6F14F1FB93007F8951 /* WCRoundedBorderImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCRoundedBorderImageCell.h; sourceTree = "<group>"; };
 		075D2F7014F1FB93007F8951 /* WCRoundedBorderImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCRoundedBorderImageCell.m; sourceTree = "<group>"; };
 		075D2F7314F1FFA8007F8951 /* WCRoundedBorderImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCRoundedBorderImageView.h; sourceTree = "<group>"; };
@@ -2394,6 +2395,7 @@
 				07096F7B150E5DD9002FE355 /* RSMemoryViewController.m */,
 				07096F89150E98DC002FE355 /* RSMemoryTabView.h */,
 				07096F8A150E98DD002FE355 /* RSMemoryTabView.m */,
+				0751684A150FF2CC006AAF27 /* RSCalculatorMemoryView.h */,
 				07096F8E150E9F19002FE355 /* RSRegularMemoryViewController.h */,
 				07096F8F150E9F19002FE355 /* RSRegularMemoryViewController.m */,
 				07096F96150EA090002FE355 /* RSRegularMemoryTableView.h */,

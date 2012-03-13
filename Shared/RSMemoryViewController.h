@@ -6,11 +6,11 @@
 //  Copyright (c) 2012 Revolution Software. All rights reserved.
 //
 
-#import <AppKit/NSViewController.h>
+#import "JAViewController.h"
 
 @class RSCalculator,PSMTabBarControl;
 
-@interface RSMemoryViewController : NSViewController {
+@interface RSMemoryViewController : JAViewController {
 	RSCalculator *_calculator;
 	NSMutableSet *_memoryViews;
 }
@@ -19,5 +19,8 @@
 @property (readonly,nonatomic) RSCalculator *calculator;
 
 - (id)initWithCalculator:(RSCalculator *)calculator;
+
+- (IBAction)jumpToAddress:(id)sender;
+- (IBAction)jumpToProgramCounter:(id)sender;
 
 @end

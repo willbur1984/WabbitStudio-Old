@@ -12,4 +12,5 @@
 
 @interface RSDisassemblyTableView : RSTableView 
 @property (readwrite,assign,nonatomic) IBOutlet RSDisassemblyViewController *disassemblyViewController;
+
 @end

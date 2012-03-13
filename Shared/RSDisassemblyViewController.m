@@ -41,7 +41,7 @@
 	if (context == self) {
 		if ([keyPath isEqualToString:@"programCounter"]) {
 			[self _reloadDisassemblyInfos];
-			[self jumpToAddress:[[self calculator] programCounter]];
+			[self jumpToProgramCounter:nil];
 		}
 		else if ([keyPath isEqualToString:@"debugging"]) {
 			[[self tableView] reloadData];
@@ -90,6 +90,22 @@ static NSString *const kSizeColumnIdentifier = @"size";
 	return nil;
 }
 
+- (void)jumpToMemoryAddress:(uint16_t)memoryAddress {
+	NSUInteger infoIndex;
+	
+	for (infoIndex=0; infoIndex<UINT16_MAX; infoIndex++) {
+		Z80_info_t info = _z80_info[infoIndex];
+		
+		if (info.waddr.addr >= memoryAddress) {
+			[[self tableView] selectRowIndexes:[NSIndexSet indexSetWithIndex:infoIndex] byExtendingSelection:NO];
+			[[self tableView] scrollRowToVisible:infoIndex];
+			return;
+		}
+	}
+	
+	NSBeep();
+}
+
 - (id)initWithCalculator:(RSCalculator *)calculator; {
 	if (!(self = [super initWithNibName:[self nibName] bundle:nil]))
 		return nil;
@@ -102,20 +118,11 @@ static NSString *const kSizeColumnIdentifier = @"size";
 	return self;
 }
 
-- (void)jumpToAddress:(uint16_t)address; {
-	NSUInteger infoIndex;
+- (IBAction)jumpToAddress:(id)sender; {
 	
-	for (infoIndex=0; infoIndex<UINT16_MAX; infoIndex++) {
-		Z80_info_t info = _z80_info[infoIndex];
-		
-		if (info.waddr.addr >= address) {
-			[[self tableView] selectRowIndexes:[NSIndexSet indexSetWithIndex:infoIndex] byExtendingSelection:NO];
-			[[self tableView] scrollRowToVisible:infoIndex];
-			return;
-		}
-	}
-	
-	NSBeep();
+}
+- (IBAction)jumpToProgramCounter:(id)sender; {
+	[self jumpToMemoryAddress:[[self calculator] programCounter]];
 }
 
 @synthesize tableView=_tableView;

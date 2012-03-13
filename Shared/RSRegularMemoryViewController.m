@@ -25,6 +25,7 @@
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
 	[_calculator removeObserver:self forKeyPath:@"programCounter" context:self];
+	[_calculator removeObserver:self forKeyPath:@"CPUHalt" context:self];
 	[_calculator release];
 	[super dealloc];
 }
@@ -44,7 +45,10 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if (context == self) {
-		if ([keyPath isEqualToString:@"programCounter"])
+		if ([keyPath isEqualToString:@"programCounter"]) {
+			[[self tableView] reloadData];
+		}
+		else if ([keyPath isEqualToString:@"CPUHalt"])
 			[[self tableView] setNeedsDisplay:YES];
 	}
 	else
@@ -76,7 +80,7 @@ static NSString *const kAddressMemoryColumnIdentifier = @"address";
 	NSUInteger offset = [[[self tableView] tableColumns] indexOfObjectIdenticalTo:tableColumn];
 	uint8_t data = [object unsignedCharValue];
 	
-	mem_write(&([[self calculator] calculator]->mem_c), (uint16_t)address+offset, data);
+	mem_write(&([[self calculator] calculator]->mem_c), (uint16_t)(address+offset), data);
 }
 
 - (NSString *)tableView:(NSTableView *)tableView toolTipForCell:(NSCell *)cell rect:(NSRectPointer)rect tableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row mouseLocation:(NSPoint)mouseLocation {
@@ -86,29 +90,18 @@ static NSString *const kAddressMemoryColumnIdentifier = @"address";
 	NSUInteger numberOfMemoryColumns = [[[self tableView] tableColumns] count] - 1;
 	uint16_t address = (row * numberOfMemoryColumns);
 	NSUInteger offset = [[[self tableView] tableColumns] indexOfObjectIdenticalTo:tableColumn];
-	uint8_t data = mem_read(&([[self calculator] calculator]->mem_c), (uint16)address+offset);
+	uint8_t data = mem_read(&([[self calculator] calculator]->mem_c), (uint16)(address+offset));
 	
-	return [NSString stringWithFormat:NSLocalizedString(@"Address: %04X\nData: %02x", @"regular memory table view tooltip format string"),(uint16_t)address+offset,data];
+	return [NSString stringWithFormat:NSLocalizedString(@"Address: %04X\nData: %02x", @"regular memory table view tooltip format string"),(uint16_t)(address+offset),data];
 }
 
-- (id)initWithCalculator:(RSCalculator *)calculator; {
-	if (!(self = [super initWithNibName:[self nibName] bundle:nil]))
-		return nil;
-	
-	_calculator = [calculator retain];
-	
-	[_calculator addObserver:self forKeyPath:@"programCounter" options:0 context:self];
-	
-	return self;
-}
-
-- (void)jumpToAddress:(uint16_t)address {
+- (void)jumpToMemoryAddress:(uint16_t)memoryAddress; {
 	NSUInteger numberOfMemoryColumns = [[[self tableView] tableColumns] count] - 1;
 	NSUInteger rowIndex, numberOfRows = [self numberOfRowsInTableView:[self tableView]];
 	uint16_t cmpAddress;
 	
 	for (rowIndex=0, cmpAddress=0; rowIndex<numberOfRows; rowIndex++, cmpAddress=(rowIndex*numberOfMemoryColumns)) {
-		if (NSLocationInRange(address, NSMakeRange(cmpAddress, numberOfMemoryColumns))) {
+		if (NSLocationInRange(memoryAddress, NSMakeRange(cmpAddress, numberOfMemoryColumns))) {
 			[[self tableView] selectRowIndexes:[NSIndexSet indexSetWithIndex:rowIndex] byExtendingSelection:NO];
 			[[self tableView] scrollRowToVisible:rowIndex];
 			return;
@@ -118,8 +111,16 @@ static NSString *const kAddressMemoryColumnIdentifier = @"address";
 	NSBeep();
 }
 
-- (IBAction)jumpToProgramCounter:(id)sender; {
-	[self jumpToAddress:[[self calculator] programCounter]];
+- (id)initWithCalculator:(RSCalculator *)calculator; {
+	if (!(self = [super initWithNibName:[self nibName] bundle:nil]))
+		return nil;
+	
+	_calculator = [calculator retain];
+	
+	[_calculator addObserver:self forKeyPath:@"programCounter" options:0 context:self];
+	[_calculator addObserver:self forKeyPath:@"CPUHalt" options:0 context:self];
+	
+	return self;
 }
 
 @synthesize tableView=_tableView;

@@ -463,7 +463,7 @@
 											<reference ref="508127258"/>
 											<object class="NSMenuItem" id="950757783">
 												<reference key="NSMenu" ref="465481059"/>
-												<string key="NSTitle">Item 2</string>
+												<string key="NSTitle">Jump to Address</string>
 												<string key="NSKeyEquiv"/>
 												<int key="NSKeyEquivModMask">1048576</int>
 												<int key="NSMnemonicLoc">2147483647</int>
@@ -474,7 +474,7 @@
 											</object>
 											<object class="NSMenuItem" id="768596965">
 												<reference key="NSMenu" ref="465481059"/>
-												<string key="NSTitle">Item 3</string>
+												<string key="NSTitle">Jump to Program Counter</string>
 												<string key="NSKeyEquiv"/>
 												<int key="NSKeyEquivModMask">1048576</int>
 												<int key="NSMnemonicLoc">2147483647</int>
@@ -486,6 +486,7 @@
 										</array>
 										<reference key="NSMenuFont" ref="690131234"/>
 									</object>
+									<int key="NSSelectedIndex">1</int>
 									<bool key="NSPullDown">YES</bool>
 									<int key="NSPreferredEdge">1</int>
 									<bool key="NSUsesItemFromMenu">YES</bool>
@@ -528,6 +529,22 @@
 						<reference key="destination" ref="502975358"/>
 					</object>
 					<int key="connectionID">37</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">jumpToAddress:</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="950757783"/>
+					</object>
+					<int key="connectionID">39</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">jumpToProgramCounter:</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="768596965"/>
+					</object>
+					<int key="connectionID">40</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -841,7 +858,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">38</int>
+			<int key="maxID">40</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -909,6 +926,20 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">RSDisassemblyViewController</string>
 					<string key="superclassName">JAViewController</string>
+					<dictionary class="NSMutableDictionary" key="actions">
+						<string key="jumpToAddress:">id</string>
+						<string key="jumpToProgramCounter:">id</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="jumpToAddress:">
+							<string key="name">jumpToAddress:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="jumpToProgramCounter:">
+							<string key="name">jumpToProgramCounter:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</dictionary>
 					<object class="NSMutableDictionary" key="outlets">
 						<string key="NS.key.0">tableView</string>
 						<string key="NS.object.0">NSTableView</string>

@@ -66,6 +66,17 @@
 	return self;
 }
 
+- (IBAction)jumpToAddress:(id)sender; {
+	//id <RSCalculatorMemoryView> memoryView = [[[[self tabBarControl] tabView] selectedTabViewItem] identifier];
+	
+	
+}
+- (IBAction)jumpToProgramCounter:(id)sender; {
+	id <RSCalculatorMemoryView> memoryView = [[[[self tabBarControl] tabView] selectedTabViewItem] identifier];
+	
+	[memoryView jumpToMemoryAddress:[[self calculator] programCounter]];
+}
+
 @synthesize tabBarControl=_tabBarControl;
 
 @synthesize calculator=_calculator;

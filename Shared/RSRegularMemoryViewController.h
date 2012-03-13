@@ -6,11 +6,12 @@
 //  Copyright (c) 2012 Revolution Software. All rights reserved.
 //
 
-#import "JAViewController.h"
+#import <AppKit/NSViewController.h>
+#import "RSCalculatorMemoryView.h"
 
 @class RSCalculator,RSHexadecimalFormatter;
 
-@interface RSRegularMemoryViewController : JAViewController <NSTableViewDataSource,NSTableViewDelegate> {
+@interface RSRegularMemoryViewController : NSViewController <RSCalculatorMemoryView,NSTableViewDataSource,NSTableViewDelegate> {
 	RSCalculator *_calculator;
 	NSUInteger _rowCount;
 }
@@ -20,9 +21,5 @@
 @property (readonly,nonatomic) RSCalculator *calculator;
 
 - (id)initWithCalculator:(RSCalculator *)calculator;
-
-- (void)jumpToAddress:(uint16_t)address;
-
-- (IBAction)jumpToProgramCounter:(id)sender;
 
 @end

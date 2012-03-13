@@ -756,6 +756,9 @@ static const uint32_t defaultValue = 0;
 	if ([self isActive])
 		[self calculator]->cpu.iff1 = interruptsIFF1;
 }
++ (NSSet *)keyPathsForValuesAffectingInterruptsIFF1 {
+	return [NSSet setWithObjects:@"programCounter", nil];
+}
 @dynamic interruptsIFF2;
 - (BOOL)interruptsIFF2 {
 	return ([self isActive] && [self calculator]->cpu.iff2);
@@ -764,11 +767,17 @@ static const uint32_t defaultValue = 0;
 	if ([self isActive])
 		[self calculator]->cpu.iff2 = interruptsIFF2;
 }
++ (NSSet *)keyPathsForValuesAffectingInterruptsIFF2 {
+	return [NSSet setWithObjects:@"programCounter", nil];
+}
 @dynamic interruptsNextTimer1;
 - (double)interruptsNextTimer1 {
 	if ([self isActive])
 		return ([self calculator]->timer_c.elapsed - [self calculator]->cpu.pio.stdint->lastchk1);
 	return defaultValue;
+}
++ (NSSet *)keyPathsForValuesAffectingInterruptsNextTimer1 {
+	return [NSSet setWithObjects:@"programCounter", nil];
 }
 @dynamic interruptsNextTimer2;
 - (double)interruptsNextTimer2 {
@@ -776,17 +785,26 @@ static const uint32_t defaultValue = 0;
 		return ([self calculator]->timer_c.elapsed - [self calculator]->cpu.pio.stdint->lastchk2);
 	return defaultValue;
 }
++ (NSSet *)keyPathsForValuesAffectingInterruptsNextTimer2 {
+	return [NSSet setWithObjects:@"programCounter", nil];
+}
 @dynamic interruptsTimer1Duration;
 - (double)interruptsTimer1Duration {
 	if ([self isActive])
 		return [self calculator]->cpu.pio.stdint->timermax1;
 	return defaultValue;
 }
++ (NSSet *)keyPathsForValuesAffectingInterruptsTimer1Duration {
+	return [NSSet setWithObjects:@"programCounter", nil];
+}
 @dynamic interruptsTimer2Duration;
 - (double)interruptsTimer2Duration {
 	if ([self isActive])
 		return [self calculator]->cpu.pio.stdint->timermax2;
 	return defaultValue;
+}
++ (NSSet *)keyPathsForValuesAffectingInterruptsTimer2Duration {
+	return [NSSet setWithObjects:@"programCounter", nil];
 }
 #pragma mark Display
 @dynamic displayActive;
@@ -817,6 +835,9 @@ static const uint32_t defaultValue = 0;
 	if ([self isActive])
 		[self calculator]->cpu.pio.lcd->x = displayX;
 }
++ (NSSet *)keyPathsForValuesAffectingDisplayX {
+	return [NSSet setWithObjects:@"programCounter", nil];
+}
 @dynamic displayY;
 - (int32_t)displayY {
 	if ([self isActive])
@@ -826,6 +847,9 @@ static const uint32_t defaultValue = 0;
 - (void)setDisplayY:(int32_t)displayY {
 	if ([self isActive])
 		[self calculator]->cpu.pio.lcd->y = displayY;
+}
++ (NSSet *)keyPathsForValuesAffectingDisplayY {
+	return [NSSet setWithObjects:@"programCounter", nil];
 }
 @dynamic displayZ;
 - (int32_t)displayZ {
@@ -837,6 +861,9 @@ static const uint32_t defaultValue = 0;
 	if ([self isActive])
 		[self calculator]->cpu.pio.lcd->z = displayZ;
 }
++ (NSSet *)keyPathsForValuesAffectingDisplayZ {
+	return [NSSet setWithObjects:@"programCounter", nil];
+}
 @dynamic displayCursorMode;
 - (LCD_CURSOR_MODE)displayCursorMode {
 	if ([self isActive])
@@ -846,6 +873,9 @@ static const uint32_t defaultValue = 0;
 - (void)setDisplayCursorMode:(LCD_CURSOR_MODE)displayCursorMode {
 	if ([self isActive])
 		[self calculator]->cpu.pio.lcd->cursor_mode = displayCursorMode;
+}
++ (NSSet *)keyPathsForValuesAffectingDisplayCursorMode {
+	return [NSSet setWithObjects:@"programCounter", nil];
 }
 #pragma mark *** Private Methods ***
 

@@ -12,6 +12,18 @@
 
 @implementation RSDisassemblyTableView
 
++ (NSMenu *)defaultMenu {
+	static NSMenu *retval;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		retval = [[NSMenu alloc] initWithTitle:@""];
+		
+		[retval addItemWithTitle:NSLocalizedString(@"Jump to Address", @"Jump to Address") action:@selector(jumpToAddress:) keyEquivalent:@""];
+		[retval addItemWithTitle:NSLocalizedString(@"Jump to Program Counter", @"Jump to Program Counter") action:@selector(jumpToProgramCounter:) keyEquivalent:@""];
+	});
+	return retval;
+}
+
 - (void)highlightSelectionInClipRect:(NSRect)clipRect {
 	NSColor *programCounterColor = [NSColor colorWithCalibratedRed:0.95 green:0.95 blue:0.0 alpha:1.0];
 	NSColor *programCounterHaltColor = [NSColor orangeColor];
