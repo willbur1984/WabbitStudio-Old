@@ -18,6 +18,7 @@
 #import "RSInterruptsViewController.h"
 #import "RSDisplayViewController.h"
 #import "RSMemoryViewController.h"
+#import "RSStackViewController.h"
 
 static NSString *const WEDebuggerToolbarStepItemIdentifier = @"WEDebuggerToolbarStepItemIdentifier";
 static NSString *const WEDebuggerToolbarStepOutItemIdentifier = @"WEDebuggerToolbarStepOutItemIdentifier";
@@ -35,6 +36,7 @@ static NSString *const WEDebuggerWindowToolbarItemIdentifier = @"WEDebuggerWindo
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
+	[_stackViewController release];
 	[_memoryViewController release];
 	[_displayViewController release];
 	[_interruptsViewController release];
@@ -86,6 +88,10 @@ static NSString *const WEDebuggerWindowToolbarItemIdentifier = @"WEDebuggerWindo
 	// memory view
 	[[[self memoryViewController] view] setFrameSize:[[self memoryDummyView] frame].size];
 	[[[self memoryDummyView] superview] replaceSubview:[self memoryDummyView] with:[[self memoryViewController] view]];
+	
+	// stack view
+	[[[self stackViewController] view] setFrameSize:[[self stackDummyView] frame].size];
+	[[[self stackDummyView] superview] replaceSubview:[self stackDummyView] with:[[self stackViewController] view]];
 	
 	// inspector view
 	[[self inspectorScrollView] setAutoresizesSubviews:YES];
@@ -162,6 +168,12 @@ static CGFloat kBottomSubviewMinimumWidth = 125.0;
 	return NSZeroRect;
 }
 
+- (CGFloat)splitView:(NSSplitView *)splitView constrainSplitPosition:(CGFloat)proposedPosition ofSubviewAt:(NSInteger)dividerIndex {
+	if ([splitView isVertical])
+		return [splitView maxPossiblePositionOfDividerAtIndex:dividerIndex];
+	return proposedPosition;
+}
+
 #pragma mark NSWindowDelegate
 - (void)windowWillClose:(NSNotification *)notification {
 	[[[self calculatorDocument] calculator] setDebugging:NO];
@@ -185,6 +197,7 @@ static CGFloat kBottomSubviewMinimumWidth = 125.0;
 @synthesize inspectorScrollView=_inspectorScrollView;
 @synthesize inspectorSplitterHandleImageView=_inspectorSplitterHandleImageView;
 @synthesize memoryDummyView=_memoryDummyView;
+@synthesize stackDummyView=_stackDummyView;
 
 @dynamic calculatorDocument;
 - (WECalculatorDocument *)calculatorDocument {
@@ -245,6 +258,12 @@ static CGFloat kBottomSubviewMinimumWidth = 125.0;
 	if (!_memoryViewController)
 		_memoryViewController = [[RSMemoryViewController alloc] initWithCalculator:[[self calculatorDocument] calculator]];
 	return _memoryViewController;
+}
+@dynamic stackViewController;
+- (RSStackViewController *)stackViewController {
+	if (!_stackViewController)
+		_stackViewController = [[RSStackViewController alloc] initWithCalculator:[[self calculatorDocument] calculator]];
+	return _stackViewController;
 }
 
 @end
