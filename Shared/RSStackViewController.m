@@ -19,6 +19,10 @@
 @implementation RSStackViewController
 
 - (void)dealloc {
+#ifdef DEBUG
+	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
+#endif
+	[_calculator removeObserver:self forKeyPath:@"debugging" context:self];
 	[_calculator removeObserver:self forKeyPath:@"stackPointer" context:self];
 	[_calculator release];
 	[super dealloc];
@@ -40,6 +44,8 @@
 	if (context == self) {
 		if ([keyPath isEqualToString:@"stackPointer"])
 			[self _updateNumberOfRows];
+		else if ([keyPath isEqualToString:@"debugging"])
+			[self _updateNumberOfRows];
 	}
 	else
 		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
@@ -59,7 +65,8 @@ static NSString *const kStackColumnIdentifier = @"stack";
 	if ([[tableColumn identifier] isEqualToString:kAddressColumnIdentifier])
 		return [NSNumber numberWithUnsignedShort:address];
 	
-	uint16_t data = mem_read16(&([[self calculator] calculator]->mem_c), address);
+	waddr_t wideAddress = addr_to_waddr(&([[self calculator] calculator]->mem_c), address);
+	uint16_t data = wmem_read16(&([[self calculator] calculator]->mem_c), wideAddress);
 	
 	return [NSNumber numberWithUnsignedShort:data];
 }
@@ -68,9 +75,10 @@ static NSString *const kStackColumnIdentifier = @"stack";
 	uint16_t stackPointer = [[self calculator] stackPointer];
 	uint16_t address = stackPointer + row;
 	uint16_t data = [object unsignedShortValue];
+	waddr_t wideAddress = addr_to_waddr(&([[self calculator] calculator]->mem_c), address);
 	
-	mem_write(&([[self calculator] calculator]->mem_c), address, (data & 0xFF));
-	mem_write(&([[self calculator] calculator]->mem_c), ++address, ((data >> 8) & 0xFF));
+	mem_write(&([[self calculator] calculator]->mem_c), wideAddress.addr, (data & 0xFF));
+	mem_write(&([[self calculator] calculator]->mem_c), ++(wideAddress.addr), ((data >> 8) & 0xFF));
 }
 
 - (id)initWithCalculator:(RSCalculator *)calculator; {
@@ -80,6 +88,7 @@ static NSString *const kStackColumnIdentifier = @"stack";
 	_calculator = [calculator retain];
 	
 	[_calculator addObserver:self forKeyPath:@"stackPointer" options:0 context:self];
+	[_calculator addObserver:self forKeyPath:@"debugging" options:0 context:self];
 	
 	return self;
 }
@@ -96,13 +105,18 @@ static NSString *const kStackColumnIdentifier = @"stack";
 }
 
 - (void)_updateNumberOfRows; {
-	uint16_t stackPointer = [[self calculator] stackPointer];
 	NSUInteger numberOfRows = 0;
 	
-	while (stackPointer++ < UINT16_MAX)
-		numberOfRows++;
-	
-	[self setRowCount:++numberOfRows];
+	if ([[self calculator] isDebugging]) {
+		uint16_t stackPointer = [[self calculator] stackPointer];
+		
+		while (stackPointer++ < UINT16_MAX)
+			numberOfRows++;
+		
+		[self setRowCount:++numberOfRows];
+	}
+	else
+		[self setRowCount:numberOfRows];
 }
 
 @end

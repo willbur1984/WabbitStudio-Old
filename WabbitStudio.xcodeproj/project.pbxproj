@@ -530,6 +530,12 @@
 		07CC8F3F14B7DBDB0081EE69 /* WCJumpInCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CC8F3E14B7DBDB0081EE69 /* WCJumpInCellView.m */; };
 		07CEA93A14EF01B3002A5240 /* WCSourceScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CEA93914EF01B3002A5240 /* WCSourceScroller.m */; };
 		07CEA93E14EF0360002A5240 /* WCSourceScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CEA93D14EF0360002A5240 /* WCSourceScrollView.m */; };
+		07D252481511027700D5830A /* RSStackTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D252471511027700D5830A /* RSStackTableView.m */; };
+		07D252491511027700D5830A /* RSStackTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D252471511027700D5830A /* RSStackTableView.m */; };
+		07D2524D1511067A00D5830A /* RSFlashMemoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D2524C1511067A00D5830A /* RSFlashMemoryViewController.m */; };
+		07D2524E1511067A00D5830A /* RSFlashMemoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D2524C1511067A00D5830A /* RSFlashMemoryViewController.m */; };
+		07D252511511077200D5830A /* RSFlashMemoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07D2524F1511077200D5830A /* RSFlashMemoryView.xib */; };
+		07D252521511077200D5830A /* RSFlashMemoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07D2524F1511077200D5830A /* RSFlashMemoryView.xib */; };
 		07E6189F150D47BE00640880 /* SplitterHandle.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 07EB8E2714B641B900F8A8C6 /* SplitterHandle.pdf */; };
 		07E91DF814C8020800B166E3 /* WCLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 07E91DF714C8020700B166E3 /* WCLayoutManager.m */; };
 		07EB8E2214B63C4F00F8A8C6 /* BGHUDAppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0791BE5314ADA3B80004AC16 /* BGHUDAppKit.framework */; };
@@ -1431,6 +1437,11 @@
 		07CEA93C14EF0360002A5240 /* WCSourceScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSourceScrollView.h; sourceTree = "<group>"; };
 		07CEA93D14EF0360002A5240 /* WCSourceScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSourceScrollView.m; sourceTree = "<group>"; };
 		07CEA93F14EF03B2002A5240 /* WCSourceScrollViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSourceScrollViewDelegate.h; sourceTree = "<group>"; };
+		07D252461511027700D5830A /* RSStackTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSStackTableView.h; sourceTree = "<group>"; };
+		07D252471511027700D5830A /* RSStackTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSStackTableView.m; sourceTree = "<group>"; };
+		07D2524B1511067A00D5830A /* RSFlashMemoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSFlashMemoryViewController.h; sourceTree = "<group>"; };
+		07D2524C1511067A00D5830A /* RSFlashMemoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSFlashMemoryViewController.m; sourceTree = "<group>"; };
+		07D252501511077200D5830A /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = RSFlashMemoryView.xib; sourceTree = "<group>"; };
 		07E91DF614C8020600B166E3 /* WCLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCLayoutManager.h; sourceTree = "<group>"; };
 		07E91DF714C8020700B166E3 /* WCLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCLayoutManager.m; sourceTree = "<group>"; };
 		07EB8E2514B63EB800F8A8C6 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCAdvancedView.xib; sourceTree = "<group>"; };
@@ -2409,8 +2420,12 @@
 				07096F97150EA090002FE355 /* RSRegularMemoryTableView.m */,
 				07096FA3150FBA7C002FE355 /* RSRegularMemoryTableHeaderView.h */,
 				07096FA4150FBA7D002FE355 /* RSRegularMemoryTableHeaderView.m */,
+				07D2524B1511067A00D5830A /* RSFlashMemoryViewController.h */,
+				07D2524C1511067A00D5830A /* RSFlashMemoryViewController.m */,
 				0751684C150FFC2A006AAF27 /* RSStackViewController.h */,
 				0751684D150FFC2A006AAF27 /* RSStackViewController.m */,
+				07D252461511027700D5830A /* RSStackTableView.h */,
+				07D252471511027700D5830A /* RSStackTableView.m */,
 				075D2FD714F408E1007F8951 /* wabbitemu */,
 			);
 			name = Emulator;
@@ -2745,6 +2760,7 @@
 				07096F7E150E5EAF002FE355 /* RSMemoryView.xib */,
 				07096F92150E9FFF002FE355 /* RSRegularMemoryView.xib */,
 				07516850150FFD21006AAF27 /* RSStackView.xib */,
+				07D2524F1511077200D5830A /* RSFlashMemoryView.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -3288,6 +3304,7 @@
 				07096F9F150EDD49002FE355 /* Step Over.png in Resources */,
 				07096FA1150EDD49002FE355 /* Step.png in Resources */,
 				07516852150FFD21006AAF27 /* RSStackView.xib in Resources */,
+				07D252511511077200D5830A /* RSFlashMemoryView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3353,6 +3370,7 @@
 				07096FA0150EDD49002FE355 /* Step Over.png in Resources */,
 				07096FA2150EDD49002FE355 /* Step.png in Resources */,
 				07516853150FFD21006AAF27 /* RSStackView.xib in Resources */,
+				07D252521511077200D5830A /* RSFlashMemoryView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3705,6 +3723,8 @@
 				07096F98150EA091002FE355 /* RSRegularMemoryTableView.m in Sources */,
 				07096FA5150FBA7E002FE355 /* RSRegularMemoryTableHeaderView.m in Sources */,
 				0751684E150FFC2A006AAF27 /* RSStackViewController.m in Sources */,
+				07D252481511027700D5830A /* RSStackTableView.m in Sources */,
+				07D2524D1511067A00D5830A /* RSFlashMemoryViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3837,6 +3857,8 @@
 				07096F99150EA091002FE355 /* RSRegularMemoryTableView.m in Sources */,
 				07096FA6150FBA7E002FE355 /* RSRegularMemoryTableHeaderView.m in Sources */,
 				0751684F150FFC2A006AAF27 /* RSStackViewController.m in Sources */,
+				07D252491511027700D5830A /* RSStackTableView.m in Sources */,
+				07D2524E1511067A00D5830A /* RSFlashMemoryViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4345,6 +4367,14 @@
 				07CC8E9814E849BC00B303C1 /* en */,
 			);
 			name = WCEditBuildTargetWindow.xib;
+			sourceTree = "<group>";
+		};
+		07D2524F1511077200D5830A /* RSFlashMemoryView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				07D252501511077200D5830A /* en */,
+			);
+			name = RSFlashMemoryView.xib;
 			sourceTree = "<group>";
 		};
 		07EB8E2414B63EB800F8A8C6 /* WCAdvancedView.xib */ = {

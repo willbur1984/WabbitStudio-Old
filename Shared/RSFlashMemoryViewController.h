@@ -1,8 +1,8 @@
 //
-//  RSRegularMemoryViewController.h
+//  RSFlashMemoryViewController.h
 //  WabbitStudio
 //
-//  Created by William Towe on 3/12/12.
+//  Created by William Towe on 3/14/12.
 //  Copyright (c) 2012 Revolution Software. All rights reserved.
 //
 
@@ -11,7 +11,7 @@
 
 @class RSCalculator,RSHexadecimalFormatter;
 
-@interface RSRegularMemoryViewController : NSViewController <RSCalculatorMemoryView,NSTableViewDataSource,NSTableViewDelegate> {
+@interface RSFlashMemoryViewController : NSViewController <RSCalculatorMemoryView,NSTableViewDataSource,NSTableViewDelegate> {
 	RSCalculator *_calculator;
 	NSUInteger _rowCount;
 }

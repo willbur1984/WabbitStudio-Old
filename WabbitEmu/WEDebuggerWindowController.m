@@ -169,7 +169,7 @@ static CGFloat kBottomSubviewMinimumWidth = 125.0;
 }
 
 - (CGFloat)splitView:(NSSplitView *)splitView constrainSplitPosition:(CGFloat)proposedPosition ofSubviewAt:(NSInteger)dividerIndex {
-	if ([splitView isVertical])
+	if ([self memoryAndStackSplitView] == splitView)
 		return [splitView maxPossiblePositionOfDividerAtIndex:dividerIndex];
 	return proposedPosition;
 }
@@ -198,6 +198,7 @@ static CGFloat kBottomSubviewMinimumWidth = 125.0;
 @synthesize inspectorSplitterHandleImageView=_inspectorSplitterHandleImageView;
 @synthesize memoryDummyView=_memoryDummyView;
 @synthesize stackDummyView=_stackDummyView;
+@synthesize memoryAndStackSplitView=_memoryAndStackSplitView;
 
 @dynamic calculatorDocument;
 - (WECalculatorDocument *)calculatorDocument {

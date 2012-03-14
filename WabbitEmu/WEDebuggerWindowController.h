@@ -27,6 +27,7 @@
 @property (readwrite,assign,nonatomic) IBOutlet NSImageView *inspectorSplitterHandleImageView;
 @property (readwrite,assign,nonatomic) IBOutlet NSView *memoryDummyView;
 @property (readwrite,assign,nonatomic) IBOutlet NSView *stackDummyView;
+@property (readwrite,assign,nonatomic) IBOutlet NSSplitView *memoryAndStackSplitView;
 
 @property (readonly,nonatomic) WECalculatorDocument *calculatorDocument;
 @property (readonly,nonatomic) JUInspectorViewContainer *inspectorViewContainer;

@@ -154,7 +154,6 @@
 													<string key="NSFrameSize">{15, 23}</string>
 													<reference key="NSSuperview" ref="521524382"/>
 													<reference key="NSWindow"/>
-													<reference key="NSNextKeyView"/>
 													<bool key="NSEnabled">YES</bool>
 													<object class="NSImageCell" key="NSCell" id="4674414">
 														<int key="NSCellFlags">130560</int>
@@ -192,7 +191,7 @@
 															<string key="NSFrameSize">{236, 577}</string>
 															<reference key="NSSuperview" ref="725534683"/>
 															<reference key="NSWindow"/>
-															<reference key="NSNextKeyView" ref="112253686"/>
+															<reference key="NSNextKeyView" ref="965675327"/>
 															<string key="NSReuseIdentifierKey">_NS:13</string>
 														</object>
 													</array>
@@ -243,7 +242,7 @@
 											<string key="NSFrame">{{0, 23}, {236, 577}}</string>
 											<reference key="NSSuperview" ref="1060962021"/>
 											<reference key="NSWindow"/>
-											<reference key="NSNextKeyView" ref="965675327"/>
+											<reference key="NSNextKeyView" ref="725534683"/>
 											<string key="NSReuseIdentifierKey">_NS:9</string>
 											<int key="NSsFlags">133648</int>
 											<reference key="NSVScroller" ref="112253686"/>
@@ -328,6 +327,14 @@
 						<reference key="destination" ref="261184663"/>
 					</object>
 					<int key="connectionID">29</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">memoryAndStackSplitView</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="42409408"/>
+					</object>
+					<int key="connectionID">31</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -548,7 +555,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">30</int>
+			<int key="maxID">31</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -620,6 +627,7 @@
 						<string key="disassemblyDummyView">NSView</string>
 						<string key="inspectorScrollView">NSScrollView</string>
 						<string key="inspectorSplitterHandleImageView">NSImageView</string>
+						<string key="memoryAndStackSplitView">NSSplitView</string>
 						<string key="memoryDummyView">NSView</string>
 						<string key="stackDummyView">NSView</string>
 					</dictionary>
@@ -635,6 +643,10 @@
 						<object class="IBToOneOutletInfo" key="inspectorSplitterHandleImageView">
 							<string key="name">inspectorSplitterHandleImageView</string>
 							<string key="candidateClassName">NSImageView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="memoryAndStackSplitView">
+							<string key="name">memoryAndStackSplitView</string>
+							<string key="candidateClassName">NSSplitView</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="memoryDummyView">
 							<string key="name">memoryDummyView</string>

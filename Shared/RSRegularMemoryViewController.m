@@ -37,6 +37,8 @@
 - (void)loadView {
 	[super loadView];
 	
+	[[self memoryColumnFormatter] setHexadecimalFormat:RSHexadecimalFormatUnsignedChar];
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewBoundsDidChange:) name:NSViewBoundsDidChangeNotification object:[[[self tableView] enclosingScrollView] contentView]];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewFrameDidChange:) name:NSViewFrameDidChangeNotification object:[[[self tableView] enclosingScrollView] contentView]];
 	
@@ -59,17 +61,18 @@
 	return [self rowCount];
 }
 
-static NSString *const kAddressMemoryColumnIdentifier = @"address";
+static NSString *const kAddressColumnIdentifier = @"address";
 
 - (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
 	NSUInteger numberOfMemoryColumns = [[[self tableView] tableColumns] count] - 1;
 	uint16_t address = (row * numberOfMemoryColumns);
 	
-	if ([[tableColumn identifier] isEqualToString:kAddressMemoryColumnIdentifier])
+	if ([[tableColumn identifier] isEqualToString:kAddressColumnIdentifier])
 		return [NSNumber numberWithUnsignedShort:address];
 	
 	NSUInteger offset = [[[self tableView] tableColumns] indexOfObjectIdenticalTo:tableColumn];
-	uint8_t data = mem_read(&([[self calculator] calculator]->mem_c), (uint16_t)address+offset);
+	waddr_t wideAddress = addr_to_waddr(&([[self calculator] calculator]->mem_c), (uint16_t)(address+offset));
+	uint8_t data = wmem_read(&([[self calculator] calculator]->mem_c), wideAddress);
 	
 	return [NSNumber numberWithUnsignedChar:data];
 }
@@ -79,20 +82,22 @@ static NSString *const kAddressMemoryColumnIdentifier = @"address";
 	uint16_t address = (row * numberOfMemoryColumns);
 	NSUInteger offset = [[[self tableView] tableColumns] indexOfObjectIdenticalTo:tableColumn];
 	uint8_t data = [object unsignedCharValue];
+	waddr_t wideAddress = addr_to_waddr(&([[self calculator] calculator]->mem_c), (uint16_t)(address+offset));
 	
-	mem_write(&([[self calculator] calculator]->mem_c), (uint16_t)(address+offset), data);
+	mem_write(&([[self calculator] calculator]->mem_c), wideAddress.addr, data);
 }
 
 - (NSString *)tableView:(NSTableView *)tableView toolTipForCell:(NSCell *)cell rect:(NSRectPointer)rect tableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row mouseLocation:(NSPoint)mouseLocation {
-	if ([[tableColumn identifier] isEqualToString:kAddressMemoryColumnIdentifier])
+	if ([[tableColumn identifier] isEqualToString:kAddressColumnIdentifier])
 		return nil;
 	
 	NSUInteger numberOfMemoryColumns = [[[self tableView] tableColumns] count] - 1;
 	uint16_t address = (row * numberOfMemoryColumns);
 	NSUInteger offset = [[[self tableView] tableColumns] indexOfObjectIdenticalTo:tableColumn];
-	uint8_t data = mem_read(&([[self calculator] calculator]->mem_c), (uint16)(address+offset));
+	waddr_t wideAddress = addr_to_waddr(&([[self calculator] calculator]->mem_c), (uint16_t)(address+offset));
+	uint8_t data = wmem_read(&([[self calculator] calculator]->mem_c), wideAddress);
 	
-	return [NSString stringWithFormat:NSLocalizedString(@"Address: %04X\nData: %02x", @"regular memory table view tooltip format string"),(uint16_t)(address+offset),data];
+	return [NSString stringWithFormat:NSLocalizedString(@"Address: %04X\nData: %02x", @"regular memory table view tooltip format string"),wideAddress.addr,data];
 }
 
 - (void)jumpToMemoryAddress:(uint16_t)memoryAddress; {
@@ -124,7 +129,7 @@ static NSString *const kAddressMemoryColumnIdentifier = @"address";
 }
 
 @synthesize tableView=_tableView;
-@synthesize addressColumnFormatter=_addressColumnFormatter;
+@synthesize memoryColumnFormatter=_memoryColumnFormatter;
 
 @synthesize calculator=_calculator;
 @synthesize rowCount=_rowCount;
@@ -146,19 +151,13 @@ static NSString *const kAddressMemoryColumnIdentifier = @"address";
 	
 	if (numberOfMemoryColumns < maxNumberOfMemoryColumns) {
 		static RSNoHighlightColorTextFieldCell *memoryColumnTextFieldCell;
-		static RSHexadecimalFormatter *memoryColumnFormatter;
 		static dispatch_once_t onceToken;
 		dispatch_once(&onceToken, ^{
 			memoryColumnTextFieldCell = [[RSNoHighlightColorTextFieldCell alloc] initTextCell:@""];
 			
 			[memoryColumnTextFieldCell setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]]];
 			[memoryColumnTextFieldCell setEditable:YES];
-			
-			memoryColumnFormatter = [[RSHexadecimalFormatter alloc] init];
-			
-			[memoryColumnFormatter setHexadecimalFormat:RSHexadecimalFormatUnsignedChar];
-			
-			[memoryColumnTextFieldCell setFormatter:memoryColumnFormatter];
+			[memoryColumnTextFieldCell setFormatter:[self memoryColumnFormatter]];
 		});
 		
 		while (numberOfMemoryColumns++ < maxNumberOfMemoryColumns) {			
