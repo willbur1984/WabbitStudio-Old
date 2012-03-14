@@ -342,6 +342,7 @@
 						<string key="NSFrame">{{127, 10}, {39, 19}}</string>
 						<reference key="NSSuperview" ref="808169242"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSTextFieldCell" key="NSCell" id="1001596774">
 							<int key="NSCellFlags">-1804468671</int>
@@ -574,6 +575,22 @@
 					<int key="connectionID">126</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: calculator.debugging</string>
+						<reference key="source" ref="31648611"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="31648611"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">enabled: calculator.debugging</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">calculator.debugging</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">143</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">formatter</string>
 						<reference key="source" ref="1030635471"/>
@@ -596,6 +613,22 @@
 						</object>
 					</object>
 					<int key="connectionID">132</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: calculator.debugging</string>
+						<reference key="source" ref="1030635471"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="1030635471"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">enabled: calculator.debugging</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">calculator.debugging</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">149</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -622,6 +655,22 @@
 					<int key="connectionID">125</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: calculator.debugging</string>
+						<reference key="source" ref="483957414"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="483957414"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">enabled: calculator.debugging</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">calculator.debugging</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">141</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">formatter</string>
 						<reference key="source" ref="1042139733"/>
@@ -644,6 +693,22 @@
 						</object>
 					</object>
 					<int key="connectionID">129</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: calculator.debugging</string>
+						<reference key="source" ref="1042139733"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="1042139733"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">enabled: calculator.debugging</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">calculator.debugging</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">146</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -670,6 +735,22 @@
 					<int key="connectionID">130</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: calculator.debugging</string>
+						<reference key="source" ref="960775059"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="960775059"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">enabled: calculator.debugging</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">calculator.debugging</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">147</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">formatter</string>
 						<reference key="source" ref="112945630"/>
@@ -692,6 +773,22 @@
 						</object>
 					</object>
 					<int key="connectionID">128</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: calculator.debugging</string>
+						<reference key="source" ref="112945630"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="112945630"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">enabled: calculator.debugging</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">calculator.debugging</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">145</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -718,6 +815,22 @@
 					<int key="connectionID">136</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: calculator.debugging</string>
+						<reference key="source" ref="688857120"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="688857120"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">enabled: calculator.debugging</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">calculator.debugging</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">153</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">formatter</string>
 						<reference key="source" ref="442814167"/>
@@ -740,6 +853,22 @@
 						</object>
 					</object>
 					<int key="connectionID">134</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: calculator.debugging</string>
+						<reference key="source" ref="442814167"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="442814167"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">enabled: calculator.debugging</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">calculator.debugging</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">151</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -766,6 +895,22 @@
 					<int key="connectionID">133</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: calculator.debugging</string>
+						<reference key="source" ref="840861742"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="840861742"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">enabled: calculator.debugging</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">calculator.debugging</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">150</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">formatter</string>
 						<reference key="source" ref="786454319"/>
@@ -788,6 +933,22 @@
 						</object>
 					</object>
 					<int key="connectionID">135</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: calculator.debugging</string>
+						<reference key="source" ref="786454319"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="786454319"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">enabled: calculator.debugging</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">calculator.debugging</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">152</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -814,6 +975,22 @@
 					<int key="connectionID">131</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: calculator.debugging</string>
+						<reference key="source" ref="844823774"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="844823774"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">enabled: calculator.debugging</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">calculator.debugging</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">148</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">formatter</string>
 						<reference key="source" ref="1028848395"/>
@@ -836,6 +1013,22 @@
 						</object>
 					</object>
 					<int key="connectionID">127</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: calculator.debugging</string>
+						<reference key="source" ref="1028848395"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="1028848395"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">enabled: calculator.debugging</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">calculator.debugging</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">144</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -1309,7 +1502,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">140</int>
+			<int key="maxID">153</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
