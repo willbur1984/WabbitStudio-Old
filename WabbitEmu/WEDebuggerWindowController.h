@@ -44,5 +44,6 @@
 - (IBAction)step:(id)sender;
 - (IBAction)stepOver:(id)sender;
 - (IBAction)stepOut:(id)sender;
+- (IBAction)toggleNormalBreakpoint:(id)sender;
 
 @end

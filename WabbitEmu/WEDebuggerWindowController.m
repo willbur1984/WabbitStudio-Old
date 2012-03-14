@@ -192,6 +192,19 @@ static CGFloat kBottomSubviewMinimumWidth = 125.0;
 	[[[self calculatorDocument] calculator] stepOut];
 }
 
+- (IBAction)toggleNormalBreakpoint:(id)sender; {
+	NSIndexSet *selectedIndexes = [[[self disassemblyViewController] tableView] selectedRowIndexes];
+	NSTableColumn *tableColumn = [[[[self disassemblyViewController] tableView] tableColumns] objectAtIndex:[[[self disassemblyViewController] tableView] columnWithIdentifier:@"address"]];
+	
+	[selectedIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+		uint16_t address = [[[self disassemblyViewController] tableView:[[self disassemblyViewController] tableView] objectValueForTableColumn:tableColumn row:idx] unsignedShortValue];
+		
+		[[[self calculatorDocument] calculator] toggleBreakpointOfType:RSBreakpointTypeNormal atAddress:address];
+	}];
+	
+	[[[self disassemblyViewController] tableView] setNeedsDisplay:YES];
+}
+
 #pragma mark Properties
 @synthesize disassemblyDummyView=_disassemblyDummyView;
 @synthesize inspectorScrollView=_inspectorScrollView;

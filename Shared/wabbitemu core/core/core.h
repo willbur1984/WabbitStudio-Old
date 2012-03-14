@@ -207,8 +207,15 @@ typedef struct memory_context {
 	int port27_remap_count;		// amount of 64 byte chunks remapped from RAM page 0 to bank 3
 	int port28_remap_count;		// amount of 64 byte chunks remapped from RAM page 1 to bank 1
 
+#ifdef MACVER
+	void (*mem_read_break_callback)(uint16_t, void *);
+	void *mem_read_break_callback_owner;
+	void (*mem_write_break_callback)(uint16_t, uint8_t, void *);
+	void *mem_write_break_callback_owner;
+#else
 	void (*mem_read_break_callback)(void *);
 	void (*mem_write_break_callback)(void *);
+#endif
 } memory_context_t, memc;
 
 /* Input/Output device mapping */
@@ -277,7 +284,12 @@ typedef struct CPU {
 	pioc pio;
 	memc *mem_c;
 	timerc *timer_c;
+#ifdef MACVER
 	void (*exe_violation_callback)(void *);
+	void *exe_violation_callback_owner;
+#else
+	void (*exe_violation_callback)(void *);
+#endif
 	int cpu_version;
 	reverse_time_t prev_instruction_list[512];
 	reverse_time_t *prev_instruction;
@@ -381,10 +393,17 @@ void displayreg(CPU_t *);
 #define tc_tstates( timer_z ) \
 	((timer_z)->tstates)
 
+#ifdef MACVER
+#define endflash_break(cpu_v) cpu_v->mem_c->step = 0;\
+		if (break_on_invalid_flash) {\
+			cpu->mem_c->mem_write_break_callback(addr, data, cpu->mem_c->mem_write_break_callback_owner);\
+		}
+#else
 #define endflash_break(cpu_v) cpu_v->mem_c->step = 0;\
 		if (break_on_invalid_flash) {\
 			cpu->mem_c->mem_write_break_callback(cpu);\
 		}
+#endif
 
 #define endflash(cpu_v) cpu_v->mem_c->step = 0;
 

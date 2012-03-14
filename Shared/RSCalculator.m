@@ -29,6 +29,34 @@ NSString *const RSCalculatorErrorDomain = @"org.revsoft.calculator.error";
 const NSInteger RSCalculatorErrorCodeUnrecognizedRomOrSavestate = 1001;
 const NSInteger RSCalculatorErrorCodeMaximumNumberOfCalculators = 1002;
 
+static void RSCalculatorBreakpointCallback(struct tagCALC *lpCalc, void *context) {
+	RSCalculator *calculator = (RSCalculator *)context;
+	
+	if ([[calculator delegate] respondsToSelector:@selector(handleBreakpointHitForCalculator:)])
+		[[calculator delegate] handleBreakpointHitForCalculator:calculator];
+}
+
+static void RSCalculatorMemoryReadCallback(uint16_t address, void *context) {
+	RSCalculator *calculator = (RSCalculator *)context;
+	
+	if ([[calculator delegate] respondsToSelector:@selector(calculator:hitMemoryReadBreakpointAtAddress:)])
+		[[calculator delegate] calculator:calculator hitMemoryReadBreakpointAtAddress:address];
+}
+
+static void RSCalculatorMemoryWriteCallback(uint16_t address, uint8_t data, void *context) {
+	RSCalculator *calculator = (RSCalculator *)context;
+	
+	if ([[calculator delegate] respondsToSelector:@selector(calculator:hitMemoryWriteBreakpointAtAddress:data:)])
+		[[calculator delegate] calculator:calculator hitMemoryWriteBreakpointAtAddress:address data:data];
+}
+
+static void RSCalculatorCPUExeViolationCallback(void *context) {
+	RSCalculator *calculator = (RSCalculator *)context;
+	
+	if ([[calculator delegate] respondsToSelector:@selector(handleCPUExeViolationForCalculator:)])
+		[[calculator delegate] handleCPUExeViolationForCalculator:calculator];
+}
+
 @interface RSCalculator ()
 @property (readwrite,assign,nonatomic,getter = isLoading) BOOL loading;
 @property (readwrite,copy,nonatomic) NSURL *lastLoadedURL;
@@ -73,6 +101,14 @@ const NSInteger RSCalculatorErrorCodeMaximumNumberOfCalculators = 1002;
 	}
 	
 	_calculator = calculator;
+	_calculator->breakpoint_callback = &RSCalculatorBreakpointCallback;
+	_calculator->breakpoint_owner = self;
+	_calculator->mem_c.mem_read_break_callback = &RSCalculatorMemoryReadCallback;
+	_calculator->mem_c.mem_read_break_callback_owner = self;
+	_calculator->mem_c.mem_write_break_callback = &RSCalculatorMemoryWriteCallback;
+	_calculator->mem_c.mem_write_break_callback_owner = self;
+	_calculator->cpu.exe_violation_callback = &RSCalculatorCPUExeViolationCallback;
+	_calculator->cpu.exe_violation_callback_owner = self;
 	
 	// if we were given a rom or savestate url, attempt to load it
 	if (romOrSavestateURL && ![self loadRomOrSavestateAtURL:romOrSavestateURL error:outError]) {

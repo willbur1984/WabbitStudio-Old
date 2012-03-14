@@ -313,7 +313,11 @@ static int CPU_opcode_fetch(CPU_t *cpu) {
 	}
 	if (!is_allowed_exec(cpu)) {
 		if (break_on_exe_violation) {
+#ifdef MACVER
+			cpu->exe_violation_callback(cpu->exe_violation_callback_owner);
+#else
 			cpu->exe_violation_callback(cpu);
+#endif
 		} else {
 			CPU_reset(cpu);
 		}
@@ -334,7 +338,11 @@ static int CPU_opcode_fetch(CPU_t *cpu) {
 
 unsigned char CPU_mem_read(CPU_t *cpu, unsigned short addr) {
 	if (check_mem_read_break(cpu->mem_c, addr_to_waddr(cpu->mem_c, addr))) {
+#ifdef MACVER
+		cpu->mem_c->mem_read_break_callback(addr,cpu->mem_c->mem_read_break_callback_owner);
+#else
 		cpu->mem_c->mem_read_break_callback(cpu);
+#endif
 	}
 	cpu->bus = mem_read(cpu->mem_c, addr);
 
@@ -542,7 +550,11 @@ static void flashwrite(CPU_t *cpu, unsigned short addr, unsigned char data) {
 
 unsigned char CPU_mem_write(CPU_t *cpu, unsigned short addr, unsigned char data) {
 	if (check_mem_write_break(cpu->mem_c, addr_to_waddr(cpu->mem_c, addr))) {
+#ifdef MACVER
+		cpu->mem_c->mem_write_break_callback(addr, data, cpu->mem_c->mem_write_break_callback_owner);
+#else
 		cpu->mem_c->mem_write_break_callback(cpu);
+#endif
 	}
 	bank_state_t *bank = &cpu->mem_c->banks[mc_bank(addr)];
 
@@ -558,7 +570,11 @@ unsigned char CPU_mem_write(CPU_t *cpu, unsigned short addr, unsigned char data)
 			((page != 0x7F && page != 0x6F) || (cpu->pio.se_aux->model_bits & 0x2) || !(cpu->pio.se_aux->model_bits & 0x1)))) {
 			flashwrite(cpu, addr, data);
 		} else if (break_on_invalid_flash) {
+#ifdef MACVER
+			cpu->mem_c->mem_write_break_callback(addr, data, cpu->mem_c->mem_write_break_callback_owner);
+#else
 			cpu->mem_c->mem_write_break_callback(cpu);
+#endif
 		}
 
 		SEtc_add(cpu->timer_c, cpu->mem_c->write_flash_tstates);

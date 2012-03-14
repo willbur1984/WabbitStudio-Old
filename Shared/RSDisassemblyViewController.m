@@ -35,6 +35,8 @@
 	[self _reloadDisassemblyInfos];
 	
 	[super loadView];
+	
+	[self jumpToProgramCounter:nil];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
@@ -55,6 +57,7 @@ static NSString *const kAddressColumnIdentifier = @"address";
 static NSString *const kDataColumnIdentifier = @"data";
 static NSString *const kDisassemblyColumnIdentifier = @"disassembly";
 static NSString *const kSizeColumnIdentifier = @"size";
+static NSString *const kBreakpointColumnIdentifier = @"breakpoint";
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
 	return ([[self calculator] isDebugging])?UINT16_MAX:0;
@@ -86,6 +89,16 @@ static NSString *const kSizeColumnIdentifier = @"size";
 		Z80_info_t info = _z80_info[row];
 		
 		return [NSNumber numberWithInt:info.size];
+	}
+	else if ([[tableColumn identifier] isEqualToString:kBreakpointColumnIdentifier]) {
+		Z80_info_t info = _z80_info[row];
+		
+		if (check_break(&([[self calculator] calculator]->mem_c), info.waddr))
+			return [NSImage imageNamed:NSImageNameStatusUnavailable];
+		else if (check_mem_read_break(&([[self calculator] calculator]->mem_c), info.waddr))
+			return [NSImage imageNamed:NSImageNameStatusAvailable];
+		else if (check_mem_write_break(&([[self calculator] calculator]->mem_c), info.waddr))
+			return [NSImage imageNamed:NSImageNameStatusPartiallyAvailable];
 	}
 	return nil;
 }

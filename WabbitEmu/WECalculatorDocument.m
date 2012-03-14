@@ -71,6 +71,10 @@
 	[[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:romOrSavestateURL];
 }
 
+- (void)handleBreakpointHitForCalculator:(RSCalculator *)calculator {
+	[self showDebugger:nil];
+}
+
 - (IBAction)showDebugger:(id)sender; {
 	[[self debuggerWindowController] showWindow:nil];
 }
