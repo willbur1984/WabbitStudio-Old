@@ -170,7 +170,7 @@ static CGFloat kBottomSubviewMinimumWidth = 125.0;
 
 - (CGFloat)splitView:(NSSplitView *)splitView constrainSplitPosition:(CGFloat)proposedPosition ofSubviewAt:(NSInteger)dividerIndex {
 	if ([self memoryAndStackSplitView] == splitView)
-		return [splitView maxPossiblePositionOfDividerAtIndex:dividerIndex];
+		return NSWidth([splitView bounds])-100.0;
 	return proposedPosition;
 }
 
