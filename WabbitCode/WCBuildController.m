@@ -128,6 +128,29 @@ NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotification = @"
 		return;
 	}
 	
+	if ([self runAfterBuilding]) {
+		if (![activeBuildTarget generateCodeListing]) {
+			NSString *message = NSLocalizedString(@"No Code Listing", @"No Code Listing");
+			NSString *informative = [NSString stringWithFormat:NSLocalizedString(@"The active build target \"%@\" is not set to generate a code listing, which is required for debugging. Do you want to enable code listing generation now?", @"build and run alert informative format string"),[activeBuildTarget name]];
+			NSAlert *alert = [NSAlert alertWithMessageText:message defaultButton:NSLocalizedString(@"Generate Code Listing", @"Generate Code Listing") alternateButton:LOCALIZED_STRING_CANCEL otherButton:nil informativeTextWithFormat:informative];
+			
+			[alert beginSheetModalForWindow:[[self projectDocument] windowForSheet] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
+				[[alert window] orderOut:nil];
+				if (returnCode == NSAlertAlternateReturn)
+					return;
+				
+				[activeBuildTarget setGenerateCodeListing:YES];
+				[self build];
+			}];
+			return;
+		}
+		else if (![[[self projectDocument] debugController] romOrSavestateForRunning]) {
+			[[[self projectDocument] debugController] setBuildAfterRomOrSavestateSheetFinishes:YES];
+			[[[self projectDocument] debugController] changeRomOrSavestateForRunning];
+			return;
+		}
+	}
+	
 	WCFile *inputFile = [activeBuildTarget inputFile];
 	
 	if (!inputFile) {
@@ -274,28 +297,6 @@ NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotification = @"
 	}
 }
 - (void)buildAndRun; {
-	WCBuildTarget *buildTarget = [[self projectDocument] activeBuildTarget];
-	
-	if (buildTarget && ![buildTarget generateCodeListing]) {
-		NSString *message = NSLocalizedString(@"No Code Listing", @"No Code Listing");
-		NSString *informative = [NSString stringWithFormat:NSLocalizedString(@"The active build target \"%@\" is not set to generate a code listing, which is required for debugging. Do you want to enable code listing generation now?", @"build and run alert informative format string"),[buildTarget name]];
-		NSAlert *alert = [NSAlert alertWithMessageText:message defaultButton:NSLocalizedString(@"Generate Code Listing", @"Generate Code Listing") alternateButton:LOCALIZED_STRING_CANCEL otherButton:nil informativeTextWithFormat:informative];
-		
-		[alert beginSheetModalForWindow:[[self projectDocument] windowForSheet] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
-			[[alert window] orderOut:nil];
-			if (returnCode == NSAlertAlternateReturn)
-				return;
-			
-			[buildTarget setGenerateCodeListing:YES];
-			[self buildAndRun];
-		}];
-		return;
-	}
-	else if (![[[self projectDocument] debugController] romOrSavestateForRunning]) {
-		[[[self projectDocument] debugController] changeRomOrSavestateForRunning];
-		return;
-	}
-	
 	[self setRunAfterBuilding:YES];
 	[self build];
 }

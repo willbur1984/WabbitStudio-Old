@@ -526,7 +526,12 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 		_breakpointManager = [[WCBreakpointManager alloc] initWithProjectDocument:self];
 	return _breakpointManager;
 }
-@synthesize debugController=_debugController;
+@dynamic debugController;
+- (WCDebugController *)debugController {
+	if (!_debugController)
+		_debugController = [[WCDebugController alloc] initWithProjectDocument:self];
+	return _debugController;
+}
 
 #pragma mark Notifications
 - (void)_projectNavigatorDidAddNewGroup:(NSNotification *)note {

@@ -28,7 +28,8 @@ extern NSString *const WCDebugControllerCurrentLineNumberDidChangeNotification;
 	struct {
 		unsigned int debugging:1;
 		unsigned int runBuildProductAfterRomOrSavestateSheetFinishes:1;
-		unsigned int RESERVED:30;
+		unsigned int buildAfterRomOrSavestateSheetFinishes:1;
+		unsigned int RESERVED:29;
 	} _debugFlags;
 }
 @property (readonly,nonatomic) WCProjectDocument *projectDocument;
@@ -39,6 +40,8 @@ extern NSString *const WCDebugControllerCurrentLineNumberDidChangeNotification;
 @property (readonly,assign,nonatomic) NSUInteger currentLineNumber;
 @property (readonly,nonatomic,getter = isDebugging) BOOL debugging;
 @property (readonly,retain,nonatomic) RSFileReference *romOrSavestateForRunning;
+@property (readwrite,assign,nonatomic) BOOL runBuildProductAfterRomOrSavestateSheetFinishes;
+@property (readwrite,assign,nonatomic) BOOL buildAfterRomOrSavestateSheetFinishes;
 
 - (id)initWithProjectDocument:(WCProjectDocument *)projectDocument;
 

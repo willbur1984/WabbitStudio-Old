@@ -70,6 +70,8 @@ NSString *const WCDebugControllerCurrentLineNumberDidChangeNotification = @"WCDe
 }
 
 - (void)changeRomOrSavestateForRunning; {
+	BOOL shouldRunBuildProduct = [self runBuildProductAfterRomOrSavestateSheetFinishes];
+	BOOL shouldBuild = [self buildAfterRomOrSavestateSheetFinishes];
 	NSOpenPanel *openPanel = [NSOpenPanel openPanel];
 	
 	[openPanel setAllowedFileTypes:[NSArray arrayWithObjects:RSCalculatorRomUTI,RSCalculatorSavestateUTI, nil]];
@@ -77,10 +79,15 @@ NSString *const WCDebugControllerCurrentLineNumberDidChangeNotification = @"WCDe
 	
 	[openPanel beginSheetModalForWindow:[[self projectDocument] windowForSheet] completionHandler:^(NSInteger result) {
 		[openPanel orderOut:nil];
+		[self setRunBuildProductAfterRomOrSavestateSheetFinishes:NO];
+		[self setBuildAfterRomOrSavestateSheetFinishes:NO];
 		if (result == NSFileHandlingPanelCancelButton)
 			return;
 		
 		[self setRomOrSavestateForRunning:[RSFileReference fileReferenceWithFileURL:[[openPanel URLs] lastObject]]];
+		
+		if (shouldBuild)
+			[[[self projectDocument] buildController] build];
 	}];
 }
 
@@ -105,6 +112,20 @@ NSString *const WCDebugControllerCurrentLineNumberDidChangeNotification = @"WCDe
 	_debugFlags.debugging = debugging;
 }
 @synthesize romOrSavestateForRunning=_romOrSavestateForRunning;
+@dynamic runBuildProductAfterRomOrSavestateSheetFinishes;
+- (BOOL)runBuildProductAfterRomOrSavestateSheetFinishes {
+	return _debugFlags.runBuildProductAfterRomOrSavestateSheetFinishes;
+}
+- (void)setRunBuildProductAfterRomOrSavestateSheetFinishes:(BOOL)runBuildProductAfterRomOrSavestateSheetFinishes {
+	_debugFlags.runBuildProductAfterRomOrSavestateSheetFinishes = runBuildProductAfterRomOrSavestateSheetFinishes;
+}
+@dynamic buildAfterRomOrSavestateSheetFinishes;
+- (BOOL)buildAfterRomOrSavestateSheetFinishes {
+	return _debugFlags.buildAfterRomOrSavestateSheetFinishes;
+}
+- (void)setBuildAfterRomOrSavestateSheetFinishes:(BOOL)buildAfterRomOrSavestateSheetFinishes {
+	_debugFlags.buildAfterRomOrSavestateSheetFinishes = buildAfterRomOrSavestateSheetFinishes;
+}
 
 - (void)_buildControllerDidFinishBuilding:(NSNotification *)note {
 	WCBuildController *buildController = [note object];
