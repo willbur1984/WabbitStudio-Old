@@ -209,10 +209,9 @@
 	if (!NSLocationInRange(range.location, [topLevelFold range]))
 		return nil;
 	
-	for (WCFold *fold in [topLevelFold descendantNodes]) {
-		if (NSLocationInRange(range.location, [fold range]) &&
-			[fold range].length < [topLevelFold range].length)
-			topLevelFold = fold;
+	for (WCFold *fold in [[topLevelFold childFoldsSortedByLevelAndLocation] reverseObjectEnumerator]) {
+		if (NSLocationInRange(range.location, [fold range]))
+			return fold;
 	}
 	
 	return topLevelFold;

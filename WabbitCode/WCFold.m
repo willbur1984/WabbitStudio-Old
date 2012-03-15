@@ -21,6 +21,7 @@
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	_sourceScanner = nil;
+	[_childFoldsSortedByLevelAndLocation release];
 	[_attributedString release];
 	[super dealloc];
 }
@@ -74,6 +75,23 @@
 		_attributedString = [temp copy];
 	}
 	return _attributedString;
+}
+@synthesize childFoldsSortedByLevelAndLocation=_childFoldsSortedByLevelAndLocation;
+- (NSArray *)childFoldsSortedByLevelAndLocation {
+	if (!_childFoldsSortedByLevelAndLocation) {
+		NSMutableArray *temp = [NSMutableArray arrayWithArray:[self descendantNodes]];
+		
+		[temp sortUsingDescriptors:[NSArray arrayWithObjects:[NSSortDescriptor sortDescriptorWithKey:@"level" ascending:YES],[NSSortDescriptor sortDescriptorWithKey:@"range" ascending:YES comparator:^NSComparisonResult(NSValue *obj1, NSValue *obj2) {
+			if ([obj1 rangeValue].location < [obj2 rangeValue].location)
+				return NSOrderedAscending;
+			else if ([obj1 rangeValue].location > [obj2 rangeValue].location)
+				return NSOrderedDescending;
+			return NSOrderedSame;
+		}], nil]];
+		
+		_childFoldsSortedByLevelAndLocation = [temp copy];
+	}
+	return _childFoldsSortedByLevelAndLocation;
 }
 #pragma mark *** Private Methods ***
 

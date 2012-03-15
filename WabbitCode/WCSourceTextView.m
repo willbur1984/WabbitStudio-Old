@@ -1844,10 +1844,6 @@ static const CGFloat kTriangleHeight = 4.0;
 		return;
 	
 	NSRange selectedRange = [self selectedRange];
-	
-	if (selectedRange.length)
-		return;
-	
 	WCFold *fold = [[[[self delegate] sourceScannerForSourceTextView:self] folds] deepestFoldForRange:selectedRange];
 	
 	if (!fold)

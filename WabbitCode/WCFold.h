@@ -25,12 +25,14 @@ typedef enum _WCFoldType {
 	NSRange _contentRange;
 	NSUInteger _level;
 	NSAttributedString *_attributedString;
+	NSArray *_childFoldsSortedByLevelAndLocation;
 }
 @property (readwrite,assign,nonatomic) WCSourceScanner *sourceScanner;
 @property (readonly,nonatomic) WCFoldType type;
 @property (readonly,nonatomic) NSRange range;
 @property (readonly,nonatomic) NSRange contentRange;
 @property (readwrite,assign,nonatomic) NSUInteger level;
+@property (readonly,nonatomic) NSArray *childFoldsSortedByLevelAndLocation;
 
 + (id)foldOfType:(WCFoldType)type level:(NSUInteger)level range:(NSRange)range contentRange:(NSRange)contentRange;
 - (id)initWithType:(WCFoldType)type level:(NSUInteger)level range:(NSRange)range contentRange:(NSRange)contentRange;
