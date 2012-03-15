@@ -9,8 +9,6 @@
 #import <AppKit/NSDocument.h>
 #import "RSCalculatorDelegate.h"
 
-@class RSCalculator;
-
 @interface WECalculatorDocument : NSDocument <RSCalculatorDelegate> {
 	RSCalculator *_calculator;
 }

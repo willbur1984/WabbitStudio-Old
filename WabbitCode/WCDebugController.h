@@ -33,15 +33,18 @@ extern NSString *const WCDebugControllerCurrentLineNumberDidChangeNotification;
 }
 @property (readonly,nonatomic) WCProjectDocument *projectDocument;
 @property (readonly,nonatomic) RSCalculator *calculator;
-@property (readonly,nonatomic) NSString *codeListing;
-@property (readonly,nonatomic) NSString *labelFile;
-@property (readonly,nonatomic) WCFile *currentFile;
-@property (readonly,nonatomic) NSUInteger currentLineNumber;
+@property (readonly,copy,nonatomic) NSString *codeListing;
+@property (readonly,copy,nonatomic) NSString *labelFile;
+@property (readonly,retain,nonatomic) WCFile *currentFile;
+@property (readonly,assign,nonatomic) NSUInteger currentLineNumber;
 @property (readonly,nonatomic,getter = isDebugging) BOOL debugging;
+@property (readonly,retain,nonatomic) RSFileReference *romOrSavestateForRunning;
 
 - (id)initWithProjectDocument:(WCProjectDocument *)projectDocument;
 
 + (NSGradient *)debugFillGradient;
 + (NSColor *)debugFillColor;
+
+- (void)changeRomOrSavestateForRunning;
 
 @end

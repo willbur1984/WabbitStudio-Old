@@ -18,7 +18,7 @@ extern NSString *const WCProjectDocumentFileBreakpointsKey;
 extern NSString *const WCProjectDataFileName;
 extern NSString *const WCProjectSettingsFileExtension;
 
-@class WCProjectContainer,WCProjectWindowController,WCSourceTextViewController,WCFile,WCSourceFileDocument,WCFileContainer,WCSourceFileSeparateWindowController,NDMutableTrie,NDTrie,WCBuildTarget,WCBuildController,WCBreakpointManager;
+@class WCProjectContainer,WCProjectWindowController,WCSourceTextViewController,WCFile,WCSourceFileDocument,WCFileContainer,WCSourceFileSeparateWindowController,NDMutableTrie,NDTrie,WCBuildTarget,WCBuildController,WCBreakpointManager,WCDebugController;
 
 @interface WCProjectDocument : NSDocument <WCOpenQuicklyDataSource> {
 	WCProjectContainer *_projectContainer;
@@ -34,6 +34,7 @@ extern NSString *const WCProjectSettingsFileExtension;
 	NSMutableArray *_buildTargets;
 	WCBuildController *_buildController;
 	WCBreakpointManager *_breakpointManager;
+	WCDebugController *_debugController;
 }
 @property (readonly,retain) WCProjectContainer *projectContainer;
 @property (readonly,retain) NSMapTable *filesToSourceFileDocuments;
@@ -55,6 +56,7 @@ extern NSString *const WCProjectSettingsFileExtension;
 @property (readwrite,retain,nonatomic) WCBuildTarget *activeBuildTarget;
 @property (readonly,nonatomic) WCBuildController *buildController;
 @property (readonly,nonatomic) WCBreakpointManager *breakpointManager;
+@property (readonly,nonatomic) WCDebugController *debugController;
 
 - (WCFileContainer *)fileContainerForFile:(WCFile *)file;
 

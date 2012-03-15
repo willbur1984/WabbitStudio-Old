@@ -33,6 +33,7 @@
 #import "WCBuildInclude.h"
 #import "WCBreakpointManager.h"
 #import "WCFileBreakpoint.h"
+#import "WCDebugController.h"
 
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
@@ -64,6 +65,7 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
+	[_debugController release];
 	[_breakpointManager release];
 	[_buildController release];
 	[_buildTargets release];
@@ -524,6 +526,7 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 		_breakpointManager = [[WCBreakpointManager alloc] initWithProjectDocument:self];
 	return _breakpointManager;
 }
+@synthesize debugController=_debugController;
 
 #pragma mark Notifications
 - (void)_projectNavigatorDidAddNewGroup:(NSNotification *)note {

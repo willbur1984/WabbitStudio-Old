@@ -24,6 +24,9 @@ extern NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotificati
 	NSMapTable *_filesToBuildIssuesSortedByLocation;
 	NSArray *_filesWithBuildIssuesSortedByName;
 	NSSet *_buildIssues;
+	NSUInteger _totalErrors;
+	NSUInteger _totalWarnings;
+	NSURL *_lastOutputFileURL;
 	struct {
 		unsigned int building:1;
 		unsigned int runAfterBuilding:1;
@@ -37,6 +40,10 @@ extern NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotificati
 @property (readonly,copy,nonatomic) NSArray *filesWithBuildIssuesSortedByName;
 @property (readonly,retain,nonatomic) NSMapTable *filesToBuildIssuesSortedByLocation;
 @property (readwrite,assign,nonatomic) BOOL issuesEnabled;
+@property (readonly,assign,nonatomic) NSUInteger totalErrors;
+@property (readonly,assign,nonatomic) NSUInteger totalWarnings;
+@property (readonly,copy,nonatomic) NSURL *lastOutputFileURL;
+@property (readonly,assign,nonatomic) BOOL runAfterBuilding;
 
 - (id)initWithProjectDocument:(WCProjectDocument *)projectDocument;
 

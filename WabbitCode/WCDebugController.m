@@ -11,15 +11,29 @@
 #import "RSTransferFileWindowController.h"
 #import "WCFile.h"
 #import "WCProjectDocument.h"
+#import "WCBuildController.h"
+#import "RSFileReference.h"
+#import "RSDefines.h"
 
 NSString *const WCDebugControllerDebugSessionDidBeginNotification = @"WCDebugControllerDebugSessionDidBeginNotification";
 NSString *const WCDebugControllerDebugSessionDidEndNotification = @"WCDebugControllerDebugSessionDidEndNotification";
 NSString *const WCDebugControllerCurrentFileDidChangeNotification = @"WCDebugControllerCurrentFileDidChangeNotification";
 NSString *const WCDebugControllerCurrentLineNumberDidChangeNotification = @"WCDebugControllerCurrentLineNumberDidChangeNotification";
 
+@interface WCDebugController ()
+@property (readwrite,copy,nonatomic) NSString *codeListing;
+@property (readwrite,copy,nonatomic) NSString *labelFile;
+@property (readwrite,retain,nonatomic) WCFile *currentFile;
+@property (readwrite,assign,nonatomic) NSUInteger currentLineNumber;
+@property (readwrite,retain,nonatomic) RSFileReference *romOrSavestateForRunning;
+
+@end
+
 @implementation WCDebugController
 - (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	_projectDocument = nil;
+	[_romOrSavestateForRunning release];
 	[_calculator release];
 	[_codeListing release];
 	[_labelFile release];
@@ -36,6 +50,9 @@ NSString *const WCDebugControllerCurrentLineNumberDidChangeNotification = @"WCDe
 		return nil;
 	
 	_projectDocument = projectDocument;
+	_currentLineNumber = NSUIntegerMax;
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_buildControllerDidFinishBuilding:) name:WCBuildControllerDidFinishBuildingNotification object:[_projectDocument buildController]];
 	
 	return self;
 }
@@ -50,6 +67,21 @@ NSString *const WCDebugControllerCurrentLineNumberDidChangeNotification = @"WCDe
 }
 + (NSColor *)debugFillColor; {
 	return [NSColor colorWithCalibratedRed:0.0 green:0.75 blue:0.0 alpha:1.0];
+}
+
+- (void)changeRomOrSavestateForRunning; {
+	NSOpenPanel *openPanel = [NSOpenPanel openPanel];
+	
+	[openPanel setAllowedFileTypes:[NSArray arrayWithObjects:RSCalculatorRomUTI,RSCalculatorSavestateUTI, nil]];
+	[openPanel setPrompt:LOCALIZED_STRING_CHOOSE];
+	
+	[openPanel beginSheetModalForWindow:[[self projectDocument] windowForSheet] completionHandler:^(NSInteger result) {
+		[openPanel orderOut:nil];
+		if (result == NSFileHandlingPanelCancelButton)
+			return;
+		
+		[self setRomOrSavestateForRunning:[RSFileReference fileReferenceWithFileURL:[[openPanel URLs] lastObject]]];
+	}];
 }
 
 @synthesize projectDocument=_projectDocument;
@@ -71,6 +103,27 @@ NSString *const WCDebugControllerCurrentLineNumberDidChangeNotification = @"WCDe
 }
 - (void)setDebugging:(BOOL)debugging {
 	_debugFlags.debugging = debugging;
+}
+@synthesize romOrSavestateForRunning=_romOrSavestateForRunning;
+
+- (void)_buildControllerDidFinishBuilding:(NSNotification *)note {
+	WCBuildController *buildController = [note object];
+	
+	if ([buildController totalErrors] && [buildController runAfterBuilding]) {
+		[self setCodeListing:nil];
+		[self setLabelFile:nil];
+		[self setCurrentFile:nil];
+		[self setCurrentLineNumber:NSUIntegerMax];
+	}
+	else {
+		NSError *outError;
+		if (![[self calculator] loadRomOrSavestateAtURL:[[self romOrSavestateForRunning] fileURL] error:&outError]) {
+			if (outError) {
+				[[NSApplication sharedApplication] presentError:outError];
+				return;
+			}
+		}
+	}
 }
 
 @end

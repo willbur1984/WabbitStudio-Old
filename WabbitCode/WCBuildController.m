@@ -20,6 +20,7 @@
 #import "WCBuildInclude.h"
 #import "WCBuildDefine.h"
 #import "WCProjectViewController.h"
+#import "WCDebugController.h"
 
 NSString *const WCBuildControllerDidFinishBuildingNotification = @"WCBuildControllerDidFinishBuildingNotification";
 
@@ -37,6 +38,9 @@ NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotification = @"
 @property (readwrite,copy,nonatomic) NSArray *filesWithBuildIssuesSortedByName;
 @property (readwrite,copy,nonatomic) NSSet *buildIssues;
 @property (readwrite,assign,nonatomic,getter = isChangingVisibilityOfAllBuildIssues) BOOL changingVisibilityOfAllBuildIssues;
+@property (readwrite,assign,nonatomic) NSUInteger totalErrors;
+@property (readwrite,assign,nonatomic) NSUInteger totalWarnings;
+@property (readwrite,copy,nonatomic) NSURL *lastOutputFileURL;
 
 - (void)_processOutput;
 @end
@@ -47,6 +51,7 @@ NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotification = @"
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
+	[_lastOutputFileURL release];
 	[_filesToBuildIssuesSortedByLocation release];
 	[_filesWithBuildIssuesSortedByName release];
 	[_buildIssues release];
@@ -254,6 +259,8 @@ NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotification = @"
 	
 	[self setBuilding:YES];
 	
+	[self setLastOutputFileURL:[NSURL fileURLWithPath:outputFilePath isDirectory:NO]];
+	
 	@try {
 		[[self task] launch];
 	}
@@ -263,9 +270,32 @@ NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotification = @"
 	@finally {
 		[self setTask:nil];
 		[self setBuilding:NO];
+		[self setRunAfterBuilding:NO];
 	}
 }
 - (void)buildAndRun; {
+	WCBuildTarget *buildTarget = [[self projectDocument] activeBuildTarget];
+	
+	if (buildTarget && ![buildTarget generateCodeListing]) {
+		NSString *message = NSLocalizedString(@"No Code Listing", @"No Code Listing");
+		NSString *informative = [NSString stringWithFormat:NSLocalizedString(@"The active build target \"%@\" is not set to generate a code listing, which is required for debugging. Do you want to enable code listing generation now?", @"build and run alert informative format string"),[buildTarget name]];
+		NSAlert *alert = [NSAlert alertWithMessageText:message defaultButton:NSLocalizedString(@"Generate Code Listing", @"Generate Code Listing") alternateButton:LOCALIZED_STRING_CANCEL otherButton:nil informativeTextWithFormat:informative];
+		
+		[alert beginSheetModalForWindow:[[self projectDocument] windowForSheet] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
+			[[alert window] orderOut:nil];
+			if (returnCode == NSAlertAlternateReturn)
+				return;
+			
+			[buildTarget setGenerateCodeListing:YES];
+			[self buildAndRun];
+		}];
+		return;
+	}
+	else if (![[[self projectDocument] debugController] romOrSavestateForRunning]) {
+		[[[self projectDocument] debugController] changeRomOrSavestateForRunning];
+		return;
+	}
+	
 	[self setRunAfterBuilding:YES];
 	[self build];
 }
@@ -322,6 +352,9 @@ NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotification = @"
 - (void)setChangingVisibilityOfAllBuildIssues:(BOOL)changingVisibilityOfAllBuildIssues {
 	_buildFlags.changingVisibilityOfAllBuildIssues = changingVisibilityOfAllBuildIssues;
 }
+@synthesize totalErrors=_totalErrors;
+@synthesize totalWarnings=_totalWarnings;
+@synthesize lastOutputFileURL=_lastOutputFileURL;
 #pragma mark *** Private Methods ***
 - (void)_processOutput; {	
 	NSString *output = [[[self output] copy] autorelease];
@@ -335,6 +368,8 @@ NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotification = @"
 		NSMutableArray *files = [NSMutableArray arrayWithCapacity:0];
 		NSMapTable *filesToBuildIssues = [NSMapTable mapTableWithWeakToStrongObjects];
 		NSMutableSet *allBuildIssues = [NSMutableSet setWithCapacity:0];
+		__block NSUInteger totalErrors = 0;
+		__block NSUInteger totalWarnings = 0;
 		
 		[output enumerateSubstringsInRange:NSMakeRange(0, [output length]) options:NSStringEnumerationByLines usingBlock:^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
 			NSTextCheckingResult *result = [messageRegex firstMatchInString:substring options:0 range:NSMakeRange(0, [substring length])];
@@ -356,10 +391,14 @@ NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotification = @"
 			NSString *code = [substring substringWithRange:[result rangeAtIndex:4]];
 			WCBuildIssue *buildIssue;
 			
-			if ([issueType isEqualToString:@"error"])
+			if ([issueType isEqualToString:@"error"]) {
 				buildIssue = [WCBuildIssue buildIssueOfType:WCBuildIssueTypeError range:range message:message code:code];
-			else
+				totalErrors++;
+			}
+			else {
 				buildIssue = [WCBuildIssue buildIssueOfType:WCBuildIssueTypeWarning range:range message:message code:code];
+				totalWarnings++;
+			}
 			
 			if (issuesEnabled)
 				[buildIssue setVisible:YES];
@@ -417,6 +456,9 @@ NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotification = @"
 						[file setWarnings:YES];
 				}
 			}
+			
+			[self setTotalErrors:totalErrors];
+			[self setTotalWarnings:totalWarnings];
 			
 			[[NSNotificationCenter defaultCenter] postNotificationName:WCBuildControllerDidFinishBuildingNotification object:self];
 		});
