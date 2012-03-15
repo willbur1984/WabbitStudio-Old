@@ -66,6 +66,7 @@
 - (void)_drawVisibleBookmarksInRect:(NSRect)bookmarkRect;
 - (void)_drawVisibleBuildIssuesInRect:(NSRect)buildIssueRect;
 - (void)_drawFocusFollowsCodeRectsInRect:(NSRect)focusFollowsCodeRect;
+- (BOOL)_unfoldChildFoldsForFold:(WCFold *)fold;
 @end
 
 @implementation WCSourceTextView
@@ -1069,8 +1070,12 @@
 - (IBAction)unfoldAll:(id)sender; {
 	NSArray *folds = [[[self delegate] sourceScannerForSourceTextView:self] folds];
 	
-	for (WCFold *fold in folds)
-		[(WCSourceTextStorage *)[self textStorage] unfoldRange:[fold contentRange] effectiveRange:NULL];
+	for (WCFold *fold in folds) {
+		if ([[self sourceTextStorage] unfoldRange:[fold contentRange] effectiveRange:NULL])
+			continue;
+		else
+			[self _unfoldChildFoldsForFold:fold];
+	}
 }
 - (IBAction)foldCommentBlocks:(id)sender; {
 	NSArray *folds = [[[self delegate] sourceScannerForSourceTextView:self] folds];
@@ -1887,6 +1892,16 @@ static const CGFloat kTriangleHeight = 4.0;
 		for (NSValue *rectValue in [dict objectForKey:@"rect"])
 			NSRectFill([rectValue rectValue]);
 	}];
+}
+
+- (BOOL)_unfoldChildFoldsForFold:(WCFold *)fold; {
+	for (WCFold *childFold in [fold childNodes]) {
+		if ([[self sourceTextStorage] unfoldRange:[childFold contentRange] effectiveRange:NULL])
+			return YES;
+		else if ([self _unfoldChildFoldsForFold:childFold])
+			return YES;
+	}
+	return NO;
 }
 #pragma mark IBActions
 - (IBAction)_symbolMenuClicked:(NSMenuItem *)sender {
