@@ -113,10 +113,10 @@ static NSString *const kStackColumnIdentifier = @"stack";
 		while (stackPointer++ < UINT16_MAX)
 			numberOfRows++;
 		
-		[self setRowCount:++numberOfRows];
+		numberOfRows++;
 	}
-	else
-		[self setRowCount:numberOfRows];
+	
+	[self setRowCount:numberOfRows];
 }
 
 @end

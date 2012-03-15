@@ -24,6 +24,7 @@
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
+	[_calculator removeObserver:self forKeyPath:@"debugging" context:self];
 	[_calculator removeObserver:self forKeyPath:@"programCounter" context:self];
 	[_calculator removeObserver:self forKeyPath:@"CPUHalt" context:self];
 	[_calculator release];
@@ -52,6 +53,8 @@
 		}
 		else if ([keyPath isEqualToString:@"CPUHalt"])
 			[[self tableView] setNeedsDisplay:YES];
+		else if ([keyPath isEqualToString:@"debugging"])
+			[self _updateMemoryTableColumns];
 	}
 	else
 		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
@@ -124,6 +127,7 @@ static NSString *const kAddressColumnIdentifier = @"address";
 	
 	[_calculator addObserver:self forKeyPath:@"programCounter" options:0 context:self];
 	[_calculator addObserver:self forKeyPath:@"CPUHalt" options:0 context:self];
+	[_calculator addObserver:self forKeyPath:@"debugging" options:0 context:self];
 	
 	return self;
 }
@@ -140,6 +144,14 @@ static NSString *const kAddressColumnIdentifier = @"address";
 }
 
 - (void)_updateMemoryTableColumns; {
+	if (![[self calculator] isDebugging]) {
+		while ([[[self tableView] tableColumns] count] > 1)
+			[[self tableView] removeTableColumn:[[[self tableView] tableColumns] lastObject]];
+		
+		[self setRowCount:0];
+		return;
+	}
+	
 	static const CGFloat kMemoryColumnWidth = 25.0;
 	const CGFloat columnPadding = [[self tableView] intercellSpacing].width;
 	CGFloat addressColumnWidth = [[[[self tableView] tableColumns] objectAtIndex:0] width] + columnPadding;

@@ -88,6 +88,7 @@
 																	<string key="NSFrameSize">{360, 266}</string>
 																	<reference key="NSSuperview" ref="42409408"/>
 																	<reference key="NSWindow"/>
+																	<reference key="NSNextKeyView" ref="112604664"/>
 																	<string key="NSReuseIdentifierKey">_NS:11</string>
 																	<string key="NSClassName">NSView</string>
 																</object>
@@ -97,6 +98,7 @@
 																	<string key="NSFrame">{{361, 0}, {202, 266}}</string>
 																	<reference key="NSSuperview" ref="42409408"/>
 																	<reference key="NSWindow"/>
+																	<reference key="NSNextKeyView" ref="1060962021"/>
 																	<string key="NSReuseIdentifierKey">_NS:13</string>
 																	<string key="NSClassName">NSView</string>
 																</object>
@@ -104,6 +106,7 @@
 															<string key="NSFrameSize">{563, 266}</string>
 															<reference key="NSSuperview" ref="467790431"/>
 															<reference key="NSWindow"/>
+															<reference key="NSNextKeyView" ref="261184663"/>
 															<string key="NSReuseIdentifierKey">_NS:9</string>
 															<bool key="NSIsVertical">YES</bool>
 															<int key="NSDividerStyle">2</int>
@@ -112,7 +115,7 @@
 													<string key="NSFrame">{{0, 334}, {563, 266}}</string>
 													<reference key="NSSuperview" ref="35827636"/>
 													<reference key="NSWindow"/>
-													<reference key="NSNextKeyView" ref="1060962021"/>
+													<reference key="NSNextKeyView" ref="42409408"/>
 													<string key="NSReuseIdentifierKey">_NS:13</string>
 													<string key="NSClassName">NSView</string>
 												</object>
@@ -154,6 +157,7 @@
 													<string key="NSFrameSize">{15, 23}</string>
 													<reference key="NSSuperview" ref="521524382"/>
 													<reference key="NSWindow"/>
+													<reference key="NSNextKeyView"/>
 													<bool key="NSEnabled">YES</bool>
 													<object class="NSImageCell" key="NSCell" id="4674414">
 														<int key="NSCellFlags">130560</int>
@@ -191,7 +195,7 @@
 															<string key="NSFrameSize">{236, 577}</string>
 															<reference key="NSSuperview" ref="725534683"/>
 															<reference key="NSWindow"/>
-															<reference key="NSNextKeyView" ref="965675327"/>
+															<reference key="NSNextKeyView" ref="112253686"/>
 															<string key="NSReuseIdentifierKey">_NS:13</string>
 														</object>
 													</array>
@@ -242,7 +246,7 @@
 											<string key="NSFrame">{{0, 23}, {236, 577}}</string>
 											<reference key="NSSuperview" ref="1060962021"/>
 											<reference key="NSWindow"/>
-											<reference key="NSNextKeyView" ref="725534683"/>
+											<reference key="NSNextKeyView" ref="965675327"/>
 											<string key="NSReuseIdentifierKey">_NS:9</string>
 											<int key="NSsFlags">133648</int>
 											<reference key="NSVScroller" ref="112253686"/>
@@ -275,6 +279,7 @@
 				<string key="NSScreenRect">{{0, 0}, {1680, 1028}}</string>
 				<string key="NSMinSize">{800, 622}</string>
 				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
+				<int key="NSWindowAnimationBehavior">2</int>
 				<bool key="NSWindowIsRestorable">NO</bool>
 			</object>
 		</array>
@@ -608,6 +613,7 @@
 						<string key="step:">id</string>
 						<string key="stepOut:">id</string>
 						<string key="stepOver:">id</string>
+						<string key="toggleNormalBreakpoint:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
 						<object class="IBActionInfo" key="step:">
@@ -620,6 +626,10 @@
 						</object>
 						<object class="IBActionInfo" key="stepOver:">
 							<string key="name">stepOver:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="toggleNormalBreakpoint:">
+							<string key="name">toggleNormalBreakpoint:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 					</dictionary>

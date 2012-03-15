@@ -20,6 +20,16 @@
 		
 		[retval addItemWithTitle:NSLocalizedString(@"Jump to Address", @"Jump to Address") action:@selector(jumpToAddress:) keyEquivalent:@""];
 		[retval addItemWithTitle:NSLocalizedString(@"Jump to Program Counter", @"Jump to Program Counter") action:@selector(jumpToProgramCounter:) keyEquivalent:@""];
+		[retval addItem:[NSMenuItem separatorItem]];
+		[retval addItemWithTitle:NSLocalizedString(@"Breakpoint", @"Breakpoint") action:NULL keyEquivalent:@""];
+		
+		NSMenu *breakpointMenu = [[[NSMenu alloc] initWithTitle:@""] autorelease];
+		
+		[breakpointMenu addItemWithTitle:NSLocalizedString(@"Normal", @"Normal") action:@selector(toggleNormalBreakpoint:) keyEquivalent:@""];
+		[breakpointMenu addItemWithTitle:NSLocalizedString(@"Read", @"Read") action:@selector(toggleReadBreakpoint:) keyEquivalent:@""];
+		[breakpointMenu addItemWithTitle:NSLocalizedString(@"Write", @"Write") action:@selector(toggleWriteBreakpoint:) keyEquivalent:@""];
+		
+		[[[retval itemArray] lastObject] setSubmenu:breakpointMenu];
 	});
 	return retval;
 }
