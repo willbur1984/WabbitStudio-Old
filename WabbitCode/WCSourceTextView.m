@@ -676,6 +676,7 @@
 		for (WCSourceFileDocument *sfDocument in [projectDocument sourceFileDocuments]) {
 			WCSourceScanner *sourceScanner = [sfDocument sourceScanner];
 			
+			// if the symbol name doesn't show up in the set of called labels, skip the document
 			if (![[sourceScanner calledLabels] containsObject:symbolName])
 				continue;
 			
@@ -683,10 +684,12 @@
 			WCSourceTextStorage *textStorage = [sfDocument textStorage];
 			NSString *string = [textStorage string];
 			
+			// collect the matches from each regex in our array
 			[textCheckingResults addObjectsFromArray:[callRegex matchesInString:string options:0 range:NSMakeRange(0, [string length])]];
 			[textCheckingResults addObjectsFromArray:[callWithConditionalRegex matchesInString:string options:0 range:NSMakeRange(0, [string length])]];
 			
 			if ([textCheckingResults count]) {
+				// if we got any results insert our header menu item before we start inserting the match items
 				NSString *fileDisplayName = [[sourceScanner delegate] fileDisplayNameForSourceScanner:sourceScanner];
 				NSMenuItem *fileMenuItem = [menu addItemWithTitle:[[[sfDocument fileURL] path] stringByAbbreviatingWithTildeInPath] action:NULL keyEquivalent:@""];
 				
