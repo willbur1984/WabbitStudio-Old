@@ -43,7 +43,7 @@ extern NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotificati
 @property (readonly,assign,nonatomic) NSUInteger totalErrors;
 @property (readonly,assign,nonatomic) NSUInteger totalWarnings;
 @property (readonly,copy,nonatomic) NSURL *lastOutputFileURL;
-@property (readonly,assign,nonatomic) BOOL runAfterBuilding;
+@property (readwrite,assign,nonatomic) BOOL runAfterBuilding;
 
 - (id)initWithProjectDocument:(WCProjectDocument *)projectDocument;
 

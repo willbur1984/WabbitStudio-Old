@@ -31,7 +31,6 @@ NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotification = @"
 
 @interface WCBuildController ()
 @property (readwrite,assign,nonatomic,getter = isBuilding) BOOL building;
-@property (readwrite,assign,nonatomic) BOOL runAfterBuilding;
 @property (readonly,nonatomic) NSMutableString *output;
 @property (readwrite,retain,nonatomic) NSTask *task;
 @property (readwrite,retain,nonatomic) NSMapTable *filesToBuildIssuesSortedByLocation;
@@ -140,7 +139,7 @@ NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotification = @"
 					return;
 				
 				[activeBuildTarget setGenerateCodeListing:YES];
-				[self build];
+				[self runAfterBuilding];
 			}];
 			return;
 		}
@@ -293,7 +292,6 @@ NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotification = @"
 	@finally {
 		[self setTask:nil];
 		[self setBuilding:NO];
-		[self setRunAfterBuilding:NO];
 	}
 }
 - (void)buildAndRun; {

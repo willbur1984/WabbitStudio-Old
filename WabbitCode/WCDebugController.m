@@ -14,6 +14,7 @@
 #import "WCBuildController.h"
 #import "RSFileReference.h"
 #import "RSDefines.h"
+#import "WCCalculatorWindowController.h"
 
 NSString *const WCDebugControllerDebugSessionDidBeginNotification = @"WCDebugControllerDebugSessionDidBeginNotification";
 NSString *const WCDebugControllerDebugSessionDidEndNotification = @"WCDebugControllerDebugSessionDidEndNotification";
@@ -42,7 +43,16 @@ NSString *const WCDebugControllerCurrentLineNumberDidChangeNotification = @"WCDe
 }
 
 - (NSWindow *)windowForTransferFileWindowControllerSheet:(RSTransferFileWindowController *)transferFileWindowController {
-	return [[self projectDocument] windowForSheet];
+	NSWindow *window = nil;
+	
+	for (id windowController in [[self projectDocument] windowControllers]) {
+		if ([windowController isKindOfClass:[WCCalculatorWindowController class]]) {
+			window = [windowController window];
+			break;
+		}
+	}
+	
+	return window;
 }
 
 - (id)initWithProjectDocument:(WCProjectDocument *)projectDocument; {
@@ -70,12 +80,13 @@ NSString *const WCDebugControllerCurrentLineNumberDidChangeNotification = @"WCDe
 }
 
 - (void)changeRomOrSavestateForRunning; {
-	BOOL shouldRunBuildProduct = [self runBuildProductAfterRomOrSavestateSheetFinishes];
+	//BOOL shouldRunBuildProduct = [self runBuildProductAfterRomOrSavestateSheetFinishes];
 	BOOL shouldBuild = [self buildAfterRomOrSavestateSheetFinishes];
 	NSOpenPanel *openPanel = [NSOpenPanel openPanel];
 	
 	[openPanel setAllowedFileTypes:[NSArray arrayWithObjects:RSCalculatorRomUTI,RSCalculatorSavestateUTI, nil]];
 	[openPanel setPrompt:LOCALIZED_STRING_CHOOSE];
+	[openPanel setMessage:NSLocalizedString(@"Choose a rom or savestate for running.", @"Choose a rom or savestate for running.")];
 	
 	[openPanel beginSheetModalForWindow:[[self projectDocument] windowForSheet] completionHandler:^(NSInteger result) {
 		[openPanel orderOut:nil];
@@ -87,7 +98,7 @@ NSString *const WCDebugControllerCurrentLineNumberDidChangeNotification = @"WCDe
 		[self setRomOrSavestateForRunning:[RSFileReference fileReferenceWithFileURL:[[openPanel URLs] lastObject]]];
 		
 		if (shouldBuild)
-			[[[self projectDocument] buildController] build];
+			[[[self projectDocument] buildController] buildAndRun];
 	}];
 }
 
@@ -130,13 +141,16 @@ NSString *const WCDebugControllerCurrentLineNumberDidChangeNotification = @"WCDe
 - (void)_buildControllerDidFinishBuilding:(NSNotification *)note {
 	WCBuildController *buildController = [note object];
 	
-	if ([buildController totalErrors] && [buildController runAfterBuilding]) {
+	if ([buildController totalErrors]) {
 		[self setCodeListing:nil];
 		[self setLabelFile:nil];
 		[self setCurrentFile:nil];
 		[self setCurrentLineNumber:NSUIntegerMax];
 	}
-	else {
+	else if ([buildController runAfterBuilding]) {
+		[[[self projectDocument] buildController] setRunAfterBuilding:NO];
+		
+		// reload the current rom or savestate so we have a clean slate for file transfer
 		NSError *outError;
 		if (![[self calculator] loadRomOrSavestateAtURL:[[self romOrSavestateForRunning] fileURL] error:&outError]) {
 			if (outError) {
@@ -144,6 +158,18 @@ NSString *const WCDebugControllerCurrentLineNumberDidChangeNotification = @"WCDe
 				return;
 			}
 		}
+		
+		WCCalculatorWindowController *calculatorWindowController = [[[WCCalculatorWindowController alloc] initWithCalculator:[self calculator]] autorelease];
+		
+		[[self projectDocument] addWindowController:calculatorWindowController];
+		
+		[calculatorWindowController showWindow:nil];
+		
+		RSTransferFileWindowController *transferWindowController = [[[RSTransferFileWindowController alloc] initWithCalculator:[self calculator]] autorelease];
+		
+		[transferWindowController setDelegate:self];
+		
+		[transferWindowController showTransferFileWindowForTransferFileURLs:[NSArray arrayWithObjects:[[[self projectDocument] buildController] lastOutputFileURL], nil]];
 	}
 }
 

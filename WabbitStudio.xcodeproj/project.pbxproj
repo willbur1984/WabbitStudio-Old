@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		070009421512C4E000FB7696 /* WCCalculatorWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 070009411512C4E000FB7696 /* WCCalculatorWindowController.m */; };
+		070009461512C6AB00FB7696 /* WCCalculatorWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 070009441512C6AB00FB7696 /* WCCalculatorWindow.xib */; };
 		07018B1114C600BB00C5A7AC /* WCOpenQuicklyWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07018B1014C600BB00C5A7AC /* WCOpenQuicklyWindowController.m */; };
 		07018B1414C6011E00C5A7AC /* WCOpenQuicklyWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07018B1214C6011E00C5A7AC /* WCOpenQuicklyWindow.xib */; };
 		07018B1814C6038F00C5A7AC /* WCOpenQuicklyMatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 07018B1714C6038F00C5A7AC /* WCOpenQuicklyMatch.m */; };
@@ -678,6 +680,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		070009401512C4E000FB7696 /* WCCalculatorWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCCalculatorWindowController.h; sourceTree = "<group>"; };
+		070009411512C4E000FB7696 /* WCCalculatorWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCCalculatorWindowController.m; sourceTree = "<group>"; };
+		070009451512C6AB00FB7696 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCCalculatorWindow.xib; sourceTree = "<group>"; };
 		07018B0E14C5FD7000C5A7AC /* WCOpenQuicklyItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCOpenQuicklyItem.h; sourceTree = "<group>"; };
 		07018B0F14C600BB00C5A7AC /* WCOpenQuicklyWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCOpenQuicklyWindowController.h; sourceTree = "<group>"; };
 		07018B1014C600BB00C5A7AC /* WCOpenQuicklyWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCOpenQuicklyWindowController.m; sourceTree = "<group>"; };
@@ -1647,6 +1652,7 @@
 				072427F714F1DAB500DC920B /* WCTemplateCollectionView.xib */,
 				075D2F8314F21BED007F8951 /* WCOpenPanelAccessoryView.xib */,
 				078CF0311501480F001E13E3 /* WCNewFileWindow.xib */,
+				070009441512C6AB00FB7696 /* WCCalculatorWindow.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -2688,6 +2694,8 @@
 				07154F5714D5D5E100F57668 /* WCSourceFileSeparateWindowController.m */,
 				077D3EEA14EEE0C8000735EA /* WCTabViewWindow.h */,
 				077D3EEB14EEE0C8000735EA /* WCTabViewWindow.m */,
+				070009401512C4E000FB7696 /* WCCalculatorWindowController.h */,
+				070009411512C4E000FB7696 /* WCCalculatorWindowController.m */,
 			);
 			name = "Window Controllers";
 			sourceTree = "<group>";
@@ -3305,6 +3313,7 @@
 				07096FA1150EDD49002FE355 /* Step.png in Resources */,
 				07516852150FFD21006AAF27 /* RSStackView.xib in Resources */,
 				07D252511511077200D5830A /* RSFlashMemoryView.xib in Resources */,
+				070009461512C6AB00FB7696 /* WCCalculatorWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3725,6 +3734,7 @@
 				0751684E150FFC2A006AAF27 /* RSStackViewController.m in Sources */,
 				07D252481511027700D5830A /* RSStackTableView.m in Sources */,
 				07D2524D1511067A00D5830A /* RSFlashMemoryViewController.m in Sources */,
+				070009421512C4E000FB7696 /* WCCalculatorWindowController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3878,6 +3888,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		070009441512C6AB00FB7696 /* WCCalculatorWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				070009451512C6AB00FB7696 /* en */,
+			);
+			name = WCCalculatorWindow.xib;
+			sourceTree = "<group>";
+		};
 		07018B1214C6011E00C5A7AC /* WCOpenQuicklyWindow.xib */ = {
 			isa = PBXVariantGroup;
 			children = (

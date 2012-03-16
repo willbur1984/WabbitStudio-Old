@@ -1,38 +1,37 @@
 //
-//  WECalculatorWindowController.m
+//  WCCalculatorWindowController.m
 //  WabbitStudio
 //
-//  Created by William Towe on 2/21/12.
+//  Created by William Towe on 3/15/12.
 //  Copyright (c) 2012 Revolution Software. All rights reserved.
 //
 
-#import "WECalculatorWindowController.h"
-#import "WECalculatorDocument.h"
+#import "WCCalculatorWindowController.h"
 #import "RSCalculator.h"
 #import "RSLCDView.h"
 #import "RSLCDViewManager.h"
 #import "RSSkinView.h"
 #import "RSDefines.h"
 
-@interface WECalculatorWindowController ()
+@interface WCCalculatorWindowController ()
 @property (readwrite,assign,nonatomic) RSLCDView *LCDView;
 @property (readwrite,copy,nonatomic) NSString *statusString;
 @end
 
-@implementation WECalculatorWindowController
+@implementation WCCalculatorWindowController
 
 - (void)dealloc {
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
-	_calculatorDocument = nil;
 	_LCDView = nil;
 	[_statusString release];
+	[_calculator release];
 	[super dealloc];
 }
 
 - (NSString *)windowNibName {
-	return @"WECalculatorWindow";
+	return @"WCCalculatorWindow";
 }
 
 - (void)windowDidLoad {
@@ -41,11 +40,12 @@
 	NSRect windowFrame = [[self window] frame];
 	NSView *contentView = [[self window] contentView];
 	NSRect contentViewFrame = [contentView frame];
-	RSCalculator *calculator = [[self calculatorDocument] calculator];
+	RSCalculator *calculator = [self calculator];
 	NSSize skinSize = [[calculator skinImage] size];
 	RSSkinView *skinView = [[[RSSkinView alloc] initWithFrame:NSMakeRect(contentViewFrame.origin.x, contentViewFrame.origin.y, skinSize.width, skinSize.height) calculator:calculator] autorelease];
+	NSRect newWindowFrame = [[self window] frameRectForContentRect:NSMakeRect(NSMinX(windowFrame), NSMinY(windowFrame)+(NSHeight(contentViewFrame)-skinSize.height), skinSize.width, skinSize.height+[[self window] contentBorderThicknessForEdge:NSMinYEdge])];
 	
-	[[self window] setFrame:[[self window] frameRectForContentRect:NSMakeRect(NSMinX(windowFrame), NSMinY(windowFrame)+(NSHeight(contentViewFrame)-skinSize.height), skinSize.width, skinSize.height+[[self window] contentBorderThicknessForEdge:NSMinYEdge])] display:YES];
+	[[self window] setFrame:newWindowFrame display:YES];
 	
 	[contentView addSubview:skinView];
 	
@@ -100,9 +100,14 @@
 	[lcdView setFrame:NSMakeRect(point.x, point.y, endPoint.x-point.x, endPoint.y-point.y)];
 	
 	[[RSLCDViewManager sharedManager] addLCDView:lcdView];
+	
 	[self setLCDView:lcdView];
 	
 	_FPSTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(_FPSTimerCallback:) userInfo:nil repeats:YES];
+}
+
+- (NSString *)windowTitleForDocumentDisplayName:(NSString *)displayName {
+	return [NSString stringWithFormat:NSLocalizedString(@"%@ - Run", @"calculator window title format string"),displayName];
 }
 
 - (void)windowWillClose:(NSNotification *)notification {
@@ -112,21 +117,21 @@
 	[[RSLCDViewManager sharedManager] removeLCDView:[self LCDView]];
 }
 
-- (id)initWithCalculatorDocument:(WECalculatorDocument *)calculatorDocument; {
+- (id)initWithCalculator:(RSCalculator *)calculator; {
 	if (!(self = [super initWithWindowNibName:[self windowNibName]]))
 		return nil;
 	
-	_calculatorDocument = calculatorDocument;
+	_calculator = [calculator retain];
 	
 	return self;
 }
 
-@synthesize calculatorDocument=_calculatorDocument;
+@synthesize calculator=_calculator;
 @synthesize LCDView=_LCDView;
 @synthesize statusString=_statusString;
 
 - (void)_FPSTimerCallback:(NSTimer *)timer {
-	RSCalculator *calculator = [[self calculatorDocument] calculator];
+	RSCalculator *calculator = [self calculator];
 	
 	if ([calculator isActive] && [calculator isRunning])
 		[self setStatusString:[NSString stringWithFormat:NSLocalizedString(@"%@, FPS: %.2f", @"calculator status format string"),[calculator modelString],[calculator calculator]->cpu.pio.lcd->ufps]];
