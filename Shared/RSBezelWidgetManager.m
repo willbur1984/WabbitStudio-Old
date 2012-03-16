@@ -51,7 +51,7 @@
 	return sharedInstance;
 }
 
-static const NSTimeInterval kFadeDelay = 0.5;
+static const NSTimeInterval kFadeDelay = 0.75;
 
 - (void)showImage:(NSImage *)image centeredInView:(NSView *)view; {
 	[_fadeTimer invalidate];
