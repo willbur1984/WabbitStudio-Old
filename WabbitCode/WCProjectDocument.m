@@ -34,6 +34,7 @@
 #import "WCBreakpointManager.h"
 #import "WCFileBreakpoint.h"
 #import "WCDebugController.h"
+#import "WCCalculatorWindowController.h"
 
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
@@ -531,6 +532,27 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 	if (!_debugController)
 		_debugController = [[WCDebugController alloc] initWithProjectDocument:self];
 	return _debugController;
+}
+@dynamic calculatorWindowController;
+- (WCCalculatorWindowController *)calculatorWindowController {
+	WCCalculatorWindowController *retval = nil;
+	
+	for (id windowController in [self windowControllers]) {
+		if ([windowController isKindOfClass:[WCCalculatorWindowController class]]) {
+			retval = windowController;
+			break;
+		}
+	}
+	
+	if (!retval) {
+		WCCalculatorWindowController *windowController = [[[WCCalculatorWindowController alloc] initWithCalculator:[[self debugController] calculator]] autorelease];
+		
+		[self addWindowController:windowController];
+		
+		retval = windowController;
+	}
+	
+	return retval;
 }
 
 #pragma mark Notifications

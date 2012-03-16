@@ -72,8 +72,10 @@
 			
 			LINK_ERR linkError = link_send_var(&(calculator->cpu), tiFile, SEND_CUR);
 			
-			
-			NSLog(@"%d",linkError);
+#ifdef DEBUG
+			if (linkError)
+				NSLog(@"link error %d",linkError);
+#endif
 		}
 		
 		dispatch_async(dispatch_get_main_queue(), ^{

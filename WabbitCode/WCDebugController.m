@@ -43,16 +43,7 @@ NSString *const WCDebugControllerCurrentLineNumberDidChangeNotification = @"WCDe
 }
 
 - (NSWindow *)windowForTransferFileWindowControllerSheet:(RSTransferFileWindowController *)transferFileWindowController {
-	NSWindow *window = nil;
-	
-	for (id windowController in [[self projectDocument] windowControllers]) {
-		if ([windowController isKindOfClass:[WCCalculatorWindowController class]]) {
-			window = [windowController window];
-			break;
-		}
-	}
-	
-	return window;
+	return [[[self projectDocument] calculatorWindowController] window];
 }
 
 - (id)initWithProjectDocument:(WCProjectDocument *)projectDocument; {
@@ -159,9 +150,19 @@ NSString *const WCDebugControllerCurrentLineNumberDidChangeNotification = @"WCDe
 			}
 		}
 		
-		WCCalculatorWindowController *calculatorWindowController = [[[WCCalculatorWindowController alloc] initWithCalculator:[self calculator]] autorelease];
+		static NSString *const kCodeListingFileExtension = @"lst";
+		static NSString *const kLabelFileExtension = @"lab";
+		NSURL *lastOutputFileURL = [[[self projectDocument] buildController] lastOutputFileURL];
+		NSString *lastOutputFileName = [lastOutputFileURL lastPathComponent];
+		NSURL *codeListingFileURL = [[lastOutputFileURL URLByDeletingLastPathComponent] URLByAppendingPathComponent:[[lastOutputFileName stringByDeletingPathExtension] stringByAppendingPathExtension:kCodeListingFileExtension]];
+		NSURL *labelFileURL = [[lastOutputFileURL URLByDeletingLastPathComponent] URLByAppendingPathComponent:[[lastOutputFileName stringByDeletingPathExtension] stringByAppendingPathExtension:kLabelFileExtension]];
 		
-		[[self projectDocument] addWindowController:calculatorWindowController];
+		if ([codeListingFileURL checkResourceIsReachableAndReturnError:NULL])
+			[self setCodeListing:[NSString stringWithContentsOfURL:codeListingFileURL encoding:NSUTF8StringEncoding error:NULL]];
+		if ([labelFileURL checkResourceIsReachableAndReturnError:NULL])
+			[self setLabelFile:[NSString stringWithContentsOfURL:labelFileURL encoding:NSUTF8StringEncoding error:NULL]];
+		
+		WCCalculatorWindowController *calculatorWindowController = [[self projectDocument] calculatorWindowController];
 		
 		[calculatorWindowController showWindow:nil];
 		
@@ -169,7 +170,7 @@ NSString *const WCDebugControllerCurrentLineNumberDidChangeNotification = @"WCDe
 		
 		[transferWindowController setDelegate:self];
 		
-		[transferWindowController showTransferFileWindowForTransferFileURLs:[NSArray arrayWithObjects:[[[self projectDocument] buildController] lastOutputFileURL], nil]];
+		[transferWindowController showTransferFileWindowForTransferFileURLs:[NSArray arrayWithObjects:lastOutputFileURL, nil]];
 	}
 }
 
