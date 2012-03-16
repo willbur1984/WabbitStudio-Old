@@ -251,6 +251,10 @@ static const CGFloat kBuildIssueWidthHeight = 10.0;
 - (void)_animationEffectDidEnd:(void *)contextInfo {
 	[[[[self delegate] projectDocumentForSourceRulerView:self] breakpointManager] removeFileBreakpoint:[self clickedFileBreakpoint]];
 	
+	[self setClickedBuildIssue:nil];
+	[self setClickedFileBreakpoint:nil];
+	[self setClickedLineNumber:NSNotFound];
+	
 	NSPoint point = [[[self window] contentView] convertPointFromBase:[[self window] convertScreenToBase:[NSEvent mouseLocation]]];
 	NSView *view = [[[self window] contentView] hitTest:point];
 	
