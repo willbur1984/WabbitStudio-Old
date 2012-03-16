@@ -41,6 +41,7 @@ extern NSString *const RSCalculatorApplicationUTI;
 extern NSString *const RSCalculatorGroupFileUTI;
 extern NSString *const RSCalculatorPictureFileUTI;
 
+extern NSString *const RSCalculatorCodeListingUTI;
 extern NSString *const RSCalculatorLabelFileUTI;
 
 extern NSString *const RSCalculatorWillLoadRomOrSavestateNotification;

@@ -168,6 +168,42 @@
 		if ([self isCancelled])
 			break;
 		
+		NSSet *conditionalRegisters = [NSSet setWithObjects:@"nz",@"nv",@"nc",@"po",@"pe",@"c",@"p",@"m",@"n",@"z",@"v", nil];
+		NSMutableSet *calledLabels = [NSMutableSet setWithCapacity:0];
+		
+		[[WCSourceScanner calledLabelRegularExpression] enumerateMatchesInString:[self string] options:0 range:searchRange usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+			if (NSLocationInRange([result range].location, [multilineCommentRanges rangeForRange:[result range]]) ||
+				NSLocationInRange([result range].location, [commentRanges rangeForRange:[result range]]) ||
+				NSLocationInRange([result range].location, [stringRanges rangeForRange:[result range]]))
+				return;
+			else if (![result rangeAtIndex:1].length)
+				return;
+			
+			NSString *labelName = [[self string] substringWithRange:[result rangeAtIndex:1]];
+			if ([conditionalRegisters containsObject:[labelName lowercaseString]])
+				return;
+			
+			[calledLabels addObject:[labelName lowercaseString]];
+		}];
+		
+		[[WCSourceScanner calledLabelWithConditionalRegularExpression] enumerateMatchesInString:[self string] options:0 range:searchRange usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+			if (NSLocationInRange([result range].location, [multilineCommentRanges rangeForRange:[result range]]) ||
+				NSLocationInRange([result range].location, [commentRanges rangeForRange:[result range]]) ||
+				NSLocationInRange([result range].location, [stringRanges rangeForRange:[result range]]))
+				return;
+			else if (![result rangeAtIndex:1].length)
+				return;
+			
+			NSString *labelName = [[self string] substringWithRange:[result rangeAtIndex:1]];
+			if ([conditionalRegisters containsObject:[labelName lowercaseString]])
+				return;
+			
+			[calledLabels addObject:[labelName lowercaseString]];
+		}];
+		
+		if ([self isCancelled])
+			break;
+		
 		[tokens sortUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"range" ascending:YES comparator:^NSComparisonResult(id obj1, id obj2) {
 			if ([obj1 rangeValue].location < [obj2 rangeValue].location)
 				return NSOrderedAscending;
@@ -177,6 +213,7 @@
 		}]]];
 		
 		[[self scanner] setTokens:tokens];
+		[[self scanner] setCalledLabels:calledLabels];
 		
 		isFinished = YES;
 	}

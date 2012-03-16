@@ -36,6 +36,7 @@
 
 - (IBAction)jumpToSelection:(id)sender;
 - (IBAction)jumpToDefinition:(id)sender;
+- (IBAction)jumpToCallers:(id)sender;
 
 - (IBAction)jumpToLine:(id)sender;
 - (IBAction)jumpInFile:(id)sender;

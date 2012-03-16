@@ -49,6 +49,7 @@
 #import "WCBreakpointManager.h"
 #import "WCFileBreakpoint.h"
 #import "AIColorAdditions.h"
+#import "WCSourceFileDocument.h"
 
 @interface WCSourceTextView ()
 @property (readwrite,copy,nonatomic) NSIndexSet *autoHighlightArgumentsRanges;
@@ -135,6 +136,7 @@
 		[retval addItem:[NSMenuItem separatorItem]];
 		[retval addItemWithTitle:NSLocalizedString(@"Find Selected Text in Project\u2026", @"Find Selected Text in Project with ellipsis") action:@selector(findSelectedTextInProject:) keyEquivalent:@""];
 		[retval addItem:[NSMenuItem separatorItem]];
+		[retval addItemWithTitle:NSLocalizedString(@"Jump to Callers", @"Jump to Callers") action:@selector(jumpToCallers:) keyEquivalent:@""];
 		[retval addItemWithTitle:NSLocalizedString(@"Jump to Definition", @"Jump to Definition") action:@selector(jumpToDefinition:) keyEquivalent:@""];
 		[retval addItem:[NSMenuItem separatorItem]];
 		[retval addItemWithTitle:NSLocalizedString(@"Shift Left", @"Shift Left") action:@selector(shiftLeft:) keyEquivalent:@""];
@@ -707,7 +709,140 @@
 		NSCursor *currentCursor = [[self enclosingScrollView] documentCursor];
 		
 		if (![menu popUpMenuPositioningItem:[menu itemAtIndex:0] atLocation:lineRect.origin inView:self])
-			[currentCursor push];
+			[currentCursor set];
+	}
+}
+- (IBAction)jumpToCallers:(id)sender; {
+	NSRange symbolRange = [[self string] symbolRangeForRange:[self selectedRange]];
+	if (symbolRange.location == NSNotFound) {
+		NSBeep();
+		
+		[[RSBezelWidgetManager sharedWindowController] showString:NSLocalizedString(@"Symbol Not Found, click another one plox", @"Symbol Not Found, click another one plox") centeredInView:[self enclosingScrollView]];
+		
+		return;
+	}
+	
+	NSArray *symbols = [[self delegate] sourceTextView:self sourceSymbolsForSymbolName:[[self string] substringWithRange:symbolRange]];
+	if (![symbols count]) {
+		NSBeep();
+		
+		[[RSBezelWidgetManager sharedWindowController] showString:NSLocalizedString(@"Symbol Not Found, click another one plox", @"Symbol Not Found, click another one plox") centeredInView:[self enclosingScrollView]];
+		return;
+	}
+	
+	WCSourceSymbol *symbol = [symbols objectAtIndex:0];
+	NSString *symbolName = [[symbol name] lowercaseString];
+	
+	if ([[self delegate] projectDocumentForSourceTextView:self]) {
+		WCProjectDocument *projectDocument = [[self delegate] projectDocumentForSourceTextView:self];
+		NSMenu *menu = [[[NSMenu alloc] initWithTitle:@""] autorelease];
+		[menu setFont:[NSFont menuFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]]];
+		[menu setShowsStateColumn:NO];
+		NSString *callPattern = [NSString stringWithFormat:@"\\b(?:call|jp|jr)\\s+%@\\b",symbolName];
+		NSRegularExpression *callRegex = [NSRegularExpression regularExpressionWithPattern:callPattern options:0 error:NULL];
+		NSString *callWithConditionalPattern = [NSString stringWithFormat:@"\\b(?:call|jp|jr)\\s+(?:nz|nv|nc|po|pe|c|p|m|n|z|v),\\s*%@\\b",symbolName];
+		NSRegularExpression *callWithConditionalRegex = [NSRegularExpression regularExpressionWithPattern:callWithConditionalPattern options:0 error:NULL];
+		
+		for (WCSourceFileDocument *sfDocument in [projectDocument sourceFileDocuments]) {
+			WCSourceScanner *sourceScanner = [sfDocument sourceScanner];
+			
+			if (![[sourceScanner calledLabels] containsObject:symbolName])
+				continue;
+			
+			NSMutableArray *textCheckingResults = [NSMutableArray arrayWithCapacity:0];
+			WCSourceTextStorage *textStorage = [sfDocument textStorage];
+			NSString *string = [textStorage string];
+			
+			[textCheckingResults addObjectsFromArray:[callRegex matchesInString:string options:0 range:NSMakeRange(0, [string length])]];
+			[textCheckingResults addObjectsFromArray:[callWithConditionalRegex matchesInString:string options:0 range:NSMakeRange(0, [string length])]];
+			
+			for (NSTextCheckingResult *result in textCheckingResults) {
+				NSString *substring = [string substringWithRange:[result range]];
+				NSString *fileDisplayName = [[sourceScanner delegate] fileDisplayNameForSourceScanner:sourceScanner];
+				NSUInteger lineNumber = [textStorage lineNumberForRange:[result range]];
+				NSMenuItem *item = [menu addItemWithTitle:[NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 (%@:%lu)", @"jump to callers menu item title format string"),substring,fileDisplayName,lineNumber+1] action:@selector(_jumpToCallersMenuClicked:) keyEquivalent:@""];
+				
+				[item setImage:[symbol icon]];
+				[[item image] setSize:NSSmallSize];
+				[item setTarget:self];
+				[item setRepresentedObject:result];
+			}
+		}
+		
+		if (![menu numberOfItems]) {
+			NSBeep();
+			
+			[[RSBezelWidgetManager sharedWindowController] showString:NSLocalizedString(@"Symbol Callers Not Found, click another one plox", @"Symbol Callers Not Found, click another one plox") centeredInView:[self enclosingScrollView]];
+			return;
+		}
+		
+		NSUInteger glyphIndex = [[self layoutManager] glyphIndexForCharacterAtIndex:symbolRange.location];
+		NSRect lineRect = [[self layoutManager] lineFragmentRectForGlyphAtIndex:glyphIndex effectiveRange:NULL];
+		NSPoint selectedPoint = [[self layoutManager] locationForGlyphAtIndex:glyphIndex];
+		
+		lineRect.origin.y += lineRect.size.height;
+		lineRect.origin.x += selectedPoint.x;
+		
+		NSCursor *currentCursor = [[self enclosingScrollView] documentCursor];
+		
+		if (![menu popUpMenuPositioningItem:[menu itemAtIndex:0] atLocation:lineRect.origin inView:self])
+			[currentCursor set];
+	}
+	else {
+		WCSourceScanner *sourceScanner = [[self delegate] sourceScannerForSourceTextView:self];
+		
+		if (![[sourceScanner calledLabels] containsObject:symbolName]) {
+			NSBeep();
+			
+			[[RSBezelWidgetManager sharedWindowController] showString:NSLocalizedString(@"Symbol Callers Not Found, click another one plox", @"Symbol Callers Not Found, click another one plox") centeredInView:[self enclosingScrollView]];
+			return;
+		}
+		
+		NSMutableArray *textCheckingResults = [NSMutableArray arrayWithCapacity:0];
+		NSString *callPattern = [NSString stringWithFormat:@"\\b(?:call|jp|jr)\\s+%@\\b",symbolName];
+		NSRegularExpression *callRegex = [NSRegularExpression regularExpressionWithPattern:callPattern options:0 error:NULL];
+		
+		[textCheckingResults addObjectsFromArray:[callRegex matchesInString:[self string] options:0 range:NSMakeRange(0, [[self string] length])]];
+		
+		NSString *callWithConditionalPattern = [NSString stringWithFormat:@"\\b(?:call|jp|jr)\\s+(?:nz|nv|nc|po|pe|c|p|m|n|z|v),\\s*%@\\b",symbolName];
+		NSRegularExpression *callWithConditionalRegex = [NSRegularExpression regularExpressionWithPattern:callWithConditionalPattern options:0 error:NULL];
+		
+		[textCheckingResults addObjectsFromArray:[callWithConditionalRegex matchesInString:[self string] options:0 range:NSMakeRange(0, [[self string] length])]];
+		
+		if (![textCheckingResults count]) {
+			NSBeep();
+			
+			[[RSBezelWidgetManager sharedWindowController] showString:NSLocalizedString(@"Symbol Callers Not Found, click another one plox", @"Symbol Callers Not Found, click another one plox") centeredInView:[self enclosingScrollView]];
+			return;
+		}
+		
+		NSMenu *menu = [[[NSMenu alloc] initWithTitle:@""] autorelease];
+		[menu setFont:[NSFont menuFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]]];
+		[menu setShowsStateColumn:NO];
+		
+		for (NSTextCheckingResult *result in textCheckingResults) {
+			NSString *substring = [[self string] substringWithRange:[result range]];
+			NSString *fileDisplayName = [[sourceScanner delegate] fileDisplayNameForSourceScanner:sourceScanner];
+			NSUInteger lineNumber = [[self textStorage] lineNumberForRange:[result range]];
+			NSMenuItem *item = [menu addItemWithTitle:[NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 (%@:%lu)", @"jump to callers menu item title format string"),substring,fileDisplayName,lineNumber+1] action:@selector(_jumpToCallersMenuClicked:) keyEquivalent:@""];
+			
+			[item setImage:[symbol icon]];
+			[[item image] setSize:NSSmallSize];
+			[item setTarget:self];
+			[item setRepresentedObject:result];
+		}
+		
+		NSUInteger glyphIndex = [[self layoutManager] glyphIndexForCharacterAtIndex:symbolRange.location];
+		NSRect lineRect = [[self layoutManager] lineFragmentRectForGlyphAtIndex:glyphIndex effectiveRange:NULL];
+		NSPoint selectedPoint = [[self layoutManager] locationForGlyphAtIndex:glyphIndex];
+		
+		lineRect.origin.y += lineRect.size.height;
+		lineRect.origin.x += selectedPoint.x;
+		
+		NSCursor *currentCursor = [[self enclosingScrollView] documentCursor];
+		
+		if (![menu popUpMenuPositioningItem:[menu itemAtIndex:0] atLocation:lineRect.origin inView:self])
+			[currentCursor set];
 	}
 }
 - (IBAction)jumpInFile:(id)sender; {
@@ -1903,7 +2038,10 @@ static const CGFloat kTriangleHeight = 4.0;
 - (IBAction)_symbolMenuClicked:(NSMenuItem *)sender {
 	[[self delegate] handleJumpToDefinitionForSourceTextView:self sourceSymbol:[sender representedObject]];
 }
-
+- (IBAction)_jumpToCallersMenuClicked:(id)sender {
+	[self setSelectedRange:[[sender representedObject] range]];
+	[self scrollRangeToVisible:[self selectedRange]];
+}
 #pragma mark Notifications
 - (void)_textViewDidChangeSelection:(NSNotification *)note {
 	NSRange oldSelectedRange = [[[note userInfo] objectForKey:@"NSOldSelectedCharacterRange"] rangeValue];

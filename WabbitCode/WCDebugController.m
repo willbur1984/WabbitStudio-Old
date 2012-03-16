@@ -150,12 +150,15 @@ NSString *const WCDebugControllerCurrentLineNumberDidChangeNotification = @"WCDe
 			}
 		}
 		
-		static NSString *const kCodeListingFileExtension = @"lst";
-		static NSString *const kLabelFileExtension = @"lab";
+		CFStringRef kCodeListingFileExtension = UTTypeCopyPreferredTagWithClass((CFStringRef)RSCalculatorCodeListingUTI, kUTTagClassFilenameExtension);
+		CFStringRef kLabelFileExtension = UTTypeCopyPreferredTagWithClass((CFStringRef)RSCalculatorLabelFileUTI, kUTTagClassFilenameExtension);
 		NSURL *lastOutputFileURL = [[[self projectDocument] buildController] lastOutputFileURL];
 		NSString *lastOutputFileName = [lastOutputFileURL lastPathComponent];
-		NSURL *codeListingFileURL = [[lastOutputFileURL URLByDeletingLastPathComponent] URLByAppendingPathComponent:[[lastOutputFileName stringByDeletingPathExtension] stringByAppendingPathExtension:kCodeListingFileExtension]];
-		NSURL *labelFileURL = [[lastOutputFileURL URLByDeletingLastPathComponent] URLByAppendingPathComponent:[[lastOutputFileName stringByDeletingPathExtension] stringByAppendingPathExtension:kLabelFileExtension]];
+		NSURL *codeListingFileURL = [[lastOutputFileURL URLByDeletingLastPathComponent] URLByAppendingPathComponent:[[lastOutputFileName stringByDeletingPathExtension] stringByAppendingPathExtension:(NSString *)kCodeListingFileExtension]];
+		NSURL *labelFileURL = [[lastOutputFileURL URLByDeletingLastPathComponent] URLByAppendingPathComponent:[[lastOutputFileName stringByDeletingPathExtension] stringByAppendingPathExtension:(NSString *)kLabelFileExtension]];
+		
+		CFRelease(kCodeListingFileExtension);
+		CFRelease(kLabelFileExtension);
 		
 		if ([codeListingFileURL checkResourceIsReachableAndReturnError:NULL])
 			[self setCodeListing:[NSString stringWithContentsOfURL:codeListingFileURL encoding:NSUTF8StringEncoding error:NULL]];

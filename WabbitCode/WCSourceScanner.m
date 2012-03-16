@@ -42,6 +42,7 @@ NSString *const WCSourceScannerDidFinishScanningFoldsNotification = @"WCSourceSc
 	[_completions release];
 	[_includes release];
 	[_folds release];
+	[_calledLabels release];
 	[super dealloc];
 }
 #pragma mark *** Public Methods ***
@@ -61,6 +62,7 @@ NSString *const WCSourceScannerDidFinishScanningFoldsNotification = @"WCSourceSc
 	_macroNamesToMacroSymbols = [[NSDictionary alloc] init];
 	_includes = [[NSSet alloc] init];
 	_folds = [[NSArray alloc] init];
+	_calledLabels = [[NSSet alloc] init];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_textStorageDidProcessEditing:) name:NSTextStorageDidProcessEditingNotification object:textStorage];
 	
@@ -237,6 +239,22 @@ NSString *const WCSourceScannerDidFinishScanningFoldsNotification = @"WCSourceSc
 	});
 	return retval;
 }
++ (NSRegularExpression *)calledLabelRegularExpression; {
+	static NSRegularExpression *retval;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		retval = [[NSRegularExpression alloc] initWithPattern:@"\\b(?:call|jp|jr)\\s+([A-Za-z0-9_!?]+)\\b" options:0 error:NULL];
+	});
+	return retval;
+}
++ (NSRegularExpression *)calledLabelWithConditionalRegularExpression; {
+	static NSRegularExpression *retval;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		retval = [[NSRegularExpression alloc] initWithPattern:@"\\b(?:call|jp|jr)\\s+(?:nz|nv|nc|po|pe|c|p|m|n|z|v),\\s*([A-Za-z0-9_!?]+)\\b" options:0 error:NULL];
+	});
+	return retval;
+}
 #pragma mark Properties
 @synthesize delegate=_delegate;
 @synthesize textStorage=_textStorage;
@@ -252,6 +270,7 @@ NSString *const WCSourceScannerDidFinishScanningFoldsNotification = @"WCSourceSc
 @synthesize completions=_completions;
 @synthesize includes=_includes;
 @synthesize folds=_folds;
+@synthesize calledLabels=_calledLabels;
 #pragma mark *** Private Methods ***
 
 #pragma mark Notifications

@@ -18,6 +18,7 @@ NSString *const RSCalculatorApplicationUTI = @"org.revsoft.wabbitemu.application
 NSString *const RSCalculatorGroupFileUTI = @"org.revsoft.wabbitemu.group";
 NSString *const RSCalculatorPictureFileUTI = @"org.revsoft.wabbitemu.picture";
 
+NSString *const RSCalculatorCodeListingUTI = @"org.revsoft.wabbitemu.listing";
 NSString *const RSCalculatorLabelFileUTI = @"org.revsoft.wabbitemu.label";
 
 NSString *const RSCalculatorWillLoadRomOrSavestateNotification = @"RSCalculatorWillLoadRomOrSavestateNotification";

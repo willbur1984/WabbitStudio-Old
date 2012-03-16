@@ -32,6 +32,7 @@ extern NSString *const WCSourceScannerDidFinishScanningFoldsNotification;
 	NDTrie *_completions;
 	NSSet *_includes;
 	NSArray *_folds;
+	NSSet *_calledLabels;
 }
 @property (readwrite,assign,nonatomic) id <WCSourceScannerDelegate> delegate;
 @property (readonly,nonatomic) NSTextStorage *textStorage;
@@ -47,6 +48,7 @@ extern NSString *const WCSourceScannerDidFinishScanningFoldsNotification;
 @property (readwrite,copy) NDTrie *completions;
 @property (readwrite,copy) NSSet *includes;
 @property (readwrite,copy) NSArray *folds;
+@property (readwrite,copy) NSSet *calledLabels;
 
 - (id)initWithTextStorage:(NSTextStorage *)textStorage;
 
@@ -69,4 +71,6 @@ extern NSString *const WCSourceScannerDidFinishScanningFoldsNotification;
 + (NSRegularExpression *)macroRegularExpression;
 + (NSRegularExpression *)symbolRegularExpression;
 + (NSRegularExpression *)includesRegularExpression;
++ (NSRegularExpression *)calledLabelRegularExpression;
++ (NSRegularExpression *)calledLabelWithConditionalRegularExpression;
 @end
