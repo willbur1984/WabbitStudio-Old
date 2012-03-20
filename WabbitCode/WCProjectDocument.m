@@ -416,6 +416,10 @@ NSString *const WCProjectSettingsFileExtension = @"plist";
 - (IBAction)toggleIssues:(id)sender; {
 	[[self buildController] setIssuesEnabled:(![[self buildController] issuesEnabled])];
 }
+
+- (IBAction)changeRomOrSavestateForRunning:(id)sender; {
+	[[self debugController] changeRomOrSavestateForRunning];
+}
 #pragma mark Properties
 @synthesize projectContainer=_projectContainer;
 @dynamic projectWindowController;

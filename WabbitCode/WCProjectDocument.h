@@ -81,4 +81,6 @@ extern NSString *const WCProjectSettingsFileExtension;
 
 - (IBAction)toggleBreakpoints:(id)sender;
 - (IBAction)toggleIssues:(id)sender;
+
+- (IBAction)changeRomOrSavestateForRunning:(id)sender;
 @end

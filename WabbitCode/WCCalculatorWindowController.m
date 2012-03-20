@@ -110,6 +110,16 @@
 	return [NSString stringWithFormat:NSLocalizedString(@"%@ - Run", @"calculator window title format string"),displayName];
 }
 
+- (BOOL)windowShouldClose:(id)sender {
+	NSString *message = NSLocalizedString(@"End Debug Session?", @"End Debug Session");
+	NSString *informative = NSLocalizedString(@"Do you want to end the current debug session?", @"Do you want to end the current debug session?");
+	NSAlert *alert = [NSAlert alertWithMessageText:message defaultButton:NSLocalizedString(@"End Debug Session", @"End Debug Session") alternateButton:LOCALIZED_STRING_CANCEL otherButton:nil informativeTextWithFormat:informative];
+	
+	NSInteger result = [alert runModal];
+	
+	return (result == NSAlertDefaultReturn);
+}
+
 - (void)windowWillClose:(NSNotification *)notification {
 	[_FPSTimer invalidate];
 	_FPSTimer = nil;
@@ -122,6 +132,7 @@
 		return nil;
 	
 	_calculator = [calculator retain];
+	_statusString = [[NSString stringWithFormat:NSLocalizedString(@"%@, FPS: 0.00", @"initial calculator status format string"),[calculator modelString]] copy];
 	
 	return self;
 }

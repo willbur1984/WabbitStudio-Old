@@ -150,15 +150,15 @@ NSString *const WCDebugControllerCurrentLineNumberDidChangeNotification = @"WCDe
 			}
 		}
 		
-		CFStringRef kCodeListingFileExtension = UTTypeCopyPreferredTagWithClass((CFStringRef)RSCalculatorCodeListingUTI, kUTTagClassFilenameExtension);
-		CFStringRef kLabelFileExtension = UTTypeCopyPreferredTagWithClass((CFStringRef)RSCalculatorLabelFileUTI, kUTTagClassFilenameExtension);
+		CFStringRef codeListingFileExtension = UTTypeCopyPreferredTagWithClass((CFStringRef)RSCalculatorCodeListingUTI, kUTTagClassFilenameExtension);
+		CFStringRef labelFileExtension = UTTypeCopyPreferredTagWithClass((CFStringRef)RSCalculatorLabelFileUTI, kUTTagClassFilenameExtension);
 		NSURL *lastOutputFileURL = [[[self projectDocument] buildController] lastOutputFileURL];
 		NSString *lastOutputFileName = [lastOutputFileURL lastPathComponent];
-		NSURL *codeListingFileURL = [[lastOutputFileURL URLByDeletingLastPathComponent] URLByAppendingPathComponent:[[lastOutputFileName stringByDeletingPathExtension] stringByAppendingPathExtension:(NSString *)kCodeListingFileExtension]];
-		NSURL *labelFileURL = [[lastOutputFileURL URLByDeletingLastPathComponent] URLByAppendingPathComponent:[[lastOutputFileName stringByDeletingPathExtension] stringByAppendingPathExtension:(NSString *)kLabelFileExtension]];
+		NSURL *codeListingFileURL = [[lastOutputFileURL URLByDeletingLastPathComponent] URLByAppendingPathComponent:[[lastOutputFileName stringByDeletingPathExtension] stringByAppendingPathExtension:(NSString *)codeListingFileExtension]];
+		NSURL *labelFileURL = [[lastOutputFileURL URLByDeletingLastPathComponent] URLByAppendingPathComponent:[[lastOutputFileName stringByDeletingPathExtension] stringByAppendingPathExtension:(NSString *)labelFileExtension]];
 		
-		CFRelease(kCodeListingFileExtension);
-		CFRelease(kLabelFileExtension);
+		CFRelease(codeListingFileExtension);
+		CFRelease(labelFileExtension);
 		
 		if ([codeListingFileURL checkResourceIsReachableAndReturnError:NULL])
 			[self setCodeListing:[NSString stringWithContentsOfURL:codeListingFileURL encoding:NSUTF8StringEncoding error:NULL]];
