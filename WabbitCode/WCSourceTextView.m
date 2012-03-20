@@ -669,9 +669,9 @@
 		[menu setFont:[NSFont menuFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]]];
 		[menu setShowsStateColumn:NO];
 		NSString *callPattern = [NSString stringWithFormat:@"\\b(?:call|jp|jr)\\s+%@\\b",symbolName];
-		NSRegularExpression *callRegex = [NSRegularExpression regularExpressionWithPattern:callPattern options:0 error:NULL];
+		NSRegularExpression *callRegex = [NSRegularExpression regularExpressionWithPattern:callPattern options:NSRegularExpressionCaseInsensitive error:NULL];
 		NSString *callWithConditionalPattern = [NSString stringWithFormat:@"\\b(?:call|jp|jr)\\s+(?:nz|nv|nc|po|pe|c|p|m|n|z|v),\\s*%@\\b",symbolName];
-		NSRegularExpression *callWithConditionalRegex = [NSRegularExpression regularExpressionWithPattern:callWithConditionalPattern options:0 error:NULL];
+		NSRegularExpression *callWithConditionalRegex = [NSRegularExpression regularExpressionWithPattern:callWithConditionalPattern options:NSRegularExpressionCaseInsensitive error:NULL];
 		
 		for (WCSourceFileDocument *sfDocument in [projectDocument sourceFileDocuments]) {
 			WCSourceScanner *sourceScanner = [sfDocument sourceScanner];
@@ -744,12 +744,12 @@
 		
 		NSMutableArray *textCheckingResults = [NSMutableArray arrayWithCapacity:0];
 		NSString *callPattern = [NSString stringWithFormat:@"\\b(?:call|jp|jr)\\s+%@\\b",symbolName];
-		NSRegularExpression *callRegex = [NSRegularExpression regularExpressionWithPattern:callPattern options:0 error:NULL];
+		NSRegularExpression *callRegex = [NSRegularExpression regularExpressionWithPattern:callPattern options:NSRegularExpressionCaseInsensitive error:NULL];
 		
 		[textCheckingResults addObjectsFromArray:[callRegex matchesInString:[self string] options:0 range:NSMakeRange(0, [[self string] length])]];
 		
 		NSString *callWithConditionalPattern = [NSString stringWithFormat:@"\\b(?:call|jp|jr)\\s+(?:nz|nv|nc|po|pe|c|p|m|n|z|v),\\s*%@\\b",symbolName];
-		NSRegularExpression *callWithConditionalRegex = [NSRegularExpression regularExpressionWithPattern:callWithConditionalPattern options:0 error:NULL];
+		NSRegularExpression *callWithConditionalRegex = [NSRegularExpression regularExpressionWithPattern:callWithConditionalPattern options:NSRegularExpressionCaseInsensitive error:NULL];
 		
 		[textCheckingResults addObjectsFromArray:[callWithConditionalRegex matchesInString:[self string] options:0 range:NSMakeRange(0, [[self string] length])]];
 		

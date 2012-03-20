@@ -12,30 +12,22 @@
 #import <QuartzCore/QuartzCore.h>
 
 @interface RSBezelWidgetManager ()
-
+- (void)_setupWindowAnimations;
 @end
 
 @implementation RSBezelWidgetManager
 #pragma mark *** Subclass Overrides ***
 - (id)init {
-	return [super initWithWindowNibName:[self windowNibName]];
+	if (!(self = [super initWithWindowNibName:[self windowNibName]]))
+		return nil;
+	
+	return self;
 }
 
 - (NSString *)windowNibName {
 	return @"RSBezelWindow";
 }
 
-- (void)windowDidLoad {
-	[super windowDidLoad];
-	
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		CAAnimation *animation = [CABasicAnimation animation];
-		[animation setDuration:0.35];
-		[animation setDelegate:self];
-		[[self window] setAnimations:[NSDictionary dictionaryWithObjectsAndKeys:animation,@"alphaValue", nil]];
-	});
-}
 #pragma mark CAAnimationDelegate
 - (void)animationDidStop:(CAAnimation *)animation finished:(BOOL)flag {
 	if (flag)
@@ -54,6 +46,8 @@
 static const NSTimeInterval kFadeDelay = 0.75;
 
 - (void)showImage:(NSImage *)image centeredInView:(NSView *)view; {
+	[self _setupWindowAnimations];
+	
 	[_fadeTimer invalidate];
 	_fadeTimer = nil;
 	
@@ -73,6 +67,8 @@ static const NSTimeInterval kFadeDelay = 0.75;
 }
 
 - (void)showString:(NSString *)string centeredInView:(NSView *)view; {
+	[self _setupWindowAnimations];
+	
 	[_fadeTimer invalidate];
 	_fadeTimer = nil;
 	
@@ -93,6 +89,15 @@ static const NSTimeInterval kFadeDelay = 0.75;
 #pragma mark Properties
 @synthesize bezelView=_bezelView;
 #pragma mark *** Private Methods ***
+- (void)_setupWindowAnimations; {
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		CAAnimation *animation = [CABasicAnimation animation];
+		[animation setDuration:0.35];
+		[animation setDelegate:self];
+		[[self window] setAnimations:[NSDictionary dictionaryWithObjectsAndKeys:animation,@"alphaValue", nil]];
+	});
+}
 #pragma mark Callbacks
 - (void)_closeTimerCallback:(NSTimer *)timer {
 	[_fadeTimer invalidate];

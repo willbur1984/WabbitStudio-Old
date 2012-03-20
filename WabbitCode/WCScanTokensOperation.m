@@ -168,7 +168,7 @@
 		if ([self isCancelled])
 			break;
 		
-		NSSet *conditionalRegisters = [NSSet setWithObjects:@"nz",@"nv",@"nc",@"po",@"pe",@"c",@"p",@"m",@"n",@"z",@"v", nil];
+		//NSSet *conditionalRegisters = [NSSet setWithObjects:@"nz",@"nv",@"nc",@"po",@"pe",@"c",@"p",@"m",@"n",@"z",@"v", nil];
 		NSMutableSet *calledLabels = [NSMutableSet setWithCapacity:0];
 		
 		[[WCSourceScanner calledLabelRegularExpression] enumerateMatchesInString:[self string] options:0 range:searchRange usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
@@ -180,8 +180,6 @@
 				return;
 			
 			NSString *labelName = [[self string] substringWithRange:[result rangeAtIndex:1]];
-			if ([conditionalRegisters containsObject:[labelName lowercaseString]])
-				return;
 			
 			[calledLabels addObject:[labelName lowercaseString]];
 		}];
@@ -195,8 +193,6 @@
 				return;
 			
 			NSString *labelName = [[self string] substringWithRange:[result rangeAtIndex:1]];
-			if ([conditionalRegisters containsObject:[labelName lowercaseString]])
-				return;
 			
 			[calledLabels addObject:[labelName lowercaseString]];
 		}];
