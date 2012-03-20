@@ -35,6 +35,8 @@
 + (NSString *)tabUnicodeCharacterString;
 + (NSString *)returnUnicodeCharacterString;
 + (NSString *)spaceUnicodeCharacterString;
+
+- (NSString *)reverseString;
 @end
 
 static inline uint8_t RSHexValueForCharacter(unichar character) {

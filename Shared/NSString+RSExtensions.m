@@ -189,6 +189,25 @@
 	return nil;
 }
 
+- (NSString *)reverseString; {
+	if ([self length] <= 1)
+		return nil;
+	
+	NSUInteger stringLength = [self length];
+	NSInteger stringIndex, reverseStringIndex;
+	unichar *stringChars = calloc(sizeof(unichar), stringLength);
+	unichar *reverseStringChars = calloc(sizeof(unichar), stringLength);
+	
+	[self getCharacters:stringChars];
+	
+	for (stringIndex=stringLength-1, reverseStringIndex=0; stringIndex>=0; stringIndex--, reverseStringIndex++)
+		reverseStringChars[reverseStringIndex] = stringChars[stringIndex];
+	
+	free(stringChars);
+	
+	return [[[NSString alloc] initWithCharactersNoCopy:reverseStringChars length:stringLength freeWhenDone:YES] autorelease];
+}
+
 // returns an autoreleased UUID String
 + (NSString *)UUIDString; {
 	CFUUIDRef UUID = CFUUIDCreate(kCFAllocatorDefault);
@@ -259,4 +278,5 @@
 	});	
 	return retval;
 }
+
 @end
