@@ -719,18 +719,24 @@
 			[[RSBezelWidgetManager sharedWindowController] showString:NSLocalizedString(@"Symbol Caller Not Found", @"Symbol Caller Not Found") centeredInView:[self enclosingScrollView]];
 			return;
 		}
-		
-		NSUInteger glyphIndex = [[self layoutManager] glyphIndexForCharacterAtIndex:symbolRange.location];
-		NSRect lineRect = [[self layoutManager] lineFragmentRectForGlyphAtIndex:glyphIndex effectiveRange:NULL];
-		NSPoint selectedPoint = [[self layoutManager] locationForGlyphAtIndex:glyphIndex];
-		
-		lineRect.origin.y += lineRect.size.height;
-		lineRect.origin.x += selectedPoint.x;
-		
-		NSCursor *currentCursor = [[self enclosingScrollView] documentCursor];
-		
-		if (![menu popUpMenuPositioningItem:[menu itemAtIndex:0] atLocation:lineRect.origin inView:self])
-			[currentCursor set];
+		else if ([menu numberOfItems] == 1) {
+			WCSourceSymbol *symbolToJumpTo = [[[menu itemArray] lastObject] representedObject];
+			
+			[[self delegate] handleJumpToDefinitionForSourceTextView:self sourceSymbol:symbolToJumpTo];
+		}
+		else {
+			NSUInteger glyphIndex = [[self layoutManager] glyphIndexForCharacterAtIndex:symbolRange.location];
+			NSRect lineRect = [[self layoutManager] lineFragmentRectForGlyphAtIndex:glyphIndex effectiveRange:NULL];
+			NSPoint selectedPoint = [[self layoutManager] locationForGlyphAtIndex:glyphIndex];
+			
+			lineRect.origin.y += lineRect.size.height;
+			lineRect.origin.x += selectedPoint.x;
+			
+			NSCursor *currentCursor = [[self enclosingScrollView] documentCursor];
+			
+			if (![menu popUpMenuPositioningItem:[menu itemAtIndex:0] atLocation:lineRect.origin inView:self])
+				[currentCursor set];
+		}
 	}
 	else {
 		WCSourceScanner *sourceScanner = [[self delegate] sourceScannerForSourceTextView:self];
@@ -759,37 +765,46 @@
 			[[RSBezelWidgetManager sharedWindowController] showString:NSLocalizedString(@"Symbol Caller Not Found", @"Symbol Caller Not Found") centeredInView:[self enclosingScrollView]];
 			return;
 		}
-		
-		NSMenu *menu = [[[NSMenu alloc] initWithTitle:@""] autorelease];
-		[menu setFont:[NSFont menuFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]]];
-		[menu setShowsStateColumn:NO];
-		
-		for (NSTextCheckingResult *result in textCheckingResults) {
+		else if ([textCheckingResults count] == 1) {
+			NSTextCheckingResult *result = [textCheckingResults lastObject];
 			WCSourceSymbol *resultSymbol = [WCSourceSymbol sourceSymbolOfType:[symbol type] range:[result range] name:[[self string] substringWithRange:[result range]]];
 			
 			[resultSymbol setSourceScanner:sourceScanner];
 			
-			NSString *fileDisplayName = [[sourceScanner delegate] fileDisplayNameForSourceScanner:sourceScanner];
-			NSUInteger lineNumber = [[self textStorage] lineNumberForRange:[result range]];
-			NSMenuItem *item = [menu addItemWithTitle:[NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 (%@:%lu)", @"jump to callers menu item title format string"),[resultSymbol name],fileDisplayName,lineNumber+1] action:@selector(_jumpToCallersMenuClicked:) keyEquivalent:@""];
-			
-			[item setImage:[resultSymbol icon]];
-			[[item image] setSize:NSSmallSize];
-			[item setTarget:self];
-			[item setRepresentedObject:resultSymbol];
+			[[self delegate] handleJumpToDefinitionForSourceTextView:self sourceSymbol:resultSymbol];
 		}
-		
-		NSUInteger glyphIndex = [[self layoutManager] glyphIndexForCharacterAtIndex:symbolRange.location];
-		NSRect lineRect = [[self layoutManager] lineFragmentRectForGlyphAtIndex:glyphIndex effectiveRange:NULL];
-		NSPoint selectedPoint = [[self layoutManager] locationForGlyphAtIndex:glyphIndex];
-		
-		lineRect.origin.y += lineRect.size.height;
-		lineRect.origin.x += selectedPoint.x;
-		
-		NSCursor *currentCursor = [[self enclosingScrollView] documentCursor];
-		
-		if (![menu popUpMenuPositioningItem:[menu itemAtIndex:0] atLocation:lineRect.origin inView:self])
-			[currentCursor set];
+		else {
+			NSMenu *menu = [[[NSMenu alloc] initWithTitle:@""] autorelease];
+			[menu setFont:[NSFont menuFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]]];
+			[menu setShowsStateColumn:NO];
+			
+			for (NSTextCheckingResult *result in textCheckingResults) {
+				WCSourceSymbol *resultSymbol = [WCSourceSymbol sourceSymbolOfType:[symbol type] range:[result range] name:[[self string] substringWithRange:[result range]]];
+				
+				[resultSymbol setSourceScanner:sourceScanner];
+				
+				NSString *fileDisplayName = [[sourceScanner delegate] fileDisplayNameForSourceScanner:sourceScanner];
+				NSUInteger lineNumber = [[self textStorage] lineNumberForRange:[result range]];
+				NSMenuItem *item = [menu addItemWithTitle:[NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 (%@:%lu)", @"jump to callers menu item title format string"),[resultSymbol name],fileDisplayName,lineNumber+1] action:@selector(_jumpToCallersMenuClicked:) keyEquivalent:@""];
+				
+				[item setImage:[resultSymbol icon]];
+				[[item image] setSize:NSSmallSize];
+				[item setTarget:self];
+				[item setRepresentedObject:resultSymbol];
+			}
+			
+			NSUInteger glyphIndex = [[self layoutManager] glyphIndexForCharacterAtIndex:symbolRange.location];
+			NSRect lineRect = [[self layoutManager] lineFragmentRectForGlyphAtIndex:glyphIndex effectiveRange:NULL];
+			NSPoint selectedPoint = [[self layoutManager] locationForGlyphAtIndex:glyphIndex];
+			
+			lineRect.origin.y += lineRect.size.height;
+			lineRect.origin.x += selectedPoint.x;
+			
+			NSCursor *currentCursor = [[self enclosingScrollView] documentCursor];
+			
+			if (![menu popUpMenuPositioningItem:[menu itemAtIndex:0] atLocation:lineRect.origin inView:self])
+				[currentCursor set];
+		}
 	}
 }
 - (IBAction)jumpToDefinition:(id)sender; {
