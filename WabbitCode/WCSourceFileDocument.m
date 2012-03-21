@@ -488,7 +488,7 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 	return _undoTextView;
 }
 #pragma mark *** Private Methods ***
-- (void)_updateFileEditedStatus {
+- (void)_updateFileEditedStatus {	
 	[self willChangeValueForKey:@"icon"];
 	[self willChangeValueForKey:@"isEdited"];
 	

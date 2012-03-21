@@ -247,6 +247,11 @@ static const CGFloat kBuildIssueWidthHeight = 10.0;
 		NSShowAnimationEffect(NSAnimationEffectDisappearingItemDefault, [[self window] convertBaseToScreen:[theEvent locationInWindow]], NSZeroSize, self, @selector(_animationEffectDidEnd:), NULL);
 	else if (fileBreakpoint && fileBreakpoint == [self clickedFileBreakpoint] && ![self clickedFileBreakpointHasMoved])
 		[fileBreakpoint setActive:(![fileBreakpoint isActive])];
+	else {
+		[self setClickedBuildIssue:nil];
+		[self setClickedFileBreakpoint:nil];
+		[self setClickedLineNumber:NSNotFound];
+	}
 }
 - (void)_animationEffectDidEnd:(void *)contextInfo {
 	[[[[self delegate] projectDocumentForSourceRulerView:self] breakpointManager] removeFileBreakpoint:[self clickedFileBreakpoint]];
