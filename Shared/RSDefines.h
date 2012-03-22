@@ -64,7 +64,7 @@ static const NSRange NSEmptyRange = {.location = 0, .length = 0};
 static const NSSize NSSmallSize = {.width = 16.0, .height = 16.0};
 static const NSSize NSMiniSize = {.width = 14.0, .height = 14.0};
 
-static inline void RSLog(NSString *format, ...) {
+static void RSLog(NSString *format, ...) {
 	va_list args;
 	va_start(args, format);
 	
@@ -92,6 +92,26 @@ static inline NSPoint NSCenteredPointInRect(NSRect rect) {
 static inline BOOL NSLocationInOrEqualToRange(NSUInteger loc, NSRange range) {
 	return (loc - range.location <= range.length);
 }
+
+#if NS_BLOCKS_AVAILABLE
+#import <mach/mach_time.h>
+
+// original timing function can be found at http://weblog.bignerdranch.com/?p=316
+static CGFloat RSTimeBlock(void (^block)(void)) {
+	mach_timebase_info_data_t info;
+	
+	if (mach_timebase_info(&info) != KERN_SUCCESS)
+		return -1.0;
+	
+	uint64_t start = mach_absolute_time ();
+    block ();
+    uint64_t end = mach_absolute_time ();
+    uint64_t elapsed = end - start;
+	
+    uint64_t nanos = elapsed * info.numer / info.denom;
+    return (CGFloat)nanos / NSEC_PER_SEC;
+}
+#endif
 
 #endif
 #endif
