@@ -12,7 +12,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 @interface RSBezelWidgetManager ()
-- (void)_setupWindowAnimations;
+
 @end
 
 @implementation RSBezelWidgetManager
@@ -28,30 +28,23 @@
 	return @"RSBezelWindow";
 }
 
-#pragma mark CAAnimationDelegate
-- (void)animationDidStop:(CAAnimation *)animation finished:(BOOL)flag {
-	if (flag)
-		[[self window] orderOut:nil];
-}
 #pragma mark *** Public Methods ***
 + (RSBezelWidgetManager *)sharedWindowController; {
 	static id sharedInstance;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
 		sharedInstance = [[[self class] alloc] init];
+		
+		[[sharedInstance window] setAnimationBehavior:NSWindowAnimationBehaviorUtilityWindow];
 	});
 	return sharedInstance;
 }
 
 static const NSTimeInterval kFadeDelay = 0.75;
 
-- (void)showImage:(NSImage *)image centeredInView:(NSView *)view; {
-	[self _setupWindowAnimations];
-	
+- (void)showImage:(NSImage *)image centeredInView:(NSView *)view; {	
 	[_fadeTimer invalidate];
 	_fadeTimer = nil;
-	
-	[[self window] setAlphaValue:1.0];
 	
 	[[self bezelView] setImage:image];
 	
@@ -66,13 +59,9 @@ static const NSTimeInterval kFadeDelay = 0.75;
 	_fadeTimer = [NSTimer scheduledTimerWithTimeInterval:kFadeDelay target:self selector:@selector(_closeTimerCallback:) userInfo:nil repeats:NO];
 }
 
-- (void)showString:(NSString *)string centeredInView:(NSView *)view; {
-	[self _setupWindowAnimations];
-	
+- (void)showString:(NSString *)string centeredInView:(NSView *)view; {	
 	[_fadeTimer invalidate];
 	_fadeTimer = nil;
-	
-	[[self window] setAlphaValue:1.0];
 	
 	[[self bezelView] setString:string];
 	
@@ -89,21 +78,13 @@ static const NSTimeInterval kFadeDelay = 0.75;
 #pragma mark Properties
 @synthesize bezelView=_bezelView;
 #pragma mark *** Private Methods ***
-- (void)_setupWindowAnimations; {
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		CAAnimation *animation = [CABasicAnimation animation];
-		[animation setDuration:0.35];
-		[animation setDelegate:self];
-		[[self window] setAnimations:[NSDictionary dictionaryWithObjectsAndKeys:animation,@"alphaValue", nil]];
-	});
-}
+
 #pragma mark Callbacks
 - (void)_closeTimerCallback:(NSTimer *)timer {
 	[_fadeTimer invalidate];
 	_fadeTimer = nil;
 	
-	[[[self window] animator] setAlphaValue:0.0];
+	[[self window] orderOut:nil];
 }
 
 @end
