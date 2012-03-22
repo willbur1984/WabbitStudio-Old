@@ -3,12 +3,12 @@
 	<data>
 		<int key="IBDocument.SystemTarget">1070</int>
 		<string key="IBDocument.SystemVersion">11D50b</string>
-		<string key="IBDocument.InterfaceBuilderVersion">2177</string>
+		<string key="IBDocument.InterfaceBuilderVersion">2182</string>
 		<string key="IBDocument.AppKitVersion">1138.32</string>
 		<string key="IBDocument.HIToolboxVersion">568.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">2177</string>
+			<string key="NS.object.0">2182</string>
 		</object>
 		<object class="NSArray" key="IBDocument.IntegratedClassDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -73,7 +73,6 @@
 							<string key="NSFrame">{{493, 12}, {93, 32}}</string>
 							<reference key="NSSuperview" ref="1006"/>
 							<reference key="NSWindow"/>
-							<reference key="NSNextKeyView"/>
 							<string key="NSReuseIdentifierKey">_NS:687</string>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="364147334">
@@ -424,7 +423,7 @@
 																			<string key="NSFrameSize">{427, 220}</string>
 																			<reference key="NSSuperview" ref="405092683"/>
 																			<reference key="NSWindow"/>
-																			<reference key="NSNextKeyView" ref="1009450779"/>
+																			<reference key="NSNextKeyView" ref="108833925"/>
 																			<string key="NSReuseIdentifierKey">_NS:80</string>
 																			<string key="NSMinGridSize">{0, 0}</string>
 																			<string key="NSMaxGridSize">{0, 0}</string>
@@ -478,7 +477,7 @@
 															<string key="NSFrame">{{0, 124}, {427, 220}}</string>
 															<reference key="NSSuperview" ref="999710965"/>
 															<reference key="NSWindow"/>
-															<reference key="NSNextKeyView" ref="108833925"/>
+															<reference key="NSNextKeyView" ref="405092683"/>
 															<string key="NSReuseIdentifierKey">_NS:76</string>
 															<int key="NSsFlags">133648</int>
 															<reference key="NSVScroller" ref="1009450779"/>
@@ -673,7 +672,7 @@
 				<string key="NSScreenRect">{{0, 0}, {1680, 1028}}</string>
 				<string key="NSMinSize">{600, 472}</string>
 				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
-				<int key="NSWindowAnimationBehavior">5</int>
+				<int key="NSWindowAnimationBehavior">2</int>
 				<bool key="NSWindowIsRestorable">NO</bool>
 			</object>
 			<object class="NSArrayController" id="212904403">

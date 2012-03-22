@@ -336,7 +336,7 @@
 	}
 	
 	NSRange lineRange = [[[note object] string] lineRangeForRange:editedRange];
-	if (lineRange.location != editedRange.location) {
+	if (lineRange.location != editedRange.location && NSMaxRange(lineRange) != editedRange.location) {
 		delta = editedRange.location;
 		
 		if ((--delta) < 0)
