@@ -62,7 +62,12 @@
 		WCSourceFileDocument *sourceFileDocument = [[window windowController] document];
 		
 		[sourceFileMenuItem setTitle:[sourceFileDocument displayName]];
-		[sourceFileMenuItem setImage:[[NSWorkspace sharedWorkspace] iconForFile:[[sourceFileDocument fileURL] path]]];
+		
+		if ([sourceFileDocument fileURL])
+			[sourceFileMenuItem setImage:[[NSWorkspace sharedWorkspace] iconForFile:[[sourceFileDocument fileURL] path]]];
+		else
+			[sourceFileMenuItem setImage:[NSImage imageNamed:@"UntitledFile"]];
+		
 		[[sourceFileMenuItem image] setSize:NSSmallSize];
 	}
 }
@@ -99,7 +104,12 @@
 		WCSourceFileDocument *sourceFileDocument = [[window windowController] document];
 		
 		[sourceFileMenuItem setTitle:[sourceFileDocument displayName]];
-		[sourceFileMenuItem setImage:[[NSWorkspace sharedWorkspace] iconForFile:[[sourceFileDocument fileURL] path]]];
+		
+		if ([sourceFileDocument fileURL])
+			[sourceFileMenuItem setImage:[[NSWorkspace sharedWorkspace] iconForFile:[[sourceFileDocument fileURL] path]]];
+		else
+			[sourceFileMenuItem setImage:[NSImage imageNamed:@"UntitledFile"]];
+		
 		[[sourceFileMenuItem image] setSize:NSSmallSize];
 	}
 }
