@@ -155,6 +155,8 @@ NSString *const WCFontAndColorThemeManagerFontDidChangeFontTypeKey = @"fontType"
 				tokenOrSymbolType = [NSNumber numberWithUnsignedInt:WCSourceSymbolTypeDefine];
 			else if ([keyPath isEqualToString:@"macroFont"])
 				tokenOrSymbolType = [NSNumber numberWithUnsignedInt:WCSourceSymbolTypeMacro];
+			else
+				tokenOrSymbolType = nil;
 			
 			[[NSNotificationCenter defaultCenter] postNotificationName:WCFontAndColorThemeManagerFontDidChangeNotification object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:keyPath,WCFontAndColorThemeManagerFontDidChangeFontNameKey,tokenOrSymbolType,WCFontAndColorThemeManagerFontDidChangeFontTypeKey, nil]];
 		}
@@ -190,6 +192,8 @@ NSString *const WCFontAndColorThemeManagerFontDidChangeFontTypeKey = @"fontType"
 				tokenOrSymbolType = [NSNumber numberWithUnsignedInt:WCSourceSymbolTypeDefine];
 			else if ([keyPath isEqualToString:@"macroColor"])
 				tokenOrSymbolType = [NSNumber numberWithUnsignedInt:WCSourceSymbolTypeMacro];
+			else
+				tokenOrSymbolType = nil;
 			
 			[[NSNotificationCenter defaultCenter] postNotificationName:WCFontAndColorThemeManagerColorDidChangeNotification object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:keyPath,WCFontAndColorThemeManagerColorDidChangeColorNameKey,tokenOrSymbolType,WCFontAndColorThemeManagerColorDidChangeColorTypeKey, nil]];
 		}

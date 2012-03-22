@@ -47,7 +47,7 @@
 	BOOL isFinished = NO;
 	
 	NSMutableArray *searchResults = [NSMutableArray arrayWithCapacity:[[self searchDocuments] count]];
-	NSMapTable *sourceFileDocumentsToSearchContainers = [[NSMapTable mapTableWithWeakToStrongObjects] retain];
+	NSMapTable *sourceFileDocumentsToSearchContainers = [NSMapTable mapTableWithWeakToStrongObjects];
 	__block NSUInteger numberOfSearchResults = 0;
 	
 	while (![self isCancelled] && !isFinished) {

@@ -41,6 +41,8 @@
 }
 
 - (IBAction)showWindow:(id)sender; {
+	[self performSelector:@selector(retain)];
+	
 	[[self window] setAnimationBehavior:NSWindowAnimationBehaviorUtilityWindow];
 	
 	_eventMonitor = [NSEvent addLocalMonitorForEventsMatchingMask:NSLeftMouseDownMask|NSRightMouseDownMask|NSKeyDownMask|NSScrollWheelMask  handler:^NSEvent* (NSEvent *event) {

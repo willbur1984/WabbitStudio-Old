@@ -135,7 +135,7 @@ int labels_app_load(LPCALC lpCalc, LPCTSTR lpszFileName) {
 				label->addr = equate & 0xFFFF;
 
 				if ( (equate & 0x0000FFFF) >= 0x4000 && (equate & 0x0000FFFF) < 0x8000) {
-					int page_offset = (equate >> 16) & 0xFF;
+					//int page_offset = (equate >> 16) & 0xFF;
 					
 					label->IsRAM = FALSE;
 					if (lpCalc->last_transferred_app == NULL) {

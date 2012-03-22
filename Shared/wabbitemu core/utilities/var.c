@@ -623,7 +623,7 @@ static TIFILE_t* ImportVarData(FILE *infile, TIFILE_t *tifile, int varNumber) {
 	if (tifile->var->data == NULL)
 		return FreeTiFile(tifile);
 
-	i = 0;
+	//i = 0;
 
 	for(i = 0; i < tifile->var->length && !feof(infile); i++) {
 		tmp = fgetc(infile);

@@ -143,6 +143,8 @@ static NSMapTable *typesToIcons;
 				tokenString = @"#";
 				break;
 			default:
+				baseColor = nil;
+				tokenString = @"";
 				break;
 		}
 		

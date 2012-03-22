@@ -481,7 +481,7 @@ static unsigned long calc_md5(MD5_t* md5) {
 	unsigned long x = md5->x;
 	unsigned long ac = md5->ac;
 	unsigned char s = md5->s & 0x1f;
-	unsigned long reg;	
+	unsigned long reg = 0;	
 	
 	switch(md5->mode) {
 		case 00:
@@ -788,7 +788,7 @@ static void port31_83pse(CPU_t *cpu, device_t *dev) {
 
 
 static void handlextal(CPU_t *cpu,XTAL_t* xtal) {
-	TIMER_t* timer = &xtal->timers[0];
+	TIMER_t* timer;// = &xtal->timers[0];
 	
 	// overall xtal timer ticking
 	xtal->ticks = (unsigned long long)(tc_elapsed(cpu->timer_c) * 32768.0);

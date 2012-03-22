@@ -148,7 +148,7 @@ NSString *const kRSRTVMovedRowsType = @"com.red-sweater.RSRTVArrayController";
 //			insertIndex -= 1;
 		}
 		object = [objects objectAtIndex:copyIndex];
-		[self insertObject:[object copy] atArrangedObjectIndex:insertIndex];
+		[self insertObject:[[object copy] autorelease] atArrangedObjectIndex:insertIndex];
 		
 		copyFromIndex = [indexSet indexLessThanIndex:copyFromIndex];
     }

@@ -180,6 +180,8 @@ NSString *const WCSourceSymbolTypeAttributeName = @"WCSourceSymbolTypeAttributeN
 				symbolString = @"E";
 				break;
 			default:
+				baseColor = nil;
+				symbolString = @"";
 				break;
 		}
 		

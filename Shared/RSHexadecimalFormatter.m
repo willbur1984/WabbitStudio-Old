@@ -61,6 +61,7 @@ static const uint32_t defaultRetval = 0;
 			newString = [string stringByRemovingInvalidBinaryDigits];
 			break;
 		default:
+			newString = string;
 			break;
 	}
 	
@@ -81,6 +82,7 @@ static const uint32_t defaultRetval = 0;
 			value = (uint32_t)[newString valueFromBinaryString];
 			break;
 		default:
+			value = 0;
 			break;
 	}
 	

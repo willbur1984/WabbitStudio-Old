@@ -168,7 +168,7 @@
 - (void)textView:(NSTextView *)textView doubleClickedOnCell:(id<NSTextAttachmentCell>)cell inRect:(NSRect)cellFrame atIndex:(NSUInteger)charIndex {
 	if ([cell isKindOfClass:[WCArgumentPlaceholderCell class]]) {
 		if ([[(WCArgumentPlaceholderCell *)cell argumentChoices] count]) {
-			WCArgumentPlaceholderWindowController *windowController = [[WCArgumentPlaceholderWindowController alloc] initWithArgumentPlaceholderCell:(WCArgumentPlaceholderCell *)cell characterIndex:charIndex textView:[self textView]];
+			WCArgumentPlaceholderWindowController *windowController = [[[WCArgumentPlaceholderWindowController alloc] initWithArgumentPlaceholderCell:(WCArgumentPlaceholderCell *)cell characterIndex:charIndex textView:[self textView]] autorelease];
 			
 			[windowController showWindow:nil];
 		}

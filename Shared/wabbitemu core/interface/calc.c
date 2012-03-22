@@ -638,7 +638,7 @@ static int calc_run_tstates(LPCALC lpCalc, time_t tstates) {
 #endif
 			return 0;
 		}
-		uint64_t oldTStates;
+		uint64_t oldTStates = 0;
 		uint16_t oldPC;
 		if (lpCalc->profiler.running) {
 			oldTStates = tc_tstates(&lpCalc->timer_c);

@@ -40,7 +40,7 @@
 	return sharedInstance;
 }
 
-static const NSTimeInterval kFadeDelay = 0.75;
+static const NSTimeInterval kFadeTimerDelay = 0.75;
 
 - (void)showImage:(NSImage *)image centeredInView:(NSView *)view; {	
 	[_fadeTimer invalidate];
@@ -56,7 +56,7 @@ static const NSTimeInterval kFadeDelay = 0.75;
 	
 	[[self window] orderFront:nil];
 	
-	_fadeTimer = [NSTimer scheduledTimerWithTimeInterval:kFadeDelay target:self selector:@selector(_closeTimerCallback:) userInfo:nil repeats:NO];
+	_fadeTimer = [NSTimer scheduledTimerWithTimeInterval:kFadeTimerDelay target:self selector:@selector(_closeTimerCallback:) userInfo:nil repeats:NO];
 }
 
 - (void)showString:(NSString *)string centeredInView:(NSView *)view; {	
@@ -73,7 +73,7 @@ static const NSTimeInterval kFadeDelay = 0.75;
 	
 	[[self window] orderFront:nil];
 	
-	_fadeTimer = [NSTimer scheduledTimerWithTimeInterval:kFadeDelay target:self selector:@selector(_closeTimerCallback:) userInfo:nil repeats:NO];
+	_fadeTimer = [NSTimer scheduledTimerWithTimeInterval:kFadeTimerDelay target:self selector:@selector(_closeTimerCallback:) userInfo:nil repeats:NO];
 }
 #pragma mark Properties
 @synthesize bezelView=_bezelView;

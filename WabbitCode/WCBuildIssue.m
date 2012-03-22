@@ -29,6 +29,7 @@
 			[retval applyFontTraits:NSBoldFontMask range:NSMakeRange(0, [retval length])];
 			break;
 		default:
+			retval = nil;
 			break;
 	}
 	

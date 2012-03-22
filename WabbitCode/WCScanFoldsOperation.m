@@ -153,6 +153,7 @@ static NSRegularExpression *endMarkersRegex;
 								foldType = WCFoldTypeMacro;
 								break;
 							default:
+								foldType = 0;
 								break;
 						}
 						WCFold *newFold = [WCFold foldOfType:foldType level:0 range:foldRange contentRange:contentRange];
@@ -211,6 +212,7 @@ static NSRegularExpression *endMarkersRegex;
 										foldType = WCFoldTypeMacro;
 										break;
 									default:
+										foldType = 0;
 										break;
 								}
 								WCFold *newFold = [WCFold foldOfType:foldType level:0 range:foldRange contentRange:contentRange];
