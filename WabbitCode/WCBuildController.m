@@ -21,6 +21,7 @@
 #import "WCBuildDefine.h"
 #import "WCProjectViewController.h"
 #import "WCDebugController.h"
+#import "RSBezelWidgetManager.h"
 
 NSString *const WCBuildControllerDidFinishBuildingNotification = @"WCBuildControllerDidFinishBuildingNotification";
 
@@ -460,6 +461,13 @@ NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotification = @"
 			[self setTotalWarnings:totalWarnings];
 			
 			[[NSNotificationCenter defaultCenter] postNotificationName:WCBuildControllerDidFinishBuildingNotification object:self];
+			
+			if (!totalErrors && !totalWarnings)
+				[[RSBezelWidgetManager sharedWindowController] showString:NSLocalizedString(@"Build Succeeded", @"Build Succeeded") centeredInView:[[[self projectDocument] windowForSheet] contentView]];
+			else if (!totalErrors)
+				[[RSBezelWidgetManager sharedWindowController] showString:[NSString stringWithFormat:NSLocalizedString(@"Build Succeeded (%lu warnings)", @"Build Succeeded (%lu warnings)"),totalWarnings] centeredInView:[[[self projectDocument] windowForSheet] contentView] withCloseDelay:1.25];
+			else
+				[[RSBezelWidgetManager sharedWindowController] showString:[NSString stringWithFormat:NSLocalizedString(@"Build Failed (%lu errors, %lu warnings)", @"Build Failed (%lu errors, %lu warnings)"),totalErrors,totalWarnings] centeredInView:[[[self projectDocument] windowForSheet] contentView] withCloseDelay:1.25];
 		});
 		
 		[pool release];
