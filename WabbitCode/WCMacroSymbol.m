@@ -63,7 +63,7 @@
 	if (!(self = [super initWithType:WCSourceSymbolTypeMacro range:range name:name]))
 		return nil;
 	
-	_value = [value copy];
+	_value = [[value stringByReplacingOccurrencesOfString:@"\t" withString:@" "] copy];
 	_valueRange = valueRange;
 	_arguments = [arguments copy];
 	

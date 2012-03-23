@@ -55,30 +55,42 @@
 			if ([self isCancelled])
 				break;
 			
+			// grab a copy of the source file document's string
 			NSString *string = [[[[sfDocument textStorage] string] copy] autorelease];
 			NSUInteger stringLength = [string length];
 			NSArray *tokens = [[sfDocument sourceScanner] tokens];
 			NSArray *symbols = [[sfDocument sourceScanner] symbols];
 			
+			// grab a copy of the current locale
 			CFLocaleRef currentLocale = CFLocaleCopyCurrent();
+			// create a string tokenizer to determine the word boundaries in the string, this is needed for a number of search options
 			CFStringTokenizerRef stringTokenizer = CFStringTokenizerCreate(kCFAllocatorDefault, (CFStringRef)string, CFRangeMake(0, (CFIndex)stringLength), kCFStringTokenizerUnitWordBoundary, currentLocale);
+			// release the copy of the current locale we were given above
 			CFRelease(currentLocale);
 			
 			// textual matching
 			if ([self findStyle] == RSFindOptionsFindStyleTextual) {
+				// search range is initially the entire string length
 				NSRange searchRange = NSMakeRange(0, stringLength);
+				// if our match case option is turned on OR in the appropriate flag
 				NSStringCompareOptions options = ([self matchCase])?NSLiteralSearch:(NSLiteralSearch|NSCaseInsensitiveSearch);
 				
+				// while our current location in the string is less than the string length, continue searching
 				while (searchRange.location < stringLength) {
+					// search for the search string within the search range given the options above
 					NSRange foundRange = [string rangeOfString:[self searchString] options:options range:searchRange];
+					// if nothing was found, bail early
 					if (foundRange.location == NSNotFound)
 						break;
 					
+					// tell the string tokenizer to jump to the nearest token for the found range
 					CFStringTokenizerGoToTokenAtIndex(stringTokenizer, (CFIndex)foundRange.location);
+					// grab the token range (i.e. full word range) corresponding to the found range
 					CFRange tokenRange = CFStringTokenizerGetCurrentTokenRange(stringTokenizer);
 					
 					WCSearchResult *searchResult = nil;
 					
+					// depending on our match style, we may have found a match
 					switch ([self matchStyle]) {
 						case RSFindOptionsMatchStyleContains:
 							searchResult = [self _searchResultForRange:foundRange string:string tokens:tokens symbols:symbols];
@@ -105,23 +117,33 @@
 					}
 					
 					if (searchResult) {
+						// if we found a match, see if the parent container for matches in that file already exists
 						WCSearchContainer *parentContainer = [sourceFileDocumentsToSearchContainers objectForKey:sfDocument];
 						
 						if (!parentContainer) {
+							// if the parent container doesn't exist (i.e. this is the first match we found in the current file), create it
 							parentContainer = [WCSearchContainer searchContainerWithFile:[[[sfDocument projectDocument] sourceFileDocumentsToFiles] objectForKey:sfDocument]];
 							
+							// add the parent container to our top level array
 							[searchResults addObject:parentContainer];
+							// add the parent container to the map table so we can retrieve it quickly for subsequent matches
 							[sourceFileDocumentsToSearchContainers setObject:parentContainer forKey:sfDocument];
 							
 							dispatch_async(dispatch_get_main_queue(), ^{
+								// add the search navigator view controller as an observer for the NSTextStorageDidProcessEditingNotification
+								// this has to be done on the main thread, which ensures the resulting notifications are also delievered
+								// on the main thread
 								[[NSNotificationCenter defaultCenter] addObserver:[self searchNavigatorViewController] selector:@selector(_textStorageDidProcessEditing:) name:NSTextStorageDidProcessEditingNotification object:[sfDocument textStorage]];
 							});
 						}
 						
+						// add a new search result container to the parent container
 						[[parentContainer mutableChildNodes] addObject:[WCSearchResultContainer searchResultContainerWithSearchResult:searchResult]];
+						// increase our counter for the number of search results
 						numberOfSearchResults++;
 					}
 					
+					// adjust our search and continue
 					searchRange = NSMakeRange(NSMaxRange(foundRange), stringLength-NSMaxRange(foundRange));
 					
 				}
@@ -261,7 +283,7 @@
 	NSRange lineRange = [string lineRangeForRange:range];
 	NSRange firstLineRange = [string lineRangeForRange:NSMakeRange(range.location, 0)];
 	NSString *lineString = [string substringWithRange:lineRange];
-	// replace all tabs with spaces, so the line is smaller and more likely to fit in the search navigator
+	// replace all tabs with spaces, so the line is smaller and more likely to fit in the search navigator outline view
 	NSString *firstLineString = [[string substringWithRange:firstLineRange] stringByReplacingOccurrencesOfString:@"\t" withString:@" "];
 	NSMutableAttributedString *attributedString = [[[NSMutableAttributedString alloc] initWithString:firstLineString attributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]],NSFontAttributeName, nil]] autorelease];
 	

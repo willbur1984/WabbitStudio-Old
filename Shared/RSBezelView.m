@@ -7,6 +7,7 @@
 //
 
 #import "RSBezelView.h"
+#import "RSVerticallyCenteredTextFieldCell.h"
 
 @interface RSBezelView ()
 - (void)_commonInit;
@@ -74,10 +75,12 @@
 	[_stringCell setStringValue:string];
 	
 	if ([[_stringCell stringValue] length]) {
-		static const NSSize maxSize = (NSSize){275.0,225.0};
-		NSSize newSize = [_stringCell cellSizeForBounds:NSMakeRect(0, 0, maxSize.width, maxSize.height)];
+		NSSize newSize = [_stringCell cellSizeForBounds:NSMakeRect(0, 0, CGFLOAT_MAX, CGFLOAT_MAX)];
 		
-		[self setFrame:NSMakeRect(0.0, 0.0, (newSize.width > maxSize.width)?maxSize.width:newSize.width, (newSize.height > maxSize.height)?maxSize.height:newSize.height)];
+		newSize.width += 8.0;
+		newSize.height += 4.0;
+		
+		[self setFrameSize:newSize];
 		
 		[self setImage:nil];
 		
@@ -86,9 +89,11 @@
 }
 #pragma mark *** Private Methods ***
 - (void)_commonInit; {
-	_stringCell = [[NSTextFieldCell alloc] initTextCell:@""];
-	[_stringCell setFont:[NSFont boldSystemFontOfSize:18.0]];
+	_stringCell = [[RSVerticallyCenteredTextFieldCell alloc] initTextCell:@""];
+	[_stringCell setFont:[NSFont boldSystemFontOfSize:24.0]];
 	[_stringCell setTextColor:[NSColor whiteColor]];
 	[_stringCell setBackgroundStyle:NSBackgroundStyleLowered];
+	[_stringCell setLineBreakMode:NSLineBreakByClipping];
+	[_stringCell setAlignment:NSCenterTextAlignment];
 }
 @end

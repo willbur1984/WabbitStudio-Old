@@ -716,7 +716,7 @@
 		if (![menu numberOfItems]) {
 			NSBeep();
 			
-			[[RSBezelWidgetManager sharedWindowController] showString:NSLocalizedString(@"Symbol Caller Not Found", @"Symbol Caller Not Found") centeredInView:[self enclosingScrollView]];
+			[[RSBezelWidgetManager sharedWindowController] showString:NSLocalizedString(@"Symbol Caller(s) Not Found", @"Symbol Caller(s) Not Found") centeredInView:[self enclosingScrollView]];
 			return;
 		}
 		else if ([menu numberOfItems] == 1) {
@@ -744,7 +744,7 @@
 		if (![[sourceScanner calledLabels] containsObject:symbolName]) {
 			NSBeep();
 			
-			[[RSBezelWidgetManager sharedWindowController] showString:NSLocalizedString(@"Symbol Caller Not Found", @"Symbol Caller Not Found") centeredInView:[self enclosingScrollView]];
+			[[RSBezelWidgetManager sharedWindowController] showString:NSLocalizedString(@"Symbol Caller(s) Not Found", @"Symbol Caller(s) Not Found") centeredInView:[self enclosingScrollView]];
 			return;
 		}
 		
@@ -762,7 +762,7 @@
 		if (![textCheckingResults count]) {
 			NSBeep();
 			
-			[[RSBezelWidgetManager sharedWindowController] showString:NSLocalizedString(@"Symbol Caller Not Found", @"Symbol Caller Not Found") centeredInView:[self enclosingScrollView]];
+			[[RSBezelWidgetManager sharedWindowController] showString:NSLocalizedString(@"Symbol Caller(s) Not Found", @"Symbol Caller(s) Not Found") centeredInView:[self enclosingScrollView]];
 			return;
 		}
 		else if ([textCheckingResults count] == 1) {
@@ -833,7 +833,7 @@
 	if (symbolRange.location == NSNotFound) {
 		NSBeep();
 		
-		[[RSBezelWidgetManager sharedWindowController] showString:NSLocalizedString(@"Symbol Not Found, click another one plox", @"Symbol Not Found, click another one plox") centeredInView:[self enclosingScrollView]];
+		[[RSBezelWidgetManager sharedWindowController] showString:NSLocalizedString(@"Symbol Not Found", @"Symbol Not Found") centeredInView:[self enclosingScrollView]];
 		
 		return;
 	}
@@ -842,7 +842,7 @@
 	if (![symbols count]) {
 		NSBeep();
 		
-		[[RSBezelWidgetManager sharedWindowController] showString:NSLocalizedString(@"Symbol Not Found, click another one plox", @"Symbol Not Found, click another one plox") centeredInView:[self enclosingScrollView]];
+		[[RSBezelWidgetManager sharedWindowController] showString:NSLocalizedString(@"Symbol Not Found", @"Symbol Not Found") centeredInView:[self enclosingScrollView]];
 		return;
 	}
 	else if ([symbols count] == 1) {

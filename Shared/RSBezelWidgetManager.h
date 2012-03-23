@@ -19,4 +19,6 @@
 
 - (void)showImage:(NSImage *)image centeredInView:(NSView *)view;
 - (void)showString:(NSString *)string centeredInView:(NSView *)view;
+- (void)showImage:(NSImage *)image centeredInView:(NSView *)view withCloseDelay:(NSTimeInterval)closeDelay;
+- (void)showString:(NSString *)string centeredInView:(NSView *)view withCloseDelay:(NSTimeInterval)closeDelay;
 @end

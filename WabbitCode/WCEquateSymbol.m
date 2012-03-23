@@ -54,7 +54,7 @@
 	if (!(self = [super initWithType:WCSourceSymbolTypeEquate range:range name:name]))
 		return nil;
 	
-	_value = [value copy];
+	_value = [[value stringByReplacingOccurrencesOfString:@"\t" withString:@" "] copy];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_currentThemeDidChange:) name:WCFontAndColorThemeManagerCurrentThemeDidChangeNotification  object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_colorDidChange:) name:WCFontAndColorThemeManagerColorDidChangeNotification object:nil];

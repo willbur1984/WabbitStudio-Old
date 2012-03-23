@@ -8,9 +8,11 @@
 
 #import <AppKit/NSView.h>
 
+@class RSVerticallyCenteredTextFieldCell;
+
 @interface RSBezelView : NSView {
 	NSImage *_image;
-	NSTextFieldCell *_stringCell;
+	RSVerticallyCenteredTextFieldCell *_stringCell;
 }
 @property (readwrite,retain,nonatomic) NSImage *image;
 @property (readwrite,copy,nonatomic) NSString *string;
