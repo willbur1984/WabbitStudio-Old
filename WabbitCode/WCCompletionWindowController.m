@@ -454,8 +454,10 @@
 		}
 	}];
 	
-	if (selectedItemIndex != NSNotFound)
+	if (selectedItemIndex != NSNotFound) {
 		[[self arrayController] setSelectionIndex:selectedItemIndex];
+		[[self tableView] scrollRowToVisible:selectedItemIndex];
+	}
 	
 	return YES;
 }

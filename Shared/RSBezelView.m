@@ -90,7 +90,7 @@
 #pragma mark *** Private Methods ***
 - (void)_commonInit; {
 	_stringCell = [[RSVerticallyCenteredTextFieldCell alloc] initTextCell:@""];
-	[_stringCell setFont:[NSFont boldSystemFontOfSize:24.0]];
+	[_stringCell setFont:[NSFont boldSystemFontOfSize:20.0]];
 	[_stringCell setTextColor:[NSColor whiteColor]];
 	[_stringCell setBackgroundStyle:NSBackgroundStyleLowered];
 	[_stringCell setLineBreakMode:NSLineBreakByClipping];
