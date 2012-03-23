@@ -261,7 +261,9 @@
 	NSRange lineRange = [string lineRangeForRange:range];
 	NSRange firstLineRange = [string lineRangeForRange:NSMakeRange(range.location, 0)];
 	NSString *lineString = [string substringWithRange:lineRange];
-	NSMutableAttributedString *attributedString = [[[NSMutableAttributedString alloc] initWithString:[string substringWithRange:firstLineRange] attributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]],NSFontAttributeName, nil]] autorelease];
+	// replace all tabs with spaces, so the line is smaller and more likely to fit in the search navigator
+	NSString *firstLineString = [[string substringWithRange:firstLineRange] stringByReplacingOccurrencesOfString:@"\t" withString:@" "];
+	NSMutableAttributedString *attributedString = [[[NSMutableAttributedString alloc] initWithString:firstLineString attributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]],NSFontAttributeName, nil]] autorelease];
 	
 	if (NSMaxRange(range) > NSMaxRange(firstLineRange))
 		[attributedString addAttributes:WCTransparentFindTextAttributes() range:NSMakeRange(0, [attributedString length])];

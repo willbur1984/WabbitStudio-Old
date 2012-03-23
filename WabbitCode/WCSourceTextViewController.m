@@ -34,6 +34,8 @@
 #import "WCBuildController.h"
 #import "WCSourceScrollView.h"
 #import "WCBreakpointManager.h"
+#import "RSToolTipManager.h"
+#import "RSToolTipProvider.h"
 
 @interface WCSourceTextViewController ()
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
@@ -195,6 +197,7 @@
 	}
 	return modifiedResults;
 }
+// suppress the tooltips that come from misspelled words
 - (NSString *)textView:(NSTextView *)textView willDisplayToolTip:(NSString *)tooltip forCharacterAtIndex:(NSUInteger)characterIndex {
 	return nil;
 }
