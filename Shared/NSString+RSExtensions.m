@@ -82,6 +82,9 @@
 		return [self capitalizedString];
 	return [[[self substringToIndex:1] capitalizedString] stringByAppendingString:[self substringFromIndex:1]];
 }
+- (NSString *)stringByReplacingTabsWithSpaces; {
+	return [self stringByReplacingOccurrencesOfString:@"\t" withString:@" "];
+}
 
 - (NSUInteger)valueFromHexadecimalString; {
 	NSString *string = [self stringByRemovingInvalidHexadecimalDigits];

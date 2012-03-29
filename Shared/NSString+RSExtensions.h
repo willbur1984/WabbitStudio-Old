@@ -15,6 +15,7 @@
 - (NSUInteger)numberOfLines;
 
 - (NSString *)stringByCapitalizingFirstLetter;
+- (NSString *)stringByReplacingTabsWithSpaces;
 
 - (NSUInteger)valueFromHexadecimalString;
 - (NSUInteger)valueFromBinaryString;

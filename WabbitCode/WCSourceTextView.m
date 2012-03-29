@@ -691,13 +691,15 @@
 			if ([textCheckingResults count]) {
 				// if we got any results insert our header menu item before we start inserting the match items
 				NSString *fileDisplayName = [[sourceScanner delegate] fileDisplayNameForSourceScanner:sourceScanner];
-				NSMenuItem *fileMenuItem = [menu addItemWithTitle:[[[sfDocument fileURL] path] stringByAbbreviatingWithTildeInPath] action:NULL keyEquivalent:@""];
+				//NSMenuItem *fileMenuItem = [menu addItemWithTitle:[[[sfDocument fileURL] path] stringByAbbreviatingWithTildeInPath] action:NULL keyEquivalent:@""];
+				NSMenuItem *fileMenuItem = [menu addItemWithTitle:fileDisplayName action:NULL keyEquivalent:@""];
 				
 				[fileMenuItem setImage:[[sfDocument fileURL] fileIcon]];
 				[[fileMenuItem image] setSize:NSSmallSize];
 				
 				for (NSTextCheckingResult *result in textCheckingResults) {
-					WCSourceSymbol *resultSymbol = [WCSourceSymbol sourceSymbolOfType:[symbol type] range:[result range] name:[string substringWithRange:[result range]]];
+					NSString *resultSymbolName = [[string substringWithRange:[result range]] stringByReplacingTabsWithSpaces];
+					WCSourceSymbol *resultSymbol = [WCSourceSymbol sourceSymbolOfType:[symbol type] range:[result range] name:resultSymbolName];
 					
 					[resultSymbol setSourceScanner:sourceScanner];
 					
@@ -767,7 +769,8 @@
 		}
 		else if ([textCheckingResults count] == 1) {
 			NSTextCheckingResult *result = [textCheckingResults lastObject];
-			WCSourceSymbol *resultSymbol = [WCSourceSymbol sourceSymbolOfType:[symbol type] range:[result range] name:[[self string] substringWithRange:[result range]]];
+			NSString *resultName = [[[self string] substringWithRange:[result range]] stringByReplacingTabsWithSpaces];
+			WCSourceSymbol *resultSymbol = [WCSourceSymbol sourceSymbolOfType:[symbol type] range:[result range] name:resultName];
 			
 			[resultSymbol setSourceScanner:sourceScanner];
 			
