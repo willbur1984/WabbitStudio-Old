@@ -41,6 +41,7 @@
 
 - (void)drawRect:(NSRect)dirtyRect {
 	NSResponder *firstResponder = [[self window] firstResponder];
+	
 	if ([[self window] isKeyWindow] &&
 		[firstResponder isKindOfClass:[NSView class]] &&
 		[(NSView *)firstResponder isDescendantOf:[self superview]])
@@ -54,6 +55,7 @@
 		[_bottomFillColor setFill];
 	else
 		[_alternateBottomFillColor setFill];
+	
 	NSRectFill(NSMakeRect(NSMinX([self bounds]), NSMinY([self bounds]), NSWidth([self bounds]), 1.0));
 }
 

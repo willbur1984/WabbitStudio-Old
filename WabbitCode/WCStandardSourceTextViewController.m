@@ -125,7 +125,10 @@
 		[[self view] setFrame:firstSubviewFrame];
 		[[[self firstTextViewController] view] setFrame:secondSubviewFrame];
 		
-		[[self sourceHighlighter] highlightSymbolsInVisibleRange];
+		//[[self sourceHighlighter] highlightSymbolsInVisibleRange];
+		
+		[[[self firstTextViewController] textView] setSelectedRange:[[self textView] selectedRange]];
+		[[[self firstTextViewController] textView] scrollRangeToVisible:[[[self firstTextViewController] textView] selectedRange]];
 	}
 	
 	[[[self view] window] makeFirstResponder:[[self firstTextViewController] textView]];
@@ -235,7 +238,10 @@
 	[[firstSourceTextViewController view] setFrame:firstSubviewFrame];
 	[[secondSourceTextViewController view] setFrame:secondSubviewFrame];
 	
-	[[self sourceHighlighter] highlightSymbolsInVisibleRange];
+	//[[self sourceHighlighter] highlightSymbolsInVisibleRange];
+	
+	[[secondSourceTextViewController textView] setSelectedRange:[[firstSourceTextViewController textView] selectedRange]];
+	[[secondSourceTextViewController textView] scrollRangeToVisible:[[secondSourceTextViewController textView] selectedRange]];
 	
 	[[[self view] window] makeFirstResponder:[secondSourceTextViewController textView]];
 }
@@ -262,16 +268,6 @@
 	[_assistantSplitViews removeObject:parentView];
 	[sourceTextViewController performCleanup];
 	[_assistantSourceTextViewControllers removeObject:sourceTextViewController];
-}
-
-- (void)breakUndoCoalescingForAllTextViews; {
-	if ([[self textView] isCoalescingUndo])
-		[[self textView] breakUndoCoalescing];
-	
-	for (WCSourceTextViewController *stvController in _assistantSourceTextViewControllers) {
-		if ([[stvController textView] isCoalescingUndo])
-			[[stvController textView] breakUndoCoalescing];
-	}
 }
 
 - (void)performCleanup; {
