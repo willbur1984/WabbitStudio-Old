@@ -212,26 +212,28 @@
 			NSDictionary *defaultAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[[self textView] font],NSFontAttributeName, nil];
 			NSMutableAttributedString *attributedString = [[[NSMutableAttributedString alloc] initWithString:[itemToInsert completionInsertionName] attributes:defaultAttributes] autorelease];
 			
-			// add the opening paren
-			[attributedString appendAttributedString:[[[NSAttributedString alloc] initWithString:@"(" attributes:defaultAttributes] autorelease]];
-			
-			// add an argument placeholder cell for each argument
-			for (NSString *argument in [itemToInsert completionArguments]) {
-				NSTextAttachment *attachment = [[[NSTextAttachment alloc] initWithFileWrapper:nil] autorelease];
-				WCArgumentPlaceholderCell *cell = [[[WCArgumentPlaceholderCell alloc] initTextCell:argument] autorelease];
+			if ([[itemToInsert completionArguments] count]) {
+				// add the opening paren
+				[attributedString appendAttributedString:[[[NSAttributedString alloc] initWithString:@"(" attributes:defaultAttributes] autorelease]];
 				
-				[attachment setAttachmentCell:cell];
-				[attributedString appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachment]];
+				// add an argument placeholder cell for each argument
+				for (NSString *argument in [itemToInsert completionArguments]) {
+					NSTextAttachment *attachment = [[[NSTextAttachment alloc] initWithFileWrapper:nil] autorelease];
+					WCArgumentPlaceholderCell *cell = [[[WCArgumentPlaceholderCell alloc] initTextCell:argument] autorelease];
+					
+					[attachment setAttachmentCell:cell];
+					[attributedString appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachment]];
+					
+					// add the comma
+					[attributedString appendAttributedString:[[[NSAttributedString alloc] initWithString:@"," attributes:defaultAttributes] autorelease]];
+				}
 				
-				// add the comma
-				[attributedString appendAttributedString:[[[NSAttributedString alloc] initWithString:@"," attributes:defaultAttributes] autorelease]];
+				// delete the trailing comma
+				[attributedString deleteCharactersInRange:NSMakeRange([attributedString length]-1, 1)];
+				
+				// add the closing paren
+				[attributedString appendAttributedString:[[[NSAttributedString alloc] initWithString:@")" attributes:defaultAttributes] autorelease]];
 			}
-			
-			// delete the trailing comma
-			[attributedString deleteCharactersInRange:NSMakeRange([attributedString length]-1, 1)];
-			
-			// add the closing paren
-			[attributedString appendAttributedString:[[[NSAttributedString alloc] initWithString:@")" attributes:defaultAttributes] autorelease]];
 			
 			if ([[self textView] shouldChangeTextInRange:completionRange replacementString:[attributedString string]]) {
 				[[[self textView] textStorage] replaceCharactersInRange:completionRange withAttributedString:attributedString];

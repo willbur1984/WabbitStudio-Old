@@ -59,6 +59,7 @@
 	[super loadView];
 	
 	[(NSSearchFieldCell *)[[self searchField] cell] setPlaceholderString:NSLocalizedString(@"String Searching", @"find bar search field placeholder string")];
+	[(NSTextFieldCell *)[[self replaceTextField] cell] setPlaceholderString:NSLocalizedString(@"Replace String", @"find bar replace text field placeholder string")];
 }
 #pragma mark NSMenuValidation
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
