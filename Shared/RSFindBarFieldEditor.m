@@ -7,6 +7,7 @@
 //
 
 #import "RSFindBarFieldEditor.h"
+#import "WCSourceTextView.h"
 
 @implementation RSFindBarFieldEditor
 #pragma mark *** Subclass Overrides ***
@@ -18,32 +19,29 @@
 	
 	return self;
 }
+
+- (id)supplementalTargetForAction:(SEL)action sender:(id)sender {	
+	if ([[self findTextView] respondsToSelector:action])
+		return [self findTextView];
+	return nil;
+}
+
 #pragma mark IBActions
-- (void)performTextFinderAction:(id)sender {
-	[[self findTextView] performTextFinderAction:sender];
-}
-- (IBAction)jumpToLine:(id)sender {
-	if ([[self findTextView] respondsToSelector:@selector(jumpToLine:)])
-		[(id)[self findTextView] jumpToLine:nil];
-}
-- (IBAction)jumpToDefinition:(id)sender {
-	if ([[self findTextView] respondsToSelector:@selector(jumpToDefinition:)])
-		[(id)[self findTextView] jumpToDefinition:nil];
-}
-- (IBAction)jumpInFile:(id)sender {
-	if ([[self findTextView] respondsToSelector:@selector(jumpInFile:)])
-		[(id)[self findTextView] jumpInFile:nil];
+- (id)performSelector:(SEL)aSelector withObject:(id)object {
+	if (aSelector == @selector(performTextFinderAction:) ||
+		(![self respondsToSelector:aSelector] && [[self findTextView] respondsToSelector:aSelector]))
+		return [[self findTextView] performSelector:aSelector withObject:object];
+	return [super performSelector:aSelector withObject:object];
 }
 
 #pragma mark NSUserInterfaceValidations
-- (BOOL)validateUserInterfaceItem:(id<NSValidatedUserInterfaceItem>)anItem {
-	if ([anItem action] == @selector(performTextFinderAction:) ||
-		[anItem action] == @selector(jumpToLine:) ||
-		[anItem action] == @selector(jumpToDefinition:) ||
-		[anItem action] == @selector(jumpInFile:))
-		return [[self findTextView] validateUserInterfaceItem:anItem];
-	return [super validateUserInterfaceItem:anItem];
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
+	if ([menuItem action] == @selector(performTextFinderAction:) ||
+		(![self respondsToSelector:[menuItem action]] && [[self findTextView] respondsToSelector:[menuItem action]]))
+		return [[self findTextView] validateMenuItem:menuItem];
+	return [super validateMenuItem:menuItem];
 }
+
 #pragma mark *** Public Methods ***
 + (RSFindBarFieldEditor *)sharedInstance; {
 	static id sharedInstance;
