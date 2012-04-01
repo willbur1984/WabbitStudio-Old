@@ -26,7 +26,6 @@
 	return nil;
 }
 
-#pragma mark IBActions
 - (id)performSelector:(SEL)aSelector withObject:(id)object {
 	if (aSelector == @selector(performTextFinderAction:) ||
 		(![self respondsToSelector:aSelector] && [[self findTextView] respondsToSelector:aSelector]))
