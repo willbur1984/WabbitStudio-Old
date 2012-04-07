@@ -10,13 +10,14 @@
 #import "NSURL+RSExtensions.h"
 
 @implementation WCTemplateCategory
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 	[_icon release];
 	[_URL release];
 	[_name release];
 	[super dealloc];
 }
-
+#pragma mark *** Public Methods ***
 + (id)templateCategoryWithURL:(NSURL *)url header:(BOOL)header; {
 	return [[[[self class] alloc] initWithURL:url header:header] autorelease];
 }
@@ -37,7 +38,7 @@
 - (id)initWithURL:(NSURL *)url; {
 	return [self initWithURL:url header:NO];
 }
-
+#pragma mark Properties
 @synthesize URL=_URL;
 @synthesize name=_name;
 @synthesize icon=_icon;

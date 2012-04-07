@@ -31,6 +31,7 @@ NSString *const WCDebugControllerCurrentLineNumberDidChangeNotification = @"WCDe
 @end
 
 @implementation WCDebugController
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	_projectDocument = nil;
@@ -41,11 +42,11 @@ NSString *const WCDebugControllerCurrentLineNumberDidChangeNotification = @"WCDe
 	[_currentFile release];
 	[super dealloc];
 }
-
+#pragma mark RSTransferFileWindowControllerDelegate
 - (NSWindow *)windowForTransferFileWindowControllerSheet:(RSTransferFileWindowController *)transferFileWindowController {
 	return [[[self projectDocument] calculatorWindowController] window];
 }
-
+#pragma mark *** Public Methods ***
 - (id)initWithProjectDocument:(WCProjectDocument *)projectDocument; {
 	if (!(self = [super init]))
 		return nil;
@@ -92,7 +93,7 @@ NSString *const WCDebugControllerCurrentLineNumberDidChangeNotification = @"WCDe
 			[[[self projectDocument] buildController] buildAndRun];
 	}];
 }
-
+#pragma mark Properties
 @synthesize projectDocument=_projectDocument;
 @dynamic calculator;
 - (RSCalculator *)calculator {
@@ -128,7 +129,9 @@ NSString *const WCDebugControllerCurrentLineNumberDidChangeNotification = @"WCDe
 - (void)setBuildAfterRomOrSavestateSheetFinishes:(BOOL)buildAfterRomOrSavestateSheetFinishes {
 	_debugFlags.buildAfterRomOrSavestateSheetFinishes = buildAfterRomOrSavestateSheetFinishes;
 }
+#pragma mark *** Private Methods ***
 
+#pragma mark Notifications
 - (void)_buildControllerDidFinishBuilding:(NSNotification *)note {
 	WCBuildController *buildController = [note object];
 	

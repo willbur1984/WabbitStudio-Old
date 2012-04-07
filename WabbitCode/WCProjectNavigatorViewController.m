@@ -284,7 +284,10 @@ static const CGFloat kMainCellHeight = 20.0;
 	}
 }
 - (void)handleReturnPressedForOutlineView:(RSOutlineView *)outlineView {
-	[[self outlineView] sendAction:[[self outlineView] action] to:[[self outlineView] target]];
+	if ([[NSUserDefaults standardUserDefaults] intForKey:WCFilesOpenFilesWithKey] == WCFilesOpenFilesWithDoubleClick)
+		[[self outlineView] sendAction:[[self outlineView] doubleAction] to:[[self outlineView] target]];
+	else
+		[[self outlineView] sendAction:[[self outlineView] action] to:[[self outlineView] target]];
 }
 #pragma mark QLPreviewPanelDataSource
 - (NSInteger)numberOfPreviewItemsInPreviewPanel:(QLPreviewPanel *)panel; {

@@ -17,6 +17,7 @@ NSString *const WCTemplateInfoMainFileNameKey = @"mainFileName";
 NSString *const WCTemplateInfoMainFileEncodingKey = @"mainFileEncoding";
 
 @implementation WCTemplate
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 	[_name release];
 	[_icon release];
@@ -24,7 +25,7 @@ NSString *const WCTemplateInfoMainFileEncodingKey = @"mainFileEncoding";
 	[_info release];
 	[super dealloc];
 }
-
+#pragma mark *** Public Methods ***
 + (id)templateWithURL:(NSURL *)url error:(NSError **)outError; {
 	return [[[[self class] alloc] initWithURL:url error:outError] autorelease];
 }
@@ -53,7 +54,7 @@ NSString *const WCTemplateInfoMainFileEncodingKey = @"mainFileEncoding";
 	
 	return self;
 }
-
+#pragma mark Properties
 @synthesize URL=_URL;
 @synthesize info=_info;
 @synthesize icon=_icon;
