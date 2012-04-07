@@ -25,6 +25,9 @@
 #import "RSDefines.h"
 #import "WCSourceFileDocument.h"
 #import "WCSourceTextStorage.h"
+#import "NSEvent+RSExtensions.h"
+#import "NSUserDefaults+RSExtensions.h"
+#import "WCFilesViewController.h"
 
 @interface WCSearchNavigatorViewController ()
 @property (readwrite,retain,nonatomic) WCSearchContainer *filteredSearchContainer;
@@ -36,6 +39,7 @@
 
 - (void)_removeAllSearchResults;
 - (void)_replaceSearchResultContainers:(NSArray *)searchResultContainers;
+- (void)_openSearchResultsForObjects:(NSArray *)objects;
 @end
 
 @implementation WCSearchNavigatorViewController
@@ -551,35 +555,45 @@ static const CGFloat kReplaceControlsHeight = (19.0+17.0+4.0+4.0);
 		}
 	}
 }
-#pragma mark IBActions
-- (IBAction)_outlineViewDoubleClick:(id)sender; {
-	for (id container in [self selectedObjects]) {
+
+- (void)_openSearchResultsForObjects:(NSArray *)objects; {
+	BOOL isOnlyOptionKeyPressed = [NSEvent isOnlyOptionKeyPressed];
+	
+	for (id container in objects) {
 		id result = [container representedObject];
 		
 		if (![result isKindOfClass:[WCSearchResult class]])
 			continue;
 		
-		WCFile *file = [[container parentNode] representedObject];
-		WCSourceFileSeparateWindowController *windowController = [[self projectDocument] openSeparateEditorForFile:file];
-		WCSourceTextViewController *stvController = [[[[[windowController tabViewController] sourceFileDocumentsToSourceTextViewControllers] objectEnumerator] allObjects] lastObject];
-		
-		[[stvController textView] setSelectedRange:[result range]];
-		[[stvController textView] centerSelectionInVisibleArea:nil];
+		if (isOnlyOptionKeyPressed) {
+			WCFile *file = [[container parentNode] representedObject];
+			WCSourceFileSeparateWindowController *windowController = [[self projectDocument] openSeparateEditorForFile:file];
+			WCSourceTextViewController *stvController = [[[[[windowController tabViewController] sourceFileDocumentsToSourceTextViewControllers] objectEnumerator] allObjects] lastObject];
+			
+			[[stvController textView] setSelectedRange:[result range]];
+			[[stvController textView] centerSelectionInVisibleArea:nil];
+		}
+		else {
+			WCFile *file = [[container parentNode] representedObject];
+			WCSourceTextViewController *stvController = [[self projectDocument] openTabForFile:file tabViewContext:nil];
+			
+			[[stvController textView] setSelectedRange:[result range]];
+			[[stvController textView] centerSelectionInVisibleArea:nil];
+		}
 	}
 }
+#pragma mark IBActions
+- (IBAction)_outlineViewDoubleClick:(id)sender; {
+	if ([[NSUserDefaults standardUserDefaults] intForKey:WCFilesOpenFilesWithKey] != WCFilesOpenFilesWithDoubleClick)
+		return;
+	
+	[self _openSearchResultsForObjects:[self selectedObjects]];
+}
 - (IBAction)_outlineViewSingleClick:(id)sender; {
-	for (id container in [self selectedObjects]) {
-		id result = [container representedObject];
-		
-		if (![result isKindOfClass:[WCSearchResult class]])
-			continue;
-		
-		WCFile *file = [[container parentNode] representedObject];
-		WCSourceTextViewController *stvController = [[self projectDocument] openTabForFile:file tabViewContext:nil];
-		
-		[[stvController textView] setSelectedRange:[result range]];
-		[[stvController textView] centerSelectionInVisibleArea:nil];
-	}
+	if ([[NSUserDefaults standardUserDefaults] intForKey:WCFilesOpenFilesWithKey] != WCFilesOpenFilesWithSingleClick)
+		return;
+	
+	[self _openSearchResultsForObjects:[self selectedObjects]];
 }
 - (IBAction)_searchFieldCancelClick:(id)sender; {
 	[_operationQueue cancelAllOperations];

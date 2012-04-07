@@ -11,6 +11,7 @@
 @interface NSUserDefaults (RSExtensions)
 - (unsigned int)unsignedIntForKey:(NSString *)key;
 - (NSUInteger)unsignedIntegerForKey:(NSString *)key;
+- (int)intForKey:(NSString *)key;
 
 - (void)setUnsignedInteger:(NSUInteger)value forKey:(NSString *)key;
 @end

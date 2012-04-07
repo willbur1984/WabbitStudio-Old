@@ -54,6 +54,10 @@
 #define NSNumberWithInteger(integerForNumber) [NSNumber numberWithInteger:(integerForNumber)]
 #define NSNumberWithUnsignedInteger(unsignedIntegerForNumber) [NSNumber numberWithUnsignedInteger:(unsignedIntegerForNumber)]
 
+#define RSNumberWithBool(boolForNumber) [NSNumber numberWithBool:(boolForNumber)]
+#define RSNumberWithInt(intForNumber) [NSNumber numberWithInt:(intForNumber)]
+#define RSNumberWithInteger(integerForNumber) [NSNumber numberWithInteger:(integerForNumber)]
+
 #ifdef __OBJC__
 #import <Foundation/NSGeometry.h>
 #import <Foundation/NSString.h>

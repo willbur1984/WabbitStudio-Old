@@ -22,11 +22,15 @@
 #import "WCSourceTextView.h"
 #import "WCTabViewController.h"
 #import "RSOutlineView.h"
+#import "NSEvent+RSExtensions.h"
+#import "WCFilesViewController.h"
+#import "NSUserDefaults+RSExtensions.h"
 
 @interface WCIssueNavigatorViewController ()
 @property (readwrite,retain,nonatomic) WCIssueContainer *filteredIssueContainer;
 
 - (void)_updateIssues;
+- (void)_openIssuesForObjects:(NSArray *)objects;
 @end
 
 @implementation WCIssueNavigatorViewController
@@ -184,35 +188,44 @@ static const CGFloat kMainCellHeight = 20.0;
 	
 	[[[[self projectDocument] projectWindowController] navigatorControl] setSelectedItemIdentifier:@"issue"];
 }
-#pragma mark IBActions
-- (IBAction)_outlineViewSingleClick:(id)sender; {
-	for (id container in [self selectedObjects]) {
+- (void)_openIssuesForObjects:(NSArray *)objects; {
+	BOOL isOnlyOptionKeyPressed = [NSEvent isOnlyOptionKeyPressed];
+	
+	for (id container in objects) {
 		id result = [container representedObject];
 		
 		if (![result isKindOfClass:[WCBuildIssue class]])
 			continue;
 		
-		WCFile *file = [[container parentNode] representedObject];
-		WCSourceTextViewController *stvController = [[self projectDocument] openTabForFile:file tabViewContext:nil];
-		
-		[[stvController textView] setSelectedRange:[result range]];
-		[[stvController textView] scrollRangeToVisible:[result range]];
+		if (isOnlyOptionKeyPressed) {
+			WCFile *file = [[container parentNode] representedObject];
+			WCSourceFileSeparateWindowController *windowController = [[self projectDocument] openSeparateEditorForFile:file];
+			WCSourceTextViewController *stvController = [[[[[windowController tabViewController] sourceFileDocumentsToSourceTextViewControllers] objectEnumerator] allObjects] lastObject];
+			
+			[[stvController textView] setSelectedRange:[result range]];
+			[[stvController textView] scrollRangeToVisible:[result range]];
+		}
+		else {
+			WCFile *file = [[container parentNode] representedObject];
+			WCSourceTextViewController *stvController = [[self projectDocument] openTabForFile:file tabViewContext:nil];
+			
+			[[stvController textView] setSelectedRange:[result range]];
+			[[stvController textView] scrollRangeToVisible:[result range]];
+		}
 	}
 }
+#pragma mark IBActions
+- (IBAction)_outlineViewSingleClick:(id)sender; {
+	if ([[NSUserDefaults standardUserDefaults] intForKey:WCFilesOpenFilesWithKey] != WCFilesOpenFilesWithSingleClick)
+		return;
+	
+	[self _openIssuesForObjects:[self selectedObjects]];
+}
 - (IBAction)_outlineViewDoubleClick:(id)sender; {
-	for (id container in [self selectedObjects]) {
-		id result = [container representedObject];
-		
-		if (![result isKindOfClass:[WCBuildIssue class]])
-			continue;
-		
-		WCFile *file = [[container parentNode] representedObject];
-		WCSourceFileSeparateWindowController *windowController = [[self projectDocument] openSeparateEditorForFile:file];
-		WCSourceTextViewController *stvController = [[[[[windowController tabViewController] sourceFileDocumentsToSourceTextViewControllers] objectEnumerator] allObjects] lastObject];
-		
-		[[stvController textView] setSelectedRange:[result range]];
-		[[stvController textView] scrollRangeToVisible:[result range]];
-	}
+	if ([[NSUserDefaults standardUserDefaults] intForKey:WCFilesOpenFilesWithKey] != WCFilesOpenFilesWithDoubleClick)
+		return;
+	
+	[self _openIssuesForObjects:[self selectedObjects]];
 }
 
 #pragma mark Notifications

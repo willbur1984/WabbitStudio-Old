@@ -21,9 +21,13 @@
 #import "WCProjectContainer.h"
 #import "WCSourceScanner.h"
 #import "WCSourceFileDocument.h"
+#import "NSEvent+RSExtensions.h"
+#import "WCFilesViewController.h"
+#import "NSUserDefaults+RSExtensions.h"
 
 @interface WCSymbolNavigatorViewController ()
 - (void)_updateSymbols;
+- (void)_openSymbolsForObjects:(NSArray *)objects;
 @end
 
 @implementation WCSymbolNavigatorViewController
@@ -186,35 +190,44 @@ static const CGFloat kMainCellHeight = 20.0;
 		});
 	});
 }
-#pragma mark IBActions
-- (IBAction)_outlineViewDoubleClick:(id)sender; {
-	for (id container in [self selectedObjects]) {
+- (void)_openSymbolsForObjects:(NSArray *)objects; {
+	BOOL isOnlyOptionKeyPressed = [NSEvent isOnlyOptionKeyPressed];
+	
+	for (id container in objects) {
 		id result = [container representedObject];
 		
 		if (![result isKindOfClass:[WCSourceSymbol class]])
 			continue;
 		
-		WCFile *file = [[container parentNode] representedObject];
-		WCSourceFileSeparateWindowController *windowController = [[self projectDocument] openSeparateEditorForFile:file];
-		WCSourceTextViewController *stvController = [[[[[windowController tabViewController] sourceFileDocumentsToSourceTextViewControllers] objectEnumerator] allObjects] lastObject];
-		
-		[[stvController textView] setSelectedRange:[result range]];
-		[[stvController textView] centerSelectionInVisibleArea:nil];
+		if (isOnlyOptionKeyPressed) {
+			WCFile *file = [[container parentNode] representedObject];
+			WCSourceFileSeparateWindowController *windowController = [[self projectDocument] openSeparateEditorForFile:file];
+			WCSourceTextViewController *stvController = [[[[[windowController tabViewController] sourceFileDocumentsToSourceTextViewControllers] objectEnumerator] allObjects] lastObject];
+			
+			[[stvController textView] setSelectedRange:[result range]];
+			[[stvController textView] centerSelectionInVisibleArea:nil];
+		}
+		else {
+			WCFile *file = [[container parentNode] representedObject];
+			WCSourceTextViewController *stvController = [[self projectDocument] openTabForFile:file tabViewContext:nil];
+			
+			[[stvController textView] setSelectedRange:[result range]];
+			[[stvController textView] centerSelectionInVisibleArea:nil];
+		}
 	}
 }
+#pragma mark IBActions
+- (IBAction)_outlineViewDoubleClick:(id)sender; {
+	if ([[NSUserDefaults standardUserDefaults] intForKey:WCFilesOpenFilesWithKey] != WCFilesOpenFilesWithDoubleClick)
+		return;
+	
+	[self _openSymbolsForObjects:[self selectedObjects]];
+}
 - (IBAction)_outlineViewSingleClick:(id)sender; {
-	for (id container in [self selectedObjects]) {
-		id result = [container representedObject];
-		
-		if (![result isKindOfClass:[WCSourceSymbol class]])
-			continue;
-		
-		WCFile *file = [[container parentNode] representedObject];
-		WCSourceTextViewController *stvController = [[self projectDocument] openTabForFile:file tabViewContext:nil];
-		
-		[[stvController textView] setSelectedRange:[result range]];
-		[[stvController textView] centerSelectionInVisibleArea:nil];
-	}
+	if ([[NSUserDefaults standardUserDefaults] intForKey:WCFilesOpenFilesWithKey] != WCFilesOpenFilesWithSingleClick)
+		return;
+	
+	[self _openSymbolsForObjects:[self selectedObjects]];
 }
 
 #pragma mark Notifications

@@ -27,6 +27,9 @@
 #import "WCSourceTextViewController.h"
 #import "WCSourceTextView.h"
 #import "WCInterfacePerformer.h"
+#import "WCFilesViewController.h"
+#import "NSEvent+RSExtensions.h"
+#import "NSUserDefaults+RSExtensions.h"
 
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
@@ -66,6 +69,7 @@ static NSString *const WCProjectNavigatorSelectedItemsKey = @"selectedItems";
 @property (readwrite,copy,nonatomic) NSSet *projectFilePaths;
 
 - (BOOL)_deleteRequiresUserConfirmation:(BOOL *)projectContainerIsSelected;
+- (void)_openFilesForObjects:(NSArray *)objects;
 @end
 
 @implementation WCProjectNavigatorViewController
@@ -782,17 +786,32 @@ static const NSInteger WCProjectNavigatorFileAlreadyExistsInProjectErrorCode = 1
 	
 	return deleteRequiresConfirmation;
 }
-#pragma mark IBActions
-- (IBAction)_outlineViewDoubleClick:(id)sender; {
-	for (WCFileContainer *selectedNode in [self selectedObjects]) {
-		if ([[selectedNode representedObject] isSourceFile])
-			[[[[self projectContainer] project] document] openSeparateEditorForFile:[selectedNode representedObject]];
+- (void)_openFilesForObjects:(NSArray *)objects; {
+	BOOL isOnlyOptionKeyPressed = [NSEvent isOnlyOptionKeyPressed];
+	
+	for (id container in objects) {
+		id result = [container representedObject];
+		
+		if (![result isSourceFile])
+			continue;
+		
+		if (isOnlyOptionKeyPressed)
+			[[self projectDocument] openSeparateEditorForFile:result];
+		else
+			[[self projectDocument] openTabForFile:result tabViewContext:nil];
 	}
 }
+#pragma mark IBActions
+- (IBAction)_outlineViewDoubleClick:(id)sender; {
+	if ([[NSUserDefaults standardUserDefaults] intForKey:WCFilesOpenFilesWithKey] != WCFilesOpenFilesWithDoubleClick)
+		return;
+	
+	[self _openFilesForObjects:[self selectedObjects]];
+}
 - (IBAction)_outlineViewSingleClick:(id)sender; {
-	for (WCFileContainer *selectedNode in [self selectedObjects]) {
-		if ([[selectedNode representedObject] isSourceFile])
-			[[[[self projectContainer] project] document] openTabForFile:[selectedNode representedObject] tabViewContext:nil];
-	}
+	if ([[NSUserDefaults standardUserDefaults] intForKey:WCFilesOpenFilesWithKey] != WCFilesOpenFilesWithSingleClick)
+		return;
+	
+	[self _openFilesForObjects:[self selectedObjects]];
 }
 @end

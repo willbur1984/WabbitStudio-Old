@@ -285,6 +285,8 @@
 		0746EE5A14F1726B00354643 /* WCEditBreakpointViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0746EE5914F1726B00354643 /* WCEditBreakpointViewController.m */; };
 		0746EE5E14F1729000354643 /* WCEditBreakpointView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0746EE5C14F1729000354643 /* WCEditBreakpointView.xib */; };
 		0746EE6214F17C1200354643 /* RSHexadecimalFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0746EE6114F177E800354643 /* RSHexadecimalFormatter.m */; };
+		0746F3891530DDCD00156F20 /* WCFilesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0746F3881530DDCD00156F20 /* WCFilesViewController.m */; };
+		0746F38D1530E66600156F20 /* WCFilesView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0746F38B1530E66600156F20 /* WCFilesView.xib */; };
 		074B7484150D23BF0096548E /* RSRegistersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 074B7483150D23BF0096548E /* RSRegistersViewController.m */; };
 		074B7485150D23BF0096548E /* RSRegistersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 074B7483150D23BF0096548E /* RSRegistersViewController.m */; };
 		074B7489150D23D10096548E /* RSRegistersView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 074B7487150D23D10096548E /* RSRegistersView.xib */; };
@@ -1094,6 +1096,9 @@
 		0746EE5D14F1729000354643 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCEditBreakpointView.xib; sourceTree = "<group>"; };
 		0746EE6014F177E800354643 /* RSHexadecimalFormatter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSHexadecimalFormatter.h; sourceTree = "<group>"; };
 		0746EE6114F177E800354643 /* RSHexadecimalFormatter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RSHexadecimalFormatter.m; sourceTree = "<group>"; };
+		0746F3871530DDCD00156F20 /* WCFilesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCFilesViewController.h; sourceTree = "<group>"; };
+		0746F3881530DDCD00156F20 /* WCFilesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCFilesViewController.m; sourceTree = "<group>"; };
+		0746F38C1530E66600156F20 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCFilesView.xib; sourceTree = "<group>"; };
 		074B7482150D23BF0096548E /* RSRegistersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSRegistersViewController.h; sourceTree = "<group>"; };
 		074B7483150D23BF0096548E /* RSRegistersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSRegistersViewController.m; sourceTree = "<group>"; };
 		074B7488150D23D10096548E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = RSRegistersView.xib; sourceTree = "<group>"; };
@@ -1653,6 +1658,7 @@
 				075D2F8314F21BED007F8951 /* WCOpenPanelAccessoryView.xib */,
 				078CF0311501480F001E13E3 /* WCNewFileWindow.xib */,
 				070009441512C6AB00FB7696 /* WCCalculatorWindow.xib */,
+				0746F38B1530E66600156F20 /* WCFilesView.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -2632,6 +2638,8 @@
 				07EB8E3414B64D2500F8A8C6 /* WCKeyboardViewController.m */,
 				072BDC2814CE622B00F3F555 /* WCAlertsViewController.h */,
 				072BDC2914CE622B00F3F555 /* WCAlertsViewController.m */,
+				0746F3871530DDCD00156F20 /* WCFilesViewController.h */,
+				0746F3881530DDCD00156F20 /* WCFilesViewController.m */,
 			);
 			name = Advanced;
 			sourceTree = "<group>";
@@ -3314,6 +3322,7 @@
 				07516852150FFD21006AAF27 /* RSStackView.xib in Resources */,
 				07D252511511077200D5830A /* RSFlashMemoryView.xib in Resources */,
 				070009461512C6AB00FB7696 /* WCCalculatorWindow.xib in Resources */,
+				0746F38D1530E66600156F20 /* WCFilesView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3735,6 +3744,7 @@
 				07D252481511027700D5830A /* RSStackTableView.m in Sources */,
 				07D2524D1511067A00D5830A /* RSFlashMemoryViewController.m in Sources */,
 				070009421512C4E000FB7696 /* WCCalculatorWindowController.m in Sources */,
+				0746F3891530DDCD00156F20 /* WCFilesViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4160,6 +4170,14 @@
 				0746EE5D14F1729000354643 /* en */,
 			);
 			name = WCEditBreakpointView.xib;
+			sourceTree = "<group>";
+		};
+		0746F38B1530E66600156F20 /* WCFilesView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0746F38C1530E66600156F20 /* en */,
+			);
+			name = WCFilesView.xib;
 			sourceTree = "<group>";
 		};
 		074B7487150D23D10096548E /* RSRegistersView.xib */ = {

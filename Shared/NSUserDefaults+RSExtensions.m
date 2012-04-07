@@ -15,6 +15,9 @@
 - (NSUInteger)unsignedIntegerForKey:(NSString *)key; {
 	return [[self objectForKey:key] unsignedIntegerValue];
 }
+- (int)intForKey:(NSString *)key; {
+	return [[self objectForKey:key] intValue];
+}
 
 - (void)setUnsignedInteger:(NSUInteger)value forKey:(NSString *)key; {
 	[self setObject:[NSNumber numberWithUnsignedInteger:value] forKey:key];
