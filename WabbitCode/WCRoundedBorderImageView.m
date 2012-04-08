@@ -9,5 +9,6 @@
 #import "WCRoundedBorderImageView.h"
 
 @implementation WCRoundedBorderImageView
+#pragma mark *** Public Methods ***
 @synthesize collectionViewItem=_collectionViewItem;
 @end

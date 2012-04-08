@@ -10,12 +10,15 @@
 #import "WCFileBreakpoint.h"
 
 @implementation WCBreakpointNavigatorFileBreakpointOutlineCellView
+#pragma mark *** Public Methods ***
+
+#pragma mark IBActions
 - (IBAction)breakpointButtonClicked:(id)sender; {
 	WCFileBreakpoint *fileBreakpoint = [[self objectValue] representedObject];
 	
 	[fileBreakpoint setActive:(![fileBreakpoint isActive])];
 }
-
+#pragma mark Properties
 @synthesize breakpointButton=_breakpointButton;
 
 @end

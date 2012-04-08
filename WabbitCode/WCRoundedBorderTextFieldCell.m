@@ -11,7 +11,7 @@
 #import "WCRoundedBorderTextField.h"
 
 @implementation WCRoundedBorderTextFieldCell
-
+#pragma mark *** Subclass Overrides ***
 static const CGFloat kRoundedBorderLeftRightPadding = 8.0;
 
 - (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView {

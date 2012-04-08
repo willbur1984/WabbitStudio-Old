@@ -23,6 +23,7 @@
 @end
 
 @implementation WCEditBuildTargetWindowController
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
@@ -66,7 +67,6 @@
 	}
 	return NO;
 }
-#pragma mark NSTableViewDelegate
 
 #pragma mark RSTableViewDelegate
 - (void)handleDeletePressedForTableView:(RSTableView *)tableView {
@@ -81,7 +81,7 @@
 	else if (tableView == (RSTableView *)[self includesTableView])
 		[self newBuildInclude:nil];
 }
-
+#pragma mark *** Public Methods ***
 + (id)editBuildTargetWindowControllerWithBuildTarget:(WCBuildTarget *)buildTarget; {
 	return [[[[self class] alloc] initWithBuildTarget:buildTarget] autorelease];
 }
@@ -99,7 +99,7 @@
 	
 	[[NSApplication sharedApplication] beginSheet:[self window] modalForWindow:[[[self buildTarget] projectDocument] windowForSheet] modalDelegate:self didEndSelector:@selector(_sheetDidEnd:code:context:) contextInfo:NULL];
 }
-
+#pragma mark IBActions
 - (IBAction)ok:(id)sender; {
 	[[NSApplication sharedApplication] endSheet:[self window] returnCode:NSCancelButton];
 }
@@ -223,7 +223,7 @@ static NSString *const kPathColumnIdentifier = @"path";
 		}
 	}];
 }
-
+#pragma mark Properties
 @synthesize nameTextField=_nameTextField;
 @synthesize definesArrayController=_definesArrayController;
 @synthesize definesTableView=_definesTableView;
@@ -239,7 +239,9 @@ static NSString *const kPathColumnIdentifier = @"path";
 		_chooseInputFileAccessoryViewController = [[WCEditBuildTargetChooseInputFileAccessoryViewController alloc] init];
 	return _chooseInputFileAccessoryViewController;
 }
+#pragma mark *** Private Methods ***
 
+#pragma mark Callbacks
 - (void)_sheetDidEnd:(NSWindow *)sheet code:(NSInteger)code context:(void *)context {
 	[self autorelease];
 	[sheet orderOut:nil];
@@ -249,7 +251,7 @@ static NSString *const kPathColumnIdentifier = @"path";
 	
 	[[[self buildTarget] projectDocument] manageBuildTargets:nil];
 }
-
+#pragma mark IBActions
 - (IBAction)_definesTableViewDoubleClick:(id)sender; {
 	NSInteger clickedRow = [[self definesTableView] clickedRow];
 	NSInteger clickedColumn = [[self definesTableView] clickedColumn];

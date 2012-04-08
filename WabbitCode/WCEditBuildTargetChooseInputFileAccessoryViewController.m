@@ -9,7 +9,7 @@
 #import "WCEditBuildTargetChooseInputFileAccessoryViewController.h"
 
 @implementation WCEditBuildTargetChooseInputFileAccessoryViewController
-
+#pragma mark *** Subclass Overrides ***
 - (id)init {
 	if (!(self = [super initWithNibName:[self nibName] bundle:nil]))
 		return nil;

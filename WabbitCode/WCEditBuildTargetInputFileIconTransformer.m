@@ -10,6 +10,7 @@
 #import "RSDefines.h"
 
 @implementation WCEditBuildTargetInputFileIconTransformer
+#pragma mark *** Subclass Overrides ***
 + (Class)transformedValueClass {
 	return [NSImage class];
 }

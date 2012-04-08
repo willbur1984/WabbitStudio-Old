@@ -9,6 +9,7 @@
 #import "WCEditBuildTargetDefineValuesFormatter.h"
 
 @implementation WCEditBuildTargetDefineValuesFormatter
+#pragma mark *** Subclass Overrides ***
 - (NSString *)stringForObjectValue:(id)obj {
 	if ([obj isKindOfClass:[NSString class]])
 		return obj;

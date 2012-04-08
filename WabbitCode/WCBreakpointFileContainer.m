@@ -10,10 +10,11 @@
 #import "WCProject.h"
 
 @implementation WCBreakpointFileContainer
+#pragma mark *** Subclass Overrides ***
 - (BOOL)isLeafNode {
 	return NO;
 }
-
+#pragma mark *** Public Methods ***
 + (id)breakpointFileContainerWithFile:(WCFile *)file; {
 	return [[(WCBreakpointFileContainer *)[[self class] alloc] initWithFile:file] autorelease];
 }
@@ -23,7 +24,7 @@
 	
 	return self;
 }
-
+#pragma mark Properties
 @dynamic statusString;
 - (NSString *)statusString {
 	if ([[self representedObject] isKindOfClass:[WCProject class]]) {

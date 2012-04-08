@@ -25,6 +25,7 @@ static NSString *const WCFileBreakpointFileUUIDKey = @"fileUUID";
 @end
 
 @implementation WCFileBreakpoint
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	_projectDocument = nil;
@@ -34,6 +35,20 @@ static NSString *const WCFileBreakpointFileUUIDKey = @"fileUUID";
 	[super dealloc];
 }
 
+- (NSImage *)icon {
+	return [[self class] breakpointIconWithSize:NSMakeSize(24.0, 12.0) type:[self type] active:[self isActive] enabled:[[[self projectDocument] breakpointManager] breakpointsEnabled]];
+}
+- (NSString *)fileNameAndLineNumber {
+	WCSourceFileDocument *sfDocument = [[[self projectDocument] filesToSourceFileDocuments] objectForKey:[self file]];
+	NSString *string = [[sfDocument textStorage] string];
+	
+	return [NSString stringWithFormat:NSLocalizedString(@"%@ - line %lu", @"file breakpoint file name and line number format string"),[[self file] fileName],[string lineNumberForRange:[self range]]+1];
+}
++ (NSSet *)keyPathsForValuesAffectingFileNameAndLineNumber {
+	return [NSSet setWithObjects:@"range", nil];
+}
+
+#pragma mark NSCopying
 - (id)copyWithZone:(NSZone *)zone {
 	WCFileBreakpoint *copy = [super copyWithZone:zone];
 	
@@ -44,7 +59,7 @@ static NSString *const WCFileBreakpointFileUUIDKey = @"fileUUID";
 	
 	return copy;
 }
-
+#pragma mark NSMutableCopying
 - (id)mutableCopyWithZone:(NSZone *)zone {
 	WCFileBreakpoint *copy = [super mutableCopyWithZone:zone];
 	
@@ -55,7 +70,7 @@ static NSString *const WCFileBreakpointFileUUIDKey = @"fileUUID";
 	
 	return copy;
 }
-
+#pragma mark RSPlistArchiving
 - (NSDictionary *)plistRepresentation {
 	NSMutableDictionary *retval = [NSMutableDictionary dictionaryWithDictionary:[super plistRepresentation]];
 	
@@ -74,20 +89,7 @@ static NSString *const WCFileBreakpointFileUUIDKey = @"fileUUID";
 	
 	return self;
 }
-
-- (NSImage *)icon {
-	return [[self class] breakpointIconWithSize:NSMakeSize(24.0, 12.0) type:[self type] active:[self isActive] enabled:[[[self projectDocument] breakpointManager] breakpointsEnabled]];
-}
-- (NSString *)fileNameAndLineNumber {
-	WCSourceFileDocument *sfDocument = [[[self projectDocument] filesToSourceFileDocuments] objectForKey:[self file]];
-	NSString *string = [[sfDocument textStorage] string];
-	
-	return [NSString stringWithFormat:NSLocalizedString(@"%@ - line %lu", @"file breakpoint file name and line number format string"),[[self file] fileName],[string lineNumberForRange:[self range]]+1];
-}
-+ (NSSet *)keyPathsForValuesAffectingFileNameAndLineNumber {
-	return [NSSet setWithObjects:@"range", nil];
-}
-
+#pragma mark *** Public Methods ***
 + (id)fileBreakpointWithRange:(NSRange)range file:(WCFile *)file projectDocument:(WCProjectDocument *)projectDocument; {
 	return [[[[self class] alloc] initWithRange:range file:file projectDocument:projectDocument] autorelease];
 }
@@ -111,7 +113,7 @@ static NSString *const WCFileBreakpointFileUUIDKey = @"fileUUID";
 	
 	return self;
 }
-
+#pragma mark Properties
 @synthesize projectDocument=_projectDocument;
 - (void)setProjectDocument:(WCProjectDocument *)projectDocument {
 	_projectDocument = projectDocument;
@@ -142,7 +144,9 @@ static NSString *const WCFileBreakpointFileUUIDKey = @"fileUUID";
 	[self setName:[NSString stringWithFormat:NSLocalizedString(@"%@ - line %lu", @"file breakpoint name format string"),[[self symbol] name],[string lineNumberForRange:range]+1]];
 }
 @synthesize symbol=_symbol;
+#pragma mark *** Private Methods ***
 
+#pragma mark Notifications
 - (void)_breakpointManagerDidChangeBreakpointsEnabled:(NSNotification *)note {
 	[self willChangeValueForKey:@"icon"];
 	[self didChangeValueForKey:@"icon"];

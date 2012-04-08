@@ -9,6 +9,7 @@
 #import "WCEditBuildTargetDefinesTableView.h"
 
 @implementation WCEditBuildTargetDefinesTableView
+#pragma mark *** Subclass Overrides ***
 - (NSDragOperation)draggingSession:(NSDraggingSession *)session sourceOperationMaskForDraggingContext:(NSDraggingContext)context {
 	if (context == NSDraggingContextWithinApplication)
 		return NSDragOperationMove;

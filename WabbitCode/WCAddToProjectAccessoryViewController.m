@@ -12,7 +12,7 @@ NSString *const WCAddToProjectDestinationCopyItemsKey = @"addToProjectDestinatio
 NSString *const WCAddToProjectFoldersCreationKey = @"addToProjectFoldersCreation";
 
 @implementation WCAddToProjectAccessoryViewController
-
+#pragma mark *** Subclass Overrides ***
 - (id)init {
 	if (!(self = [super initWithNibName:[self nibName] bundle:nil]))
 		return nil;
@@ -24,7 +24,7 @@ NSString *const WCAddToProjectFoldersCreationKey = @"addToProjectFoldersCreation
 - (NSString *)nibName {
 	return @"WCAddToProjectAccessoryView";
 }
-
+#pragma mark RSUserDefaultsProvider
 + (NSDictionary *)userDefaults {
 	return [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],WCAddToProjectDestinationCopyItemsKey,[NSNumber numberWithUnsignedInt:WCAddToProjectFoldersCreateGroups],WCAddToProjectFoldersCreationKey, nil];
 }

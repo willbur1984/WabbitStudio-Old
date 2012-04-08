@@ -10,7 +10,7 @@
 #import "WCTemplateCategory.h"
 
 @implementation WCTemplateCategoryRowView
-
+#pragma mark *** Subclass Overrides ***
 - (void)drawBackgroundInRect:(NSRect)dirtyRect {
 	[super drawBackgroundInRect:dirtyRect];
 	
@@ -31,7 +31,9 @@
 		NSRectFill(NSMakeRect(NSMinX(dirtyRect), NSMaxY(dirtyRect)-1.0, NSWidth(dirtyRect), 1.0));
 	}
 }
+#pragma mark *** Public Methods ***
 
+#pragma mark Properties
 @synthesize tableView=_tableView;
 
 @end

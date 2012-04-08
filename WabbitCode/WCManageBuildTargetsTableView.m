@@ -9,6 +9,7 @@
 #import "WCManageBuildTargetsTableView.h"
 
 @implementation WCManageBuildTargetsTableView
+#pragma mark *** Subclass Overrides ***
 + (NSMenu *)defaultMenu {
 	static NSMenu *retval;
 	static dispatch_once_t onceToken;

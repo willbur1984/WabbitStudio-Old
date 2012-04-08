@@ -16,12 +16,12 @@ static NSString *const WCBreakpointPageKey = @"page";
 static NSString *const WCBreakpointActiveKey = @"active";
 
 @implementation WCBreakpoint
-
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 	[_name release];
 	[super dealloc];
 }
-
+#pragma mark NSCopying
 - (id)copyWithZone:(NSZone *)zone {
 	WCBreakpoint *copy = [[WCBreakpoint alloc] init];
 	
@@ -33,7 +33,7 @@ static NSString *const WCBreakpointActiveKey = @"active";
 	
 	return copy;
 }
-
+#pragma mark NSMutableCopying
 - (id)mutableCopyWithZone:(NSZone *)zone {
 	WCBreakpoint *copy = [[WCBreakpoint alloc] init];
 	
@@ -45,7 +45,7 @@ static NSString *const WCBreakpointActiveKey = @"active";
 	
 	return copy;
 }
-
+#pragma mark RSPlistArchiving
 - (NSDictionary *)plistRepresentation {
 	NSMutableDictionary *retval = [NSMutableDictionary dictionaryWithDictionary:[super plistRepresentation]];
 	
@@ -68,7 +68,7 @@ static NSString *const WCBreakpointActiveKey = @"active";
 	
 	return self;
 }
-
+#pragma mark *** Public Methods ***
 + (id)breakpointOfType:(WCBreakpointType)type address:(uint16_t)address page:(uint8_t)page; {
 	return [[[[self class] alloc] initWithType:type address:address page:page] autorelease];
 }
@@ -174,7 +174,7 @@ static NSString *const WCBreakpointActiveKey = @"active";
 	
 	return retval;
 }
-
+#pragma mark Properties
 @synthesize type=_type;
 @synthesize address=_address;
 @synthesize page=_page;

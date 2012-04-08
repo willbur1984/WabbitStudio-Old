@@ -37,6 +37,8 @@
 		NSRectFill(NSMakeRect(NSMinX([self bounds]), NSMaxY([self bounds])-1.0, NSWidth([self bounds]), 1.0));
 	}
 }
+#pragma mark *** Public Methods ***
 
+#pragma mark Properties
 @synthesize outlineView=_outlineView;
 @end

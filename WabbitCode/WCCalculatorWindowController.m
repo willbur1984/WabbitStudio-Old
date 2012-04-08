@@ -19,7 +19,7 @@
 @end
 
 @implementation WCCalculatorWindowController
-
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
@@ -109,7 +109,7 @@
 - (NSString *)windowTitleForDocumentDisplayName:(NSString *)displayName {
 	return [NSString stringWithFormat:NSLocalizedString(@"%@ - Run", @"calculator window title format string"),displayName];
 }
-
+#pragma mark NSWindowDelegate
 - (BOOL)windowShouldClose:(id)sender {
 	NSString *message = NSLocalizedString(@"End Debug Session?", @"End Debug Session");
 	NSString *informative = NSLocalizedString(@"Do you want to end the current debug session?", @"Do you want to end the current debug session?");
@@ -126,7 +126,7 @@
 	
 	[[RSLCDViewManager sharedManager] removeLCDView:[self LCDView]];
 }
-
+#pragma mark *** Public Methods ***
 - (id)initWithCalculator:(RSCalculator *)calculator; {
 	if (!(self = [super initWithWindowNibName:[self windowNibName]]))
 		return nil;
@@ -136,11 +136,13 @@
 	
 	return self;
 }
-
+#pragma mark Properties
 @synthesize calculator=_calculator;
 @synthesize LCDView=_LCDView;
 @synthesize statusString=_statusString;
+#pragma mark *** Private Methods ***
 
+#pragma mark Callbacks
 - (void)_FPSTimerCallback:(NSTimer *)timer {
 	RSCalculator *calculator = [self calculator];
 	

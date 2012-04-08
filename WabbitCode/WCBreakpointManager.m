@@ -28,6 +28,7 @@ NSString *const WCBreakpointManagerDidChangeBreakpointsEnabledNotification = @"W
 @end
 
 @implementation WCBreakpointManager
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	_projectDocument = nil;
@@ -36,7 +37,7 @@ NSString *const WCBreakpointManagerDidChangeBreakpointsEnabledNotification = @"W
 	[_filesWithFileBreakpointsSortedByName release];
 	[super dealloc];
 }
-
+#pragma mark NSKeyValueObserving
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if (context == self && [keyPath isEqualToString:@"active"]) {
 		[[NSNotificationCenter defaultCenter] postNotificationName:WCBreakpointManagerDidChangeBreakpointActiveNotification object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:object,WCBreakpointManagerDidChangeBreakpointActiveChangedBreakpointUserInfoKey, nil]];
@@ -44,7 +45,7 @@ NSString *const WCBreakpointManagerDidChangeBreakpointsEnabledNotification = @"W
 	else
 		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
-
+#pragma mark *** Public Methods ***
 - (id)initWithProjectDocument:(WCProjectDocument *)projectDocument; {
 	if (!(self = [super init]))
 		return nil;
@@ -114,7 +115,7 @@ NSString *const WCBreakpointManagerDidChangeBreakpointsEnabledNotification = @"W
 	for (WCFileBreakpoint *fileBreakpoint in [self fileBreakpoints])
 		[fileBreakpoint removeObserver:self forKeyPath:@"active" context:self];
 }
-
+#pragma mark Properties
 @synthesize projectDocument=_projectDocument;
 @synthesize filesToFileBreakpointsSortedByLocation=_filesToFileBreakpointsSortedByLocation;
 @synthesize filesWithFileBreakpointsSortedByName=_filesWithFileBreakpointsSortedByName;
@@ -132,7 +133,9 @@ NSString *const WCBreakpointManagerDidChangeBreakpointsEnabledNotification = @"W
 - (NSArray *)allFileBreakpoints {
 	return [_fileBreakpoints allObjects];
 }
+#pragma mark *** Private Methods ***
 
+#pragma mark Notifications
 - (void)_textStorageDidProcessEditing:(NSNotification *)note {
 	NSTextStorage *textStorage = [note object];
 	

@@ -12,6 +12,7 @@
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
 @implementation WCTabViewWindow
+#pragma mark *** Subclass Overrides ***
 - (void)performClose:(id)sender {
 	NSTabViewItem *selectedTabViewItem = [[[[self tabViewController] tabBarControl] tabView] selectedTabViewItem];
 	
@@ -28,7 +29,9 @@
 	else
 		[super performClose:sender];
 }
+#pragma mark *** Public Methods ***
 
+#pragma mark Properties
 @synthesize tabViewController=_tabViewController;
 
 @end

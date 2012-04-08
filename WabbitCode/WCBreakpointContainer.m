@@ -18,11 +18,11 @@
 #import "NSString+RSExtensions.h"
 
 @implementation WCBreakpointContainer
-
+#pragma mark *** Subclass Overrides ***
 - (BOOL)isLeafNode {
 	return YES;
 }
-
+#pragma mark *** Public Methods ***
 + (id)breakpointContainerWithFileBreakpoint:(WCFileBreakpoint *)fileBreakpoint; {
 	return [[[[self class] alloc] initWithFileBreakpoint:fileBreakpoint] autorelease];
 }

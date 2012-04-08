@@ -21,11 +21,11 @@ NSString *const WCFileTemplateIncludeFileNamesValueKey = @"WCFileTemplateInclude
 NSString *const WCFileTemplateAllowedFileTypesInfoKey = @"allowedFileTypes";
 
 @implementation WCFileTemplate
-
+#pragma mark *** Public Methods ***
 + (id)fileTemplateWithURL:(NSURL *)url error:(NSError **)outError; {
 	return [self templateWithURL:url error:outError];
 }
-
+#pragma mark Properties
 @dynamic allowedFileTypes;
 - (NSArray *)allowedFileTypes {
 	return [[self info] objectForKey:WCFileTemplateAllowedFileTypesInfoKey];

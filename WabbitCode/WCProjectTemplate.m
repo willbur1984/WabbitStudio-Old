@@ -12,10 +12,11 @@ NSString *const WCProjectTemplateInfoIncludeFileNamesKey = @"includeFileNames";
 NSString *const WCProjectTemplateInfoOutputTypeKey = @"outputType";
 
 @implementation WCProjectTemplate
+#pragma mark *** Public Methods ***
 + (id)projectTemplateWithURL:(NSURL *)url; {
 	return [self templateWithURL:url error:NULL];
 }
-
+#pragma mark Properties
 @dynamic includeFiles;
 - (NSArray *)includeFiles {
 	return [[self info] objectForKey:WCProjectTemplateInfoIncludeFileNamesKey];

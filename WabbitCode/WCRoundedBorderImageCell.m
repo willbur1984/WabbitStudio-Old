@@ -12,6 +12,7 @@
 #import "NSBezierPath+StrokeExtensions.h"
 
 @implementation WCRoundedBorderImageCell
+#pragma mark *** Subclass Overrides ***
 - (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView {
 	WCRoundedBorderImageView *imageView = (WCRoundedBorderImageView *)controlView;
 	

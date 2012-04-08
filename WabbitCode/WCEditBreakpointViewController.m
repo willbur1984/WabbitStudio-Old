@@ -15,6 +15,7 @@
 @end
 
 @implementation WCEditBreakpointViewController
+#pragma mark *** Subclass Overrides ***
 - (void)dealloc {
 #ifdef DEBUG
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
@@ -39,7 +40,7 @@
 	[_popover setContentViewController:nil];
 	[self setBreakpoint:nil];
 }
-
+#pragma mark *** Public Methods ***
 + (id)editBreakpointViewControllerWithBreakpoint:(WCBreakpoint *)breakpoint; {
 	return [[[[self class] alloc] initWithBreakpoint:breakpoint] autorelease];
 }
@@ -63,11 +64,11 @@
 - (void)hideEditBreakpointView; {
 	[_popover performClose:nil];
 }
-
+#pragma mark IBActions
 - (IBAction)hideEditBreakpointView:(id)sender; {
 	[self hideEditBreakpointView];
 }
-
+#pragma mark Properties
 @synthesize formatter=_formatter;
 
 @synthesize breakpoint=_breakpoint;

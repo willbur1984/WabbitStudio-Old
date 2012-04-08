@@ -13,7 +13,7 @@
 @end
 
 @implementation WCTemplateCollectionViewItem
-
+#pragma mark *** Subclass Overrides ***
 - (NSString *)nibName {
 	return @"WCTemplateCollectionView";
 }
