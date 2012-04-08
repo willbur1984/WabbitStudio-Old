@@ -16,6 +16,9 @@
 #import "WCProjectWindowController.h"
 #import "RSNavigatorControl.h"
 #import "WCProjectNavigatorViewController.h"
+#import "WCReallyAdvancedViewController.h"
+#import "WCTabViewController.h"
+#import "NSString+WCExtensions.h"
 
 @interface WCOpenQuicklyWindowController ()
 @property (readwrite,copy,nonatomic) NSArray *items;
@@ -101,6 +104,23 @@
 	[self setDataSource:dataSource];
 	
 	[[self window] makeFirstResponder:[self searchField]];
+	
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:WCReallyAdvancedOpenQuicklySearchUsingCurrentEditorSelectionKey]) {
+		WCTabViewController *tabViewController = [[[[self dataSource] openQuicklyProjectDocument] currentTabViewContext] tabViewController];
+		WCSourceFileDocument *sourceFileDocument = [[[tabViewController tabView] selectedTabViewItem] identifier];
+		NSTextView *textView = [[[tabViewController sourceFileDocumentsToSourceTextViewControllers] objectForKey:sourceFileDocument] textView];
+		NSRange symbolRange;
+		
+		if ([textView selectedRange].length)
+			symbolRange = [textView selectedRange];
+		else
+			symbolRange = [[textView string] symbolRangeForRange:[textView selectedRange]];
+		
+		if (symbolRange.location != NSNotFound) {
+			[self setSearchString:[[textView string] substringWithRange:symbolRange]];
+			[self search:nil];
+		}
+	}
 	
 	NSInteger result = [[NSApplication sharedApplication] runModalForWindow:[self window]];
 	

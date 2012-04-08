@@ -20,6 +20,10 @@ extern NSString *const WCReallyAdvancedJumpBarShowFileAndLineNumberKey;
 
 extern NSString *const WCReallyAdvancedJumpInFileSearchUsingCurrentEditorSelectionKey;
 
+extern NSString *const WCReallyAdvancedOpenQuicklySearchUsingCurrentEditorSelectionKey;
+
 @interface WCReallyAdvancedViewController : NSViewController <RSPreferencesModule,RSUserDefaultsProvider>
+
 @property (readwrite,assign,nonatomic) IBOutlet NSView *initialFirstResponder;
+
 @end
