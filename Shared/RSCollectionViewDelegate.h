@@ -13,5 +13,6 @@
 @protocol RSCollectionViewDelegate <NSCollectionViewDelegate>
 @optional
 - (void)handleReturnPressedForCollectionView:(RSCollectionView *)collectionView;
+- (void)handleTabPressedForCollectionView:(RSCollectionView *)collectionView;
 - (void)collectionView:(RSCollectionView *)collectionView handleDoubleClickForItemsAtIndexes:(NSIndexSet *)indexes;
 @end

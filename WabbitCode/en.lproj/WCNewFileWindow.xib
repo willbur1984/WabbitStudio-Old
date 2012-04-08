@@ -69,6 +69,7 @@
 							<string key="NSFrame">{{493, 12}, {93, 32}}</string>
 							<reference key="NSSuperview" ref="76288594"/>
 							<reference key="NSWindow"/>
+							<reference key="NSNextKeyView"/>
 							<string key="NSReuseIdentifierKey">_NS:687</string>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="1066305749">
@@ -380,7 +381,7 @@
 																			<string key="NSFrameSize">{427, 220}</string>
 																			<reference key="NSSuperview" ref="124384775"/>
 																			<reference key="NSWindow"/>
-																			<reference key="NSNextKeyView" ref="501244535"/>
+																			<reference key="NSNextKeyView" ref="401303200"/>
 																			<string key="NSReuseIdentifierKey">_NS:80</string>
 																			<string key="NSMinGridSize">{0, 0}</string>
 																			<string key="NSMaxGridSize">{0, 0}</string>
@@ -433,7 +434,7 @@
 															<string key="NSFrame">{{0, 124}, {427, 220}}</string>
 															<reference key="NSSuperview" ref="268647890"/>
 															<reference key="NSWindow"/>
-															<reference key="NSNextKeyView" ref="124384775"/>
+															<reference key="NSNextKeyView" ref="501244535"/>
 															<string key="NSReuseIdentifierKey">_NS:76</string>
 															<int key="NSsFlags">133648</int>
 															<reference key="NSVScroller" ref="401303200"/>
@@ -707,6 +708,14 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
+						<string key="label">tableView</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="725061518"/>
+					</object>
+					<int key="connectionID">84</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
 						<string key="label">delegate</string>
 						<reference key="source" ref="293671506"/>
 						<reference key="destination" ref="1001"/>
@@ -768,7 +777,7 @@
 						<reference key="source" ref="424956940"/>
 						<reference key="destination" ref="725061518"/>
 					</object>
-					<int key="connectionID">80</int>
+					<int key="connectionID">83</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -873,7 +882,7 @@
 						<reference key="source" ref="725061518"/>
 						<reference key="destination" ref="424956940"/>
 					</object>
-					<int key="connectionID">81</int>
+					<int key="connectionID">82</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -1547,7 +1556,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">81</int>
+			<int key="maxID">84</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1641,6 +1650,7 @@
 						<string key="categoriesArrayController">NSArrayController</string>
 						<string key="collectionView">NSCollectionView</string>
 						<string key="splitterHandleImageView">NSImageView</string>
+						<string key="tableView">NSTableView</string>
 						<string key="templatesArrayController">NSArrayController</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
@@ -1655,6 +1665,10 @@
 						<object class="IBToOneOutletInfo" key="splitterHandleImageView">
 							<string key="name">splitterHandleImageView</string>
 							<string key="candidateClassName">NSImageView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="tableView">
+							<string key="name">tableView</string>
+							<string key="candidateClassName">NSTableView</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="templatesArrayController">
 							<string key="name">templatesArrayController</string>

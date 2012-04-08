@@ -73,6 +73,7 @@
 							<string key="NSFrame">{{493, 12}, {93, 32}}</string>
 							<reference key="NSSuperview" ref="1006"/>
 							<reference key="NSWindow"/>
+							<reference key="NSNextKeyView"/>
 							<string key="NSReuseIdentifierKey">_NS:687</string>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="364147334">
@@ -423,7 +424,7 @@
 																			<string key="NSFrameSize">{427, 220}</string>
 																			<reference key="NSSuperview" ref="405092683"/>
 																			<reference key="NSWindow"/>
-																			<reference key="NSNextKeyView" ref="108833925"/>
+																			<reference key="NSNextKeyView" ref="1009450779"/>
 																			<string key="NSReuseIdentifierKey">_NS:80</string>
 																			<string key="NSMinGridSize">{0, 0}</string>
 																			<string key="NSMaxGridSize">{0, 0}</string>
@@ -477,7 +478,7 @@
 															<string key="NSFrame">{{0, 124}, {427, 220}}</string>
 															<reference key="NSSuperview" ref="999710965"/>
 															<reference key="NSWindow"/>
-															<reference key="NSNextKeyView" ref="405092683"/>
+															<reference key="NSNextKeyView" ref="108833925"/>
 															<string key="NSReuseIdentifierKey">_NS:76</string>
 															<int key="NSsFlags">133648</int>
 															<reference key="NSVScroller" ref="1009450779"/>
@@ -766,6 +767,14 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
+						<string key="label">tableView</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="8188445"/>
+					</object>
+					<int key="connectionID">91</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
 						<string key="label">delegate</string>
 						<reference key="source" ref="731739905"/>
 						<reference key="destination" ref="1001"/>
@@ -820,6 +829,14 @@
 						<reference key="destination" ref="1001"/>
 					</object>
 					<int key="connectionID">47</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">nextKeyView</string>
+						<reference key="source" ref="8188445"/>
+						<reference key="destination" ref="1002022694"/>
+					</object>
+					<int key="connectionID">89</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -1106,6 +1123,14 @@
 						<reference key="destination" ref="1001"/>
 					</object>
 					<int key="connectionID">87</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">nextKeyView</string>
+						<reference key="source" ref="1002022694"/>
+						<reference key="destination" ref="8188445"/>
+					</object>
+					<int key="connectionID">90</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -1722,7 +1747,7 @@
 				<reference key="dict.values" ref="1002"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">88</int>
+			<int key="maxID">91</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1845,6 +1870,7 @@
 							<string>categoriesArrayController</string>
 							<string>collectionView</string>
 							<string>splitterHandleImageView</string>
+							<string>tableView</string>
 							<string>templatesArrayController</string>
 						</object>
 						<object class="NSArray" key="dict.values">
@@ -1852,6 +1878,7 @@
 							<string>NSArrayController</string>
 							<string>NSCollectionView</string>
 							<string>NSImageView</string>
+							<string>NSTableView</string>
 							<string>NSArrayController</string>
 						</object>
 					</object>
@@ -1862,6 +1889,7 @@
 							<string>categoriesArrayController</string>
 							<string>collectionView</string>
 							<string>splitterHandleImageView</string>
+							<string>tableView</string>
 							<string>templatesArrayController</string>
 						</object>
 						<object class="NSArray" key="dict.values">
@@ -1877,6 +1905,10 @@
 							<object class="IBToOneOutletInfo">
 								<string key="name">splitterHandleImageView</string>
 								<string key="candidateClassName">NSImageView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">tableView</string>
+								<string key="candidateClassName">NSTableView</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">templatesArrayController</string>

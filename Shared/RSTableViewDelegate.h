@@ -15,4 +15,5 @@
 - (void)handleDeletePressedForTableView:(RSTableView *)tableView;
 - (void)handleReturnPressedForTableView:(RSTableView *)tableView;
 - (void)handleSpacePressedForTableView:(RSTableView *)tableView;
+- (void)handleTabPressedForTableView:(RSTableView *)tableView;
 @end

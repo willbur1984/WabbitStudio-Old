@@ -95,6 +95,10 @@ static NSString *const kHeaderCellIdentifier = @"HeaderCell";
 	if ([rowView respondsToSelector:@selector(setTableView:)])
 		[(id)rowView setTableView:nil];
 }
+#pragma mark RSTableViewDelegate
+- (void)handleTabPressedForTableView:(RSTableView *)tableView {
+	[[self window] makeFirstResponder:[self collectionView]];
+}
 #pragma mark NSSplitViewDelegate
 - (BOOL)splitView:(NSSplitView *)splitView shouldAdjustSizeOfSubview:(NSView *)view {
 	if ([[splitView subviews] objectAtIndex:0] == view)
@@ -116,6 +120,9 @@ static const CGFloat kRightSubviewMinimumWidth = 350.0;
 #pragma mark RSCollectionViewDelegate
 - (void)handleReturnPressedForCollectionView:(RSCollectionView *)collectionView {
 	[self create:nil];
+}
+- (void)handleTabPressedForCollectionView:(RSCollectionView *)collectionView {
+	[[self window] makeFirstResponder:[self tableView]];
 }
 - (void)collectionView:(RSCollectionView *)collectionView handleDoubleClickForItemsAtIndexes:(NSIndexSet *)indexes {
 	[self create:nil];
@@ -268,6 +275,7 @@ static const CGFloat kRightSubviewMinimumWidth = 350.0;
 	}];
 }
 #pragma mark Properties
+@synthesize tableView=_tableView;
 @synthesize categoriesArrayController=_categoriesArrayController;
 @synthesize collectionView=_collectionView;
 @synthesize splitterHandleImageView=_splitterHandleImageView;

@@ -39,6 +39,12 @@
 				return;
 			}
 			break;
+		case KEY_CODE_TAB:
+			if ([[self delegate] respondsToSelector:@selector(handleTabPressedForTableView:)]) {
+				[[self delegate] handleTabPressedForTableView:self];
+				return;
+			}
+			break;
 		default:
 			break;
 	}

@@ -21,6 +21,12 @@
 				return;
 			}
 			break;
+		case KEY_CODE_TAB:
+			if ([[self delegate] respondsToSelector:@selector(handleTabPressedForCollectionView:)]) {
+				[[self delegate] handleTabPressedForCollectionView:self];
+				return;
+			}
+			break;
 		default:
 			break;
 	}

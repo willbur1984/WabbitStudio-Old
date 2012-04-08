@@ -8,14 +8,16 @@
 
 #import <AppKit/NSWindowController.h>
 #import "RSCollectionViewDelegate.h"
+#import "RSTableViewDelegate.h"
 
 @class WCFileTemplate,WCProjectDocument;
 
-@interface WCNewFileWindowController : NSWindowController <RSCollectionViewDelegate,NSTableViewDelegate,NSSplitViewDelegate> {
+@interface WCNewFileWindowController : NSWindowController <RSCollectionViewDelegate,RSTableViewDelegate,NSSplitViewDelegate> {
 	__weak WCProjectDocument *_projectDocument;
 	NSMutableArray *_categories;
 	NSURL *_savePanelURL;
 }
+@property (readwrite,assign,nonatomic) IBOutlet NSTableView *tableView;
 @property (readwrite,assign,nonatomic) IBOutlet NSArrayController *categoriesArrayController;
 @property (readwrite,assign,nonatomic) IBOutlet NSCollectionView *collectionView;
 @property (readwrite,assign,nonatomic) IBOutlet NSImageView *splitterHandleImageView;
