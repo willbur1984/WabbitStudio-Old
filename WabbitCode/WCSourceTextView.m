@@ -816,8 +816,8 @@
 		__block WCFile *includedFile = nil;
 		
 		[[WCSourceScanner includesRegularExpression] enumerateMatchesInString:[self string] options:0 range:[[self string] lineRangeForRange:[self selectedRange]] usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-			NSString *fileName = [[[self string] substringWithRange:[result rangeAtIndex:1]] lowercaseString];
-			
+            NSString *fileName = [[self string] substringWithRange:[result rangeAtIndex:1]];
+            
 			[filePathsToFiles enumerateKeysAndObjectsUsingBlock:^(NSString *filePath, WCFile *file, BOOL *stop) {
 				if ([filePath hasSuffix:fileName]) {
 					includedFile = file;

@@ -62,7 +62,7 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 #endif
 		
 		dispatch_async(dispatch_get_main_queue(), ^{
-			[self setShouldMonitorFile:YES];
+            [self setShouldMonitorFile:YES];
 			[[self delegate] fileReferenceWasWrittenTo:self];
 		});
 	});
