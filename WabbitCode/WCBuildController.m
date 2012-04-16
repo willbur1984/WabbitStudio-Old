@@ -288,11 +288,7 @@ NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotification = @"
 		[[self task] launch];
 	}
 	@catch (NSException *exception) {
-		
-	}
-	@finally {
-		[self setTask:nil];
-		[self setBuilding:NO];
+		NSLog(@"exception while running build task %@",exception);
 	}
 }
 - (void)buildAndRun; {
@@ -357,6 +353,8 @@ NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotification = @"
 @synthesize lastOutputFileURL=_lastOutputFileURL;
 #pragma mark *** Private Methods ***
 - (void)_processOutput; {	
+    RSLog(@"process output");
+    
 	NSString *output = [[[self output] copy] autorelease];
 	NSDictionary *filePathsToFiles = [[self projectDocument] filePathsToFiles];
 	NSMapTable *filesToSourceFileDocuments = [[self projectDocument] filesToSourceFileDocuments];
@@ -476,18 +474,26 @@ NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotification = @"
 #pragma mark Notifications
 
 - (void)_readDataFromTask:(NSNotification *)note {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSFileHandleReadCompletionNotification object:nil];
+    
 	NSData *data = [[note userInfo] objectForKey:NSFileHandleNotificationDataItem];
 	
 	if ([data length]) {
+        NSLog(@"got some data and reading again");
+        
 		NSString *string = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
 		
+        NSLog(@"data that was received %@",string);
+        
 		[[self output] appendString:string];
 		
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_readDataFromTask:) name:NSFileHandleReadCompletionNotification object:[[[self task] standardOutput] fileHandleForReading]];
+        
 		[[note object] readInBackgroundAndNotify];
 	}
 	else {
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:NSFileHandleReadCompletionNotification object:nil];
-		
+        NSLog(@"got final data, terminating task");
+        
 		[[self task] terminate];
 		
 		while ((data = [[[[self task] standardOutput] fileHandleForReading] availableData]) && [data length]) {
