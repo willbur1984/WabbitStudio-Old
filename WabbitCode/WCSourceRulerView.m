@@ -493,7 +493,7 @@ static const CGFloat kBuildIssueWidthHeight = 10.0;
 					
 					lineRect = rects[0];
 					
-					lineRect = NSMakeRect(NSMinX(buildIssueRect)+kIconPaddingLeft, [self convertPoint:lineRect.origin fromView:[self clientView]].y+kIconPaddingTop, kBuildIssueWidthHeight, kBuildIssueWidthHeight);
+					lineRect = NSMakeRect(NSMinX(buildIssueRect)+kIconPaddingLeft, [self convertPoint:lineRect.origin fromView:[self clientView]].y+floor((NSHeight(lineRect)-kBuildIssueWidthHeight)/2.0), kBuildIssueWidthHeight, kBuildIssueWidthHeight);
 					
 					[(NSImage *)[NSImage imageNamed:@"Error"] drawInRect:lineRect fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
 					
@@ -538,7 +538,7 @@ static const CGFloat kBuildIssueWidthHeight = 10.0;
 					
 					lineRect = rects[0];
 					
-					lineRect = NSMakeRect(NSMinX(buildIssueRect)+kIconPaddingLeft, [self convertPoint:lineRect.origin fromView:[self clientView]].y+kIconPaddingTop, kBuildIssueWidthHeight, kBuildIssueWidthHeight);
+					lineRect = NSMakeRect(NSMinX(buildIssueRect)+kIconPaddingLeft, [self convertPoint:lineRect.origin fromView:[self clientView]].y+floor((NSHeight(lineRect)-kBuildIssueWidthHeight)/2.0), kBuildIssueWidthHeight, kBuildIssueWidthHeight);
 					
 					[(NSImage *)[NSImage imageNamed:@"Warning"] drawInRect:lineRect fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
 					
@@ -623,6 +623,10 @@ static const CGFloat kBuildIssueWidthHeight = 10.0;
 			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_breakpointManagerDidRemoveFileBreakpoint:) name:WCBreakpointManagerDidRemoveFileBreakpointNotification object:[projectDocument breakpointManager]];
 			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_breakpointManagerDidChangeBreakpointActive:) name:WCBreakpointManagerDidChangeBreakpointActiveNotification object:[projectDocument breakpointManager]];
 			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_breakpointManagerDidChangeBreakpointsEnabled:) name:WCBreakpointManagerDidChangeBreakpointsEnabledNotification object:[projectDocument breakpointManager]];
+            
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_fontAndColorThemeManagerCurrentThemeDidChange:) name:WCFontAndColorThemeManagerCurrentThemeDidChangeNotification object:nil];
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_fontAndColorThemeManagerColorDidChange:) name:WCFontAndColorThemeManagerColorDidChangeNotification object:nil];
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_fontAndColorThemeManagerFontDidChange:) name:WCFontAndColorThemeManagerFontDidChangeNotification object:nil];
 		}
 	}
 }
@@ -962,5 +966,14 @@ static const CGFloat kTriangleHeight = 6.0;
 }
 - (void)_breakpointManagerDidChangeBreakpointsEnabled:(NSNotification *)note {
 	[self setNeedsDisplay:YES];
+}
+- (void)_fontAndColorThemeManagerCurrentThemeDidChange:(NSNotification *)note {
+    [self setNeedsDisplay:YES];
+}
+- (void)_fontAndColorThemeManagerColorDidChange:(NSNotification *)note {
+    [self setNeedsDisplay:YES];
+}
+- (void)_fontAndColorThemeManagerFontDidChange:(NSNotification *)note {
+    [self setNeedsDisplay:YES];
 }
 @end
