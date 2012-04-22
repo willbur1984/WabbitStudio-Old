@@ -141,7 +141,15 @@
 		if (![[self sourceFileDocument] fileURL])
 			return NO;
 	}
-	return [[self standardSourceTextViewController] validateMenuItem:menuItem];
+    else if ([menuItem action] == @selector(addAssistantEditor:))
+        return [[self standardSourceTextViewController] validateMenuItem:menuItem];
+    else if ([menuItem action] == @selector(removeAssistantEditor:))
+        return [[self standardSourceTextViewController] validateMenuItem:menuItem];
+    else if ([menuItem action] == @selector(showStandardEditor:))
+        return [[self standardSourceTextViewController] validateMenuItem:menuItem];
+    else if ([menuItem action] == @selector(showAssistantEditor:))
+        return [[self standardSourceTextViewController] validateMenuItem:menuItem];
+	return YES;
 }
 #pragma mark NSLayoutManagerDelegate
 - (void)layoutManagerDidInvalidateLayout:(NSLayoutManager *)sender {

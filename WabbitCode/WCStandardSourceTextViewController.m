@@ -182,7 +182,11 @@
 		if ([_assistantSplitViews count] <= 1)
 			return NO;
 	}
-	return YES;
+    else if ([menuItem action] == @selector(showStandardEditor:))
+        return YES;
+    else if ([menuItem action] == @selector(showAssistantEditor:))
+        return YES;
+	return [super validateMenuItem:menuItem];
 }
 #pragma mark NSSplitViewDelegate
 - (CGFloat)splitView:(NSSplitView *)splitView constrainMaxCoordinate:(CGFloat)proposedMaximumPosition ofSubviewAt:(NSInteger)dividerIndex {
