@@ -50,8 +50,6 @@
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[_scrollingHighlightTimer invalidate];
-	_scrollingHighlightTimer = nil;
 	_standardSourceTextViewController = nil;
 	[_jumpBarViewController release];
 	_sourceFileDocument = nil;
@@ -375,8 +373,6 @@
 }
 
 - (void)performCleanup; {
-	[_scrollingHighlightTimer invalidate];
-	_scrollingHighlightTimer = nil;
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
 	[[self textStorage] removeLayoutManager:[[self textView] layoutManager]];
@@ -456,22 +452,7 @@
 
 #pragma mark Notifications
 
-static const NSTimeInterval kScrollingHighlightTimerDelay = 0.1;
 - (void)_viewBoundsDidChange:(NSNotification *)note {
-	[[self sourceHighlighter] highlightSymbolsInRange:[[self textView] visibleRange]];
-	
-	/*
-	if (_scrollingHighlightTimer)
-		[_scrollingHighlightTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:kScrollingHighlightTimerDelay]];
-	else
-		_scrollingHighlightTimer = [NSTimer scheduledTimerWithTimeInterval:kScrollingHighlightTimerDelay target:self selector:@selector(_scrollingHighlightTimerCallback:) userInfo:nil repeats:NO];
-	 */
-}
-#pragma mark Callbacks
-- (void)_scrollingHighlightTimerCallback:(NSTimer *)timer {
-	[_scrollingHighlightTimer invalidate];
-	_scrollingHighlightTimer = nil;
-	
 	[[self sourceHighlighter] highlightSymbolsInRange:[[self textView] visibleRange]];
 }
 @end
