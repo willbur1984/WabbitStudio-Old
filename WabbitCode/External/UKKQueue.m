@@ -693,7 +693,8 @@ static id					gUKKQueueSharedNotificationCenterProxy = nil;	// Object to which w
 	NSString*	nm = [notif name];
 	if( [watchedFiles objectForKey: fp] == nil )	// Don't notify about files we don't care about.
 		return;
-	[delegate watcher: self receivedNotification: nm forPath: fp];
+    if (delegate)
+        [delegate watcher: self receivedNotification: nm forPath: fp];
 	if( !delegate || alwaysNotify )
 	{
 		[[[NSWorkspace sharedWorkspace] notificationCenter] postNotificationName: nm object: self

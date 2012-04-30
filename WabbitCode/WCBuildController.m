@@ -479,12 +479,8 @@ NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotification = @"
 	NSData *data = [[note userInfo] objectForKey:NSFileHandleNotificationDataItem];
 	
 	if ([data length]) {
-        NSLog(@"got some data and reading again");
-        
 		NSString *string = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
 		
-        NSLog(@"data that was received %@",string);
-        
 		[[self output] appendString:string];
 		
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_readDataFromTask:) name:NSFileHandleReadCompletionNotification object:[[[self task] standardOutput] fileHandleForReading]];
@@ -492,8 +488,6 @@ NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotification = @"
 		[[note object] readInBackgroundAndNotify];
 	}
 	else {
-        NSLog(@"got final data, terminating task");
-        
 		[[self task] terminate];
 		
 		while ((data = [[[[self task] standardOutput] fileHandleForReading] availableData]) && [data length]) {

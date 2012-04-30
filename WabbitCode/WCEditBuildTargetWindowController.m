@@ -81,6 +81,24 @@
 	else if (tableView == (RSTableView *)[self includesTableView])
 		[self newBuildInclude:nil];
 }
+#pragma mark NSKeyValueObserving
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if (context == self) {
+        if ([keyPath isEqualToString:@"name"] ||
+            [keyPath isEqualToString:@"outputType"] ||
+            [keyPath isEqualToString:@"inputFile"] ||
+            [keyPath isEqualToString:@"active"] ||
+            [keyPath isEqualToString:@"generateCodeListing"] ||
+            [keyPath isEqualToString:@"generateLabelFile"] ||
+            [keyPath isEqualToString:@"symbolsAreCaseSensitive"]) {
+            
+            [self.buildTarget.projectDocument updateChangeCount:NSChangeDone];
+        }
+    }
+    else
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+}
+
 #pragma mark *** Public Methods ***
 + (id)editBuildTargetWindowControllerWithBuildTarget:(WCBuildTarget *)buildTarget; {
 	return [[[[self class] alloc] initWithBuildTarget:buildTarget] autorelease];
@@ -90,6 +108,14 @@
 		return nil;
 	
 	_buildTarget = [buildTarget retain];
+    
+    [buildTarget addObserver:self forKeyPath:@"name" options:0 context:self];
+    [buildTarget addObserver:self forKeyPath:@"outputType" options:0 context:self];
+    [buildTarget addObserver:self forKeyPath:@"inputFile" options:0 context:self];
+    [buildTarget addObserver:self forKeyPath:@"active" options:0 context:self];
+    [buildTarget addObserver:self forKeyPath:@"generateCodeListing" options:0 context:self];
+    [buildTarget addObserver:self forKeyPath:@"generateLabelFile" options:0 context:self];
+    [buildTarget addObserver:self forKeyPath:@"symbolsAreCaseSensitive" options:0 context:self];
 	
 	return self;
 }
@@ -105,6 +131,16 @@
 }
 - (IBAction)manageBuildTargets:(id)sender; {
 	[[NSApplication sharedApplication] endSheet:[self window] returnCode:NSOKButton];
+}
+
+- (void)performCleanup; {
+    [self.buildTarget removeObserver:self forKeyPath:@"name" context:self];
+    [self.buildTarget removeObserver:self forKeyPath:@"outputType" context:self];
+    [self.buildTarget removeObserver:self forKeyPath:@"inputFile" context:self];
+    [self.buildTarget removeObserver:self forKeyPath:@"active" context:self];
+    [self.buildTarget removeObserver:self forKeyPath:@"generateCodeListing" context:self];
+    [self.buildTarget removeObserver:self forKeyPath:@"generateLabelFile" context:self];
+    [self.buildTarget removeObserver:self forKeyPath:@"symbolsAreCaseSensitive" context:self];
 }
 
 static NSString *const kNameColumnIdentifier = @"name";
@@ -245,6 +281,7 @@ static NSString *const kPathColumnIdentifier = @"path";
 - (void)_sheetDidEnd:(NSWindow *)sheet code:(NSInteger)code context:(void *)context {
 	[self autorelease];
 	[sheet orderOut:nil];
+    [self performCleanup];
 	
 	if (code == NSCancelButton)
 		return;

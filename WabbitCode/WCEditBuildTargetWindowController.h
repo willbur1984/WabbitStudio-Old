@@ -40,4 +40,6 @@
 
 - (IBAction)chooseInputFile:(id)sender;
 
+- (void)performCleanup;
+
 @end
