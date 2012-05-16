@@ -51,6 +51,7 @@
              [theEvent clickCount] == 1) {
         
         if ([[self delegate] respondsToSelector:@selector(collectionView:handleSingleClickForItemsAtIndexes:)]) {
+            [super mouseDown:theEvent];
             [[self delegate] collectionView:self handleSingleClickForItemsAtIndexes:[self selectionIndexes]];
             return;
         }
