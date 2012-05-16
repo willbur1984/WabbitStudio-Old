@@ -471,6 +471,8 @@ NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotification = @"
 				[[RSBezelWidgetManager sharedWindowController] showString:[NSString stringWithFormat:NSLocalizedString(@"Build Succeeded (%lu warnings)", @"Build Succeeded (%lu warnings)"),totalWarnings] centeredInView:[[[self projectDocument] windowForSheet] contentView] withCloseDelay:1.25];
 			else
 				[[RSBezelWidgetManager sharedWindowController] showString:[NSString stringWithFormat:NSLocalizedString(@"Build Failed (%lu errors, %lu warnings)", @"Build Failed (%lu errors, %lu warnings)"),totalErrors,totalWarnings] centeredInView:[[[self projectDocument] windowForSheet] contentView] withCloseDelay:1.25];
+            
+            [self setBuilding:NO];
 		});
 		
 		[pool release];

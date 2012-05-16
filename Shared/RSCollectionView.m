@@ -47,6 +47,14 @@
 			return;
 		}
 	}
+    else if ([theEvent type] == NSLeftMouseDown &&
+             [theEvent clickCount] == 1) {
+        
+        if ([[self delegate] respondsToSelector:@selector(collectionView:handleSingleClickForItemsAtIndexes:)]) {
+            [[self delegate] collectionView:self handleSingleClickForItemsAtIndexes:[self selectionIndexes]];
+            return;
+        }
+    }
 	[super mouseDown:theEvent];
 }
 
