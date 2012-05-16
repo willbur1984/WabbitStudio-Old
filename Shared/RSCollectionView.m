@@ -59,9 +59,11 @@
 }
 
 - (void)setSelectionIndexes:(NSIndexSet *)indexes; {
-	// don't allow empty selection
-	if (![indexes count])
-		return;
+    if (self.allowsEmptySelection)
+        [super setSelectionIndexes:indexes];
+    else if (!indexes.count && !self.allowsEmptySelection)
+        return;
+    
 	[super setSelectionIndexes:indexes];
 }
 #pragma mark *** Public Methods ***
@@ -73,5 +75,7 @@
 - (void)setDelegate:(id<RSCollectionViewDelegate>)delegate {
 	[super setDelegate:delegate];
 }
+
+@synthesize allowsEmptySelection=_allowsEmptySelection;
 
 @end

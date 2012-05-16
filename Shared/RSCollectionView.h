@@ -16,4 +16,5 @@
 
 @interface RSCollectionView : NSCollectionView
 @property (readwrite,assign,nonatomic) IBOutlet id <RSCollectionViewDelegate> delegate;
+@property (assign,nonatomic) BOOL allowsEmptySelection;
 @end
