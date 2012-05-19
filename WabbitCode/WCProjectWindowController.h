@@ -26,7 +26,7 @@ extern NSString *const WCProjectWindowNavigatorControlSearchItemIdentifier;
 extern NSString *const WCProjectWindowNavigatorControlIssueItemIdentifier;
 extern NSString *const WCProjectWindowNavigatorControlBreakpointItemIdentifier;
 
-@class WCProjectNavigatorViewController,WCTabViewController,WCSearchNavigatorViewController,WCIssueNavigatorViewController,WCSymbolNavigatorViewController,WCBreakpointNavigatorViewController;
+@class WCProjectNavigatorViewController,WCTabViewController,WCSearchNavigatorViewController,WCIssueNavigatorViewController,WCSymbolNavigatorViewController,WCBreakpointNavigatorViewController,WCConsoleViewController;
 
 @interface WCProjectWindowController : NSWindowController <WCTabViewControllerDelegate,WCProjectDocumentSettingsProvider,RSNavigatorControlDataSource,RSNavigatorControlDelegate,WCTabViewContext,NSSplitViewDelegate,NSWindowDelegate,NSToolbarDelegate> {
 	NSMutableArray *_navigatorItemDictionaries;
@@ -35,6 +35,7 @@ extern NSString *const WCProjectWindowNavigatorControlBreakpointItemIdentifier;
 	WCIssueNavigatorViewController *_issueNavigatorViewController;
 	WCSymbolNavigatorViewController *_symbolNavigatorViewController;
 	WCBreakpointNavigatorViewController *_breakpointNavigatorViewController;
+    WCConsoleViewController *_consoleViewController;
 	WCTabViewController *_tabViewController;
 }
 @property (readwrite,assign,nonatomic) IBOutlet RSNavigatorControl *navigatorControl;
@@ -46,6 +47,7 @@ extern NSString *const WCProjectWindowNavigatorControlBreakpointItemIdentifier;
 @property (readonly,nonatomic) WCIssueNavigatorViewController *issueNavigatorViewController;
 @property (readonly,nonatomic) WCSymbolNavigatorViewController *symbolNavigatorViewController;
 @property (readonly,nonatomic) WCBreakpointNavigatorViewController *breakpointNavigatorViewController;
+@property (readonly,nonatomic) WCConsoleViewController *consoleViewController;
 
 - (IBAction)showProjectNavigator:(id)sender;
 - (IBAction)showSymbolNavigator:(id)sender;

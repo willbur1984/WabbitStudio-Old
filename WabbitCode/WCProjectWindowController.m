@@ -23,6 +23,7 @@
 #import "WCSymbolNavigatorViewController.h"
 #import "WCTabViewWindow.h"
 #import "WCBreakpointNavigatorViewController.h"
+#import "WCConsoleViewController.h"
 
 #import <PSMTabBarControl/PSMTabBarControl.h>
 #import <Quartz/Quartz.h>
@@ -37,6 +38,10 @@ NSString *const WCProjectWindowNavigatorControlBreakpointItemIdentifier = @"brea
 
 static NSString *const WCProjectWindowToolbarIdentifier = @"WCProjectWindowToolbarIdentifier";
 
+@interface WCProjectWindowController ()
+@property (assign,nonatomic) IBOutlet NSSplitView *editorAndDebugSplitView;
+@end
+
 @implementation WCProjectWindowController
 #pragma mark *** Subclass Overrides ***
 - (void)dealloc {
@@ -44,6 +49,7 @@ static NSString *const WCProjectWindowToolbarIdentifier = @"WCProjectWindowToolb
 	NSLog(@"%@ called in %@",NSStringFromSelector(_cmd),[self className]);
 #endif
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+    [_consoleViewController release];
 	[_tabViewController release];
 	[_breakpointNavigatorViewController release];
 	[_symbolNavigatorViewController release];
@@ -93,9 +99,12 @@ static const NSSize kBreakpointImageSize = {.width = 20.0, .height = 10.0};
 	
 	[(WCTabViewWindow *)[self window] setTabViewController:[self tabViewController]];
 	
-	[[[self tabViewController] view] setFrameSize:[[[[self splitView] subviews] lastObject] frame].size];
-	[[self splitView] replaceSubview:[[[self splitView] subviews] lastObject] with:[[self tabViewController] view]];
-	
+    [self.tabViewController.view setFrameSize:[[self.editorAndDebugSplitView.subviews objectAtIndex:0] frame].size];
+    [self.editorAndDebugSplitView replaceSubview:[self.editorAndDebugSplitView.subviews objectAtIndex:0] with:self.tabViewController.view];
+    
+    [self.consoleViewController.view setFrameSize:[[self.editorAndDebugSplitView.subviews lastObject] frame].size];
+    [self.editorAndDebugSplitView replaceSubview:[self.editorAndDebugSplitView.subviews lastObject] with:self.consoleViewController.view];
+    
 	[[self navigatorControl] setSelectedItemIdentifier:@"project"];
 }
 
@@ -147,10 +156,14 @@ static const NSSize kBreakpointImageSize = {.width = 20.0, .height = 10.0};
 static const CGFloat kLeftSubviewMinWidth = 200.0;
 static const CGFloat kRightSubviewMinWidth = 400.0;
 - (CGFloat)splitView:(NSSplitView *)splitView constrainMaxCoordinate:(CGFloat)proposedMaximumPosition ofSubviewAt:(NSInteger)dividerIndex {
-	return proposedMaximumPosition-kRightSubviewMinWidth;
+    if (splitView.isVertical)
+        return proposedMaximumPosition-kRightSubviewMinWidth;
+    return proposedMaximumPosition;
 }
 - (CGFloat)splitView:(NSSplitView *)splitView constrainMinCoordinate:(CGFloat)proposedMinimumPosition ofSubviewAt:(NSInteger)dividerIndex {
-	return proposedMinimumPosition+kLeftSubviewMinWidth;
+    if (splitView.isVertical)
+        return proposedMinimumPosition+kLeftSubviewMinWidth;
+    return proposedMinimumPosition;
 }
 #pragma mark WCTabViewControllerDelegate
 - (WCProjectDocument *)projectDocumentForTabViewController:(WCTabViewController *)tabViewController {
@@ -288,6 +301,7 @@ static const CGFloat kRightSubviewMinWidth = 400.0;
 #pragma mark Properties
 @synthesize navigatorControl=_navigatorControl;
 @synthesize splitView=_splitView;
+@synthesize editorAndDebugSplitView=_editorAndDebugSplitView;
 
 @dynamic projectNavigatorViewController;
 - (WCProjectNavigatorViewController *)projectNavigatorViewController {
@@ -319,7 +333,14 @@ static const CGFloat kRightSubviewMinWidth = 400.0;
 		_breakpointNavigatorViewController = [[WCBreakpointNavigatorViewController alloc] initWithProjectDocument:[self document]];
 	return _breakpointNavigatorViewController;
 }
+@dynamic consoleViewController;
+- (WCConsoleViewController *)consoleViewController {
+    if (!_consoleViewController)
+        _consoleViewController = [[WCConsoleViewController alloc] initWithProjectDocument:self.document];
+    return _consoleViewController;
+}
 @synthesize tabViewController=_tabViewController;
+
 #pragma mark Notifications
 - (void)_tabViewControllerDidCloseTab:(NSNotification *)note {
 	[self synchronizeWindowTitleWithDocumentName];

@@ -356,6 +356,10 @@ NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotification = @"
 @synthesize totalErrors=_totalErrors;
 @synthesize totalWarnings=_totalWarnings;
 @synthesize lastOutputFileURL=_lastOutputFileURL;
+@dynamic outputCopy;
+- (NSString *)outputCopy {
+    return [[self.output copy] autorelease];
+}
 #pragma mark *** Private Methods ***
 - (void)_processOutput; {	
     RSLog(@"process output");

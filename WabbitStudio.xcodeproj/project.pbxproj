@@ -630,6 +630,10 @@
 		7973ADC9154D24D400DEC0EF /* errors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7973ADC6154D24D400DEC0EF /* errors.cpp */; };
 		7973ADCC154D24E000DEC0EF /* modp_ascii.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7973ADCA154D24E000DEC0EF /* modp_ascii.cpp */; };
 		7973ADCF154D24F000DEC0EF /* libgmp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7973ADCE154D24F000DEC0EF /* libgmp.a */; };
+		798411C61568054A00B504CF /* WCConsoleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 798411C51568054A00B504CF /* WCConsoleViewController.m */; };
+		798411C91568062900B504CF /* WCConsoleView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 798411C71568062900B504CF /* WCConsoleView.xib */; };
+		798411CC1568077400B504CF /* RSBottomOnlyBorderedGlassGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 798411CB1568077400B504CF /* RSBottomOnlyBorderedGlassGradientView.m */; };
+		798411CF1568080700B504CF /* WCConsoleTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 798411CE1568080700B504CF /* WCConsoleTextView.m */; };
 		79A1A089154D25FB0006F6B6 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 79A1A088154D25FB0006F6B6 /* libcrypto.dylib */; };
 		79A1A08B154D260C0006F6B6 /* libmathCommon.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 79A1A08A154D260C0006F6B6 /* libmathCommon.dylib */; };
 		79A1A08D154D262A0006F6B6 /* libc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 79A1A08C154D262A0006F6B6 /* libc.dylib */; };
@@ -1589,6 +1593,13 @@
 		7973ADCB154D24E000DEC0EF /* modp_ascii.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = modp_ascii.h; sourceTree = "<group>"; };
 		7973ADCD154D24F000DEC0EF /* gmp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gmp.h; sourceTree = "<group>"; };
 		7973ADCE154D24F000DEC0EF /* libgmp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libgmp.a; sourceTree = "<group>"; };
+		798411C41568054A00B504CF /* WCConsoleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCConsoleViewController.h; sourceTree = "<group>"; };
+		798411C51568054A00B504CF /* WCConsoleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCConsoleViewController.m; sourceTree = "<group>"; };
+		798411C81568062900B504CF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = WCConsoleView.xib; sourceTree = "<group>"; };
+		798411CA1568077400B504CF /* RSBottomOnlyBorderedGlassGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSBottomOnlyBorderedGlassGradientView.h; sourceTree = "<group>"; };
+		798411CB1568077400B504CF /* RSBottomOnlyBorderedGlassGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSBottomOnlyBorderedGlassGradientView.m; sourceTree = "<group>"; };
+		798411CD1568080700B504CF /* WCConsoleTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCConsoleTextView.h; sourceTree = "<group>"; };
+		798411CE1568080700B504CF /* WCConsoleTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCConsoleTextView.m; sourceTree = "<group>"; };
 		79A1A088154D25FB0006F6B6 /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
 		79A1A08A154D260C0006F6B6 /* libmathCommon.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libmathCommon.dylib; path = usr/lib/system/libmathCommon.dylib; sourceTree = SDKROOT; };
 		79A1A08C154D262A0006F6B6 /* libc.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libc.dylib; path = usr/lib/libc.dylib; sourceTree = SDKROOT; };
@@ -1748,6 +1759,7 @@
 				078CF0311501480F001E13E3 /* WCNewFileWindow.xib */,
 				070009441512C6AB00FB7696 /* WCCalculatorWindow.xib */,
 				0746F38B1530E66600156F20 /* WCFilesView.xib */,
+				798411C71568062900B504CF /* WCConsoleView.xib */,
 			);
 			name = Xibs;
 			path = en.lproj;
@@ -2001,6 +2013,7 @@
 		071985F914C0B3BA00C8E91A /* Project */ = {
 			isa = PBXGroup;
 			children = (
+				798411C21568052500B504CF /* Console */,
 				077CC17014F7EEE900713ED8 /* Debugging */,
 				072427E214F1A8AF00DC920B /* Templates */,
 				070EC25514EF8E5100982CA8 /* Breakpoints */,
@@ -2954,6 +2967,8 @@
 				072BBC5B14AA6D190044ECC2 /* RSGlassGradientView.m */,
 				072BBC5D14AA700B0044ECC2 /* RSBottomBorderedGlassGradientView.h */,
 				072BBC5E14AA700B0044ECC2 /* RSBottomBorderedGlassGradientView.m */,
+				798411CA1568077400B504CF /* RSBottomOnlyBorderedGlassGradientView.h */,
+				798411CB1568077400B504CF /* RSBottomOnlyBorderedGlassGradientView.m */,
 				0745BE0A14AAD51D00F541DC /* RSBorderedGlassGradientView.h */,
 				0745BE0B14AAD51D00F541DC /* RSBorderedGlassGradientView.m */,
 				0778851D14C23F9700605F5D /* RSTopBorderedGlassGradientView.h */,
@@ -3196,6 +3211,17 @@
 				7973AD9B154D240900DEC0EF /* main.cpp */,
 			);
 			path = spasm;
+			sourceTree = "<group>";
+		};
+		798411C21568052500B504CF /* Console */ = {
+			isa = PBXGroup;
+			children = (
+				798411C41568054A00B504CF /* WCConsoleViewController.h */,
+				798411C51568054A00B504CF /* WCConsoleViewController.m */,
+				798411CD1568080700B504CF /* WCConsoleTextView.h */,
+				798411CE1568080700B504CF /* WCConsoleTextView.m */,
+			);
+			name = Console;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -3480,6 +3506,7 @@
 				07D252511511077200D5830A /* RSFlashMemoryView.xib in Resources */,
 				070009461512C6AB00FB7696 /* WCCalculatorWindow.xib in Resources */,
 				0746F38D1530E66600156F20 /* WCFilesView.xib in Resources */,
+				798411C91568062900B504CF /* WCConsoleView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3902,6 +3929,9 @@
 				07D2524D1511067A00D5830A /* RSFlashMemoryViewController.m in Sources */,
 				070009421512C4E000FB7696 /* WCCalculatorWindowController.m in Sources */,
 				0746F3891530DDCD00156F20 /* WCFilesViewController.m in Sources */,
+				798411C61568054A00B504CF /* WCConsoleViewController.m in Sources */,
+				798411CC1568077400B504CF /* RSBottomOnlyBorderedGlassGradientView.m in Sources */,
+				798411CF1568080700B504CF /* WCConsoleTextView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4629,6 +4659,14 @@
 				07FCEDC91507EACE00595ADA /* en */,
 			);
 			name = RSDisassemblyView.xib;
+			sourceTree = "<group>";
+		};
+		798411C71568062900B504CF /* WCConsoleView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				798411C81568062900B504CF /* en */,
+			);
+			name = WCConsoleView.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
