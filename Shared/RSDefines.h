@@ -38,6 +38,9 @@
 #define LOCALIZED_STRING_CREATE NSLocalizedString(@"Create",@"Create")
 #define LOCALIZED_STRING_ADD NSLocalizedString(@"Add",@"Add")
 
+#define NSLogVerbose(format, ...) NSLog((@"%s [Line %d] " format), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+#define RSLogVerbose(format, ...) RSLog((@"%s [Line %d] " format), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+
 #define NSLogObject(objectToLog) NSLog(@"%@",(objectToLog))
 #define NSLogRange(rangeToLog) NSLog(@"%@",NSStringFromRange(rangeToLog))
 #define NSLogRect(rectToLog) NSLog(@"%@",NSStringFromRect(rectToLog))
@@ -54,6 +57,12 @@
 #define RSLogSize(sizeToLog) RSLog(@"%@",NSStringFromSize(sizeToLog))
 #define RSLogFloat(floatToLog) RSLog(@"%f",floatToLog)
 #define RSLogPoint(pointToLog) RSLog(@"%@",NSStringFromPoint(pointToLog))
+
+#ifdef DEBUG
+#define RSAssert(condition, description) NSAssert(condition, description)
+#else
+#define RSAssert(...)
+#endif
 
 #define NSNumberWithBool(boolForNumber) [NSNumber numberWithBool:(boolForNumber)]
 #define NSNumberWithInteger(integerForNumber) [NSNumber numberWithInteger:(integerForNumber)]
