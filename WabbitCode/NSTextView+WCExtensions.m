@@ -27,4 +27,15 @@
 	
 	return NSMakeRange(firstChar, lastChar-firstChar);
 }
+
+- (void)WC_appendString:(NSString *)string; {
+    [self replaceCharactersInRange:NSMakeRange(self.string.length, 0) withString:string];
+}
+- (void)WC_appendAttributedString:(NSAttributedString *)attributedString; {
+    [self.textStorage replaceCharactersInRange:NSMakeRange(self.string.length, 0) withAttributedString:attributedString];
+}
+
+- (void)WC_appendNewline; {
+    [self replaceCharactersInRange:NSMakeRange(self.string.length, 0) withString:@"\n"];
+}
 @end

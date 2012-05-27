@@ -16,4 +16,8 @@
 
 @interface NSTextView (WCExtensions)
 - (NSRange)visibleRange;
+
+- (void)WC_appendString:(NSString *)string;
+- (void)WC_appendAttributedString:(NSAttributedString *)attributedString;
+- (void)WC_appendNewline;
 @end
