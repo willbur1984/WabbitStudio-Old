@@ -4,6 +4,16 @@
 <dict>
 	<key>keyBindings</key>
 	<dict>
+		<key>clearConsole:</key>
+		<dict>
+			<key>keyCode</key>
+			<integer>40</integer>
+			<key>modifierFlags</key>
+			<dict>
+				<key>command</key>
+				<true/>
+			</dict>
+		</dict>
 		<key>newProject:</key>
 		<dict>
 			<key>keyCode</key>
