@@ -612,6 +612,8 @@
 		07FF7B3F14C763EB000AE014 /* UKFileWatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 07FF7B3C14C763EB000AE014 /* UKFileWatcher.m */; };
 		07FF7B4014C763EB000AE014 /* UKKQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 07FF7B3E14C763EB000AE014 /* UKKQueue.m */; };
 		07FF7B4314C763FC000AE014 /* UKMainThreadProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 07FF7B4214C763FC000AE014 /* UKMainThreadProxy.m */; };
+		79413DC415728DE800DE2D99 /* NSTextStorage+WCExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 79413DC315728DE800DE2D99 /* NSTextStorage+WCExtensions.m */; };
+		79413DC81572911600DE2D99 /* NSAttributedString+RSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 79413DC71572911600DE2D99 /* NSAttributedString+RSExtensions.m */; };
 		7973AD9C154D240900DEC0EF /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7973AD9B154D240900DEC0EF /* main.cpp */; };
 		7973AD9F154D241A00DEC0EF /* opcodes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7973AD9D154D241A00DEC0EF /* opcodes.cpp */; };
 		7973ADA4154D243B00DEC0EF /* pass_one.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7973ADA0154D243B00DEC0EF /* pass_one.cpp */; };
@@ -1557,6 +1559,10 @@
 		07FF7B4114C763FC000AE014 /* UKMainThreadProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UKMainThreadProxy.h; sourceTree = "<group>"; };
 		07FF7B4214C763FC000AE014 /* UKMainThreadProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UKMainThreadProxy.m; sourceTree = "<group>"; };
 		07FF7B4414C76C71000AE014 /* RSFileReferenceDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSFileReferenceDelegate.h; sourceTree = "<group>"; };
+		79413DC215728DE800DE2D99 /* NSTextStorage+WCExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTextStorage+WCExtensions.h"; sourceTree = "<group>"; };
+		79413DC315728DE800DE2D99 /* NSTextStorage+WCExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTextStorage+WCExtensions.m"; sourceTree = "<group>"; };
+		79413DC61572911600DE2D99 /* NSAttributedString+RSExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString+RSExtensions.h"; sourceTree = "<group>"; };
+		79413DC71572911600DE2D99 /* NSAttributedString+RSExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString+RSExtensions.m"; sourceTree = "<group>"; };
 		7973AD91154D21E400DEC0EF /* spasm */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = spasm; sourceTree = BUILT_PRODUCTS_DIR; };
 		7973AD9B154D240900DEC0EF /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		7973AD9D154D241A00DEC0EF /* opcodes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = opcodes.cpp; sourceTree = "<group>"; };
@@ -1855,6 +1861,8 @@
 				0745BE2214ABDAB200F541DC /* NSObject+WCExtensions.m */,
 				07BCB53314FF169400314A25 /* NSURL+WCExtensions.h */,
 				07BCB53414FF169400314A25 /* NSURL+WCExtensions.m */,
+				79413DC215728DE800DE2D99 /* NSTextStorage+WCExtensions.h */,
+				79413DC315728DE800DE2D99 /* NSTextStorage+WCExtensions.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -3026,6 +3034,8 @@
 				07A8AFC214BDF42D008CB9FF /* NSApplication+RSExtensions.m */,
 				071985E414C01F5D00C8E91A /* NSURL+RSExtensions.h */,
 				071985E514C01F5D00C8E91A /* NSURL+RSExtensions.m */,
+				79413DC61572911600DE2D99 /* NSAttributedString+RSExtensions.h */,
+				79413DC71572911600DE2D99 /* NSAttributedString+RSExtensions.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -3932,6 +3942,8 @@
 				798411C61568054A00B504CF /* WCConsoleViewController.m in Sources */,
 				798411CC1568077400B504CF /* RSBottomOnlyBorderedGlassGradientView.m in Sources */,
 				798411CF1568080700B504CF /* WCConsoleTextView.m in Sources */,
+				79413DC415728DE800DE2D99 /* NSTextStorage+WCExtensions.m in Sources */,
+				79413DC81572911600DE2D99 /* NSAttributedString+RSExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
