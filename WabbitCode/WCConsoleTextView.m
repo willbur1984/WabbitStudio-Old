@@ -13,8 +13,55 @@
 
 #import "WCConsoleTextView.h"
 
+@interface WCConsoleTextView ()
+- (void)_commonInit;
+@end
+
 @implementation WCConsoleTextView
 
+- (id)initWithFrame:(NSRect)frameRect {
+    if (!(self = [super initWithFrame:frameRect]))
+        return nil;
+    
+    [self _commonInit];
+    
+    return self;
+}
 
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    if (!(self = [super initWithCoder:aDecoder]))
+        return nil;
+    
+    [self _commonInit];
+    
+    return self;
+}
+
+- (void)drawViewBackgroundInRect:(NSRect)rect {
+    [super drawViewBackgroundInRect:rect];
+    
+    if (self.shouldDrawEmptyContentString) {
+        [_emptyContentCell setEmptyContentStringStyle:[self emptyContentStringStyle]];
+		[_emptyContentCell setStringValue:[self emptyContentString]];
+		[_emptyContentCell drawWithFrame:[self bounds] inView:self];
+    }
+}
+
+@dynamic emptyContentString;
+- (NSString *)emptyContentString {
+	return NSLocalizedString(@"No Build Output", @"No Build Output");
+}
+@dynamic shouldDrawEmptyContentString;
+- (BOOL)shouldDrawEmptyContentString {
+	return (!self.string.length);
+}
+@dynamic emptyContentStringStyle;
+- (RSEmptyContentStringStyle)emptyContentStringStyle {
+	return RSEmptyContentStringStyleNormal;
+}
+
+- (void)_commonInit; {
+    _emptyContentCell = [[RSEmptyContentCell alloc] initTextCell:@""];
+}
 
 @end
