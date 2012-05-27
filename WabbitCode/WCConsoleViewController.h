@@ -17,8 +17,11 @@
 
 @interface WCConsoleViewController : JAViewController
 
-@property (readonly,assign,nonatomic) IBOutlet WCConsoleTextView *textView;
+@property (readonly,assign,nonatomic) IBOutlet NSView *gradientBarView;
+@property (readonly,assign,nonatomic) IBOutlet NSButton *clearButton;
 
 - (id)initWithProjectDocument:(WCProjectDocument *)projectDocument;
+
+- (IBAction)clearConsole:(id)sender;
 
 @end
