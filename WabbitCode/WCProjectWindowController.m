@@ -148,9 +148,34 @@ static const NSSize kBreakpointImageSize = {.width = 20.0, .height = 10.0};
 }
 
 #pragma mark NSSplitViewDelegate
+- (NSRect)splitView:(NSSplitView *)splitView additionalEffectiveRectOfDividerAtIndex:(NSInteger)dividerIndex {
+    if (!splitView.isVertical) {
+        NSRect frame = [splitView convertRect:self.consoleViewController.gradientBarView.frame fromView:self.consoleViewController.view];
+        
+        frame.size.width -= NSWidth(self.consoleViewController.clearButton.frame);
+        
+        return frame;
+    }
+    return NSZeroRect;
+}
+
+- (BOOL)splitView:(NSSplitView *)splitView canCollapseSubview:(NSView *)subview {
+    if (!splitView.isVertical && subview == [splitView.subviews lastObject])
+        return YES;
+    return NO;
+}
+
+- (BOOL)splitView:(NSSplitView *)splitView shouldCollapseSubview:(NSView *)subview forDoubleClickOnDividerAtIndex:(NSInteger)dividerIndex {
+    if (!splitView.isVertical && subview == [splitView.subviews lastObject])
+        return YES;
+    return NO;
+}
+
 - (BOOL)splitView:(NSSplitView *)splitView shouldAdjustSizeOfSubview:(NSView *)view {
 	if ([splitView isVertical] && view == [[splitView subviews] objectAtIndex:0])
 		return NO;
+    else if (!splitView.isVertical && view == [splitView.subviews lastObject])
+        return NO;
 	return YES;
 }
 static const CGFloat kLeftSubviewMinWidth = 200.0;
@@ -158,12 +183,12 @@ static const CGFloat kRightSubviewMinWidth = 400.0;
 - (CGFloat)splitView:(NSSplitView *)splitView constrainMaxCoordinate:(CGFloat)proposedMaximumPosition ofSubviewAt:(NSInteger)dividerIndex {
     if (splitView.isVertical)
         return proposedMaximumPosition-kRightSubviewMinWidth;
-    return proposedMaximumPosition;
+    return proposedMaximumPosition - floor(NSHeight(splitView.frame) * 0.25);
 }
 - (CGFloat)splitView:(NSSplitView *)splitView constrainMinCoordinate:(CGFloat)proposedMinimumPosition ofSubviewAt:(NSInteger)dividerIndex {
     if (splitView.isVertical)
         return proposedMinimumPosition+kLeftSubviewMinWidth;
-    return proposedMinimumPosition;
+    return proposedMinimumPosition + floor(NSHeight(splitView.frame) * 0.25);
 }
 #pragma mark WCTabViewControllerDelegate
 - (WCProjectDocument *)projectDocumentForTabViewController:(WCTabViewController *)tabViewController {
