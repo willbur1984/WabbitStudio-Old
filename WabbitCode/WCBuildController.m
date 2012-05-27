@@ -28,6 +28,8 @@
 #import "WCDebugController.h"
 #import "RSBezelWidgetManager.h"
 
+NSString *const WCBuildControllerWillBeginBuildingNotification = @"WCBuildControllerWillBeginBuildingNotification";
+
 NSString *const WCBuildControllerDidFinishBuildingNotification = @"WCBuildControllerDidFinishBuildingNotification";
 
 NSString *const WCBuildControllerDidChangeBuildIssueVisibleNotification = @"WCBuildControllerDidChangeBuildIssueVisibleNotification";
@@ -289,6 +291,8 @@ NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotification = @"
 	
 	[self setLastOutputFileURL:[NSURL fileURLWithPath:outputFilePath isDirectory:NO]];
 	
+    [[NSNotificationCenter defaultCenter] postNotificationName:WCBuildControllerWillBeginBuildingNotification object:self];
+    
 	@try {
 		[[self task] launch];
 	}

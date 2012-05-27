@@ -13,6 +13,8 @@
 
 #import <Foundation/NSObject.h>
 
+extern NSString *const WCBuildControllerWillBeginBuildingNotification;
+
 extern NSString *const WCBuildControllerDidFinishBuildingNotification;
 
 extern NSString *const WCBuildControllerDidChangeBuildIssueVisibleNotification;
