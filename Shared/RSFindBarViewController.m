@@ -264,7 +264,13 @@ static const NSAnimationCurve kFindBarShowHideAnimationCurve = NSAnimationEaseIn
 
 static const CGFloat kReplaceControlsHeight = 22.0;
 - (IBAction)showReplaceControls:(id)sender; {
-	if ([self areReplaceControlsVisible]) {
+    if (!self.textView.isEditable) {
+        [self setViewMode:RSFindBarViewControllerViewModeFindAndReplace];
+        [self setViewMode:RSFindBarViewControllerViewModeFind];
+        
+        return;
+    }
+	else if ([self areReplaceControlsVisible]) {
 		[self showFindBar:nil];
 		return;
 	}
