@@ -697,8 +697,7 @@
 			if ([textCheckingResults count]) {
 				// if we got any results insert our header menu item before we start inserting the match items
 				NSString *fileDisplayName = [[sourceScanner delegate] fileDisplayNameForSourceScanner:sourceScanner];
-				//NSMenuItem *fileMenuItem = [menu addItemWithTitle:[[[sfDocument fileURL] path] stringByAbbreviatingWithTildeInPath] action:NULL keyEquivalent:@""];
-				NSMenuItem *fileMenuItem = [menu addItemWithTitle:fileDisplayName action:NULL keyEquivalent:@""];
+                NSMenuItem *fileMenuItem = [menu addItemWithTitle:[NSString stringWithFormat:NSLocalizedString(@"%@ \u2192 (%@)", @"jump to caller file menu item title format string"),fileDisplayName,[[[sfDocument fileURL] path] stringByAbbreviatingWithTildeInPath]] action:NULL keyEquivalent:@""];
 				
 				[fileMenuItem setImage:[[sfDocument fileURL] fileIcon]];
 				[[fileMenuItem image] setSize:NSSmallSize];
@@ -727,7 +726,7 @@
 			[[RSBezelWidgetManager sharedWindowController] showString:NSLocalizedString(@"Symbol Caller(s) Not Found", @"Symbol Caller(s) Not Found") centeredInView:[self enclosingScrollView]];
 			return;
 		}
-		else if ([menu numberOfItems] == 1) {
+		else if ([menu numberOfItems] == 2) {
 			WCSourceSymbol *symbolToJumpTo = [[[menu itemArray] lastObject] representedObject];
 			
 			[[self delegate] handleJumpToDefinitionForSourceTextView:self sourceSymbol:symbolToJumpTo];
