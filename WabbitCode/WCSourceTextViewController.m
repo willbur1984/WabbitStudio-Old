@@ -42,6 +42,7 @@
 #import "WCBreakpointManager.h"
 #import "RSToolTipManager.h"
 #import "RSToolTipProvider.h"
+#import "RSNavigatorControl.h"
 
 @interface WCSourceTextViewController ()
 @property (readonly,nonatomic) WCSourceScanner *sourceScanner;
@@ -411,6 +412,7 @@
 - (IBAction)revealInProjectNavigator:(id)sender; {
 	WCFile *file = [[[[self sourceFileDocument] projectDocument] sourceFileDocumentsToFiles] objectForKey:[self sourceFileDocument]];
 	
+    [self.sourceFileDocument.projectDocument.projectWindowController.navigatorControl setSelectedItemIdentifier:WCProjectWindowNavigatorControlProjectItemIdentifier];
 	[[[[[self sourceFileDocument] projectDocument] projectWindowController] projectNavigatorViewController] setSelectedModelObjects:[NSArray arrayWithObjects:file, nil]];
 }
 - (IBAction)showInFinder:(id)sender; {
