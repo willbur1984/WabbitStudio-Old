@@ -15,7 +15,7 @@
 #import "WCSourceToken.h"
 
 @interface WCNumberToken : WCSourceToken {
-	NSInteger _value;
+	NSUInteger _value;
 }
-@property (readonly,nonatomic) NSInteger value;
+@property (readonly,nonatomic) NSUInteger value;
 @end

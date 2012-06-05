@@ -640,6 +640,8 @@
 		79A1A08B154D260C0006F6B6 /* libmathCommon.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 79A1A08A154D260C0006F6B6 /* libmathCommon.dylib */; };
 		79A1A08D154D262A0006F6B6 /* libc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 79A1A08C154D262A0006F6B6 /* libc.dylib */; };
 		79A1A091154D26A70006F6B6 /* spasm in Resources */ = {isa = PBXBuildFile; fileRef = 7973AD91154D21E400DEC0EF /* spasm */; };
+		79FDD16B157D6E5800E9C691 /* WCHexadecimalToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 79FDD16A157D6E5800E9C691 /* WCHexadecimalToken.m */; };
+		79FDD16F157D88F900E9C691 /* WCBinaryToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 79FDD16E157D88F900E9C691 /* WCBinaryToken.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1612,6 +1614,10 @@
 		79A1A08E154D265C0006F6B6 /* spasm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = spasm.h; sourceTree = "<group>"; };
 		79F3954B1557354000E7F1A3 /* ReadMe.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = ReadMe.rtf; sourceTree = "<group>"; };
 		79F3954D155735CE00E7F1A3 /* License.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = License.txt; sourceTree = "<group>"; };
+		79FDD169157D6E5800E9C691 /* WCHexadecimalToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCHexadecimalToken.h; sourceTree = "<group>"; };
+		79FDD16A157D6E5800E9C691 /* WCHexadecimalToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCHexadecimalToken.m; sourceTree = "<group>"; };
+		79FDD16D157D88F900E9C691 /* WCBinaryToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCBinaryToken.h; sourceTree = "<group>"; };
+		79FDD16E157D88F900E9C691 /* WCBinaryToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCBinaryToken.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1778,6 +1784,10 @@
 				071ECCE314A42483002409F8 /* WCSourceToken.m */,
 				071ECCF414A44954002409F8 /* WCNumberToken.h */,
 				071ECCF514A44954002409F8 /* WCNumberToken.m */,
+				79FDD169157D6E5800E9C691 /* WCHexadecimalToken.h */,
+				79FDD16A157D6E5800E9C691 /* WCHexadecimalToken.m */,
+				79FDD16D157D88F900E9C691 /* WCBinaryToken.h */,
+				79FDD16E157D88F900E9C691 /* WCBinaryToken.m */,
 				071ECCE814A434A8002409F8 /* WCSourceSymbol.h */,
 				071ECCE914A434A8002409F8 /* WCSourceSymbol.m */,
 				071ECCEB14A435CC002409F8 /* WCEquateSymbol.h */,
@@ -3944,6 +3954,8 @@
 				798411CF1568080700B504CF /* WCConsoleTextView.m in Sources */,
 				79413DC415728DE800DE2D99 /* NSTextStorage+WCExtensions.m in Sources */,
 				79413DC81572911600DE2D99 /* NSAttributedString+RSExtensions.m in Sources */,
+				79FDD16B157D6E5800E9C691 /* WCHexadecimalToken.m in Sources */,
+				79FDD16F157D88F900E9C691 /* WCBinaryToken.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
