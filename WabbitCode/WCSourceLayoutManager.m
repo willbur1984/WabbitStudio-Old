@@ -49,7 +49,8 @@
     if ((invalidatedCharRange.location == length) && (invalidatedCharRange.location != 0)) { // it's at the end. check if the last char is in lineFoldingAttributeName
         value = [str attribute:WCLineFoldingAttributeName atIndex:invalidatedCharRange.location - 1 effectiveRange:&effectiveRange];
 		
-        if (value && [value boolValue]) invalidatedCharRange = NSUnionRange(invalidatedCharRange, effectiveRange);
+        if (value && [value boolValue])
+            invalidatedCharRange = NSUnionRange(invalidatedCharRange, effectiveRange);
     }
 	
     if (invalidatedCharRange.location < length) {
@@ -95,7 +96,9 @@
                 }
             }
 			
-            if (NSEqualRanges(range, invalidatedCharRange)) break;
+            if (NSEqualRanges(range, invalidatedCharRange))
+                break;
+            
             invalidatedCharRange = range;
         }
     }

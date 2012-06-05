@@ -43,6 +43,7 @@
 			
 			if (effectiveRange.location == charIndex)
 				buffer[0] = NSControlGlyph;
+            
 			glyphs = buffer;
 		}
     }
