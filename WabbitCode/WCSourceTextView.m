@@ -118,12 +118,17 @@
 		
 		NSRange symbolRange = [[self string] symbolRangeForRange:NSMakeRange([self characterIndexForInsertionAtPoint:[self convertPointFromBase:[theEvent locationInWindow]]], 0)];
 		if (symbolRange.location == NSNotFound) {
+            [[RSBezelWidgetManager sharedWindowController] showString:NSLocalizedString(@"Symbol Not Found", nil) centeredInView:self.enclosingScrollView];
+            
 			NSBeep();
 			return;
 		}
 		
 		[self setSelectedRange:symbolRange];
+        
 		[self jumpToDefinition:nil];
+        
+        return;
 	}
 	else if ([self _handleUnfoldForEvent:theEvent])
 		return;
