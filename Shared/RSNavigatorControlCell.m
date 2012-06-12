@@ -27,6 +27,68 @@
 	
 	return self;
 }
+
+- (NSInteger)nextState {
+    return self.state;
+}
+
+- (void)drawWithFrame:(NSRect)frame inView:(NSView *)controlView {
+    if (self.state == NSOnState) {
+        [[NSGraphicsContext currentContext] saveGraphicsState];
+        
+        // light vertical gradient
+        static NSGradient *gradient = nil;
+        if (!gradient) {
+            NSColor *color1 = [NSColor colorWithCalibratedWhite:0.7 alpha:0.0];
+            NSColor *color2 = [NSColor colorWithCalibratedWhite:0.7 alpha:5.0];
+            CGFloat loactions[] = {0.0f, 0.5f, 1.0f};
+            gradient = [[NSGradient alloc] initWithColors:[NSArray arrayWithObjects:color1, color2, color1, nil] atLocations:loactions colorSpace:[NSColorSpace genericGrayColorSpace]];
+        }
+        [gradient drawInRect:frame angle:-90.0f];
+        
+        
+        // shadow on the left border
+        NSShadow *shadow = [[NSShadow alloc] init];
+        shadow.shadowOffset = NSMakeSize(1.0f, 0.0f);
+        shadow.shadowBlurRadius = 2.0f;
+        shadow.shadowColor = [NSColor darkGrayColor];
+        [shadow set];
+        
+        // not visible color
+        [[NSColor redColor] set];
+        
+        CGFloat radius = 50.0;
+        
+        NSPoint center = NSMakePoint(NSMinX(frame) - radius, NSMidY(frame));
+        NSBezierPath *path = [NSBezierPath bezierPath];
+        [path moveToPoint:center];
+        [path appendBezierPathWithArcWithCenter:center
+                                         radius:radius
+                                     startAngle:-90.0f 
+                                       endAngle:90.0f];
+        [path closePath];
+        [path fill];
+        
+        // shadow of the right border
+        shadow.shadowOffset = NSMakeSize(-1.0f, 0.0f);
+        [shadow set];
+        
+        center = NSMakePoint(NSMaxX(frame) + radius, NSMidY(frame));
+        path = [NSBezierPath bezierPath];
+        [path moveToPoint:center];
+        [path appendBezierPathWithArcWithCenter:center
+                                         radius:radius
+                                     startAngle:90.0f 
+                                       endAngle:270.0f];
+        [path closePath];
+        [path fill];
+        
+        [[NSGraphicsContext currentContext] restoreGraphicsState];
+    }
+    
+    [self drawInteriorWithFrame:frame inView:controlView];
+}
+ 
 #pragma mark NSCoding
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (!(self = [super initWithCoder:aDecoder]))

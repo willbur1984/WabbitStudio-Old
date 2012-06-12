@@ -19,6 +19,7 @@
 @interface RSNavigatorControl ()
 - (void)_commonInit;
 - (void)_setupToolTips;
+- (void)_adjustSubviews;
 @end
 
 @implementation RSNavigatorControl
@@ -67,6 +68,12 @@
 	return self;
 }
 
+- (void)resizeSubviewsWithOldSize:(NSSize)oldBoundsSize {
+	[super resizeSubviewsWithOldSize:oldBoundsSize];
+	[self _adjustSubviews];
+}
+
+/*
 - (void)mouseDown:(NSEvent *)theEvent {
 	NSUInteger itemIndex, numberOfItems = [_itemIdentifiers count];
 	CGFloat itemWidth = [[self dataSource] itemWidthForNavigatorControl:self], totalItemWidth = numberOfItems*itemWidth;
@@ -109,6 +116,7 @@
 	[pool release];
 	free(rectsForItems);
 }
+ */
 
 - (void)viewWillMoveToWindow:(NSWindow *)newWindow {
 	[super viewWillMoveToWindow:newWindow];
@@ -139,23 +147,15 @@
 		[_alternateFillGradient drawInRect:[self bounds] angle:90.0];
 	
 	NSUInteger itemIndex, numberOfItems = [_itemIdentifiers count];
-	CGFloat itemWidth = [[self dataSource] itemWidthForNavigatorControl:self], totalItemWidth = numberOfItems*itemWidth;
-	CGFloat startX = NSMinX([self bounds])+floor(NSWidth([self bounds])/2.0)-floor(totalItemWidth/2.0);
 	
 	for (itemIndex=0; itemIndex<numberOfItems; itemIndex++) {
-		NSRect itemRect = NSMakeRect(startX+(itemIndex*itemWidth), NSMinY([self bounds]), itemWidth, NSHeight([self bounds]));
 		NSString *itemIdentifier = [_itemIdentifiers objectAtIndex:itemIndex];
 		
-		if ([itemIdentifier isEqualToString:[self selectedItemIdentifier]]) {
-			[_selectedFillGradient drawInRect:itemRect angle:90.0];
-			if ([[self window] isKeyWindow])
-				[_bottomFillColor setFill];
-			else
-				[_alternateBottomFillColor setFill];
-			NSRectFill(NSMakeRect(NSMinX(itemRect), NSMinY(itemRect), 1.0, NSHeight(itemRect)));
-			NSRectFill(NSMakeRect(NSMaxX(itemRect)-1, NSMinY(itemRect), 1.0, NSHeight(itemRect)));
-		}
-		
+		if ([itemIdentifier isEqualToString:[self selectedItemIdentifier]])
+            [[_cells objectAtIndex:itemIndex] setState:NSOnState];
+        else
+            [[_cells objectAtIndex:itemIndex] setState:NSOffState];
+        
 		NSSize imageSize = NSSmallSize;
 		if ([[self dataSource] respondsToSelector:@selector(navigatorControl:imageSizeForItemIdentifier:atIndex:)])
 			imageSize = [[self dataSource] navigatorControl:self imageSizeForItemIdentifier:[_itemIdentifiers objectAtIndex:itemIndex] atIndex:itemIndex];
@@ -164,9 +164,8 @@
 		[image setSize:imageSize];
 		
 		[[_cells objectAtIndex:itemIndex] setImage:image];
-		[[_cells objectAtIndex:itemIndex] drawWithFrame:itemRect inView:self];
 	}
-	
+    
 	if ([[self window] isKeyWindow])
 		[_bottomFillColor setFill];
 	else
@@ -186,9 +185,29 @@
 	_itemIdentifiers = [[[self dataSource] itemIdentifiersForNavigatorControl:self] copy];
 	
 	[_cells removeAllObjects];
-	for (NSUInteger itemIndex = 0; itemIndex<[_itemIdentifiers count]; itemIndex++)
-		[_cells addObject:[[[self cell] copy] autorelease]];
+    
+    CGFloat itemWidth = [[self dataSource] itemWidthForNavigatorControl:self];
+    
+	for (NSUInteger itemIndex = 0; itemIndex<[_itemIdentifiers count]; itemIndex++) {
+        NSString *itemIdentifer = [_itemIdentifiers objectAtIndex:itemIndex];
+        NSSize imageSize = NSSmallSize;
+		if ([[self dataSource] respondsToSelector:@selector(navigatorControl:imageSizeForItemIdentifier:atIndex:)])
+			imageSize = [[self dataSource] navigatorControl:self imageSizeForItemIdentifier:[_itemIdentifiers objectAtIndex:itemIndex] atIndex:itemIndex];
+		NSImage *image = [[self dataSource] navigatorControl:self imageForItemIdentifier:[_itemIdentifiers objectAtIndex:itemIndex] atIndex:itemIndex];
+        NSButton *button = [[[NSButton alloc] initWithFrame:NSMakeRect(0, 0, itemWidth, NSHeight(self.bounds))] autorelease];
+        
+        [button setCell:[[[RSNavigatorControlCell alloc] init] autorelease]];
+        [button.cell setRepresentedObject:itemIdentifer];
+        [button setImage:image];
+        [button setEnabled:YES];
+        [button setTarget:self];
+        [button setAction:@selector(setSelectedItemIdentifier:)];
+        
+        [self addSubview:button];
+        [_cells addObject:button];
+    }
 	
+    [self _adjustSubviews];
 	[self _setupToolTips];
 	
 	[self setNeedsDisplay:YES];
@@ -203,6 +222,9 @@
 	return _selectedItemIdentifier;
 }
 - (void)setSelectedItemIdentifier:(NSString *)selectedItemIdentifier {
+    if ([selectedItemIdentifier isKindOfClass:[NSButton class]])
+        selectedItemIdentifier = [[(NSButton *)selectedItemIdentifier cell] representedObject];
+    
 	if (_selectedItemIdentifier == selectedItemIdentifier)
 		return;
 	
@@ -226,6 +248,16 @@
 	[self setNeedsDisplay:YES];
 }
 #pragma mark *** Private Methods ***
+- (void)_adjustSubviews; {
+    CGFloat itemWidth = [[self dataSource] itemWidthForNavigatorControl:self];
+    NSUInteger numberOfButtons = [_itemIdentifiers count];
+    CGFloat completeWidth = numberOfButtons * itemWidth;
+    CGFloat offset = floorf((NSWidth(self.bounds) - completeWidth) / 2.0f);
+    for (NSButton *button in self.subviews) {
+        button.frame = NSMakeRect(offset, NSMinY(self.bounds), itemWidth, NSHeight(self.bounds));
+        offset += itemWidth;
+    }
+}
 - (void)_commonInit; {
 	_fillGradient = [[NSGradient alloc] initWithStartingColor:[NSColor colorWithCalibratedWhite:174.0/255.0 alpha:1.0] endingColor:[NSColor colorWithCalibratedWhite:211.0/255.0 alpha:1.0]];
 	_alternateFillGradient = [[NSGradient alloc] initWithStartingColor:[NSColor colorWithCalibratedWhite:209.0/255.0 alpha:1.0] endingColor:[NSColor colorWithCalibratedWhite:244.0/255.0 alpha:1.0]];
