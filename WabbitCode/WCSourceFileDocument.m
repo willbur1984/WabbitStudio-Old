@@ -113,7 +113,9 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 + (BOOL)canConcurrentlyReadDocumentsOfType:(NSString *)typeName {
 	if ([typeName isEqualToString:WCAssemblyFileUTI] ||
 		[typeName isEqualToString:WCIncludeFileUTI] ||
-		[typeName isEqualToString:WCActiveServerIncludeFileUTI])
+		[typeName isEqualToString:WCActiveServerIncludeFileUTI] ||
+        [typeName isEqualToString:WCWabbitEditAssemblyFileUTI] ||
+        [typeName isEqualToString:WCWabbitEditIncludeFileUTI])
 		return YES;
 	return NO;
 }
@@ -121,7 +123,9 @@ NSString *const WCSourceFileDocumentVisibleRangeKey = @"org.revsoft.wabbitstudio
 - (BOOL)canAsynchronouslyWriteToURL:(NSURL *)url ofType:(NSString *)typeName forSaveOperation:(NSSaveOperationType)saveOperation {
 	if ([typeName isEqualToString:WCAssemblyFileUTI] ||
 		[typeName isEqualToString:WCIncludeFileUTI] ||
-		[typeName isEqualToString:WCActiveServerIncludeFileUTI])
+		[typeName isEqualToString:WCActiveServerIncludeFileUTI] ||
+        [typeName isEqualToString:WCWabbitEditAssemblyFileUTI] ||
+        [typeName isEqualToString:WCWabbitEditIncludeFileUTI])
 		return YES;
 	return NO;
 }

@@ -85,6 +85,43 @@
 			<key>NSDocumentClass</key>
 			<string>WCProjectDocument</string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>z80</string>
+				<string>asm</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>assembly</string>
+			<key>CFBundleTypeName</key>
+			<string>Z80 Assembly File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.revsoft.wabbitedit.assembly</string>
+			</array>
+			<key>NSDocumentClass</key>
+			<string>WCSourceFileDocument</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>inc</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>include</string>
+			<key>CFBundleTypeName</key>
+			<string>Z80 Include File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.revsoft.wabbitedit.include</string>
+			</array>
+			<key>NSDocumentClass</key>
+			<string>WCSourceFileDocument</string>
+		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
@@ -111,11 +148,11 @@
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2011 Revolution Software.
 //
-//  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+//  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 // 
 //  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 // 
-//  THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</string>
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</string>
 	<key>NSMainNibFile</key>
 	<string>WCMainMenu</string>
 	<key>NSPrincipalClass</key>
@@ -214,6 +251,45 @@
 				<string>inc</string>
 				<string>INC</string>
 			</array>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.source-code</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Z80 Assembly File</string>
+			<key>UTTypeIconFile</key>
+			<string>assembly</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.revsoft.wabbitedit.assembly</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>z80</string>
+					<string>asm</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.source-code</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Z80 Include File</string>
+			<key>UTTypeIconFile</key>
+			<string>include</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.revsoft.wabbitedit.include</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>inc</string>
+				</array>
+			</dict>
 		</dict>
 	</array>
 </dict>

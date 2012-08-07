@@ -242,7 +242,7 @@ static NSString *const kPathColumnIdentifier = @"path";
 	
 	[openPanel setCanChooseDirectories:NO];
 	[openPanel setAllowsMultipleSelection:NO];
-	[openPanel setAllowedFileTypes:[NSArray arrayWithObjects:WCAssemblyFileUTI,WCIncludeFileUTI,WCActiveServerIncludeFileUTI, nil]];
+	[openPanel setAllowedFileTypes:[NSArray arrayWithObjects:WCAssemblyFileUTI,WCIncludeFileUTI,WCActiveServerIncludeFileUTI,WCWabbitEditIncludeFileUTI,WCWabbitEditAssemblyFileUTI, nil]];
 	[openPanel setDirectoryURL:[[[[self buildTarget] projectDocument] fileURL] parentDirectoryURL]];
 	[openPanel setPrompt:LOCALIZED_STRING_CHOOSE];
 	[openPanel setAccessoryView:[[self chooseInputFileAccessoryViewController] view]];

@@ -17,6 +17,8 @@ extern NSString *const WCAssemblyFileUTI;
 extern NSString *const WCIncludeFileUTI;
 extern NSString *const WCActiveServerIncludeFileUTI;
 extern NSString *const WCProjectFileUTI;
+extern NSString *const WCWabbitEditAssemblyFileUTI;
+extern NSString *const WCWabbitEditIncludeFileUTI;
 
 @class WCOpenPanelAccessoryViewController,WCProjectDocument;
 

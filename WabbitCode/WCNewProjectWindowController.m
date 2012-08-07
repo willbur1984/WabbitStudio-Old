@@ -203,7 +203,9 @@ static const CGFloat kRightSubviewMinimumWidth = 350.0;
 			continue;
 		else if ([fileUTI isEqualToString:WCAssemblyFileUTI] ||
 				 [fileUTI isEqualToString:WCIncludeFileUTI] ||
-				 [fileUTI isEqualToString:WCActiveServerIncludeFileUTI]) {
+				 [fileUTI isEqualToString:WCActiveServerIncludeFileUTI] ||
+                 [fileUTI isEqualToString:WCWabbitEditAssemblyFileUTI] ||
+                 [fileUTI isEqualToString:WCWabbitEditIncludeFileUTI]) {
 			
 			// run any source code files through template processing
 			NSMutableDictionary *fileTemplateValues = [[templateValues mutableCopy] autorelease];

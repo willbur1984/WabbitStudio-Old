@@ -21,6 +21,8 @@
 	
 	return ([fileUTI isEqualToString:WCAssemblyFileUTI] ||
 			[fileUTI isEqualToString:WCIncludeFileUTI] ||
-			[fileUTI isEqualToString:WCActiveServerIncludeFileUTI]);
+			[fileUTI isEqualToString:WCActiveServerIncludeFileUTI] ||
+            [fileUTI isEqualToString:WCWabbitEditAssemblyFileUTI] ||
+            [fileUTI isEqualToString:WCWabbitEditIncludeFileUTI]);
 }
 @end

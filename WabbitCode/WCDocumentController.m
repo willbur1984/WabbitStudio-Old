@@ -22,6 +22,8 @@ NSString *const WCAssemblyFileUTI = @"org.revsoft.wabbitcode.assembly";
 NSString *const WCIncludeFileUTI = @"org.revsoft.wabbitcode.include";
 NSString *const WCActiveServerIncludeFileUTI = @"com.panic.coda.active-server-include-file";
 NSString *const WCProjectFileUTI = @"org.revsoft.wabbitcode.project";
+NSString *const WCWabbitEditAssemblyFileUTI = @"org.revsoft.wabbitedit.assembly";
+NSString *const WCWabbitEditIncludeFileUTI = @"org.revsoft.wabbitedit.include";
 
 @interface WCDocumentController ()
 @property (readwrite,retain,nonatomic) WCOpenPanelAccessoryViewController *openPanelAccessoryViewController;
@@ -168,7 +170,7 @@ NSString *const WCProjectFileUTI = @"org.revsoft.wabbitcode.project";
 	static NSSet *retval;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		retval = [[NSSet alloc] initWithObjects:WCAssemblyFileUTI,WCIncludeFileUTI,WCActiveServerIncludeFileUTI, nil];
+		retval = [[NSSet alloc] initWithObjects:WCAssemblyFileUTI,WCIncludeFileUTI,WCActiveServerIncludeFileUTI,WCWabbitEditAssemblyFileUTI,WCWabbitEditIncludeFileUTI, nil];
 	});
 	return retval;
 }
