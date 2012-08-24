@@ -49,6 +49,7 @@
 @property (readwrite,assign,nonatomic) NSUInteger clickedLineNumber;
 @property (readwrite,assign,nonatomic) WCFold *foldToHighlight;
 @property (readwrite,assign,nonatomic) WCFileBreakpoint *clickedFileBreakpoint;
+@property (readwrite,assign,nonatomic) BOOL didReceiveMouseDown;
 @property (readwrite,assign,nonatomic) WCBuildIssue *clickedBuildIssue;
 @property (readwrite,assign,nonatomic) BOOL clickedFileBreakpointHasMoved;
 @property (readonly,nonatomic) WCEditBreakpointViewController *editBreakpointViewController;
@@ -167,6 +168,8 @@ static const CGFloat kBuildIssueWidthHeight = 10.0;
 }
 
 - (void)mouseDown:(NSEvent *)theEvent {
+    [self setDidReceiveMouseDown:YES];
+    
 	if ([self foldToHighlight]) {
 		NSRange foldRange = [[self textStorage] foldRangeForRange:[[self foldToHighlight] contentRange]];
 		// the range is folded, unfold it
@@ -247,17 +250,21 @@ static const CGFloat kBuildIssueWidthHeight = 10.0;
 	WCFileBreakpoint *fileBreakpoint = [[[self delegate] fileBreakpointsForSourceRulerView:self] fileBreakpointForRange:range];
 	WCBuildIssue *buildIssue = [[[self delegate] buildIssuesForSourceRulerView:self] buildIssueForRange:range];
 	
-	if (buildIssue && buildIssue == [self clickedBuildIssue])
-		[buildIssue setVisible:(![buildIssue isVisible])];
-	else if ([self clickedFileBreakpoint] && !NSMouseInRect(point, [self bounds], [self isFlipped]))
-		NSShowAnimationEffect(NSAnimationEffectDisappearingItemDefault, [[self window] convertBaseToScreen:[theEvent locationInWindow]], NSZeroSize, self, @selector(_animationEffectDidEnd:), NULL);
-	else if (fileBreakpoint && fileBreakpoint == [self clickedFileBreakpoint] && ![self clickedFileBreakpointHasMoved])
-		[fileBreakpoint setActive:(![fileBreakpoint isActive])];
+    if ([self didReceiveMouseDown]) {
+        if (buildIssue && buildIssue == [self clickedBuildIssue])
+            [buildIssue setVisible:(![buildIssue isVisible])];
+        else if ([self clickedFileBreakpoint] && !NSMouseInRect(point, [self bounds], [self isFlipped]))
+            NSShowAnimationEffect(NSAnimationEffectDisappearingItemDefault, [[self window] convertBaseToScreen:[theEvent locationInWindow]], NSZeroSize, self, @selector(_animationEffectDidEnd:), NULL);
+        else if (fileBreakpoint && fileBreakpoint == [self clickedFileBreakpoint] && ![self clickedFileBreakpointHasMoved])
+            [fileBreakpoint setActive:(![fileBreakpoint isActive])];
+    }
 	else {
 		[self setClickedBuildIssue:nil];
 		[self setClickedFileBreakpoint:nil];
 		[self setClickedLineNumber:NSNotFound];
 	}
+    
+    [self setDidReceiveMouseDown:NO];
 }
 - (void)_animationEffectDidEnd:(void *)contextInfo {
 	[[[[self delegate] projectDocumentForSourceRulerView:self] breakpointManager] removeFileBreakpoint:[self clickedFileBreakpoint]];
@@ -647,6 +654,7 @@ static const CGFloat kBuildIssueWidthHeight = 10.0;
 	[self setNeedsDisplay:YES];
 }
 @synthesize clickedFileBreakpoint=_clickedFileBreakpoint;
+@synthesize didReceiveMouseDown=_didReceiveMouseDown;
 @synthesize clickedBuildIssue=_clickedBuildIssue;
 @dynamic clickedFileBreakpointHasMoved;
 - (BOOL)clickedFileBreakpointHasMoved {
