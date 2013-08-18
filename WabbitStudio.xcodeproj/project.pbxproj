@@ -4802,6 +4802,7 @@
 				INFOPLIST_FILE = "WabbitEmuQLPlugin/WabbitEmuQLPlugin-Info.plist";
 				INSTALL_PATH = /Library/QuickLook;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = qlgenerator;
 			};
 			name = Debug;
@@ -4821,6 +4822,7 @@
 				INFOPLIST_FILE = "WabbitEmuQLPlugin/WabbitEmuQLPlugin-Info.plist";
 				INSTALL_PATH = /Library/QuickLook;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = qlgenerator;
 			};
 			name = Release;
@@ -4839,6 +4841,7 @@
 				INFOPLIST_FILE = "WabbitCodeQLPlugin/WabbitCodeQLPlugin-Info.plist";
 				INSTALL_PATH = /Library/QuickLook;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = qlgenerator;
 			};
 			name = Debug;
@@ -4853,6 +4856,7 @@
 				INFOPLIST_FILE = "WabbitCodeQLPlugin/WabbitCodeQLPlugin-Info.plist";
 				INSTALL_PATH = /Library/QuickLook;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = qlgenerator;
 			};
 			name = Release;
@@ -4910,6 +4914,7 @@
 					"\"$(SDKROOT)/usr/lib/system\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 			};
 			name = Debug;
 		};
@@ -4931,6 +4936,7 @@
 					"\"$(SDKROOT)/usr/lib/system\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 			};
 			name = Release;
 		};
