@@ -291,6 +291,26 @@
 				</array>
 			</dict>
 		</dict>
+		<dict>
+			<key>UTTypeDescription</key>
+			<string>Z80 Include File</string>
+			<key>UTTypeIconFile</key>
+			<string>include</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.macromates.textmate.include-file</string>
+			<key>UTTypeTagSpecification</key>
+			<dict/>
+		</dict>
+		<dict>
+			<key>UTTypeDescription</key>
+			<string>Z80 Assembly File</string>
+			<key>UTTypeIconFile</key>
+			<string>assembly</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.mips.mips-assembler</string>
+			<key>UTTypeTagSpecification</key>
+			<dict/>
+		</dict>
 	</array>
 </dict>
 </plist>

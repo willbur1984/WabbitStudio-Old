@@ -170,7 +170,7 @@ NSString *const WCWabbitEditIncludeFileUTI = @"org.revsoft.wabbitedit.include";
 	static NSSet *retval;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		retval = [[NSSet alloc] initWithObjects:WCAssemblyFileUTI,WCIncludeFileUTI,WCActiveServerIncludeFileUTI,WCWabbitEditAssemblyFileUTI,WCWabbitEditIncludeFileUTI, nil];
+		retval = [[NSSet alloc] initWithObjects:WCAssemblyFileUTI,WCIncludeFileUTI,WCActiveServerIncludeFileUTI,WCWabbitEditAssemblyFileUTI,WCWabbitEditIncludeFileUTI,@"com.mips.mips-assembler",@"com.macromates.textmate.include-file", nil];
 	});
 	return retval;
 }
