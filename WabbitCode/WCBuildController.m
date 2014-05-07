@@ -108,7 +108,7 @@ NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotification = @"
 		NSString *informative = NSLocalizedString(@"Your project does not have any build targets. Would you like to edit your build targets now?", @"no build targets alert informative string");
 		NSAlert *noBuildTargetsAlert = [NSAlert alertWithMessageText:message defaultButton:NSLocalizedString(@"Edit Build Targets\u2026", @"Edit Build Targets with ellipsis") alternateButton:LOCALIZED_STRING_CANCEL otherButton:nil informativeTextWithFormat:informative];
 		
-		[noBuildTargetsAlert beginSheetModalForWindow:[[self projectDocument] windowForSheet] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
+		[noBuildTargetsAlert OA_beginSheetModalForWindow:[[self projectDocument] windowForSheet] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
 			[[alert window] orderOut:nil];
 			if (returnCode == NSAlertAlternateReturn)
 				return;
@@ -125,7 +125,7 @@ NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotification = @"
 		NSString *informative = NSLocalizedString(@"Your project does not have an active build target. Would you like to assign an active build target now?", @"no active build target alert informative string");
 		NSAlert *noActiveBuildTargetAlert = [NSAlert alertWithMessageText:message defaultButton:NSLocalizedString(@"Assign Active Build Target\u2026", @"Assign Active Build Target with ellipsis") alternateButton:LOCALIZED_STRING_CANCEL otherButton:nil informativeTextWithFormat:informative];
 		
-		[noActiveBuildTargetAlert beginSheetModalForWindow:[[self projectDocument] windowForSheet] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
+		[noActiveBuildTargetAlert OA_beginSheetModalForWindow:[[self projectDocument] windowForSheet] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
 			[[alert window] orderOut:nil];
 			if (returnCode == NSAlertAlternateReturn)
 				return;
@@ -141,7 +141,7 @@ NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotification = @"
 			NSString *informative = [NSString stringWithFormat:NSLocalizedString(@"The active build target \"%@\" is not set to generate a code listing, which is required for debugging. Do you want to enable code listing generation now?", @"build and run alert informative format string"),[activeBuildTarget name]];
 			NSAlert *alert = [NSAlert alertWithMessageText:message defaultButton:NSLocalizedString(@"Generate Code Listing", @"Generate Code Listing") alternateButton:LOCALIZED_STRING_CANCEL otherButton:nil informativeTextWithFormat:informative];
 			
-			[alert beginSheetModalForWindow:[[self projectDocument] windowForSheet] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
+			[alert OA_beginSheetModalForWindow:[[self projectDocument] windowForSheet] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
 				[[alert window] orderOut:nil];
 				if (returnCode == NSAlertAlternateReturn)
 					return;
@@ -163,7 +163,7 @@ NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotification = @"
 	if (!inputFile) {
 		NSAlert *noInputFileAlert = [NSAlert alertWithMessageText:NSLocalizedString(@"No Input File", @"No Input File") defaultButton:NSLocalizedString(@"Edit Active Build Target\u2026", @"Edit Active Build Target with ellipsis") alternateButton:LOCALIZED_STRING_CANCEL otherButton:nil informativeTextWithFormat:NSLocalizedString(@"The active build target \"%@\" does not have an input file. Would you like to edit the active build target now?", @"no input file alert informative text format string"),[activeBuildTarget name]];
 		
-		[noInputFileAlert beginSheetModalForWindow:[[self projectDocument] windowForSheet] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
+		[noInputFileAlert OA_beginSheetModalForWindow:[[self projectDocument] windowForSheet] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
 			[[alert window] orderOut:nil];
 			if (returnCode == NSAlertAlternateReturn)
 				return;
@@ -207,7 +207,7 @@ NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotification = @"
 			if (outError) {
 				NSAlert *alert = [NSAlert alertWithError:outError];
 				
-				[alert beginSheetModalForWindow:[[self projectDocument] windowForSheet] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
+				[alert OA_beginSheetModalForWindow:[[self projectDocument] windowForSheet] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
 					[[alert window] orderOut:nil];
 				}];
 			}

@@ -264,7 +264,7 @@ static const CGFloat kMainCellHeight = 20.0;
 		
 		[[deleteBreakpointAlert suppressionButton] bind:NSValueBinding toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:[@"values." stringByAppendingString:WCAlertsWarnBeforeDeletingBreakpointsKey] options:[NSDictionary dictionaryWithObjectsAndKeys:NSNegateBooleanTransformerName,NSValueTransformerNameBindingOption, nil]];
 		
-		[deleteBreakpointAlert beginSheetModalForWindow:[[self view] window] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
+		[deleteBreakpointAlert OA_beginSheetModalForWindow:[[self view] window] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
 			[[alert suppressionButton] unbind:NSValueBinding];
 			[[alert window] orderOut:nil];
 			if (returnCode == NSAlertAlternateReturn)

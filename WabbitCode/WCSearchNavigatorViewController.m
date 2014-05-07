@@ -459,7 +459,7 @@ static const CGFloat kReplaceControlsHeight = (19.0+17.0+4.0+4.0);
 	NSString *informative = [NSString stringWithFormat:NSLocalizedString(@"Replace all occurrences of \"%@\" with \"%@\"?", @"replace all alert format string"),[self searchString],[self replaceString]];
 	NSAlert *replaceAllAlert = [NSAlert alertWithMessageText:message defaultButton:NSLocalizedString(@"Replace All", @"Replace All") alternateButton:LOCALIZED_STRING_CANCEL otherButton:nil informativeTextWithFormat:informative];
 	
-	[replaceAllAlert beginSheetModalForWindow:[[self view] window] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
+	[replaceAllAlert OA_beginSheetModalForWindow:[[self view] window] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
 		[[alert window] orderOut:nil];
 		if (returnCode == NSAlertAlternateReturn)
 			return;

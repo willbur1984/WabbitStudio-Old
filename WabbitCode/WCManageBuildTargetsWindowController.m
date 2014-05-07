@@ -217,7 +217,7 @@ static NSString *const kOutputTypeColumnIdentifier = @"outputType";
 		
 		[[deleteBuildTargetsAlert suppressionButton] bind:NSValueBinding toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:[@"values." stringByAppendingString:WCAlertsWarnBeforeDeletingBuildTargetsKey] options:[NSDictionary dictionaryWithObjectsAndKeys:NSNegateBooleanTransformerName,NSValueTransformerNameBindingOption, nil]];
 		
-		[deleteBuildTargetsAlert beginSheetModalForWindow:[self window] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
+		[deleteBuildTargetsAlert OA_beginSheetModalForWindow:[self window] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
 			[[alert suppressionButton] unbind:NSValueBinding];
 			[[alert window] orderOut:nil];
 			if (returnCode == NSAlertAlternateReturn)

@@ -148,7 +148,7 @@ NSString *const WCFontsAndColorsUserThemeIdentifiersKey = @"WCFontsAndColorsUser
 		
 		[[alert suppressionButton] bind:NSValueBinding toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:@"values.alertsWarnBeforeDeletingFontAndColorThemes" options:[NSDictionary dictionaryWithObjectsAndKeys:NSNegateBooleanTransformerName,NSValueTransformerNameBindingOption, nil]];
 		
-		[alert beginSheetModalForWindow:[[self view] window] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
+		[alert OA_beginSheetModalForWindow:[[self view] window] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
 			[[alert suppressionButton] unbind:NSValueBinding];
 			[[alert window] orderOut:nil];
 			if (returnCode == NSAlertAlternateReturn)

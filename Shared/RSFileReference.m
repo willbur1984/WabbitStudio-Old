@@ -121,10 +121,10 @@ static NSString *const RSFileReferenceFilePathKey = @"filePath";
 		_fileURL = [fileURL copy];
 		_fileReferenceURL = [[_fileURL fileReferenceURL] copy];
 		
-#ifdef DEBUG
-		if (outError)
-			RSLogObject(outError);
-#endif
+//#ifdef DEBUG
+//		if (outError)
+//			RSLogObject(outError);
+//#endif
 	}
 	else {
 		_fileReferenceURL = [fileReferenceURL copy];

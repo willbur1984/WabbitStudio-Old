@@ -896,7 +896,7 @@ static const CGFloat kTriangleHeight = 6.0;
 		
 		[[deleteBreakpointAlert suppressionButton] bind:NSValueBinding toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:[@"values." stringByAppendingString:WCAlertsWarnBeforeDeletingBreakpointsKey] options:[NSDictionary dictionaryWithObjectsAndKeys:NSNegateBooleanTransformerName,NSValueTransformerNameBindingOption, nil]];
 		
-		[deleteBreakpointAlert beginSheetModalForWindow:[self window] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
+		[deleteBreakpointAlert OA_beginSheetModalForWindow:[self window] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
 			[[alert suppressionButton] unbind:NSValueBinding];
 			[[alert window] orderOut:nil];
 			if (returnCode == NSAlertAlternateReturn)

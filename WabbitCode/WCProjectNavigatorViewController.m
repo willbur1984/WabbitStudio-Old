@@ -265,7 +265,7 @@ static const CGFloat kMainCellHeight = 20.0;
 		
 		[alert setAlertStyle:NSCriticalAlertStyle];
 		
-		[alert beginSheetModalForWindow:[[self view] window] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
+		[alert OA_beginSheetModalForWindow:[[self view] window] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
 			[[alert window] orderOut:nil];
 			if (returnCode == NSAlertAlternateReturn)
 				return;

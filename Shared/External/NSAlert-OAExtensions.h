@@ -12,7 +12,7 @@
 typedef void (^OAAlertSheetCompletionHandler)(NSAlert *alert, NSInteger returnCode);
 
 @interface NSAlert (OAExtensions)
-- (void)beginSheetModalForWindow:(NSWindow *)window completionHandler:(OAAlertSheetCompletionHandler)completionHandler;
+- (void)OA_beginSheetModalForWindow:(NSWindow *)window completionHandler:(OAAlertSheetCompletionHandler)completionHandler;
 @end
 
 // Runs an NSAlert with an optional completion block. The returnCode passed to the block is based on the NSAlertFirstButtonReturn+N convention.

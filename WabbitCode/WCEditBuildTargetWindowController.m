@@ -178,7 +178,7 @@ static NSString *const kPathColumnIdentifier = @"path";
 		
 		[[deleteBuildDefinesAlert suppressionButton] bind:NSValueBinding toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:[@"values." stringByAppendingString:WCAlertsWarnBeforeDeletingBuildDefinesKey] options:[NSDictionary dictionaryWithObjectsAndKeys:NSNegateBooleanTransformerName,NSValueTransformerNameBindingOption, nil]];
 		
-		[deleteBuildDefinesAlert beginSheetModalForWindow:[self window] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
+		[deleteBuildDefinesAlert OA_beginSheetModalForWindow:[self window] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
 			[[alert suppressionButton] unbind:NSValueBinding];
 			[[alert window] orderOut:nil];
 			if (returnCode == NSAlertAlternateReturn)
@@ -224,7 +224,7 @@ static NSString *const kPathColumnIdentifier = @"path";
 		
 		[[deleteBuildIncludesAlert suppressionButton] bind:NSValueBinding toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:[@"values." stringByAppendingString:WCAlertsWarnBeforeDeletingBuildIncludesKey] options:[NSDictionary dictionaryWithObjectsAndKeys:NSNegateBooleanTransformerName,NSValueTransformerNameBindingOption, nil]];
 		
-		[deleteBuildIncludesAlert beginSheetModalForWindow:[self window] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
+		[deleteBuildIncludesAlert OA_beginSheetModalForWindow:[self window] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
 			[[alert suppressionButton] unbind:NSValueBinding];
 			[[alert window] orderOut:nil];
 			if (returnCode == NSAlertAlternateReturn)

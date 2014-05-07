@@ -252,7 +252,7 @@
 		
 		[addToProjectAlert setAccessoryView:[[self addToProjectAccessoryViewController] view]];
 		
-		[addToProjectAlert beginSheetModalForWindow:[outlineView window] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
+		[addToProjectAlert OA_beginSheetModalForWindow:[outlineView window] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
 			[[alert window] orderOut:nil];
 			[self setAddToProjectAccessoryViewController:nil];
 			if (returnCode == NSAlertAlternateReturn)

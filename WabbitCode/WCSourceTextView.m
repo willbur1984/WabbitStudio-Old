@@ -1121,7 +1121,7 @@
 	WCSourceScanner *scanner = [[self delegate] sourceScannerForSourceTextView:self];
 	NSAlert *removeAlert = [NSAlert alertWithMessageText:NSLocalizedString(@"Remove All Bookmarks?", @"Remove All Bookmarks?") defaultButton:NSLocalizedString(@"Remove All Bookmarks", @"Remove All Bookmarks") alternateButton:LOCALIZED_STRING_CANCEL otherButton:nil informativeTextWithFormat:NSLocalizedString(@"Are you sure you want to remove all bookmarks in \"%@\"? This operation cannot be undone.", @"remove all bookmarks alert informative text format string"),[[scanner delegate] fileDisplayNameForSourceScanner:scanner]];
 	
-	[removeAlert beginSheetModalForWindow:[self window] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
+	[removeAlert OA_beginSheetModalForWindow:[self window] completionHandler:^(NSAlert *alert, NSInteger returnCode) {
 		[[alert window] orderOut:nil];
 		if (returnCode == NSAlertAlternateReturn)
 			return;

@@ -55,7 +55,7 @@
 
 @implementation NSAlert (OAExtensions)
 
-- (void)beginSheetModalForWindow:(NSWindow *)window completionHandler:(OAAlertSheetCompletionHandler)completionHandler;
+- (void)OA_beginSheetModalForWindow:(NSWindow *)window completionHandler:(OAAlertSheetCompletionHandler)completionHandler;
 {
     _OAAlertSheetCompletionHandlerRunner *runner = [[_OAAlertSheetCompletionHandlerRunner alloc] initWithAlert:self completionHandler:completionHandler];
     [runner startOnWindow:window];
@@ -88,6 +88,6 @@ void OABeginAlertSheet(NSString *title, NSString *defaultButton, NSString *alter
     if (otherButton)
         [alert addButtonWithTitle:otherButton];
     
-    [alert beginSheetModalForWindow:docWindow completionHandler:completionHandler];
+    [alert OA_beginSheetModalForWindow:docWindow completionHandler:completionHandler];
     [alert release]; // retained by the runner while the sheet is up
 }
