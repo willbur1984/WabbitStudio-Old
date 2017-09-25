@@ -18,8 +18,8 @@
 @class WCJumpBar,WCJumpBarView;
 
 @interface WCJumpBarViewController : NSViewController <NSMenuDelegate> {
-	__weak NSTextView *_textView;
-	__weak id <WCJumpBarDataSource> _jumpBarDataSource;
+	__unsafe_unretained NSTextView *_textView;
+	__unsafe_unretained id <WCJumpBarDataSource> _jumpBarDataSource;
 	NSString *_textViewSelectedLineAndColumn;
 	NSMenu *_symbolsMenu;
 	NSArray *_includesFiles;

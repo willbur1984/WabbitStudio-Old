@@ -15,7 +15,7 @@
 #import "WCJumpInDataSource.h"
 
 @interface WCJumpInWindowController : NSWindowController <NSControlTextEditingDelegate,NSWindowDelegate> {
-	__weak id <WCJumpInDataSource> _dataSource;
+	__unsafe_unretained id <WCJumpInDataSource> _dataSource;
 	NSArray *_items;
 	NSMutableArray *_matches;
 	NSString *_searchString;

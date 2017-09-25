@@ -16,8 +16,8 @@
 @class WECalculatorDocument,RSLCDView,RSCalculator;
 
 @interface WECalculatorWindowController : NSWindowController <NSWindowDelegate> {
-	__weak WECalculatorDocument *_calculatorDocument;
-	__weak RSLCDView *_LCDView;
+	__unsafe_unretained WECalculatorDocument *_calculatorDocument;
+	__unsafe_unretained RSLCDView *_LCDView;
 	NSTimer *_FPSTimer;
 	NSString *_statusString;
 }

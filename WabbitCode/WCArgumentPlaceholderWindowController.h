@@ -16,7 +16,7 @@
 @class WCArgumentPlaceholderCell;
 
 @interface WCArgumentPlaceholderWindowController : NSWindowController {
-	__weak NSTextView *_textView;
+	__unsafe_unretained NSTextView *_textView;
 	NSUInteger _characterIndex;
 	WCArgumentPlaceholderCell *_argumentPlaceholderCell;
 	id _eventMonitor;

@@ -22,8 +22,8 @@ extern NSString *const WCSourceScannerDidFinishScanningFoldsNotification;
 @class NDTrie;
 
 @interface WCSourceScanner : NSObject {
-	__weak NSTextStorage *_textStorage;
-	__weak id <WCSourceScannerDelegate> _delegate;
+	__unsafe_unretained NSTextStorage *_textStorage;
+	__unsafe_unretained id <WCSourceScannerDelegate> _delegate;
 	NSOperationQueue *_operationQueue;
 	NSTimer *_scanTimer;
 	NSArray *_tokens;

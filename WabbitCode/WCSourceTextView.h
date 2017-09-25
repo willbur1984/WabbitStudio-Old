@@ -20,7 +20,7 @@
 @class WCSourceTextStorage;
 
 @interface WCSourceTextView : WCFindableTextView <RSToolTipView,WCJumpInDataSource> {
-	__weak id <WCSourceTextViewDelegate> _delegate;
+	__unsafe_unretained id <WCSourceTextViewDelegate> _delegate;
 	id _windowDidResignKeyObservingToken;
 	id _windowDidBecomeKeyObservingToken;
 	NSTimer *_completionTimer;

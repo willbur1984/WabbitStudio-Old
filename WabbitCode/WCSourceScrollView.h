@@ -15,7 +15,7 @@
 #import "WCSourceScrollViewDelegate.h"
 
 @interface WCSourceScrollView : NSScrollView {
-	__weak id <WCSourceScrollViewDelegate> _delegate;
+	__unsafe_unretained id <WCSourceScrollViewDelegate> _delegate;
 }
 @property (readwrite,assign,nonatomic) IBOutlet id <WCSourceScrollViewDelegate> delegate;
 @end

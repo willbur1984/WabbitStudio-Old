@@ -26,7 +26,7 @@ extern NSString *const WCSourceFileDocumentVisibleRangeKey;
 @class WCSourceScanner,WCSourceHighlighter,WCSourceTextStorage,WCProjectDocument;
 
 @interface WCSourceFileDocument : NSDocument <WCJumpBarDataSource,WCSourceTextStorageDelegate,WCSourceScannerDelegate,WCSourceHighlighterDelegate,NSTextViewDelegate> {
-	__weak WCProjectDocument *_projectDocument;
+	__unsafe_unretained WCProjectDocument *_projectDocument;
 	
 	NSStringEncoding _fileEncoding;
 	

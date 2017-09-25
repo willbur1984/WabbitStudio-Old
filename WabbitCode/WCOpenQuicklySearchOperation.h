@@ -16,7 +16,7 @@
 @class WCOpenQuicklyWindowController;
 
 @interface WCOpenQuicklySearchOperation : NSOperation {
-	__weak WCOpenQuicklyWindowController *_windowController;
+	__unsafe_unretained WCOpenQuicklyWindowController *_windowController;
 	NSString *_searchString;
 }
 - (id)initWithOpenQuicklyWindowController:(WCOpenQuicklyWindowController *)windowController;

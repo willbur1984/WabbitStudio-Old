@@ -15,7 +15,7 @@
 
 @class RSCalculator,RSHexadecimalFormatter;
 
-@interface RSStackViewController : JAViewController <NSTableViewDataSource> {
+@interface RSStackViewController : NSViewController <NSTableViewDataSource> {
 	RSCalculator *_calculator;
 	NSUInteger _rowCount;
 }

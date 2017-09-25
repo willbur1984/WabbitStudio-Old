@@ -19,9 +19,9 @@
 
 @class WCSourceTextView,WCSourceTextStorage,WCSourceHighlighter,WCJumpBarViewController,WCSourceFileDocument,WCStandardSourceTextViewController;
 
-@interface WCSourceTextViewController : JAViewController <WCSourceTextViewDelegate,WCSourceRulerViewDelegate,WCSourceScrollViewDelegate,NSLayoutManagerDelegate> {
-	__weak WCStandardSourceTextViewController *_standardSourceTextViewController;
-	__weak WCSourceFileDocument *_sourceFileDocument;
+@interface WCSourceTextViewController : NSViewController <WCSourceTextViewDelegate,WCSourceRulerViewDelegate,WCSourceScrollViewDelegate,NSLayoutManagerDelegate> {
+	__unsafe_unretained WCStandardSourceTextViewController *_standardSourceTextViewController;
+	__unsafe_unretained WCSourceFileDocument *_sourceFileDocument;
 	WCJumpBarViewController *_jumpBarViewController;
 }
 @property (readwrite,assign,nonatomic) IBOutlet WCSourceTextView *textView;

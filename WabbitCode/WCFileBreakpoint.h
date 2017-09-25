@@ -16,7 +16,7 @@
 @class WCFile,WCProjectDocument,WCSourceSymbol;
 
 @interface WCFileBreakpoint : WCBreakpoint <RSPlistArchiving,NSCopying,NSMutableCopying> {
-	__weak WCProjectDocument *_projectDocument;
+	__unsafe_unretained WCProjectDocument *_projectDocument;
 	NSRange _range;
 	WCFile *_file;
 	NSString *_fileUUID;

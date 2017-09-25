@@ -20,7 +20,7 @@ typedef enum _WCJumpToLineWindowControllerJumpMode {
 } WCJumpToLineWindowControllerJumpMode;
 
 @interface WCJumpToLineWindowController : NSWindowController {
-	__weak NSTextView *_textView;
+	__unsafe_unretained NSTextView *_textView;
 	WCJumpToLineWindowControllerJumpMode _jumpMode;
 	NSString *_characterOrLineString;
 }

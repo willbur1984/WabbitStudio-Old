@@ -30,7 +30,7 @@ typedef enum _RSFindOptionsMatchStyle {
 } RSFindOptionsMatchStyle;
 
 @interface RSFindOptionsViewController : NSViewController <NSPopoverDelegate> {
-	__weak id <RSFindOptionsViewControllerDelegate> _delegate;
+	__unsafe_unretained id <RSFindOptionsViewControllerDelegate> _delegate;
 	RSFindOptionsFindStyle _findStyle;
 	RSFindOptionsMatchStyle _matchStyle;
 	NSPopover *_popover;

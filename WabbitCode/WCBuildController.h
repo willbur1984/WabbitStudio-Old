@@ -25,7 +25,7 @@ extern NSString *const WCBuildControllerDidChangeAllBuildIssuesVisibleNotificati
 @class WCProjectDocument;
 
 @interface WCBuildController : NSObject {
-	__weak WCProjectDocument *_projectDocument;
+	__unsafe_unretained WCProjectDocument *_projectDocument;
 	NSTask *_task;
 	NSMutableString *_output;
 	NSMapTable *_filesToBuildIssuesSortedByLocation;

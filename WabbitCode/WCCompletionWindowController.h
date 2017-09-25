@@ -18,7 +18,7 @@
 @class WCSourceTextView,NDMutableTrie;
 
 @interface WCCompletionWindowController : NSWindowController <RSTableViewDelegate> {
-	__weak WCSourceTextView *_textView;
+	__unsafe_unretained WCSourceTextView *_textView;
 	NSMutableArray *_completions;
 	id _eventMonitor;
 	id _applicationDidResignActiveObservingToken;

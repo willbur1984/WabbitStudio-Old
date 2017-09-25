@@ -22,7 +22,7 @@ typedef enum _RSFindBarViewControllerViewMode {
 } RSFindBarViewControllerViewMode;
 
 @interface RSFindBarViewController : NSViewController <RSFindOptionsViewControllerDelegate,NSAnimationDelegate,NSControlTextEditingDelegate> {
-	__weak NSTextView *_textView;
+	__unsafe_unretained NSTextView *_textView;
 	RSFindBarViewControllerViewMode _viewMode;
 	NSString *_findString;
 	NSString *_replaceString;

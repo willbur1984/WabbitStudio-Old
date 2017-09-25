@@ -27,7 +27,7 @@ extern NSString *const WCBreakpointManagerDidChangeBreakpointsEnabledNotificatio
 @class WCProjectDocument,WCFileBreakpoint;
 
 @interface WCBreakpointManager : NSObject {
-	__weak WCProjectDocument *_projectDocument;
+	__unsafe_unretained WCProjectDocument *_projectDocument;
 	NSMapTable *_filesToFileBreakpointsSortedByLocation;
 	NSMutableArray *_filesWithFileBreakpointsSortedByName;
 	NSMutableSet *_fileBreakpoints;

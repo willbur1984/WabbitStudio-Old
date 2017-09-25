@@ -16,8 +16,8 @@
 
 @class WCProjectDocument,WCSymbolFileContainer;
 
-@interface WCSymbolNavigatorViewController : JAViewController <WCNavigatorModule> {
-	__weak WCProjectDocument *_projectDocument;
+@interface WCSymbolNavigatorViewController : NSViewController <WCNavigatorModule> {
+	__unsafe_unretained WCProjectDocument *_projectDocument;
 	WCSymbolFileContainer *_symbolFileContainer;
 	WCSymbolFileContainer *_filteredSymbolFileContainer;
 }

@@ -14,7 +14,7 @@
 #import "RSObject.h"
 
 @interface RSBookmark : RSObject <RSPlistArchiving> {
-	__weak NSTextStorage *_textStorage;
+	__unsafe_unretained NSTextStorage *_textStorage;
 	NSRange _range;
 	NSRange _visibleRange;
 }

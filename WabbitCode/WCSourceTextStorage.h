@@ -26,7 +26,7 @@ extern NSString *const WCSourceTextStorageFoldRangeUserInfoKey;
 @class RSBookmark;
 
 @interface WCSourceTextStorage : NSTextStorage {
-	__weak id <WCSourceTextStorageDelegate> _delegate;
+	__unsafe_unretained id <WCSourceTextStorageDelegate> _delegate;
 	NSMutableAttributedString *_attributedString;
 	NSMutableArray *_lineStartIndexes;
 	NSMutableArray *_bookmarks;

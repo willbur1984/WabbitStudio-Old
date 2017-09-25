@@ -41,8 +41,8 @@ extern NSString *const WCProjectNavigatorDidMoveNodesNotificationMovedNodesUserI
 
 @class WCProjectContainer,RSFindOptionsViewController,WCProjectDocument,WCAddToProjectAccessoryViewController;
 
-@interface WCProjectNavigatorViewController : JAViewController <WCProjectDocumentSettingsProvider,WCNavigatorModule,RSOutlineViewDelegate,RSFindOptionsViewControllerDelegate,QLPreviewPanelDataSource,QLPreviewPanelDelegate,NSOpenSavePanelDelegate> {
-	__weak WCProjectDocument *_projectDocument;
+@interface WCProjectNavigatorViewController : NSViewController <WCProjectDocumentSettingsProvider,WCNavigatorModule,RSOutlineViewDelegate,RSFindOptionsViewControllerDelegate,QLPreviewPanelDataSource,QLPreviewPanelDelegate,NSOpenSavePanelDelegate> {
+	__unsafe_unretained WCProjectDocument *_projectDocument;
 	WCProjectContainer *_projectContainer;
 	WCProjectContainer *_filteredProjectContainer;
 	NSString *_filterString;

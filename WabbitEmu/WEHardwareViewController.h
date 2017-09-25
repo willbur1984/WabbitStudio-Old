@@ -17,7 +17,7 @@
 
 @class RSLCDView,RSCalculator;
 
-@interface WEHardwareViewController : JAViewController <RSPreferencesModule,RSCalculatorDelegate,NSMenuDelegate>
+@interface WEHardwareViewController : NSViewController <RSPreferencesModule,RSCalculatorDelegate,NSMenuDelegate>
 
 @property (readwrite,assign,nonatomic) IBOutlet NSView *dummyLCDView;
 @property (readwrite,assign,nonatomic) IBOutlet NSMenu *previewSourceMenu;

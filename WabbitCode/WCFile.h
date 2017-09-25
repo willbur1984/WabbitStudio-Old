@@ -25,7 +25,7 @@ extern NSString *const WCFileUUIDKey;
 @class RSFileReference,WCProject;
 
 @interface WCFile : RSObject <RSPlistArchiving,WCOpenQuicklyItem,WCCompletionItem,RSFileReferenceDelegate,QLPreviewItem,NSPasteboardWriting> {
-	__weak id <WCFileDelegate> _delegate;
+	__unsafe_unretained id <WCFileDelegate> _delegate;
 	NSString *_UUID;
 	RSFileReference *_fileReference;
 	struct {

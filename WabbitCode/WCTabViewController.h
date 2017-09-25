@@ -21,7 +21,7 @@ extern NSString *const WCTabViewControllerDidCloseTabNotification;
 @class PSMTabBarControl,WCSourceFileDocument,WCSourceTextViewController;
 
 @interface WCTabViewController : NSViewController <WCProjectDocumentSettingsProvider,NSTabViewDelegate> {
-	__weak id <WCTabViewControllerDelegate> _delegate;
+	__unsafe_unretained id <WCTabViewControllerDelegate> _delegate;
 	NSMapTable *_sourceFileDocumentsToSourceTextViewControllers;
 	NSTabViewItem *_clickedTabViewItem;
 	struct {

@@ -15,7 +15,7 @@
 
 @class RSCalculator,PSMTabBarControl;
 
-@interface RSMemoryViewController : JAViewController {
+@interface RSMemoryViewController : NSViewController {
 	RSCalculator *_calculator;
 	NSMutableSet *_memoryViews;
 }

@@ -17,7 +17,7 @@
 @class RSCalculator,RSTransferFile;
 
 @interface RSTransferFileWindowController : NSWindowController {
-	__weak id <RSTransferFileWindowControllerDelegate> _delegate;
+	__unsafe_unretained id <RSTransferFileWindowControllerDelegate> _delegate;
 	RSCalculator *_calculator;
 	NSMutableArray *_romsAndSavestates;
 	NSMutableArray *_otherFiles;

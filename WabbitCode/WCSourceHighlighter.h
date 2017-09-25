@@ -18,9 +18,9 @@
 @class WCSourceScanner;
 
 @interface WCSourceHighlighter : NSObject {
-	__weak WCSourceScanner *_sourceScanner;
+	__unsafe_unretained WCSourceScanner *_sourceScanner;
 	BOOL _needsToPerformFullHighlight;
-	__weak id <WCSourceHighlighterDelegate> _delegate;
+	__unsafe_unretained id <WCSourceHighlighterDelegate> _delegate;
 }
 @property (readwrite,assign) id <WCSourceHighlighterDelegate> delegate;
 

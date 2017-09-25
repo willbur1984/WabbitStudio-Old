@@ -18,7 +18,7 @@
 @class WCTabViewController,WCSourceFileDocument;
 
 @interface WCSourceFileSeparateWindowController : NSWindowController <WCTabViewContext,WCTabViewControllerDelegate,NSWindowDelegate> {
-	__weak WCSourceFileDocument *_sourceFileDocument;
+	__unsafe_unretained WCSourceFileDocument *_sourceFileDocument;
 	WCTabViewController *_tabViewController;
 }
 @property (readonly,nonatomic) WCTabViewController *tabViewController;

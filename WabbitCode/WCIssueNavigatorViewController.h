@@ -17,8 +17,8 @@
 
 @class WCProjectDocument,WCIssueContainer;
 
-@interface WCIssueNavigatorViewController : JAViewController <WCNavigatorModule,RSOutlineViewDelegate> {
-	__weak WCProjectDocument *_projectDocument;
+@interface WCIssueNavigatorViewController : NSViewController <WCNavigatorModule,RSOutlineViewDelegate> {
+	__unsafe_unretained WCProjectDocument *_projectDocument;
 	WCIssueContainer *_issueContainer;
 	WCIssueContainer *_filteredIssueContainer;
 }

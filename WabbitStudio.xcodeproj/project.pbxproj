@@ -4908,10 +4908,12 @@
 				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				HEADER_SEARCH_PATHS = /usr/local/opt/openssl/include;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/spasm\"",
 					"\"$(SDKROOT)/usr/lib/system\"",
+					/usr/local/opt/openssl/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -4930,10 +4932,12 @@
 				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				HEADER_SEARCH_PATHS = /usr/local/opt/openssl/include;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/spasm\"",
 					"\"$(SDKROOT)/usr/lib/system\"",
+					/usr/local/opt/openssl/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

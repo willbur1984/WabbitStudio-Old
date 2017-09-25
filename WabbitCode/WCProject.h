@@ -16,7 +16,7 @@
 @class WCProjectDocument;
 
 @interface WCProject : WCGroup <RSFileReferenceDelegate> {
-	__weak WCProjectDocument *_document;
+	__unsafe_unretained WCProjectDocument *_document;
 }
 @property (readonly,nonatomic) WCProjectDocument *document;
 @property (readonly,nonatomic) NSString *fileStatus;

@@ -14,7 +14,7 @@
 #import <AppKit/NSTextView.h>
 
 @interface RSFindBarFieldEditor : NSTextView <NSUserInterfaceValidations> {
-	__weak NSTextView *_findTextView;
+	__unsafe_unretained NSTextView *_findTextView;
 }
 @property (readwrite,assign,nonatomic) NSTextView *findTextView;
 

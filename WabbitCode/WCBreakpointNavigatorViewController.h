@@ -17,8 +17,8 @@
 
 @class WCProjectDocument,WCBreakpointFileContainer,WCEditBreakpointViewController;
 
-@interface WCBreakpointNavigatorViewController : JAViewController <WCNavigatorModule,RSOutlineViewDelegate> {
-	__weak WCProjectDocument *_projectDocument;
+@interface WCBreakpointNavigatorViewController : NSViewController <WCNavigatorModule,RSOutlineViewDelegate> {
+	__unsafe_unretained WCProjectDocument *_projectDocument;
 	WCBreakpointFileContainer *_breakpointFileContainer;
 	WCBreakpointFileContainer *_filteredBreakpointFileContainer;
 	WCEditBreakpointViewController *_editBreakpointViewController;

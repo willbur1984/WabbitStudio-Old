@@ -24,7 +24,7 @@ typedef enum _WCFoldType {
 @class WCSourceScanner;
 
 @interface WCFold : RSTreeNode <RSToolTipProvider> {
-	__weak WCSourceScanner *_sourceScanner;
+	__unsafe_unretained WCSourceScanner *_sourceScanner;
 	WCFoldType _type;
 	NSRange _range;
 	NSRange _contentRange;

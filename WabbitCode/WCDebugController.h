@@ -23,7 +23,7 @@ extern NSString *const WCDebugControllerCurrentLineNumberDidChangeNotification;
 @class WCProjectDocument,RSFileReference,WCFile;
 
 @interface WCDebugController : NSObject <RSCalculatorDelegate,RSTransferFileWindowControllerDelegate> {
-	__weak WCProjectDocument *_projectDocument;
+	__unsafe_unretained WCProjectDocument *_projectDocument;
 	RSFileReference *_romOrSavestateForRunning;
 	RSCalculator *_calculator;
 	NSString *_codeListing;

@@ -17,7 +17,7 @@
 @class WCFontAndColorTheme;
 
 @interface WCFontAndColorThemePair : NSObject {
-	__weak WCFontAndColorTheme *_theme;
+	__unsafe_unretained WCFontAndColorTheme *_theme;
 	NSString *_name;
 	SEL _fontSelector;
 	SEL _colorSelector;

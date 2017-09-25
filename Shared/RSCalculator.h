@@ -65,7 +65,7 @@ extern const NSInteger RSCalculatorErrorCodeMaximumNumberOfCalculators;
  */
 
 @interface RSCalculator : NSObject <RSUserDefaultsProvider> {
-	__weak id <RSCalculatorDelegate> _delegate;
+	__unsafe_unretained id <RSCalculatorDelegate> _delegate;
 	LPCALC _calculator;
 	NSURL *_lastLoadedURL;
 	struct {

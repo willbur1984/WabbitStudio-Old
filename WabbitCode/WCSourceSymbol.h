@@ -32,7 +32,7 @@ extern NSString *const WCSourceSymbolTypeAttributeName;
 @class WCSourceScanner;
 
 @interface WCSourceSymbol : NSObject <WCCompletionItem,RSToolTipProvider,WCJumpInItem,WCOpenQuicklyItem> {
-	__weak WCSourceScanner *_sourceScanner;
+	__unsafe_unretained WCSourceScanner *_sourceScanner;
 	WCSourceSymbolType _type;
 	NSRange _range;
 	NSString *_name;

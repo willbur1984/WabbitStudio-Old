@@ -15,7 +15,7 @@
 #import "WCOpenQuicklyDataSource.h"
 
 @interface WCOpenQuicklyWindowController : NSWindowController <NSControlTextEditingDelegate,NSWindowDelegate> {
-	__weak id <WCOpenQuicklyDataSource> _dataSource;
+	__unsafe_unretained id <WCOpenQuicklyDataSource> _dataSource;
 	NSArray *_items;
 	NSMutableArray *_matches;
 	NSString *_searchString;

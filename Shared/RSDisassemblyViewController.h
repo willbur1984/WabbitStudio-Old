@@ -18,7 +18,7 @@
 
 @class RSCalculator;
 
-@interface RSDisassemblyViewController : JAViewController <RSCalculatorMemoryView,RSTableViewDelegate,NSTableViewDataSource> {
+@interface RSDisassemblyViewController : NSViewController <RSCalculatorMemoryView,RSTableViewDelegate,NSTableViewDataSource> {
 	RSCalculator *_calculator;
 	Z80_info_t *_z80_info;
 }

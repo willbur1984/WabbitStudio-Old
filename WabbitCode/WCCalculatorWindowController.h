@@ -17,7 +17,7 @@
 
 @interface WCCalculatorWindowController : NSWindowController <NSWindowDelegate> {
 	RSCalculator *_calculator;
-	__weak RSLCDView *_LCDView;
+	__unsafe_unretained RSLCDView *_LCDView;
 	NSTimer *_FPSTimer;
 	NSString *_statusString;
 }

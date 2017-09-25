@@ -17,7 +17,7 @@
 @class WCProjectDocument;
 
 @interface WCManageBuildTargetsWindowController : NSWindowController <RSTableViewDelegate> {
-	__weak WCProjectDocument *_projectDocument;
+	__unsafe_unretained WCProjectDocument *_projectDocument;
 }
 @property (readwrite,assign,nonatomic) IBOutlet NSTableView *tableView;
 @property (readwrite,assign,nonatomic) IBOutlet NSArrayController *arrayController;

@@ -31,8 +31,8 @@ typedef enum _WCSearchNavigatorSearchScope {
 
 @class WCProjectContainer,WCSearchContainer,RSFindOptionsViewController,WCProjectDocument;
 
-@interface WCSearchNavigatorViewController : JAViewController <WCNavigatorModule,RSFindOptionsViewControllerDelegate,RSOutlineViewDelegate,NSControlTextEditingDelegate,NSAnimationDelegate> {
-	__weak WCProjectDocument *_projectDocument;
+@interface WCSearchNavigatorViewController : NSViewController <WCNavigatorModule,RSFindOptionsViewControllerDelegate,RSOutlineViewDelegate,NSControlTextEditingDelegate,NSAnimationDelegate> {
+	__unsafe_unretained WCProjectDocument *_projectDocument;
 	WCSearchContainer *_searchContainer;
 	WCSearchContainer *_filteredSearchContainer;
 	NSString *_filterString;

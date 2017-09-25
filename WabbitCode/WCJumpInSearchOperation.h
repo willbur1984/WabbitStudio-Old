@@ -16,7 +16,7 @@
 @class WCJumpInWindowController;
 
 @interface WCJumpInSearchOperation : NSOperation {
-	__weak WCJumpInWindowController *_windowController;
+	__unsafe_unretained WCJumpInWindowController *_windowController;
 	NSString *_searchString;
 }
 - (id)initWithJumpInWindowController:(WCJumpInWindowController *)windowController;

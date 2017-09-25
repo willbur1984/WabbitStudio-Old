@@ -19,8 +19,8 @@
 	NSMutableArray *_cells;
 	NSArray *_itemIdentifiers;
 	NSString *_selectedItemIdentifier;
-	__weak id <RSNavigatorControlDataSource> _dataSource;
-	__weak id <RSNavigatorControlDelegate> _delegate;
+	__unsafe_unretained id <RSNavigatorControlDataSource> _dataSource;
+	__unsafe_unretained id <RSNavigatorControlDelegate> _delegate;
 	NSGradient *_fillGradient;
 	NSGradient *_alternateFillGradient;
 	NSColor *_bottomFillColor;

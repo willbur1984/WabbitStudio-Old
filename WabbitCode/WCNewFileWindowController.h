@@ -18,7 +18,7 @@
 @class WCFileTemplate,WCProjectDocument;
 
 @interface WCNewFileWindowController : NSWindowController <RSCollectionViewDelegate,RSTableViewDelegate,NSSplitViewDelegate> {
-	__weak WCProjectDocument *_projectDocument;
+	__unsafe_unretained WCProjectDocument *_projectDocument;
 	NSMutableArray *_categories;
 	NSURL *_savePanelURL;
 }

@@ -23,7 +23,7 @@
 @class UKKQueue;
 
 @interface RSFileReference : RSObject <RSPlistArchiving,NSFilePresenter,NSCopying> {
-	__weak id <RSFileReferenceDelegate> _delegate;
+	__unsafe_unretained id <RSFileReferenceDelegate> _delegate;
 	NSURL *_fileReferenceURL;
 	NSURL *_fileURL;
 	UKKQueue *_kqueue;

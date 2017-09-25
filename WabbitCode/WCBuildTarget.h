@@ -28,7 +28,7 @@ typedef enum _WCBuildTargetOutputType {
 @class WCProjectDocument,WCFile;
 
 @interface WCBuildTarget : RSObject <RSPlistArchiving,NSCopying,NSMutableCopying> {
-	__weak WCProjectDocument *_projectDocument;
+	__unsafe_unretained WCProjectDocument *_projectDocument;
 	WCBuildTargetOutputType _outputType;
 	NSString *_name;
 	WCFile *_inputFile;

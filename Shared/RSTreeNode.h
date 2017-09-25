@@ -23,7 +23,7 @@ extern NSString *const RSTreeNodeChildNodesKey;
  */
 
 @interface RSTreeNode : RSObject <RSPlistArchiving,NSCopying,NSMutableCopying,QLPreviewItem> {
-	__weak id _parentNode;
+	__unsafe_unretained id _parentNode;
 	NSMutableArray *_childNodes;
 	id _representedObject;
 }

@@ -19,7 +19,7 @@
 @class WCFold,WCSourceTextView,WCFileBreakpoint,WCBuildIssue,WCEditBreakpointViewController;
 
 @interface WCSourceRulerView : WCLineNumberRulerView <RSToolTipView> {
-	__weak id <WCSourceRulerViewDelegate> _delegate;
+	__unsafe_unretained id <WCSourceRulerViewDelegate> _delegate;
 	NSUInteger _clickedLineNumber;
 	NSTrackingArea *_codeFoldingTrackingArea;
 	WCFold *_foldToHighlight;
